@@ -45,6 +45,15 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+         'web_customer' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
+         'web_merchandiser' => [
+            'driver' => 'session',
+            'provider' => 'merchandisers',
+        ],
+
     ],
 
     /*
@@ -70,10 +79,15 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+       'customers' => [
+            'driver' => 'eloquent',  //We are using eloquent model
+            'model' => App\Customer::class,
+        ],
+
+        'merchandisers' => [
+            'driver' => 'eloquent',  //We are using eloquent model
+            'model' => App\Merchandiser::class,
+        ],
     ],
 
     /*
