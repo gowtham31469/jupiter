@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Classes\Modules;
+use View;
 
 class HomeController extends Controller
 {
@@ -11,8 +13,9 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Modules $modules_res)
     {
+        $this->module = $modules_res;
         $this->middleware('auth');
     }
 
@@ -23,6 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        
+            $module_var = new Modules();
+            //get permitted menus
+            $get_main_module = $this->module->getMainModules();
+            View::composer('layouts.Admin.sidebar', function($view) use ($get_main_module) {
+                return $view->with(['modules' => $get_main_module]);
+            });
+             
+            return view('home');
+        
     }
 }
