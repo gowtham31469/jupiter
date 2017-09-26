@@ -14,10 +14,19 @@ use App\OrchestraParcelQuantityDetails;
 
 class UploadController extends Controller
 {
+    /**
+     * method to view the orchestra item detail upload view
+     * @return [type] [description]
+     */
     public function index()
     {
         return view('csv-upload');
     }
+    /**
+     * method to upload the orchestra item details csv into db
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function csvUpload(Request $request)
     {
         try
@@ -27,68 +36,77 @@ class UploadController extends Controller
 	        	ini_set('max_execution_time', 300);
 	        	$path     = $request->file('file')->getRealPath();
                 $data = Excel::load($path, function($reader) {})->get();
-                foreach ($data as $value)
-        		{	OrchestraItemDetails::create([
-			            'FactoryCode' 	  => $value->factorycode,
-			            'SupplierName' 	  => $value->suppliername,
-			            'SupplierAddress' => $value->supplieraddress,
-			            'SupplierEmail' => $value->supplieremail,
-			            'SupplierCountry' => $value->suppliername,
-			            'BuyerEmail' => $value->suppliername,
-			            'First_ETD_SHIPMENT_DATE' => $value->suppliername,
-			            'EditionNumber' => 111,
-			            'VersionNumber' => 22,
-			            'Collection' => $value->suppliername,
-			            'BuyerPONo' => $value->suppliername,
-			            'BarcodeForPricesTags' => $value->suppliername,
-			            'UVC_TCO' => $value->suppliername,
-			            'Description' => $value->suppliername,
-			            'Rayon' => $value->suppliername,
-			            'Color' => $value->suppliername,
-			            'Size' => $value->suppliername,
-			            'Stature' => $value->suppliername,
-			            'Age' => $value->suppliername,
-			            'Theme' => $value->suppliername,
-			            'Marque' => $value->suppliername,
-			            'Disney' => $value->suppliername,
-			            'Marvel' => $value->suppliername,
-			            'PommeFramboise' => $value->suppliername,
-			            'PrixEurope' => 1,
-			            'PrixClubEurope' => 1,
-			            'PrixVenteKoweit' => 2,
-			            'Prix_Vente_Arabie_Saoudite' => 2,
-			            'Prix_Club_Arabie_Saoudite' => 2,
-			            'Prix_Vente_Canada' => 1,
-			            'Prix_Club_Canada' => 4,
-			            'Prix_Vente_Suisse' => 3,
-			            'Prix_Club_Suisse' => 2,
-			            'Prix_Vente_Chine' => 2,
-			            'Prix_Club_Chine' => 2,
-			            'Prix_Vente_Turquie' => 2,
-			            'Prix_Club_Turquie' => 2,
-			            'Prix_Vente_Maroc' => 2,
-			            'Prix_Club_Maroc' => 2,
-			            'Prix_Vente_Ile_Maurice' => 2,
-			            'Prix_Club_Ile_Maurice' => 2,
-			            'Prix_Vente_Emirats_Arabes_Unis' => 2,
-			            'Prix_Club_Emirats_Arabes_Unis' => 2,
-			            'Prix_Vente_TUNISIE' => 2,
-			            'Prix_Club_TUNISIE' => 2,
-			            'Prix_Vente_ALGERIE' => 2,
-			            'Prix_Club_ALGERIE' => 2,
-			            'Quantity' => 2,
-			            'UVC' => $value->suppliername,
-			            'ParcelBarCode' => 111111111,
-			            'ParcelCode' => $value->suppliername,
-			            'HangTag_Print_Date' => $value->suppliername,
-			            'Prix_Vente_QATAR' => 1,
-			            'Prix_Club_QATAR' =>1,
-			            'Style_Name' => $value->suppliername,
-			            'Prix_Vente_USA' => 2,
-			            'Prix_Club_USA' => 2,
-			        ]);
-        		}
-        		$result = "true";
+                $data_exists = OrchestraItemDetails::select()->get();
+                if (count($data_exists)>0)
+                {
+                	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+                }
+                else
+                {
+                	foreach ($data as $value)
+	        		{	
+	        			OrchestraItemDetails::create([
+				            'FactoryCode' 	  => $value->factorycode,
+				            'SupplierName' 	  => $value->suppliername,
+				            'SupplierAddress' => $value->supplieraddress,
+				            'SupplierEmail' => $value->supplieremail,
+				            'SupplierCountry' => $value->suppliercountry,
+				            'BuyerEmail' => $value->buyeremail,
+				            'First_ETD_SHIPMENT_DATE' => $value->first_etd_shipment_date,
+				            'EditionNumber' => $value->editionnumber,
+				            'VersionNumber' => $value->versionnumber,
+				            'Collection' => $value->collection,
+				            'BuyerPONo' => $value->buyerpono,
+				            'BarcodeForPricesTags' => $value->barcodeforpricestags,
+				            'UVC_TCO' => $value->uvc_tco,
+				            'Description' => $value->description,
+				            'Rayon' => $value->rayon,
+				            'Color' => $value->color,
+				            'Size' => $value->size,
+				            'Stature' => $value->stature,
+				            'Age' => $value->age,
+				            'Theme' => $value->theme,
+				            'Marque' => $value->marque,
+				            'Disney' => $value->disney,
+				            'Marvel' => $value->marvel,
+				            'PommeFramboise' => $value->pommeframboise,
+				            'PrixEurope' => $value->prixeurope,
+				            'PrixClubEurope' => $value->prixclubeurope,
+				            'PrixVenteKoweit' => $value->prixventekoweit,
+				            'Prix_Vente_Arabie_Saoudite' => $value->prix_vente_arabie_saoudite,
+				            'Prix_Club_Arabie_Saoudite' => $value->prix_club_arabie_saoudite,
+				            'Prix_Vente_Canada' => $value->prix_vente_canada,
+				            'Prix_Club_Canada' => $value->prix_club_canada,
+				            'Prix_Vente_Suisse' => $value->prix_vente_suisse,
+				            'Prix_Club_Suisse' => $value->prix_club_suisse,
+				            'Prix_Vente_Chine' => $value->prix_vente_chine,
+				            'Prix_Club_Chine' => $value->prix_club_chine,
+				            'Prix_Vente_Turquie' => $value->prix_vente_turquie,
+				            'Prix_Club_Turquie' => $value->prix_club_turquie,
+				            'Prix_Vente_Maroc' => $value->prix_vente_maroc,
+				            'Prix_Club_Maroc' => $value->prix_club_maroc,
+				            'Prix_Vente_Ile_Maurice' => $value->prix_vente_ile_maurice,
+				            'Prix_Club_Ile_Maurice' => $value->prix_club_ile_maurice,
+				            'Prix_Vente_Emirats_Arabes_Unis' => $value->prix_vente_emirats_arabes_unis,
+				            'Prix_Club_Emirats_Arabes_Unis' => $value->prix_club_emirats_arabes_unis,
+				            'Prix_Vente_TUNISIE' => $value->prix_vente_tunisie,
+				            'Prix_Club_TUNISIE' => $value->prix_club_tunisie,
+				            'Prix_Vente_ALGERIE' => $value->prix_vente_algerie,
+				            'Prix_Club_ALGERIE' => $value->prix_club_algerie,
+				            'Quantity' => $value->quantity,
+				            'UVC' => $value->uvc,
+				            'ParcelBarCode' => $value->parcelbarcode,
+				            'ParcelCode' => $value->parcelcode,
+				            'HangTag_Print_Date' => $value->hangtag_print_date,
+				            'Prix_Vente_QATAR' => $value->prix_vente_qatar,
+				            'Prix_Club_QATAR' =>$value->prix_club_qatar,
+				            'Style_Name' => $value->style_name,
+				            'Prix_Vente_USA' => $value->prix_vente_usa,
+				            'Prix_Club_USA' => $value->prix_club_usa,
+				        ]);
+	        		}
+	        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+                }
 	        }
 	        else
 	        {
@@ -102,11 +120,20 @@ class UploadController extends Controller
     	return $result;
     }
 
+    /**
+     * method to view the parcel details csv upload view
+     * @return blade
+     */
     public function multiUploadView()
     {
         return view('multi-csv-upload');
     }
 
+    /**
+     * method to upload the parcel details csv files into the db
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function csvMultiUpload(Request $request)
     {
         try
@@ -115,69 +142,77 @@ class UploadController extends Controller
 	        $path  		= $request->file('file')->getRealPath();
 	        $filename	= $request->file('file')->getClientOriginalName();
 	        $extension  = $request->file('file')->getClientOriginalExtension();
-	        if ($extension !='csv')
-	        {
-	        	return "failed" ;
-	        }
-	        else
-	        {
-	        	$data  = Excel::load($path, function($reader) {})->get();
-	        	$filename = preg_replace( '/\.[a-z0-9]+$/i' , '' , $filename );
-	        	return "success";
-	        	if ($filename =="ParcelDetails_file1")
-	        	{
-	        		foreach ($data as $vals)
+        	$data  = Excel::load($path, function($reader) {})->get();
+        	$filename = preg_replace( '/\.[a-z0-9]+$/i' , '' , $filename );
+        	if ($filename =="ParcelDetails_file1")
+        	{
+        		$data_exists = OrchestraParcelDetails::select()->get();
+	            if (count($data_exists)>0)
+	            {
+	            	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+	            }
+	            else
+	            {
+	            	foreach ($data as $value)
 		        	{
-		        		return $vals;
+		        		OrchestraParcelDetails::create([
+				            'FactoryCode' 	  => $value->factorycode,
+				            'SupplierName' 	  => $value->suppliername,
+				            'SupplierAddress' => $value->supplieraddress,
+				            'SupplierEmail' => $value->supplieremail,
+				            'SupplierCountry' => $value->suppliercountry,
+				            'EditionNumber' => $value->editionnumber,
+				            'VersionNumber' => $value->versionnumber,
+				            'BuyerPONo' => $value->buyerpono,
+				            'Theme' => $value->theme,
+				            'Quantity' => $value->quantity,
+				            'IsSTD' => $value->isstd,
+				            'UVC' => $value->uvc,
+				            'ParcelBarCode' => $value->parcelbarcode,
+				            'ParcelCode' => $value->parcelcode,
+				            'CatgDescr' => $value->catgdescr,
+				            'NomApple' => $value->nomapple,
+			       		 ]);
 		        	}
-	        	}
-	        	else if ($filename =="ParcelDetails_file2")
-	        	{
-	        		foreach ($data as $vals)
+	            }
+        		
+        	}
+        	else if ($filename =="ParcelDetails_file2")
+        	{
+        		$data_exists = OrchestraParcelQuantityDetails::select()->get();
+	            if (count($data_exists)>0)
+	            {
+	            	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+	            }
+	            else
+	            {
+	            	foreach ($data as $value)
 		        	{
-		        		return $vals;
+		        		OrchestraParcelQuantityDetails::create([
+				            'FactoryCode' 	  => $value->factorycode,
+				            'EditionNumber' => $value->editionnumber,
+				            'VersionNumber' => $value->versionnumber,
+				            'BuyerPONo' => $value->buyerpono,
+				            'Theme' => $value->theme,
+				            'UVC_TCO' => $value->uvc_tco,
+				            'Quantity' => $value->quantity,
+				            'Color' => $value->color,
+				            'UVC' => $value->uvc,
+				            'Size' => $value->size,
+				            'BarcodeForPricesTags' => $value->barcodeforpricestags,
+			       	 	]);
 		        	}
-	        	}
-	        	else
-	        	{
-	        		return "Invalid File";
-	        	}
-	        }
-
+	            }
+        	}
+        	else
+        	{
+        		return "Invalid File";
+        	}
 	    }
 		catch (\Exception $e)
 		{
           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
      	}
     	return $result;
-    }
-
-    public function uploadFiles(Request $request)
-    {
- 
-        $input = $request->all();
- 		
-        $rules = array(
-            'file' => 'image|max:3000',
-        );
- 
-        $validation = Validator::make($input, $rules);
- 
-        if ($validation->fails()) {
-            return Response::make($validation->errors->first(), 400);
-        }
- 		$path     = $request->file('file')->getRealPath();
-        $data = Excel::load($path, function($reader) {})->get();
-
-        // $destinationPath = 'uploads'; // upload path
-        // $extension = Input::file('file')->getClientOriginalExtension(); // getting file extension
-        // $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
-        // $upload_success = Input::file('file')->move($destinationPath, $fileName); // uploading file to given path
- 
-        // if ($upload_success) {
-        //     return Response::json('success', 200);
-        // } else {
-        //     return Response::json('error', 400);
-        // }
     }
 }

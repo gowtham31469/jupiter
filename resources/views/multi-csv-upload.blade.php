@@ -27,7 +27,8 @@
                   }
              });
              Dropzone.options.imageUpload = {
-              maxFilesize    :  1,
+              maxFilesize    :  10,
+              maxFiles       :   2,
               acceptedFiles  : ".csv"
               };
          </script>
