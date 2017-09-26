@@ -2,8 +2,6 @@
 namespace App\Classes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\EmployeeMdl;
-use App\KitchenManagementMdl;
 use Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
@@ -22,8 +20,8 @@ class Modules{
     
     public function getSubModules($parent_id) 
 	{
-        $this->employee_role_id = Auth::guard("admin")->user()->employee_role_id;
-		return RolePermissionMdl::where('role_permission.employee_role_id',$this->employee_role_id)
+        $this->user_role_id = Auth::guard("web")->user()->user_role_id;
+		return RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('module.parent_id',$parent_id)
                     ->where('permission',1)->select('module.*')->get();
@@ -37,8 +35,8 @@ class Modules{
      */
     public function getMainModules()
     {
-        $this->employee_role_id = Auth::guard('admin')->user()->employee_role_id;
-        $modules = RolePermissionMdl::where('role_permission.employee_role_id',$this->employee_role_id)
+        $this->user_role_id = Auth::guard('web')->user()->user_role_id;
+        $modules = RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('role_permission.module_id','module.*')
                     ->orderBy('module.id')
@@ -78,8 +76,8 @@ class Modules{
     public function permittedModules()
     {
         $modules_array = array();
-        $this->employee_role_id = Auth::guard('admin')->user()->employee_role_id;
-        $modules = RolePermissionMdl::where('role_permission.employee_role_id',$this->employee_role_id)
+        $this->user_role_id = Auth::guard('web')->user()->user_role_id;
+        $modules = RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('module.url_path')->get();
         foreach($modules as $modules_per)
@@ -121,7 +119,7 @@ class Modules{
     public function editModules($id)
     {
         $modules_array = array();
-        return RolePermissionMdl::where('role_permission.employee_role_id',$id)
+        return RolePermissionMdl::where('role_permission.user_role_id',$id)
                     ->join('module','module.id','=','role_permission.module_id')
                     ->where('permission',1)->select('role_permission.module_id')->get();
 //        return $modules;

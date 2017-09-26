@@ -30,7 +30,10 @@ $this->get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkReques
 $this->get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('admin/dashboard', 'HomeController@index')->name('home');
+
+
+Route::get('admin/order-management', 'Admin\OrderManagementCntrl@index');
 
 Route::group(['middleware' => 'customer_guest'], function() 
 {
