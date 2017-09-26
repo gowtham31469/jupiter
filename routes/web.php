@@ -17,8 +17,8 @@ Route::get('/', function () {
 
 // Auth::routes();
 
-$this->get('admin/login', 'Auth\LoginController@showLoginForm')->name('login');
-$this->post('admin/login', 'Auth\LoginController@login');
+$this->get('admin', 'Auth\LoginController@showLoginForm')->name('login');
+$this->post('admin', 'Auth\LoginController@login');
 $this->post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 
 $this->get('admin/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
@@ -30,7 +30,7 @@ $this->get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkReques
 $this->get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::get('admin/dashboard', 'HomeController@index')->name('home');
+Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 
 Route::get('admin/order-management', 'Admin\OrderManagementCntrl@index');

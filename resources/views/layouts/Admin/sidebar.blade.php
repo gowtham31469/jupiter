@@ -7,7 +7,7 @@
                             <!-- sidebar-heading-image -->
                             <div class="sidebar-heading-image">
                                 <span class="badge badge-rounded badge-danger">8</span>
-                                <img src="../../assets/faces/m7.png" class="rounded-circle" alt="image" />
+                                <img src="{{ asset('delta/assets/faces/m7.png') }}" class="rounded-circle" alt="image" />
                             </div>
                             <!-- end sidebar-heading-image -->
                             <!-- dropdown -->

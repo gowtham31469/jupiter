@@ -31,7 +31,7 @@
             <li class="nav-item dropdown dropdown-user">
                 <a class="nav-link" href="#" data-toggle="dropdown" data-target="dropdown-user">
                     <span class="badge badge-sm badge-rounded badge-warning">1</span>
-                    <img src="../../assets/faces/m7.png" class="rounded-circle" alt="avatar" />
+                    <img src="{{ asset('delta/assets/faces/m7.png') }}" class="rounded-circle" alt="avatar" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-right from-right" id="dropdown-user">
                     <h6 class="dropdown-header dropdown-title">My account</h6>
