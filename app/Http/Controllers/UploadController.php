@@ -18,6 +18,7 @@ class UploadController extends Controller
     	{
     		if($request->hasFile('file'))
 	        {
+	        	ini_set('max_execution_time', 300);
 	        	$path     = $request->file('file')->getRealPath();
                 $data = Excel::load($path, function($reader) {})->get();
                 foreach ($data as $value)
@@ -86,6 +87,35 @@ class UploadController extends Controller
 	        else
 	        {
 	        	$result = "flase";
+	        }
+	    }
+		catch (\Exception $e)
+		{
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+     	}
+    	return $result;
+    }
+
+    public function multiUploadView()
+    {
+        return view('multi-csv-upload');
+    }
+
+    public function csvMultiUpload(Request $request)
+    {
+        try
+    	{
+    		$files =$request->file('files');
+    		return $files;
+    		$no_files = count($_FILES["files"]['name']);
+    		return $no_files;
+    		if($request->hasFile('file'))
+	        {
+	        	ini_set('max_execution_time', 300);
+
+	        	// $path     = $request->file('file')->getRealPath();
+          //       $data = Excel::load($path, function($reader) {})->get();
+                
 	        }
 	    }
 		catch (\Exception $e)

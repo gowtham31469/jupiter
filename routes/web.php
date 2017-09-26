@@ -72,3 +72,5 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 Route::get('upload', 'UploadController@index');
 Route::post('upload', 'UploadController@csvUpload');
+Route::get('multi-upload', 'UploadController@multiUploadView');
+Route::post('multi-upload', 'UploadController@csvMultiUpload');
