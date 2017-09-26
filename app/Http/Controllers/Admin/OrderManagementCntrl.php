@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;   
+use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use Response;
 use View;
@@ -49,7 +49,6 @@ class OrderManagementCntrl extends Controller
         {
              return redirect('/admin/dashboard');
         }
-        
+
     }
 }
-
