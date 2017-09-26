@@ -187,7 +187,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/pages/user-profile.css') }}">
     <!-- endbuild -->
 </head>
-  <body id="pages-empty-page" data-layout="top-navigation-1" data-background="light" data-sidebar="light" data-navbar="light" data-top-navigation="light" data-controller="pages" data-view="empty-page" data-collapsed="false" data-fullscreen="false" data-logo="light">
         @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar') @include('layouts.Admin.sidebar') @elseif(!Auth::guest())
             <script type="text/javascript">
                 window.location = "{{ url('/admin/login') }}";
@@ -240,7 +239,7 @@
     <script src="{{ asset('delta/scripts/maps/functions.js') }}"></script>
     <script src="{{ asset('delta/scripts/icons/functions.js') }}"></script>
     <script src="{{ asset('delta/scripts/custom-events.js') }}"></script>
-    <script src="{{ asset('delta/scripts/app.js') }}"></script>
+    <!--<script src="{{ asset('delta/scripts/app.js') }}"></script>-->
     <script src="{{ asset('delta/scripts/mousetrap.js') }}"></script>
     <script src="{{ asset('delta/scripts/elements/right-sidebar.js') }}"></script>
     <script src="{{ asset('delta/scripts/elements/navbar.js') }}"></script>

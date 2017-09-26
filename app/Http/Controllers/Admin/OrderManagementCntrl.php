@@ -30,9 +30,10 @@ class OrderManagementCntrl extends Controller
      */
     public function index()
     {
-            $module_var = new Modules();
-            //get permitted menus
-        
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
             $top_mod = "Order Management";
             $get_main_module = $module_var->getMainModules();
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
@@ -43,6 +44,11 @@ class OrderManagementCntrl extends Controller
                 return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
             });
             return view('Admin/order-management');
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
         
     }
 }

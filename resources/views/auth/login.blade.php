@@ -1,5 +1,7 @@
 @extends('layouts.Admin.app')
 @section('content')
+<body id="pages-login" data-layout="empty-view-1" data-background="light">
+<div class="bg-dark"></div>
 <div class="container-fluid">
 <div class="row">
     <div class="col">
