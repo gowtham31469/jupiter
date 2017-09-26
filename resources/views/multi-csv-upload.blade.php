@@ -1,56 +1,65 @@
 @extends('layouts.app')
 
 @section('content')
+<style type="text/css">
+  .dropzone {
+    border: none !important;
+    border-radius: 5px;
+    padding: 0 !important;
+    background: white !important;
+    min-height: 200px !important;
+    width: 100%;
+    margin-bottom: 20px;
+    line-height: 200px;
+    vertical-align: middle;
+    color: #263238 ;
+    text-align: center !important;
+}
+</style>
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
-
+              
                 <div class="panel-body">
-                   <p id="msg"></p>
-                    {!! Form::file('files[]', array('multiple'=>true)) !!}
-                    <button id="upload">Upload</button>
+                <div class="dropzone" id="dropzoneFileUpload">
                 </div>
+               </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('jqueryIncludes')
-<script type="text/javascript">
-      $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-  </script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript">
-            $(document).ready(function (e) {
-                $('#upload').on('click', function () {
-                    var form_data = new FormData();
-                    var ins = document.getElementById('multiFiles').files.length;
-                    for (var x = 0; x < ins; x++) {
-                        form_data.append("files[]", document.getElementById('multiFiles').files[x]);
-                    }
-                      alert(form_data)
-                    $.ajax({
-                        url: 'multi-upload', // point to server-side PHP script 
-                        dataType: 'text', // what to expect back from the PHP script
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: form_data,
-                        type: 'post',
-                        success: function (result) {
-                            console.log(result)
-                        },
-                        error: function (response) {
-                            alert()
-                        }
-                    });
-                });
-            });
-        </script>
+  <script type="text/javascript">
+            var csrf_token     = $('meta[name="csrf-token"]').attr('content');
+            Dropzone.autoDiscover = false;
+             var myDropzone = new Dropzone("div#dropzoneFileUpload", { 
+                 url: "multi-upload",
+                 params: {
+                    _token: csrf_token
+                  }
+             });
+             Dropzone.options.myAwesomeDropzone = {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 2, // MB
+                addRemoveLinks: true,
+                acceptedFiles: ".csv",
+                uploadMultiple: true,
+                clickable: ".dropzone",
+                // accept: function(file, done)
+                // {
+                //   var re = /(?:\.([^.]+))?$/;
+                //   var ext = re.exec(file.name)[1];
+                //   ext = ext.toUpperCase();
+                //   if ( ext == "CSV" || ext == "csv") 
+                //   {
+                //      done();
+                //   }
+                //   else { done("select csv files."); }
+                // },
+              };
+         </script>
 @endsection

@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Excel;
+use Input;
+use Validator;
+use Response;
 use App\OrchestraItemDetails;
+use App\OrchestraParcelDetails;
+use App\OrchestraParcelQuantityDetails;
+
 
 class UploadController extends Controller
 {
@@ -105,23 +111,73 @@ class UploadController extends Controller
     {
         try
     	{
-    		$files =$request->file('files');
-    		return $files;
-    		$no_files = count($_FILES["files"]['name']);
-    		return $no_files;
-    		if($request->hasFile('file'))
+    		ini_set('max_execution_time', 300);
+	        $path  		= $request->file('file')->getRealPath();
+	        $filename	= $request->file('file')->getClientOriginalName();
+	        $extension  = $request->file('file')->getClientOriginalExtension();
+	        if ($extension !='csv')
 	        {
-	        	ini_set('max_execution_time', 300);
-
-	        	// $path     = $request->file('file')->getRealPath();
-          //       $data = Excel::load($path, function($reader) {})->get();
-                
+	        	return "failed" ;
 	        }
+	        else
+	        {
+	        	$data  = Excel::load($path, function($reader) {})->get();
+	        	$filename = preg_replace( '/\.[a-z0-9]+$/i' , '' , $filename );
+	        	return "success";
+	        	if ($filename =="ParcelDetails_file1")
+	        	{
+	        		foreach ($data as $vals)
+		        	{
+		        		return $vals;
+		        	}
+	        	}
+	        	else if ($filename =="ParcelDetails_file2")
+	        	{
+	        		foreach ($data as $vals)
+		        	{
+		        		return $vals;
+		        	}
+	        	}
+	        	else
+	        	{
+	        		return "Invalid File";
+	        	}
+	        }
+
 	    }
 		catch (\Exception $e)
 		{
           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
      	}
     	return $result;
+    }
+
+    public function uploadFiles(Request $request)
+    {
+ 
+        $input = $request->all();
+ 		
+        $rules = array(
+            'file' => 'image|max:3000',
+        );
+ 
+        $validation = Validator::make($input, $rules);
+ 
+        if ($validation->fails()) {
+            return Response::make($validation->errors->first(), 400);
+        }
+ 		$path     = $request->file('file')->getRealPath();
+        $data = Excel::load($path, function($reader) {})->get();
+
+        // $destinationPath = 'uploads'; // upload path
+        // $extension = Input::file('file')->getClientOriginalExtension(); // getting file extension
+        // $fileName = rand(11111, 99999) . '.' . $extension; // renameing image
+        // $upload_success = Input::file('file')->move($destinationPath, $fileName); // uploading file to given path
+ 
+        // if ($upload_success) {
+        //     return Response::json('success', 200);
+        // } else {
+        //     return Response::json('error', 400);
+        // }
     }
 }

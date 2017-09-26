@@ -74,3 +74,8 @@ Route::get('upload', 'UploadController@index');
 Route::post('upload', 'UploadController@csvUpload');
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('multi-upload', 'UploadController@csvMultiUpload');
+// Route::post('multi-upload', function(){
+// 	echo "<pre>";
+// 	print_r(Input::all());
+// 	echo "<pre>";
+// });
