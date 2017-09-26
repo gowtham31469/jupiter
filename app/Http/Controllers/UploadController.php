@@ -28,7 +28,8 @@ class UploadController extends Controller
 	        	$path     = $request->file('file')->getRealPath();
                 $data = Excel::load($path, function($reader) {})->get();
                 foreach ($data as $value)
-        		{	OrchestraItemDetails::create([
+        		{	
+        			OrchestraItemDetails::create([
 			            'FactoryCode' 	  => $value->factorycode,
 			            'SupplierName' 	  => $value->suppliername,
 			            'SupplierAddress' => $value->supplieraddress,
@@ -123,19 +124,35 @@ class UploadController extends Controller
 	        {
 	        	$data  = Excel::load($path, function($reader) {})->get();
 	        	$filename = preg_replace( '/\.[a-z0-9]+$/i' , '' , $filename );
-	        	return "success";
 	        	if ($filename =="ParcelDetails_file1")
 	        	{
-	        		foreach ($data as $vals)
+	        		foreach ($data as $value)
 		        	{
-		        		return $vals;
+		        		OrchestraParcelDetails::create([
+			            'FactoryCode' 	  => $value->factorycode,
+			            'SupplierName' 	  => $value->suppliername,
+			            'SupplierAddress' => $value->supplieraddress,
+			            'SupplierEmail' => $value->supplieremail,
+			            'SupplierCountry' => $value->suppliername,
+			            'BuyerEmail' => $value->suppliername,
+			            'Style_Name' => $value->suppliername,
+			            'EditionNumber' => 111,
+			            'VersionNumber' => 22,
+			            'BuyerPONo' => $value->suppliername,
+			            'Theme' => $value->suppliername,
+			            'Quantity' => 2,
+			            'UVC' => $value->suppliername,
+			            'ParcelBarCode' => 111111111,
+			            'ParcelCode' => $value->suppliername,
+			            'Style_Name' => $value->suppliername,
+			        ]);
 		        	}
 	        	}
 	        	else if ($filename =="ParcelDetails_file2")
 	        	{
-	        		foreach ($data as $vals)
+	        		foreach ($data as $value)
 		        	{
-		        		return $vals;
+		        		return $value;
 		        	}
 	        	}
 	        	else
