@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'JGA'),
 
     /*
     |--------------------------------------------------------------------------
@@ -165,7 +165,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        Arcanedev\LogViewer\LogViewerServiceProvider::class,
         /*
          * Package Service Providers...
          */
