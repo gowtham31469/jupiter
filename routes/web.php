@@ -75,10 +75,9 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 Route::get('upload', 'UploadController@index');
 Route::post('upload', 'UploadController@csvUpload');
-Route::get('multi-upload', 'UploadController@multiUploadView');
-Route::post('multi-upload', 'UploadController@csvMultiUpload');
-// Route::post('multi-upload', function(){
-// 	echo "<pre>";
-// 	print_r(Input::all());
-// 	echo "<pre>";
-// });
+
+//Order Management
+
+Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
+Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
+
