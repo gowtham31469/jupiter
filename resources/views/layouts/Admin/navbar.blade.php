@@ -82,14 +82,24 @@
       @foreach($modules as $mod)
       @if($mod->parent_id == 0)
         <ul class="menu-bottom list-unstyled">
-           
-                    <li class="level-1">
-                       <a href="{{$mod->url_path}}">
-                        <span class="modName">{{$mod->module_name}}</span>
-                        <?php $varia = $mod->module_id?>
-                        </a>
-                    </li>
+            <li class="level-1">
+               <a href="{{$mod->url_path}}">
+                <span class="modName">{{$mod->module_name}}</span>
+                <?php $varia = $mod->module_id?>
+                </a>
+                <ul class="menu-bottom list-unstyled">
+                @foreach($modules as $mod)
+                @if($mod->parent_id == $varia)
+                <li>
+                    <a href="{{$mod->url_path}}">
+                        <span>{{$mod->module_name}}</span>
+                    </a>
+                </li>
+                @endif
+                @endforeach
+                </ul>
+            </li>
         </ul>
       @endif
-            @endforeach
+      @endforeach
 </div>

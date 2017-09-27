@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Orchestra;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
 use Response;
 use View;
+use DB;
 
 class OrderManagementCntrl extends Controller
 {
@@ -39,16 +40,18 @@ class OrderManagementCntrl extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(1);
+            $get_sub_module = $module_var->getSubModules(9);
             View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
                 return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
             });
-            return view('Admin/order-management');
+ 	    $orders = DB::table('orchestra_parcel_details')->select('*')->get();
+            return view('Admin/Orchestra/order-management',['orders' => $orders]);
         }
         else
         {
              return redirect('/admin/dashboard');
         }
-
+        
     }
 }
+

@@ -282,6 +282,7 @@
     <script src="{{ asset('delta/scripts/plugins/accounting-js.js') }}"></script>
     <script src="{{ asset('delta/scripts/pages/coming-soon.js') }}"></script>
     <script src="{{ asset('delta/scripts/pages/error-page.js') }}"></script>
+    @yield('jqueryIncludes')
     <!-- endbuild -->
 </body>
 </html>
