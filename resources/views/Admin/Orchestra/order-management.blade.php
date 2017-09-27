@@ -12,7 +12,7 @@
                     <div class="container-fluid">
 				<div class="row">
                                     <div class="col">
-                                        <ol class="breadcrumb icon-home icon-angle-right">
+                                        <ol class="breadcrumb icon-angle-right">
                                             <li><a href="{{url('admin/dashboard')}}">Dashboard</a>
                                             </li>
                                             <li class="active">Sticker Orders</li>
@@ -22,8 +22,8 @@
                         <div class="row">
                             <div class="col">
                                 <a class="btn btn-info btn-rounded btn-icon" href="#">
-                                    <i class="sli-wrench"></i>
-                                    <span class="btn-text">Add Order</span>
+                                    <i class="fa fa-plus"></i>
+                                    <span class="btn-text">Create Order</span>
                                 </a>
                                 <h4>Order Management</h4>
                                 <h5>Sticker Orders</h5>
@@ -53,7 +53,7 @@
                                             <tbody>
 						@foreach($orders as $value)
 		                                        <tr id="{{$value->id}}">
-		                                            <td>{{$value->BuyerPONo}}</td>
+		                                            <td>{{$value->UVC}}</td>
 		                                            <td>{{$value->BuyerPONo}}</td>
 		                                            <td>{{$value->SupplierName}}</td>
 		                                            <td>{{$value->Theme}}</td>
@@ -82,8 +82,8 @@
 @endif
 
 @section('jqueryIncludes')
- <script>
+<script>
     $('#datatable-example-2').DataTable();
-    </script>
+</script>
 @endsection
 

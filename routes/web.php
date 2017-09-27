@@ -35,8 +35,6 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 Route::get('admin/order-management', 'Admin\OrderManagementCntrl@index');
 Route::get('admin/user-management', 'Admin\UserManagementController@index');
-Route::get('admin/user-management/users', 'Admin\UserManagementController@users');
-Route::get('admin/user-management/roles', 'Admin\UserManagementController@users');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
@@ -83,6 +81,8 @@ Route::post('upload', 'UploadController@csvUpload');
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
+Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
+Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@stickerOrders');
 
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('multi-upload', 'UploadController@csvMultiUpload');

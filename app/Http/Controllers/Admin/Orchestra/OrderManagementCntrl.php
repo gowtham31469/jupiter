@@ -52,6 +52,16 @@ class OrderManagementCntrl extends Controller
              return redirect('/admin/dashboard');
         }
         
+    } 
+    public function labelOrders()
+    {
+            $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->get();
+            echo json_encode($orders);
+    }
+    public function stickerOrders()
+    {
+            $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
+            echo json_encode($orders);
     }
 }
 
