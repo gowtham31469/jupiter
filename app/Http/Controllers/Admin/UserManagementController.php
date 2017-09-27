@@ -15,7 +15,7 @@ class UserManagementController extends Controller
   private $modules_permission;
   /**
    * Create a new controller instance.
-   *
+   * @author <Praveen>
    * @return void
    */
   public function __construct()
@@ -24,8 +24,8 @@ class UserManagementController extends Controller
   }
 
   /**
-   * Show the application dashboard.
-   *
+   * Show the user-management home page.
+   * @author <Praveen>
    * @return \Illuminate\Http\Response
    */
   public function index()
@@ -44,6 +44,33 @@ class UserManagementController extends Controller
             return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
         });
         return view('Admin/User Management/home');
+    }
+    else
+    {
+         return redirect('/admin/dashboard');
+    }
+  }
+  /**
+   * Show the application dashboard.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function users()
+  {
+    $module_var = new Modules();
+    $is_allowed = $module_var->permittedModules();
+    if($is_allowed)
+    {
+        $top_mod = "User Management";
+        $get_main_module = $module_var->getMainModules();
+        View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+            return $view->with(['modules' => $get_main_module]);
+        });
+        $get_sub_module = $module_var->getSubModules(2);
+        View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
+            return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
+        });
+        return view('Admin/User Management/users');
     }
     else
     {

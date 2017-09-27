@@ -35,6 +35,8 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 Route::get('admin/order-management', 'Admin\OrderManagementCntrl@index');
 Route::get('admin/user-management', 'Admin\UserManagementController@index');
+Route::get('admin/user-management/users', 'Admin\UserManagementController@users');
+Route::get('admin/user-management/roles', 'Admin\UserManagementController@users');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
