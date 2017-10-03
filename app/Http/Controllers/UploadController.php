@@ -10,7 +10,9 @@ use Response;
 use App\OrchestraItemDetails;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
-
+use View;
+use DB;
+use App\Classes\Uploads;
 
 class UploadController extends Controller
 {
@@ -31,6 +33,7 @@ class UploadController extends Controller
     {
         try
     	{
+    		$upload_obj = new Uploads();
     		if($request->hasFile('file'))
 	        {
 	        	ini_set('max_execution_time', 300);
@@ -39,71 +42,56 @@ class UploadController extends Controller
                 $data_exists = OrchestraItemDetails::select()->get();
                 if (count($data_exists)>0)
                 {
-                	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+                	foreach ($data as $value)
+	        		{	
+	        			$collection_exixts = DB::table('orchestra_item_details')->where('Collection',$value->collection)->select('*')->get();
+	        			if (count($orders)>0)
+	        			{
+	        				$order_uvc = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->select('*')->get();
+	        				if (count($order_uvc)>0)
+	        				{
+	        					$order_po = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->select('*')->get();
+	        					if (count($order_po)>0)
+	        					{
+	        						$order_version = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->select('*')->get();
+	        						if (count($order_version)>0)
+	        						{
+	        							$order_edition = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->select('*')->get();
+	        							if (count($order_edition)>0)
+	        							{
+	        								$order_size = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
+	        							}
+	        							else
+	        							{
+	        								$upload_obj->insertOrchestraItemDetails($value);
+	        							}
+	        						}
+	        						else
+	        						{
+	        							$upload_obj->insertOrchestraItemDetails($value);
+	        						}
+	        					}
+	        					else
+	        					{
+	        						$upload_obj->insertOrchestraItemDetails($value);
+	        					}
+	        				}
+	        				else
+	        				{
+	        					$upload_obj->insertOrchestraItemDetails($value);
+	        				}
+	        			}
+	        			else
+	        			{
+	        				$upload_obj->insertOrchestraItemDetails($value);
+	        			}
+	        		}
                 }
                 else
                 {
                 	foreach ($data as $value)
 	        		{	
-	        			OrchestraItemDetails::create([
-				            'FactoryCode' 	  => $value->factorycode,
-				            'SupplierName' 	  => $value->suppliername,
-				            'SupplierAddress' => $value->supplieraddress,
-				            'SupplierEmail' => $value->supplieremail,
-				            'SupplierCountry' => $value->suppliercountry,
-				            'BuyerEmail' => $value->buyeremail,
-				            'First_ETD_SHIPMENT_DATE' => $value->first_etd_shipment_date,
-				            'EditionNumber' => $value->editionnumber,
-				            'VersionNumber' => $value->versionnumber,
-				            'Collection' => $value->collection,
-				            'BuyerPONo' => $value->buyerpono,
-				            'BarcodeForPricesTags' => $value->barcodeforpricestags,
-				            'UVC_TCO' => $value->uvc_tco,
-				            'Description' => $value->description,
-				            'Rayon' => $value->rayon,
-				            'Color' => $value->color,
-				            'Size' => $value->size,
-				            'Stature' => $value->stature,
-				            'Age' => $value->age,
-				            'Theme' => $value->theme,
-				            'Marque' => $value->marque,
-				            'Disney' => $value->disney,
-				            'Marvel' => $value->marvel,
-				            'PommeFramboise' => $value->pommeframboise,
-				            'PrixEurope' => $value->prixeurope,
-				            'PrixClubEurope' => $value->prixclubeurope,
-				            'PrixVenteKoweit' => $value->prixventekoweit,
-				            'Prix_Vente_Arabie_Saoudite' => $value->prix_vente_arabie_saoudite,
-				            'Prix_Club_Arabie_Saoudite' => $value->prix_club_arabie_saoudite,
-				            'Prix_Vente_Canada' => $value->prix_vente_canada,
-				            'Prix_Club_Canada' => $value->prix_club_canada,
-				            'Prix_Vente_Suisse' => $value->prix_vente_suisse,
-				            'Prix_Club_Suisse' => $value->prix_club_suisse,
-				            'Prix_Vente_Chine' => $value->prix_vente_chine,
-				            'Prix_Club_Chine' => $value->prix_club_chine,
-				            'Prix_Vente_Turquie' => $value->prix_vente_turquie,
-				            'Prix_Club_Turquie' => $value->prix_club_turquie,
-				            'Prix_Vente_Maroc' => $value->prix_vente_maroc,
-				            'Prix_Club_Maroc' => $value->prix_club_maroc,
-				            'Prix_Vente_Ile_Maurice' => $value->prix_vente_ile_maurice,
-				            'Prix_Club_Ile_Maurice' => $value->prix_club_ile_maurice,
-				            'Prix_Vente_Emirats_Arabes_Unis' => $value->prix_vente_emirats_arabes_unis,
-				            'Prix_Club_Emirats_Arabes_Unis' => $value->prix_club_emirats_arabes_unis,
-				            'Prix_Vente_TUNISIE' => $value->prix_vente_tunisie,
-				            'Prix_Club_TUNISIE' => $value->prix_club_tunisie,
-				            'Prix_Vente_ALGERIE' => $value->prix_vente_algerie,
-				            'Prix_Club_ALGERIE' => $value->prix_club_algerie,
-				            'Quantity' => $value->quantity,
-				            'UVC' => $value->uvc,
-				            'ParcelBarCode' => $value->parcelbarcode,
-				            'ParcelCode' => $value->parcelcode,
-				            'HangTag_Print_Date' => $value->hangtag_print_date,
-				            'Prix_Vente_QATAR' => $value->prix_vente_qatar,
-				            'Prix_Club_QATAR' =>$value->prix_club_qatar,
-				            'Style_Name' => $value->style_name,
-				            'Prix_Vente_USA' => $value->prix_vente_usa,
-				            'Prix_Club_USA' => $value->prix_club_usa,
-				        ]);
+	        			$upload_obj->insertOrchestraItemDetails($value);
 	        		}
 	        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
                 }

@@ -49,6 +49,5 @@ class OrderManagementCntrl extends Controller
         {
              return redirect('/admin/dashboard');
         }
-
     }
 }
