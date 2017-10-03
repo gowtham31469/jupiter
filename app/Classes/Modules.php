@@ -17,8 +17,8 @@ class Modules{
      * @return sub modules
      */
     private $employee_role_id;
-    
-    public function getSubModules($parent_id) 
+
+    public function getSubModules($parent_id)
 	{
         $this->user_role_id = Auth::guard("web")->user()->user_role_id;
 		return RolePermissionMdl::where('role_permission.user_role_id',$this->user_role_id)
@@ -30,7 +30,7 @@ class Modules{
 /**
      * Function to get main modules
      *
-     * 
+     *
      * @return Main modules
      */
     public function getMainModules()
@@ -46,10 +46,10 @@ class Modules{
     /**
      * Function to get default sub modules
      *
-     * 
+     *
      * @return Main modules
      */
-    public function subModules($parent_id) 
+    public function subModules($parent_id)
 	{
 		return DB::table('module')->where('module.parent_id',$parent_id)
                             ->select('module.*')->get();
@@ -58,7 +58,7 @@ class Modules{
     /**
      * Function to get default main modules
      *
-     * 
+     *
      * @return Main modules
      */
     public function mainModules()
@@ -70,7 +70,7 @@ class Modules{
     /**
      * Function to get role permissions for modules
      *
-     * 
+     *
      * @return Main modules
      */
     public function permittedModules()
@@ -96,7 +96,7 @@ class Modules{
      *
      * @return Top Module
      */
-    public function getTopParent($url) 
+    public function getTopParent($url)
 	{
         $loop='';
 		$first_level= DB::table("module")->where("url_path", $url)->first();
@@ -109,7 +109,7 @@ class Modules{
         //return module name
         if($loop != '')
         {
-            return $loop;    
+            return $loop;
         }
 	}
     /**
@@ -124,62 +124,5 @@ class Modules{
                     ->where('permission',1)->select('role_permission.module_id')->get();
 //        return $modules;
     }
-    /**
-     * To get the city id of a ichor employee
-     */
-    public function getCity($kid)
-    {
-        $tree  = DB::select(DB::raw("select id, name,parent_id FROM kitchen_hierarchy where archive = 0"));
-            $data  = array();
-            $index = array();
-            foreach($tree as $item) 
-            {
-                $id        = $item->id;
-                $parent_id = $item->parent_id == 0 ? "NULL" : $item->parent_id;
-                $data[$id] = $item;
-                $index[$parent_id][] = $id;
-            }
-            if(in_array($kid,$index['NULL']))
-            {
-                return $kid;
-            }
-            else
-            {
-                $current = $data[$kid];
-                $parent_id = $current->parent_id == 0 ? "NULL" : $current->parent_id;
-                $parents = array();
-                while (isset($data[$parent_id])) 
-                {
-                    $current = $data[$parent_id];
-                    $parent_id = $current->parent_id == 0 ? "NULL" : $current->parent_id;
-                    $parents[] = $current->id;
-                }
-                $levelArray = array_reverse($parents);
-                return $levelArray[0];
-            }
-    }
-    /**
-     * To get the type of hierarchy
-     */
-    public function getType($kid)
-    {
-        return DB::table('kitchen_hierarchy')
-                ->join('kitchen_hierarchy_type','kitchen_hierarchy_type.id','=','kitchen_hierarchy.kitchen_heirarchy_type_id')
-                ->where('kitchen_hierarchy.id',$kid)
-                ->select('kitchen_hierarchy_type.name as entity', 'kitchen_hierarchy.id','kitchen_hierarchy.name')
-                ->first();
-    }
 
-    /**
-     * Tocheck if the employee is Super Admin
-     */
-    public function isAdmin($role_id)
-    {
-        $role =  DB::table('employee_role')
-                ->where('id',$role_id)
-                ->select('employee_role_name')
-                ->first();
-        return ($role->employee_role_name == 'SuperAdmin')?1:0;
-    }
- 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Orchestra;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use Response;
 use View;
+use DB;
 
 class OrderManagementCntrl extends Controller
 {
@@ -39,17 +40,28 @@ class OrderManagementCntrl extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(1);
+            $get_sub_module = $module_var->getSubModules(9);
             View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
                 return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
             });
-            return view('Admin/order-management');
+ 	    $orders = DB::table('orchestra_parcel_details')->select('*')->get();
+            return view('Admin/Orchestra/order-management',['orders' => $orders]);
         }
         else
         {
              return redirect('/admin/dashboard');
         }
         
+    } 
+    public function labelOrders()
+    {
+            $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->get();
+            echo json_encode($orders);
+    }
+    public function stickerOrders()
+    {
+            $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
+            echo json_encode($orders);
     }
 }
 

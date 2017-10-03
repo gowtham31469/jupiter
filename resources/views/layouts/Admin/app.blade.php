@@ -5,6 +5,7 @@
     <title>JGA</title>
     <meta name="description" content="dashboard, admin, template, templates, delta, bootstrap 4, angular 4 templates, angular 4 themes">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('delta/assets/icons/android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('delta/assets/icons/favicon-32x32.png') }}">
@@ -150,11 +151,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/notifications/alerts.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/notifications/sweet-alert-2.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/notifications/toastr.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/font-awesome.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/font-awesome-4.7.0/css/font-awesome.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/flags.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/material-design-icons.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/weather-icons.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/simple-line-icons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/simple-line-icons-master/css/simple-line-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/icons/ionicons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/forms/default-forms.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/forms/file-uploads.css') }}">
@@ -187,12 +188,16 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('delta/css/pages/user-profile.css') }}">
     <!-- endbuild -->
 </head>
-        @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar') @include('layouts.Admin.sidebar') @elseif(!Auth::guest())
+        @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar') @include('layouts.Admin.sidebar') 
+        @elseif(!Auth::guest())
             <script type="text/javascript">
                 window.location = "{{ url('/admin/login') }}";
             </script>
         @endif
         @yield('content')   
+    <script>
+    var base_url = "<?php echo  url('/') ?>";
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=weather,visualization,panoramio&key=AIzaSyDRuAzjz4dLpeQnvW4D8qZ7mX-G0pAZEcI"></script>
     <!-- build:js /js/vendor.js -->
     <script src="{{ asset('delta/bower_components/jquery-1.9.1/index.js') }}"></script>
@@ -282,6 +287,8 @@
     <script src="{{ asset('delta/scripts/plugins/accounting-js.js') }}"></script>
     <script src="{{ asset('delta/scripts/pages/coming-soon.js') }}"></script>
     <script src="{{ asset('delta/scripts/pages/error-page.js') }}"></script>
+    <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    @yield('jqueryIncludes')
     <!-- endbuild -->
 </body>
 </html>
