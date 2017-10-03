@@ -45,7 +45,7 @@ class UploadController extends Controller
                 	foreach ($data as $value)
 	        		{	
 	        			$collection_exixts = DB::table('orchestra_item_details')->where('Collection',$value->collection)->select('*')->get();
-	        			if (count($orders)>0)
+	        			if (count($collection_exixts)>0)
 	        			{
 	        				$order_uvc = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->select('*')->get();
 	        				if (count($order_uvc)>0)
@@ -60,6 +60,14 @@ class UploadController extends Controller
 	        							if (count($order_edition)>0)
 	        							{
 	        								$order_size = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
+	        								if (count($order_size)>0)
+	        								{
+	        									$upload_obj->updateOrchestraItemDetails($value);
+	        								}
+	        								else
+	        								{
+	        									$upload_obj->insertOrchestraItemDetails($value);
+	        								}
 	        							}
 	        							else
 	        							{
@@ -86,6 +94,7 @@ class UploadController extends Controller
 	        				$upload_obj->insertOrchestraItemDetails($value);
 	        			}
 	        		}
+	        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
                 }
                 else
                 {
@@ -98,7 +107,7 @@ class UploadController extends Controller
 	        }
 	        else
 	        {
-	        	$result = "flase";
+	        	$result = response()->json(['error' =>true,'message' => 'File missing'], 403);
 	        }
 	    }
 		catch (\Exception $e)
