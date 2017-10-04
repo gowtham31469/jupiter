@@ -80,38 +80,38 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <form>
+                                                {!! Form::open(['method' => 'post','id' => 'add_user']) !!}
                                                     <div class="form-group">
                                                         {!! Form::label('user_id', 'User ID * :', ['class' => 'form_label']) !!}
-                                                        {!! Form::text('user_id',$value = '', array('class' => 'form-control input-sm','required')) !!}
+                                                        {!! Form::text('user_id',$value = '', array('class' => 'form-control ','required')) !!}
                                                     </div>
                                                     <div class="form-group">
                                                       {!! Form::label('name', 'Name * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::text('name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Name','required')) !!}
+                                                      {!! Form::text('name',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Name','required')) !!}
                                                     </div>
                                                     <div class="form-group">
                                                       {!! Form::label('phone', 'Phone * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Phone','required')) !!}
+                                                      {!! Form::text('phone',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Phone','required')) !!}
                                                     </div>
                                                     <div class="form-group">
                                                       {!! Form::label('email', 'Email * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::email('email',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Email','required')) !!}
+                                                      {!! Form::email('email',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Email','required')) !!}
                                                     </div>
                                                     <div class="form-group">
                                                       {!! Form::label('address', 'Address * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Email','required')) !!}
+                                                      {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Email','required')) !!}
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Password</label>
-                                                        <input type="password" class="form-control" placeholder="Enter Password">
+                                                      {!! Form::label('password', 'Password * :', ['class' => ' form_label']) !!}
+                                                      {!! Form::password('password', array('class' => 'form-control ','placeholder' => 'Enter Password','required')) !!}
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>User Role</label>
-                                                        <input type="email" class="form-control" placeholder="Enter Email">
+                                                        {!! Form::label('user_role', 'User Role * :', ['class' => 'form_label']) !!}
+                                                        {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles),'',array('class' => 'form-control ')) }}
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                    <button type="submit" class="btn btn-primary">Cancel</button>
-                                                </form>
+                                                    {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
+                                                    {!! Form::submit('Cancel', ['class' => 'btn btn-primary'] ) !!}
+                                                {!! Form::close() !!}
                                             </div>
                                         </div>
                                    </div>

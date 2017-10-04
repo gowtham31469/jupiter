@@ -151,7 +151,7 @@
         </li>
     </ul>
     @endif
-    @endforeach 
+    @endforeach
 </div>
 <script>
     $('.typeahead').typeahead()
