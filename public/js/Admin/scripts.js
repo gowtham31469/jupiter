@@ -33,17 +33,25 @@ function orchestra_sticker_orders(buyer)
         data: {_token:csrf_token},
         beforeSend: function () {
             $("#fakeloader").fadeIn();
+            $(".slideUp").css('margin-top','0%');
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
         },
         success: function (data) {
              $('.main').html(jumbotron('Sticker Orders','Order Management'));
              $('.main').append(table(data));
              $('#datatable-example-2').DataTable();
+            $('.sub_modules').css('display', 'block')
+            $( ".sub_modules a:first-child" ).addClass( "active" )
+            
         },
         error: function (data) {
 
         },
         complete: function () {
             $("#fakeloader").fadeOut();
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
         }
     })
 }
