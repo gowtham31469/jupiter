@@ -14,7 +14,7 @@ class RedirectIfCustomerAuthenticated
      * @param  \Closure  $next
      * @return mixed
      */
-   
+
       public function handle($request, Closure $next)
       {
           //If request comes from logged in user, he will
@@ -26,7 +26,7 @@ class RedirectIfCustomerAuthenticated
           //If request comes from logged in seller, he will
           //be redirected to seller's home page.
           if (Auth::guard('web_customer')->check()) {
-              return redirect('/customer');
+              return redirect('/customer/dashboard');
           }
           return $next($request);
       }
