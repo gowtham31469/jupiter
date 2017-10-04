@@ -21,7 +21,7 @@
                                 </div>
                         <div class="row">
                             <div class="col">
-                                <a class="btn btn-info btn-rounded btn-icon" href="#">
+                                <a class="btn btn-info btn-rounded btn-icon" href="#" onclick="orchestra_create_template_view(this)">
                                     <i class="fa fa-plus"></i>
                                     <span class="btn-text">Create Template</span>
                                 </a>

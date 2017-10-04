@@ -10,7 +10,8 @@ function orchestra_label_orders(obj)
             $("#fakeloader").fadeIn();
         },
         success: function (data) {
-             $('.main').html(jumbotron('Label Orders',data));
+             $('.main').html(jumbotron('Label Orders','Order Management'));
+             $('.main').append(table(data));
              $('#datatable-example-2').DataTable();
         },
         error: function (data) {
@@ -22,11 +23,11 @@ function orchestra_label_orders(obj)
     })
 }
 
-function orchestra_sticker_orders(obj)
+function orchestra_sticker_orders(buyer)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/orchestra/order-management/sticker-orders",
+        url: base_url + "/admin/"+buyer+"/order-management/sticker-orders",
         type: "Post",
         dataType:"json",
         data: {_token:csrf_token},
@@ -34,7 +35,8 @@ function orchestra_sticker_orders(obj)
             $("#fakeloader").fadeIn();
         },
         success: function (data) {
-             $('.main').html(jumbotron('Sticker Orders',data));
+             $('.main').html(jumbotron('Sticker Orders','Order Management'));
+             $('.main').append(table(data));
              $('#datatable-example-2').DataTable();
         },
         error: function (data) {
@@ -45,9 +47,15 @@ function orchestra_sticker_orders(obj)
         }
     })
 }
-function jumbotron(name,data)
+
+function orchestra_create_template_view(obj)
 {
-    return '<div class="jumbotron jumbotron-1"><div class="container-fluid"><div class="row"><div class="col"><ol class="breadcrumb icon-angle-right"><li><a href="#">Dashboard</a></li><li class="active">'+name+'</li></ol></div></div><div class="row"><div class="col"><a class="btn btn-info btn-rounded btn-icon" href="#"><i class="fa fa-plus"></i><span class="btn-text">Create Order</span></a><h4>Order Management</h4><h5>'+name+'</h5></div></div></div></div><div class="page"><div class="row"><div class="col"><div class="widget"><div class="row"><div class="col">'+table(data)+'</div></div></div></div></div></div>';
+    $('.main').html(jumbotron('Create Template','Template Management'));
+}
+
+function jumbotron(name,main_menu)
+{
+    return '<div class="jumbotron jumbotron-1"><div class="container-fluid"><div class="row"><div class="col"><ol class="breadcrumb icon-angle-right"><li><a href="#">Dashboard</a></li><li class="active">'+name+'</li></ol></div></div><div class="row"><div class="col"><a class="btn btn-info btn-rounded btn-icon" href="#"><i class="fa fa-plus"></i><span class="btn-text">Create Order</span></a><h4>'+main_menu+'</h4><h5>'+name+'</h5></div></div></div></div>';
 }
 function table(data)
 {
@@ -83,6 +91,6 @@ function table(data)
         }   
         tr += '</tr>';
     })  
-    return'<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table>';
+    return'<div class="page"><div class="row"><div class="col"><div class="widget"><div class="row"><div class="col"><table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div></div></div></div></div></div>';
    
 }

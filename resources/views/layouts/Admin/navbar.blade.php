@@ -147,35 +147,12 @@
                 <span class="modName">{{$mod->module_name}}</span>
                 <?php $varia = $mod->module_id?>
             </a>
-            <ul class="menu-bottom list-unstyled">
-                @foreach($modules as $mod)
-                @if($mod->parent_id == $varia)
-                <li>
-                    <a href="{{$mod->url_path}}">
-                        <span>{{$mod->module_name}}</span>
-                    </a>
-                </li>
-                @endif
-                @endforeach 
-            </ul>
+         
         </li>
     </ul>
-    @endif @endforeach
-</div>
-<div class="specific-menu">
-    <div class="dropdown-select">
-        <input autocomplete="off" class="typeahead-1 form-control" data-provide="typeahead" name="typeahead-1" type="text">
-    </div>
-    <div class="btn-group">
-        @foreach($sub_modules as $mod)
-
-        <a href="#" onclick="{{$mod->url_path}}" class="btn btn-transparent">
-                                            <i class="{{$mod->image}}"></i>
-                                            <span class="title">{{$mod->module_name}}</span>
-                                            </a> @endforeach
-    </div>
+    @endif
+    @endforeach 
 </div>
 <script>
     $('.typeahead').typeahead()
-
 </script>

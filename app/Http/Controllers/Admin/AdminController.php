@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Classes\Modules;
+use Response;
+use View;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use DB;
 
 class AdminController extends Controller
 {
@@ -25,5 +31,106 @@ class AdminController extends Controller
     public function index()
     {
         return view('Admin/login');
+    }
+    
+    public function orderManagement()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $top_mod = "User Management";
+            $get_main_module = $module_var->getMainModules();
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+                return $view->with(['modules' => $get_main_module]);
+            });
+            $get_sub_module = $module_var->getSubModules(9);
+            $roles = DB::table('user_role')->select('user_role.*')
+                        ->get();
+            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
+                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
+            });
+            return view('Admin/order-management',['sub_modules' => $get_sub_module]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+        
+    }
+    
+    public function buyerManagement()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $top_mod = "User Management";
+            $get_main_module = $module_var->getMainModules();
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+                return $view->with(['modules' => $get_main_module]);
+            });
+            $get_sub_module = $module_var->getSubModules(2);
+            $roles = DB::table('user_role')->select('user_role.*')
+                        ->get();
+            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
+                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
+            });
+            return view('Admin/buyer-management',['sub_modules' => $get_sub_module]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+    }
+    
+    public function supplierManagement()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $top_mod = "User Management";
+            $get_main_module = $module_var->getMainModules();
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+                return $view->with(['modules' => $get_main_module]);
+            });
+            $get_sub_module = $module_var->getSubModules(2);
+            $roles = DB::table('user_role')->select('user_role.*')
+                        ->get();
+            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
+                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
+            });
+            return view('Admin/supplier-management',['sub_modules' => $get_sub_module]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+    }
+    
+    public function templateManagement()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $top_mod = "User Management";
+            $get_main_module = $module_var->getMainModules();
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+                return $view->with(['modules' => $get_main_module]);
+            });
+            $get_sub_module = $module_var->getSubModules(2);
+            $roles = DB::table('user_role')->select('user_role.*')
+                        ->get();
+            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
+                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
+            });
+            return view('Admin/template-management',['sub_modules' => $get_sub_module]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
     }
 }
