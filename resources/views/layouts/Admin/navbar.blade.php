@@ -2,13 +2,13 @@
     .top-navigation.top-navigation-1 {
         z-index: 1000000;
     }
-    
+
     [data-layout="top-navigation-1"][data-collapsed="true"] .navbar,
     [data-top-navigation="dark"] .top-navigation.top-navigation-1 {
         padding-left: 20px;
         z-index: 1099;
     }
-    
+
 [data-layout="top-navigation-1"] .left-sidebar {
     position: fixed;
     top: 115px;
@@ -118,14 +118,17 @@
                 <?php $varia = $mod->module_id?>
             </a>
             <ul class="menu-bottom list-unstyled">
-                @foreach($modules as $mod) 
+                @foreach($modules as $mod)
                 @if($mod->parent_id == $varia)
                 <li>
                     <a href="{{$mod->url_path}}">
                         <span>{{$mod->module_name}}</span>
                     </a>
                 </li>
-                @endif @endforeach
+                @endif
+                @endforeach
+                @endif
+                @endforeach 
             </ul>
         </li>
     </ul>
