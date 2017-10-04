@@ -147,6 +147,7 @@
                 <span class="modName">{{$mod->module_name}}</span>
                 <?php $varia = $mod->module_id?>
             </a>
+         
         </li>
     </ul>
     @endif
