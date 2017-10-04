@@ -81,13 +81,10 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
     return view('merchandiser.home');
 	});
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-<<<<<<< HEAD
 	Route::get('/merchandiser/dashboard', function(){
 	  return view('merchandiser.home');
 	});
 
-=======
->>>>>>> master
 });
 
 Route::get('upload', 'UploadController@index');
