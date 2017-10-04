@@ -1,44 +1,56 @@
 <style>
-    .top-navigation.top-navigation-1 {
-        z-index: 1000000;
+    [data-background="light"] .navbar.navbar-1 a {
+        color: #fff;
     }
     
-    [data-layout="top-navigation-1"][data-collapsed="true"] .navbar,
+    [data-layout="top-navigation-1"] .main {
+        padding-top: 0px;
+    }
+    
     [data-top-navigation="dark"] .top-navigation.top-navigation-1 {
-        padding-left: 20px;
-        z-index: 1099;
+        background: #1791E8;
+        color: #ffffff;
     }
     
-[data-layout="top-navigation-1"] .left-sidebar {
-    position: fixed;
-    top: 115px;
-    background: #f5f5f5 !important;
-    bottom: 0;
-    left: 0;
-    height: calc(100% - 120px);
-    width: 240px;
-    z-index: 1037;
-    -webkit-transform: translate3d(-240px, 0, 0);
-    transform: translate3d(-240px, 0, 0);
-   border-right: 1px solid #e3e3e3;
-}
-    [data-sidebar="light"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar{
-        background: #f5f5f5 !important;
+    [data-navbar="custom"] .navbar.navbar-1 {
+        background: #000F08;
+        color: #ffffff;
     }
-        [data-layout="top-navigation-1"] .main {
-    padding-top: 115px;
-}
-    [data-navbar="light"] .navbar.navbar-1 {
-    background: #f5f5f6;
-    color: #212121;
-}
-    [data-navbar="light"] .logo {
-    background: #f5f5f6;
-    color: #212121;
-}
-    [data-sidebar="light"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar, [data-sidebar="light"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar:hover {
-    border-right: 1px solid #ddd;
-}
+    
+    [data-top-navigation="dark"] .top-navigation.top-navigation-1 .menu-bottom {
+        background: #2f91e9;
+        border-color: #2988de;
+    }
+    
+    a.btn.btn-transparent {
+        background-color: transparent;
+        border-bottom: 2px solid transparent;
+    }
+    
+    a.btn.btn-transparent:hover {
+        border-bottom: 2px solid #2f91e9!important;
+    }
+    
+    a.btn.btn-transparent.active {
+        border-bottom: 2px solid #2f91e9!important;
+        color: #000000;
+    }
+    .specific-menu{
+        padding-top:120px;
+    }
+    .btn-group,
+    .btn-group-vertical {
+        position: relative;
+        text-align: center;
+        align-items: center;
+        margin: auto 0;
+        display: block;
+    }
+    
+    [data-top-navigation="dark"] ul.menu-bottom.active.list-unstyled {
+        background: #030f07;
+    }
+
 </style>
 <!-- navbar-1 -->
 <nav class="navbar navbar-1 navbar-fixed-top">
@@ -76,7 +88,7 @@
             <a class="nav-link" href="#" data-toggle="dropdown" data-target="dropdown-user">
                 <!--                    <span class="badge badge-sm badge-rounded badge-warning">1</span>-->
                 <img src="http://reflectivetech.in/elpfa/images/avatar.png" class="rounded-circle" alt="avatar" />
-                <span style="padding-top: 17px;font-weight: 600;display: inline-block;margin-left:10px;">JGA Admin</span> </a>
+                <span style="font-weight: 600;display: inline-block;margin-left:10px;">JGA Admin</span> </a>
             <div class="dropdown-menu dropdown-menu-right from-right" id="dropdown-user">
                 <h6 class="dropdown-header dropdown-title">My account</h6>
                 <a class="dropdown-item" href="#">
@@ -130,3 +142,20 @@
     </ul>
     @endif @endforeach
 </div>
+<div class="specific-menu">
+    <div class="dropdown-select">
+        <input autocomplete="off" class="typeahead-1 form-control" data-provide="typeahead" name="typeahead-1" type="text">
+    </div>
+    <div class="btn-group">
+        @foreach($sub_modules as $mod)
+
+        <a href="#" onclick="{{$mod->url_path}}" class="btn btn-transparent">
+                                            <i class="{{$mod->image}}"></i>
+                                            <span class="title">{{$mod->module_name}}</span>
+                                            </a> @endforeach
+    </div>
+</div>
+<script>
+    $('.typeahead').typeahead()
+
+</script>

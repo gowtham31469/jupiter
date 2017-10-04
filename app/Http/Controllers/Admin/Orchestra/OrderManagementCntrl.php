@@ -45,7 +45,7 @@ class OrderManagementCntrl extends Controller
                 return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
             });
  	    $orders = DB::table('orchestra_parcel_details')->select('*')->get();
-            return view('Admin/Orchestra/order-management',['orders' => $orders]);
+            return view('Admin/Orchestra/order-management',['orders' => $orders,'sub_modules' => $get_sub_module]);
         }
         else
         {
