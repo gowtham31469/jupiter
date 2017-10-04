@@ -33,23 +33,24 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 
+
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
 Route::get('admin/buyer-management', 'Admin\AdminController@buyerManagement');
 Route::get('admin/supplier-management', 'Admin\AdminController@supplierManagement');
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
+
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-Route::get('admin/user-management/add-user', 'Admin\UserManagement\UserManagementController@addUsers');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
 	Route::get('customer/register', 'CustomerAuth\RegisterController@showRegistrationForm');
 	Route::post('customer/register', 'CustomerAuth\RegisterController@register');
 
-	Route::get('customer/login', 'CustomerAuth\LoginController@showLoginForm');
-	Route::post('customer/login', 'CustomerAuth\LoginController@login');
+	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm');
+	Route::post('customer', 'CustomerAuth\LoginController@login');
 });
 
 //Only logged in Customers can access or send requests to these pages
@@ -57,9 +58,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 {
 
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
-	Route::get('/customer', function(){
-	  return view('customer.home');
-	});
 
 });
 
@@ -68,17 +66,13 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 {
 	Route::get('merchandiser/register', 'MerchandiserAuth\RegisterController@showRegistrationForm');
 	Route::post('merchandiser/register', 'MerchandiserAuth\RegisterController@register');
-	Route::get('merchandiser/login', 'MerchandiserAuth\LoginController@showLoginForm');
-	Route::post('merchandiser/login', 'MerchandiserAuth\LoginController@login');
+	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm');
+	Route::post('merchandiser', 'MerchandiserAuth\LoginController@login');
 });
 
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-	Route::get('/merchandiser', function(){
-	  return view('merchandiser.home');
-	});
-
 });
 
 Route::get('upload', 'UploadController@index');
