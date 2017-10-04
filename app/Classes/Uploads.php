@@ -14,7 +14,11 @@ use App\RolePermissionMdl;
 
 class Uploads
 {
-
+	/**
+	 * method to insert the orchestra item details data into DB
+	 * @param   $data 
+	 * @return 
+	 */
 	public function insertOrchestraItemDetails($data)
 	{
 		OrchestraItemDetails::create([
@@ -78,6 +82,11 @@ class Uploads
 	    ]);
 	}
 
+	/**
+	 * method to update the orchestra item details in DB
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
 	public function updateOrchestraItemDetails($data)
 	{
 		OrchestraItemDetails::where('Collection',$data->collection)
@@ -137,5 +146,88 @@ class Uploads
 	        'Style_Name' => $data->style_name,
 	        'Prix_Vente_USA' => $data->prix_vente_usa,
 	        'Prix_Club_USA' => $data->prix_club_usa]);
+	}
+
+	public function insertOrchestraParcelDetails($data)
+	{
+		OrchestraParcelDetails::create([
+            'FactoryCode' 	  => $data->factorycode,
+            'SupplierName' 	  => $data->suppliername,
+            'SupplierAddress' => $data->supplieraddress,
+            'SupplierEmail' => $data->supplieremail,
+            'SupplierCountry' => $data->suppliercountry,
+            'EditionNumber' => $data->editionnumber,
+            'VersionNumber' => $data->versionnumber,
+            'BuyerPONo' => $data->buyerpono,
+            'Theme' => $data->theme,
+            'Quantity' => $data->quantity,
+            'IsSTD' => $data->isstd,
+            'UVC' => $data->uvc,
+            'ParcelBarCode' => $data->parcelbarcode,
+            'ParcelCode' => $data->parcelcode,
+            'CatgDescr' => $data->catgdescr,
+            'NomApple' => $data->nomapple,
+   		]);
+	}
+	public function updateOrchestraParcelDetails($data)
+	{
+		OrchestraParcelDetails::where('UVC',$data->uvc)
+			->where('BuyerPONo',$data->buyerpono)
+			->where('VersionNumber',$data->versionnumber)
+			->where('EditionNumber',$data->editionnumber)
+			->where('IsSTD',$data->isstd)
+            ->update(['FactoryCode' => $data->factorycode,
+            'SupplierName' 	  => $data->suppliername,
+            'SupplierAddress' => $data->supplieraddress,
+            'SupplierEmail' => $data->supplieremail,
+            'SupplierCountry' => $data->suppliercountry,
+            'EditionNumber' => $data->editionnumber,
+            'VersionNumber' => $data->versionnumber,
+            'BuyerPONo' => $data->buyerpono,
+            'Theme' => $data->theme,
+            'Quantity' => $data->quantity,
+            'IsSTD' => $data->isstd,
+            'UVC' => $data->uvc,
+            'ParcelBarCode' => $data->parcelbarcode,
+            'ParcelCode' => $data->parcelcode,
+            'CatgDescr' => $data->catgdescr,
+            'NomApple' => $data->nomapple]);
+	}
+
+	public function insertOrchestraParcelQuantityDetails($data)
+	{
+		OrchestraParcelQuantityDetails::create([
+            'FactoryCode' 	  => $data->factorycode,
+            'EditionNumber' => $data->editionnumber,
+            'VersionNumber' => $data->versionnumber,
+            'BuyerPONo' => $data->buyerpono,
+            'Theme' => $data->theme,
+            'UVC_TCO' => $data->uvc_tco,
+            'Quantity' => $data->quantity,
+            'Color' => $data->color,
+            'UVC' => $data->uvc,
+            'Size' => $data->size,
+            'BarcodeForPricesTags' => $data->barcodeforpricestags
+   	 	]);
+	}
+
+	public function updateOrchestraParcelQuantityDetails($data)
+	{
+		OrchestraParcelQuantityDetails::where('UVC',$data->uvc)
+			->where('BuyerPONo',$data->buyerpono)
+			->where('VersionNumber',$data->versionnumber)
+			->where('EditionNumber',$data->editionnumber)
+			->where('Size',$data->size)
+			->update(['FactoryCode' => $data->factorycode,
+            'EditionNumber' => $data->editionnumber,
+            'VersionNumber' => $data->versionnumber,
+            'BuyerPONo' => $data->buyerpono,
+            'Theme' => $data->theme,
+            'UVC_TCO' => $data->uvc_tco,
+            'Quantity' => $data->quantity,
+            'Color' => $data->color,
+            'UVC' => $data->uvc,
+            'Size' => $data->size,
+            'BarcodeForPricesTags' => $data->barcodeforpricestags]);
 	}
 }

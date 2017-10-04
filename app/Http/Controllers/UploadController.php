@@ -62,7 +62,7 @@ class UploadController extends Controller
 	        								$order_size = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
 	        								if (count($order_size)>0)
 	        								{
-	        									$upload_obj->updateOrchestraItemDetails($value);
+	        									// $upload_obj->updateOrchestraItemDetails($value);
 	        								}
 	        								else
 	        								{
@@ -135,6 +135,7 @@ class UploadController extends Controller
     {
         try
     	{
+    		$upload_obj = new Uploads();
     		ini_set('max_execution_time', 300);
 	        $path  		= $request->file('file')->getRealPath();
 	        $filename	= $request->file('file')->getClientOriginalName();
@@ -146,59 +147,131 @@ class UploadController extends Controller
         		$data_exists = OrchestraParcelDetails::select()->get();
 	            if (count($data_exists)>0)
 	            {
-	            	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+	            	foreach ($data as $value)
+		        	{
+	            		$parcel_uvc = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->select('*')->get();
+	            		if (count($parcel_uvc)>0)
+	            		{
+	            			$parcel_po = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->select('*')->get();
+	            			if (count($parcel_po)>0)
+	            			{
+	            				$parcel_version = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->select('*')->get();
+	            				if (count($parcel_version)>0)
+	            				{
+	            					$parcel_edition = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->select('*')->get();
+	            					if (count($parcel_edition))
+	            					{
+	            						$parcel_std = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('IsSTD',$value->isstd)->select('*')->get();
+	            						if (count($parcel_std)>0)
+	            						{
+	            							foreach ($parcel_std as $vals)
+	            							{
+	            								if ($vals->IsSTD == 1)
+	            								{
+	            									DB::table('orchestra_parcel_quantity_details')
+													   ->where('UVC',$value->uvc)
+													   ->where('BuyerPONo',$value->buyerpono)
+													   ->where('VersionNumber',$value->versionnumber)
+													   ->where('EditionNumber',$value->editionnumber)
+													   ->delete();
+	            								}
+	            								// $upload_obj->updateOrchestraParcelDetails($value);
+	            							}
+	            						}
+	            						else
+	            						{
+	            							$upload_obj->insertOrchestraParcelDetails($value);
+	            						}
+	            					}
+	            					else
+	            					{
+	            						$upload_obj->insertOrchestraParcelDetails($value);
+	            					}
+	            				}
+	            				else
+	            				{
+	            					$upload_obj->insertOrchestraParcelDetails($value);
+	            				}
+	            			}
+	            			else
+	            			{
+	            				$upload_obj->insertOrchestraParcelDetails($value);
+	            			}
+	            		}
+	            		else
+	            		{
+	            			$upload_obj->insertOrchestraParcelDetails($value);
+	            		}
+	            	}
+	            	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
 	            else
 	            {
 	            	foreach ($data as $value)
 		        	{
-		        		OrchestraParcelDetails::create([
-				            'FactoryCode' 	  => $value->factorycode,
-				            'SupplierName' 	  => $value->suppliername,
-				            'SupplierAddress' => $value->supplieraddress,
-				            'SupplierEmail' => $value->supplieremail,
-				            'SupplierCountry' => $value->suppliercountry,
-				            'EditionNumber' => $value->editionnumber,
-				            'VersionNumber' => $value->versionnumber,
-				            'BuyerPONo' => $value->buyerpono,
-				            'Theme' => $value->theme,
-				            'Quantity' => $value->quantity,
-				            'IsSTD' => $value->isstd,
-				            'UVC' => $value->uvc,
-				            'ParcelBarCode' => $value->parcelbarcode,
-				            'ParcelCode' => $value->parcelcode,
-				            'CatgDescr' => $value->catgdescr,
-				            'NomApple' => $value->nomapple,
-			       		 ]);
+		        		$upload_obj->insertOrchestraParcelDetails($value);
 		        	}
+		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
-        		
         	}
         	else if ($filename =="ParcelDetails_file2")
         	{
         		$data_exists = OrchestraParcelQuantityDetails::select()->get();
 	            if (count($data_exists)>0)
 	            {
-	            	$result = response()->json(['error' =>false,'message' => 'Data Exists'], 200);
+	            	foreach ($data as $value)
+		        	{
+		        		$quantity_uvc = DB::table('orchestra_parcel_quantity_details')->where('UVC',$value->uvc)->select('*')->get();
+		        		if (count($quantity_uvc)>0)
+		        		{
+		        			$quantity_po = DB::table('orchestra_parcel_quantity_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->select('*')->get();
+		        			if (count($quantity_po)>0)
+		        			{
+		        				$quantity_version = DB::table('orchestra_parcel_quantity_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->select('*')->get();
+		        				if (count($quantity_version)>0)
+		        				{
+		        					$quantity_edition = DB::table('orchestra_parcel_quantity_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->select('*')->get();
+		        					if (count($quantity_edition)>0)
+		        					{
+		        						$quantity_size = DB::table('orchestra_parcel_quantity_details')->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
+		        						if (count($quantity_size)>0)
+		        						{
+		        							// $upload_obj->updateOrchestraParcelQuantityDetails($value);
+		        						}
+		        						else
+		        						{
+		        							$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        						}
+		        					}
+		        					else
+		        					{
+		        						$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        					}
+		        				}
+		        				else
+		        				{
+		        					$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        				}
+		        			}
+		        			else
+		        			{	
+		        				$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        			}
+		        		}
+		        		else
+		        		{
+		        			$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        		}
+		        	}
+		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
 	            else
 	            {
 	            	foreach ($data as $value)
 		        	{
-		        		OrchestraParcelQuantityDetails::create([
-				            'FactoryCode' 	  => $value->factorycode,
-				            'EditionNumber' => $value->editionnumber,
-				            'VersionNumber' => $value->versionnumber,
-				            'BuyerPONo' => $value->buyerpono,
-				            'Theme' => $value->theme,
-				            'UVC_TCO' => $value->uvc_tco,
-				            'Quantity' => $value->quantity,
-				            'Color' => $value->color,
-				            'UVC' => $value->uvc,
-				            'Size' => $value->size,
-				            'BarcodeForPricesTags' => $value->barcodeforpricestags,
-			       	 	]);
+		        		$upload_obj->insertOrchestraParcelQuantityDetails($value);
 		        	}
+		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
         	}
         	else
