@@ -55,7 +55,7 @@
     </div>
 
     <div class="col main">
-        <div class="loader"></div>
+        <div class="loader">    </div>
     </div>
 </body>
 @endsection @else
