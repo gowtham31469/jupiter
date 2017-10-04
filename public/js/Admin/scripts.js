@@ -42,6 +42,7 @@ function orchestra_sticker_orders(buyer)
              $('.main').append(table(data));
              $('#datatable-example-2').DataTable();
             $('.sub_modules').css('display', 'block')
+            $( ".sub_modules a:first-child" ).addClass( "active" )
             
         },
         error: function (data) {
