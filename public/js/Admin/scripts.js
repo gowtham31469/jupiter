@@ -23,11 +23,11 @@ function orchestra_label_orders(obj)
     })
 }
 
-function orchestra_sticker_orders(obj)
+function orchestra_sticker_orders(buyer)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/orchestra/order-management/sticker-orders",
+        url: base_url + "/admin/"+buyer+"/order-management/sticker-orders",
         type: "Post",
         dataType:"json",
         data: {_token:csrf_token},
