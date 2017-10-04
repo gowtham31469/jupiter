@@ -20,9 +20,8 @@ class AuthenticateCustomer
        //then he shall be redirected to Seller Login page
         if (! Auth::guard('web_customer')->check())
         {
-           return redirect('/customer/login');
+           return redirect('/customer');
         }
-
        return $next($request);
     }
 }

@@ -20,7 +20,7 @@ class AuthenticateMerchandiser
        //then he shall be redirected to Seller Login page
         if (! Auth::guard('web_merchandiser')->check())
         {
-           return redirect('/merchandiser/login');
+           return redirect('/merchandiser');
         }
         return $next($request);
     }
