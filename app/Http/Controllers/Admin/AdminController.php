@@ -44,7 +44,7 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(2);
+            $get_sub_module = $module_var->getSubModules(9);
             $roles = DB::table('user_role')->select('user_role.*')
                         ->get();
             View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
