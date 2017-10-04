@@ -5,9 +5,6 @@
                         <!-- end sidebar-heading-1 -->
                         <!-- section -->
                         <div class="section">
-                            <!-- section-title -->
-                            <div class="section-title">
-                                {{$top_mod}} </div>
                             <!-- end section-title -->
                             <!-- menu -->
                             <ul class="list-unstyled">
