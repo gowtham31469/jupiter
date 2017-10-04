@@ -33,15 +33,16 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 
+
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
 Route::get('admin/buyer-management', 'Admin\AdminController@buyerManagement');
 Route::get('admin/supplier-management', 'Admin\AdminController@supplierManagement');
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
+
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-Route::get('admin/user-management/add-user', 'Admin\UserManagement\UserManagementController@addUsers');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
