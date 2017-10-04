@@ -289,6 +289,14 @@
     <script src="{{ asset('delta/scripts/pages/error-page.js') }}"></script>
     <script src="{{ asset('js/Admin/scripts.js') }}"></script>
     @yield('jqueryIncludes')
+    <script>
+    $(function () {
+        var url = window.location;
+        $('.menu-bottom a[href="' + url + '"]').parent('li').addClass('current-page');
+        $('.menu-bottom a').filter(function () {
+            return this.href == url;
+        }).parent('li').addClass('current-page').parent('ul').show('fast').addClass('active');
+    });
+    </script>
     <!-- endbuild -->
-</body>
 </html>
