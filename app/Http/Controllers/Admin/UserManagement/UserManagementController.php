@@ -70,10 +70,12 @@ class UserManagementController extends Controller
         $users = DB::table('users')->select('users.id','user_id','name','email','phone','user_role_name','address','user_role_id')
                     ->join('user_role','user_role.id','users.user_role_id')
                     ->get();
+        $roles = DB::table('user_role')->pluck('user_role_name','id')
+                                ->all();
         View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
             return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
         });
-        return view('Admin/User Management/users')->with(['users' => $users,'sub_modules' => $get_sub_module]);
+        return view('Admin/User Management/users')->with(['users' => $users,'roles' => $roles,'sub_modules' => $get_sub_module]);
     }
     else
     {

@@ -53,7 +53,7 @@
 
                             <!--merchandiser Login and registration Links -->
 
-                            <li><a href="{{ url('/merchandiser/login') }}">Merchandiser Login</a></li>
+                            <li><a href="{{ url('/merchandiser') }}">Merchandiser Login</a></li>
                             <li><a href="{{ url('/merchandiser/register') }}">Merchandiser Registration</a></li>
                         @else
                             <li class="dropdown">

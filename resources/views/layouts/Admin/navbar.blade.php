@@ -161,7 +161,7 @@
         </li>
     </ul>
     @endif
-    @endforeach 
+    @endforeach
 </div>
 <div id="overlay">
 <p>LOADING</p>

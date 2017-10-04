@@ -60,6 +60,9 @@ Route::group(['middleware' => 'customer_auth'], function()
     return view('customer.home');
 	});
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
+	Route::get('/customer/dashboard', function(){
+	  return view('customer.home');
+	});
 
 });
 
@@ -78,6 +81,13 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
     return view('merchandiser.home');
 	});
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
+<<<<<<< HEAD
+	Route::get('/merchandiser/dashboard', function(){
+	  return view('merchandiser.home');
+	});
+
+=======
+>>>>>>> master
 });
 
 Route::get('upload', 'UploadController@index');
