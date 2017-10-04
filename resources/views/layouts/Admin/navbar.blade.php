@@ -6,8 +6,9 @@
     [data-layout="top-navigation-1"] .main {
         padding-top: 0px;
     }
-    
-    [data-top-navigation="dark"] .top-navigation.top-navigation-1 {
+
+
+    [data-layout="top-navigation-1"][data-collapsed="true"] .navbar,[data-top-navigation="dark"] .top-navigation.top-navigation-1 {
         background: #1791E8;
         color: #ffffff;
     }
@@ -30,10 +31,27 @@
     a.btn.btn-transparent:hover {
         border-bottom: 2px solid #2f91e9!important;
     }
-    
+
     a.btn.btn-transparent.active {
         border-bottom: 2px solid #2f91e9!important;
         color: #000000;
+    }
+
+[data-layout="top-navigation-1"] .left-sidebar {
+    position: fixed;
+    top: 115px;
+    background: #f5f5f5 !important;
+    bottom: 0;
+    left: 0;
+    height: calc(100% - 120px);
+    width: 240px;
+    z-index: 1037;
+    -webkit-transform: translate3d(-240px, 0, 0);
+    transform: translate3d(-240px, 0, 0);
+   border-right: 1px solid #e3e3e3;
+}
+    [data-sidebar="light"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar{
+        background: #f5f5f5 !important;
     }
     .specific-menu{
         padding-top:120px;
@@ -130,13 +148,17 @@
                 <?php $varia = $mod->module_id?>
             </a>
             <ul class="menu-bottom list-unstyled">
-                @foreach($modules as $mod) @if($mod->parent_id == $varia)
+                @foreach($modules as $mod)
+                @if($mod->parent_id == $varia)
                 <li>
                     <a href="{{$mod->url_path}}">
                         <span>{{$mod->module_name}}</span>
                     </a>
                 </li>
-                @endif @endforeach
+                @endif
+                @endforeach
+                @endif
+                @endforeach 
             </ul>
         </li>
     </ul>
