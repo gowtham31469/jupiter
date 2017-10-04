@@ -77,12 +77,14 @@
                 </a>
                 <ul class="menu-bottom list-unstyled">
                 @foreach($modules as $mod)
+                @if($mod->parent_id != "2")
                 @if($mod->parent_id == $varia)
                 <li>
                     <a href="{{$mod->url_path}}">
                         <span>{{$mod->module_name}}</span>
                     </a>
                 </li>
+                @endif
                 @endif
                 @endforeach
                 </ul>
