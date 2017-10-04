@@ -38,7 +38,7 @@
                         <div class="col">
                             <div class="widget">
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col" id="user-table">
                                         <table id="users-list-table" class="table table-hover table-striped table-bordered" style="width: 100%">
                                             <thead>
                                                 <tr>
@@ -71,11 +71,54 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class="col-12 col-md-6 add-user-form" style="display:none">
+                                    <div class="widget">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="title">Add User</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form>
+                                                    <div class="form-group">
+                                                        {!! Form::label('user_id', 'User ID * :', ['class' => 'form_label']) !!}
+                                                        {!! Form::text('user_id',$value = '', array('class' => 'form-control input-sm','required')) !!}
+                                                    </div>
+                                                    <div class="form-group">
+                                                      {!! Form::label('name', 'Name * :', ['class' => 'form_label']) !!}
+                                                      {!! Form::text('name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Name','required')) !!}
+                                                    </div>
+                                                    <div class="form-group">
+                                                      {!! Form::label('phone', 'Phone * :', ['class' => 'form_label']) !!}
+                                                      {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Phone','required')) !!}
+                                                    </div>
+                                                    <div class="form-group">
+                                                      {!! Form::label('email', 'Email * :', ['class' => 'form_label']) !!}
+                                                      {!! Form::email('email',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Email','required')) !!}
+                                                    </div>
+                                                    <div class="form-group">
+                                                      {!! Form::label('address', 'Address * :', ['class' => 'form_label']) !!}
+                                                      {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Enter Email','required')) !!}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Password</label>
+                                                        <input type="password" class="form-control" placeholder="Enter Password">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>User Role</label>
+                                                        <input type="email" class="form-control" placeholder="Enter Email">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-primary">Cancel</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                   </div>
+                               </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection
@@ -88,19 +131,14 @@
 
 @section('jqueryIncludes')
  <script>
+ $(document).ready(function(){
     $('#users-list-table').DataTable();
 
-    // $("#add_user_btn").click(function(){
-    //   $.ajax({
-    //       url: 'add-user',
-    //       type: 'get',
-    //       success: function(data) {
-    //           $("body").html(data);
-    //       },
-    //       error: function() {
-    //           console.log('something is wrong, please try later');
-    //       }
-    //   });
-    // });
+    $("#add_user_btn").click(function(){
+      $('#user-table').hide();
+      $('#add_user_btn').hide();
+      $('.add-user-form').show();
+    });
+    });
 </script>
 @endsection

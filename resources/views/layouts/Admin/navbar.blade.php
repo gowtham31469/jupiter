@@ -2,7 +2,7 @@
     [data-background="light"] .navbar.navbar-1 a {
         color: #fff;
     }
-    
+
     [data-layout="top-navigation-1"] .main {
         padding-top: 0px;
     }
@@ -12,22 +12,22 @@
         background: #1791E8;
         color: #ffffff;
     }
-    
+
     [data-navbar="custom"] .navbar.navbar-1 {
         background: #000F08;
         color: #ffffff;
     }
-    
+
     [data-top-navigation="dark"] .top-navigation.top-navigation-1 .menu-bottom {
         background: #2f91e9;
         border-color: #2988de;
     }
-    
+
     a.btn.btn-transparent {
         background-color: transparent;
         border-bottom: 2px solid transparent;
     }
-    
+
     a.btn.btn-transparent:hover {
         border-bottom: 2px solid #2f91e9!important;
     }
@@ -64,7 +64,7 @@
         margin: auto 0;
         display: block;
     }
-    
+
     [data-top-navigation="dark"] ul.menu-bottom.active.list-unstyled {
         background: #030f07;
     }
@@ -147,6 +147,7 @@
                 <span class="modName">{{$mod->module_name}}</span>
                 <?php $varia = $mod->module_id?>
             </a>
+         
         </li>
     </ul>
     @endif
