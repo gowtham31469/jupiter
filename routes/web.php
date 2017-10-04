@@ -92,6 +92,7 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
+Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('multi-upload', 'UploadController@csvMultiUpload');
