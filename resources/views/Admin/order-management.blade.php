@@ -65,7 +65,7 @@
 @endif @section('jqueryIncludes')
 <script>
     $('.custom-select').change(function() {
-        orchestra_sticker_orders($(this).find("option:selected").text().toLowerCase())
+        orchestra_sticker_orders()
     });
 </script>
 @endsection

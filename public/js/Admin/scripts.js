@@ -1,5 +1,6 @@
 function orchestra_label_orders(obj)
 {
+    $('.main').html('<div class="loader"></div>');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/label-orders",
@@ -8,6 +9,10 @@ function orchestra_label_orders(obj)
         data: {_token:csrf_token},
         beforeSend: function () {
             $("#fakeloader").fadeIn();
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+            $( ".sub_modules a" ).removeClass( "active" )
+            $( obj ).addClass( "active" )
         },
         success: function (data) {
              $('.main').html(jumbotron('Label Orders','Order Management'));
@@ -19,12 +24,16 @@ function orchestra_label_orders(obj)
         },
         complete: function () {
             $("#fakeloader").fadeOut();
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
         }
     })
 }
 
-function orchestra_sticker_orders(buyer)
+function orchestra_sticker_orders()
 {
+    $('.main').html('<div class="loader"></div>');
+    var buyer = $('.custom-select').find("option:selected").text().toLowerCase();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/sticker-orders",
@@ -36,6 +45,7 @@ function orchestra_sticker_orders(buyer)
             $(".slideUp").css('margin-top','0%');
             $(".loader").show();
             $(".loader").css('margin-top','12%');
+            $( ".sub_modules a" ).removeClass( "active" )
         },
         success: function (data) {
              $('.main').html(jumbotron('Sticker Orders','Order Management'));
@@ -63,7 +73,7 @@ function orchestra_create_template_view(obj)
 
 function jumbotron(name,main_menu)
 {
-    return '<div class="jumbotron jumbotron-1"><div class="container-fluid"><div class="row"><div class="col"><ol class="breadcrumb icon-angle-right"><li><a href="#">Dashboard</a></li><li class="active">'+name+'</li></ol></div></div><div class="row"><div class="col"><a class="btn btn-info btn-rounded btn-icon" href="#"><i class="fa fa-plus"></i><span class="btn-text">Create Order</span></a><h4>'+main_menu+'</h4><h5>'+name+'</h5></div></div></div></div>';
+    return '<div class="loader"></div><div class="jumbotron jumbotron-1"><div class="container-fluid"><div class="row"><div class="col"><ol class="breadcrumb icon-angle-right"><li><a href="#">Dashboard</a></li><li class="active">'+name+'</li></ol></div></div><div class="row"><div class="col"><a class="btn btn-info btn-rounded btn-icon" href="#"><i class="fa fa-plus"></i><span class="btn-text">Create Order</span></a><h4>'+main_menu+'</h4><h5>'+name+'</h5></div></div></div></div>';
 }
 function table(data)
 {
