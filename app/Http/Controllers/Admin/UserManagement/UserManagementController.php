@@ -43,7 +43,7 @@ class UserManagementController extends Controller
         View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
             return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
         });
-        return view('Admin/User Management/home');
+        return view('Admin/User Management/home',['sub_modules' => $get_sub_module]);
     }
     else
     {

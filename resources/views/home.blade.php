@@ -11,6 +11,8 @@
 <body id="dashboards-dashboard" data-layout="top-navigation-1" data-background="light" data-sidebar="dark" data-navbar="dark" data-top-navigation="dark" data-controller="dashboards" data-view="dashboard" data-collapsed="false" data-fullscreen="false"
     data-logo="light">
     <div id="fakeloader"></div>
+    <div class="specific-menu">
+    </div>
     <div class="container-fluid">
         <div class="row">
             <div class="left-sidebar-placeholder"></div>

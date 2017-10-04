@@ -160,22 +160,9 @@
             </ul>
         </li>
     </ul>
-    @endif @endforeach
-</div>
-<div class="specific-menu">
-    <div class="dropdown-select">
-        <input autocomplete="off" class="typeahead-1 form-control" data-provide="typeahead" name="typeahead-1" type="text">
-    </div>
-    <div class="btn-group">
-        @foreach($sub_modules as $mod)
-
-        <a href="#" onclick="{{$mod->url_path}}" class="btn btn-transparent">
-                                            <i class="{{$mod->image}}"></i>
-                                            <span class="title">{{$mod->module_name}}</span>
-                                            </a> @endforeach
-    </div>
+    @endif
+    @endforeach 
 </div>
 <script>
     $('.typeahead').typeahead()
-
 </script>
