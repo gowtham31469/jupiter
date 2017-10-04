@@ -23,9 +23,19 @@
         border-color: #2988de;
     }
 
+    [data-layout="top-navigation-1"][data-collapsed="true"] .navbar, [data-layout="top-navigation-1"][data-collapsed="true"] .top-navigation {
+    padding-left: 20px;
+}
+    [data-sidebar="dark"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar:active, [data-sidebar="dark"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar:focus, [data-sidebar="dark"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar:visited, [data-sidebar="dark"] .left-sidebar.left-sidebar-1 .btn-default.btn-flat.btn-sidebar.focus {
+    background: #f5f5f5;
+    color: #000000;
+    position: relative;
+}
+
     a.btn.btn-transparent {
         background-color: transparent;
         border-bottom: 2px solid transparent;
+        color: #000000;
     }
 
     a.btn.btn-transparent:hover {
@@ -54,7 +64,7 @@
         background: #f5f5f5 !important;
     }
     .specific-menu{
-        padding-top:120px;
+        padding-top:90px;
     }
     .btn-group,
     .btn-group-vertical {
@@ -152,6 +162,9 @@
     </ul>
     @endif
     @endforeach
+</div>
+<div id="overlay">
+<p>LOADING</p>
 </div>
 <script>
     $('.typeahead').typeahead()

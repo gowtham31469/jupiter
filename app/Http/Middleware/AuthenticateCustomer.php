@@ -22,7 +22,6 @@ class AuthenticateCustomer
         {
            return redirect('/customer');
         }
-
        return $next($request);
     }
 }
