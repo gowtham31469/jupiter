@@ -34,11 +34,9 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 
 Route::get('admin/order-management', 'Admin\OrderManagementCntrl@index');
-
-Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
+/* User Management URLSs */
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-Route::get('admin/user-management/add-user', 'Admin\UserManagement\UserManagementController@addUsers');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {

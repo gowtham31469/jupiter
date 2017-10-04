@@ -22,34 +22,6 @@ class UserManagementController extends Controller
   {
      $this->middleware('auth');
   }
-
-  /**
-   * Show the user-management home page.
-   * @author <Praveen>
-   * @return \Illuminate\Http\Response
-   */
-  public function index()
-  {
-    $module_var = new Modules();
-    $is_allowed = $module_var->permittedModules();
-    if($is_allowed)
-    {
-        $top_mod = "User Management";
-        $get_main_module = $module_var->getMainModules();
-        View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-            return $view->with(['modules' => $get_main_module]);
-        });
-        $get_sub_module = $module_var->getSubModules(2);
-        View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-            return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-        });
-        return view('Admin/User Management/home');
-    }
-    else
-    {
-         return redirect('/admin/dashboard');
-    }
-  }
   /**
    * Show the users list page.
    * @author <Praveen>
@@ -73,7 +45,7 @@ class UserManagementController extends Controller
         View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
             return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
         });
-        return view('Admin/User Management/users')->with(['users' => $users]);
+        return view('Admin/User Management/users')->with(['users' => $users,'sub_modules' => $get_sub_module]);
     }
     else
     {
@@ -102,34 +74,7 @@ class UserManagementController extends Controller
         View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
             return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
         });
-        return view('Admin/User Management/roles')->with(['roles' => $roles]);
-    }
-    else
-    {
-         return redirect('/admin/dashboard');
-    }
-  }
-  /**
-   * Show the add users page.
-   * @author <Praveen>
-   * @return \Illuminate\Http\Response
-   */
-  public function addUsers()
-  {
-    $module_var = new Modules();
-    $is_allowed = $module_var->permittedModules();
-    if($is_allowed)
-    {
-        $top_mod = "User Management";
-        $get_main_module = $module_var->getMainModules();
-        View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-            return $view->with(['modules' => $get_main_module]);
-        });
-        $get_sub_module = $module_var->getSubModules(2);
-        View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-            return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-        });
-        return view('Admin/User Management/add-user');
+        return view('Admin/User Management/roles')->with(['roles' => $roles,'sub_modules' => $get_sub_module]);
     }
     else
     {
