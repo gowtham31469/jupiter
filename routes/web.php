@@ -56,7 +56,9 @@ Route::group(['middleware' => 'customer_guest'], function()
 //Only logged in Customers can access or send requests to these pages
 Route::group(['middleware' => 'customer_auth'], function()
 {
-
+	Route::get('/customer', function () {
+    return view('customer.home');
+	});
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 
 });
@@ -72,6 +74,9 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
+	Route::get('/merchandiser', function () {
+    return view('merchandiser.home');
+	});
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
 });
 
