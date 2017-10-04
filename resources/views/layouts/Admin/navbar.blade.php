@@ -156,8 +156,6 @@
                     </a>
                 </li>
                 @endif
-                @endforeach
-                @endif
                 @endforeach 
             </ul>
         </li>
