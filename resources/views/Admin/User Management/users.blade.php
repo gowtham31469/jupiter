@@ -6,12 +6,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="left-sidebar-placeholder"></div>
-            <div class="col main">
+            <div class="col main" style="margin-top: 142px;">
+              <div class="loader"></div>
                 <!-- jumbotron-1 -->
                 <div class="jumbotron jumbotron-1">
+                  <div class="container-fluid">
                   <div class="row">
                       <div class="col">
-                          <ol class="breadcrumb icon-home icon-angle-right">
+                          <ol class="breadcrumb icon-angle-right">
                               <li><a href="{{url('admin/dashboard')}}">Dashboard</a>
                               </li>
                               <li class="active">Users</li>
@@ -22,13 +24,14 @@
                         <div class="row">
                             <div class="col">
                                 <a class="btn btn-info btn-rounded btn-icon" href="#"  id="add_user_btn">
-                                    <i class="sli-wrench"></i>
+                                  <i class="fa fa-plus"></i>
                                     <span class="btn-text">Add User</span>
                                 </a>
                                 <h4>User Management</h4>
                                 <h5>Users</h5>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
                 <!-- end jumbotron-1 -->
@@ -71,56 +74,12 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 add-user-form" style="display:none">
-                                    <div class="widget">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="title">Add User</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                {!! Form::open(['method' => 'post','id' => 'add_user']) !!}
-                                                    <div class="form-group">
-                                                        {!! Form::label('user_id', 'User ID * :', ['class' => 'form_label']) !!}
-                                                        {!! Form::text('user_id',$value = '', array('class' => 'form-control ','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                      {!! Form::label('name', 'Name * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::text('name',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Name','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                      {!! Form::label('phone', 'Phone * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::text('phone',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Phone','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                      {!! Form::label('email', 'Email * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::email('email',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Email','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                      {!! Form::label('address', 'Address * :', ['class' => 'form_label']) !!}
-                                                      {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Enter Email','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                      {!! Form::label('password', 'Password * :', ['class' => ' form_label']) !!}
-                                                      {!! Form::password('password', array('class' => 'form-control ','placeholder' => 'Enter Password','required')) !!}
-                                                    </div>
-                                                    <div class="form-group">
-                                                        {!! Form::label('user_role', 'User Role * :', ['class' => 'form_label']) !!}
-                                                        {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles),'',array('class' => 'form-control ')) }}
-                                                    </div>
-                                                    {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
-                                                    {!! Form::submit('Cancel', ['class' => 'btn btn-primary','id' => 'cancel_btn'] ) !!}
-                                                {!! Form::close() !!}
-                                            </div>
-                                        </div>
-                                   </div>
-                               </div>
                             </div>
                         </div>
                     </div>
         </div>
     </div>
+    <div id="add-user-form"></div>
 @endsection
 
 @else
@@ -135,15 +94,35 @@
     $('#users-list-table').DataTable();
 
     $("#add_user_btn").click(function(){
-      $('#user-table').hide();
-      $('#add_user_btn').hide();
-      $('.add-user-form').show();
+      // $('#user-table').hide();
+      // $('#add_user_btn').hide();
+
+        $.ajax({
+            url:"add-user",
+            method:"get",
+            beforeSend: function () {
+                $("#fakeloader").fadeIn();
+                $(".loader").show();
+                $(".loader").css('margin-top','12%');
+            },
+            success: function(data){
+              $('#add-user-form').html(data);
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+             $("#fakeloader").fadeOut();
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+         }
+      })
     });
-    $("#cancel_btn").click(function(){
-      $('#user-table').show();
-      $('#add_user_btn').show();
-      $('.add-user-form').hide();
-    });
+    // $("#cancel_btn").click(function(){
+    //   $('#user-table').show();
+    //   $('#add_user_btn').show();
+    //   $('.add-user-form').hide();
+    // });
     });
 </script>
 @endsection

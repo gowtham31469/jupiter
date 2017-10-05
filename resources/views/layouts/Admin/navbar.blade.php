@@ -157,7 +157,18 @@
                 <span class="modName">{{$mod->module_name}}</span>
                 <?php $varia = $mod->module_id?>
             </a>
-
+            @if($mod->module_name == "User Management" || $mod->module_name == "user management" || $mod->module_name == "USER MANAGEMENT")
+            <ul class="menu-bottom list-unstyled">
+              @foreach($sub_modules as $sub_mod)
+              <li>
+                  <a href="{{$sub_mod->url_path}}">
+                      <span class="subModName">{{$sub_mod->module_name}}</span>
+                      <?php $varia = $sub_mod->module_id?>
+                  </a>
+              </li>
+              @endforeach
+            </ul>
+            @endif
         </li>
     </ul>
     @endif

@@ -39,10 +39,10 @@ Route::get('admin/buyer-management', 'Admin\AdminController@buyerManagement');
 Route::get('admin/supplier-management', 'Admin\AdminController@supplierManagement');
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 
-Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
-
+Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
+Route::get('admin/user-management/add-user', 'Admin\UserManagement\UserManagementController@addUser');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
