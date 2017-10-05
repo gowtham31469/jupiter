@@ -79,7 +79,6 @@
                     </div>
         </div>
     </div>
-    <div id="add-user-form"></div>
 @endsection
 
 @else
@@ -94,30 +93,26 @@
     $('#users-list-table').DataTable();
 
     $("#add_user_btn").click(function(){
-      // $('#user-table').hide();
-      // $('#add_user_btn').hide();
-
-        $.ajax({
-            url:"add-user",
-            method:"get",
-            beforeSend: function () {
-                $("#fakeloader").fadeIn();
-                $(".loader").show();
-                $(".loader").css('margin-top','12%');
-            },
-            success: function(data){
-              $('#add-user-form').html(data);
-            },
-            error: function (data) {
-
-            },
-            complete: function () {
-             $("#fakeloader").fadeOut();
-             $(".loader").hide();
-             $(".loader").css('margin-top','0%');
-         }
-      })
-    });
+     add_user_page()
+    //   // $('#user-table').hide();
+    //   // $('#add_user_btn').hide();
+    //   //   $.ajax({
+    //   //       url:"add-user",
+    //   //       method:"get",
+    //   //       beforeSend: function () {
+    //   //
+    //   //       },
+    //   //       success: function(data){
+    //   //         $('body').html(data['html']);
+    //   //       },
+    //   //       error: function (data) {
+    //   //
+    //   //       },
+    //   //       complete: function () {
+    //   //
+    //   //    }
+    //   // })
+     });
     // $("#cancel_btn").click(function(){
     //   $('#user-table').show();
     //   $('#add_user_btn').show();

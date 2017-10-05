@@ -35,10 +35,10 @@ class UserManagementController extends Controller
     {
         $top_mod = "User Management";
         $get_main_module = $module_var->getMainModules();
+        $get_sub_module = $module_var->getSubModules(2);
         View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
             return $view->with(['modules' => $get_main_module]);
         });
-        $get_sub_module = $module_var->getSubModules(2);
         $users = DB::table('users')->select('users.id','user_id','name','email','phone','user_role_name','address','user_role_id')
                     ->join('user_role','user_role.id','users.user_role_id')
                     ->get();
@@ -65,10 +65,10 @@ class UserManagementController extends Controller
     {
         $top_mod = "User Management";
         $get_main_module = $module_var->getMainModules();
+        $get_sub_module = $module_var->getSubModules(2);
         View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
             return $view->with(['modules' => $get_main_module]);
         });
-        $get_sub_module = $module_var->getSubModules(2);
         $roles = DB::table('user_role')->select('user_role.*')
                     ->get();
         View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
@@ -80,17 +80,5 @@ class UserManagementController extends Controller
     {
          return redirect('/admin/dashboard');
     }
-  }
-  /**
-   * Show the add user page.
-   * @author <Praveen>
-   * @return \Illuminate\Http\Response
-   */
-  public function addUser()
-  {
-    $roles = DB::table('user_role')->pluck('user_role_name','id');
-    $returnHTML = View::make('Admin.User Management.add-user',['roles'=> $roles])->render();
-
-    return response()->json(array('success' => true, 'html'=>$returnHTML));
   }
 }
