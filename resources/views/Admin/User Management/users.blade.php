@@ -110,7 +110,7 @@
                                                         {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles),'',array('class' => 'form-control ')) }}
                                                     </div>
                                                     {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
-                                                    {!! Form::submit('Cancel', ['class' => 'btn btn-primary'] ) !!}
+                                                    {!! Form::submit('Cancel', ['class' => 'btn btn-primary','id' => 'cancel_btn'] ) !!}
                                                 {!! Form::close() !!}
                                             </div>
                                         </div>
@@ -138,6 +138,11 @@
       $('#user-table').hide();
       $('#add_user_btn').hide();
       $('.add-user-form').show();
+    });
+    $("#cancel_btn").click(function(){
+      $('#user-table').show();
+      $('#add_user_btn').show();
+      $('.add-user-form').hide();
     });
     });
 </script>
