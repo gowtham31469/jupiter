@@ -56,7 +56,6 @@ Route::group(['middleware' => 'customer_guest'], function()
 //Only logged in Customers can access or send requests to these pages
 Route::group(['middleware' => 'customer_auth'], function()
 {
-
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 	Route::get('/customer/dashboard', function(){
 	  return view('customer.home');
