@@ -1,37 +1,27 @@
 @extends('layouts.Admin.app')
 @if (Auth::guard("web")->user())
 @section('content')
-<body id="pages-empty-page" data-layout="top-navigation-1" data-background="light" data-sidebar="dark" data-navbar="dark" data-top-navigation="dark" data-controller="pages" data-view="empty-page" data-collapsed="false" data-fullscreen="false" data-logo="dark" class="pace-done">
-    <div id="fakeloader"></div>
+<body>
     <div class="container-fluid">
         <div class="row">
-            <div class="left-sidebar-placeholder"></div>
-            <div class="col main">
-                <!-- jumbotron-1 -->
-                <div class="jumbotron jumbotron-1">
-                  <div class="row">
-                      <div class="col">
-                          <ol class="breadcrumb icon-angle-right">
-                              <li><a href="{{url('admin/dashboard')}}">Dashboard</a>
-                              </li>
-                              <li class="active">Roles</li>
-                          </ol>
-                      </div>
-                   </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <a class="btn btn-info btn-rounded btn-icon" href="#">
-                                    <i class="fa fa-plus"></i>
-                                    <span class="btn-text">Add Role</span>
-                                </a>
-                                <h4>User Management</h4>
-                                <h5>Roles</h5>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-sm-12 col-md-12 main">
+                <h3><i class="ion-ios-browsers-outline"></i>User Management</h3>
+                <div class="action-group pull-right">
+                    <a href="#" data-toggle="modal" data-target="#myModal" class=" btn btn-primary btn-sm"><i class="ion-person-add"></i>Add Roles</a>
                 </div>
-                <!-- end jumbotron-1 -->
+                <ul class="sub-nav-list">
+                    <li><a class="" href="{{url('admin/user-management')}}"><i class="ion-social-codepen"></i>User Management Dashboard</a></li>
+                    <li><a class="" href="{{url('admin/user-management/users')}}"><i class="ion-ios-pricetag"></i>Users</a></li>
+                    <li><a class="active" href="#"><i class="ion-ios-pricetag"></i>Roles</a></li>
+                </ul>
+                <hr/>
+
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col main">
                 <div class="page">
                     <!-- pages/empty-page -->
                     <div class="row">
@@ -68,21 +58,80 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end pages/empty-page -->
                 </div>
             </div>
         </div>
     </div>
-@endsection
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add User</h4>
+                </div>
+                <form>
 
-@else
-<script type="text/javascript">
-    window.location = "{{ url('/admin') }}";
-</script>
-@endif
+                    <div class="modal-body">
 
-@section('jqueryIncludes')
- <script>
+                        <div class="form-group">
+                            <label>User ID</label>
+                            <input type="email" class="form-control input-sm" id="" placeholder="User ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Name</label>
+                            <input type="password" class="form-control input-sm" id="exampleInputPassword1" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Email</label>
+                            <input type="password" class="form-control input-sm" id="exampleInputPassword1" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <div class="input-group">
+                                <input type="text" value="" class="form-control input-sm" id="password" placeholder="password">
+                                <span id="generatePwd" class="input-group-addon">Generate Password</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Phone</label>
+                            <input type="password" class="form-control input-sm" id="exampleInputPassword1" placeholder="Phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Address</label>
+                            <textarea placeholder="Address" class="form-control">
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">User Role</label>
+                            <select class="form-control input-sm">
+                            <option>Akshay Bhat</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <p>By Clicking ADD USER a email will be sent to user with his/her login details.</p>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endsection
+
+    @else
+    <script type="text/javascript">
+        window.location = "{{ url('/admin') }}";
+    </script>
+    @endif
+    @section('jqueryIncludes')
+    <script>
+    $(document).ready(function() {
     $('#roles-list-table').DataTable();
+    $("#example_filter input").addClass('form-control');
+    $("#example_filter input").attr('placeholder', 'Data Search');
+    });
     </script>
 @endsection

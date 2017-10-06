@@ -69,10 +69,7 @@ class UserManagementController extends Controller
                           ->join('user_role','user_role.id','users.user_role_id')
                           ->get();
               $roles = DB::table('user_role')->pluck('user_role_name','id');
-              View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module) {
-                  return $view->with(['modules' => $get_sub_module]);
-              });
-              return view('Admin/User Management/users')->with(['users' => $users,'sub_modules' => $get_sub_module,'roles' => $roles]);
+              return view('Admin/User Management/users')->with(['users' => $users,'roles' => $roles]);
           }
           else
           {
@@ -102,10 +99,7 @@ class UserManagementController extends Controller
                 });
                 $roles = DB::table('user_role')->select('user_role.*')
                             ->get();
-                View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module) {
-                    return $view->with(['modules' => $get_sub_module]);
-                });
-                return view('Admin/User Management/roles')->with(['roles' => $roles,'sub_modules' => $get_sub_module]);
+                return view('Admin/User Management/roles')->with(['roles' => $roles]);
             }
             else
             {
