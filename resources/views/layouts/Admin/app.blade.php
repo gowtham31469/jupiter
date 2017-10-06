@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="">
     <title>JGA</title>
     <!-- Bootstrap core CSS -->
@@ -35,8 +36,9 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.0/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
-     <script src="{{ asset('js/select2.min.js') }}"></script>
-
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+     <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    @yield('jqueryIncludes')
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script>
         $(document).ready(function() {

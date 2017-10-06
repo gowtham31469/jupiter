@@ -11,6 +11,7 @@
     </form>
     <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
     <div class="main-content">
+        <div class="loader"></div>
         <div class="col-md-4">
             <div class="card">
                 <h4 class="text-center">Total Orders</h4>
@@ -84,9 +85,12 @@
     window.location = "{{ url('/admin') }}";
 
 </script>
-@endif @section('jqueryIncludes')
+@endif 
+@section('jqueryIncludes')
 <script>
-
+      $('.buyer-select').change(function() {
+           orchestra_sticker_orders()
+       });
 
 </script>
 @endsection
