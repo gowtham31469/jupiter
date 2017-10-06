@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 </head>
 <body>
     <div class="container-fluid">
@@ -34,6 +35,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.0/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
+     <script src="{{ asset('js/select2.min.js') }}"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script>
@@ -110,6 +112,10 @@
             options: [{
 
             }]
+        });
+         $('.buyer-select').select2({
+            placeholder: "Select Buyer",
+            allowClear: true
         });
     </script>
     @yield('jqueryIncludes')

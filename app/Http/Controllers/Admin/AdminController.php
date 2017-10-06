@@ -45,7 +45,8 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(9);
-            return view('Admin/order-management',['sub_modules' => $get_sub_module]);
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/order-management',['buyers' => $buyers]);
         }
         else
         {
@@ -65,8 +66,8 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(2);
-            return view('Admin/buyer-management',['sub_modules' => $get_sub_module]);
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/buyer-management',['buyers' => $buyers]);
         }
         else
         {
@@ -85,8 +86,8 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(2);
-            return view('Admin/supplier-management',['sub_modules' => $get_sub_module]);
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/supplier-management',['buyers' => $buyers]);
         }
         else
         {
@@ -105,8 +106,8 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $get_sub_module = $module_var->getSubModules(2);
-            return view('Admin/template-management',['sub_modules' => $get_sub_module]);
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/template-management',['buyers' => $buyers]);
         }
         else
         {
