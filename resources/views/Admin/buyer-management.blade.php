@@ -1,11 +1,6 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
  <div class="col-sm-12 col-md-12 main">
- <div class="alert alert-dismissible alert-warning">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <h4>Warning!</h4>
-  <p>Please select buyer to access all the information related to the selected buyer.</p>
-</div>
-                <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
+                <h3><i class="ion-bag"></i>Buyer Management</h3>
 
                 <div class="col-md-4">
                     <div class="card">
