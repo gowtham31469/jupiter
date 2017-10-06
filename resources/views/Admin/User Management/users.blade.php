@@ -25,6 +25,7 @@
         <div class="row">
             <div class="col">
                 <div class="widget">
+                  <div class="container-fluid">
                     <div class="row">
                         <div class="col" id="user-table">
                             <table id="users-list-table" class="table table-hover table-striped table-bordered" style="width: 100%">
@@ -59,6 +60,7 @@
                             </table>
                         </div>
                     </div>
+                  </div>
                 </div>
             </div>
         </div>
