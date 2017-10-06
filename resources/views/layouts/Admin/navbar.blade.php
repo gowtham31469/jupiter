@@ -32,7 +32,7 @@
     </nav>
  <div class="top-navigation">
         <ul class="nav-list">
-            @foreach($modules as $mod) 
+            @foreach($modules as $mod)
             @if($mod->parent_id == 0)
             <li class="parent-menu"><a class="" href="{{$mod->url_path}}"><i class="{{$mod->image}}"></i>{{$mod->module_name}}</a></li>
             @endif
