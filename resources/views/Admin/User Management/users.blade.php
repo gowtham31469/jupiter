@@ -45,7 +45,7 @@
                                     <tr id="{{$user->id}}">
                                         <td>{{$user->user_id}}</td>
                                         <td>{{$user->name}}</td>
-                                        <td><span class="badge badge-pill badge-success">{{$user->user_role_name}}</span></td>
+                                        <td><span class="badge badge-pill ">{{$user->user_role_name}}</span></td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->phone}}</td>
                                         <td>{{$user->address}}</td>
@@ -126,9 +126,9 @@
     @section('jqueryIncludes')
     <script>
     $(document).ready(function() {
-    $('#users-list-table').DataTable();
-    $("#example_filter input").addClass('form-control');
-    $("#example_filter input").attr('placeholder', 'Data Search');
+      $('#users-list-table').DataTable();
+      $("#example_filter input").addClass('form-control');
+      $("#example_filter input").attr('placeholder', 'Data Search');
     $("#generatePwd").click(function(){
     function randomString(length, chars)
     {

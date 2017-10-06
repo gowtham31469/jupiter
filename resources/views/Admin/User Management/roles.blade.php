@@ -43,7 +43,7 @@
                                               @foreach ($roles as $role)
                                                 <tr id="{{$role->id}}">
                                                     <td>{{$role->role_id}}</td>
-                                                    <td><span class="badge badge-pill badge-success">{{$role->user_role_name}}</span></td>
+                                                    <td><span class="badge badge-pill ">{{$role->user_role_name}}</span></td>
                                                     <td>{{$role->user_role_description}}</td>
                                                     @if($role->id != 1)
                                                       <td><a href="#"><i class="ion-edit" title="Edit" ></i></a><a href="#"><i class="ion-trash-a" data-userid="{{$role->id}}" title="Delete" data-toggle="modal" data-target="#deleteVendor" ></i></a></td>
@@ -131,9 +131,9 @@
     @section('jqueryIncludes')
     <script>
     $(document).ready(function() {
-    $('#roles-list-table').DataTable();
-    $("#example_filter input").addClass('form-control');
-    $("#example_filter input").attr('placeholder', 'Data Search');
+      $('#roles-list-table').DataTable();
+      $("#example_filter input").addClass('form-control');
+      $("#example_filter input").attr('placeholder', 'Data Search');
     });
     </script>
 @endsection
