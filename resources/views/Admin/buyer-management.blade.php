@@ -1,21 +1,83 @@
-@extends('layouts.Admin.app') @section('content')
-<body id="pages-empty-page" data-layout="top-navigation-1" data-background="light" data-sidebar="dark" data-navbar="dark" data-top-navigation="dark" data-controller="pages" data-view="empty-page" data-collapsed="false" data-fullscreen="false" data-logo="light">
-    <div class="specific-menu">
-        <div class="dropdown-select">
-            <select class="custom-select form-control">
-        <option value="default">Select Buyer</option>
-        <option value="1">Tesco</option>
-        <option value="2">Orchestra</option>
-        </select>
-        </div>
-        <div class="btn-group sub_modules" style="display:none">
-            @foreach($sub_modules as $mod)
+@extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+ <div class="col-sm-12 col-md-12 main">
+ <div class="alert alert-dismissible alert-warning">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <h4>Warning!</h4>
+  <p>Please select buyer to access all the information related to the selected buyer.</p>
+</div>
+                <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
 
-            <a href="#" onclick="{{$mod->url_path}}" class="btn btn-transparent">
-        <i class="{{$mod->image}}"></i>
-        <span class="title">{{$mod->module_name}}</span>
-        </a> @endforeach
-        </div>
-    </div>
-</body>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h4 class="text-center">Total Orders</h4>
+                        <canvas id="myChart" width="100px" height="100px"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h4 class="text-center">Total Orders</h4>
+                        <canvas id="myChart1" width="100px" height="100px"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <h4 class="text-center">Total Orders</h4>
+                        <canvas id="myChart2" width="100px" height="100px"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                <div class="card">
+                    <h4 class="text-center">Tabel Data</h4>
+                    <div class = "table-responsive">
+   <table class = "table table-striped text-center">
+      
+      <thead>
+         <tr>
+            <th class="text-center">Product</th>
+            <th class="text-center">Payment Date</th>
+            <th class="text-center">Status</th>
+         </tr>
+      </thead>
+      
+      <tbody>
+         <tr>
+            <td>Product1</td>
+            <td>23/11/2013</td>
+             <td><label class="label label-warning">Pending</label></td>
+         </tr>
+         
+         <tr>
+            <td>Product2</td>
+            <td>10/11/2013</td>
+             <td><label class="label label-success">Delivered</label></td>
+         </tr>
+         
+         <tr>
+            <td>Product3</td>
+            <td>20/10/2013</td>
+            <td><label class="label label-info">In Call to confirm</label></td>
+         </tr>
+         
+         <tr>
+            <td>Product4</td>
+            <td>20/10/2013</td>
+             <td><label class="label label-danger">Declined</label></td>
+         </tr>
+      </tbody>
+      
+   </table>
+</div>  
+                    </div>
+                </div>
+                <div class="col-md-6">
+                <div class="card"></div>
+                </div>
+</div>
+@endsection @else
+<script type="text/javascript">
+    window.location = "{{ url('/admin') }}";
+</script>
+@endif @section('jqueryIncludes')
+<script>
+</script>
 @endsection

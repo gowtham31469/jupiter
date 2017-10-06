@@ -44,9 +44,6 @@ class HomeController extends Controller
                 return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
             });*/
             $get_sub_module=array();
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('home',['sub_modules' => $get_sub_module]);
         
     }
