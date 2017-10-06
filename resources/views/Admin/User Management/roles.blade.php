@@ -19,50 +19,43 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col main">
-                <div class="page">
-                    <!-- pages/empty-page -->
-                    <div class="row">
-                        <div class="col">
-                            <div class="widget">
-                              <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col">
-                                        <table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Role Name</th>
-                                                    <th>Description</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                              @foreach ($roles as $role)
-                                                <tr id="{{$role->id}}">
-                                                    <td>{{$role->role_id}}</td>
-                                                    <td><span class="badge badge-pill ">{{$role->user_role_name}}</span></td>
-                                                    <td>{{$role->user_role_description}}</td>
-                                                    @if($role->id != 1)
-                                                      <td><a href="#"><i class="ion-edit" title="Edit" ></i></a><a href="#"><i class="ion-trash-a" data-userid="{{$role->id}}" title="Delete" data-toggle="modal" data-target="#deleteVendor" ></i></a></td>
-                                                    @else
-                                                    <td></td>
-                                                    @endif
-                                                </tr>
-                                              @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
+    <div class="col main">
+      <div class="page">
+        <div class="container-fluid">
+          <div class="row">
+              <div class="col">
+                  <div class="widget">
+                          <div class="col" id="user-table">
+                            <table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Role Name</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  @foreach ($roles as $role)
+                                    <tr id="{{$role->id}}">
+                                        <td>{{$role->role_id}}</td>
+                                        <td><span class="badge badge-pill ">{{$role->user_role_name}}</span></td>
+                                        <td>{{$role->user_role_description}}</td>
+                                        @if($role->id != 1)
+                                          <td><a href="#"><i class="ion-edit" title="Edit" ></i></a><a href="#"><i class="ion-trash-a" data-userid="{{$role->id}}" title="Delete" data-toggle="modal" data-target="#deleteVendor" ></i></a></td>
+                                        @else
+                                        <td></td>
+                                        @endif
+                                    </tr>
+                                  @endforeach
+                                </tbody>
+                            </table>
+                          </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -114,8 +107,8 @@
                     </div>
                     <div class="modal-footer">
                         <p>By Clicking ADD USER a email will be sent to user with his/her login details.</p>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Add User</button>
+                        {!! Form::submit('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add User', ['class' => 'btn btn-primary'] ) !!}
                     </div>
                 </form>
             </div>
