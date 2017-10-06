@@ -32,6 +32,8 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
+Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
+
 
 
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
