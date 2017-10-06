@@ -6,12 +6,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="left-sidebar-placeholder"></div>
-            <div class="col main">
+            <div class="col main"  style="margin-top: 142px;">
                 <!-- jumbotron-1 -->
                 <div class="jumbotron jumbotron-1">
                   <div class="row">
                       <div class="col">
-                          <ol class="breadcrumb icon-home icon-angle-right">
+                          <ol class="breadcrumb icon-angle-right">
                               <li><a href="{{url('admin/dashboard')}}">Dashboard</a>
                               </li>
                               <li class="active">Roles</li>
@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col">
                                 <a class="btn btn-info btn-rounded btn-icon" href="#">
-                                    <i class="sli-wrench"></i>
+                                    <i class="fa fa-plus"></i>
                                     <span class="btn-text">Add Role</span>
                                 </a>
                                 <h4>User Management</h4>
