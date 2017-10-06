@@ -41,9 +41,6 @@ class TemplateManagementCntrl extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(22);
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('Admin/Orchestra/template-management');
         }
         else

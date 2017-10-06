@@ -32,6 +32,8 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
+Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
+
 
 
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
@@ -40,9 +42,9 @@ Route::get('admin/supplier-management', 'Admin\AdminController@supplierManagemen
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
-
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
+Route::get('admin/user-management/get-roles', 'Admin\UserManagement\UserManagementController@getUserRoles');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
@@ -56,7 +58,6 @@ Route::group(['middleware' => 'customer_guest'], function()
 //Only logged in Customers can access or send requests to these pages
 Route::group(['middleware' => 'customer_auth'], function()
 {
-
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 	Route::get('/customer/dashboard', function(){
 	  return view('customer.home');

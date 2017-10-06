@@ -53,7 +53,7 @@ function orchestra_sticker_orders()
              $('#datatable-example-2').DataTable();
             $('.sub_modules').css('display', 'block')
             $( ".sub_modules a:first-child" ).addClass( "active" )
-            
+
         },
         error: function (data) {
 
@@ -79,13 +79,13 @@ function table(data)
 {
     var th = "";
     var tr = "";
-    var columnsIn = data[0]; 
+    var columnsIn = data[0];
     for(var key in columnsIn){
          if(key != "id")
          {
             th += "<th>"+key+"</th>";
          }
-    } 
+    }
     $.each(data, function (index, value) {
         tr += '<tr id="'+value.id+'">';
         for(var key in columnsIn){
@@ -106,9 +106,9 @@ function table(data)
                     tr += '<td>'+value[key]+'</td>';
                 }
             }
-        }   
+        }
         tr += '</tr>';
-    })  
+    })
     return'<div class="page"><div class="row"><div class="col"><div class="widget"><div class="row"><div class="col"><table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div></div></div></div></div></div>';
-   
+
 }

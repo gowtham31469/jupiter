@@ -45,11 +45,6 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(9);
-            $roles = DB::table('user_role')->select('user_role.*')
-                        ->get();
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('Admin/order-management',['sub_modules' => $get_sub_module]);
         }
         else
@@ -71,11 +66,6 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(2);
-            $roles = DB::table('user_role')->select('user_role.*')
-                        ->get();
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('Admin/buyer-management',['sub_modules' => $get_sub_module]);
         }
         else
@@ -96,11 +86,6 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(2);
-            $roles = DB::table('user_role')->select('user_role.*')
-                        ->get();
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('Admin/supplier-management',['sub_modules' => $get_sub_module]);
         }
         else
@@ -121,11 +106,6 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module]);
             });
             $get_sub_module = $module_var->getSubModules(2);
-            $roles = DB::table('user_role')->select('user_role.*')
-                        ->get();
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });
             return view('Admin/template-management',['sub_modules' => $get_sub_module]);
         }
         else
