@@ -7,7 +7,7 @@
             <div class="left-sidebar-placeholder"></div>
 
             <div class="col main">
-       
+
                 <!-- jumbotron-1 -->
                 <div class="jumbotron jumbotron-1">
                     <div class="container-fluid">

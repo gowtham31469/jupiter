@@ -301,3 +301,8 @@ ul.sub-nav-list li a.active {
 p.terms{
     color: rgba(255, 255, 255, 0.56);
 }
+.input-group-addon {
+    padding: 9px 15px;
+    cursor: pointer;
+
+}

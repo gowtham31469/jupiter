@@ -1,11 +1,26 @@
-@extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+@extends('layouts.Admin.app')
+@if (Auth::guard("web")->user())
+@section('content')
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 main">
+                <h3><i class="ion-ios-browsers-outline"></i>User Management</h3>
+                <ul class="sub-nav-list">
+                    <li><a class="active" href="#"><i class="ion-social-codepen"></i>User Management Dashboard</a></li>
+                    <li><a class="" href="#"><i class="ion-ios-pricetag"></i>Users</a></li>
+                    <li><a class="" href="#"><i class="ion-ios-pricetag"></i>Roles</a></li>
+                </ul>
+                <hr/>
+            </div>
+        </div>
+    </div>
+    @endsection
 
-<body id="pages-empty-page" data-layout="top-navigation-1" data-background="light" data-sidebar="dark" data-navbar="dark" data-top-navigation="dark" data-controller="pages" data-view="empty-page" data-collapsed="false" data-fullscreen="false" data-logo="light">
-
-</body>
-@endsection @else
-<script type="text/javascript">
-    window.location = "{{ url('/admin') }}";
-</script>
-@endif @section('jqueryIncludes')
-@endsection
+    @else
+    <script type="text/javascript">
+        window.location = "{{ url('/admin') }}";
+    </script>
+    @endif
+    @section('jqueryIncludes')
+    @endsection

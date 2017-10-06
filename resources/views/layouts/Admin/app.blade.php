@@ -23,7 +23,7 @@
                 window.location = "{{ url('/admin/login') }}";
             </script>
         @endif
-        @yield('content')  
+        @yield('content')
         </div>
     </div>
     <script>
@@ -50,7 +50,7 @@
             return this.href == url;
         }).parent('li').addClass('current-page').find('a').addClass('active');
     });
-        
+
         var myDoughnutChart = new Chart(myChart, {
             type: 'doughnut',
             data: data = {
@@ -112,5 +112,6 @@
             }]
         });
     </script>
+    @yield('jqueryIncludes')
 </body>
 </html>
