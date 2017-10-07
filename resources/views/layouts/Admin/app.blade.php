@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container-fluid">
@@ -114,7 +114,7 @@
             }]
         });
          $('.buyer-select').select2({
-            placeholder: "Select Buyer",
+            placeholder: "Buyer Listing",
             allowClear: true
         });
     </script>
