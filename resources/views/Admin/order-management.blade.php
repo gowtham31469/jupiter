@@ -1,8 +1,9 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
-    <form class="navbar-form pull-right">
+    <div class="top-content">
+    <form class="navbar-form pull-right" style="margin-top:0px;">
         <label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label>
-        <select class="form-control buyer-select">
+        <select class="js-example-responsive buyer-select">
                   <option></option>
                     @foreach($buyers as $buyer)
                     <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
@@ -18,6 +19,8 @@
             <li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li>
         </ul><hr/>
     </div>
+        </div>
+    <div class="clearfix"></div>
     <div class="main-content">
         <div class="loader"></div>
         <div class="col-md-4">

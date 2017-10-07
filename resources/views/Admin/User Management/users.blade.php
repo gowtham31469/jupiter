@@ -21,12 +21,10 @@
     </div>
   <div class="col main">
     <div class="page">
-        <!-- pages/empty-page -->
+      <div class="container-fluid">
         <div class="row">
             <div class="col">
                 <div class="widget">
-                  <div class="container-fluid">
-                    <div class="row">
                         <div class="col" id="user-table">
                             <table id="users-list-table" class="table table-hover table-striped table-bordered" style="width: 100%">
                                 <thead>
@@ -59,7 +57,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                   </div>
                 </div>
             </div>
@@ -104,15 +101,15 @@
                         </div>
                         <div class="form-group">
                           {!! Form::label('user_role', 'User Role', ['class' => 'form_label']) !!}
-                          {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles->toArray()),'',array('class' => 'form-control input-sm')) }}
+                          {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles->toArray()),'',array('class' => 'form-control input-sm','id'=>'user_role')) }}
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <p>By Clicking ADD USER a email will be sent to user with his/her login details.</p>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add User</button>
+                        <p>By clicking ADD USER a email will be sent to user with his/her login details.</p>
+                        {!! Form::submit('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add User', ['class' => 'btn btn-primary'] ) !!}
                     </div>
-                </form>
+               {!! Form::close() !!}
             </div>
         </div>
     </div>
@@ -129,6 +126,7 @@
       $('#users-list-table').DataTable();
       $("#example_filter input").addClass('form-control');
       $("#example_filter input").attr('placeholder', 'Data Search');
+      /** Generate Password**/
     $("#generatePwd").click(function(){
     function randomString(length, chars)
     {
