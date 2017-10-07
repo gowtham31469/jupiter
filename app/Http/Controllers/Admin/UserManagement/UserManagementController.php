@@ -34,12 +34,9 @@ class UserManagementController extends Controller
     if($is_allowed)
     {
         $get_main_module = $module_var->getMainModules();
+        $get_sub_module = $module_var->getSubModules(2);
         View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
             return $view->with(['modules' => $get_main_module]);
-        });
-        $get_sub_module = $module_var->getSubModules(2);
-        View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module) {
-            return $view->with(['modules' => $get_sub_module]);
         });
         return view('Admin/User Management/home',['sub_modules' => $get_sub_module]);
     }
@@ -48,72 +45,77 @@ class UserManagementController extends Controller
          return redirect('/admin/dashboard');
     }
   }
-  /**
-   * Show the users list page.
-   * @author <Praveen>
-   * @return \Illuminate\Http\Response
-   */
+  // /**
+  //  * Show the users list page.
+  //  * @author <Praveen>
+  //  * @return \Illuminate\Http\Response
+  //  */
+  // public function users()
+  // {
+  //   try {
+  //         $module_var = new Modules();
+  //         $is_allowed = $module_var->permittedModules();
+  //         if($is_allowed)
+  //         {
+  //             $get_main_module = $module_var->getMainModules();
+  //             $get_sub_module = $module_var->getSubModules(2);
+  //             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+  //                 return $view->with(['modules' => $get_main_module]);
+  //             });
+  //             $users = DB::table('users')->select('users.id','user_id','name','email','phone','user_role_name','address','user_role_id')
+  //                         ->join('user_role','user_role.id','users.user_role_id')
+  //                         ->get();
+  //             $roles = DB::table('user_role')->pluck('user_role_name','id');
+  //             return view('Admin/User Management/users')->with(['users' => $users,'roles' => $roles]);
+  //         }
+  //         else
+  //         {
+  //              return redirect('/admin/dashboard');
+  //         }
+  //   } catch (\Exception $e)
+  //   {
+  //     return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  //   }
+  // }
+  // /**
+  //  * Show the roles list page.
+  //  * @author <Praveen>
+  //  * @return \Illuminate\Http\Response
+  //  */
+  // public function roles()
+  // {
+  //   try {
+  //           $module_var = new Modules();
+  //           $is_allowed = $module_var->permittedModules();
+  //           if($is_allowed)
+  //           {
+  //               $get_main_module = $module_var->getMainModules();
+  //               $get_sub_module = $module_var->getSubModules(2);
+  //               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
+  //                   return $view->with(['modules' => $get_main_module]);
+  //               });
+  //               $roles = DB::table('user_role')->select('user_role.*')
+  //                           ->get();
+  //               return view('Admin/User Management/roles')->with(['roles' => $roles]);
+  //           }
+  //           else
+  //           {
+  //                return redirect('/admin/dashboard');
+  //           }
+  //   } catch (\Exception $e)
+  //   {
+  //     return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  //   }
+  // }
+
   public function users()
   {
-    try {
-          $module_var = new Modules();
-          $is_allowed = $module_var->permittedModules();
-          if($is_allowed)
-          {
-              $get_main_module = $module_var->getMainModules();
-              $get_sub_module = $module_var->getSubModules(2);
-              View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                  return $view->with(['modules' => $get_main_module]);
-              });
-              $users = DB::table('users')->select('users.id','user_id','name','email','phone','user_role_name','address','user_role_id')
-                          ->join('user_role','user_role.id','users.user_role_id')
-                          ->get();
-              $roles = DB::table('user_role')->pluck('user_role_name','id');
-              View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module) {
-                  return $view->with(['modules' => $get_sub_module]);
-              });
-              return view('Admin/User Management/users')->with(['users' => $users,'sub_modules' => $get_sub_module,'roles' => $roles]);
-          }
-          else
-          {
-               return redirect('/admin/dashboard');
-          }
-    } catch (\Exception $e)
-    {
-      return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-    }
+          $users = DB::table('users')->select('users.id','user_id','name','email','phone','user_role_name','address','user_role_id')->join('user_role','user_role.id','users.user_role_id')->get();
+          echo json_encode($users);
   }
-  /**
-   * Show the roles list page.
-   * @author <Praveen>
-   * @return \Illuminate\Http\Response
-   */
   public function roles()
   {
-    try {
-            $module_var = new Modules();
-            $is_allowed = $module_var->permittedModules();
-            if($is_allowed)
-            {
-                $get_main_module = $module_var->getMainModules();
-                $get_sub_module = $module_var->getSubModules(2);
-                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                    return $view->with(['modules' => $get_main_module]);
-                });
-                $roles = DB::table('user_role')->select('user_role.*')
-                            ->get();
-                View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module) {
-                    return $view->with(['modules' => $get_sub_module]);
-                });
-                return view('Admin/User Management/roles')->with(['roles' => $roles,'sub_modules' => $get_sub_module]);
-            }
-            else
-            {
-                 return redirect('/admin/dashboard');
-            }
-    } catch (\Exception $e)
-    {
-      return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-    }
+          $roles = DB::table('user_role')->select('id','role_id','user_role_name','user_role_description')->get();
+          echo json_encode($roles);
   }
 }
