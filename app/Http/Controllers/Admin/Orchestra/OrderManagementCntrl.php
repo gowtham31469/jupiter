@@ -57,7 +57,7 @@ class OrderManagementCntrl extends Controller
     }
     public function stickerOrders()
     {
-            $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
+            $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->groupBy('UVC')->get();
             echo json_encode($orders);
     }
 }

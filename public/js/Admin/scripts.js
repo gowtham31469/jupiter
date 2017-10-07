@@ -1,37 +1,39 @@
-function orchestra_label_orders(obj)
+function label_orders()
 {
-    $('.main').html('<div class="loader"></div>');
+    $('.main-content').html('<div class="loader"></div>');
+    $( ".sub_modules a" ).removeClass( "active" )
+    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/orchestra/order-management/label-orders",
+        url: base_url + "/admin/"+buyer+"/order-management/label-orders",
         type: "Post",
         dataType:"json",
         data: {_token:csrf_token},
         beforeSend: function () {
-            $("#fakeloader").fadeIn();
             $(".loader").show();
             $(".loader").css('margin-top','12%');
-            $( ".sub_modules a" ).removeClass( "active" )
-            $( obj ).addClass( "active" )
         },
         success: function (data) {
-             $('.main').html(jumbotron('Label Orders','Order Management'));
-             $('.main').append(table(data));
+             $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
+             $("#datatable-example-2_filter input").addClass('form-control');
+             $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+             $('.label_orders a').addClass("active")
         },
         error: function (data) {
 
         },
         complete: function () {
-            $("#fakeloader").fadeOut();
             $(".loader").hide();
             $(".loader").css('margin-top','0%');
         }
     })
 }
 
-function orchestra_sticker_orders()
+function sticker_orders()
 {
+    $('.main-sub-menu').removeClass('hidden');
+    $( ".sub_modules a" ).removeClass( "active" )
     $('.main-content').html('<div class="loader"></div>');
     var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -47,6 +49,9 @@ function orchestra_sticker_orders()
         success: function (data) {
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
+             $("#datatable-example-2_filter input").addClass('form-control');
+             $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+             $('.sticker_orders a').addClass("active")
 
         },
         error: function (data) {
@@ -102,7 +107,7 @@ function table(data)
         }
         tr += '</tr>';
     })
-    return' <div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div><ul class="sub-nav-list"><li><a class="active" href="#"><i class="ion-social-codepen"></i>Sticker Orders</a></li><li><a class="" href="#"><i class="ion-ios-pricetag"></i>Label Orders</a></li></ul><hr/><table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div></div></div></div></div></div>';
+    return'<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div></div></div></div></div></div>';
 
 }
 function jumbotron_without_button(name,main_menu)

@@ -10,6 +10,14 @@
               </select>
     </form>
     <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
+    <div class="main-sub-menu hidden">
+        <div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div>
+        <ul class="sub-nav-list">
+             <li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>
+            <li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li>
+            <li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li>
+        </ul><hr/>
+    </div>
     <div class="main-content">
         <div class="loader"></div>
         <div class="col-md-4">
@@ -89,7 +97,15 @@
 @section('jqueryIncludes')
 <script>
       $('.buyer-select').change(function() {
-           orchestra_sticker_orders()
+          if($(this).val() != "")
+          {
+               sticker_orders()
+          }
+          else
+          {
+              location.reload()
+          }
+          
        });
 
 </script>
