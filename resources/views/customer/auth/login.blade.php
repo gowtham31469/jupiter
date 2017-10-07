@@ -4,7 +4,7 @@
         <div class="row">
             <div class="login-section">
                 <div class="container">
-                    <div class="card card-container">
+                    <div class="card login-card-container">
                         <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
                         <img id="profile-img" class="profile-img-card" src="{{ asset('images/logo.png') }}" />
                     
