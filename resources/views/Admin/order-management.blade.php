@@ -1,6 +1,10 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
+        <ol class="breadcrumb">
+  <li><a href="#">Dashboard</a></li>
+  <li class="active">Order Management</li>
+</ol>
     <form class="navbar-form pull-right" style="margin-top:0px;">
         <label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label>
         <select class="js-example-responsive buyer-select">

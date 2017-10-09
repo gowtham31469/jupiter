@@ -1,7 +1,8 @@
 body {
     padding-top: 50px;
 }
-h4{
+
+h4 {
     font-weight: bold;
 }
 
@@ -272,6 +273,7 @@ i {
 /*
  * Card component
  */
+
 .login-card {
     background-color: #F7F7F7;
     /* just in case there no content*/
@@ -297,6 +299,7 @@ i {
 /*
  * Form styles
  */
+
 .profile-name-card {
     font-size: 16px;
     font-weight: bold;
@@ -304,10 +307,12 @@ i {
     margin: 10px 0 0;
     min-height: 1em;
 }
-.card-container input{
+
+.card-container input {
     margin-bottom: 5px;
 }
-p.terms{
+
+p.terms {
     color: rgba(255, 255, 255, 0.56);
 }
 
@@ -315,38 +320,52 @@ p.terms{
     padding: 9px 15px;
     cursor: pointer;
 }
+
 .loader {
-       display: none;
-        margin: 0 auto;
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #3498db; /* Blue */
+    display: none;
+    margin: 0 auto;
+    border: 3px solid #eeeeee;
+    /* Light grey */
+    border-top: 3px solid #2c3e50;
+    /* Blue */
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     animation: spin 1.5s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 .table > thead > tr > th {
     vertical-align: middle;
-       background: rgba(247, 247, 247, 0.39);
+    background: rgba(247, 247, 247, 0.39);
 }
+
 .table > tbody > tr > td {
     vertical-align: middle;
 }
-.strong{
+
+.strong {
     font-weight: bold;
 }
-.card-title{
-    border-bottom: 1px solid rgba(44, 62, 80, 0.45);;
+
+.card-title {
+    border-bottom: 1px solid rgba(44, 62, 80, 0.45);
+    ;
 }
-.card-title h5{
-       font-size: 17px;
+
+.card-title h5 {
+    font-size: 17px;
     margin-top: -2px;
 }
+
 .main h4:after {
     content: "";
     height: 2px;
@@ -356,54 +375,87 @@ p.terms{
     margin-top: 10px;
     margin-left: 4px;
 }
-.add-label{
+
+.add-label {
     margin-top: 18%;
 }
-.add-label i{
+
+.add-label i {
     font-size: 50px;
 }
-.add-card:hover{
+
+.add-card:hover {
     cursor: pointer;
     background: #f7f7f7;
 }
-     #svg_box{
-            width: 210px;
-            margin: 0 auto;
-        }
 
-@media (min-width: 992px){
-.modal-lg {
-    width: 95%;
-}}
-.artworkCol .col-md-4{
-    border-right:1px solid rgba(51, 51, 51, 0.37);
+#svg_box {
+    width: 210px;
+    margin: 0 auto;
 }
-.sample-artwork{
-    width:210px;
+
+@media (min-width: 992px) {
+    .modal-lg {
+        width: 95%;
+    }
+}
+
+.artworkCol .col-md-4 {
+    border-right: 1px solid rgba(51, 51, 51, 0.37);
+}
+
+.sample-artwork {
+    width: 210px;
     background: #eee;
     height: 480px;
     border-radius: 8px;
     margin: 0 auto;
 }
-.h100{
+
+.h100 {
     min-height: 100%;
 }
+
 .img_artwork {
     text-align: center;
     padding-top: 8%;
 }
+
 .img_artwork img {
     object-fit: contain;
     height: 200px;
     margin: 0 auto;
 }
-.bottom-bar{
+
+.bottom-bar {
     background: #2c3e50;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    z-index: 1;
 }
-.bottom-bar .modal-footer{
+
+.bottom-bar .modal-footer {
     padding: 10px;
+}
+
+.poc_number {
+    line-height: 1.8;
+}
+
+.bredcrumb {
+    margin-top: 4px;
+    margin-bottom: -13px;
+    background: #fcfcfc;
+    padding: 5px;
+    padding-left: 10px;
+    border: 1px solid rgba(221, 221, 221, 0.17);
+}
+
+.bredcrumb a {
+    background: #fff;
+    padding: 2px 9px;
+    border-radius: 4px;
+    box-shadow: inset 0px 0px 10px #ddd;
 }
