@@ -44,7 +44,7 @@ Route::get('admin/template-management', 'Admin\AdminController@templateManagemen
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::post('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::post('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-// Route::get('admin/user-management/get-roles', 'Admin\UserManagement\UserManagementController@getUserRoles');
+Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserManagementController@addJgaUser');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {

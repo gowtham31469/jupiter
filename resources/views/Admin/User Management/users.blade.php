@@ -63,56 +63,7 @@
         </div>
     </div>
   </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add User</h4>
-                </div>
-                {!! Form::open(['method' => 'post','id' => 'add_user']) !!}
-                    <div class="modal-body">
-                        <div class="form-group">
-                            {!! Form::label('user_id', 'User ID', ['class' => 'form_label']) !!}
-                            {!! Form::text('user_id',$value = '', array('class' => 'form-control input-sm ','required','placeholder'=>'User ID')) !!}
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('email', 'Email', ['class' => 'form_label']) !!}
-                          {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
-                          <div class="input-group">
-                            {!! Form::text('password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Password','required')) !!}
-                            <span id="generatePwd" class="input-group-addon">Generate Password</span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('phone', 'Phone', ['class' => 'form_label']) !!}
-                          {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','required')) !!}
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                        </div>
-                        <div class="form-group">
-                          {!! Form::label('user_role', 'User Role', ['class' => 'form_label']) !!}
-                          {{  Form::select('user_role',(['' => '-- Select User Role --']+ $roles->toArray()),'',array('class' => 'form-control input-sm','id'=>'user_role')) }}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <p>By clicking ADD USER a email will be sent to user with his/her login details.</p>
-                        {!! Form::submit('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::submit('Add User', ['class' => 'btn btn-primary'] ) !!}
-                    </div>
-               {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
+
     @endsection
 
     @else

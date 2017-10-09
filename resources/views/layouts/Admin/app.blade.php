@@ -37,7 +37,9 @@
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-     <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js">
+    </script>
     @yield('jqueryIncludes')
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script>
