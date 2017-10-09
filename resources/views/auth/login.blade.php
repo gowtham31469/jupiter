@@ -4,12 +4,22 @@
         <div class="row">
             <div class="login-section">
                 <div class="container">
-                    <div class="card card-container">
+                    <div class="login-card card-container">
                         <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
                         <img id="profile-img" class="profile-img-card" src="{{ asset('images/logo.png') }}" />
                     
                        <form class="form-group" method="POST" action="{{ route('login') }}">
                             {{ csrf_field() }}
+                            @if ($errors->has('email'))
+                            <span class="help-block">
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
+                            @endif
+                            @if ($errors->has('password'))
+                            <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                            @endif
                             <span id="reauth-email" class="reauth-email"></span>
                             <input id="email" type="email" class="form-control" placeholder="Email address" required autofocus name="email" value="{{ old('email') }}">
                            <input id="password" type="password" class="form-control" name="password" required placeholder="Password">

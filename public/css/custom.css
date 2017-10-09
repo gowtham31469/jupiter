@@ -2,6 +2,9 @@ body {
     padding-top: 50px;
 }
 
+h4 {
+    font-weight: bold;
+}
 
 /*
  * Global add-ons
@@ -156,17 +159,19 @@ ul.nav-list li a {
 }
 
 ul.nav-list li a:hover {
-  border-bottom: 3px solid #18bc9c;
+    border-bottom: 3px solid #18bc9c;
     color: #18bc9c;
 }
 
 ul.nav-list li a.active {
-   background-color: #18bc9c;
+    background-color: #18bc9c;
     color: #ffffff;
 }
-.main h3{
+
+.main h3 {
     font-weight: bold;
 }
+
 .main h3:after {
     content: "";
     height: 2px;
@@ -220,7 +225,8 @@ ul.sub-nav-list li a.active {
 
 
 
-.action-group > a > i, i {
+.action-group > a > i,
+i {
     margin-right: 5px;
 }
 
@@ -228,7 +234,8 @@ ul.sub-nav-list li a.active {
     right: 0;
     left: auto;
 }
-.right-sidebar{
+
+.right-sidebar {
     height: 100%;
     width: 400px;
     position: fixed;
@@ -236,14 +243,16 @@ ul.sub-nav-list li a.active {
     top: 0;
     background: #fff;
 }
-.card{
+
+.card {
     padding: 15px;
     background: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    margin:10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    margin: 10px;
     min-height: 300px;
 }
+
 .login-section {
     background: url(../images/background.jpg);
     background-size: cover;
@@ -264,9 +273,11 @@ ul.sub-nav-list li a.active {
 /*
  * Card component
  */
-.card {
-    background-color: #F7F7F7 ;
+
+.login-card {
+    background-color: #F7F7F7;
     /* just in case there no content*/
+    width: 300px;
     padding: 20px 25px 30px;
     margin: 0 auto 25px;
     margin-top: 15%;
@@ -288,6 +299,7 @@ ul.sub-nav-list li a.active {
 /*
  * Form styles
  */
+
 .profile-name-card {
     font-size: 16px;
     font-weight: bold;
@@ -295,14 +307,155 @@ ul.sub-nav-list li a.active {
     margin: 10px 0 0;
     min-height: 1em;
 }
-.card-container input{
+
+.card-container input {
     margin-bottom: 5px;
 }
-p.terms{
+
+p.terms {
     color: rgba(255, 255, 255, 0.56);
 }
+
 .input-group-addon {
     padding: 9px 15px;
     cursor: pointer;
+}
 
+.loader {
+    display: none;
+    margin: 0 auto;
+    border: 3px solid #eeeeee;
+    /* Light grey */
+    border-top: 3px solid #2c3e50;
+    /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.table > thead > tr > th {
+    vertical-align: middle;
+    background: rgba(247, 247, 247, 0.39);
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.card-title {
+    border-bottom: 1px solid rgba(44, 62, 80, 0.45);
+    ;
+}
+
+.card-title h5 {
+    font-size: 17px;
+    margin-top: -2px;
+}
+
+.main h4:after {
+    content: "";
+    height: 2px;
+    width: 20px;
+    background: #5cbc9c;
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 4px;
+}
+
+.add-label {
+    margin-top: 18%;
+}
+
+.add-label i {
+    font-size: 50px;
+}
+
+.add-card:hover {
+    cursor: pointer;
+    background: #f7f7f7;
+}
+
+#svg_box {
+    width: 210px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        width: 95%;
+    }
+}
+
+.artworkCol .col-md-4 {
+    border-right: 1px solid rgba(51, 51, 51, 0.37);
+}
+
+.sample-artwork {
+    width: 210px;
+    background: #eee;
+    height: 480px;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.h100 {
+    min-height: 100%;
+}
+
+.img_artwork {
+    text-align: center;
+    padding-top: 8%;
+}
+
+.img_artwork img {
+    object-fit: contain;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.bottom-bar {
+    background: #2c3e50;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.bottom-bar .modal-footer {
+    padding: 10px;
+}
+
+.poc_number {
+    line-height: 1.8;
+}
+
+.bredcrumb {
+    margin-top: 4px;
+    margin-bottom: -13px;
+    background: #fcfcfc;
+    padding: 5px;
+    padding-left: 10px;
+    border: 1px solid rgba(221, 221, 221, 0.17);
+}
+
+.bredcrumb a {
+    background: #fff;
+    padding: 2px 9px;
+    border-radius: 4px;
+    box-shadow: inset 0px 0px 10px #ddd;
 }

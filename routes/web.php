@@ -91,7 +91,9 @@ Route::post('upload', 'UploadController@csvUpload');
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
+Route::post('admin/orchestra/order-management/back-label-orders', 'Admin\Orchestra\OrderManagementCntrl@backLabelOrders');
 Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@stickerOrders');
+Route::post('admin/orchestra/order-management/order-details', 'Admin\Orchestra\OrderManagementCntrl@orderDetails');
 
 //Template Management
 
