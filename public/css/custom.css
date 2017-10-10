@@ -80,6 +80,7 @@ h4 {
 .main {
     padding: 20px;
     margin-top: 25px;
+    margin-bottom: 100px;
 }
 
 @media (min-width: 768px) {
@@ -365,7 +366,9 @@ p.terms {
     font-size: 17px;
     margin-top: -2px;
 }
-
+.main h4{
+    margin-bottom: 25px;
+}
 .main h4:after {
     content: "";
     height: 2px;
@@ -433,7 +436,7 @@ p.terms {
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 1;
+    z-index: 10000;
 }
 
 .bottom-bar .modal-footer {
@@ -458,4 +461,54 @@ p.terms {
     padding: 2px 9px;
     border-radius: 4px;
     box-shadow: inset 0px 0px 10px #ddd;
+}
+
+span.sticker-details {
+    padding-right: 10px;
+    border-right: 1px solid;
+    margin-right: 10px;
+}
+
+input {
+    border-radius: 5px;
+    border: 1px solid #c7c7c7;
+    background-color: rgb(248, 248, 248);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(166, 166, 166);
+    border-image: initial;
+}
+
+.girl {
+    background-color: rgb(236, 121, 164);
+    color: #fff;
+}
+
+.boy {
+    background-color: rgb(141, 174, 215);
+    color: #fff;
+}
+
+.bb {
+    background-color: rgb(172, 225, 206);
+    color: #000;
+}
+
+.new {
+    background-color: rgb(239, 237, 152);
+    color: #000;
+}
+
+.others {
+    background-color: #f4eb21;
+    color: #000;
+}
+.border-right:after{
+    content: "";
+    width: 1px;
+    background: rgba(44, 62, 80, 0.45);
+    height: 350px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
