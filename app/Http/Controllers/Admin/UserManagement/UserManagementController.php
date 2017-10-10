@@ -34,6 +34,7 @@ class UserManagementController extends Controller
     try {
           $module_var = new Modules();
           $is_allowed = $module_var->permittedModules();
+          return $modules_tree = $this->getModules();
           if($is_allowed)
           {
               $get_main_module = $module_var->getMainModules();
@@ -44,7 +45,10 @@ class UserManagementController extends Controller
               $user_id = DB::table('users')->max('id');
               $user_id = $user_id + 1;
               $user_id = "JGAU00".$user_id;
-              return view('Admin/User Management/home',['roles' => $roles,'user_id' => $user_id]);
+              $role_id = DB::table('user_role')->max('id');
+              $role_id = $role_id + 1;
+              $role_id = "JGAR00".$role_id;
+              return view('Admin/User Management/home',['roles' => $roles,'user_id' => $user_id,'role_id' => $role_id,'modules_tree' => $modules_tree]);
           }
           else
           {
@@ -156,11 +160,6 @@ class UserManagementController extends Controller
   {
     try {
             $id        = $request['id'];
-            // $name      = $request['name'];
-            // $email     = $request['email'];
-            // $phone     = $request['phone'];
-            // $user_role = $request['user_role'];
-            // $address   = $request['address'];
             $input['id']        = Input::get('id');
             $input['email']     = Input::get('email');
             $input['name']      = Input::get('name');
@@ -178,11 +177,11 @@ class UserManagementController extends Controller
             {
               $updated = User::where('users.id',$id)
                           ->update([
-                            'name'       => $input['name'],
-                            'email'      => $input['email'],
-                            'phone'      => $input['phone'],
+                            'name'          => $input['name'],
+                            'email'         => $input['email'],
+                            'phone'         => $input['phone'],
                             'user_role_id'  => $input['user_role'],
-                            'address'    => $input['address']
+                            'address'       => $input['address']
                           ]);
               if($updated != '')
               {
@@ -223,6 +222,37 @@ class UserManagementController extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
+  }
+  /**
+   * function to get modules tree.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function getModules()
+  {
+    try {
+          $first_level= DB::table("module")->select('id','module_name')->where("parent_id", 0)->get();
+          if($first_level)
+          {
+            foreach ($first_level as $level1)
+            {
+              $level1_parent = $level1->id;
+              $second_level = DB::table("module")->where("parent_id",$level1_parent)->select('id','module_name')->get();
+              $level1->second = $second_level;
+              foreach ($level1->second as $level2)
+              {
+                  $level2_parent = $level2->id;
+                  $third_level = DB::table("module")->where("parent_id",$level2_parent)->select('id','module_name')->get();
+                  $level2->third = $third_level;
+              }
+            }
+
+          }
+          return $first_level;
+        } catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
   }
 
 }
