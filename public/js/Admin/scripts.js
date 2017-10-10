@@ -295,7 +295,7 @@ function hangtagmodal(data)
                                      svgDoc.getElementById("size_english").innerHTML="months";
                                  }
                                var code = data.order_details[0].BarcodeForPricesTags.toString();
-            JsBarcode("#ean-13", code, { format: "ean13",width:4,height:100 });
+            JsBarcode("#ean-13", code, { format: "ean13"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
                 body = document.getElementsByTagName('body')[0],
@@ -331,7 +331,7 @@ function hangtagmodal(data)
             img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
             // img.src - contains base64 URI from svg
-//            console.log(img.src);
+            console.log(img.src);
 
             //remove temporary canvas
             canvasTmp.remove();
