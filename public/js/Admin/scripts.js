@@ -303,7 +303,7 @@ function hangtagmodal(data)
                 svg_xml,
                 ctx,
                 img;
-
+ 
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
