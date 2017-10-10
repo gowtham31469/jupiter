@@ -16,7 +16,7 @@ class Modules{
      * @param parent_id
      * @return sub modules
      */
-    private $employee_role_id;
+    private $user_role_id;
 
     public function getSubModules($parent_id)
 	{
