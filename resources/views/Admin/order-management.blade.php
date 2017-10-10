@@ -2,7 +2,7 @@
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <ol class="breadcrumb">
-  <li><a href="#">Dashboard</a></li>
+  <li><a href="/admin/dashboard">Dashboard</a></li>
   <li class="active">Order Management</li>
 </ol>
     <form class="navbar-form pull-right" style="margin-top:0px;">
