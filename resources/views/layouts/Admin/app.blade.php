@@ -38,6 +38,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
      <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
     @yield('jqueryIncludes')
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script>

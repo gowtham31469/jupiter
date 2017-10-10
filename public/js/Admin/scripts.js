@@ -205,26 +205,91 @@ function hangtagmodal(data)
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
-             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" data="'+data.orchestra_template+'" type="image/svg+xml"></object></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:500px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
              
              var mySVG = document.getElementById("svg2");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
                               var svgItem = svgDoc.getElementById("uvc_tco");
-                              svgDoc.getElementById("algeria_price").innerHTML=data.order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",");
-                              svgDoc.getElementById("algeria_club_price").innerHTML=data.order_details[0].Prix_Club_ALGERIE; svgDoc.getElementById("saudi_price").innerHTML=data.order_details[0].Prix_Vente_Arabie_Saoudite; svgDoc.getElementById("morocco_price").innerHTML=data.order_details[0].Prix_Vente_Maroc; svgDoc.getElementById("swiss_price").innerHTML=data.order_details[0].Prix_Vente_Suisse; svgDoc.getElementById("canada_price").innerHTML=data.order_details[0].Prix_Vente_Canada.toString().replace(".", ",");
-                              svgDoc.getElementById("turkey_price").innerHTML=data.order_details[0].Prix_Vente_Turquie;
-                              svgDoc.getElementById("us_price").innerHTML=data.order_details[0].Prix_Vente_USA;
-                              svgDoc.getElementById("us_club_price").innerHTML=data.order_details[0].Prix_Club_USA;
-                              svgDoc.getElementById("morris_price").innerHTML=data.order_details[0].Prix_Vente_Ile_Maurice;
-                              svgDoc.getElementById("morris_club_price").innerHTML=data.order_details[0].Prix_Club_Ile_Maurice;
-                              svgDoc.getElementById("morroco_club_price").innerHTML=data.order_details[0].Prix_Club_Maroc;
-                              svgDoc.getElementById("swiss_club_price").innerHTML=data.order_details[0].Prix_Club_Suisse;
-                              svgDoc.getElementById("canada_club_price").innerHTML=data.order_details[0].Prix_Club_Canada;
-                              svgDoc.getElementById("turkey_club_price").innerHTML=data.order_details[0].Prix_Club_Turquie;
+                              svgDoc.getElementById("algeria_price").innerHTML=data.order_details[0].Prix_Vente_ALGERIE!= null ?data.order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("algeria_club_price").innerHTML=data.order_details[0].Prix_Club_ALGERIE!= null ?data.order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : ""; svgDoc.getElementById("saudi_price").innerHTML=data.order_details[0].Prix_Vente_Arabie_Saoudite!= null ?data.order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : ""; svgDoc.getElementById("morocco_price").innerHTML=data.order_details[0].Prix_Vente_Maroc!= null ?data.order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : ""; svgDoc.getElementById("swiss_price").innerHTML=data.order_details[0].Prix_Vente_Suisse!= null ?data.order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : ""; svgDoc.getElementById("canada_price").innerHTML=data.order_details[0].Prix_Vente_Canada!= null ?data.order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("turkey_price").innerHTML=data.order_details[0].Prix_Vente_Turquie!= null ?data.order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("us_price").innerHTML=data.order_details[0].Prix_Vente_USA!= null ?data.order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("us_club_price").innerHTML=data.order_details[0].Prix_Club_USA!= null ?data.order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("morris_price").innerHTML=data.order_details[0].Prix_Vente_Ile_Maurice!= null ?data.order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("morris_club_price").innerHTML=data.order_details[0].Prix_Club_Ile_Maurice!= null ?data.order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("morroco_club_price").innerHTML=data.order_details[0].Prix_Club_Maroc!= null ?data.order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("swiss_club_price").innerHTML=data.order_details[0].Prix_Club_Suisse!= null ?data.order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("canada_club_price").innerHTML=data.order_details[0].Prix_Club_Canada!= null ?data.order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
+                              svgDoc.getElementById("turkey_club_price").innerHTML=data.order_details[0].Prix_Club_Turquie!= null ?data.order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
                               svgItem.innerHTML = data.order_details[0].UVC_TCO;
+                              var size = data.order_details[0].Size.split(" ")
+                              svgDoc.getElementById("theme").innerHTML=data.order_details[0].Theme;
+                              svgDoc.getElementById("size").innerHTML=size[0];
+                             if(size[1] == "ANS")
+                                 {
+                                      svgDoc.getElementById("size_french").innerHTML=size[1];
+                                      svgDoc.getElementById("size_english").innerHTML="years";
+                                     
+                                 }
+                             else
+                                 {
+                                     svgDoc.getElementById("size_french").innerHTML=size[1];
+                                     svgDoc.getElementById("size_english").innerHTML="months";
+                                 }
+                               var code = data.order_details[0].BarcodeForPricesTags.toString();
+            JsBarcode("#ean-13", code, { format: "ean13",width:4,height:100 });
+            var svg = document.getElementById('svgdiv').querySelector('svg'),
+                canvas = document.createElement('canvas'),
+                body = document.getElementsByTagName('body')[0],
+                canvasTmp,
+                svg_xml,
+                ctx,
+                img;
+
+            // if our "svg" doesn't have 'xmlns' attribute we must add it
+            //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+            canvas.id = 'canvas';
+            canvas.width = svg.getBoundingClientRect().width;
+            canvas.height = svg.getBoundingClientRect().height;
+
+            body.appendChild(canvas);
+            canvasTmp = document.getElementById('canvas');
+
+            /* Time to play ;) */
+
+            // https://developer.mozilla.org/en/XMLSerializer
+            svg_xml = (new XMLSerializer()).serializeToString(svg);
+            ctx = canvasTmp.getContext('2d');
+
+            // JavaScript (HTML) image
+            img = new Image();
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+            };
+
+            // https://developer.mozilla.org/en/DOM/window.btoa
+            img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+            // img.src - contains base64 URI from svg
+            console.log(img.src);
+
+            //remove temporary canvas
+            canvasTmp.remove();
+
+            //Check in browsers
+            //
+
+            svgDoc.getElementById("bhat").setAttribute('xlink:href', img.src);
+                             
+                             
                          }, false);
+    
+    
+    
     
              $('.template-select').select2({
                 placeholder: "Select Template",
@@ -233,18 +298,44 @@ function hangtagmodal(data)
              $('.template-select').change(function() {
                   if($(this).val() != "")
                   {
-                         $('.sample-artwork').html('<object id="svg1" data="'+$(this).val()+'" type="image/svg+xml"></object>')
+                         $('.sample-artwork').html('<object id="svg1" data="'+$(this).val()+'" style="width:233px;height:500px" type="image/svg+xml"></object>')
                          var mySVG = document.getElementById("svg1");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
-                              var svgItem = svgDoc.getElementById("price");
-                              svgItem.innerHTML = "13";
+                             var pri = data.order_details[0].PrixEurope.split(".")
+                             
+                             if(pri.length == 1)
+                             {
+                                 var svgItem = svgDoc.getElementById("price1");
+                                 svgItem.innerHTML = innerHTML=data.order_details[0].PrixEurope;
+                                 svgDoc.getElementById("price2").innerHTML ="";
+                             }
+                             else if(pri.length == 2)
+                             {
+                                 var svgItem = svgDoc.getElementById("price1");
+                                 svgItem.innerHTML = innerHTML=pri[0];
+                                 svgDoc.getElementById("price2").innerHTML =","+pri[1];
+                             }
+                             var pri1 = data.order_details[0].PrixClubEurope.toString().split(".")
+                             if(pri1.length == 1)
+                             {
+                                 svgDoc.getElementById("club_price1").innerHTML =data.order_details[0].PrixClubEurope;
+                                 svgDoc.getElementById("club_price2").innerHTML ="";
+                             }
+                             else if(pri1.length == 2)
+                             {
+                                  svgDoc.getElementById("club_price1").innerHTML =pri1[0];
+                                  svgDoc.getElementById("club_price2").innerHTML =","+pri1[1];
+                             }
+                              
                          }, false);
+                      $('.sample-artwork').css('background','#fff');
                   }
                   else
                   {
                      $('.sample-artwork').html('');
+                      $('.sample-artwork').css('background','#eee');
                   }
 
               });
