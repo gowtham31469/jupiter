@@ -17,8 +17,10 @@ function label_orders()
         success: function (data) {
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
-             $("#datatable-example-2_filter input").addClass('form-control');
+             $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+             $('#datatable-example-2_length select').addClass('form-control input-sm');
+            $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li  class="active">Label Orders</li>')
         },
         error: function (data) {
 
@@ -51,11 +53,12 @@ function back_label_orders(buyer,buyer_id)
             $.each(data.buyer, function (index, value) {
                 option+="<option value="+value.id+">"+value.buyer_name+"</option>";
             });
-             $('.top-content').html('<form class="navbar-form pull-right" style="margin-top:0px;"><label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label><select class="js-example-responsive buyer-select">'+option+'</select></form><h3><i class="ion-ios-browsers-outline"></i>Order Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div><ul class="sub-nav-list"><li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li><li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li><li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li></ul><hr/></div>')
+             $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Label Orders</li></ol><form class="navbar-form pull-right" style="margin-top:0px;"><label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label><select class="js-example-responsive buyer-select">'+option+'</select></form><h3><i class="ion-ios-browsers-outline"></i>Order Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div><ul class="sub-nav-list"><li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li><li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li><li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li></ul><hr/></div>')
              $('.main-content').html(table(data.orders));
              $('#datatable-example-2').DataTable();
-             $("#datatable-example-2_filter input").addClass('form-control');
+             $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+             $('#datatable-example-2_length select').addClass('form-control input-sm');
              $('.label_orders a').addClass("active")
              $('.buyer-select').val(buyer_id)
              $('.buyer-select').select2({
@@ -103,8 +106,10 @@ function sticker_orders()
         success: function (data) {
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
-             $("#datatable-example-2_filter input").addClass('form-control');
+             $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+              $('#datatable-example-2_length select').addClass('form-control input-sm');
+             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
         },
         error: function (data) {
 
@@ -168,6 +173,7 @@ function table(data)
 }
 function order_details(uvc)
 {
+    $('.main-content').html('<div class="loader"></div>');
     var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     var buyer_id=$('.buyer-select').val()
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -182,6 +188,7 @@ function order_details(uvc)
         },
         success: function (data) {
             orchestra_label_order_details(buyer,buyer_id,uvc,data)
+            hangtagmodal(data);
         },
         error: function (data) {
 
@@ -192,9 +199,57 @@ function order_details(uvc)
         }
     })
 }
-function hangtagmodal()
+function hangtagmodal(data)
 {
-    $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control"><option>Baby boy</option></select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+            var option="<option></option>";
+            $.each(data.orchestra_template_front, function (index, value) {
+                option+="<option value="+value.template_file+">"+value.template_name+"</option>";
+            });
+             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" data="'+data.orchestra_template+'" type="image/svg+xml"></object></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+             
+             var mySVG = document.getElementById("svg2");
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                              var svgItem = svgDoc.getElementById("uvc_tco");
+                              svgDoc.getElementById("algeria_price").innerHTML=data.order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",");
+                              svgDoc.getElementById("algeria_club_price").innerHTML=data.order_details[0].Prix_Club_ALGERIE; svgDoc.getElementById("saudi_price").innerHTML=data.order_details[0].Prix_Vente_Arabie_Saoudite; svgDoc.getElementById("morocco_price").innerHTML=data.order_details[0].Prix_Vente_Maroc; svgDoc.getElementById("swiss_price").innerHTML=data.order_details[0].Prix_Vente_Suisse; svgDoc.getElementById("canada_price").innerHTML=data.order_details[0].Prix_Vente_Canada.toString().replace(".", ",");
+                              svgDoc.getElementById("turkey_price").innerHTML=data.order_details[0].Prix_Vente_Turquie;
+                              svgDoc.getElementById("us_price").innerHTML=data.order_details[0].Prix_Vente_USA;
+                              svgDoc.getElementById("us_club_price").innerHTML=data.order_details[0].Prix_Club_USA;
+                              svgDoc.getElementById("morris_price").innerHTML=data.order_details[0].Prix_Vente_Ile_Maurice;
+                              svgDoc.getElementById("morris_club_price").innerHTML=data.order_details[0].Prix_Club_Ile_Maurice;
+                              svgDoc.getElementById("morroco_club_price").innerHTML=data.order_details[0].Prix_Club_Maroc;
+                              svgDoc.getElementById("swiss_club_price").innerHTML=data.order_details[0].Prix_Club_Suisse;
+                              svgDoc.getElementById("canada_club_price").innerHTML=data.order_details[0].Prix_Club_Canada;
+                              svgDoc.getElementById("turkey_club_price").innerHTML=data.order_details[0].Prix_Club_Turquie;
+                              svgItem.innerHTML = data.order_details[0].UVC_TCO;
+                         }, false);
+    
+             $('.template-select').select2({
+                placeholder: "Select Template",
+                allowClear: true
+             });
+             $('.template-select').change(function() {
+                  if($(this).val() != "")
+                  {
+                         $('.sample-artwork').html('<object id="svg1" data="'+$(this).val()+'" type="image/svg+xml"></object>')
+                         var mySVG = document.getElementById("svg1");
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                              var svgItem = svgDoc.getElementById("price");
+                              svgItem.innerHTML = "13";
+                         }, false);
+                  }
+                  else
+                  {
+                     $('.sample-artwork').html('');
+                  }
+
+              });
+       
+   
 }
 function orchestra_label_order_details(buyer,buyer_id,uvc,data)
 {
@@ -207,10 +262,10 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
          barcode+=value.BuyerPONo+" | ";
      });
     
-    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
+    $('.top-content').html("<ol class='breadcrumb'><li><a href='/admin/dashboard'>Dashboard</a></li><li><a href=''>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
       $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
       $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="assets/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare - Main & Size label</p></div></div>');
-      hangtagmodal();
+     
 }
 function user_table(data)
 {

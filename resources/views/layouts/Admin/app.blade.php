@@ -43,8 +43,9 @@
     <script>
         $(document).ready(function() {
             $('#example').DataTable();
-            $("#example_filter input").addClass('form-control');
+            $("#example_filter input").addClass('form-control input-sm');
             $("#example_filter input").attr('placeholder', 'Data Search');
+            $('#datatable-example-2_length select').addClass('form-control input-sm');
 
         });
         $(function () {

@@ -74,6 +74,22 @@ class OrderManagementCntrl extends Controller
         
             $total_qty = DB::table('orchestra_item_details')->select('*',DB::raw("sum(Quantity) as total_qty"))->where('UVC',$uvc)->groupBy('UVC')->get();
             $data['total_qty']=$total_qty{0}->total_qty;
+            if($total_qty{0}->Disney == 1)
+            {
+                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','2')->get();
+                $data['orchestra_template']=$orchestra_template{0}->template_file;
+                
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','1')->get();
+                $data['orchestra_template_front']=$orchestra_template_front;
+            }
+            else
+            {
+                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','1')->get();
+                $data['orchestra_template']=$orchestra_template{0}->template_file;
+                
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
+                $data['orchestra_template_front']=$orchestra_template_front;
+            }
             echo json_encode($data);
     }
 }
