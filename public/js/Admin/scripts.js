@@ -158,7 +158,7 @@ function table(data)
                 }
                 else if(key == "UVC")
                 {
-                    tr += '<td><a href="#" onclick=order_details("'+value[key]+'")>'+value[key]+'</a></td>';
+                    tr += '<td><a href="#" onclick=order_details("'+value[key]+'","'+value.BuyerPONo+'")>'+value[key]+'</a></td>';
                 }
                 else
                 {
@@ -171,14 +171,70 @@ function table(data)
     return'<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div></div></div></div></div></div>';
 
 }
-function order_details(uvc)
+function order_details(uvc,po)
+{
+   if($('.sub-nav-list').find('.active').text() == "Sticker Orders") 
+   {
+       sticker_order_details(uvc,po)
+   }
+    else
+    {
+        label_order_details(uvc)
+    }
+    
+}
+function sticker_order_details(uvc,po)
 {
     $('.main-content').html('<div class="loader"></div>');
     var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     var buyer_id=$('.buyer-select').val()
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/"+buyer+"/order-management/order-details",
+        url: base_url + "/admin/"+buyer+"/order-management/sticker-order-details",
+        type: "Post",
+        dataType:"json",
+        data: {_token:csrf_token,po:po},
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+        },
+        success: function (data) {
+            orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+        }
+    })
+}
+
+function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
+{
+    var tr="";
+    
+     $.each(data.orchestra_parcel_quantity_details, function (index, value) {
+         tr+='<tr><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
+     });
+    
+    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('"+buyer+"','"+buyer_id+"')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC "+uvc+" and PO "+po+"</li></ol></div>")
+    
+      $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO #173571</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select onchange="this.className=this.options[this.selectedIndex].className" name="carlist" id="age" form="carform"><option selected="true"  disabled="disabled">Age Group</option></select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>Quantity for Solid Size Stickers</h4><div class="table-responsive"><table class="table table-bordered table-hover"><thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td><td class="text-center">0</td><td class="text-center">0</td></tr></tbody></table></div></div><div class="col-md-4"><h4>Solid Size Parcel/Carton Sticker</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="" class="form-control input-sm" placeholder="Length"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="" class="form-control input-sm" placeholder="Width"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" placeholder="Height"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">asdd</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input disabled="disabled" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div> </div></div>');
+
+    
+          $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><img src="assets/images/sticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"> <img src="assets/images/sticker-sample.png" class="img-responsive center-block"> </div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><img src="assets/images/polysticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"> <img src="assets/images/polysticker-sample.png" class="img-responsive center-block"> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div>')
+}
+
+function label_order_details(uvc)
+{
+    $('.main-content').html('<div class="loader"></div>');
+    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    var buyer_id=$('.buyer-select').val()
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/"+buyer+"/order-management/label-order-details",
         type: "Post",
         dataType:"json",
         data: {_token:csrf_token,uvc:uvc},

@@ -66,7 +66,7 @@ class OrderManagementCntrl extends Controller
             $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
             echo json_encode($orders);
     }
-    public function orderDetails(Request $request)
+    public function labelOrderDetails(Request $request)
     {
             $uvc=$request->uvc;
             $data['order_details'] = DB::table('orchestra_item_details')->select('*',DB::raw("sum(Quantity) as Sum"))->where('UVC',$uvc)->groupBy('Size')->get();
@@ -91,6 +91,17 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_template_front']=$orchestra_template_front;
             }
             echo json_encode($data);
+    }
+    public function stickerOrderDetails(Request $request)
+    {
+         $po=$request->po;
+        
+         $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select('*')->where('BuyerPONo',$po)->get();
+        
+         $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*')->where('BuyerPONo',$po)->groupBy('BuyerPONo')->get();
+        
+        echo json_encode($data);
+           
     }
 }
 
