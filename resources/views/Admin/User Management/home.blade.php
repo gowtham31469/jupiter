@@ -297,6 +297,9 @@
       /** To refresh modal **/
       $('.modal').on('hidden.bs.modal', function (e) {
         $('#add_user_form').trigger("reset");
+        $('#edit_result').hide();
+        $('#result').hide();
+        $('#delete_result').hide();
        })
      /**  Validation for mobile number **/
      function isNumber(evt) {
