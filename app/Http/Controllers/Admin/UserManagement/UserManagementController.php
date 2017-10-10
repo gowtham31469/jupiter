@@ -34,7 +34,7 @@ class UserManagementController extends Controller
     try {
           $module_var = new Modules();
           $is_allowed = $module_var->permittedModules();
-          return $modules_tree = $this->getModules();
+          $modules_tree = $this->getModules();
           if($is_allowed)
           {
               $get_main_module = $module_var->getMainModules();
