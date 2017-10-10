@@ -45,6 +45,9 @@ Route::get('admin/user-management', 'Admin\UserManagement\UserManagementControll
 Route::post('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::post('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
 Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserManagementController@addJgaUser');
+Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserManagementController@getUserById');
+Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
+Route::delete('admin/user-management/delete-user', 'Admin\UserManagement\UserManagementController@deleteUserById');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {

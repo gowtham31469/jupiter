@@ -10,6 +10,8 @@ use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\User;
+use Hash;
 
 class UserManagementController extends Controller
 {
@@ -35,7 +37,6 @@ class UserManagementController extends Controller
           if($is_allowed)
           {
               $get_main_module = $module_var->getMainModules();
-              $get_sub_module = $module_var->getSubModules(2);
               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                   return $view->with(['modules' => $get_main_module]);
               });
@@ -43,7 +44,7 @@ class UserManagementController extends Controller
               $user_id = DB::table('users')->max('id');
               $user_id = $user_id + 1;
               $user_id = "JGAU00".$user_id;
-              return view('Admin/User Management/home',['sub_modules' => $get_sub_module,'roles' => $roles,'user_id' => $user_id]);
+              return view('Admin/User Management/home',['roles' => $roles,'user_id' => $user_id]);
           }
           else
           {
@@ -92,21 +93,136 @@ class UserManagementController extends Controller
   public function addJgaUser(Request $request)
   {
     try {
-          if(Request::ajax())
-          {
             $user_id   = $request['user_id'];
             $name      = $request['name'];
             $email     = $request['email'];
-            $password  = $request['password'];
             $phone     = $request['phone'];
             $user_role = $request['user_role'];
             $address   = $request['address'];
-            return response()->json(['error'=>'false','message' =>'success']);
-          }
-
+            $password  = Hash::make($request['p']); //Password
+            $email_exists = User::where('email',$email)->select('id')->get();
+            if(count($email_exists) > 0)
+            {
+              $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+            }
+            else
+            {
+              $inserted = User::create([
+                          'user_id'    => $user_id,
+                          'name'       => $name,
+                          'email'      => $email,
+                          'phone'      => $phone,
+                          'user_role_id'  => $user_role,
+                          'address'    => $address,
+                          'password'   => $password
+                        ]);
+              if($inserted != '')
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
+            }
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * Get user details by ID for editing.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function getUserById(Request $request)
+  {
+    try {
+          $id = $request['id'];
+          $user = DB::table('users')->select('user_id','user_role_id','name','email','phone','address')->where('users.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'user' => $user]);
         } catch (\Exception $e)
         {
                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
   }
+  /**
+   * function to update jga users.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function updateUserById(Request $request)
+  {
+    try {
+            $id        = $request['id'];
+            // $name      = $request['name'];
+            // $email     = $request['email'];
+            // $phone     = $request['phone'];
+            // $user_role = $request['user_role'];
+            // $address   = $request['address'];
+            $input['id']        = Input::get('id');
+            $input['email']     = Input::get('email');
+            $input['name']      = Input::get('name');
+            $input['user_role'] = Input::get('user_role');
+            $input['address']   = Input::get('address');
+            $input['phone']     = Input::get('phone');
+            $email_rules = array('email' => 'unique:users,email,'.$id);
+            $emailValidator = Validator::make($input ,$email_rules);
+
+            if($emailValidator->fails())
+            {
+                return response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+            }
+            else
+            {
+              $updated = User::where('users.id',$id)
+                          ->update([
+                            'name'       => $input['name'],
+                            'email'      => $input['email'],
+                            'phone'      => $input['phone'],
+                            'user_role_id'  => $input['user_role'],
+                            'address'    => $input['address']
+                          ]);
+              if($updated != '')
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
+            }
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * function to update jga users.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function deleteUserById(Request $request)
+  {
+    try {
+              $id        = $request['id'];
+              $deleted = user::where('users.id', '=', $id)
+                          ->delete();
+              if($deleted != '')
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+
 }

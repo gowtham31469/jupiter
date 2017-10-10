@@ -6,16 +6,16 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
                 <h3><i class="ion-ios-browsers-outline"></i>User Management</h3>
-                <div class="action-group pull-right hidden add-users-div" >
-                    <a href="#" data-toggle="modal" data-target="#myModal" class=" btn btn-primary btn-sm" data-backdrop=“static” data-keyboard=“false”><i class="ion-person-add"></i>Add Users</a>
+                <div class="action-group pull-right hidden add-users-div">
+                    <a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a>
                 </div>
-                <div class="action-group pull-right hidden add-roles-div" >
-                    <a href="#" data-toggle="modal" data-target="#myModal" class=" btn btn-primary btn-sm"><i class="ion-person-add"></i>Add Roles</a>
+                <div class="action-group pull-right hidden add-roles-div">
+                    <a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a>
                 </div>
                 <ul class="sub-nav-list">
                     <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-social-codepen"></i>User Management Dashboard</a></li>
-                    <li class="users-list-view"><a class="" href="#" onclick="users_list_view()"><i class="ion-ios-pricetag"></i>Users</a></li>
-                    <li class="roles-list-view"><a class="" href="#" onclick="roles_list_view()"><i class="ion-ios-pricetag"></i>Roles</a></li>
+                    <li class="users-list-view"><a class="" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li>
+                    <li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li>
                 </ul>
                 <hr/>
                 <div class="main-content">
@@ -89,7 +89,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -98,6 +98,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_user_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="result"></div>
                         <div class="form-group has-feedback">
                             {!! Form::label('user_id', 'User ID', ['class' => 'form_label']) !!}
                             {!! Form::text('user_id',$value = $user_id, array('class' => 'form-control input-sm','placeholder' => 'User ID','readonly')) !!}
@@ -152,13 +153,98 @@
                     <div class="modal-footer">
                         <p>By clicking ADD USER a email will be sent to user with his/her login details.</p>
                         {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Add User', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::submit('Add User', ['class' => 'btn btn-primary'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
         </div>
     </div>
-    <div id="snackbar">Some text some message..</div>
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit User</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_user_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('user_edit_id',$value = null, array('id'=>'user_edit_id','class' => 'form-control input-sm')) !!}
+                      <div id="edit_result"></div>
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_user_id', 'User ID', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_user_id',$value = '', array('class' => 'form-control input-sm','placeholder' => 'User ID','readonly')) !!}
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_name', 'Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_email', 'Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">@</span>
+                            {!! Form::email('edit_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_phone', 'Phone', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">+91</span>
+                            {!! Form::text('edit_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                         </div>
+                         <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_address', 'Address', ['class' => 'form_label']) !!}
+                          {!! Form::textarea('edit_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_user_role', 'User Role', ['class' => 'form_label']) !!}
+                          {{  Form::select('edit_user_role',(['' => 'Select User Role']+ $roles->toArray()),'',array('class' => 'form-control input-sm','id'=>'edit_user_role','required')) }}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <p>By clicking ADD USER a email will be sent to user with his/her login details.</p>
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Edit User', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete User</h4>
+                </div>
+                {!! Form::open(['id' => 'delete_user_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="delete_result"></div>
+                        <div class="form-group has-feedback">
+                          <p>You are about to delete user. Do you want to proceed?</p>
+                           {!! Form::hidden('id',$value = null, array('id'=>'delete_user_id','class' => 'form-control input-sm')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Delete User', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
     @endsection
     @else
     <script type="text/javascript">
@@ -183,7 +269,6 @@
     });
     /** generate password **/
     $("#generatePwd").validator().click(function(){
-      $('#password').validator('validate');
     function randomString(length, chars)
     {
       var mask = '';
@@ -201,7 +286,7 @@
       /** restrict special characters **/
       $('input').on('input', function() {
         var c = this.selectionStart,
-            r = /[^a-z0-9@._]/gi,
+            r = /[^a-z0-9@._ ]/gi,
             v = $(this).val();
         if(r.test(v)) {
           $(this).val(v.replace(r, ''));
@@ -211,7 +296,6 @@
       });
       /** To refresh modal **/
       $('.modal').on('hidden.bs.modal', function (e) {
-        $(this).find("input:not('#user_id'),textarea,select").val('').end();
         $('#add_user_form').trigger("reset");
        })
      /**  Validation for mobile number **/
@@ -226,9 +310,38 @@
       /** submit add user form **/
       $('#add_user_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
-          return false;
+
         } else {
-          add_user()
+           e.preventDefault();
+           addUser();
+        }
+      })
+      // get edit user details
+      $(document).on('click','.edit-user',function(){
+          var id = $(this).closest('tr').attr('id');
+          getUser(id);
+      });
+      /** submit edit user form **/
+      $('#edit_user_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+           e.preventDefault();
+           editUser();
+        }
+      })
+      $('#deleteUserModal').on('show.bs.modal', function (e) {
+          var config = $(e.relatedTarget).data('userid');
+          $('#delete_user_id').attr('value', config);
+      });
+      /** submit edit user form **/
+      $('#delete_user_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+           e.preventDefault();
+           var id         = $('#delete_user_id').val();
+           deleteUser(id);
         }
       })
     </script>

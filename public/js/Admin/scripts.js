@@ -32,7 +32,7 @@ function label_orders()
 
 function back_label_orders(buyer,buyer_id)
 {
-   
+
     $('.main-content').html('<div class="loader"></div>');
     $( ".sub_modules a" ).removeClass( "active" )
     $('.label_orders a').addClass("active")
@@ -199,7 +199,7 @@ function hangtagmodal()
 }
 function orchestra_label_order_details(buyer,buyer_id,uvc,data)
 {
-    var tr=""; 
+    var tr="";
     var barcode="";
      $.each(data.order_details, function (index, value) {
          tr+='<tr><td>'+value.UVC_TCO+'</td><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td>'+value.Sum+'</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
@@ -207,14 +207,14 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
      $.each(data.barcode, function (index, value) {
          barcode+=value.BuyerPONo+" | ";
      });
-    
+
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
       $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
       $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="assets/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare - Main & Size label</p></div></div>');
-     
+
 }
 
-function users_list_view()
+function usersListView()
 {
     $('.main-content').html('<div class="loader"></div>');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -227,18 +227,19 @@ function users_list_view()
         dataType:"json",
         data: {_token:csrf_token},
         beforeSend: function () {
-
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
         },
         success: function (data) {
           $('.add-users-div').removeClass('hidden');
           $('.add-roles-div').addClass('hidden');
 
-          var table = '<div class="col main"><div class="page"><div class="container-fluid"><div class="row"><div class="col"><div class="widget"><div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.users, function(i, item){
             table += '<tr id="'+item.id+'"><td>'+item.user_id+'</td><td>'+item.name+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.email+'</td><td>'+item.phone+'</td><td>'+item.address+'</td>';
             if(item.user_role_id != 1)
             {
-              table += '<td><a href="#"><i class="ion-edit" title="Edit" ></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.user_id+'" title="Delete" data-toggle="modal" data-target="#deleteVendor" ></i></a></td>'
+              table += '<td><a href="#"><i class="ion-edit edit-user" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete"  data-target="#deleteUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"></i></a></td>'
             }
             else
             {
@@ -246,20 +247,23 @@ function users_list_view()
             }
               table += '</tr>';
           });
-             table += '</tbody></table></div></div></div></div></div></div></div>';
+             table += '</tbody></table></div>';
              $('.main-content').html(table);
              $('#users-list-table').DataTable();
+             $("#users-list-table_filter input").addClass('form-control');
+             $("#users-list-table_filter input").attr('placeholder', 'Data Search');
 
         },
         error: function (data) {
 
         },
         complete: function () {
-
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
         }
     })
 }
-function roles_list_view()
+function rolesListView()
 {
     $('.main-content').html('<div class="loader"></div>');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -272,12 +276,13 @@ function roles_list_view()
         dataType:"json",
         data: {_token:csrf_token},
         beforeSend: function () {
-
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
         },
         success: function (data) {
           $('.add-roles-div').removeClass('hidden');
           $('.add-users-div').addClass('hidden');
-          var table = '<div class="col main"><div class="page"><div class="container-fluid"><div class="row"><div class="col"><div class="widget"><div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.roles, function(i, item){
            table += '<tr id="'+item.id+'"><td>'+item.role_id+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.user_role_description+'</td>';
            if(item.id != 1)
@@ -291,56 +296,165 @@ function roles_list_view()
            table += '</tr>';
           });
 
-          table += '</tbody></table></div></div></div></div></div></div></div>';
+          table += '</tbody></table></div>';
           $('.main-content').html(table);
           $('#roles-list-table').DataTable();
+          $("#roles-list-table_filter input").addClass('form-control');
+          $("#roles-list-table_filter input").attr('placeholder', 'Data Search');
         },
         error: function (data) {
 
         },
         complete: function () {
-
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
         }
     })
 }
-function add_user()
+function addUser()
 {
     var user_id    = $('#user_id').val();
     var name       = $('#name').val();
     var email      = $('#email').val();
-    var password   = $('#password').val();
     var phone      = $('#phone').val();
     var address    = $('#address').val();
+    var p          = $('#password').val();
     var user_role  =  $('#user_role option:selected').val();
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    // var form_data = new FormData();
-    // form_data.append('user_id', user_id);
-    // form_data.append('name', name);
-    // form_data.append('email', email);
-    // form_data.append('password', password);
-    // form_data.append('phone', phone);
-    // form_data.append('address', address);
-    // form_data.append('user_role', user_role);
-    // form_data.append('_token', csrf_token);
+
     $.ajax({
         url: base_url + "/admin/user-management/add-jga-user",
-        type: "POST",
-        dataType:"json",
-        processData: false,
-        contentType: false,
-        cache: false,
-        data: {_token:csrf_token,name:name,email:email,password:password,phone:phone,address:address,user_role:user_role},
+        method: 'POST',
+        data: {_token:csrf_token,user_id:user_id,name:name,email:email,phone:phone,address:address,user_role:user_role,p:p},
         beforeSend: function () {
-
+          $(".loader").show();
+          $(".loader").css('margin-top','12%');
         },
-        success: function (data) {
-          console.log(data)
+        statusCode: {
+             200: function() {
+                  $('#result').html('User Added Successfully')
+                  $("#result").addClass("alert alert-success");
+                  $('#addUserModal').modal('hide');
+                  usersListView();
+             },
+             400: function() {
+               $('#result').html("Something went wrong!!")
+               $("#result").addClass("alert alert-dander");
+             },
+             409: function() {
+                  $('#result').html('Email already registered.')
+                  $("#result").addClass("alert alert-warning");
+             }
         },
         error: function (data) {
 
         },
         complete: function () {
-
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
         }
     })
-}
+ }
+
+ function getUser(id)
+ {
+   $.ajax({
+       url:base_url + "/admin/user-management/get-user-details",
+       dataType:"json",
+       method:"get",
+       data:{id:id},
+       beforeSend: function () {
+         $(".loader").show();
+         $(".loader").css('margin-top','12%');
+       },
+       success: function(data){
+           $('#user_edit_id').val(id);
+           $('#edit_user_id').val(data.user[0].user_id);
+           $('#edit_name').val(data.user[0].name);
+           $('#edit_email').val(data.user[0].email);
+           $('#edit_phone').val(data.user[0].phone);
+           $('#edit_address').val(data.user[0].address);
+           $('#edit_user_role').val(data.user[0].user_role_id);
+           $('#editUserModal').modal({
+                backdrop: 'static',
+                keyboard: false
+           })
+           $('#edit_user_form').validator('validate');
+           $('#editUserModal').modal('show');
+       },
+       complete: function () {
+         $(".loader").hide();
+         $(".loader").css('margin-top','0%');
+       }
+   })
+ }
+ function editUser()
+ {
+   var id         = $('#user_edit_id').val();
+   var name       = $('#edit_name').val();
+   var email      = $('#edit_email').val();
+   var phone      = $('#edit_phone').val();
+   var address    = $('#edit_address').val();
+   var user_role  =  $('#edit_user_role option:selected').val();
+   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   $.ajax({
+       url:base_url + "/admin/user-management/update-user-details",
+       dataType:"json",
+       beforeSend: function () {
+         $(".loader").show();
+         $(".loader").css('margin-top','12%');
+       },
+       method:"put",
+       data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address,user_role:user_role},
+       statusCode: {
+            200: function() {
+                 $('#edit_result').html('User Updated Successfully')
+                 $("#edit_result").addClass("alert alert-success");
+                 $('#editUserModal').modal('hide');
+                 usersListView();
+            },
+            400: function() {
+              $('#edit_result').html("Something went wrong!!")
+              $("#edit_result").addClass("alert alert-dander");
+            },
+            409: function() {
+                 $('#edit_result').html('Email already registered.')
+                 $("#edit_result").addClass("alert alert-warning");
+            }
+       },
+       complete: function () {
+         $(".loader").hide();
+         $(".loader").css('margin-top','0%');
+       }
+   })
+ }
+ function deleteUser(id)
+ {
+   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   $.ajax({
+       url:base_url + "/admin/user-management/delete-user",
+       dataType:"json",
+       beforeSend: function () {
+         $(".loader").show();
+         $(".loader").css('margin-top','12%');
+       },
+       method:"delete",
+       data:{_token:csrf_token,id:id},
+       statusCode: {
+            200: function() {
+                 $('#delete_result').html('User deleted Successfully')
+                 $("#delete_result").addClass("alert alert-success");
+                 $('#deleteUserModal').modal('hide');
+                 usersListView();
+            },
+            400: function() {
+              $('#delete_result').html("Something went wrong!!")
+              $("#delete_result").addClass("alert alert-dander");
+            }
+       },
+       complete: function () {
+         $(".loader").hide();
+         $(".loader").css('margin-top','0%');
+       }
+   })
+ }
