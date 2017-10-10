@@ -331,7 +331,7 @@ function hangtagmodal(data)
             img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
             // img.src - contains base64 URI from svg
-            console.log(img.src);
+//            console.log(img.src);
 
             //remove temporary canvas
             canvasTmp.remove();
