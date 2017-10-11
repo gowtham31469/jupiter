@@ -85,6 +85,59 @@ function back_label_orders(buyer,buyer_id)
         }
     })
 }
+function back_sticker_orders(buyer,buyer_id)
+{
+
+    $('.main-content').html('<div class="loader"></div>');
+    $( ".sub_modules a" ).removeClass( "active" )
+    $('.sticker_orders a').addClass("active")
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/"+buyer+"/order-management/back-sticker-orders",
+        type: "Post",
+        dataType:"json",
+        data: {_token:csrf_token},
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+        },
+        success: function (data) {
+            var option="<option></option>";
+            $.each(data.buyer, function (index, value) {
+                option+="<option value="+value.id+">"+value.buyer_name+"</option>";
+            });
+             $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li></ol><form class="navbar-form pull-right" style="margin-top:0px;"><label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label><select class="js-example-responsive buyer-select">'+option+'</select></form><h3><i class="ion-ios-browsers-outline"></i>Order Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div><ul class="sub-nav-list"><li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li><li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li><li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li></ul><hr/></div>')
+             $('.main-content').html(table(data.orders));
+             $('#datatable-example-2').DataTable();
+             $("#datatable-example-2_filter input").addClass('form-control input-sm');
+             $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+             $('#datatable-example-2_length select').addClass('form-control input-sm');
+             $('.sticker_orders a').addClass("active")
+             $('.buyer-select').val(buyer_id)
+             $('.buyer-select').select2({
+                  placeholder: "Buyer Listing",
+                  allowClear: true
+             });
+            $('.buyer-select').change(function() {
+                  if($(this).val() != "")
+                  {
+                       sticker_orders()
+                  }
+                  else
+                  {
+                      location.reload()
+                  }
+            });
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+        }
+    })
+}
 
 function sticker_orders()
 {
@@ -214,17 +267,98 @@ function sticker_order_details(uvc,po)
 function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
 {
     var tr="";
-    
-     $.each(data.orchestra_parcel_quantity_details, function (index, value) {
+    if(data.template_name == "Standard")
+    {
+        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
+         tr+='<tr><td>'+value.Size+'</td><td>'+data.orchestra_parcel_details[0].ParcelBarCode+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
+           
+     });
+         var head_qty="Quantity for Standard Stickers";
+        var head_qty1="Standard Parcel/Carton Sticker";
+    }
+    else
+    {
+        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
          tr+='<tr><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
      });
-    
+        var head_qty="Quantity for Solid Size Stickers";
+        var head_qty1="Solid Size Parcel/Carton Sticker";
+    }
+     
+     var option="<option>Age Group</option>";
+            $.each(data.orchestra_age_group, function (index, value) {
+                option+="<option value="+value.id+" style='background-color:"+value.color+"'>"+value.age_group_name+"</option>";
+     });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('"+buyer+"','"+buyer_id+"')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC "+uvc+" and PO "+po+"</li></ol></div>")
     
-      $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO #173571</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select onchange="this.className=this.options[this.selectedIndex].className" name="carlist" id="age" form="carform"><option selected="true"  disabled="disabled">Age Group</option></select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>Quantity for Solid Size Stickers</h4><div class="table-responsive"><table class="table table-bordered table-hover"><thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td><td class="text-center">0</td><td class="text-center">0</td></tr></tbody></table></div></div><div class="col-md-4"><h4>Solid Size Parcel/Carton Sticker</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="" class="form-control input-sm" placeholder="Length"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="" class="form-control input-sm" placeholder="Width"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" placeholder="Height"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">asdd</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input disabled="disabled" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div> </div></div>');
+      $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover"><thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td><td class="text-center">0</td><td class="text-center">0</td></tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">asdd</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input disabled="disabled" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div> </div></div>');
 
     
-          $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/sticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"> <img src="'+base_url+'/images/sticker-sample.png" class="img-responsive center-block"> </div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/polysticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"> <img src="'+base_url+'/images/polysticker-sample.png" class="img-responsive center-block"> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div>')
+          $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/sticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg2" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/polysticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg1" class="center-block" style="width:580px;height:500px" data="'+data.carton_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Information</h4></div><div class="modal-body">Use this column only if needed</div></div>   ')
+    
+      var mySVG = document.getElementById("svg2");
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                              var svgItem = svgDoc.getElementById("uvc_tco");
+                               var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+            JsBarcode("#ean-13", code, { format: "ean13"});
+            var svg = document.getElementById('svgdiv').querySelector('svg'),
+                canvas = document.createElement('canvas'),
+                body = document.getElementsByTagName('body')[0],
+                canvasTmp,
+                svg_xml,
+                ctx,
+                img;
+ 
+            // if our "svg" doesn't have 'xmlns' attribute we must add it
+            //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+            canvas.id = 'canvas';
+            canvas.width = svg.getBoundingClientRect().width;
+            canvas.height = svg.getBoundingClientRect().height;
+
+            body.appendChild(canvas);
+            canvasTmp = document.getElementById('canvas');
+
+            /* Time to play ;) */
+
+            // https://developer.mozilla.org/en/XMLSerializer
+            svg_xml = (new XMLSerializer()).serializeToString(svg);
+            ctx = canvasTmp.getContext('2d');
+
+            // JavaScript (HTML) image
+            img = new Image();
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+            };
+
+            // https://developer.mozilla.org/en/DOM/window.btoa
+            img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+            // img.src - contains base64 URI from svg
+            console.log(img.src);
+
+            //remove temporary canvas
+            canvasTmp.remove();
+
+            //Check in browsers
+            //
+
+            svgDoc.getElementById("barcode1").setAttribute('xlink:href', img.src);
+            svgDoc.getElementById("barcode2").setAttribute('xlink:href', img.src);
+                             
+                             
+           }, false);
+    
+            $( "#modal_close" ).click(function() {
+                $('#modal_height').removeAttr('data-target')
+            });
+    
+            $('#age').change(function() {
+                $('#age_modal').modal("show");
+            });
 }
 
 function label_order_details(uvc)
@@ -283,6 +417,9 @@ function hangtagmodal(data)
                               var size = data.order_details[0].Size.split(" ")
                               svgDoc.getElementById("theme").innerHTML=data.order_details[0].Theme;
                               svgDoc.getElementById("size").innerHTML=size[0];
+                              svgDoc.getElementById("size_list").innerHTML=data.order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+                             svgDoc.getElementById("cm").innerHTML=data.order_details[0].cm+"cm";
+                             svgDoc.getElementById("in").innerHTML=data.order_details[0].in;
                              if(size[1] == "ANS")
                                  {
                                       svgDoc.getElementById("size_french").innerHTML=size[1];
