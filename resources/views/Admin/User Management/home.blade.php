@@ -289,19 +289,20 @@
                             @foreach($modules_tree as $key => $sub_mod)
                             <div class="main-menu" id="{{$sub_mod->id}}">
                                 <div class="main-module">
-                                    <input class="main_input" type="checkbox" value="{{$sub_mod->id}}"> {{$sub_mod->module_name}}
+                                    <input class="main-input" type="checkbox" value="{{$sub_mod->id}}"> {{$sub_mod->module_name}}
 
                                     <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span>
                                 </div>
-                                <div class="new">
+                                <div class="new-div">
                                     @foreach($sub_mod->second as $key1 => $sub_mod1)
-                                    <div class="sub-module" data-id="{{$sub_mod1->id}}">
-                                        <input class="sub-input" type="checkbox" data-id="{{$sub_mod1->id}}" value="{{$sub_mod1->id}}"> {{$sub_mod1->module_name}} </div>
-                                        <div class="new">
+                                    <div class="sub-module" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}">
+                                        <input class="sub-input" type="checkbox" data-id="{{$sub_mod->id}}" value="{{$sub_mod1->id}}">
+                                        <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> {{$sub_mod1->module_name}} </div>
+                                        <div class="new-div2">
                                         @foreach($sub_mod1->third as $key2 => $sub_mod2)
 
-                                        <div class="sub-module" data-id="{{$sub_mod2->id}}">
-                                            <input class="sub-input" type="checkbox" data-id="{{$sub_mod2->id}}" value="{{$sub_mod2->id}}"> {{$sub_mod2->module_name}} </div>
+                                        <div class="sub-module2" data-id="{{$sub_mod1->id}}" style="display:none;">
+                                            <input class="sub-input2" type="checkbox" data-id="{{$sub_mod1->id}}" value="{{$sub_mod2->id}}"> {{$sub_mod2->module_name}} </div>
                                         @endforeach
                                     </div>
                                     @endforeach
@@ -318,15 +319,6 @@
             </div>
         </div>
     </div>
-    <style>
-    .sub-module:after {
-        width: 32px !important;
-    }
-    .main-menu,
-    .new {
-    display: block;
-    }
-    </style>
     @endsection
     @else
     <script type="text/javascript">
@@ -369,6 +361,9 @@
         $('#edit_result').hide();
         $('#result').hide();
         $('#delete_result').hide();
+        $('.main-input').prop('checked', false)
+        $('.sub-input').prop('checked', false)
+        $('.sub-input2').prop('checked', false)
        })
      /**  Validation for mobile number **/
      function isNumber(evt) {
@@ -427,5 +422,170 @@
           }, 2500);
         });
       });
+    </script>
+    <script>
+    $('.modules_div').ready(function () {
+    $('new-div').each(function () {
+        var submod_no = $(this).find('.sub-module').length;
+        if (submod_no == 0)
+        {
+            $(this).prev('.main-module').find('span').css('display', 'none')
+        }
+    })
+    })
+    </script>
+    <script>
+    //Open and close sub modules
+    $('.main-menu').on('click', function (e) {
+    // $('.main-module').css('background', 'white')
+    // $('.main-module').css('color', '#73879C')
+    // $('.main-module').css('border-color', '#e5e5e5')
+    // $(this).find('.main-module').css('background', 'rgb(238, 238, 238)')
+    // $(this).find('.main-module').css('color', '#000')
+    // $(this).find('.main-module').css('border-color', 'rgb(238, 238, 238)')
+    $('.main-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
+    $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
+    var dataId = $(this).attr('id')
+    $(".sub-module").css('display', 'none');
+    $(".sub-module2").css('display', 'none');
+    $(".sub-module[data-id='" + dataId + "']").css('display', 'inline-block');
+    e.stopPropagation()
+    })
+    //Open and close sub modules level 2
+    $('.sub-module').on('click', function (e) {
+    // $('.sub-module').css('background', 'white')
+    // $('.sub-module').css('color', '#73879C')
+    // $('.sub-module').css('border-color', '#e5e5e5')
+    // $(this).find('.sub-module').css('background', 'rgb(238, 238, 238)')
+    // $(this).find('.sub-module').css('color', '#000')
+    // $(this).find('.sub-module').css('border-color', 'rgb(238, 238, 238)')
+    $('.sub-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
+    $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
+    var dataId = $(this).attr('id')
+    $(".sub-module2").css('display', 'none');
+    $(".sub-module2[data-id='" + dataId + "']").css('display', 'block');
+    e.stopPropagation()
+    })
+    /** hide all on body click **/
+    $('body').on('click', function (e) {
+        $(".sub-module").css('display', 'none');
+        $(".sub-module2").css('display', 'none');
+        $('.main-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
+        $('.main-module').css('background', 'white')
+        $('.main-module').css('color', '#73879C')
+        $('.main-module').css('border-color', '#e5e5e5')
+    })
+    /** Checked 1st level **/
+    $('.main-module').find('input').on('change', function () {
+    var mainModule = $(this).val();
+    if ($(this).is(":checked"))
+    {
+        $('.sub-input[data-id="' + mainModule + '"]').prop('checked', true)
+        $('.sub-input2').prop('checked', true)
+    }
+    else
+    {
+        $('.sub-input[data-id="' + mainModule + '"]').prop('checked', false)
+        $('.sub-input2').prop('checked', false)
+    }
+    })
+    /** Checked 2nd level **/
+    $('.sub-module').find('input').on('change', function () {
+    var mainModule = $(this).attr('data-id');
+    var subModule = $(this).val();
+    if ($(this).is(":checked"))
+    {
+        $('.main-module').find('input[value="' + mainModule + '"]').prop('checked', true)
+        $('.sub-input2[data-id="' + subModule + '"]').prop('checked', true)
+    }
+    else
+    {
+      var checked = [];
+      $(this).closest('new-div').find('.sub-input').each(function () {
+          if ($(this).is(':checked'))
+          {
+              checked.push($(this).val())
+          }
+          else
+          {
+
+          }
+      })
+      if ($.isEmptyObject(checked) == true)
+      {
+          $('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
+      }
+      else
+      {
+
+      }
+
+    }
+    })
+    /** Checked 3rd level **/
+    $('.sub-module2').find('input').on('change', function () {
+    var mainModule1 = $(this).attr('data-id');
+    //var mainModule2 = $('.sub-module').attr('data-id');
+    if ($(this).is(":checked"))
+    {
+        $('.sub-module').find('input[value="' + mainModule1 + '"]').prop('checked', true)
+    }
+    else
+    {
+
+    }
+    })
+
+    //Selected Permissions
+    // var permissions = [];
+    // $('#set_role_btn').on('click', function () {
+    // $('.sub-input').each(function () {
+    //     if ($(this).is(':checked')) {
+    //         permissions.push($(this).val());
+    //     } else {}
+    // });
+    // $('.main-input').each(function () {
+    //     if ($(this).is(':checked')) {
+    //         permissions.push($(this).val());
+    //     } else {}
+    // });
+    // //Submit to add new role
+    // if ($.trim($('#emp_role_id').val()) == '' || $.trim($('#emp_role_name').val()) == '' || $.trim($('#emp_role_desc').val()) == '') {
+    //     $('.alert-danger').removeClass('hidden').html('Enter Required Fields');
+    //     $('.alert-success').addClass('hidden');
+    // } else if ($.isEmptyObject(permissions) == false) {
+    //     permissions = permissions.join(',');
+    //     $.ajax({
+    //         url: "set-new-role",
+    //         method: "get",
+    //         dataType: "json",
+    //         beforeSend: function() {
+    //                   $("#loading").fadeIn();
+    //                  },
+    //         data: {
+    //             id: $('#emp_role_id').val(),
+    //             name: $('#emp_role_name').val(),
+    //             desc: $('#emp_role_desc').val(),
+    //             permissions: permissions
+    //         },
+    //         success: function (data) {
+    //             if (data.error == "false") {
+    //                 $('.alert-danger').addClass('hidden')
+    //                 $('.alert-success').removeClass('hidden').html(data.message);
+    //             } else {
+    //                 $('.alert-danger').removeClass('hidden').html(data.message);
+    //                 $('.alert-success').addClass('hidden');
+    //             }
+    //         } ,
+    //           complete: function(data)
+    //           {
+    //             $("#loading").fadeOut();
+    //           }
+    //     });
+    // } else if ($.isEmptyObject(permissions) == true) {
+    //     $('.alert-danger').removeClass('hidden').html('Choose Role Permissions');
+    //     $('.alert-success').addClass('hidden');
+    // } else {}
+    // })
     </script>
     @endsection

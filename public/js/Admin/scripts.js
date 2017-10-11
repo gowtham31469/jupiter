@@ -206,7 +206,7 @@ function hangtagmodal(data)
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
              $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
-    
+
              var mySVG = document.getElementById("svg2");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
@@ -231,7 +231,7 @@ function hangtagmodal(data)
                                  {
                                       svgDoc.getElementById("size_french").innerHTML=size[1];
                                       svgDoc.getElementById("size_english").innerHTML="years";
-                                     
+
                                  }
                              else
                                  {
@@ -239,7 +239,7 @@ function hangtagmodal(data)
                                      svgDoc.getElementById("size_english").innerHTML="months";
                                  }
                                var code = data.order_details[0].BarcodeForPricesTags.toString();
-            JsBarcode("#ean-13", code, { 
+            JsBarcode("#ean-13", code, {
                 format: "ean13",
                 font:"Arial"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -249,7 +249,7 @@ function hangtagmodal(data)
                 svg_xml,
                 ctx,
                 img;
- 
+
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -286,8 +286,8 @@ function hangtagmodal(data)
             //
 
             svgDoc.getElementById("bhat").setAttribute('xlink:href', img.src);
-                             
-                             
+
+
            }, false);
              $('.template-select').select2({
                 placeholder: "Select Template",
@@ -302,7 +302,7 @@ function hangtagmodal(data)
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
                              var pri = data.order_details[0].PrixEurope.split(".")
-                             
+
                              if(pri.length == 1)
                              {
                                  var svgItem = svgDoc.getElementById("price1");
@@ -326,7 +326,7 @@ function hangtagmodal(data)
                                   svgDoc.getElementById("club_price1").innerHTML =pri1[0];
                                   svgDoc.getElementById("club_price2").innerHTML =","+pri1[1];
                              }
-                              
+
                          }, false);
                       $('.sample-artwork').css('background','#fff');
                   }
