@@ -226,7 +226,7 @@ function table(data)
 }
 function order_details(uvc,po)
 {
-   if($('.sub-nav-list').find('.active').text() == "Sticker Orders") 
+   if($('.sub-nav-list').find('.active').text() == "Sticker Orders")
    {
        sticker_order_details(uvc,po)
    }
@@ -234,7 +234,7 @@ function order_details(uvc,po)
     {
         label_order_details(uvc)
     }
-    
+
 }
 function sticker_order_details(uvc,po)
 {
@@ -271,7 +271,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
     {
         $.each(data.orchestra_parcel_quantity_details, function (index, value) {
          tr+='<tr><td>'+value.Size+'</td><td>'+data.orchestra_parcel_details[0].ParcelBarCode+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
-           
+
      });
          var head_qty="Quantity for Standard Stickers";
         var head_qty1="Standard Parcel/Carton Sticker";
@@ -284,16 +284,16 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
         var head_qty="Quantity for Solid Size Stickers";
         var head_qty1="Solid Size Parcel/Carton Sticker";
     }
-     
+
      var option="<option>Age Group</option>";
             $.each(data.orchestra_age_group, function (index, value) {
                 option+="<option value="+value.color+" style='background-color:"+value.color+"'>"+value.age_group_name+"</option>";
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('"+buyer+"','"+buyer_id+"')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC "+uvc+" and PO "+po+"</li></ol></div>")
-    
+
       $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover"><thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td><td class="text-center">0</td><td class="text-center">0</td></tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input disabled="disabled" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div> </div></div>');
 
-    
+
           $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px" class="center-block svg2" data="'+data.carton_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="'+data.polybag_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="'+data.polybag_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
 
           barcode_carton('svg2',data)
@@ -310,19 +310,19 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
                 svgDoc1.getElementById("volume").innerHTML=val;
                svgDoc1.getElementById("height").innerHTML=this.value;
             });
-            $( "#modal_close" ).click(function() {  
+            $( "#modal_close" ).click(function() {
                 $('#modal_height').removeAttr('data-target')
             });
-    
+
             $('#age').change(function() {
-                $('#age_modal').modal("show"); 
+                $('#age_modal').modal("show");
                 var mySVG1 = document.getElementById("svg1");
                 svgDoc1 = mySVG1.contentDocument;
                 svgDoc1.getElementById("round").style.fill=$(this).val();
                 
             });
-    
-    
+
+
 }
 function barcode_polybag(id,data)
 {
@@ -408,12 +408,12 @@ function barcode_carton(id,data)
                               svgDoc.getElementById("po").innerHTML=data.orchestra_parcel_details[0].BuyerPONo;
                                      svgDoc.getElementById("length").innerHTML=$('#length').val();
                                      svgDoc.getElementById("width").innerHTML=$('#width').val();
-                                     svgDoc.getElementById("height").innerHTML=$('#modal_height').val(); 
+                                     svgDoc.getElementById("height").innerHTML=$('#modal_height').val();
                                      svgDoc.getElementById("volume").innerHTML=$('#parcelVolume').text();
                                      svgDoc.getElementById("theme").innerHTML=data.orchestra_parcel_details[0].Theme;
                                      svgDoc.getElementById("parcelcode").innerHTML=data.orchestra_parcel_details[0].ParcelCode;
                                      svgDoc.getElementById("color").innerHTML=data.orchestra_parcel_quantity_details[0].Color;
-                             
+
                                 if(data.template_name == "Standard")
                                 {
                                      var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
@@ -423,7 +423,7 @@ function barcode_carton(id,data)
                                      var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
                                      svgDoc.getElementById("size").innerHTML=data.orchestra_parcel_quantity_details[0].Size;
                                 }
-                              
+
             JsBarcode("#ean-13", code, { format: "ean13"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
@@ -432,7 +432,7 @@ function barcode_carton(id,data)
                 svg_xml,
                 ctx,
                 img;
- 
+
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -470,10 +470,10 @@ function barcode_carton(id,data)
 
             svgDoc.getElementById("barcode1").setAttribute('xlink:href', img.src);
             svgDoc.getElementById("barcode2").setAttribute('xlink:href', img.src);
-                             
-                             
+
+
            }, false);
-    
+
 }
 function label_order_details(uvc)
 {
@@ -509,8 +509,8 @@ function hangtagmodal(data)
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
-             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:500px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
-    
+             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+
              var mySVG = document.getElementById("svg2");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
@@ -538,7 +538,7 @@ function hangtagmodal(data)
                                  {
                                       svgDoc.getElementById("size_french").innerHTML=size[1];
                                       svgDoc.getElementById("size_english").innerHTML="years";
-                                     
+
                                  }
                              else
                                  {
@@ -546,7 +546,9 @@ function hangtagmodal(data)
                                      svgDoc.getElementById("size_english").innerHTML="months";
                                  }
                                var code = data.order_details[0].BarcodeForPricesTags.toString();
-            JsBarcode("#ean-13", code, { format: "ean13"});
+            JsBarcode("#ean-13", code, {
+                format: "ean13",
+                font:"Arial"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
                 body = document.getElementsByTagName('body')[0],
@@ -554,7 +556,6 @@ function hangtagmodal(data)
                 svg_xml,
                 ctx,
                 img;
- 
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -591,8 +592,8 @@ function hangtagmodal(data)
             //
 
             svgDoc.getElementById("bhat").setAttribute('xlink:href', img.src);
-                             
-                             
+
+
            }, false);
              $('.template-select').select2({
                 placeholder: "Select Template",
@@ -607,7 +608,7 @@ function hangtagmodal(data)
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
                              var pri = data.order_details[0].PrixEurope.split(".")
-                             
+
                              if(pri.length == 1)
                              {
                                  var svgItem = svgDoc.getElementById("price1");
@@ -631,7 +632,7 @@ function hangtagmodal(data)
                                   svgDoc.getElementById("club_price1").innerHTML =pri1[0];
                                   svgDoc.getElementById("club_price2").innerHTML =","+pri1[1];
                              }
-                              
+
                          }, false);
                       $('.sample-artwork').css('background','#fff');
                   }
