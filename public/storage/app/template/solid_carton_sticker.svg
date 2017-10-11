@@ -6,7 +6,7 @@
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
 	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st2{font-family:'Calibri-Bold';}
+	.st2{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;}
 	.st3{font-size:8.4071px;}
 	.st4{font-size:8.5px;}
 	.st5{font-size:6.5388px;}
@@ -75,13 +75,13 @@
 <text transform="matrix(1 0 0 1 28.562 193.6973)" class="st2 st5">    N° Commande /</text>
 <text transform="matrix(1 0 0 1 33.4731 201.6748)" class="st2 st5">Or</text>
 <text transform="matrix(1 0 0 1 40.1411 201.6748)" class="st2 st5">der Number</text>
-<text transform="matrix(1 0 0 1 31.9629 215.3594)" class="st2 st6">900233696</text>
+<text transform="matrix(1 0 0 1 31.9629 215.3594)" class="st2 st6" id="po">900233696</text>
 <text transform="matrix(1 0 0 1 23.2842 228.207)" class="st2 st7">Dimension colis / P</text>
 <text transform="matrix(1 0 0 1 82.3979 228.207)" class="st2 st7">ar</text>
 <text transform="matrix(1 0 0 1 88.6377 228.207)" class="st2 st7">cel dimension</text>
-<text transform="matrix(1 0 0 1 175.9468 230.8398)" class="st2 st8">600</text>
-<text transform="matrix(1 0 0 1 269.3584 230.8398)" class="st2 st8">395</text>
-<text transform="matrix(1 0 0 1 359.501 230.8398)" class="st2 st8">300</text>
+<text transform="matrix(1 0 0 1 175.9468 230.8398)" class="st2 st8" id="length">600</text>
+<text transform="matrix(1 0 0 1 269.3584 230.8398)" class="st2 st8" id="width">395</text>
+<text transform="matrix(1 0 0 1 359.501 230.8398)" class="st2 st8" id="height">300</text>
 <text transform="matrix(1 0 0 1 29.3369 241.4951)" class="st2 st7">V</text>
 <text transform="matrix(1 0 0 1 33.4092 241.4951)" class="st2 st7">olume c</text>
 <text transform="matrix(1 0 0 1 57.8882 241.4951)" class="st2 st7">art</text>
@@ -89,7 +89,7 @@
 <text transform="matrix(1 0 0 1 85.1973 241.4951)" class="st2 st7">ar</text>
 <text transform="matrix(1 0 0 1 91.438 241.4951)" class="st2 st7">cel v</text>
 <text transform="matrix(1 0 0 1 105.3184 241.4951)" class="st2 st7">olume</text>
-<text transform="matrix(1 0 0 1 174.1064 243.542)" class="st2 st9">0.071</text>
+<text transform="matrix(1 0 0 1 174.1064 243.542)" class="st2 st9 volume" id="volume">0.071</text>
 <text transform="matrix(1 0 0 1 148.1377 261.6914)" class="st2 st10">T</text>
 <text transform="matrix(1 0 0 1 151.2729 261.6914)" class="st2 st10">aille / Siz</text>
 <text transform="matrix(1 0 0 1 179.0186 261.6914)" class="st2 st10">e</text>
@@ -140,9 +140,9 @@
 </image>
 <image style="overflow:visible;" width="679" height="396" id="barcode2" xlink:href="8D4BA674F87BE4C3.png"  transform="matrix(0 -0.1628 0.2147 0 281.4321 149.1247)">
 </image>
-<text transform="matrix(1 0 0 1 264.2012 206.6113)" class="st2 st12">PYJAMA GARCON A1</text>
-<text transform="matrix(1 0 0 1 128.6777 208.5938)" class="st2 st13">MG4109\107</text>
-<text transform="matrix(1 0 0 1 94.3398 261.6777)" class="st2 st14">BLANC</text>
-<text transform="matrix(1 0 0 1 193.6484 261.2715)" class="st2 st14">10 ANS</text>
+<text transform="matrix(1 0 0 1 264.2012 206.6113)" class="st2 st12" id="theme">PYJAMA GARCON A1</text>
+<text transform="matrix(1 0 0 1 128.6777 208.5938)" class="st2 st13" id="parcelcode">MG4109\107</text>
+<text transform="matrix(1 0 0 1 94.3398 261.6777)" class="st2 st14" id="color">BLANC</text>
+<text transform="matrix(1 0 0 1 193.6484 261.2715)" class="st2 st14" id="size">10 ANS</text>
 <text transform="matrix(1 0 0 1 238.4492 256.4434)"><tspan x="0" y="0" class="st2 st15">Nombre d’articles / Items</tspan><tspan x="27.5" y="9" class="st2 st15">number</tspan></text>
 </svg>

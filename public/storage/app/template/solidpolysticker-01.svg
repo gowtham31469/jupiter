@@ -5,12 +5,12 @@
 <style type="text/css">
 	.st0{fill:none;stroke:#000000;stroke-width:1.5;stroke-miterlimit:10;}
 	.st1{fill:#F06292;}
-	.st2{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-weight: bold;}
+	.st2{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;}
 	.st3{font-size:16px;}
 	.st4{font-size:18px;}
 </style>
 <rect x="15" y="15" class="st0" width="253" height="168"/>
-<circle class="st1" cx="40.1" cy="36.1" r="12.8"/>
+<circle class="st1" cx="40.1" cy="36.1" id="round" r="12.8"/>
 <text transform="matrix(1 0 0 1 189.8418 61.7759)" class="st2 st3">ECRU</text>
 <text transform="matrix(1 0 0 1 186.8418 39.6309)" class="st2 st3">2 ANS</text>
 <text transform="matrix(1 0 0 1 59.5747 41.1074)" class="st2 st4">OB5102\101</text>
