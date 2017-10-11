@@ -112,14 +112,18 @@ class OrderManagementCntrl extends Controller
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','6')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','3')->get();
+            $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Standard";
         }
         else
         {
             $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','6')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
+            $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Solid";
             
         }
