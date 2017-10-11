@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="405.4px" height="260.8px" viewBox="0 0 405.4 260.8" style="enable-background:new 0 0 405.4 260.8;" xml:space="preserve"
+	>
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:1.0001;stroke-miterlimit:10;}
+	.st1{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;}
+	.st2{font-size:6.2144px;}
+	.st3{font-size:13.3849px;}
+	.st4{font-size:9.5606px;}
+	.st5{fill:#F3EA1F;}
+	.st6{font-size:7.6485px;}
+	.st7{font-size:10.5167px;}
+	.st8{font-size:13.38px;}
+	.st9{font-size:9.56px;}
+	.st10{font-size:7.44px;}
+	.st11{font-size:6.21px;}
+	.st12{font-size:7.65px;}
+	.st13{font-size:15.3px;}
+	.st14{font-size:10.52px;}
+</style>
+<image style="overflow:visible;" width="679" height="396" id="barcode1" xlink:href="../../../Desktop/Screen Shot 2017-08-28 at 4.08.05 PM.png"  transform="matrix(0.1793 0 0 0.1793 43 28)">
+</image>
+<g>
+	<path d="M404.7,1v258.8H1V1H404.7 M405.7,0H0v260.8h405.7V0L405.7,0z"/>
+</g>
+<line class="st0" x1="95" y1="123.3" x2="151.9" y2="123.3"/>
+<line class="st0" x1="95" y1="163.4" x2="151.9" y2="163.4"/>
+<line class="st0" x1="151.4" y1="122.8" x2="151.4" y2="163.9"/>
+<line class="st0" x1="151.4" y1="123.3" x2="405.7" y2="123.3"/>
+<line class="st0" x1="151.4" y1="163.4" x2="405.7" y2="163.4"/>
+<text transform="matrix(1 0 0 1 10.0879 171.7832)" class="st1 st2">   N° Commande /</text>
+<line class="st0" x1="65.3" y1="163.4" x2="65.3" y2="180.6"/>
+<line class="st0" x1="65.3" y1="193.1" x2="237.9" y2="193.1"/>
+<line class="st0" x1="237.4" y1="163.4" x2="237.4" y2="193.6"/>
+<line class="st0" x1="237.4" y1="193.1" x2="405.7" y2="193.1"/>
+<text transform="matrix(1 0 0 1 160.3428 210.8486)" class="st1 st3" id="length">600</text>
+<line class="st0" x1="132.3" y1="216" x2="209.2" y2="216"/>
+<line class="st0" x1="208.7" y1="193.1" x2="208.7" y2="216.5"/>
+<text transform="matrix(1 0 0 1 254.5146 210.8486)" class="st1 st3" id="width">395</text>
+<line class="st0" x1="208.7" y1="216" x2="321.1" y2="216"/>
+<line class="st0" x1="320.6" y1="193.1" x2="320.6" y2="216.5"/>
+<text transform="matrix(1 0 0 1 352.9893 210.8486)" class="st1 st3" id="height">300</text>
+<line class="st0" x1="320.6" y1="216" x2="405.7" y2="216"/>
+<text transform="matrix(1 0 0 1 12.0635 189.9814)" class="st1 st4" id="po">900233695</text>
+<line class="st0" x1="0.3" y1="193.1" x2="65.8" y2="193.1"/>
+<line class="st0" x1="65.3" y1="180.6" x2="65.3" y2="193.6"/>
+<line class="st0" x1="320.6" y1="229.4" x2="320.6" y2="260"/>
+<line class="st0" x1="132.3" y1="229.4" x2="132.3" y2="260"/>
+<rect x="1" y="123.3" class="st5" width="94" height="40.2"/>
+<line class="st0" x1="0.3" y1="123.3" x2="95.5" y2="123.3"/>
+<line class="st0" x1="0.3" y1="163.4" x2="95.5" y2="163.4"/>
+<line class="st0" x1="95" y1="122.8" x2="95" y2="163.9"/>
+<line class="st0" x1="0.3" y1="229.4" x2="132.7" y2="229.4"/>
+<line class="st0" x1="132.3" y1="216" x2="132.3" y2="229.9"/>
+<text transform="matrix(1 0 0 1 242 225.291)" class="st1 st6">Coloris / Color</text>
+<line class="st0" x1="208.7" y1="229.4" x2="321.1" y2="229.4"/>
+<line class="st0" x1="320.6" y1="216" x2="320.6" y2="229.9"/>
+<line class="st0" x1="320.6" y1="229.4" x2="405.7" y2="229.4"/>
+<line class="st0" x1="0.3" y1="216" x2="132.7" y2="216"/>
+<line class="st0" x1="132.3" y1="193.1" x2="132.3" y2="216.5"/>
+<text transform="matrix(1 0 0 1 158.46 227.3887)" class="st1 st7 volume" id="volume">0.071</text>
+<line class="st0" x1="132.3" y1="229.4" x2="209.2" y2="229.4"/>
+<line class="st0" x1="208.7" y1="216" x2="208.7" y2="229.9"/>
+<line class="st0" x1="208.7" y1="229.4" x2="208.7" y2="260"/>
+<text transform="matrix(1 0 0 1 168.5938 251.002)" class="st1 st3">/</text>
+<image style="overflow:visible;" width="679" height="396" id="barcode2" xlink:href="../../../Desktop/Screen Shot 2017-08-28 at 4.08.05 PM.png"  transform="matrix(9.574131e-18 -0.1564 0.1564 9.574131e-18 271 114.1667)">
+</image>
+<text transform="matrix(1 0 0 1 35.333 148.333)" class="st1 st8">STD</text>
+<text transform="matrix(1 0 0 1 99.333 146.667)" class="st1 st9">ORCHESTRA</text>
+<text transform="matrix(1 0 0 1 160.5 146)" class="st1 st10">570 BOULEVARD JULES CESAR, ACTIPARC 62 223 SAINT LAURENT BLANGY</text>
+<text transform="matrix(1 0 0 1 15.333 179.333)" class="st1 st11">Order number</text>
+<text transform="matrix(1 0 0 1 12 206.5)" class="st1 st12">Dimension colis / Parcel dimension</text>
+<text transform="matrix(1 0 0 1 17.833 225)" class="st1 st12">Volume carton / Parcel volume</text>
+<text transform="matrix(1 0 0 1 20.167 246.333)"><tspan x="0" y="0" class="st1 st12">Num</tspan><tspan x="15.4" y="0" class="st1 st6">é</tspan><tspan x="19.2" y="0" class="st1 st12">ro colis / Parcel numero</tspan></text>
+<text transform="matrix(1 0 0 1 113 183.333)" class="st1 st13" id="parcelcode">OB5102#1\1</text>
+<text transform="matrix(1 0 0 1 260.333 182.333)" class="st1 st14" id="theme">SOUS VETEMENTS GAPE A1</text>
+<text transform="matrix(1 0 0 1 352.333 226)" class="st1 st14" id="color">ECRU</text>
+<text transform="matrix(1 0 0 1 212.9141 238.333)"><tspan x="0" y="0" class="st1 st12">Nombre total de sachets dans ce</tspan><tspan x="-3.4" y="9.2" class="st1 st12">carton / Total quantity of polybags</tspan><tspan x="30.9" y="18.4" class="st1 st12">in this carton</tspan></text>
+</svg>
