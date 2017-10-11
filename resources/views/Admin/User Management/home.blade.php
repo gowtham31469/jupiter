@@ -290,19 +290,17 @@
                             <div class="main-menu" id="{{$sub_mod->id}}">
                                 <div class="main-module">
                                     <input class="main-input" type="checkbox" value="{{$sub_mod->id}}"> {{$sub_mod->module_name}}
-
                                     <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span>
                                 </div>
-                                <div class="new-div">
+                                <div class="new">
                                     @foreach($sub_mod->second as $key1 => $sub_mod1)
                                     <div class="sub-module" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}">
                                         <input class="sub-input" type="checkbox" data-id="{{$sub_mod->id}}" value="{{$sub_mod1->id}}">
                                         <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> {{$sub_mod1->module_name}} </div>
-                                        <div class="new-div2">
+                                        <div class="new1" id="{{$sub_mod->id}}">
                                         @foreach($sub_mod1->third as $key2 => $sub_mod2)
-
                                         <div class="sub-module2" data-id="{{$sub_mod1->id}}" style="display:none;">
-                                            <input class="sub-input2" type="checkbox" data-id="{{$sub_mod1->id}}" value="{{$sub_mod2->id}}"> {{$sub_mod2->module_name}} </div>
+                                            <input class="sub-input2" type="checkbox" data-id="{{$sub_mod1->id}}" data-sub-id="{{$sub_mod->id}}" value="{{$sub_mod2->id}}"> {{$sub_mod2->module_name}} </div>
                                         @endforeach
                                     </div>
                                     @endforeach
@@ -436,7 +434,7 @@
     </script>
     <script>
     $('.modules_div').ready(function () {
-    $('new-div').each(function () {
+    $('.new').each(function () {
         var submod_no = $(this).find('.sub-module').length;
         if (submod_no == 0)
         {
@@ -488,58 +486,42 @@
     })
     /** Checked 1st level **/
     $('.main-module').find('input').on('change', function () {
-    var mainModule = $(this).val();
-    if ($(this).is(":checked"))
-    {
-        $('.sub-input[data-id="' + mainModule + '"]').prop('checked', true)
-        if($('.new-div').html() == "")
-        {
-          alert('empty')
-        }
-        else
-        {
-          alert('not empty')
-        }
-        $('.sub-input2').prop('checked', true)
-    }
-    else
-    {
-        $('.sub-input[data-id="' + mainModule + '"]').prop('checked', false)
-        $('.sub-input2').prop('checked', false)
-    }
-    })
-    /** Checked 2nd level **/
-    $('.sub-module').find('input').on('change', function () {
-    var mainModule = $(this).attr('data-id');
-    var subModule = $(this).val();
-    if ($(this).is(":checked"))
-    {
-        $('.main-module').find('input[value="' + mainModule + '"]').prop('checked', true)
-        $('.sub-input2[data-id="' + subModule + '"]').prop('checked', true)
-    }
-    else
-    {
-      var checked = [];
-      $(this).closest('new-div').find('.sub-input').each(function () {
-          if ($(this).is(':checked'))
-          {
-              checked.push($(this).val())
-          }
-          else
-          {
-
-          }
-      })
-      if ($.isEmptyObject(checked) == true)
+      var mainModule = $(this).val();
+      if ($(this).is(":checked"))
       {
-          $('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
+          $('.sub-input[data-id="' + mainModule + '"]').prop('checked', true)
+          $('.sub-input2[data-sub-id="' + mainModule + '"]').prop('checked', true)
       }
       else
       {
-
+          $('.sub-input[data-id="' + mainModule + '"]').prop('checked', false)
+          $('.sub-input2[data-sub-id="' + mainModule + '"]').prop('checked', false)
       }
+    })
+    /** Checked 2nd level **/
 
-    }
+    $('.sub-module').find('input').on('change', function () {
+      var mainModule = $(this).attr('data-id');
+      var subModule = $(this).val();
+        if ($(this).is(":checked"))
+        {
+            $('.main-module').find('input[value="' + mainModule + '"]').prop('checked', true)
+            $('.sub-input2[data-id="' + subModule + '"]').prop('checked', true)
+        }
+        else
+        {
+          var checked = [];
+          //$('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
+          $('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
+
+          $('.sub-input[data-id="' + mainModule + '"]').each(function(){
+            if ($(this).is(":checked"))
+                checked.push($(this).val());
+          });
+          if(!checked.length){
+            $('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
+          }
+        }
     })
     /** Checked 3rd level **/
     $('.sub-module2').find('input').on('change', function () {
@@ -547,18 +529,35 @@
       if ($(this).is(":checked"))
       {
           $('.sub-module').find('input[value="' + mainModule1 + '"]').prop('checked', true)
-          $('new-div2').each(function () {
-              var submod_no = $(this).find('.sub-module2').length;
-              if (submod_no != 0)
-              {
-                var mainModule2 = $(this).parent().parent().parent().parent().attr("id");
-                $('.main-module').find('input[value="' + mainModule2 + '"]').prop('checked', true)
-              }
-          })
-
+          var mainModule2 = $(this).closest('.main-menu').attr("id");
+          $('.main-module').find('input[value="' + mainModule2 + '"]').prop('checked', true)
       }
       else
       {
+          var checked = [];
+          $('.sub-input2[data-id="' + mainModule1 + '"]').each(function(){
+            if ($(this).is(":checked"))
+                checked.push($(this).val());
+          });
+          if(!checked.length){
+            $('.sub-module').find('input[value="' + mainModule1 + '"]').prop('checked', false)
+          }
+          var topModule = $(this).closest('.new1').attr("id");
+          console.log(topModule);
+          var checkedMain = [];
+          //$('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
+          //$('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
+
+          $('.sub-input[data-id="' + topModule + '"]').each(function(){
+            if ($(this).is(":checked")){
+              checkedMain.push($(this).val());
+              console.log(checkedMain);
+            }
+
+          });
+          if(!checkedMain.length){
+            $('.main-module').find('input[value="' + topModule + '"]').prop('checked', false)
+          }
       }
     })
     /** submit edit user form **/
@@ -572,25 +571,39 @@
          e.preventDefault();
          var permissions = [];
          $('.sub-input').each(function () {
-             if ($(this).is(':checked')) {
+             if ($(this).is(':checked'))
+             {
                  permissions.push($(this).val());
-             } else {}
+             }
+             else
+             {
+
+             }
          });
          $('.main-input').each(function () {
-             if ($(this).is(':checked')) {
+             if ($(this).is(':checked'))
+             {
                  permissions.push($(this).val());
-             } else {}
+             }
+             else
+             {
+
+             }
          });
          $('.sub-input2').each(function () {
-             if ($(this).is(':checked')) {
+             if ($(this).is(':checked'))
+             {
                  permissions.push($(this).val());
-             } else {}
+             }
+             else
+             {
+
+             }
          });
          if ($.isEmptyObject(permissions) == false)
          {
              permissions = permissions.join(',');
          }
-         alert(permissions)
          addRole(permissions)
       }
     })

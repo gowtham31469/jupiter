@@ -319,7 +319,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
                 var mySVG1 = document.getElementById("svg1");
                 svgDoc1 = mySVG1.contentDocument;
                 svgDoc1.getElementById("round").style.fill=$(this).val();
-                
+
             });
 
 
@@ -331,10 +331,10 @@ function barcode_polybag(id,data)
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
                               var svgItem = svgDoc.getElementById("uvc_tco");
-                                     
+
                                      svgDoc.getElementById("parcel_code").innerHTML=data.orchestra_parcel_details[0].ParcelCode;
                              svgDoc.getElementById("round").style.fill=$('#age').val();
-                             
+
                                 if(data.template_name == "Standard")
                                 {
                                      var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
@@ -345,9 +345,9 @@ function barcode_polybag(id,data)
                                      var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
                                     svgDoc.getElementById("size").innerHTML=data.orchestra_parcel_quantity_details[0].Size;
                                      svgDoc.getElementById("color").innerHTML=data.orchestra_parcel_quantity_details[0].Color;
-                                    
+
                                 }
-                              
+
             JsBarcode("#ean-13", code, { format: "ean13"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
@@ -356,7 +356,7 @@ function barcode_polybag(id,data)
                 svg_xml,
                 ctx,
                 img;
- 
+
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -393,10 +393,10 @@ function barcode_polybag(id,data)
             //
 
             svgDoc.getElementById("barcode").setAttribute('xlink:href', img.src);
-                             
-                             
+
+
            }, false);
-    
+
 }
 function barcode_carton(id,data)
 {
