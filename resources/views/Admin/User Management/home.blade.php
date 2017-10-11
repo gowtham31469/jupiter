@@ -1,23 +1,23 @@
 @extends('layouts.Admin.app')
 @if (Auth::guard("web")->user())
 @section('content')
-<body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
+              <div class="top-content">
+                  <ol class="breadcrumb">
+                    <li><a href="/admin/dashboard">Dashboard</a></li>
+                    <li class="active">User Management</li>
+                  </ol>
                 <h3><i class="ion-ios-browsers-outline"></i>User Management</h3>
-                <div class="action-group pull-right hidden add-users-div">
-                    <a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a>
-                </div>
-                <div class="action-group pull-right hidden add-roles-div">
-                    <a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a>
-                </div>
                 <ul class="sub-nav-list">
                     <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-social-codepen"></i>User Management Dashboard</a></li>
                     <li class="users-list-view"><a class="" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li>
                     <li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li>
                 </ul>
                 <hr/>
+              </div>
+          <div class="clearfix"></div>
                 <div class="main-content">
                     <div class="loader"></div>
                     <div class="col-md-4">
@@ -124,8 +124,8 @@
                           {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                           <div class="input-group">
                             {!! Form::text('password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
-                            <span id="generatePwd" class="input-group-addon">Generate Password</span>
-                            <span id="generatePwd" class="input-group-addon js-textareacopybtn">Copy Password</span>
+                            <span id="generatePwd" class="input-group-addon" style="background-color:#18bc9c;border-right: white;border-style: solid;">Generate Password</span>
+                            <span class="input-group-addon js-textareacopybtn clipboard" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
                           </div>
                           <div class="help-block with-errors"></div>
                         </div>
@@ -245,6 +245,88 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-lg" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Role</h4>
+                </div>
+                {!! Form::open(['id' => 'add_role_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="result"></div>
+                      <div class="row">
+                          <div class="col-md-6">
+                            <div class="col-md-12">
+                              <div class="form-group has-feedback">
+                                  {!! Form::label('role_id', 'Role ID', ['class' => 'form_label']) !!}
+                                  {!! Form::text('role_id',$value = $role_id, array('class' => 'form-control input-sm','placeholder' => 'Role ID','readonly')) !!}
+                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group has-feedback">
+                                  {!! Form::label('role_name', 'Role Name', ['class' => 'form_label']) !!}
+                                  {!! Form::text('role_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Role Name','required')) !!}
+                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('role_description', 'Description', ['class' => 'form_label']) !!}
+                                {!! Form::textarea('role_description',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Description','required','style'=>'resize:none;','rows'=>3)) !!}
+                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                      </div>
+                      <div class="col-md-6 modules_div">
+                        <div class="row">
+                            {!! Form::label('role_permissions', 'Role Permissions', ['class' => ' form_label']) !!}
+                        </div>
+                            @foreach($modules_tree as $key => $sub_mod)
+                            <div class="main-menu" id="{{$sub_mod->id}}">
+                                <div class="main-module">
+                                    <input class="main_input" type="checkbox" value="{{$sub_mod->id}}"> {{$sub_mod->module_name}}
+
+                                    <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span>
+                                </div>
+                                <div class="new">
+                                    @foreach($sub_mod->second as $key1 => $sub_mod1)
+                                    <div class="sub-module" data-id="{{$sub_mod1->id}}">
+                                        <input class="sub-input" type="checkbox" data-id="{{$sub_mod1->id}}" value="{{$sub_mod1->id}}"> {{$sub_mod1->module_name}} </div>
+                                        <div class="new">
+                                        @foreach($sub_mod1->third as $key2 => $sub_mod2)
+
+                                        <div class="sub-module" data-id="{{$sub_mod2->id}}">
+                                            <input class="sub-input" type="checkbox" data-id="{{$sub_mod2->id}}" value="{{$sub_mod2->id}}"> {{$sub_mod2->module_name}} </div>
+                                        @endforeach
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endforeach
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add Role', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <style>
+    .sub-module:after {
+        width: 32px !important;
+    }
+    .main-menu,
+    .new {
+    display: block;
+    }
+    </style>
     @endsection
     @else
     <script type="text/javascript">
@@ -253,20 +335,6 @@
     @endif
     @section('jqueryIncludes')
     <script>
-    /** copy password **/
-    var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
-    copyTextareaBtn.addEventListener('click', function(event) {
-      var copyTextarea = document.querySelector('.js-copytextarea');
-      copyTextarea.select();
-
-      try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copying text command was ' + msg);
-      } catch (err) {
-        console.log('Oops, unable to copy');
-      }
-    });
     /** generate password **/
     $("#generatePwd").validator().click(function(){
     function randomString(length, chars)
@@ -297,6 +365,10 @@
       /** To refresh modal **/
       $('.modal').on('hidden.bs.modal', function (e) {
         $('#add_user_form').trigger("reset");
+        $('#add_role_form').trigger('reset');
+        $('#edit_result').hide();
+        $('#result').hide();
+        $('#delete_result').hide();
        })
      /**  Validation for mobile number **/
      function isNumber(evt) {
@@ -344,5 +416,16 @@
            deleteUser(id);
         }
       })
+      /** Copy password to clipboard **/
+      $( document ).ready(function() {
+        var clipboard = new Clipboard('.clipboard');
+        clipboard.on('success', function(e) {
+          $(e.trigger).text("Copied!");
+          e.clearSelection();
+          setTimeout(function() {
+            $(e.trigger).text("Copy");
+          }, 2500);
+        });
+      });
     </script>
     @endsection
