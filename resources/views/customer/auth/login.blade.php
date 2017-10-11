@@ -11,7 +11,7 @@
                        <form class="form-group" method="POST" action="{{ url('/customer') }}">
                             {{ csrf_field() }}
                             @if ($errors->has('email'))
-                            <span class="help-block">
+                            <span class="help-block" style="color:red">
                                             <strong>{{ $errors->first('email') }}</strong>
                                         </span>
                             @endif
