@@ -295,6 +295,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
 
     
           $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/sticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg2" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><img src="'+base_url+'/images/polysticker-sample.png"></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg1" class="center-block" style="width:580px;height:500px" data="'+data.polybag_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Information</h4></div><div class="modal-body">Use this column only if needed</div></div>   ')
+
     
       var mySVG = document.getElementById("svg2");
                          var svgDoc;
@@ -365,7 +366,8 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
             });
     
             $('#age').change(function() {
-                $('#age_modal').modal("show");
+            $('#age_modal').modal("show");
+              
             });
 }
 
@@ -796,3 +798,6 @@ function addUser()
        }
    })
  }
+$("#age").change(function(){
+    alert();
+})
