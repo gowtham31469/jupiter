@@ -36,7 +36,7 @@ class UploadController extends Controller
     		$upload_obj = new Uploads();
     		if($request->hasFile('file'))
 	        {
-	        	ini_set('max_execution_time', 300);
+	        	ini_set('max_execution_time', 1000);
 	        	$path     = $request->file('file')->getRealPath();
                 $data = Excel::load($path, function($reader) {})->get();
                 $data_exists = OrchestraItemDetails::select()->get();
@@ -136,7 +136,7 @@ class UploadController extends Controller
         try
     	{
     		$upload_obj = new Uploads();
-    		ini_set('max_execution_time', 300);
+    		ini_set('max_execution_time', 1000);
 	        $path  		= $request->file('file')->getRealPath();
 	        $filename	= $request->file('file')->getClientOriginalName();
 	        $extension  = $request->file('file')->getClientOriginalExtension();
