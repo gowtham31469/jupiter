@@ -254,7 +254,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_role_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
-                      <div id="result"></div>
+                      <div id="role_result"></div>
                       <div class="row">
                           <div class="col-md-6">
                             <div class="col-md-12">
@@ -348,7 +348,8 @@
         var c = this.selectionStart,
             r = /[^a-z0-9@._ ]/gi,
             v = $(this).val();
-        if(r.test(v)) {
+        if(r.test(v))
+        {
           $(this).val(v.replace(r, ''));
           c--;
         }
@@ -369,16 +370,20 @@
      function isNumber(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+      {
           return false;
       }
-      return true;
+        return true;
       }
       /** submit add user form **/
       $('#add_user_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+        if (e.isDefaultPrevented())
+        {
 
-        } else {
+        }
+        else
+        {
            e.preventDefault();
            addUser();
         }
@@ -390,9 +395,12 @@
       });
       /** submit edit user form **/
       $('#edit_user_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+        if (e.isDefaultPrevented())
+        {
 
-        } else {
+        }
+        else
+        {
            e.preventDefault();
            editUser();
         }
@@ -403,11 +411,14 @@
       });
       /** submit edit user form **/
       $('#delete_user_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+        if (e.isDefaultPrevented())
+        {
 
-        } else {
+        }
+        else
+        {
            e.preventDefault();
-           var id         = $('#delete_user_id').val();
+           var id   = $('#delete_user_id').val();
            deleteUser(id);
         }
       })
@@ -435,7 +446,7 @@
     })
     </script>
     <script>
-    //Open and close sub modules
+    /** Open and close sub modules level 1 **/
     $('.main-menu').on('click', function (e) {
     // $('.main-module').css('background', 'white')
     // $('.main-module').css('color', '#73879C')
@@ -451,7 +462,7 @@
     $(".sub-module[data-id='" + dataId + "']").css('display', 'inline-block');
     e.stopPropagation()
     })
-    //Open and close sub modules level 2
+    /** Open and close sub modules level 2 **/
     $('.sub-module').on('click', function (e) {
     // $('.sub-module').css('background', 'white')
     // $('.sub-module').css('color', '#73879C')
@@ -481,6 +492,14 @@
     if ($(this).is(":checked"))
     {
         $('.sub-input[data-id="' + mainModule + '"]').prop('checked', true)
+        if($('.new-div').html() == "")
+        {
+          alert('empty')
+        }
+        else
+        {
+          alert('not empty')
+        }
         $('.sub-input2').prop('checked', true)
     }
     else
@@ -524,68 +543,56 @@
     })
     /** Checked 3rd level **/
     $('.sub-module2').find('input').on('change', function () {
-    var mainModule1 = $(this).attr('data-id');
-    //var mainModule2 = $('.sub-module').attr('data-id');
-    if ($(this).is(":checked"))
-    {
-        $('.sub-module').find('input[value="' + mainModule1 + '"]').prop('checked', true)
-    }
-    else
-    {
+      var mainModule1 = $(this).attr('data-id');
+      if ($(this).is(":checked"))
+      {
+          $('.sub-module').find('input[value="' + mainModule1 + '"]').prop('checked', true)
+          $('new-div2').each(function () {
+              var submod_no = $(this).find('.sub-module2').length;
+              if (submod_no != 0)
+              {
+                var mainModule2 = $(this).parent().parent().parent().parent().attr("id");
+                $('.main-module').find('input[value="' + mainModule2 + '"]').prop('checked', true)
+              }
+          })
 
-    }
+      }
+      else
+      {
+      }
     })
+    /** submit edit user form **/
+    $('#add_role_form').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented())
+      {
 
-    //Selected Permissions
-    // var permissions = [];
-    // $('#set_role_btn').on('click', function () {
-    // $('.sub-input').each(function () {
-    //     if ($(this).is(':checked')) {
-    //         permissions.push($(this).val());
-    //     } else {}
-    // });
-    // $('.main-input').each(function () {
-    //     if ($(this).is(':checked')) {
-    //         permissions.push($(this).val());
-    //     } else {}
-    // });
-    // //Submit to add new role
-    // if ($.trim($('#emp_role_id').val()) == '' || $.trim($('#emp_role_name').val()) == '' || $.trim($('#emp_role_desc').val()) == '') {
-    //     $('.alert-danger').removeClass('hidden').html('Enter Required Fields');
-    //     $('.alert-success').addClass('hidden');
-    // } else if ($.isEmptyObject(permissions) == false) {
-    //     permissions = permissions.join(',');
-    //     $.ajax({
-    //         url: "set-new-role",
-    //         method: "get",
-    //         dataType: "json",
-    //         beforeSend: function() {
-    //                   $("#loading").fadeIn();
-    //                  },
-    //         data: {
-    //             id: $('#emp_role_id').val(),
-    //             name: $('#emp_role_name').val(),
-    //             desc: $('#emp_role_desc').val(),
-    //             permissions: permissions
-    //         },
-    //         success: function (data) {
-    //             if (data.error == "false") {
-    //                 $('.alert-danger').addClass('hidden')
-    //                 $('.alert-success').removeClass('hidden').html(data.message);
-    //             } else {
-    //                 $('.alert-danger').removeClass('hidden').html(data.message);
-    //                 $('.alert-success').addClass('hidden');
-    //             }
-    //         } ,
-    //           complete: function(data)
-    //           {
-    //             $("#loading").fadeOut();
-    //           }
-    //     });
-    // } else if ($.isEmptyObject(permissions) == true) {
-    //     $('.alert-danger').removeClass('hidden').html('Choose Role Permissions');
-    //     $('.alert-success').addClass('hidden');
-    // } else {}
-    // })
+      }
+      else
+      {
+         e.preventDefault();
+         var permissions = [];
+         $('.sub-input').each(function () {
+             if ($(this).is(':checked')) {
+                 permissions.push($(this).val());
+             } else {}
+         });
+         $('.main-input').each(function () {
+             if ($(this).is(':checked')) {
+                 permissions.push($(this).val());
+             } else {}
+         });
+         $('.sub-input2').each(function () {
+             if ($(this).is(':checked')) {
+                 permissions.push($(this).val());
+             } else {}
+         });
+         if ($.isEmptyObject(permissions) == false)
+         {
+             permissions = permissions.join(',');
+         }
+         alert(permissions)
+         addRole(permissions)
+      }
+    })
     </script>
     @endsection

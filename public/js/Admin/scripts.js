@@ -830,3 +830,35 @@ function addUser()
 $("#age").change(function(){
     alert();
 })
+
+function addRole(permissions)
+{
+    var id   = $('#role_id').val();
+    var name = $('#role_name').val();
+    var desc = $('#role_description').val();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/user-management/add-user-role",
+        method: 'POST',
+        data: {_token:csrf_token,permissions:permissions,role_id:id,role_name:name,role_desc:desc},
+        beforeSend: function () {
+          $(".loader").show();
+          $(".loader").css('margin-top','12%');
+        },
+        statusCode: {
+             200: function() {
+                  $('#role_result').html('User Role Added Successfully')
+                  $("#role_result").addClass("alert alert-success");
+                  $('#addRoleModal').modal('hide');
+                  rolesListView();
+             }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
+        }
+    })
+ }

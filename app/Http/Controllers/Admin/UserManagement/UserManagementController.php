@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\User;
+use App\UserRole;
+use App\RolePermissionMdl;
 use Hash;
 
 class UserManagementController extends Controller
@@ -207,7 +209,7 @@ class UserManagementController extends Controller
   {
     try {
               $id        = $request['id'];
-              $deleted = user::where('users.id', '=', $id)
+              $deleted = User::where('users.id', '=', $id)
                           ->delete();
               if($deleted != '')
               {
@@ -253,6 +255,42 @@ class UserManagementController extends Controller
         {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
+  }
+  /**
+   * function to add jga user roles.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function addUserRole(Request $request)
+  {
+    try {
+            $role_id     = $request['role_id'];
+            $role_name   = $request['role_name'];
+            $role_desc   = $request['role_desc'];
+            $permissions = $request['permissions'];
+            $permissions = explode(',',$permissions);
+            $user_role_id = UserRole::insertGetId([
+                          'role_id'               => $role_id,
+                          'user_role_name'        => $role_name,
+                          'user_role_description' => $role_desc
+                        ]);
+            RolePermissionMdl::where('user_role_id', '=', $user_role_id)->delete();
+            foreach($permissions as $permission)
+            {
+              RolePermissionMdl::create([
+                  'user_role_id' => $user_role_id,
+                  'module_id'    => $permission,
+                  'permission'   => 1
+              ]);
+            }
+
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
   }
 
 }
