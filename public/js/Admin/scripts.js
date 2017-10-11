@@ -296,8 +296,10 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
     
           $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px" class="center-block svg2" data="'+data.carton_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="'+data.polybag_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="'+data.polybag_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
 
-          barcode('svg2',data)
-          barcode('svg3',data)
+          barcode_carton('svg2',data)
+          barcode_carton('svg3',data)
+          barcode_polybag('svg1',data)
+          barcode_polybag('svg4',data)
            $( "#modal_height" ).keyup(function() {
               var num = $('#length').val() * $('#width').val() * this.value
               var val =num/(1000 * 1000 * 1000)
@@ -316,13 +318,87 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
                 $('#age_modal').modal("show"); 
                 var mySVG1 = document.getElementById("svg1");
                 svgDoc1 = mySVG1.contentDocument;
-                svgDoc1.getElementById("round").style.fill="red";
+                svgDoc1.getElementById("round").style.fill=$(this).val();
                 
             });
     
     
 }
-function barcode(id,data)
+function barcode_polybag(id,data)
+{
+    var mySVG = document.getElementById(id);
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                              var svgItem = svgDoc.getElementById("uvc_tco");
+                                     
+                                     svgDoc.getElementById("parcel_code").innerHTML=data.orchestra_parcel_details[0].ParcelCode;
+                             svgDoc.getElementById("round").style.fill=$('#age').val();
+                             
+                                if(data.template_name == "Standard")
+                                {
+                                     var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+                                     svgDoc.getElementById("theme").innerHTML=data.orchestra_parcel_details[0].Theme;
+                                }
+                                else
+                                {
+                                     var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+                                    svgDoc.getElementById("size").innerHTML=data.orchestra_parcel_quantity_details[0].Size;
+                                     svgDoc.getElementById("color").innerHTML=data.orchestra_parcel_quantity_details[0].Color;
+                                    
+                                }
+                              
+            JsBarcode("#ean-13", code, { format: "ean13"});
+            var svg = document.getElementById('svgdiv').querySelector('svg'),
+                canvas = document.createElement('canvas'),
+                body = document.getElementsByTagName('body')[0],
+                canvasTmp,
+                svg_xml,
+                ctx,
+                img;
+ 
+            // if our "svg" doesn't have 'xmlns' attribute we must add it
+            //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+            canvas.id = 'canvas';
+            canvas.width = svg.getBoundingClientRect().width;
+            canvas.height = svg.getBoundingClientRect().height;
+
+            body.appendChild(canvas);
+            canvasTmp = document.getElementById('canvas');
+
+            /* Time to play ;) */
+
+            // https://developer.mozilla.org/en/XMLSerializer
+            svg_xml = (new XMLSerializer()).serializeToString(svg);
+            ctx = canvasTmp.getContext('2d');
+
+            // JavaScript (HTML) image
+            img = new Image();
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+            };
+
+            // https://developer.mozilla.org/en/DOM/window.btoa
+            img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+            // img.src - contains base64 URI from svg
+            console.log(img.src);
+
+            //remove temporary canvas
+            canvasTmp.remove();
+
+            //Check in browsers
+            //
+
+            svgDoc.getElementById("barcode").setAttribute('xlink:href', img.src);
+                             
+                             
+           }, false);
+    
+}
+function barcode_carton(id,data)
 {
     var mySVG = document.getElementById(id);
                          var svgDoc;
