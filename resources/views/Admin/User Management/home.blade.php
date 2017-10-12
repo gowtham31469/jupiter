@@ -424,6 +424,15 @@
     @endif
     @section('jqueryIncludes')
     <script>
+    $( document ).ready(function() {
+      $('#add_user_form').trigger("reset");
+      $('#add_role_form').trigger('reset');
+      $('#edit_result').hide();
+      $('#result').hide();
+      $('#delete_result').hide();
+      $('#role_result').hide();
+      $('#edit_role_result').hide();
+    });
     /** generate password **/
     $("#generatePwd").validator().click(function(){
     function randomString(length, chars)
