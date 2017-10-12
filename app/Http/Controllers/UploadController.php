@@ -36,7 +36,7 @@ class UploadController extends Controller
     		$upload_obj = new Uploads();
     		if($request->hasFile('file'))
 	        {
-	        	ini_set('max_execution_time', 300);
+	        	ini_set('max_execution_time', 1000);
 	        	$path     = $request->file('file')->getRealPath();
                 $data = Excel::load($path, function($reader) {})->get();
                 $data_exists = OrchestraItemDetails::select()->get();
@@ -136,7 +136,7 @@ class UploadController extends Controller
         try
     	{
     		$upload_obj = new Uploads();
-    		ini_set('max_execution_time', 300);
+    		ini_set('max_execution_time', 1000);
 	        $path  		= $request->file('file')->getRealPath();
 	        $filename	= $request->file('file')->getClientOriginalName();
 	        $extension  = $request->file('file')->getClientOriginalExtension();
@@ -149,6 +149,7 @@ class UploadController extends Controller
 	            {
 	            	foreach ($data as $value)
 		        	{
+	            		print_r($value->parcelbarcode);
 	            		$parcel_uvc = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->select('*')->get();
 	            		if (count($parcel_uvc)>0)
 	            		{
@@ -269,7 +270,19 @@ class UploadController extends Controller
 	            {
 	            	foreach ($data as $value)
 		        	{
-		        		$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        		OrchestraParcelQuantityDetails::create([
+				            'FactoryCode' 	  => $value->factorycode,
+				            'EditionNumber' => $value->editionnumber,
+				            'VersionNumber' => $value->versionnumber,
+				            'BuyerPONo' => $value->buyerpono,
+				            'Theme' => $value->theme,
+				            'UVC_TCO' => $value->uvc_tco,
+				            'Quantity' => $value->quantity,
+				            'Color' => $value->color,
+				            'UVC' => $value->uvc,
+				            'Size' => $value->size,
+				            'BarcodeForPricesTags' => $value->barcodeforpricestags
+				   	 	]);
 		        	}
 		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }

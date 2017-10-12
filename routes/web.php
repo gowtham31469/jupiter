@@ -87,9 +87,6 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 });
 
-Route::get('upload', 'UploadController@index');
-Route::post('upload', 'UploadController@csvUpload');
-
 //Order Management
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
@@ -110,12 +107,14 @@ Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManag
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
+
+// Route::get('upload', 'UploadController@index');
+Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
+// Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
+
 Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
 
 Route::get('multi-upload', 'UploadController@multiUploadView');
-Route::post('multi-upload', 'UploadController@csvMultiUpload');
-// Route::post('multi-upload', function(){
-// 	echo "<pre>";
-// 	print_r(Input::all());
-// 	echo "<pre>";
-// });
+Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
+// Route::post('multi-upload', 'UploadController@csvMultiUpload');
+
