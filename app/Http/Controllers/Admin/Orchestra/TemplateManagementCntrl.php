@@ -48,6 +48,12 @@ class TemplateManagementCntrl extends Controller
              return redirect('/admin/dashboard');
         }
         
+    }    
+    public function templateList()
+    {
+        $template = DB::table('orchestra_template')->join('orchestra_item_master','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name as Item Name','orchestra_template.template_name as Template Name','orchestra_template.disney as Disney')->where('orchestra_template.item_id','2')->get();
+        echo json_encode($template);
+        
     }   
 }
 

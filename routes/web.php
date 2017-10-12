@@ -48,7 +48,7 @@ Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserMana
 Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserManagementController@getUserById');
 Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
 Route::delete('admin/user-management/delete-user', 'Admin\UserManagement\UserManagementController@deleteUserById');
-//Route::get('admin/user-management/get-modules', 'Admin\UserManagement\UserManagementController@getModules');
+Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserManagementController@addUserRole');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
@@ -98,6 +98,9 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
 
+Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
+Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
+
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
@@ -108,6 +111,9 @@ Route::post('admin/orchestra/template-management/create-template-view', 'Admin\O
 // Route::get('upload', 'UploadController@index');
 Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
 // Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
+
+Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
+
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
 // Route::post('multi-upload', 'UploadController@csvMultiUpload');

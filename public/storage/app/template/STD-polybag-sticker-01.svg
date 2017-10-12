@@ -20,7 +20,7 @@
 <g>
 	<path d="M413.5,10.2V269H9.9V10.2H413.5 M414.5,9.2H8.9V270h405.7V9.2L414.5,9.2z"/>
 </g>
-<image style="overflow:visible;" width="679" height="396" xlink:href="D0CB344D43176778.png"  transform="matrix(0.2159 0 0 0.2159 137.567 171.7122)">
+<image style="overflow:visible;" id="barcode" width="679" height="396" xlink:href="D0CB344D43176778.png"  transform="matrix(0.2159 0 0 0.2159 137.567 171.7122)">
 </image>
 <line class="st0" x1="9.2" y1="49.6" x2="90.4" y2="49.6"/>
 <line class="st0" x1="89.9" y1="9.7" x2="89.9" y2="50.1"/>
@@ -121,8 +121,8 @@
 <line class="st0" x1="356.9" y1="118.2" x2="356.9" y2="139.1"/>
 <text transform="matrix(1 0 0 1 107.3751 34.21)" class="st1 st5">570 BOULEVARD JULES CESAR, ACTIPARC 62 223 SAINT LAURENT BLANGY</text>
 <text transform="matrix(1 0 0 1 16.3751 34.71)" class="st1 st6">ORCHESTRA</text>
-<text transform="matrix(1 0 0 1 231.8751 75.71)" class="st1 st7">SOUS  VETEMENTS GAPE A1</text>
-<text transform="matrix(1 0 0 1 113.3751 76.21)" class="st1 st8">OB5102#1\1</text>
+<text transform="matrix(1 0 0 1 231.8751 75.71)" class="st1 st7" id="theme">SOUS  VETEMENTS GAPE A1</text>
+<text transform="matrix(1 0 0 1 113.3751 76.21)" class="st1 st8" id="parcel_code">OB5102#1\1</text>
 <text transform="matrix(1 0 0 1 333.8742 152.6338)" class="st9 st10">1</text>
 <text transform="matrix(1 0 0 1 378.7082 151.877)" class="st9 st11">16</text>
 <text transform="matrix(1 0 0 1 82.5416 152.543)" class="st9 st11">1</text>
@@ -132,6 +132,6 @@
 <text transform="matrix(1 0 0 1 250.2081 152.21)" class="st9 st11">3</text>
 <text transform="matrix(1 0 0 1 292.2082 152.21)" class="st9 st11">2</text>
 <g>
-	<circle cx="48.4" cy="70.7" r="16.5"/>
+	<circle cx="48.4" cy="70.7" id="round" r="16.5"/>
 </g>
 </svg>

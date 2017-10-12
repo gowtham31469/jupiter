@@ -16,5 +16,5 @@ class RolePermissionMdl extends Authenticatable
      */
 
     protected $table = 'role_permission';
-    protected $fillable =['employee_role_id','module_id','permission','created_at','updated_at'];
+    protected $fillable =['user_role_id','module_id','permission','created_at','updated_at'];
 }

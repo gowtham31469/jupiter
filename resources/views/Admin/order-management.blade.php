@@ -152,7 +152,43 @@
       $('.buyer-select').change(function() {
           if($(this).val() != "")
           {
-               sticker_orders()
+              
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType:"json",
+                    data: {_token:csrf_token,buyer:$(this).find("option:selected").text().toLowerCase()},
+                    beforeSend: function () {
+                        $(".loader").show();
+                        $(".loader").css('margin-top','12%');
+                    },
+                    success: function (data) {
+                         $('.sub-nav-list').html('<li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>')
+                         $.each(data, function (index, value) {
+                            $('.sub-nav-list').append('<li class="'+value.module_name.toLowerCase().replace(" ", "_")+' sub_modules"><a href="#" onclick="'+value.url_path+'"><i class="'+value.image+'"></i>'+value.module_name+'</a></li>')
+                        });
+                         $('.main-sub-menu').removeClass('hidden');
+                        
+                        if(data[0].module_name == "Label Orders")
+                            {
+                                label_orders();
+                            }
+                         if(data[0].module_name == "Sticker Orders")
+                             {
+                                 sticker_orders();
+                             }
+                        
+                        
+                    },
+                    error: function (data) {
+
+                    },
+                    complete: function () {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top','0%');
+                    }
+                })
           }
           else
           {

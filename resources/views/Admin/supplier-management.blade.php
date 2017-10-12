@@ -1,6 +1,30 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
  <div class="col-sm-12 col-md-12 main">
-                <h3><i class="ion-ios-pricetags-outline"></i>Supplier Management</h3>
+           <div class="top-content">
+        <ol class="breadcrumb">
+  <li><a href="/admin/dashboard">Dashboard</a></li>
+  <li class="active">Supplier Management</li>
+</ol>
+    <form class="navbar-form pull-right" style="margin-top:0px;">
+        <label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label>
+        <select class="js-example-responsive buyer-select">
+                  <option></option>
+                    @foreach($buyers as $buyer)
+                    <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
+                    @endforeach
+              </select>
+    </form>
+     <h3><i class="ion-ios-flower-outline"></i>Supplier Management</h3>
+    <div class="main-sub-menu hidden">
+        
+        <ul class="sub-nav-list">
+             <li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>
+            <li class="template sub_modules"><a href="#" onclick="template_list()"><i class="ion-social-codepen"></i>Supplier List</a></li>
+        </ul><hr/>
+    </div>
+        </div>
+    <div class="clearfix"></div>
+    <div class="main-content">
 
                 <div class="col-md-4">
                     <div class="card">
@@ -67,6 +91,7 @@
                 <div class="col-md-6">
                 <div class="card"></div>
                 </div>
+</div>
 </div>
 @endsection @else
 <script type="text/javascript">
