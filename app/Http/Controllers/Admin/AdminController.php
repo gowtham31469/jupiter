@@ -66,8 +66,7 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/buyer-management',['buyers' => $buyers]);
+            return view('Admin/Buyer Management/home');
         }
         else
         {
