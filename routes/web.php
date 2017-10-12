@@ -58,6 +58,8 @@ Route::get('admin/buyer-management', 'Admin\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagementController@buyerList');
 Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagementController@addJgaBuyer');
 
+Route::get('admin/buyer-management/merchandiser', 'Admin\BuyerManagementController@merchandiserList');
+
 Route::group(['middleware' => 'customer_guest'], function()
 {
 	Route::get('customer/register', 'CustomerAuth\RegisterController@showRegistrationForm');

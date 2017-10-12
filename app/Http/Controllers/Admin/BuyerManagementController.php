@@ -82,5 +82,10 @@ class BuyerManagementController extends Controller
             }
             return $result;
       }
-    
+      
+    public function merchandiserList()
+    {
+        $merchandisers = DB::table('merchandisers')->select('merchandiser_name','email','merchandiser_address','merchandiser_phone')->get();
+            echo json_encode($merchandisers);
+    }
 }
