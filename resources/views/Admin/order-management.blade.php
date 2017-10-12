@@ -16,7 +16,10 @@
     </form>
     <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
     <div class="main-sub-menu hidden">
-        <div class="action-group pull-right"><a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a></div>
+        <div class="action-group pull-right">
+            <!-- <a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a> -->
+             <a href="#" id ="uploadModal" data-target="#uploadData" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-upload"></i>Upload Data</a>
+        </div>
         <ul class="sub-nav-list">
              <li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>
             <li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li>
@@ -94,6 +97,40 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Upload Data</h4>
+            </div>
+            <div class="modal-body" class="dropzone" id="dropzoneFileUpload">
+                {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'upload']) !!}
+            </div>
+            <div class="modal-footer">
+                {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+            </div>
+               {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uploadMultiData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Upload Multiple Data Files</h4>
+        </div>
+        <div class="modal-body" class="dropzone" id="dropzoneMultiFileUpload">
+           {!! Form::open([ 'route' => [ 'dropzone.multi-store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'multi-upload','multiple'=>"true"]) !!}
+        </div>
+        <div class="modal-footer">
+            {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+        </div>
+           {!! Form::close() !!}
+    </div>
+</div>
+</div>
 <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -104,8 +141,6 @@
     </div>
   </div>
 </div>
-
-
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
@@ -117,14 +152,60 @@
       $('.buyer-select').change(function() {
           if($(this).val() != "")
           {
-               sticker_orders()
+              
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType:"json",
+                    data: {_token:csrf_token,buyer:$(this).find("option:selected").text().toLowerCase()},
+                    beforeSend: function () {
+                        $(".loader").show();
+                        $(".loader").css('margin-top','12%');
+                    },
+                    success: function (data) {
+                         $('.sub-nav-list').html('<li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>')
+                         $.each(data, function (index, value) {
+                            $('.sub-nav-list').append('<li class="'+value.module_name.toLowerCase().replace(" ", "_")+' sub_modules"><a href="#" onclick="'+value.url_path+'"><i class="'+value.image+'"></i>'+value.module_name+'</a></li>')
+                        });
+                         $('.main-sub-menu').removeClass('hidden');
+                        
+                        if(data[0].module_name == "Label Orders")
+                            {
+                                label_orders();
+                            }
+                         if(data[0].module_name == "Sticker Orders")
+                             {
+                                 sticker_orders();
+                             }
+                        
+                        
+                    },
+                    error: function (data) {
+
+                    },
+                    complete: function () {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top','0%');
+                    }
+                })
           }
           else
           {
               location.reload()
           }
-          
        });
-
+</script>
+<script src="{{ asset('js/dropzone.js') }}"></script>
+<script type="text/javascript">
+        Dropzone.options.imageUpload = {
+            maxFilesize    :  10,
+            maxFiles       :  1,
+            acceptedFiles: ".csv"
+        };
+$('.modal').on('hidden.bs.modal', function (e) {
+        $('#uploadMultiData').trigger("reset");
+        $('#uploadData').trigger('reset');
+       })
 </script>
 @endsection

@@ -10,6 +10,7 @@
     <link rel="icon" href="">
     <title>JGA</title>
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{ asset('css/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/admin.css') }}">
@@ -38,7 +39,8 @@
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-     <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+    <script src="{{ asset('js/Admin/scripts.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
@@ -77,7 +79,6 @@
                 ]
             },
             options: [{
-
             }]
         });
         var myDoughnutChart = new Chart(myChart1, {
