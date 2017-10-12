@@ -10,6 +10,7 @@ use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\Customer;
 
 class SupplierManagementController extends Controller
 {
@@ -38,8 +39,7 @@ class SupplierManagementController extends Controller
                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                    return $view->with(['modules' => $get_main_module]);
                });
-               $buyers = DB::table('buyers')->select('*')->get();
-               return view('Admin/Supplier Management/home',['buyers' => $buyers]);
+               return view('Admin/Supplier Management/home');
            }
            else
            {
@@ -58,11 +58,11 @@ class SupplierManagementController extends Controller
     public function suppliers()
     {
       try{
-            $suppliers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_emails','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
+            $suppliers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_email','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
             return response()->json(['error'=>'false','message' =>'success', 'suppliers' => $suppliers]);
           } catch (\Exception $e)
           {
-                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
 }
