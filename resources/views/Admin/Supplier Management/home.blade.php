@@ -201,63 +201,70 @@
                               </div>
                             </div>
                       </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                            {!! Form::label('bill_address', 'Billing Address', ['class' => ' form_label']) !!}
+                            <button type="button" class="btn btn-primary btn-sm pull-right" style="padding: 5px 8px;font-size: 14px;"><i class="ion-plus"></i> Add Address</button>
+                        </div>
+                      </div>
                       <div class="col-md-6 modules_div">
-                        <!-- <div class="col-md-12">
-                            {!! Form::label('bill_address', 'Bill To Address', ['class' => ' form_label']) !!}
-                        </div> -->
                         <div class="bill-address">
-                          <div class="col-md-12">
-                            <div class="form-group has-feedback">
-                              {!! Form::label('address', 'Address', ['class' => 'form_label']) !!}
-                              {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm ','placeholder' =>  style="border:thick solid #0000FF;"'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('country', 'Country', ['class' => 'form_label']) !!}
-                                {!! Form::text('country',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country','required')) !!}
-                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('telephone', 'Telephone', ['class' => 'form_label']) !!}
-                                {!! Form::text('telephone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Telephone','required','data-minlength' => '10','data-maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
-                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('fax', 'Fax', ['class' => 'form_label']) !!}
-                                {!! Form::text('fax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
-                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group has-feedback">
-                              {!! Form::label('address_email', 'Email', ['class' => 'form_label']) !!}
-                              <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1">@</span>
-                                {!! Form::email('address_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                              </div>
-                              <div class="help-block with-errors"></div>
+                          <div class="card">
+                            <div class="card-block">
+
+                                  <div class="form-group has-feedback">
+                                    {!! Form::label('address', 'Address', ['class' => 'form_label']) !!}
+                                    {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
+
+                                  <div class="form-group has-feedback">
+                                      {!! Form::label('country', 'Country', ['class' => 'form_label']) !!}
+                                      {!! Form::text('country',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country','required')) !!}
+                                      <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+
+
+                                  <div class="form-group has-feedback">
+                                      {!! Form::label('telephone', 'Telephone', ['class' => 'form_label']) !!}
+                                      {!! Form::text('telephone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Telephone','required','data-minlength' => '10','data-maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
+                                      <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+
+
+                                  <div class="form-group has-feedback">
+                                      {!! Form::label('fax', 'Fax', ['class' => 'form_label']) !!}
+                                      {!! Form::text('fax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
+                                      <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+
+
+                                  <div class="form-group has-feedback">
+                                    {!! Form::label('address_email', 'Email', ['class' => 'form_label']) !!}
+                                    <div class="input-group">
+                                      <span class="input-group-addon" id="basic-addon1">@</span>
+                                      {!! Form::email('address_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                                      <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
+
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::submit('Add Supplier', ['class' => 'btn btn-primary'] ) !!}
-                    </div>
+                      <div id="newTextarea"></div>
+                  </div>
+                </div>
+             </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::submit('Add Supplier', ['class' => 'btn btn-primary'] ) !!}
+                </div>
                {!! Form::close() !!}
-            </div>
         </div>
     </div>
   </div>
@@ -327,5 +334,26 @@
           }, 2500);
         });
       });
+      /** submit add supplier form **/
+      $('#add_supplier_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           addSupplier();
+        }
+      })
+      //to add html
+      // function addAddress(){
+      //     var newRow = $('.bill-address').html();
+      //     $('#newTextarea').append(newRow+'<div class="remove-address"><button type="button" class="btn btn-primary btn-sm pull-right" style="padding: 5px 8px;font-size: 14px;" onclick="removeAddress()"><i class="ion-minus"></i> Remove Address</button><div>');
+      // }
+      //to remove html
+      // function removeAddress(){
+      //     $('#newTextarea').remove(); //this removes the item from the screen
+      // }
     </script>
     @endsection

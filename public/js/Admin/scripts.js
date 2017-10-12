@@ -692,7 +692,7 @@ function usersListView()
               table += '<td></td>';
             }
               table += '</tr>';
-            });
+          });
              table += '</tbody></table></div>';
              $('.main-content').html(table);
              $('#users-list-table').DataTable();
@@ -781,47 +781,6 @@ function addUser()
                   $("#result").addClass("alert alert-success");
                   $('#addUserModal').modal('hide');
                   usersListView();
-             },
-             400: function() {
-               $('#result').html("Something went wrong!!")
-               $("#result").addClass("alert alert-dander");
-             },
-             409: function() {
-                  $('#result').html('Email already registered.')
-                  $("#result").addClass("alert alert-warning");
-             }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-          $(".loader").hide();
-          $(".loader").css('margin-top','0%');
-        }
-    })
- }
- function addBuyer()
- {
-    var name       = $('#name').val();
-    var email      = $('#email').val();
-    var phone      = $('#phone').val();
-    var address    = $('#address').val();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-
-    $.ajax({
-        url: base_url + "/admin/buyer-management/add-jga-buyer",
-        method: 'POST',
-        data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
-        beforeSend: function () {
-          $(".loader").show();
-          $(".loader").css('margin-top','12%');
-        },
-        statusCode: {
-             200: function() {
-                  $('#result').html('Buyer Added Successfully')
-                  $("#result").addClass("alert alert-success");
-                  $('#addbuyerModal').modal('hide');
-                  buyers();
              },
              400: function() {
                $('#result').html("Something went wrong!!")
@@ -1138,3 +1097,57 @@ function addRole(permissions)
           }
       })
   }
+  function addSupplier()
+  {
+      var factory_code    = $('#factory_code').val();
+      var company_name    = $('#company_name').val();
+      var contact_person  = $('#contact_person').val();
+      var contact_phone   = $('#contact_phone').val();
+      var contact_email   = $('#contact_email').val();
+      var courier_choice  = $('#courier_choice').val();
+      var account_no      =  $('#account_no').val();
+      var tin_number      =  $('#tin_number').val();
+      var pan_number      =  $('#pan_number').val();
+      var login_email     =  $('#login_email').val();
+      var address         =  $('#address').val();
+      var country         =  $('#country').val();
+      var fax             =  $('#pan_number').val();
+      var telephone       =  $('#telephone').val();
+      var address_email   =  $('#address_email').val();
+
+
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+          url: base_url + "/admin/user-management/add-jga-user",
+          method: 'POST',
+          data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,pan_number:pan_number,login_email:login_email,p:p,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email},
+          beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+          },
+          statusCode: {
+               200: function() {
+                    $('#result').html('User Added Successfully')
+                    $("#result").addClass("alert alert-success");
+                    $('#addUserModal').modal('hide');
+                    usersListView();
+               },
+               400: function() {
+                 $('#result').html("Something went wrong!!")
+                 $("#result").addClass("alert alert-dander");
+               },
+               409: function() {
+                    $('#result').html('Email already registered.')
+                    $("#result").addClass("alert alert-warning");
+               }
+          },
+          error: function (data) {
+
+          },
+          complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+          }
+      })
+   }

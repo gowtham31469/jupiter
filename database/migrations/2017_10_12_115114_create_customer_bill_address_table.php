@@ -15,7 +15,14 @@ class CreateCustomerBillAddressTable extends Migration
     {
         Schema::create('customer_bill_address', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('customer_id')->unsigned();
+            $table->text('address');
+            $table->string('country');
+            $table->string('email');
+            $table->bigInteger('telephone');
+            $table->bigInteger('fax');
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 
