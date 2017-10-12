@@ -15,13 +15,13 @@ function label_orders()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
+             $('#uploadModal').attr('data-target','#uploadMultiData'); 
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
              $('#datatable-example-2_length select').addClass('form-control input-sm');
              $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li  class="active">Label Orders</li>')
-             $('#uploadModal').attr('data-target','#uploadMultiData'); 
         },
         error: function (data) {
 
@@ -158,14 +158,13 @@ function sticker_orders()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
+             $('#uploadModal').attr('data-target','#uploadData');
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
              $('#datatable-example-2_length select').addClass('form-control input-sm');
-             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
-             $('#uploadModal').attr('data-target','#uploadData');
-           
+             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>') 
         },
         error: function (data) {
 

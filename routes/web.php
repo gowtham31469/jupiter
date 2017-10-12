@@ -106,7 +106,9 @@ Route::post('admin/orchestra/template-management/create-template-view', 'Admin\O
 
 
 // Route::get('upload', 'UploadController@index');
-Route::post('admin/order-management/upload', 'UploadController@csvUpload');
+Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
+// Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
 Route::get('multi-upload', 'UploadController@multiUploadView');
-Route::post('multi-upload', 'UploadController@csvMultiUpload');
+Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
+// Route::post('multi-upload', 'UploadController@csvMultiUpload');
 

@@ -105,7 +105,7 @@
                 <h4 class="modal-title" id="myModalLabel">Upload Data</h4>
             </div>
             <div class="modal-body" class="dropzone" id="dropzoneFileUpload">
-                {!! Form::open(['files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'upload' ]) !!}
+                {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'upload']) !!}
             </div>
             <div class="modal-footer">
                 {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
@@ -121,8 +121,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">Upload Multiple Data Files</h4>
         </div>
-        <div class="modal-body" class="dropzone" id="dropzoneMultiFileUpload" onclick="flieUpload()">
-            {!! Form::open(['files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'multi-upload' ]) !!}
+        <div class="modal-body" class="dropzone" id="dropzoneMultiFileUpload">
+           {!! Form::open([ 'route' => [ 'dropzone.multi-store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'multi-upload','multiple'=>"true"]) !!}
         </div>
         <div class="modal-footer">
             {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
@@ -162,27 +162,14 @@
 </script>
 <script src="{{ asset('js/dropzone.js') }}"></script>
 <script type="text/javascript">
-
-    var csrf_token     = $('meta[name="csrf-token"]').attr('content');
-    var myAwesomeDropzone = new Dropzone("div#dropzoneFileUpload", {
-        url: base_url +"/admin/order-management/upload",
-        params: {
-           _token: csrf_token
-        },
-        autoProcessQueue:false,
-        headers:{
-           'Access-Control-Request-Headers: x-requested-with'
-        },
-    });
-    Dropzone.options.imageUpload = {
-        maxFilesize    :  10,
-        maxFiles       :   2,
-        acceptedFiles  : ".csv"
-    };
-     $('#add').on('click',function(e){
-        e.preventDefault();
-        myDropzone.processQueue();  
-    }); 
+        Dropzone.options.imageUpload = {
+            maxFilesize    :  10,
+            maxFiles       :  1,
+            acceptedFiles: ".csv"
+        };
+$('.modal').on('hidden.bs.modal', function (e) {
+        $('#uploadMultiData').trigger("reset");
+        $('#uploadData').trigger('reset');
+       })
 </script>
-
 @endsection

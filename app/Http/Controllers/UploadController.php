@@ -149,6 +149,7 @@ class UploadController extends Controller
 	            {
 	            	foreach ($data as $value)
 		        	{
+	            		print_r($value->parcelbarcode);
 	            		$parcel_uvc = DB::table('orchestra_parcel_details')->where('UVC',$value->uvc)->select('*')->get();
 	            		if (count($parcel_uvc)>0)
 	            		{
@@ -269,7 +270,19 @@ class UploadController extends Controller
 	            {
 	            	foreach ($data as $value)
 		        	{
-		        		$upload_obj->insertOrchestraParcelQuantityDetails($value);
+		        		OrchestraParcelQuantityDetails::create([
+				            'FactoryCode' 	  => $value->factorycode,
+				            'EditionNumber' => $value->editionnumber,
+				            'VersionNumber' => $value->versionnumber,
+				            'BuyerPONo' => $value->buyerpono,
+				            'Theme' => $value->theme,
+				            'UVC_TCO' => $value->uvc_tco,
+				            'Quantity' => $value->quantity,
+				            'Color' => $value->color,
+				            'UVC' => $value->uvc,
+				            'Size' => $value->size,
+				            'BarcodeForPricesTags' => $value->barcodeforpricestags
+				   	 	]);
 		        	}
 		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
