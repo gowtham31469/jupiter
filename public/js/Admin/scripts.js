@@ -1,3 +1,5 @@
+var washcare=0;
+var mainlabel=0;
 function label_orders()
 {
     $('.main-content').html('<div class="loader"></div>');
@@ -189,12 +191,39 @@ function template_list()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-             $('.main-content').html(table(data));
-             $('#datatable-example-2').DataTable();
-             $("#datatable-example-2_filter input").addClass('form-control input-sm');
-             $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-              $('#datatable-example-2_length select').addClass('form-control input-sm');
+            var template = '<div class="col-md-6 modules_div"> <div class="row">';
+             $.each(data, function (index, value) {
+                 template+='<div class="main-menu" id="'+value.id+'"><div class="main-module"> '+value.item_name+' <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> </div><div class="new-div">';
+                  $.each(value.second, function (index1, value1) {
+                      template+=' <div class="sub-module" id="'+value1.id+'" data-id="'+value.id+'" style="display:none"><span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> '+value1.item_name+' </div><div class="new-div2">';
+                       $.each(value1.third, function (index2, value2) {
+                           template+='<div class="sub-module2" data-id="'+value1.id+'" style="display:none">'+value2.template_name+' </div>';
+                        });
+                      template+='</div>';
+                  });
+                 template+='</div> </div>';
+             });
+            template+='</div> </div>';
+             $('.main-content').html(template); 
              $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Template Management</a></li><li class="active">Template List</li>')
+              $('.main-menu').on('click', function (e) {
+                $('.main-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
+                $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
+                var dataId = $(this).attr('id')
+                $(".sub-module").css('display', 'none');
+                $(".sub-module2").css('display', 'none');
+                $(".sub-module[data-id='" + dataId + "']").css('display', 'inline-block');
+                e.stopPropagation()
+                })
+            
+                $('.sub-module').on('click', function (e) {
+                $('.sub-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
+                $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
+                var dataId = $(this).attr('id')
+                $(".sub-module2").css('display', 'none');
+                $(".sub-module2[data-id='" + dataId + "']").css('display', 'block');
+                e.stopPropagation()
+                })
         },
         error: function (data) {
 
@@ -690,7 +719,17 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
       $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
-      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare - Main & Size label</p></div></div>');
+      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
+    
+    
+     $('#washcare_label_card').on('click', function (e) {
+          washcare+=1;
+          $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_'+washcare+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right">Click to edit</p> <h5>Washcare label</h5></div><div class="img_artwork"></div></div></div><div class="modal washcare_label_'+washcare+' artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Wash Care Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="sample-artwork1"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="front-side"><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>')
+     });
+     $('#main_label_card').on('click', function (e) {
+          mainlabel+=1;
+          $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_'+mainlabel+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right">Click to edit</p> <h5>Main & Size Label</h5></div><div class="img_artwork"></div></div></div><div class="modal main_label_'+mainlabel+' artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Main Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="sample-artwork1"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="front-side"><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>')
+     });
 
 }
 

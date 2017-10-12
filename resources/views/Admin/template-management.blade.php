@@ -1,4 +1,70 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+<style>
+.main-module {
+    border: 1px solid #e5e5e5;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px 0px 12px;
+    min-width: 350px;
+    cursor: pointer;
+    background: #fff;
+    position: relative;
+}
+    .sub-module {
+    display: none;
+    padding: 5px 10px;
+    border: 1px solid #e5e5e5;
+    margin: 2px 50px 12px;
+    width: 290px;
+    cursor: pointer;
+    border-left: 2px solid #1abb9c;
+    position: relative;
+}
+    .sub-module2 {
+    display: none;
+    padding: 5px 10px;
+    border: 1px solid #e5e5e5;
+    margin: 2px 102px 12px;
+    width: 290px;
+    cursor: pointer;
+    border-left: 2px solid #1abb9c;
+    position: relative;
+}
+    .sub-module:after {
+    content: "";
+    position: absolute;
+    border-top: 1px solid #dddddd;
+    width: 22px;
+    right: calc(100% + 2px);
+    TOP: 50%;
+}
+      .sub-module2:after {
+    content: "";
+    position: absolute;
+    border-top: 1px solid #dddddd;
+    width: 22px;
+    right: calc(100% + 2px);
+    TOP: 50%;
+}
+    .modules_div:before {
+    position: absolute;
+    content: "";
+    border-left: 1px solid #ddd;
+    height: calc(100% - 53px);
+    top: 26px;
+    left: 27px;
+    z-index: 0;
+}
+     .modules_div1:after {
+     position: absolute;
+    content: "";
+    border-left: 1px solid #ddd;
+    height: calc(100% - 53px);
+    top: 30px;
+    left: 80px;
+    z-index: 0;
+}
+</style>
  <div class="col-sm-12 col-md-12 main">
       <div class="top-content">
         <ol class="breadcrumb">
