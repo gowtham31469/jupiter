@@ -38,9 +38,8 @@ Route::get('customer/dashboard', 'Customer\HomeController@index')->name('custome
 
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
 Route::get('admin/buyer-management', 'Admin\AdminController@buyerManagement');
-Route::get('admin/supplier-management', 'Admin\AdminController@supplierManagement');
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
-
+/** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::post('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
 Route::post('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
@@ -49,6 +48,12 @@ Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserM
 Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
 Route::delete('admin/user-management/delete-user', 'Admin\UserManagement\UserManagementController@deleteUserById');
 Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserManagementController@addUserRole');
+Route::get('admin/user-management/get-user-role-details', 'Admin\UserManagement\UserManagementController@getUserRoleById');
+Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserManagementController@updateUserRoleById');
+Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
+/** User Management **/
+Route::get('admin/supplier-management', 'Admin\SupplierManagement\SupplierManagementController@index');
+Route::post('admin/supplier-management/suppliers', 'Admin\SupplierManagement\SupplierManagementController@suppliers');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {

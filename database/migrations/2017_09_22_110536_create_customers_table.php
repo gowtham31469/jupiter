@@ -18,13 +18,12 @@ class CreateCustomersTable extends Migration
           $table->string('company_name');
           $table->string('factory_code');
           $table->string('contact_person');
-          $table->string('contact_emails');
+          $table->string('contact_email');
           $table->integer('phone_no');
           $table->string('courier_choice');
           $table->string('account_no');
           $table->string('tin_number');
           $table->string('pan_number');
-          $table->string('gstn_number');
           $table->string('email')->unique();
           $table->string('password');
           $table->rememberToken();
