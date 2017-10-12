@@ -201,7 +201,7 @@ class UserManagementController extends Controller
         return $result;
   }
   /**
-   * function to update jga users.
+   * function to delete jga users.
    * @author <Praveen>
    * @return \Illuminate\Http\Response
    */
@@ -286,6 +286,88 @@ class UserManagementController extends Controller
 
             $result = response()->json(['error'=> false,'message' =>'Success'],200);
 
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * Get user role details by ID for editing.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function getUserRoleById(Request $request)
+  {
+    try {
+          $id = $request['id'];
+          $user_role = DB::table('user_role')->select('user_role.role_id','user_role.user_role_name','user_role.user_role_description')
+          ->where('user_role.id',$id)->get();
+          $permissions = DB::table('role_permission')->select('role_permission.module_id')
+          ->where('role_permission.user_role_id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'user_role' => $user_role,'permissions' => $permissions]);
+        } catch (\Exception $e)
+        {
+               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+  }
+  /**
+   * function to update jga users role permissions.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function updateUserRoleById(Request $request)
+  {
+    try {
+          $id          = $request['id'];
+          $role_id     = $request['role_id'];
+          $role_name   = $request['role_name'];
+          $role_desc   = $request['role_desc'];
+          $permissions = $request['permissions'];
+          $permissions = explode(',',$permissions);
+
+          UserRole::where('id',$id)
+           ->update([
+              'role_id'               => $role_id,
+              'user_role_name'        => $role_name,
+              'user_role_description' => $role_desc
+          ]);
+          RolePermissionMdl::where('user_role_id', '=', $id)->delete();
+          foreach($permissions as $permission)
+          {
+            RolePermissionMdl::create([
+                'user_role_id' => $id,
+                'module_id'    => $permission,
+                'permission'   => 1
+            ]);
+          }
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * function to delete jga user role permissions.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function deleteUserRoleById(Request $request)
+  {
+    try {
+              $id      = $request['id'];
+              $deleted = UserRole::where('id', '=', $id)
+                          ->delete();
+              if($deleted != '')
+              {
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+              }
         } catch (\Exception $e)
         {
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
