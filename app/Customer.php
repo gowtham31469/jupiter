@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Customer extends Authenticatable
 {
     protected $fillable = [
-      'company_name','contact_person','factory_code','contact_person','contact_emails','email', 'password','phone_no','courier_choice','account_no','tin_number','pan_number','gstn_number'
+      'company_name','contact_person','factory_code','contact_person','contact_email','email', 'password','phone_no','courier_choice','account_no','tin_number','pan_number'
   ];
 
   //hidden attributes

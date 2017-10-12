@@ -680,7 +680,7 @@ function usersListView()
         },
         success: function (data) {
           $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Users</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a class="active" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
-          var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.users, function(i, item){
             table += '<tr id="'+item.id+'"><td>'+item.user_id+'</td><td>'+item.name+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.email+'</td><td>'+item.phone+'</td><td>'+item.address+'</td>';
             if(item.user_role_id != 1)
@@ -727,7 +727,7 @@ function rolesListView()
         },
         success: function (data) {
           $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Roles</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addRoleModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="active" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
-          var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.roles, function(i, item){
            table += '<tr id="'+item.id+'"><td>'+item.role_id+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.user_role_description+'</td>';
            if(item.id != 1)
@@ -1076,21 +1076,12 @@ function addRole(permissions)
               $(".loader").css('margin-top','12%');
           },
           success: function (data) {
-            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSuppliersModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th></tr></thead><tbody>';
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSupplierModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="suppliersListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
+            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
             $.each(data.suppliers, function(i, item){
-             table += '<tr id="'+item.id+'"><td>'+item.role_id+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.user_role_description+'</td>';
-             if(item.id != 1)
-             {
-               table += '<td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td>'
-             }
-             else
-             {
-               table += '<td></td>';
-             }
-             table += '</tr>';
+             var index = i+1;
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td></tr>';
             });
-
             table += '</tbody></table></div>';
             $('.main-content').html(table);
             $('#suppliers-list-table').DataTable();
