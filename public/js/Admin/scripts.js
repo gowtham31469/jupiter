@@ -141,7 +141,7 @@ function back_sticker_orders(buyer,buyer_id)
 
 function sticker_orders()
 {
-    $('.main-sub-menu').removeClass('hidden');
+   
     $( ".sub_modules a" ).removeClass( "active" )
      $('.sticker_orders a').addClass("active")
     $('.main-content').html('<div class="loader"></div>');
@@ -163,6 +163,38 @@ function sticker_orders()
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
               $('#datatable-example-2_length select').addClass('form-control input-sm');
              $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+        }
+    })
+}
+function template_list()
+{
+    $( ".sub_modules a" ).removeClass( "active" )
+     $('.template_list a').addClass("active")
+    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/"+buyer+"/template-management/template-list",
+        type: "Post",
+        dataType:"json",
+        data: {_token:csrf_token},
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+        },
+        success: function (data) {
+             $('.main-content').html(table(data));
+             $('#datatable-example-2').DataTable();
+             $("#datatable-example-2_filter input").addClass('form-control input-sm');
+             $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+              $('#datatable-example-2_length select').addClass('form-control input-sm');
+             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Template Management</a></li><li class="active">Template List</li>')
         },
         error: function (data) {
 
@@ -906,35 +938,3 @@ function addUser()
 $("#age").change(function(){
     alert();
 })
-
-function addRole(permissions)
-{
-    var id   = $('#role_id').val();
-    var name = $('#role_name').val();
-    var desc = $('#role_description').val();
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/user-management/add-user-role",
-        method: 'POST',
-        data: {_token:csrf_token,permissions:permissions,role_id:id,role_name:name,role_desc:desc},
-        beforeSend: function () {
-          $(".loader").show();
-          $(".loader").css('margin-top','12%');
-        },
-        statusCode: {
-             200: function() {
-                  $('#role_result').html('User Role Added Successfully')
-                  $("#role_result").addClass("alert alert-success");
-                  $('#addRoleModal').modal('hide');
-                  rolesListView();
-             }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-          $(".loader").hide();
-          $(".loader").css('margin-top','0%');
-        }
-    })
- }

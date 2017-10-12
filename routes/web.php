@@ -101,11 +101,16 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
 
+Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
+Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
+
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
+
+Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
 
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('multi-upload', 'UploadController@csvMultiUpload');

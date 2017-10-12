@@ -113,5 +113,23 @@ class AdminController extends Controller
         {
              return redirect('/admin/dashboard');
         }
+    }  
+    public function orderSubModules(Request $request)
+    {
+            $buyer_id=$request->buyer;
+            $parent_module = DB::table('module')->select('*')->where('parent_id','6')->where('module_name',$buyer_id)->get();
+            $parent_id = $parent_module{0}->id;
+            $module_var = new Modules();
+            $get_sub_module = $module_var->getSubModules($parent_id);
+            echo json_encode($get_sub_module);
+    } 
+    public function templateSubModules(Request $request)
+    {
+            $buyer_id=$request->buyer;
+            $parent_module = DB::table('module')->select('*')->where('parent_id','5')->where('module_name',$buyer_id)->get();
+            $parent_id = $parent_module{0}->id;
+            $module_var = new Modules();
+            $get_sub_module = $module_var->getSubModules($parent_id);
+            echo json_encode($get_sub_module);
     }
 }
