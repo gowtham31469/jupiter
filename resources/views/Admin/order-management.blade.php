@@ -201,9 +201,7 @@
                          if(data[0].module_name == "Sticker Orders")
                              {
                                  sticker_orders();
-                             }
-                        
-                        
+                             }                        
                     },
                     error: function (data) {
 
@@ -224,8 +222,7 @@
 <script type="text/javascript">
         Dropzone.options.imageUpload = {
             maxFilesize    :  10,
-            maxFiles       :  1,
-            acceptedFiles: ".csv"
+            acceptedFiles: ".csv",".xls"
         };
 $('.modal').on('hidden.bs.modal', function (e) {
         $('#uploadMultiData').trigger("reset");

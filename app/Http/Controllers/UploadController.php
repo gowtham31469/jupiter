@@ -37,73 +37,83 @@ class UploadController extends Controller
     		if($request->hasFile('file'))
 	        {
 	        	ini_set('max_execution_time', 1000);
-	        	$path     = $request->file('file')->getRealPath();
-                $data = Excel::load($path, function($reader) {})->get();
-                $data_exists = OrchestraItemDetails::select()->get();
-                if (count($data_exists)>0)
-                {
-                	foreach ($data as $value)
-	        		{	
-	        			$collection_exixts = DB::table('orchestra_item_details')->where('Collection',$value->collection)->select('*')->get();
-	        			if (count($collection_exixts)>0)
-	        			{
-	        				$order_uvc = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->select('*')->get();
-	        				if (count($order_uvc)>0)
-	        				{
-	        					$order_po = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->select('*')->get();
-	        					if (count($order_po)>0)
-	        					{
-	        						$order_version = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->select('*')->get();
-	        						if (count($order_version)>0)
-	        						{
-	        							$order_edition = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->select('*')->get();
-	        							if (count($order_edition)>0)
-	        							{
-	        								$order_size = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
-	        								if (count($order_size)>0)
-	        								{
-	        									// $upload_obj->updateOrchestraItemDetails($value);
-	        								}
-	        								else
-	        								{
-	        									$upload_obj->insertOrchestraItemDetails($value);
-	        								}
-	        							}
-	        							else
-	        							{
-	        								$upload_obj->insertOrchestraItemDetails($value);
-	        							}
-	        						}
-	        						else
-	        						{
-	        							$upload_obj->insertOrchestraItemDetails($value);
-	        						}
-	        					}
-	        					else
-	        					{
-	        						$upload_obj->insertOrchestraItemDetails($value);
-	        					}
-	        				}
-	        				else
-	        				{
-	        					$upload_obj->insertOrchestraItemDetails($value);
-	        				}
-	        			}
-	        			else
-	        			{
-	        				$upload_obj->insertOrchestraItemDetails($value);
-	        			}
-	        		}
-	        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
-                }
+	        	$path = $request->file('file')->getRealPath();
+	        	$filename	= $request->file('file')->getClientOriginalName();
+	            $extension  = $request->file('file')->getClientOriginalExtension();
+	            $filename = strtok($filename, " ");
+	           	if ($filename == "ItemDetails_ORCHESTRA")
+	           	{
+	           		$data = Excel::load($path, function($reader) {})->get();
+	                $data_exists = OrchestraItemDetails::select()->get();
+	                if (count($data_exists)>0)
+	                {
+	                	foreach ($data as $value)
+		        		{	
+		        			$collection_exixts = DB::table('orchestra_item_details')->where('Collection',$value->collection)->select('*')->get();
+		        			if (count($collection_exixts)>0)
+		        			{
+		        				$order_uvc = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->select('*')->get();
+		        				if (count($order_uvc)>0)
+		        				{
+		        					$order_po = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->select('*')->get();
+		        					if (count($order_po)>0)
+		        					{
+		        						$order_version = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->select('*')->get();
+		        						if (count($order_version)>0)
+		        						{
+		        							$order_edition = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->select('*')->get();
+		        							if (count($order_edition)>0)
+		        							{
+		        								$order_size = DB::table('orchestra_item_details')->where('Collection',$value->collection)->where('UVC',$value->uvc)->where('BuyerPONo',$value->buyerpono)->where('VersionNumber',$value->versionnumber)->where('EditionNumber',$value->editionnumber)->where('Size',$value->size)->select('*')->get();
+		        								if (count($order_size)>0)
+		        								{
+		        									// $upload_obj->updateOrchestraItemDetails($value);
+		        								}
+		        								else
+		        								{
+		        									$upload_obj->insertOrchestraItemDetails($value);
+		        								}
+		        							}
+		        							else
+		        							{
+		        								$upload_obj->insertOrchestraItemDetails($value);
+		        							}
+		        						}
+		        						else
+		        						{
+		        							$upload_obj->insertOrchestraItemDetails($value);
+		        						}
+		        					}
+		        					else
+		        					{
+		        						$upload_obj->insertOrchestraItemDetails($value);
+		        					}
+		        				}
+		        				else
+		        				{
+		        					$upload_obj->insertOrchestraItemDetails($value);
+		        				}
+		        			}
+		        			else
+		        			{
+		        				$upload_obj->insertOrchestraItemDetails($value);
+		        			}
+		        		}
+		        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+	                }
+	                else
+	                {
+	                	foreach ($data as $value)
+		        		{	
+		        			$upload_obj->insertOrchestraItemDetails($value);
+		        		}
+		        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+	                }
+	           	}
                 else
-                {
-                	foreach ($data as $value)
-	        		{	
-	        			$upload_obj->insertOrchestraItemDetails($value);
-	        		}
-	        		$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
-                }
+		        {
+		        	$result = response()->json(['error' =>true,'message' => 'Invalid File'], 403);
+		        }
 	        }
 	        else
 	        {
@@ -141,8 +151,8 @@ class UploadController extends Controller
 	        $filename	= $request->file('file')->getClientOriginalName();
 	        $extension  = $request->file('file')->getClientOriginalExtension();
         	$data  = Excel::load($path, function($reader) {})->get();
-        	$filename = preg_replace( '/\.[a-z0-9]+$/i' , '' , $filename );
-        	if ($filename =="ParcelDetails_file1")
+        	$filename = strtok($filename, " ");
+        	if ($filename =="ParcelDetails_File1_ORCHESTRA")
         	{
         		$data_exists = OrchestraParcelDetails::select()->get();
 	            if (count($data_exists)>0)
@@ -215,7 +225,7 @@ class UploadController extends Controller
 		        	$result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
 	            }
         	}
-        	else if ($filename =="ParcelDetails_file2")
+        	else if ($filename =="ParcelDetails_File2_ORCHESTRA")
         	{
         		$data_exists = OrchestraParcelQuantityDetails::select()->get();
 	            if (count($data_exists)>0)
@@ -289,7 +299,7 @@ class UploadController extends Controller
         	}
         	else
         	{
-        		return "Invalid File";
+        		$result = response()->json(['error' =>true,'message' => 'Invalid File'], 403);
         	}
 	    }
 		catch (\Exception $e)
