@@ -4,7 +4,7 @@
     width: 100% !important;
     height:50px !important;
 }
-    .select2-container .select2-selection--single {
+   .washing_select + .select2-container .select2-selection--single,.instruction_select + .select2-container .select2-selection--single,.parts_select + .select2-container .select2-selection--single,.cleaning_select + .select2-container .select2-selection--single,.ironing_select + .select2-container .select2-selection--single,.dryer_select + .select2-container .select2-selection--single,.whitening_select + .select2-container .select2-selection--single {
         height:34px;
     }
     .washing_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .cleaning_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .ironing_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .instruction_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow, .parts_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .dryer_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .whitening_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -161,6 +161,17 @@
       <div class="modal-header alert-warning">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <p class="modal-title" id="myModalLabel">SUPPLIER IS SOLELY RESPONSIBLE TO CHOOSE CORRECT AGE GROUP. IN CASE OF ANY WRONG SELECTION, <strong>ORCHESTRA/JUPITER</strong> ARE NOT LAIBLE FOR CONSEQUENCES THERE OFF.</p>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header alert-danger">
+        <button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <p>Use this column only if needed</p>
         </div>
     </div>
   </div>
