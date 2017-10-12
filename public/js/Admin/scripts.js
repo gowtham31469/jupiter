@@ -692,7 +692,7 @@ function usersListView()
               table += '<td></td>';
             }
               table += '</tr>';
-          });
+            });
              table += '</tbody></table></div>';
              $('.main-content').html(table);
              $('#users-list-table').DataTable();
@@ -781,6 +781,47 @@ function addUser()
                   $("#result").addClass("alert alert-success");
                   $('#addUserModal').modal('hide');
                   usersListView();
+             },
+             400: function() {
+               $('#result').html("Something went wrong!!")
+               $("#result").addClass("alert alert-dander");
+             },
+             409: function() {
+                  $('#result').html('Email already registered.')
+                  $("#result").addClass("alert alert-warning");
+             }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
+        }
+    })
+ }
+ function addBuyer()
+ {
+    var name       = $('#name').val();
+    var email      = $('#email').val();
+    var phone      = $('#phone').val();
+    var address    = $('#address').val();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    $.ajax({
+        url: base_url + "/admin/buyer-management/add-jga-buyer",
+        method: 'POST',
+        data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
+        beforeSend: function () {
+          $(".loader").show();
+          $(".loader").css('margin-top','12%');
+        },
+        statusCode: {
+             200: function() {
+                  $('#result').html('Buyer Added Successfully')
+                  $("#result").addClass("alert alert-success");
+                  $('#addbuyerModal').modal('hide');
+                  buyers();
              },
              400: function() {
                $('#result').html("Something went wrong!!")

@@ -37,7 +37,7 @@ Route::get('customer/dashboard', 'Customer\HomeController@index')->name('custome
 
 
 Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
-Route::get('admin/buyer-management', 'Admin\AdminController@buyerManagement');
+
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
@@ -54,6 +54,11 @@ Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\Us
 /** User Management **/
 Route::get('admin/supplier-management', 'Admin\SupplierManagement\SupplierManagementController@index');
 Route::post('admin/supplier-management/suppliers', 'Admin\SupplierManagement\SupplierManagementController@suppliers');
+Route::get('admin/buyer-management', 'Admin\BuyerManagementController@index');
+Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagementController@buyerList');
+Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagementController@addJgaBuyer');
+
+Route::get('admin/buyer-management/merchandiser', 'Admin\BuyerManagementController@merchandiserList');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
