@@ -32,7 +32,7 @@ class AdminController extends Controller
     {
         return view('Admin/login');
     }
-    
+
     public function orderManagement()
     {
         $module_var = new Modules();
@@ -52,9 +52,9 @@ class AdminController extends Controller
         {
              return redirect('/admin/dashboard');
         }
-        
+
     }
-    
+
     public function buyerManagement()
     {
         $module_var = new Modules();
@@ -66,35 +66,14 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                 return $view->with(['modules' => $get_main_module]);
             });
-            $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/buyer-management',['buyers' => $buyers]);
+            return view('Admin/Buyer Management/home');
         }
         else
         {
              return redirect('/admin/dashboard');
         }
     }
-    
-    public function supplierManagement()
-    {
-        $module_var = new Modules();
-        $is_allowed = $module_var->permittedModules();
-        if($is_allowed)
-        {
-            $top_mod = "User Management";
-            $get_main_module = $module_var->getMainModules();
-            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                return $view->with(['modules' => $get_main_module]);
-            });
-            $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/supplier-management',['buyers' => $buyers]);
-        }
-        else
-        {
-             return redirect('/admin/dashboard');
-        }
-    }
-    
+
     public function templateManagement()
     {
         $module_var = new Modules();

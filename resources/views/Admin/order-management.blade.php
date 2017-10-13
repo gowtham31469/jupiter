@@ -1,4 +1,28 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+<style>
+.washing_select + .select2 , .instruction_select + .select2, .parts_select + .select2  , .cleaning_select + .select2 , .ironing_select + .select2 , .dryer_select + .select2 , .whitening_select + .select2 {
+    width: 100% !important;
+    height:50px !important;
+}
+   .washing_select + .select2-container .select2-selection--single,.instruction_select + .select2-container .select2-selection--single,.parts_select + .select2-container .select2-selection--single,.cleaning_select + .select2-container .select2-selection--single,.ironing_select + .select2-container .select2-selection--single,.dryer_select + .select2-container .select2-selection--single,.whitening_select + .select2-container .select2-selection--single {
+        height:34px;
+    }
+    .washing_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .cleaning_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .ironing_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .instruction_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow, .parts_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .dryer_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow , .whitening_select + .select2.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 10px;
+    right: 10px;
+}
+    .washing_select + .select2.select2-container--default .select2-selection--single .select2-selection__rendered , .cleaning_select + .select2.select2-container--default .select2-selection--single .select2-selection__rendered , .ironing_select + .select2.select2-container--default .select2-selection--single .select2-selection__rendered , .instruction_select + .select2.select2-container--default .select2-selection--multiple .select2-selection__rendered, .parts_select + .select2.select2-container--default .select2-selection--multiple .select2-selection__rendered , .dryer_select + .select2.select2-container--default .select2-selection--single .select2-selection__rendered , .whitening_select + .select2.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 45px;
+}
+   .washing_select + .select2-container .select2-selection--single , .cleaning_select + .select2-container .select2-selection--single , .ironing_select + .select2-container .select2-selection--single , .instruction_select + select2-container .select2-selection--multiple, .parts_select + select2-container .select2-selection--multiple, .dryer_select + .select2-container .select2-selection--single , .whitening_select + .select2-container .select2-selection--single {
+    height: 50px;
+}
+   .washing_select + .select2-container--default .select2-selection--single , .cleaning_select + .select2-container--default .select2-selection--single , .ironing_select + .select2-container--default .select2-selection--single , .instruction_select + .select2-container--default .select2-selection--multiple, .parts_select + .select2-container--default .select2-selection--multiple , .dryer_select + .select2-container--default .select2-selection--single , .whitening_select + .select2-container--default .select2-selection--single {
+    border: 2px solid #dce4ec;
+}
+    
+</style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <ol class="breadcrumb">
@@ -141,6 +165,17 @@
     </div>
   </div>
 </div>
+
+<div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header alert-danger">
+        <button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <p>Use this column only if needed</p>
+        </div>
+    </div>
+  </div>
+</div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
@@ -177,9 +212,7 @@
                          if(data[0].module_name == "Sticker Orders")
                              {
                                  sticker_orders();
-                             }
-                        
-                        
+                             }                        
                     },
                     error: function (data) {
 
@@ -200,8 +233,7 @@
 <script type="text/javascript">
         Dropzone.options.imageUpload = {
             maxFilesize    :  10,
-            maxFiles       :  1,
-            acceptedFiles: ".csv"
+            acceptedFiles: ".csv",".xls"
         };
 $('.modal').on('hidden.bs.modal', function (e) {
         $('#uploadMultiData').trigger("reset");

@@ -1,5 +1,3 @@
-var washcare=0;
-var mainlabel=0;
 function label_orders()
 {
     $('.main-content').html('<div class="loader"></div>');
@@ -17,13 +15,12 @@ function label_orders()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-             $('#uploadModal').attr('data-target','#uploadMultiData'); 
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
              $('#datatable-example-2_length select').addClass('form-control input-sm');
-             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li  class="active">Label Orders</li>')
+            $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li  class="active">Label Orders</li>')
         },
         error: function (data) {
 
@@ -144,7 +141,7 @@ function back_sticker_orders(buyer,buyer_id)
 
 function sticker_orders()
 {
-   
+    $('.main-sub-menu').removeClass('hidden');
     $( ".sub_modules a" ).removeClass( "active" )
      $('.sticker_orders a').addClass("active")
     $('.main-content').html('<div class="loader"></div>');
@@ -160,13 +157,12 @@ function sticker_orders()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-             $('#uploadModal').attr('data-target','#uploadData');
              $('.main-content').html(table(data));
              $('#datatable-example-2').DataTable();
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-             $('#datatable-example-2_length select').addClass('form-control input-sm');
-             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>') 
+              $('#datatable-example-2_length select').addClass('form-control input-sm');
+             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
         },
         error: function (data) {
 
@@ -177,6 +173,7 @@ function sticker_orders()
         }
     })
 }
+
 function template_list()
 {
     $( ".sub_modules a" ).removeClass( "active" )
@@ -240,7 +237,7 @@ function template_list()
             $(".loader").css('margin-top','0%');
         }
     })
-}
+}   
 
 function orchestra_create_template_view(obj)
 {
@@ -337,20 +334,28 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
     var tr="";
     if(data.template_name == "Standard")
     {
+        var disabled='';
+        var ttotal='';
+        var thead='<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/>(for parcel/carton & polybag)</th></tr></thead>';
         $.each(data.orchestra_parcel_quantity_details, function (index, value) {
-         tr+='<tr><td>'+value.Size+'</td><td>'+data.orchestra_parcel_details[0].ParcelBarCode+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
+         tr+='<tr><td>'+value.Size+'</td><td>'+data.orchestra_parcel_details[0].ParcelBarCode+'</td><td>'+value.Quantity+'</td></tr>';
 
      });
          var head_qty="Quantity for Standard Stickers";
         var head_qty1="Standard Parcel/Carton Sticker";
+        var standard_div = '<div class="form-group"><label>Total Polybags per carton: </label><input onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control input-sm"></div>';
     }
     else
     {
+        var disabled='disabled="disabled"';
+        var ttotal='<td class="text-center">0</td><td class="text-center">0</td>';
+        var thead='<thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead>';
         $.each(data.orchestra_parcel_quantity_details, function (index, value) {
          tr+='<tr><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td>'+value.Quantity+'</td><td><input type="number" value="0" class="form-control input-sm"><td><input type="number" value="0" class="form-control input-sm"></td></tr>';
      });
         var head_qty="Quantity for Solid Size Stickers";
         var head_qty1="Solid Size Parcel/Carton Sticker";
+         var standard_div = '';
     }
 
      var option="<option>Age Group</option>";
@@ -359,8 +364,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('"+buyer+"','"+buyer_id+"')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC "+uvc+" and PO "+po+"</li></ol></div>")
 
-      $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover"><thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td><td class="text-center">0</td><td class="text-center">0</td></tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input disabled="disabled" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div> </div></div>');
-
+ $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover">'+thead+'<tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td>'+ttotal+'</tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input '+disabled+' data-toggle="modal" data-target=".needed_modal" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>'+standard_div+' </div></div>');
 
           $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px" class="center-block svg2" data="'+data.carton_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary">Save</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="'+data.polybag_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="'+data.polybag_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary">Save</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
 
@@ -380,6 +384,8 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
             });
             $( "#modal_close" ).click(function() {
                 $('#modal_height').removeAttr('data-target')
+            }); $( ".modal_close1" ).click(function() {
+                $('#needed_modal').removeAttr('data-target')
             });
 
             $('#age').change(function() {
@@ -387,7 +393,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
                 var mySVG1 = document.getElementById("svg1");
                 svgDoc1 = mySVG1.contentDocument;
                 svgDoc1.getElementById("round").style.fill=$(this).val();
-                
+
             });
 
 
@@ -399,10 +405,10 @@ function barcode_polybag(id,data)
                          mySVG.addEventListener("load",function() {
                               svgDoc = mySVG.contentDocument;
                               var svgItem = svgDoc.getElementById("uvc_tco");
-                                     
+
                                      svgDoc.getElementById("parcel_code").innerHTML=data.orchestra_parcel_details[0].ParcelCode;
                              svgDoc.getElementById("round").style.fill=$('#age').val();
-                             
+
                                 if(data.template_name == "Standard")
                                 {
                                      var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
@@ -413,9 +419,9 @@ function barcode_polybag(id,data)
                                      var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
                                     svgDoc.getElementById("size").innerHTML=data.orchestra_parcel_quantity_details[0].Size;
                                      svgDoc.getElementById("color").innerHTML=data.orchestra_parcel_quantity_details[0].Color;
-                                    
+
                                 }
-                              
+
             JsBarcode("#ean-13", code, { format: "ean13"});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
@@ -424,7 +430,7 @@ function barcode_polybag(id,data)
                 svg_xml,
                 ctx,
                 img;
- 
+
             // if our "svg" doesn't have 'xmlns' attribute we must add it
             //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -461,10 +467,10 @@ function barcode_polybag(id,data)
             //
 
             svgDoc.getElementById("barcode").setAttribute('xlink:href', img.src);
-                             
-                             
+
+
            }, false);
-    
+
 }
 function barcode_carton(id,data)
 {
@@ -561,6 +567,7 @@ function label_order_details(uvc)
         success: function (data) {
             orchestra_label_order_details(buyer,buyer_id,uvc,data)
             hangtagmodal(data);
+            washcarelabels(data);
         },
         error: function (data) {
 
@@ -571,13 +578,294 @@ function label_order_details(uvc)
         }
     })
 }
+function washcarelabels(data)
+{
+            var washing_option="<option>Select Option</option>";
+            var whitening_option="<option>Select Option</option>";
+            var dryer_option="<option>Select Option</option>";
+            var ironing_option="<option>Select Option</option>";
+            var cleaning_option="<option>Select Option</option>";
+            var made_option="<option>Select Option</option>";
+            var instruction_option="";
+            var parts_option="";
+            var composition_option="<option>Select Option</option>";
+         
+             $.each(data.orchestra_countries, function (index, value) {
+                        made_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_care_instruction, function (index, value) {
+                        instruction_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_parts, function (index, value) {
+                        parts_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_composition, function (index, value) {
+                        composition_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_care_symbols, function (index, value) {
+                 if(value.category_id == 1)
+                     {
+                          washing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                 else if(value.category_id == 2)
+                     {
+                          whitening_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 3)
+                     {
+                          dryer_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 4)
+                     {
+                          ironing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 5)
+                     {
+                          cleaning_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+               
+            });
+             $('.top-content').append('<div class="modal wash_care_label_main" artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">WashCare Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Washing</label><select class="form-control washing_select">'+washing_option+'</select> </div><div class="form-group"><label>Whitening</label><select class="form-control whitening_select">'+whitening_option+'</select> </div><div class="form-group"><label>Dryer</label><select class="form-control dryer_select">'+dryer_option+'</select> </div><div class="form-group"><label>Ironing</label><select class="form-control ironing_select">'+ironing_option+'</select> </div><div class="form-group"><label>Cleaning</label><select class="form-control cleaning_select">'+cleaning_option+'</select> </div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="front-side"><object id="washcare_svg1" style="width:550px" data="/storage/app/template/WCL.svg" type="image/svg+xml"></object><object id="washcare_svg2" style="margin-top: 0px;margin-left: -194px;display: inline-block;width: 186.6px;" data="/storage/app/template/WCL2.svg" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="form-group"><label>Made in</label><select class="form-control made_select">'+made_option+'</select> </div><div class="form-group"><label>Care Instructions</label><select class="form-control instruction_select" multiple>'+instruction_option+'</select> </div><div class="form-group"><label>Parts</label><select class="form-control parts_select" multiple>'+parts_option+'</select> </div><div class="form-group"><label>Compositions</label><select class="form-control composition_select">'+composition_option+'</select> </div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>');
+    
+     $('.instruction_select').select2({
+                placeholder: "Select Option",
+                allowClear: true
+             });
+    
+     $('.parts_select').select2({
+                placeholder: "Select Option",
+                allowClear: true
+             });
+    
+            $('.select2-dropdown').css('width','270px')
+    
+                function formatData (data) {
+                  if (!data.id) { return data.text; }
+                    console.log(data)
+                  var $result= $(
+                    '<span><img style="width: 34px;" src="'+data.id+'"/> ' + data.text + '</span>'
+                  );
+                  return $result;
+                };
+
+                $(".washing_select").select2({
+                  templateResult: formatData,
+                  templateSelection: formatData
+
+                });
+    $(".whitening_select").select2({
+                  templateResult: formatData,
+                  templateSelection: formatData
+
+                });
+    $(".dryer_select").select2({
+                  templateResult: formatData,
+                  templateSelection: formatData
+
+                });$(".ironing_select").select2({
+                  templateResult: formatData,
+                  templateSelection: formatData
+
+                });
+    $(".cleaning_select").select2({
+                  templateResult: formatData,
+                  templateSelection: formatData
+
+                });
+    
+                        $('.washing_select').change(function() {
+                            if($(this).val() != "")
+                            {
+                                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href',$(this).val());
+                                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href',$(this).val());
+                            }
+                             else
+                            {
+                                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href',"");
+                            }
+                            
+
+                        });
+                        $('.whitening_select').change(function() {
+                            if($(this).val() != "")
+                            {
+                             svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href',$(this).val());
+                            svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href',$(this).val());
+                            }
+                             else
+                            {
+                                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href',"");
+                            }
+                        });
+                        $('.dryer_select').change(function() {
+                            if($(this).val() != "")
+                            {
+                             svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href',$(this).val());
+                            svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href',$(this).val());
+                            }
+                             else
+                            {
+                                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href',"");
+                            }
+
+                        });
+                        $('.ironing_select').change(function() {
+                            if($(this).val() != "")
+                            {
+                              svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href',$(this).val());
+                            svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href',$(this).val());
+                            }
+                             else
+                            {
+                                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href',"");
+                            }
+
+                        });
+                        $('.cleaning_select').change(function() {
+                            if($(this).val() != "")
+                            {
+                              svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href',$(this).val()); svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href',$(this).val());
+                            }
+                            else
+                            {
+                                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href',"");
+                            }
+
+                        });
+    
+                         var mySVG = document.getElementById("washcare_svg1");
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                               var size = data.order_details[0].Size.split(" ")
+                               if(size[1] == "ANS")
+                               {
+                                    var size1="years";
+                               }
+                               else
+                               {
+                                    var size1="months";
+                               }
+                                svgDoc.getElementById("parcel_code1").innerHTML=data.order_details[0].UVC_TCO;
+                             svgDoc.getElementById("parcel_code2").innerHTML=data.order_details[0].UVC_TCO;
+                             svgDoc.getElementById("size_in_fr_en1").innerHTML=data.order_details[0].cm+"cm / "+ data.order_details[0].in+"in";
+                              svgDoc.getElementById("size_in_fr_en2").innerHTML=data.order_details[0].cm+"cm / "+ data.order_details[0].in+"in";
+                             svgDoc.getElementById("size1").innerHTML=data.order_details[0].Size.replace(" ","").toLowerCase()+"/"+size1;
+                             svgDoc.getElementById("size2").innerHTML=data.order_details[0].Size.replace(" ","").toLowerCase()+"/"+size1;
+                                
+                               var code = data.order_details[0].BarcodeForPricesTags.toString();
+                                JsBarcode("#ean-13", code, {
+                                    format: "ean13",
+                                    font:"Arial"});
+                                var svg = document.getElementById('svgdiv').querySelector('svg'),
+                                    canvas = document.createElement('canvas'),
+                                    body = document.getElementsByTagName('body')[0],
+                                    canvasTmp,
+                                    svg_xml,
+                                    ctx,
+                                    img;
+                                // if our "svg" doesn't have 'xmlns' attribute we must add it
+                                //svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+                                canvas.id = 'canvas';
+                                canvas.width = svg.getBoundingClientRect().width;
+                                canvas.height = svg.getBoundingClientRect().height;
+
+                                body.appendChild(canvas);
+                                canvasTmp = document.getElementById('canvas');
+
+                                /* Time to play ;) */
+
+                                // https://developer.mozilla.org/en/XMLSerializer
+                                svg_xml = (new XMLSerializer()).serializeToString(svg);
+                                ctx = canvasTmp.getContext('2d');
+
+                                // JavaScript (HTML) image
+                                img = new Image();
+
+                                img.onload = function () {
+                                    ctx.drawImage(img, 0, 0);
+                                };
+
+                                // https://developer.mozilla.org/en/DOM/window.btoa
+                                img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+                                // img.src - contains base64 URI from svg
+                                console.log(img.src);
+
+                                //remove temporary canvas
+                                canvasTmp.remove();
+
+                                //Check in browsers
+                                //
+
+                               // svgDoc.getElementById("barcode").setAttribute('xlink:href', img.src);
+
+
+           }, false);
+}
 function hangtagmodal(data)
 {
             var option="<option></option>";
+            var washing_option="<option>Select Option</option>";
+            var whitening_option="<option>Select Option</option>";
+            var dryer_option="<option>Select Option</option>";
+            var ironing_option="<option>Select Option</option>";
+            var cleaning_option="<option>Select Option</option>";
+            var made_option="<option>Select Option</option>";
+            var instruction_option="<option></option>";
+            var parts_option="<option></option>";
+            var composition_option="<option>Select Option</option>";
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
+    
+             $.each(data.orchestra_countries, function (index, value) {
+                        made_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_care_instruction, function (index, value) {
+                        instruction_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_parts, function (index, value) {
+                        parts_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_composition, function (index, value) {
+                        composition_option+="<option value="+value.id+">"+value.english+"</option>";
+                    });
+             $.each(data.orchestra_care_symbols, function (index, value) {
+                 if(value.category_id == 1)
+                     {
+                          washing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                 else if(value.category_id == 2)
+                     {
+                          whitening_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 3)
+                     {
+                          dryer_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 4)
+                     {
+                          ironing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+                  else if(value.category_id == 5)
+                     {
+                          cleaning_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
+                     }
+               
+            });
              $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+    
+     $('.instruction_select').select2({
+                placeholder: "Select Option",
+                allowClear: true
+             });
+    
+     $('.parts_select').select2({
+                placeholder: "Select Option",
+                allowClear: true
+             });
 
              var mySVG = document.getElementById("svg2");
                          var svgDoc;
@@ -726,7 +1014,8 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
       $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
-      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
+
+      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
     
     
      $('#washcare_label_card').on('click', function (e) {
@@ -758,7 +1047,7 @@ function usersListView()
         },
         success: function (data) {
           $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Users</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a class="active" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
-          var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.users, function(i, item){
             table += '<tr id="'+item.id+'"><td>'+item.user_id+'</td><td>'+item.name+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.email+'</td><td>'+item.phone+'</td><td>'+item.address+'</td>';
             if(item.user_role_id != 1)
@@ -805,12 +1094,12 @@ function rolesListView()
         },
         success: function (data) {
           $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Roles</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addRoleModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="active" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
-          var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
+          var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.roles, function(i, item){
            table += '<tr id="'+item.id+'"><td>'+item.role_id+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.user_role_description+'</td>';
            if(item.id != 1)
            {
-             table += '<td><a href="#"><i class="ion-edit" title="Edit" ></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteVendor" ></i></a></td>'
+             table += '<td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td>'
            }
            else
            {
@@ -878,9 +1167,13 @@ function addUser()
         }
     })
  }
-
+ var isSubmitting = false;
  function getUser(id)
  {
+   if(isSubmitting) {
+        return;
+    }
+    isSubmitting = true;
    $.ajax({
        url:base_url + "/admin/user-management/get-user-details",
        dataType:"json",
@@ -891,6 +1184,7 @@ function addUser()
          $(".loader").css('margin-top','12%');
        },
        success: function(data){
+           isSubmitting = false;
            $('#user_edit_id').val(id);
            $('#edit_user_id').val(data.user[0].user_id);
            $('#edit_name').val(data.user[0].name);
@@ -984,3 +1278,243 @@ function addUser()
 $("#age").change(function(){
     alert();
 })
+
+function addRole(permissions)
+{
+    var id   = $('#role_id').val();
+    var name = $('#role_name').val();
+    var desc = $('#role_description').val();
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/user-management/add-user-role",
+        method: 'POST',
+        data: {_token:csrf_token,permissions:permissions,role_id:id,role_name:name,role_desc:desc},
+        beforeSend: function () {
+          $(".loader").show();
+          $(".loader").css('margin-top','12%');
+        },
+        statusCode: {
+             200: function() {
+                  $('#role_result').html('User Role Added Successfully')
+                  $("#role_result").addClass("alert alert-success");
+                  $('#addRoleModal').modal('hide');
+                  rolesListView();
+             }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
+        }
+    })
+ }
+ function getUserRole(id)
+ {
+   if(isSubmitting) {
+        return;
+    }
+    isSubmitting = true;
+   $.ajax({
+       url:base_url + "/admin/user-management/get-user-role-details",
+       dataType:"json",
+       method:"get",
+       data:{id:id},
+       beforeSend: function () {
+         $(".loader").show();
+         $(".loader").css('margin-top','12%');
+       },
+       success: function(data){
+           isSubmitting = false;
+           $('#user_edit_role_id').val(id);
+           $('#edit_role_id').val(data.user_role[0].role_id);
+           $('#edit_role_name').val(data.user_role[0].user_role_name);
+           $('#edit_role_description').val(data.user_role[0].user_role_description);
+
+           if (data.error == "false") {
+               var parsedData = [];
+               data.permissions.forEach(function (index) {
+                   parsedData.push(index.module_id);
+               })
+               $('.role_permissions_div').find('input[type="checkbox"]').each(function () {
+                   var permitted_mod = parseInt($(this).val());
+
+                   if ($.inArray(permitted_mod, parsedData) != -1) {
+                       $(this).prop('checked', true);
+                   } else {
+                       $(this).prop('checked', false);
+                   }
+               })
+           } else {
+
+           }
+           $('#editRoleModal').modal({
+                backdrop: 'static',
+                keyboard: false
+           })
+           $('#edit_role_form').validator('validate');
+           $('#editRoleModal').modal('show');
+       },
+       complete: function () {
+         $(".loader").hide();
+         $(".loader").css('margin-top','0%');
+       }
+   })
+ }
+ function updateRole(permissions)
+ {
+     var id         = $('#user_edit_role_id').val();
+     var role_id    = $('#edit_role_id').val();
+     var name       = $('#edit_role_name').val();
+     var desc       = $('#edit_role_description').val();
+     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+     $.ajax({
+         url: base_url + "/admin/user-management/update-user-role",
+         dataType:"json",
+         method:"put",
+         data: {_token:csrf_token,permissions:permissions,role_id:role_id,role_name:name,role_desc:desc,id:id},
+         beforeSend: function () {
+           $(".loader").show();
+           $(".loader").css('margin-top','12%');
+         },
+         statusCode: {
+              200: function() {
+                   $('#role_result').html('User Role Updated Successfully')
+                   $("#role_result").addClass("alert alert-success");
+                   $('#editRoleModal').modal('hide');
+                   rolesListView();
+              }
+         },
+         error: function (data) {
+
+         },
+         complete: function () {
+           $(".loader").hide();
+           $(".loader").css('margin-top','0%');
+         }
+     })
+  }
+  function deleteUserRole(id)
+  {
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url:base_url + "/admin/user-management/delete-user-role",
+        dataType:"json",
+        beforeSend: function () {
+          $(".loader").show();
+          $(".loader").css('margin-top','12%');
+        },
+        method:"delete",
+        data:{_token:csrf_token,id:id},
+        statusCode: {
+             200: function() {
+                  $('#delete_result').html('User role deleted Successfully')
+                  $("#delete_result").addClass("alert alert-success");
+                  $('#deleteUserRoleModal').modal('hide');
+                  rolesListView();
+             },
+             400: function() {
+               $('#delete_result').html("Something went wrong!!")
+               $("#delete_result").addClass("alert alert-dander");
+             }
+        },
+        complete: function () {
+          $(".loader").hide();
+          $(".loader").css('margin-top','0%');
+        }
+    })
+  }
+  function suppliersListView()
+  {
+      $('.main-sub-menu').removeClass('hidden');
+      $( ".sub_modules a" ).removeClass( "active" )
+       $('.sticker_orders a').addClass("active")
+      $('.main-content').html('<div class="loader"></div>');
+      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/supplier-management/suppliers",
+          type: "Post",
+          dataType:"json",
+          data: {_token:csrf_token},
+          beforeSend: function () {
+              $(".loader").show();
+              $(".loader").css('margin-top','12%');
+          },
+          success: function (data) {
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSupplierModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="suppliersListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
+            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.suppliers, function(i, item){
+             var index = i+1;
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td></tr>';
+            });
+            table += '</tbody></table></div>';
+            $('.main-content').html(table);
+            $('#suppliers-list-table').DataTable();
+            $("#suppliers-list-table_filter input").addClass('form-control');
+            $("#suppliers-list-table_filter input").attr('placeholder', 'Data Search');
+          },
+          error: function (data) {
+
+          },
+          complete: function () {
+              $(".loader").hide();
+              $(".loader").css('margin-top','0%');
+          }
+      })
+  }
+  function addSupplier()
+  {
+      var factory_code    = $('#factory_code').val();
+      var company_name    = $('#company_name').val();
+      var contact_person  = $('#contact_person').val();
+      var contact_phone   = $('#contact_phone').val();
+      var contact_email   = $('#contact_email').val();
+      var courier_choice  = $('#courier_choice').val();
+      var account_no      =  $('#account_no').val();
+      var tin_number      =  $('#tin_number').val();
+      var pan_number      =  $('#pan_number').val();
+      var login_email     =  $('#login_email').val();
+      var address         =  $('#address').val();
+      var country         =  $('#country').val();
+      var fax             =  $('#pan_number').val();
+      var telephone       =  $('#telephone').val();
+      var address_email   =  $('#address_email').val();
+
+
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+          url: base_url + "/admin/user-management/add-jga-user",
+          method: 'POST',
+          data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,pan_number:pan_number,login_email:login_email,p:p,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email},
+          beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+          },
+          statusCode: {
+               200: function() {
+                    $('#result').html('User Added Successfully')
+                    $("#result").addClass("alert alert-success");
+                    $('#addUserModal').modal('hide');
+                    usersListView();
+               },
+               400: function() {
+                 $('#result').html("Something went wrong!!")
+                 $("#result").addClass("alert alert-dander");
+               },
+               409: function() {
+                    $('#result').html('Email already registered.')
+                    $("#result").addClass("alert alert-warning");
+               }
+          },
+          error: function (data) {
+
+          },
+          complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+          }
+      })
+   }
