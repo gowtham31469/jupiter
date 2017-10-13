@@ -336,7 +336,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
     {
         var disabled='';
         var ttotal='';
-        var thead='<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/>(for parcel/carton & polybag)</th></tr></thead>';
+        var thead='<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th></tr></thead>';
         $.each(data.orchestra_parcel_quantity_details, function (index, value) {
          tr+='<tr><td>'+value.Size+'</td><td>'+value.Quantity+'</td><td>'+data.orchestra_parcel_details[0].ParcelBarCode+'</td></tr>';
 
