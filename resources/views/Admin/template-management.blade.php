@@ -176,8 +176,7 @@
                     dataType:"json",
                     data: {_token:csrf_token,buyer:$(this).find("option:selected").text().toLowerCase()},
                     beforeSend: function () {
-                        $(".loader").show();
-                        $(".loader").css('margin-top','12%');
+                        
                     },
                     success: function (data) {
                          $('.sub-nav-list').html('<li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>')
