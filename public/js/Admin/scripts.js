@@ -193,19 +193,18 @@ function template_list()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-            var template = '<div class="col-md-6 modules_div"> <div class="row">';
+            var template = '<div class="col-md-4 modules_div"> <div class="row">';
              $.each(data, function (index, value) {
                  template+='<div class="main-menu" id="'+value.id+'"><div class="main-module"> '+value.item_name+' <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> </div><div class="new-div">';
                   $.each(value.second, function (index1, value1) {
-                      template+=' <div class="sub-module" id="'+value1.id+'" data-id="'+value.id+'" style="display:none"><span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> '+value1.item_name+' </div><div class="new-div2">';
+                      template+=' <div class="sub-module" id="'+value1.id+'" data-id="'+value.id+'" style="display:none"><span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> '+value1.item_name+' </div>';
                        $.each(value1.third, function (index2, value2) {
-                           template+='<div class="sub-module2" data-id="'+value1.id+'" style="display:none">'+value2.template_name+' </div>';
+                           template+='<div class="sub-module2" data-id="'+value1.id+'" style="display:none"><i class="ion-ios-eye pull-right"></i>'+value2.template_name+' </div>';
                         });
-                      template+='</div>';
                   });
                  template+='</div> </div>';
              });
-            template+='</div> </div>';
+            template+='</div> </div><div class="col-md-8"><div class="viewDiv hidden"></div><div class="loader"></div></div>';
              $('.main-content').html(template); 
              $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Template Management</a></li><li class="active">Template List</li>')
               $('.main-menu').on('click', function (e) {
@@ -224,6 +223,12 @@ function template_list()
                 var dataId = $(this).attr('id')
                 $(".sub-module2").css('display', 'none');
                 $(".sub-module2[data-id='" + dataId + "']").css('display', 'block');
+                e.stopPropagation()
+                })
+            $('.sub-module2').on('click', function (e) {
+                
+                $(".sub-module2").css('display', 'block');
+                $(".sub-module2").css('display', 'block');
                 e.stopPropagation()
                 })
         },
