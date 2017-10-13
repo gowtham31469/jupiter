@@ -512,3 +512,103 @@ input {
     top: 0;
     right: 0;
 }
+.viewDiv {
+    min-height: 200px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background: rgba(238, 238, 238, 0.05);
+}
+  .main-module {
+        border: 1px solid #e5e5e5;
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 2px 0px 12px;
+        min-width: 350px;
+        cursor: pointer;
+        background: #fff;
+        position: relative;
+    }
+
+    .sub-module {
+        display: none;
+        padding: 5px 10px;
+        border: 1px solid #e5e5e5;
+        margin: 2px 50px 12px;
+        width: 290px;
+        cursor: pointer;
+        border-left: 2px solid #1abb9c;
+        position: relative;
+    }
+
+    .sub-module2 {
+        display: none;
+        padding: 5px 10px;
+        border: 1px solid #e5e5e5;
+        margin: 2px 102px 12px;
+        width: 290px;
+        cursor: pointer;
+        border-left: 2px solid #1abb9c;
+        position: relative;
+    }
+
+    .sub-module:after {
+        content: "";
+        position: absolute;
+        border-top: 1px solid #dddddd;
+        width: 22px;
+        right: calc(100% + 2px);
+        TOP: 50%;
+    }
+
+    .sub-module2:after {
+        content: "";
+        position: absolute;
+        border-top: 1px solid #dddddd;
+        width: 22px;
+        right: calc(100% + 2px);
+        TOP: 50%;
+    }
+
+    .modules_div:before {
+        position: absolute;
+        content: "";
+        border-left: 1px solid #ddd;
+        height: calc(100% - 53px);
+        top: 26px;
+        left: 27px;
+        z-index: 0;
+    }
+
+    .modules_div1:after {
+        position: absolute;
+        content: "";
+        border-left: 1px solid #ddd;
+        height: calc(100% - 53px);
+        top: 30px;
+        left: 80px;
+        z-index: 0;
+    }
+.sub-module2:before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 200%;
+    border-left: 1px solid #ddd;
+    left: -25px;
+    top: -15px;
+}
+.sub-module2:after {
+    content: "";
+    position: absolute;
+    border-top: 1px solid #dddddd;
+    width: 22px;
+    height: 20px;
+    right: calc(100% + 2px);
+    TOP: 50%;
+}
+.sub-module2:last-of-type:before {
+    height: 100%;
+}
+.sub-module:last-of-type:after {
+    height: 100%;
+}
