@@ -18,7 +18,7 @@ class CreateBuyersTable extends Migration
             $table->string('buyer_name');
             $table->string('buyer_address');
             $table->string('buyer_email')->unique();
-            $table->integer('buyer_phone');
+            $table->bigInteger('buyer_phone');
             $table->timestamps();
         });
     }

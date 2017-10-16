@@ -11,7 +11,7 @@
                   </ol>
                 <h3><i class="ion-ios-browsers-outline"></i>User Management</h3>
                 <ul class="sub-nav-list">
-                    <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-social-codepen"></i>Dashboard</a></li>
+                    <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-grid"></i>Dashboard</a></li>
                     <li class="users-list-view"><a class="" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li>
                     <li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li>
                 </ul>
@@ -146,12 +146,12 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('user_role', 'User Role', ['class' => 'form_label']) !!}
-                          {{  Form::select('user_role',(['' => 'Select User Role']+ $roles->toArray()),'',array('class' => 'form-control input-sm','id'=>'user_role','required')) }}
+                          {{  Form::select('user_role',(['' => '-- Select User Role --']),'',array('class' => 'form-control input-sm','id'=>'user_role','required')) }}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <p>By clicking ADD USER a email will be sent to user with his/her login details.</p>
+                        <!-- <p>By clicking ADD USER a email will be sent to user with his/her login details.</p> -->
                         {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
                         {!! Form::submit('Add User', ['class' => 'btn btn-primary'] ) !!}
                     </div>
@@ -208,7 +208,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_user_role', 'User Role', ['class' => 'form_label']) !!}
-                          {{  Form::select('edit_user_role',(['' => 'Select User Role']+ $roles->toArray()),'',array('class' => 'form-control input-sm','id'=>'edit_user_role','required')) }}
+                          {{  Form::select('edit_user_role',(['' => '-- Select User Role --']),'',array('class' => 'form-control input-sm','id'=>'edit_user_role','required')) }}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -294,7 +294,7 @@
                                 </div>
                                 <div class="new1">
                                     @foreach($sub_mod->second as $key1 => $sub_mod1)
-                                    <div class="sub-module" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}">
+                                    <div class="sub-module" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}" style="margin: 2px 35px 12px;">
                                         <input class="sub-input" type="checkbox" data-id="{{$sub_mod->id}}" value="{{$sub_mod1->id}}">
                                         <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> {{$sub_mod1->module_name}} </div>
                                         <div class="new2" id="{{$sub_mod->id}}">
@@ -368,7 +368,7 @@
                               </div>
                               <div class="new-edit">
                                   @foreach($sub_mod->second as $key1 => $sub_mod1)
-                                  <div class="sub-module-edit" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}">
+                                  <div class="sub-module-edit" id="{{$sub_mod1->id}}" data-id="{{$sub_mod->id}}" style="margin: 2px 35px 12px;">
                                       <input class="sub-input-edit" type="checkbox" data-id="{{$sub_mod->id}}" value="{{$sub_mod1->id}}">
                                       <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> {{$sub_mod1->module_name}} </div>
                                       <div class="new1-edit" id="{{$sub_mod->id}}">
@@ -401,7 +401,7 @@
             </div>
             {!! Form::open(['id' => 'delete_user_role_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
-                  <div id="delete_result"></div>
+                  <div id="delete_user_role_result"></div>
                     <div class="form-group has-feedback">
                       <p>You are about to delete user role. Do you want to proceed?</p>
                        {!! Form::hidden('id',$value = null, array('id'=>'delete_user_role_id','class' => 'form-control input-sm')) !!}
@@ -468,22 +468,13 @@
         $('#edit_result').hide();
         $('#result').hide();
         $('#delete_result').hide();
+        $('#delete_user_role_result').hide();
         $('#role_result').hide();
         $('#edit_role_result').hide();
         $('.main-input').prop('checked', false)
         $('.sub-input').prop('checked', false)
         $('.sub-input2').prop('checked', false)
        })
-     /**  Validation for mobile number **/
-     function isNumber(evt) {
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-      {
-          return false;
-      }
-        return true;
-      }
       /** submit add user form **/
       $('#add_user_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -560,14 +551,14 @@
     })
     })
     $('.role_permissions_div').ready(function () {
-    $('.new1-edit').each(function () {
+    $('.new-edit').each(function () {
         var submod_no = $(this).find('.sub-module-edit').length;
         if (submod_no == 0)
         {
             $(this).prev('.main-module-edit').find('span').css('display', 'none')
         }
     })
-    $('.new2-edit').each(function () {
+    $('.new1-edit').each(function () {
         var submod_no = $(this).find('.sub-module2-edit').length;
         if (submod_no == 0)
         {
@@ -676,8 +667,6 @@
           var topModule = $(this).closest('.new2').attr("id");
           console.log(topModule);
           var checkedMain = [];
-          //$('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
-          //$('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
 
           $('.sub-input[data-id="' + topModule + '"]').each(function(){
             if ($(this).is(":checked")){
@@ -756,12 +745,11 @@
      })
      /** Open and close sub modules level 1 **/
      $('.main-menu-edit').on('click', function (e) {
-     // $('.main-module').css('background', 'white')
-     // $('.main-module').css('color', '#73879C')
-     // $('.main-module').css('border-color', '#e5e5e5')
-     // $(this).find('.main-module').css('background', 'rgb(238, 238, 238)')
-     // $(this).find('.main-module').css('color', '#000')
-     // $(this).find('.main-module').css('border-color', 'rgb(238, 238, 238)')
+     $('.main-menu-edit').css('background', 'white')
+     $('.main-menu-edit').css('color', '#73879C')
+     $(this).find('.main-menu-edit').css('background', 'rgb(238, 238, 238)')
+     $(this).find('.main-menu-edit').css('color', '#000')
+     $(this).find('.main-menu-edit').css('border-color', 'rgb(238, 238, 238)')
      $('.main-module-edit').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
      $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
      var dataId = $(this).attr('id')
@@ -772,12 +760,11 @@
      })
      /** Open and close sub modules level 2 **/
      $('.sub-module-edit').on('click', function (e) {
-     // $('.sub-module').css('background', 'white')
-     // $('.sub-module').css('color', '#73879C')
-     // $('.sub-module').css('border-color', '#e5e5e5')
-     // $(this).find('.sub-module').css('background', 'rgb(238, 238, 238)')
-     // $(this).find('.sub-module').css('color', '#000')
-     // $(this).find('.sub-module').css('border-color', 'rgb(238, 238, 238)')
+     $('.sub-module-edit').css('background', 'white')
+     $('.sub-module-edit').css('color', '#73879C')
+     $(this).find('.sub-module-edit').css('background', 'rgb(238, 238, 238)')
+     $(this).find('.sub-module-edit').css('color', '#000')
+     $(this).find('.sub-module-edit').css('border-color', 'rgb(238, 238, 238)')
      $('.sub-module-edit').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
      $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
      var dataId = $(this).attr('id')
@@ -821,7 +808,6 @@
          else
          {
            var checked = [];
-           //$('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
            $('.sub-input2-edit[data-id="' + subModule + '"]').prop('checked', false)
 
            $('.sub-input-edit[data-id="' + mainModule + '"]').each(function(){
@@ -855,9 +841,6 @@
            var topModule = $(this).closest('.new1-edit').attr("id");
            console.log(topModule);
            var checkedMain = [];
-           //$('.main-module').find('input[value="' + mainModule + '"]').prop('checked', false)
-           //$('.sub-input2[data-id="' + subModule + '"]').prop('checked', false)
-
            $('.sub-input-edit[data-id="' + topModule + '"]').each(function(){
              if ($(this).is(":checked")){
                checkedMain.push($(this).val());

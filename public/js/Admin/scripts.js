@@ -202,7 +202,7 @@ function template_list()
                  template+='</div> </div>';
              });
             template+='</div> </div><div class="col-md-8"><div class="viewDiv hidden"></div><div class="loader"></div></div>';
-             $('.main-content').html(template); 
+             $('.main-content').html(template);
              $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Template Management</a></li><li class="active">Template List</li>')
               $('.main-menu').on('click', function (e) {
                 $('.main-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
@@ -213,7 +213,7 @@ function template_list()
                 $(".sub-module[data-id='" + dataId + "']").css('display', 'inline-block');
                 e.stopPropagation()
                 })
-            
+
                 $('.sub-module').on('click', function (e) {
                 $('.sub-module').find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right')
                 $(this).find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
@@ -223,7 +223,7 @@ function template_list()
                 e.stopPropagation()
                 })
             $('.sub-module2').on('click', function (e) {
-                
+
                 $(".sub-module2").css('display', 'block');
                 $(".sub-module2").css('display', 'block');
                 e.stopPropagation()
@@ -237,7 +237,7 @@ function template_list()
             $(".loader").css('margin-top','0%');
         }
     })
-}   
+}
 
 function orchestra_create_template_view(obj)
 {
@@ -589,7 +589,7 @@ function washcarelabels(data)
             var instruction_option="";
             var parts_option="";
             var composition_option="<option>Select Option</option>";
-         
+
              $.each(data.orchestra_countries, function (index, value) {
                         made_option+="<option value="+value.id+">"+value.english+"</option>";
                     });
@@ -623,22 +623,22 @@ function washcarelabels(data)
                      {
                           cleaning_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
                      }
-               
+
             });
              $('.top-content').append('<div class="modal wash_care_label_main" artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">WashCare Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Washing</label><select class="form-control washing_select">'+washing_option+'</select> </div><div class="form-group"><label>Whitening</label><select class="form-control whitening_select">'+whitening_option+'</select> </div><div class="form-group"><label>Dryer</label><select class="form-control dryer_select">'+dryer_option+'</select> </div><div class="form-group"><label>Ironing</label><select class="form-control ironing_select">'+ironing_option+'</select> </div><div class="form-group"><label>Cleaning</label><select class="form-control cleaning_select">'+cleaning_option+'</select> </div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="front-side"><object id="washcare_svg1" style="width:550px" data="/storage/app/template/WCL.svg" type="image/svg+xml"></object><object id="washcare_svg2" style="margin-top: 0px;margin-left: -194px;display: inline-block;width: 186.6px;" data="/storage/app/template/WCL2.svg" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="form-group"><label>Made in</label><select class="form-control made_select">'+made_option+'</select> </div><div class="form-group"><label>Care Instructions</label><select class="form-control instruction_select" multiple>'+instruction_option+'</select> </div><div class="form-group"><label>Parts</label><select class="form-control parts_select" multiple>'+parts_option+'</select> </div><div class="form-group"><label>Compositions</label><select class="form-control composition_select">'+composition_option+'</select> </div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>');
-    
+
      $('.instruction_select').select2({
                 placeholder: "Select Option",
                 allowClear: true
              });
-    
+
      $('.parts_select').select2({
                 placeholder: "Select Option",
                 allowClear: true
              });
-    
+
             $('.select2-dropdown').css('width','270px')
-    
+
                 function formatData (data) {
                   if (!data.id) { return data.text; }
                     console.log(data)
@@ -672,7 +672,7 @@ function washcarelabels(data)
                   templateSelection: formatData
 
                 });
-    
+
                         $('.washing_select').change(function() {
                             if($(this).val() != "")
                             {
@@ -683,7 +683,7 @@ function washcarelabels(data)
                             {
                                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href',""); svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href',"");
                             }
-                            
+
 
                         });
                         $('.whitening_select').change(function() {
@@ -732,7 +732,7 @@ function washcarelabels(data)
                             }
 
                         });
-    
+
                          var mySVG = document.getElementById("washcare_svg1");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
@@ -752,7 +752,7 @@ function washcarelabels(data)
                               svgDoc.getElementById("size_in_fr_en2").innerHTML=data.order_details[0].cm+"cm / "+ data.order_details[0].in+"in";
                              svgDoc.getElementById("size1").innerHTML=data.order_details[0].Size.replace(" ","").toLowerCase()+"/"+size1;
                              svgDoc.getElementById("size2").innerHTML=data.order_details[0].Size.replace(" ","").toLowerCase()+"/"+size1;
-                                
+
                                var code = data.order_details[0].BarcodeForPricesTags.toString();
                                 JsBarcode("#ean-13", code, {
                                     format: "ean13",
@@ -819,7 +819,7 @@ function hangtagmodal(data)
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
-    
+
              $.each(data.orchestra_countries, function (index, value) {
                         made_option+="<option value="+value.id+">"+value.english+"</option>";
                     });
@@ -853,15 +853,15 @@ function hangtagmodal(data)
                      {
                           cleaning_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
                      }
-               
+
             });
              $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
-    
+
      $('.instruction_select').select2({
                 placeholder: "Select Option",
                 allowClear: true
              });
-    
+
      $('.parts_select').select2({
                 placeholder: "Select Option",
                 allowClear: true
@@ -1016,8 +1016,8 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
       $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
 
       $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
-    
-    
+
+
      $('#washcare_label_card').on('click', function (e) {
           washcare+=1;
           $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_'+washcare+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right">Click to edit</p> <h5>Washcare label</h5></div><div class="img_artwork"></div></div></div><div class="modal washcare_label_'+washcare+' artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Wash Care Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="sample-artwork1"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="front-side"><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>')
@@ -1038,7 +1038,7 @@ function usersListView()
     $('#add_user_form').trigger("reset");
     $.ajax({
         url: base_url + "/admin/user-management/users",
-        type: "Post",
+        type: "get",
         dataType:"json",
         data: {_token:csrf_token},
         beforeSend: function () {
@@ -1046,7 +1046,25 @@ function usersListView()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-          $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Users</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a class="active" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
+          $.ajax({
+              url: base_url + "/admin/user-management/get-user-roles",
+              method: 'get',
+              success: function (data) {
+                console.log(data.roles);
+                var appenddata = "<option value = ''>-- Select User Role --</option>";
+                $.each(data.roles, function (key, value) {
+
+                appenddata += "<option value = '"+value.id+"'>" +value.user_role_name+" </option>";
+                });
+              $('#user_role').html(appenddata);
+              },
+              error: function (data) {
+
+              },
+              complete: function () {
+              }
+          })
+          $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Users</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addUserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Users</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li><a class="active" href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
           var table = '<div class="col" id="user-table"><table id="users-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.users, function(i, item){
             table += '<tr id="'+item.id+'"><td>'+item.user_id+'</td><td>'+item.name+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.email+'</td><td>'+item.phone+'</td><td>'+item.address+'</td>';
@@ -1085,7 +1103,7 @@ function rolesListView()
     $('#add_user_form').trigger("reset");
     $.ajax({
         url: base_url + "/admin/user-management/roles",
-        type: "Post",
+        type: "get",
         dataType:"json",
         data: {_token:csrf_token},
         beforeSend: function () {
@@ -1093,7 +1111,7 @@ function rolesListView()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-          $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Roles</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addRoleModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>User Management Dashboard</a></li><li class="users-list-view"><a href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="active" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
+          $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">User Management</a></li><li class="active">Roles</li></ol><h3><i class="ion-ios-browsers-outline"></i>User Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addRoleModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Roles</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li><a href="#" onclick="usersListView()"><i class="ion-ios-pricetag"></i>Users</a></li><li class="roles-list-view"><a class="active" href="#" onclick="rolesListView()"><i class="ion-ios-pricetag"></i>Roles</a></li></ul><hr/></div>');
           var table = '<div class="col" id="user-table"><table id="roles-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Role Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
           $.each(data.roles, function(i, item){
            table += '<tr id="'+item.id+'"><td>'+item.role_id+'</td><td><span class="badge badge-pill ">'+item.user_role_name+'</span></td><td>'+item.user_role_description+'</td>';
@@ -1144,16 +1162,20 @@ function addUser()
         },
         statusCode: {
              200: function() {
+                  $('#result').removeAttr('style');
                   $('#result').html('User Added Successfully')
                   $("#result").addClass("alert alert-success");
                   $('#addUserModal').modal('hide');
+                  rolesListView();
                   usersListView();
              },
              400: function() {
+               $('#result').removeAttr('style');
                $('#result').html("Something went wrong!!")
                $("#result").addClass("alert alert-dander");
              },
              409: function() {
+                  $('#result').removeAttr('style');
                   $('#result').html('Email already registered.')
                   $("#result").addClass("alert alert-warning");
              }
@@ -1182,6 +1204,23 @@ function addUser()
        beforeSend: function () {
          $(".loader").show();
          $(".loader").css('margin-top','12%');
+         $.ajax({
+             url: base_url + "/admin/user-management/get-user-roles",
+             method: 'get',
+             success: function (data) {
+               var appenddata = "<option value = ''>-- Select User Role --</option>";
+                 $.each(data.roles, function (key, value) {
+
+                 appenddata += "<option value = '"+value.id+"'>" +value.user_role_name+" </option>";
+                 });
+             $('#edit_user_role').html(appenddata);
+             },
+             error: function (data) {
+
+             },
+             complete: function () {
+             }
+         })
        },
        success: function(data){
            isSubmitting = false;
@@ -1227,14 +1266,17 @@ function addUser()
             200: function() {
                  $('#edit_result').html('User Updated Successfully')
                  $("#edit_result").addClass("alert alert-success");
+                 $('#edit_result').removeAttr('style');
                  $('#editUserModal').modal('hide');
                  usersListView();
             },
             400: function() {
+              $('#edit_result').removeAttr('style');
               $('#edit_result').html("Something went wrong!!")
               $("#edit_result").addClass("alert alert-dander");
             },
             409: function() {
+                 $('#edit_result').removeAttr('style');
                  $('#edit_result').html('Email already registered.')
                  $("#edit_result").addClass("alert alert-warning");
             }
@@ -1259,12 +1301,14 @@ function addUser()
        data:{_token:csrf_token,id:id},
        statusCode: {
             200: function() {
+                 $('#delete_result').removeAttr('style');
                  $('#delete_result').html('User deleted Successfully')
                  $("#delete_result").addClass("alert alert-success");
                  $('#deleteUserModal').modal('hide');
                  usersListView();
             },
             400: function() {
+              $('#delete_result').removeAttr('style');
               $('#delete_result').html("Something went wrong!!")
               $("#delete_result").addClass("alert alert-dander");
             }
@@ -1295,9 +1339,11 @@ function addRole(permissions)
         },
         statusCode: {
              200: function() {
+                  $('#role_result').removeAttr('style');
                   $('#role_result').html('User Role Added Successfully')
                   $("#role_result").addClass("alert alert-success");
                   $('#addRoleModal').modal('hide');
+                  usersListView();
                   rolesListView();
              }
         },
@@ -1380,8 +1426,9 @@ function addRole(permissions)
          },
          statusCode: {
               200: function() {
-                   $('#role_result').html('User Role Updated Successfully')
-                   $("#role_result").addClass("alert alert-success");
+                   $('#edit_role_result').removeAttr('style');
+                   $('#edit_role_result').html('User Role Updated Successfully')
+                   $("#edit_role_result").addClass("alert alert-success");
                    $('#editRoleModal').modal('hide');
                    rolesListView();
               }
@@ -1409,14 +1456,15 @@ function addRole(permissions)
         data:{_token:csrf_token,id:id},
         statusCode: {
              200: function() {
-                  $('#delete_result').html('User role deleted Successfully')
-                  $("#delete_result").addClass("alert alert-success");
+                  $('#delete_user_role_result').removeAttr('style');
+                  $('#delete_user_role_result').html('User role deleted Successfully')
+                  $("#delete_user_role_result").addClass("alert alert-success");
                   $('#deleteUserRoleModal').modal('hide');
                   rolesListView();
              },
              400: function() {
-               $('#delete_result').html("Something went wrong!!")
-               $("#delete_result").addClass("alert alert-dander");
+               $('#delete_user_role_result').html("Something went wrong!!")
+               $("#delete_user_role_result").addClass("alert alert-dander");
              }
         },
         complete: function () {
@@ -1518,3 +1566,456 @@ function addRole(permissions)
           }
       })
    }
+   function buyers()
+   {
+      $('.main-sub-menu').removeClass('hidden');
+      $( ".sub_modules a" ).removeClass( "active" )
+      $('.sticker_orders a').addClass("active")
+      $('.main-content').html('<div class="loader"></div>');
+      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+           url: base_url + "/admin/buyer-management/buyers",
+           type: "get",
+           dataType:"json",
+           data: {_token:csrf_token},
+           beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+           },
+           success: function (data) {
+               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Buyers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Buyer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-social-codepen"></i>Dashboard</a></li><li><a class="active" href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li><li class="roles-list-view"><a class="" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandiser</a></li></ul><hr/></div>');
+               var table = '<div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
+               $.each(data.buyers, function(i, item){
+                var index = i+1;
+                table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="ion-edit edit-buyer" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a></td></tr>';
+               });
+               table += '</tbody></table></div>';
+               $('.main-content').html(table);
+                $('#buyers-list-table').DataTable();
+                $("#buyers-list-table_filter input").addClass('form-control input-sm');
+                $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
+                 $('#buyers-list-table_length select').addClass('form-control input-sm');
+           },
+           error: function (data) {
+
+           },
+           complete: function () {
+               $(".loader").hide();
+               $(".loader").css('margin-top','0%');
+           }
+       })
+   }
+   function addBuyer()
+   {
+       var name       = $('#buyer_name').val();
+       var email      = $('#buyer_email').val();
+       var phone      = $('#buyer_phone').val();
+       var address    = $('#buyer_address').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+       $.ajax({
+           url: base_url + "/admin/buyer-management/add-jga-buyer",
+           method: 'POST',
+           data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           statusCode: {
+                200: function() {
+                     $('#buyer_result').removeAttr('style');
+                     $('#buyer_result').html('Buyer Added Successfully')
+                     $("#buyer_result").addClass("alert alert-success");
+                     $('#addBuyerModal').modal('hide');
+                     buyers();
+                },
+                400: function() {
+                  $('#buyer_result').removeAttr('style');
+                  $('#buyer_result').html("Something went wrong!!")
+                  $("#buyer_result").addClass("alert alert-dander");
+                },
+                409: function() {
+                     $('#buyer_result').removeAttr('style');
+                     $('#buyer_result').html('Email already registered.')
+                     $("#buyer_result").addClass("alert alert-warning");
+                }
+           },
+           error: function (data) {
+
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+    }
+   var isSubmitting = false;
+   function getBuyer(id)
+   {
+     if(isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+     $.ajax({
+         url:base_url + "/admin/buyer-management/get-buyer-details",
+         dataType:"json",
+         method:"get",
+         data:{id:id},
+         beforeSend: function () {
+           $(".loader").show();
+           $(".loader").css('margin-top','12%');
+         },
+         success: function(data){
+             isSubmitting = false;
+             $('#buyer_edit_id').val(id);
+             $('#edit_buyer_name').val(data.buyer[0].buyer_name);
+             $('#edit_buyer_email').val(data.buyer[0].buyer_email);
+             $('#edit_buyer_phone').val(data.buyer[0].buyer_phone);
+             $('#edit_buyer_address').val(data.buyer[0].buyer_address);
+             $('#editBuyerModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+             })
+             $('#edit_buyer_form').validator('validate');
+             $('#editBuyerModal').modal('show');
+         },
+         complete: function () {
+           $(".loader").hide();
+           $(".loader").css('margin-top','0%');
+         }
+     })
+   }
+   function editBuyer()
+   {
+     var id         = $('#buyer_edit_id').val();
+     var name       = $('#edit_buyer_name').val();
+     var phone      = $('#edit_buyer_phone').val();
+     var email      = $('#edit_buyer_email').val();
+     var address    = $('#edit_buyer_address').val();
+     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+     $.ajax({
+         url:base_url + "/admin/buyer-management/update-buyer-details",
+         dataType:"json",
+         beforeSend: function () {
+           $(".loader").show();
+           $(".loader").css('margin-top','12%');
+         },
+         method:"put",
+         data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
+         statusCode: {
+              200: function() {
+                   $('#edit_buyer_result').removeAttr('style');
+                   $('#edit_buyer_result').html('Buyer Updated Successfully')
+                   $("#edit_buyer_result").addClass("alert alert-success");
+                   $('#editBuyerModal').modal('hide');
+                   buyers();
+              },
+              400: function() {
+                $('#edit_buyer_result').removeAttr('style');
+                $('#edit_buyer_result').html("Something went wrong!!")
+                $("#edit_buyer_result").addClass("alert alert-dander");
+              },
+              409: function() {
+                   $('#edit_buyer_result').removeAttr('style');
+                   $('#edit_buyer_result').html('Email already registered.')
+                   $("#edit_buyer_result").addClass("alert alert-warning");
+              }
+         },
+         complete: function () {
+           $(".loader").hide();
+           $(".loader").css('margin-top','0%');
+         }
+     })
+   }
+   function deleteBuyer(id)
+   {
+     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+     $.ajax({
+         url:base_url + "/admin/buyer-management/delete-buyer",
+         dataType:"json",
+         beforeSend: function () {
+           $(".loader").show();
+           $(".loader").css('margin-top','12%');
+         },
+         method:"delete",
+         data:{_token:csrf_token,id:id},
+         statusCode: {
+              200: function() {
+                   $('#delete_buyer_result').removeAttr('style');
+                   $('#delete_buyer_result').html('Buyer deleted Successfully')
+                   $("#delete_buyer_result").addClass("alert alert-success");
+                   $('#deleteBuyerModal').modal('hide');
+                   buyers();
+              },
+              400: function() {
+                $('#delete_buyer_result').removeAttr('style');
+                $('#delete_buyer_result').html("Something went wrong!!")
+                $("#delete_buyer_result").addClass("alert alert-dander");
+              }
+         },
+         complete: function () {
+           $(".loader").hide();
+           $(".loader").css('margin-top','0%');
+         }
+     })
+   }
+   /**  Validation for mobile number **/
+   function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+    {
+        return false;
+    }
+      return true;
+    }
+
+    function merchandiser()
+    {
+      $('.main-sub-menu').removeClass('hidden');
+      $( ".sub_modules a" ).removeClass( "active" )
+      $('.sticker_orders a').addClass("active")
+      $('.main-content').html('<div class="loader"></div>');
+      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+           url: base_url + "/admin/buyer-management/merchandiser",
+           type: "get",
+           dataType:"json",
+           data: {_token:csrf_token},
+           beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+               $.ajax({
+                   url: base_url + "/admin/buyer-management/get-buyers",
+                   method: 'get',
+                   success: function (data) {
+                     var appenddata = "<option value = ''>-- Select Buyers --</option>";
+                       $.each(data.buyers, function (key, value) {
+
+                       appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
+                       });
+                   $('#merchandiser_buyer').html(appenddata);
+                   var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
+                     $.each(data.suppliers, function (key, value) {
+
+                     appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
+                     });
+                 $('#merchandiser_supplier').html(appenddata1);
+                   },
+                   error: function (data) {
+
+                   },
+                   complete: function () {
+                   }
+               })
+           },
+           success: function (data) {
+               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Merchandisers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Merchandiser</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-social-codepen"></i>Dashboard</a></li><li><a  href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li><li class="roles-list-view"><a class="active" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandisers</a></li></ul><hr/></div>');
+               var table = '<div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Supplier Name</th><th>Buyer Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
+               $.each(data.merchandisers, function(i, item){
+                var index = i+1;
+                table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="ion-edit edit-merchandiser" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
+               });
+               table += '</tbody></table></div>';
+               $('.main-content').html(table);
+                $('#merchandisers-list-table').DataTable();
+                $("#merchandisers-list-table_filter input").addClass('form-control input-sm');
+                $("#merchandisers-list-table_filter input").attr('placeholder', 'Data Search');
+                 $('#merchandisers-list-table_length select').addClass('form-control input-sm');
+           },
+           error: function (data) {
+
+           },
+           complete: function () {
+               $(".loader").hide();
+               $(".loader").css('margin-top','0%');
+           }
+       })
+    }
+    function addMerchandiser()
+    {
+        var name                   = $('#merchandiser_name').val();
+        var email                  = $('#merchandiser_email').val();
+        var password               = $('#merchandiser_password').val();
+        var phone                  = $('#merchandiser_phone').val();
+        var address                = $('#merchandiser_address').val();
+        var merchandiser_buyer     = $('#merchandiser_buyer option:selected').val();
+        var merchandiser_supplier  = $('#merchandiser_supplier option:selected').val();
+        var csrf_token             = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: base_url + "/admin/buyer-management/add-merchandiser",
+            method: 'POST',
+            data: {_token:csrf_token,name:name,email:email,phone:phone,address:address,p:password,merchandiser_buyer:merchandiser_buyer,merchandiser_supplier:merchandiser_supplier},
+            beforeSend: function () {
+              $(".loader").show();
+              $(".loader").css('margin-top','12%');
+            },
+            statusCode: {
+                 200: function() {
+                      $('#add_merchandiser_result').removeAttr('style');
+                      $('#add_merchandiser_result').html('Merchandiser Added Successfully')
+                      $("#add_merchandiser_result").addClass("alert alert-success");
+                      $('#addMerchandiserModal').modal('hide');
+                      merchandiser();
+                 },
+                 400: function() {
+                   $('#add_merchandiser_result').removeAttr('style');
+                   $('#add_merchandiser_result').html("Something went wrong!!")
+                   $("#add_merchandiser_result").addClass("alert alert-dander");
+                 },
+                 409: function() {
+                      $('#add_merchandiser_result').removeAttr('style');
+                      $('#add_merchandiser_result').html('Email already registered.')
+                      $("#add_merchandiser_result").addClass("alert alert-warning");
+                 }
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+              $(".loader").hide();
+              $(".loader").css('margin-top','0%');
+            }
+        })
+     }
+     var isSubmitting = false;
+     function getMerchandiser(id)
+     {
+       if(isSubmitting) {
+            return;
+        }
+        isSubmitting = true;
+       $.ajax({
+           url:base_url + "/admin/buyer-management/get-merchandiser-details",
+           dataType:"json",
+           method:"get",
+           data:{id:id},
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+             $.ajax({
+                 url: base_url + "/admin/buyer-management/get-buyers",
+                 method: 'get',
+                 success: function (data) {
+                   var appenddata = "<option value = ''>-- Select Buyers --</option>";
+                     $.each(data.buyers, function (key, value) {
+
+                     appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
+                     });
+                 $('#edit_merchandiser_buyer').html(appenddata);
+                 var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
+                   $.each(data.suppliers, function (key, value) {
+
+                   appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
+                   });
+               $('#edit_merchandiser_supplier').html(appenddata1);
+                 },
+                 error: function (data) {
+
+                 },
+                 complete: function () {
+                 }
+             })
+           },
+           success: function(data){
+               isSubmitting = false;
+               $('#merchandiser_edit_id').val(id);
+               $('#edit_merchandiser_name').val(data.merchandiser[0].merchandiser_name);
+               $('#edit_merchandiser_email').val(data.merchandiser[0].email);
+               $('#edit_merchandiser_phone').val(data.merchandiser[0].merchandiser_phone);
+               $('#edit_merchandiser_address').val(data.merchandiser[0].merchandiser_address);
+               $('#edit_merchandiser_supplier').val(data.merchandiser[0].customer_id);
+               $('#edit_merchandiser_buyer').val(data.merchandiser[0].buyer_id);
+               $('#editMerchandiserModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+               })
+               $('#edit_merchandiser_form').validator('validate');
+               $('#editMerchandiserModal').modal('show');
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+     }
+     function editMerchandiser()
+     {
+       var id         = $('#merchandiser_edit_id').val();
+       var name       = $('#edit_merchandiser_name').val();
+       var phone      = $('#edit_merchandiser_phone').val();
+       var email      = $('#edit_merchandiser_email').val();
+       var address    = $('#edit_merchandiser_address').val();
+       var supplier   = $('#edit_merchandiser_supplier').val();
+       var buyer      = $('#edit_merchandiser_buyer').val();
+
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/buyer-management/update-merchandiser-details",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address,supplier:supplier,buyer:buyer},
+           statusCode: {
+                200: function() {
+                     $('#edit_merchandiser_result').removeAttr('style');
+                     $('#edit_merchandiser_result').html('Merchandiser Updated Successfully')
+                     $("#edit_merchandiser_result").addClass("alert alert-success");
+                     $('#editMerchandiserModal').modal('hide');
+                     merchandiser();
+                },
+                400: function() {
+                  $('#edit_merchandiser_result').removeAttr('style');
+                  $('#edit_merchandiser_result').html("Something went wrong!!")
+                  $("#edit_merchandiser_result").addClass("alert alert-dander");
+                },
+                409: function() {
+                     $('#edit_merchandiser_result').removeAttr('style');
+                     $('#edit_merchandiser_result').html('Email already registered.')
+                     $("#edit_merchandiser_result").addClass("alert alert-warning");
+                }
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+     }
+     function deleteMerchandiser(id)
+     {
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/buyer-management/delete-merchandiser",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('#delete_merchandiser_result').removeAttr('style');
+                     $('#delete_merchandiser_result').html('Merchandiser deleted Successfully')
+                     $("#delete_merchandiser_result").addClass("alert alert-success");
+                     $('#deleteMerchandiserModal').modal('hide');
+                     merchandiser();
+                },
+                400: function() {
+                  $('#delete_merchandiser_result').removeAttr('style');
+                  $('#delete_merchandiser_result').html("Something went wrong!!")
+                  $("#delete_merchandiser_result").addClass("alert alert-dander");
+                }
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+     }
