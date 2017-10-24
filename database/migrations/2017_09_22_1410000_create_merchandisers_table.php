@@ -21,7 +21,7 @@ class CreateMerchandisersTable extends Migration
           $table->string('email');
           $table->string('password');
           $table->string('merchandiser_address');
-          $table->integer('merchandiser_phone');
+          $table->bigInteger('merchandiser_phone');
           $table->rememberToken();
           $table->timestamps();
           $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');

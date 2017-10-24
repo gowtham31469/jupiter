@@ -41,8 +41,9 @@ Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
-Route::post('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
-Route::post('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
+Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
+Route::get('admin/user-management/get-user-roles', 'Admin\UserManagement\UserManagementController@getUserRoles');
+Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
 Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserManagementController@addJgaUser');
 Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserManagementController@getUserById');
 Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
@@ -51,14 +52,23 @@ Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserMan
 Route::get('admin/user-management/get-user-role-details', 'Admin\UserManagement\UserManagementController@getUserRoleById');
 Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserManagementController@updateUserRoleById');
 Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
-/** User Management **/
+/** supplier Management **/
 Route::get('admin/supplier-management', 'Admin\SupplierManagement\SupplierManagementController@index');
 Route::post('admin/supplier-management/suppliers', 'Admin\SupplierManagement\SupplierManagementController@suppliers');
-Route::get('admin/buyer-management', 'Admin\BuyerManagementController@index');
-Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagementController@buyerList');
-Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagementController@addJgaBuyer');
+/** buyer Management **/
+Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
+Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
+Route::get('admin/buyer-management/get-buyers', 'Admin\BuyerManagement\BuyerManagementController@getBuyers');
+Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagement\BuyerManagementController@addJgaBuyer');
+Route::get('admin/buyer-management/get-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@getBuyerById');
+Route::put('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
+Route::delete('admin/buyer-management/delete-buyer', 'Admin\BuyerManagement\BuyerManagementController@deleteBuyerById');
 
-Route::get('admin/buyer-management/merchandiser', 'Admin\BuyerManagementController@merchandiserList');
+Route::get('admin/buyer-management/merchandiser', 'Admin\BuyerManagement\BuyerManagementController@merchandiserList');
+Route::post('admin/buyer-management/add-merchandiser', 'Admin\BuyerManagement\BuyerManagementController@addMerchandiser');
+Route::get('admin/buyer-management/get-merchandiser-details', 'Admin\BuyerManagement\BuyerManagementController@getMerchandiserById');
+Route::put('admin/buyer-management/update-merchandiser-details', 'Admin\BuyerManagement\BuyerManagementController@updateMerchandiserById');
+Route::delete('admin/buyer-management/delete-merchandiser', 'Admin\BuyerManagement\BuyerManagementController@deleteMerchandiserById');
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
@@ -127,4 +137,3 @@ Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestr
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
 // Route::post('multi-upload', 'UploadController@csvMultiUpload');
-

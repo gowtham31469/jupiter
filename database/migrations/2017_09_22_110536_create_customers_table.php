@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
           $table->string('factory_code');
           $table->string('contact_person');
           $table->string('contact_email');
-          $table->integer('phone_no');
+          $table->bigInteger('phone_no');
           $table->string('courier_choice');
           $table->string('account_no');
           $table->string('tin_number');

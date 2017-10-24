@@ -518,18 +518,37 @@ input {
     padding: 15px;
     background: rgba(238, 238, 238, 0.05);
 }
+  .role_permissions_div:before,.modules_div:before{
+      position: absolute;
+      content: "";
+      border-left: 1px solid #ddd;
+      height: calc(100% - 53px);
+      top: 29px;
+      left: 27px;
+      z-index: 0;
+  }
   .main-module {
         border: 1px solid #e5e5e5;
         display: inline-block;
         padding: 5px 10px;
-        margin: 2px 0px 12px;
+        margin: 0px 0px 12px;
         min-width: 350px;
         cursor: pointer;
         background: #fff;
         position: relative;
     }
+    .main-module-edit {
+          border: 1px solid #e5e5e5;
+          display: inline-block;
+          padding: 5px 10px;
+          margin: 0px 0px 12px;
+          min-width: 350px;
+          cursor: pointer;
+          background: #fff;
+          position: relative;
+      }
 
-    .sub-module {
+    .sub-module,.sub-module-edit {
         display: none;
         padding: 5px 10px;
         border: 1px solid #e5e5e5;
@@ -540,7 +559,7 @@ input {
         position: relative;
     }
 
-    .sub-module2 {
+    .sub-module2,.sub-module2-edit {
         display: none;
         padding: 5px 10px;
         border: 1px solid #e5e5e5;
@@ -551,7 +570,7 @@ input {
         position: relative;
     }
 
-    .sub-module:after {
+    .sub-module:after,.sub-module-edit:after {
         content: "";
         position: absolute;
         border-top: 1px solid #dddddd;
@@ -559,16 +578,15 @@ input {
         right: calc(100% + 2px);
         TOP: 50%;
     }
-
-    .sub-module2:after {
+    .sub-module2:after,.sub-module2-edit:after {
         content: "";
         position: absolute;
         border-top: 1px solid #dddddd;
         width: 22px;
+        height: 20px;
         right: calc(100% + 2px);
         TOP: 50%;
     }
-
     .modules_div:before {
         position: absolute;
         content: "";
@@ -588,7 +606,7 @@ input {
         left: 80px;
         z-index: 0;
     }
-.sub-module2:before {
+.sub-module2:before,.sub-module2-edit:before  {
     content: "";
     position: absolute;
     width: 1px;
@@ -596,15 +614,6 @@ input {
     border-left: 1px solid #ddd;
     left: -25px;
     top: -15px;
-}
-.sub-module2:after {
-    content: "";
-    position: absolute;
-    border-top: 1px solid #dddddd;
-    width: 22px;
-    height: 20px;
-    right: calc(100% + 2px);
-    TOP: 50%;
 }
 .sub-module2:last-of-type:before {
     height: 100%;

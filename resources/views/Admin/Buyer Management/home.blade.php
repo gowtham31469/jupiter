@@ -11,7 +11,7 @@
                   </ol>
                 <h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3>
                 <ul class="sub-nav-list">
-                    <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-social-codepen"></i>Dashboard</a></li>
+                    <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-grid"></i>Dashboard</a></li>
                     <li class="suppliers-list-view"><a class="" href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li>
                     <li class="suppliers-list-view"><a class="" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandiser</a></li>
                 </ul>
@@ -89,7 +89,7 @@
             </div>
         </div>
     </div>
-     <div class="modal fade" id="addbuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal fade" id="addBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -98,38 +98,38 @@
                 </div>
                 {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
-                      <div id="result"></div>
+                      <div id="buyer_result"></div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('name', 'Buyer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                          {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('email', 'Buyer Email', ['class' => 'form_label']) !!}
+                          {!! Form::label('buyer_email', 'Email', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">@</span>
-                            {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                            {!! Form::email('buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                           </div>
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('phone', 'Buyer Phone', ['class' => 'form_label']) !!}
+                          {!! Form::label('buyer_phone', 'Phone', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">+91</span>
-                            {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                            {!! Form::text('buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          </div>
                          <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('address', 'Buyer Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                          {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
+                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                           <div class="help-block with-errors"></div>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer">
                         {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
@@ -139,6 +139,233 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Buyer</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     <div id="edit_buyer_result"></div>
+                     {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_email', 'Email', ['class' => 'form_label']) !!}
+                         <div class="input-group">
+                           <span class="input-group-addon" id="basic-addon1">@</span>
+                           {!! Form::email('edit_buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                         </div>
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_phone', 'Phone', ['class' => 'form_label']) !!}
+                         <div class="input-group">
+                           <span class="input-group-addon" id="basic-addon1">+91</span>
+                           {!! Form::text('edit_buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
+                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                         <div class="help-block with-errors"></div>
+                       </div>
+
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Edit Buyer', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+   <div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Buyer</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     <div id="delete_buyer_result"></div>
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete buyer. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_buyer_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete Buyer', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+   <div class="modal fade" id="addMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Add Merchandiser</h4>
+              </div>
+              {!! Form::open(['id' => 'add_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
+                  <div class="modal-body">
+                    <div id="add_merchandiser_result"></div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_name', 'Name', ['class' => 'form_label']) !!}
+                        {!! Form::text('merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_email', 'Email', ['class' => 'form_label']) !!}
+                        <div class="input-group">
+                          <span class="input-group-addon" id="basic-addon1">@</span>
+                          {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_password', 'Password', ['class' => ' form_label']) !!}
+                        <div class="input-group">
+                          {!! Form::text('merchandiser_password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
+                          <span id="generatePwd" class="input-group-addon" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
+                          <span class="input-group-addon js-textareacopybtn clipboard" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#merchandiser_password">Copy</span>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
+                        <div class="input-group">
+                          <span class="input-group-addon" id="basic-addon1">+91</span>
+                          {!! Form::text('merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                       </div>
+                       <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_address', 'Address', ['class' => 'form_label']) !!}
+                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_supplier', 'Select Supplier', ['class' => 'form_label']) !!}
+                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Supplier --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                      {!! Form::submit('Add Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                  </div>
+             {!! Form::close() !!}
+          </div>
+      </div>
+  </div>
+  <div class="modal fade" id="editMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title" id="myModalLabel">Edit Merchandiser</h4>
+             </div>
+             {!! Form::open(['id' => 'edit_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 <div class="modal-body">
+                   {!! Form::hidden('merchandiser_edit_id',$value = null, array('id'=>'merchandiser_edit_id','class' => 'form-control input-sm')) !!}
+                   <div id="edit_merchandiser_result"></div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_name', 'Name', ['class' => 'form_label']) !!}
+                       {!! Form::text('edit_merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_email', 'Email', ['class' => 'form_label']) !!}
+                       <div class="input-group">
+                         <span class="input-group-addon" id="basic-addon1">@</span>
+                         {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                       </div>
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
+                       <div class="input-group">
+                         <span class="input-group-addon" id="basic-addon1">+91</span>
+                         {!! Form::text('edit_merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                      </div>
+                      <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
+                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_supplier', 'Select Supplier', ['class' => 'form_label']) !!}
+                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Supplier --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::submit('Edit Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
+ <div class="modal fade" id="deleteMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title" id="myModalLabel">Delete Merchandiser</h4>
+             </div>
+             {!! Form::open(['id' => 'delete_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 <div class="modal-body">
+                   <div id="delete_buyer_result"></div>
+                     <div class="form-group has-feedback">
+                       <p>You are about to delete buyer. Do you want to proceed?</p>
+                        {!! Form::hidden('id',$value = null, array('id'=>'delete_merchandiser_id','class' => 'form-control input-sm')) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::submit('Delete Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
     @endsection
     @else
     <script type="text/javascript">
@@ -147,45 +374,18 @@
     @endif
     @section('jqueryIncludes')
    <script type="text/javascript">
-        function buyers()
-        {
-           $('.main-sub-menu').removeClass('hidden');
-           $( ".sub_modules a" ).removeClass( "active" )
-           $('.sticker_orders a').addClass("active")
-           $('.main-content').html('<div class="loader"></div>');
-           var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
-           $.ajax({
-                url: base_url + "/admin/buyer-management/buyers",
-                type: "get",
-                dataType:"json",
-                data: {_token:csrf_token},
-                beforeSend: function () {
-                    $(".loader").show();
-                    $(".loader").css('margin-top','12%');
-                },
-                success: function (data) {
-                    $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Users</li></ol><h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addbuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Buyer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-social-codepen"></i>Dashboard</a></li><li class="users-list-view"><a class="active" href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li><li class="roles-list-view"><a class="" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandiser</a></li></ul><hr/></div>');
-                     $('.main-content').html(table(data));
-                     $('#datatable-example-2').DataTable();
-                     $("#datatable-example-2_filter input").addClass('form-control input-sm');
-                     $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-                      $('#datatable-example-2_length select').addClass('form-control input-sm');
-                     $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Buyers</li>')
-                },
-                error: function (data) {
+       $( document ).ready(function() {
+         $('#add_buyer_form').trigger("reset");
+         $('#edit_buyer_form').trigger('reset');
+         $('#add_merchandiser_form').trigger('reset');
+         $('#edit_merchandiser_form').trigger('reset');
+         $('#buyer_result').hide();
+         $('#edit_buyer_result').hide();
+         $('#delete_buyer_result').hide();
+         $('#add_merchandiser_result').hide();
+         $('#edit_merchandiser_result').hide();
+       });
 
-                },
-                complete: function () {
-                    $(".loader").hide();
-                    $(".loader").css('margin-top','0%');
-                }
-            })
-        }
-        function merchandiser()
-        {
-            alert()
-        }
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -197,5 +397,124 @@
            addBuyer();
         }
       })
+      /** To refresh modal **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#add_buyer_form').trigger("reset");
+        $('#add_merchandiser_form').trigger('reset');
+        $('#buyer_result').hide();
+        $('#edit_buyer_result').hide();
+        $('#delete_buyer_result').hide();
+        $('#merchandiserr_result').hide();
+        $('#edit_merchandiserr_result').hide();
+        $('#delete_merchandiserr_result').hide();
+       })
+       // get edit buyer details
+       $(document).on('click','.edit-buyer',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           getBuyer(id);
+       });
+       /** submit edit buyer form **/
+       $('#edit_buyer_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            editBuyer();
+         }
+       })
+       $('#deleteBuyerModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_buyer_id').attr('value', config);
+       });
+       /** submit delete buyer form **/
+       $('#delete_buyer_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_buyer_id').val();
+            deleteBuyer(id);
+         }
+       })
+       /** generate password **/
+       $("#generatePwd").validator().click(function(){
+       function randomString(length, chars)
+       {
+         var mask = '';
+         if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+         if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+         if (chars.indexOf('#') > -1) mask += '0123456789';
+         if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
+         var result = '';
+         for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
+         return result;
+       }
+         $("#merchandiser_password").val( randomString(10, 'aA#!'));
+         $('#add_merchandiser_form').validator('validate');
+         })
+         /** Copy password to clipboard **/
+         $( document ).ready(function() {
+           var clipboard = new Clipboard('.clipboard');
+           clipboard.on('success', function(e) {
+             $(e.trigger).text("Copied!");
+             e.clearSelection();
+             setTimeout(function() {
+               $(e.trigger).text("Copy");
+             }, 2500);
+           });
+         });
+         $('#add_merchandiser_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            addMerchandiser();
+         }
+       })
+       // get edit merchandiser details
+       $(document).on('click','.edit-merchandiser',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           getMerchandiser(id);
+       });
+       /** submit edit merchandiser form **/
+       $('#edit_merchandiser_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            editMerchandiser();
+         }
+       })
+       $('#deleteMerchandiserModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_merchandiser_id').attr('value', config);
+       });
+       /** submit delete merchandiser form **/
+       $('#delete_merchandiser_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_merchandiser_id').val();
+            deleteMerchandiser(id);
+         }
+       })
     </script>
     @endsection

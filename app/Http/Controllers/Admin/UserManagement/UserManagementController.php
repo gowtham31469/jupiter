@@ -43,14 +43,13 @@ class UserManagementController extends Controller
               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                   return $view->with(['modules' => $get_main_module]);
               });
-              $roles = DB::table('user_role')->pluck('user_role_name','id');
               $user_id = DB::table('users')->max('id');
               $user_id = $user_id + 1;
               $user_id = "JGAU00".$user_id;
               $role_id = DB::table('user_role')->max('id');
               $role_id = $role_id + 1;
               $role_id = "JGAR00".$role_id;
-              return view('Admin/User Management/home',['roles' => $roles,'user_id' => $user_id,'role_id' => $role_id,'modules_tree' => $modules_tree]);
+              return view('Admin/User Management/home',['user_id' => $user_id,'role_id' => $role_id,'modules_tree' => $modules_tree]);
           }
           else
           {
@@ -373,6 +372,22 @@ class UserManagementController extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
+  }
+  /**
+   * get all user roles.
+   * @author <Praveen>
+   * @return \Illuminate\Http\Response
+   */
+  public function getUserRoles()
+  {
+    try {
+              $roles = DB::table('user_role')->select('user_role_name','id')->get();
+
+              return response()->json(['error'=> false,'message' =>'Success','roles' => $roles],200);
+        } catch (\Exception $e)
+        {
+               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
   }
 
 }

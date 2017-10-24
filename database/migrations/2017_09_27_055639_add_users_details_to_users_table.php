@@ -15,7 +15,7 @@ class AddUsersDetailsToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
           $table->string('user_id')->after('id');
-          $table->string('phone', 12)->nullable()->after('email');
+          $table->bigInteger('phone')->nullable()->after('email');
           $table->string('address')->nullable()->after('password');
           $table->integer('user_role_id')->unsigned()->after('user_id');
           $table->foreign('user_role_id')->references('id')->on('user_role');
