@@ -195,7 +195,7 @@ class BuyerManagementController extends Controller
       try {
                 $buyers = DB::table('buyers')->select('buyer_name','id')->get();
                 $customers = DB::table('customers')->select('company_name','id')->get();
-                return response()->json(['error'=> false,'message' =>'Success','buyers' => $buyers,'suppliers' => $customers],200);
+                return response()->json(['error'=> false,'message' =>'Success','buyers' => $buyers,'customers' => $customers],200);
           } catch (\Exception $e)
           {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
