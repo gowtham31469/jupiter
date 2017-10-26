@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Customer;
+use App\CustomerContactPersons;
+use App\CustomerBillAddress;
 
 class CustomerManagementController extends Controller
 {
@@ -58,7 +60,7 @@ class CustomerManagementController extends Controller
     public function customers()
     {
       try{
-            $customers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_email','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
+            $customers = DB::table('customers')->select('id','company_name','factory_code','courier_choice','account_no','tin_number','pan_number','email')->get();
             return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
           } catch (\Exception $e)
           {
