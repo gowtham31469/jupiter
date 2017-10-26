@@ -201,6 +201,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input class="form-check-input" type="checkbox" value="" name="default">
+                                              Make as default contact person
+                                            </label>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
@@ -347,5 +353,16 @@
               }
           }
       }
+      $(':checkbox').on('change',function(){
+       var th = $(this), name = th.prop('name');
+       if(th.is(':checked')){
+           $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+        }
+      });
+    //   $(':checkbox').on('change', function() {
+    //
+    //   $(':checkbox').not(this).prop('checked', false);
+    //
+    // });
     </script>
     @endsection
