@@ -133,7 +133,7 @@
                           {!! Form::label('phone', 'Phone', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">+91</span>
-                            {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                            {!! Form::text('phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          </div>
                          <div class="help-block with-errors"></div>
@@ -195,7 +195,7 @@
                           {!! Form::label('edit_phone', 'Phone', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">+91</span>
-                            {!! Form::text('edit_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                            {!! Form::text('edit_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          </div>
                          <div class="help-block with-errors"></div>

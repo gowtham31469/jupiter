@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\SupplierManagement;
+namespace App\Http\Controllers\Admin\CustomerManagement;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Customer;
 
-class SupplierManagementController extends Controller
+class CustomerManagementController extends Controller
 {
   /**
    * Create a new controller instance.
@@ -24,7 +24,7 @@ class SupplierManagementController extends Controller
       $this->middleware('auth');
    }
    /**
-    * Show the Supplier-Management home page.
+    * Show the Customer-Management home page.
     * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
@@ -39,7 +39,7 @@ class SupplierManagementController extends Controller
                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
                    return $view->with(['modules' => $get_main_module]);
                });
-               return view('Admin/Supplier Management/home');
+               return view('Admin/Customer Management/home');
            }
            else
            {
@@ -51,15 +51,15 @@ class SupplierManagementController extends Controller
          }
    }
    /**
-    * Show the orchestra suppliers list view on ajax.
+    * Show the orchestra customers list view on ajax.
     * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
-    public function suppliers()
+    public function customers()
     {
       try{
-            $suppliers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_email','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
-            return response()->json(['error'=>'false','message' =>'success', 'suppliers' => $suppliers]);
+            $customers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_email','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
           } catch (\Exception $e)
           {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

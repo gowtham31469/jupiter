@@ -52,9 +52,9 @@ Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserMan
 Route::get('admin/user-management/get-user-role-details', 'Admin\UserManagement\UserManagementController@getUserRoleById');
 Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserManagementController@updateUserRoleById');
 Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
-/** supplier Management **/
-Route::get('admin/supplier-management', 'Admin\SupplierManagement\SupplierManagementController@index');
-Route::post('admin/supplier-management/suppliers', 'Admin\SupplierManagement\SupplierManagementController@suppliers');
+/** customer Management **/
+Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
+Route::post('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
