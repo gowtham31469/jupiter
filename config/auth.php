@@ -53,6 +53,10 @@ return [
             'driver' => 'session',
             'provider' => 'merchandisers',
         ],
+	 'web_erp_user' => [
+            'driver' => 'session',
+            'provider' => 'erp_users',
+        ],
 
     ],
 
@@ -87,6 +91,10 @@ return [
         'merchandisers' => [
             'driver' => 'eloquent',  //We are using eloquent model
             'model' => App\Merchandiser::class,
+        ],
+	'erp_users' => [
+            'driver' => 'eloquent',  //We are using eloquent model
+            'model' => App\Erp::class,
         ],
     ],
 

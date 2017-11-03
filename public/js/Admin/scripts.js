@@ -190,7 +190,7 @@ function template_list()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-            var template = '<div class="col-md-4 modules_div"> <div class="row">';
+          /*  var template = '<div class="col-md-4 modules_div"> <div class="row">';
              $.each(data, function (index, value) {
                  template+='<div class="main-menu" id="'+value.id+'"><div class="main-module"> '+value.item_name+' <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> </div><div class="new-div">';
                   $.each(value.second, function (index1, value1) {
@@ -227,7 +227,7 @@ function template_list()
                 $(".sub-module2").css('display', 'block');
                 $(".sub-module2").css('display', 'block');
                 e.stopPropagation()
-                })
+                })*/
         },
         error: function (data) {
 

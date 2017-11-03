@@ -107,6 +107,31 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 
 });
 
+//Erp Module
+
+Route::post('erp_logout', 'ErpAuth\LoginController@logout');
+Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
+Route::post('erp', 'ErpAuth\LoginController@login');
+
+Route::group(['middleware' => 'erp_guest'], function() {
+
+Route::get('erp_register', 'ErpAuth\RegisterController@showRegistrationForm');
+Route::post('erp_register', 'ErpAuth\RegisterController@register');
+Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
+Route::post('erp', 'ErpAuth\LoginController@login');
+
+});
+
+//Only logged in sellers can access or send requests to these pages
+Route::group(['middleware' => 'erp_auth'], function(){
+
+Route::post('erp/logout', 'ErpAuth\LoginController@logout');
+Route::get('/erp/dashboard', function(){
+  return view('erp.home');
+});
+
+});
+
 //Order Management
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
