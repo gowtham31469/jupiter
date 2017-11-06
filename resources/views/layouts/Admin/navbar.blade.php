@@ -17,7 +17,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav dynamic-menu">
-                    <li><a href="">hg</a></li>
+                    <li><a href="#" onclick="usersListView()">Users</a></li>
+                    <li><a href="#" onclick="rolesListView()">Roles</a></li>
+<!--
                 <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -30,6 +32,7 @@
             <li><a href="#">One more separated link</a></li>
           </ul>
         </li>
+-->
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

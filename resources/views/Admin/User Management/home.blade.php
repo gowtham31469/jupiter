@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
-              <div class="top-content">
+              <div class="top-content hidden">
                   <ol class="breadcrumb">
                     <li><a href="/admin/dashboard">Dashboard</a></li>
                     <li class="active">User Management</li>
