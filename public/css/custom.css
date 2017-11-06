@@ -20,6 +20,16 @@ body {
 .pagename {
     color: #fff !important;
 }
+.breadcrumb {
+    margin-right: -15px;
+    margin-left: -15px;
+    padding: 8px 15px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
 
 .dynamic-menu a.active,
 .dynamic-menu a:hover,
