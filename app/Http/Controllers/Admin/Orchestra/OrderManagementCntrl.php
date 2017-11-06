@@ -69,8 +69,9 @@ class OrderManagementCntrl extends Controller
     }
     public function stickerOrders()
     {
-            $orders = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
-            echo json_encode($orders);
+            $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw('"Null" as Season'),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw('"Stickers" as OrderType'),DB::raw('"Null" as Disney'))->get();
+            $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw('"-" as BuyerPONo'),'SupplierName','Description','Style_Name','Disney',DB::raw('"Null" as Type'),'Quantity',DB::raw('"Labels" as OrderType'))->groupBy('UVC')->get();
+            echo json_encode($data);
     }
     public function labelOrderDetails(Request $request)
     {

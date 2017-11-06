@@ -17,9 +17,10 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav dynamic-menu">
-                    <li><a class="active" href="#" onClick="window.location.reload()">Dashboard</a></li>
-                    <li><a href="#" onclick="usersListView()">Users</a></li>
-                    <li><a href="#" onclick="rolesListView()">Roles</a></li>
+                      <li><a class="active" href="#" onClick="window.location.reload()">Dashboard</a></li>
+                     @foreach($sub_modules as $mod) @if($mod->parent_id != 0)
+                        <li><a class="" onclick="{{$mod->url_path}}">{{$mod->module_name}}</a></li>
+                    @endif @endforeach
 <!--
                 <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
@@ -38,13 +39,16 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">A</span>JGA User <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
+                            <li><a href="#">Profile</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
+                             <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+                            {{ csrf_field() }}
+
+                        </form>
                         </ul>
                     </li>
                 </ul>
