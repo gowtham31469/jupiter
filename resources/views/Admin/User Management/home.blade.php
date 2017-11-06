@@ -425,6 +425,7 @@
     @section('jqueryIncludes')
     <script>
     $( document ).ready(function() {
+        $(".logo").html('Users');
       $('#add_user_form').trigger("reset");
       $('#add_role_form').trigger('reset');
       $('#edit_result').hide();

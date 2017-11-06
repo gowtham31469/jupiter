@@ -50,6 +50,33 @@ body {
 #main-content{
      padding-top: calc(40px + 2%)
 }
+.main{
+        margin-top: 0px;
+    padding-top: 50px;
+    min-height: 100%;
+}
+.main-menu{
+    padding-top: 60px;
+    padding-bottom: calc(100% - (20px + 30px));
+}
+.case-wrapper:hover{
+    transform: scale(1.1);
+    transition: 0.5s ease;
+}
+.case-wrapper{
+    transition: 0.5s ease;
+}
+.grid-menu{
+      padding-left: 26px;
+    color: #fff !important;
+    background: #607D8B;
+}
+a.navbar-brand.grid-menu:hover{
+    background: #333;
+}
+.logo{
+        margin-left: 0px !important;
+}
 .case-wrapper {
     position: relative;
     margin: 0px;
