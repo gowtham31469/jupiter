@@ -41,10 +41,11 @@ class AdminController extends Controller
         {
             $top_mod = "User Management";
             $get_main_module = $module_var->getMainModules();
-            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                return $view->with(['modules' => $get_main_module]);
-            });
             $get_sub_module = $module_var->getSubModules(9);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
             $buyers = DB::table('buyers')->select('*')->get();
             return view('Admin/order-management',['buyers' => $buyers]);
         }
@@ -63,8 +64,9 @@ class AdminController extends Controller
         {
             $top_mod = "User Management";
             $get_main_module = $module_var->getMainModules();
-            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                return $view->with(['modules' => $get_main_module]);
+            $get_sub_module = $module_var->getSubModules(17);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             return view('Admin/Buyer Management/home');
         }
@@ -82,8 +84,9 @@ class AdminController extends Controller
         {
             $top_mod = "User Management";
             $get_main_module = $module_var->getMainModules();
-            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                return $view->with(['modules' => $get_main_module]);
+            $get_sub_module = $module_var->getSubModules(21);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             $buyers = DB::table('buyers')->select('*')->get();
             return view('Admin/template-management',['buyers' => $buyers]);
