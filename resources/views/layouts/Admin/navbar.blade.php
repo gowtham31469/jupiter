@@ -11,12 +11,13 @@
                 
                 
                 <a class="navbar-brand grid-menu" href="/admin/dashboard"><i class="fa fa-th" aria-hidden="true"></i></a>
-                <a class="navbar-brand logo" href="#"></a>
+                <span class="navbar-brand logo" href="#"></span>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav dynamic-menu">
+                    <li><a class="active" href="#" onClick="window.location.reload()">Dashboard</a></li>
                     <li><a href="#" onclick="usersListView()">Users</a></li>
                     <li><a href="#" onclick="rolesListView()">Roles</a></li>
 <!--
