@@ -35,8 +35,8 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                     <li class="dropdown buyer-nav-select">
-                    </li>
+<!--                    <li><a>Buyer : </a></li>-->
+                    <li class="dropdown buyer-nav-select"></li>
                     
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a>

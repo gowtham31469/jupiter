@@ -339,3 +339,28 @@ p.terms {
         transform: rotate(360deg);
     }
 }
+.buyer-nav-select .btn-group.bootstrap-select.js-example-responsive.buyer-select{
+    margin-top: 3px;
+}
+
+.buyer-nav-select button.btn.dropdown-toggle.btn-default{
+    color: #fff;
+    background-color: transparent;
+    border-color: transparent;
+    outline: 0 !important;
+}
+.buyer-nav-select{
+    padding-bottom: 2px;
+}
+.buyer-nav-select:hover{
+        background: #192327 !important;
+    color: #fff !important;
+}
+.buyer-nav-select .filter-option{
+    color: #8D99A6;
+    font-weight: 500;
+    font-size: 13px;
+}
+.buyer-nav-select .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 175px;
+}
