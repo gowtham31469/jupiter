@@ -56,7 +56,13 @@
     @yield('jqueryIncludes')
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script>
+        
         $(document).ready(function() {
+            $('#buyer-select').selectpicker({
+               style: 'btn-default',
+               size: 4
+            });
+   
             $('#example').DataTable();
             $("#example_filter input").addClass('form-control input-sm');
             $("#example_filter input").attr('placeholder', 'Data Search');
@@ -130,10 +136,10 @@
 
             }]
         });
-         $('.buyer-select').select2({
-            placeholder: "Buyer Listing",
-            allowClear: true
-        });
+//         $('.buyer-select').select2({
+//            placeholder: "Buyer Listing",
+//            allowClear: true
+//        });
     </script>
     @yield('jqueryIncludes')
 </body>

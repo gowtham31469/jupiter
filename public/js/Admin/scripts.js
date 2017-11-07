@@ -145,7 +145,7 @@ function sticker_orders()
    // $( ".sub_modules a" ).removeClass( "active" )
    //  $('.sticker_orders a').addClass("active")
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/sticker-orders",
@@ -308,7 +308,7 @@ function table(data)
 }
 function order_details(uvc,po)
 {
-   if(po != "Null")
+   if(po != "-")
    {
        sticker_order_details(uvc,po)
    }
@@ -321,8 +321,10 @@ function order_details(uvc,po)
 function sticker_order_details(uvc,po)
 {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-    var buyer_id=$('.buyer-select').val()
+    //var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    //var buyer_id=$('.buyer-select').val()
+    var buyer =localStorage.getItem("buyer");
+    var buyer_id=localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/sticker-order-details",
@@ -569,8 +571,10 @@ function barcode_carton(id,data)
 function label_order_details(uvc)
 {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-    var buyer_id=$('.buyer-select').val()
+   // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+   // var buyer_id=$('.buyer-select').val()
+    var buyer =localStorage.getItem("buyer");
+    var buyer_id=localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/label-order-details",
