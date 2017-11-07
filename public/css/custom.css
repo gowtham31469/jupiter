@@ -373,3 +373,11 @@ p.terms {
 {
     color:#333 !important;
 }
+span.navbar-brand.logo{
+    font-weight: bold;
+    color: #ffffff;
+}
+span.navbar-brand.logo:hover{
+    font-weight: bold;
+    color: #ffffff;
+}
