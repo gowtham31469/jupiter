@@ -66,7 +66,7 @@
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-div hidden">
-             <select class="js-example-responsive buyer-select" data-live-search="true">
+             <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
