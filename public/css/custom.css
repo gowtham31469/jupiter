@@ -364,3 +364,11 @@ p.terms {
 .buyer-nav-select .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width: 215px;
 }
+span.navbar-brand.logo{
+    font-weight: bold;
+    color: #ffffff;
+}
+span.navbar-brand.logo:hover{
+    font-weight: bold;
+    color: #ffffff;
+}
