@@ -66,7 +66,7 @@
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-div hidden">
-             <select class="js-example-responsive buyer-select">
+             <select class="js-example-responsive buyer-select" data-live-search="true">
                     @foreach($buyers as $buyer)
                     <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
@@ -177,6 +177,10 @@
          $('.buyer-nav-select').html($('.buyer-div').html())
          sticker_orders();
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
+          $('.buyer-nav-select .buyer-select').selectpicker({
+               style: 'btn-default',
+               size: 4
+            });
         $('.buyer-select').change(function() {
         if ($(this).val() != "") {
             localStorage.setItem("buyer",$(this).find("option:selected").text().toLowerCase());
