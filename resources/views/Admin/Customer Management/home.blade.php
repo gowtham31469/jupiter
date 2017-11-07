@@ -336,7 +336,7 @@
         else
         {
            e.preventDefault();
-           addSupplier();
+           addCustomer();
         }
       })
 

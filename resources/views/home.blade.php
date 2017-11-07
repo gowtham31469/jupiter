@@ -39,7 +39,7 @@
                     </a>
                 </div>
                 <div class="case-wrapper" title="Item" draggable="false">
-                    <a href="/admin/supplier-management">
+                    <a href="/admin/customer-management">
                         <div class="app-icon" style="background-color: #8e44ad; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-tag" title="Item" style=""></i></div>
                         <div class="case-label ellipsis">
                             <div class="circle module-count-list-item hidden" data-doctype="Item" style=""> <span class="circle-text">1</span> </div> <span class="case-label-text">Supplier</span> </div>

@@ -1497,7 +1497,7 @@ function addRole(permissions)
         }
     })
   }
-  function suppliersListView()
+  function customersListView()
   {
       $('.main-sub-menu').removeClass('hidden');
       $( ".sub_modules a" ).removeClass( "active" )
@@ -1506,7 +1506,7 @@ function addRole(permissions)
       var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
-          url: base_url + "/admin/supplier-management/suppliers",
+          url: base_url + "/admin/customer-management/customers",
           type: "Post",
           dataType:"json",
           data: {_token:csrf_token},
@@ -1515,17 +1515,17 @@ function addRole(permissions)
               $(".loader").css('margin-top','12%');
           },
           success: function (data) {
-            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSupplierModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="suppliersListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.suppliers, function(i, item){
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Customer Management</a></li><li class="active">Customers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="customers-list-view"><a class="active" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li></ul><hr/></div>');
+            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.customers, function(i, item){
              var index = i+1;
-             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td></tr>';
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
-            $('#suppliers-list-table').DataTable();
-            $("#suppliers-list-table_filter input").addClass('form-control');
-            $("#suppliers-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#customers-list-table').DataTable();
+            $("#customers-list-table_filter input").addClass('form-control');
+            $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
           },
           error: function (data) {
 
@@ -1536,7 +1536,7 @@ function addRole(permissions)
           }
       })
   }
-  function addSupplier()
+  function addCustomer()
   {
       var factory_code    = $('#factory_code').val();
       var company_name    = $('#company_name').val();
