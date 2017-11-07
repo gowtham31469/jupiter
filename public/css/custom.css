@@ -364,3 +364,12 @@ p.terms {
 .buyer-nav-select .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width: 215px;
 }
+.profile-dropdown-admin
+{
+    background: transparent !important;
+    color: #fff !important;
+}
+.profile-dropdown-admin .well
+{
+    color:#333 !important;
+}

@@ -159,7 +159,10 @@ function sticker_orders()
         success: function (data) {
             var newObj = data.sticker_orders.concat(data.label_orders);
              $('.main-content').html(table(newObj));
-             $('#datatable-example-2').DataTable();
+             $('#datatable-example-2').DataTable(
+             {
+                 "pageLength": 25
+             });
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
               $('#datatable-example-2_length select').addClass('form-control input-sm');
@@ -257,7 +260,7 @@ function table(data)
     for(var key in columnsIn){
          if(key != "id")
          {
-            th += "<th>"+key+"</th>";
+            th += "<th style='text-align: center;'>"+key+"</th>";
          }
     }
     $.each(data, function (index, value) {
@@ -275,7 +278,7 @@ function table(data)
                     {
                             var Isstd = value[key] == "0" ? "Solid" : "Standard";
                     }
-                    tr += '<td>'+Isstd+'</td>';
+                    tr += '<td align="center">'+Isstd+'</td>';
                         
                 }
                 else if(key == "Disney")
@@ -289,15 +292,15 @@ function table(data)
                          var Disney = value[key] == "0" ? "No" : "Yes";
                     }
                    
-                    tr += '<td>'+Disney+'</td>';
+                    tr += '<td align="center">'+Disney+'</td>';
                 }
                 else if(key == "UVC")
                 {
-                    tr += '<td><a href="#" onclick=order_details("'+value[key]+'","'+value.BuyerPONo+'")>'+value[key]+'</a></td>';
+                    tr += '<td align="center"><a href="#" onclick=order_details("'+value[key]+'","'+value.BuyerPONo+'")>'+value[key]+'</a></td>';
                 }
                 else
                 {
-                    tr += '<td>'+value[key]+'</td>';
+                    tr += '<td align="center">'+value[key]+'</td>';
                 }
             }
         }
