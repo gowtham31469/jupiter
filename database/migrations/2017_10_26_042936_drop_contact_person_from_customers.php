@@ -14,7 +14,7 @@ class DropContactPersonFromCustomers extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-          //$table->dropColumn('contact_person');
+          $table->dropColumn('contact_person');
           $table->dropColumn('contact_email');
           $table->dropColumn('phone_no');
         });
@@ -28,7 +28,7 @@ class DropContactPersonFromCustomers extends Migration
     public function down()
     {
         Schema::table('customers', function (Blueprint $table) {
-          //$table->addColumn('contact_person');
+          $table->addColumn('contact_person');
           $table->addColumn('contact_email');
           $table->addColumn('phone_no');
         });
