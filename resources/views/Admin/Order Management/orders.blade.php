@@ -68,7 +68,7 @@
         <div class="buyer-div hidden">
              <select class="js-example-responsive buyer-select" data-live-search="true">
                     @foreach($buyers as $buyer)
-                    <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
+                    <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
               </select>
         </div>

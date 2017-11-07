@@ -362,5 +362,5 @@ p.terms {
     font-size: 13px;
 }
 .buyer-nav-select .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
-    width: 175px;
+    width: 215px;
 }
