@@ -141,11 +141,11 @@ function back_sticker_orders(buyer,buyer_id)
 
 function sticker_orders()
 {
-    $('.main-sub-menu').removeClass('hidden');
-    $( ".sub_modules a" ).removeClass( "active" )
-     $('.sticker_orders a').addClass("active")
+   // $('.main-sub-menu').removeClass('hidden');
+   // $( ".sub_modules a" ).removeClass( "active" )
+   //  $('.sticker_orders a').addClass("active")
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/sticker-orders",
@@ -157,12 +157,16 @@ function sticker_orders()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-             $('.main-content').html(table(data));
-             $('#datatable-example-2').DataTable();
+            var newObj = data.sticker_orders.concat(data.label_orders);
+             $('.main-content').html(table(newObj));
+             $('#datatable-example-2').DataTable(
+             {
+                 "pageLength": 25
+             });
              $("#datatable-example-2_filter input").addClass('form-control input-sm');
              $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
               $('#datatable-example-2_length select').addClass('form-control input-sm');
-             $('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
+             //$('.breadcrumb').html('<li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Order Management</a></li><li class="active">Sticker Orders</li>')
         },
         error: function (data) {
 
@@ -190,7 +194,7 @@ function template_list()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
-            var template = '<div class="col-md-4 modules_div"> <div class="row">';
+          /*  var template = '<div class="col-md-4 modules_div"> <div class="row">';
              $.each(data, function (index, value) {
                  template+='<div class="main-menu" id="'+value.id+'"><div class="main-module"> '+value.item_name+' <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> </div><div class="new-div">';
                   $.each(value.second, function (index1, value1) {
@@ -227,7 +231,7 @@ function template_list()
                 $(".sub-module2").css('display', 'block');
                 $(".sub-module2").css('display', 'block');
                 e.stopPropagation()
-                })
+                })*/
         },
         error: function (data) {
 
@@ -256,7 +260,7 @@ function table(data)
     for(var key in columnsIn){
          if(key != "id")
          {
-            th += "<th>"+key+"</th>";
+            th += "<th style='text-align: center;'>"+key+"</th>";
          }
     }
     $.each(data, function (index, value) {
@@ -266,21 +270,37 @@ function table(data)
             {
                 if(key == "Type")
                 {
-                    var Isstd = value[key] == "0" ? "Solid" : "Standard";
-                    tr += '<td>'+Isstd+'</td>';
+                     if(value[key] == "Null")
+                    {
+                             var Isstd = "Null";
+                    }
+                    else
+                    {
+                            var Isstd = value[key] == "0" ? "Solid" : "Standard";
+                    }
+                    tr += '<td align="center">'+Isstd+'</td>';
+                        
                 }
                 else if(key == "Disney")
                 {
-                    var Disney = value[key] == "0" ? "No" : "Yes";
-                    tr += '<td>'+Disney+'</td>';
+                    if(value[key] == "Null")
+                    {
+                             var Disney = "Null";
+                    }
+                    else
+                    {
+                         var Disney = value[key] == "0" ? "No" : "Yes";
+                    }
+                   
+                    tr += '<td align="center">'+Disney+'</td>';
                 }
                 else if(key == "UVC")
                 {
-                    tr += '<td><a href="#" onclick=order_details("'+value[key]+'","'+value.BuyerPONo+'")>'+value[key]+'</a></td>';
+                    tr += '<td align="center"><a href="#" onclick=order_details("'+value[key]+'","'+value.BuyerPONo+'")>'+value[key]+'</a></td>';
                 }
                 else
                 {
-                    tr += '<td>'+value[key]+'</td>';
+                    tr += '<td align="center">'+value[key]+'</td>';
                 }
             }
         }
@@ -291,7 +311,7 @@ function table(data)
 }
 function order_details(uvc,po)
 {
-   if($('.sub-nav-list').find('.active').text() == "Sticker Orders")
+   if(po != "-")
    {
        sticker_order_details(uvc,po)
    }
@@ -304,8 +324,10 @@ function order_details(uvc,po)
 function sticker_order_details(uvc,po)
 {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-    var buyer_id=$('.buyer-select').val()
+    //var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    //var buyer_id=$('.buyer-select').val()
+    var buyer =localStorage.getItem("buyer");
+    var buyer_id=localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/sticker-order-details",
@@ -552,8 +574,10 @@ function barcode_carton(id,data)
 function label_order_details(uvc)
 {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-    var buyer_id=$('.buyer-select').val()
+   // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+   // var buyer_id=$('.buyer-select').val()
+    var buyer =localStorage.getItem("buyer");
+    var buyer_id=localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/label-order-details",
@@ -1473,7 +1497,7 @@ function addRole(permissions)
         }
     })
   }
-  function customersListView()
+  function suppliersListView()
   {
       $('.main-sub-menu').removeClass('hidden');
       $( ".sub_modules a" ).removeClass( "active" )
@@ -1482,7 +1506,7 @@ function addRole(permissions)
       var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
-          url: base_url + "/admin/customer-management/customers",
+          url: base_url + "/admin/supplier-management/suppliers",
           type: "Post",
           dataType:"json",
           data: {_token:csrf_token},
@@ -1491,17 +1515,17 @@ function addRole(permissions)
               $(".loader").css('margin-top','12%');
           },
           success: function (data) {
-            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Customer Management</a></li><li class="active">Customers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="customers-list-view"><a class="active" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.customers, function(i, item){
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSupplierModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="suppliersListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
+            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.suppliers, function(i, item){
              var index = i+1;
-             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
-            $('#customers-list-table').DataTable();
-            $("#customers-list-table_filter input").addClass('form-control');
-            $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#suppliers-list-table').DataTable();
+            $("#suppliers-list-table_filter input").addClass('form-control');
+            $("#suppliers-list-table_filter input").attr('placeholder', 'Data Search');
           },
           error: function (data) {
 
@@ -1791,14 +1815,14 @@ function addRole(permissions)
                    url: base_url + "/admin/buyer-management/get-buyers",
                    method: 'get',
                    success: function (data) {
-                     var appenddata = "<option value = ''>-- Select Buyer --</option>";
+                     var appenddata = "<option value = ''>-- Select Buyers --</option>";
                        $.each(data.buyers, function (key, value) {
 
                        appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                        });
                    $('#merchandiser_buyer').html(appenddata);
-                   var appenddata1 = "<option value = ''>-- Select Customer --</option>";
-                     $.each(data.customers, function (key, value) {
+                   var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
+                     $.each(data.suppliers, function (key, value) {
 
                      appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
                      });
@@ -1900,14 +1924,14 @@ function addRole(permissions)
                  url: base_url + "/admin/buyer-management/get-buyers",
                  method: 'get',
                  success: function (data) {
-                   var appenddata = "<option value = ''>-- Select Buyer --</option>";
+                   var appenddata = "<option value = ''>-- Select Buyers --</option>";
                      $.each(data.buyers, function (key, value) {
 
                      appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                      });
                  $('#edit_merchandiser_buyer').html(appenddata);
-                 var appenddata1 = "<option value = ''>-- Select Customer --</option>";
-                   $.each(data.customers, function (key, value) {
+                 var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
+                   $.each(data.suppliers, function (key, value) {
 
                    appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
                    });

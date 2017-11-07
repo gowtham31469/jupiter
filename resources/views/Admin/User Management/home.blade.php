@@ -1,10 +1,11 @@
 @extends('layouts.Admin.app')
 @if (Auth::guard("web")->user())
 @section('content')
+<!--<div class="loader-div"></div>-->
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
-              <div class="top-content">
+              <div class="top-content hidden">
                   <ol class="breadcrumb">
                     <li><a href="/admin/dashboard">Dashboard</a></li>
                     <li class="active">User Management</li>
@@ -20,22 +21,28 @@
           <div class="clearfix"></div>
                 <div class="main-content">
                     <div class="loader"></div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart" width="100px" height="100px"></canvas>
+                            <h4>Total Orders</h4>
+                            <span class="numbers">26004</span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart1" width="100px" height="100px"></canvas>
+                            <h4>Open Orders</h4>
+                            <span class="numbers">20</span><span class="sub-number">/140</span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart2" width="100px" height="100px"></canvas>
+                            <h4>Total Orders</h4>
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <h4>Total Orders</h4>
+                           
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -425,6 +432,7 @@
     @section('jqueryIncludes')
     <script>
     $( document ).ready(function() {
+        $(".logo").html('Users').addClass('pagename');
       $('#add_user_form').trigger("reset");
       $('#add_role_form').trigger('reset');
       $('#edit_result').hide();
@@ -917,5 +925,6 @@
          deleteUserRole(id);
       }
     })
+//        $(".loader-div").addClass('hidden');
     </script>
     @endsection

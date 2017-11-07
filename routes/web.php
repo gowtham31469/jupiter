@@ -36,7 +36,8 @@ Route::get('customer/dashboard', 'Customer\HomeController@index')->name('custome
 
 
 
-Route::get('admin/order-management', 'Admin\AdminController@orderManagement');
+Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
+Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 
 Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
 /** User Management **/
@@ -104,6 +105,31 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 	Route::get('/merchandiser/dashboard', function(){
 	  return view('merchandiser.home');
 	});
+
+});
+
+//Erp Module
+
+Route::post('erp_logout', 'ErpAuth\LoginController@logout');
+Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
+Route::post('erp', 'ErpAuth\LoginController@login');
+
+Route::group(['middleware' => 'erp_guest'], function() {
+
+Route::get('erp_register', 'ErpAuth\RegisterController@showRegistrationForm');
+Route::post('erp_register', 'ErpAuth\RegisterController@register');
+Route::get('erp', 'ErpAuth\LoginController@showLoginForm');
+Route::post('erp', 'ErpAuth\LoginController@login');
+
+});
+
+//Only logged in sellers can access or send requests to these pages
+Route::group(['middleware' => 'erp_auth'], function(){
+
+Route::post('erp/logout', 'ErpAuth\LoginController@logout');
+Route::get('/erp/dashboard', function(){
+  return view('erp.home');
+});
 
 });
 
