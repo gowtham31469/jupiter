@@ -180,9 +180,9 @@ function sticker_orders()
 
 function template_list()
 {
-    $( ".sub_modules a" ).removeClass( "active" )
-     $('.template_list a').addClass("active")
-    var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+    //$( ".sub_modules a" ).removeClass( "active" )
+     //$('.template_list a').addClass("active")
+    var buyer = localStorage.getItem("template_buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/"+buyer+"/template-management/template-list",
@@ -194,6 +194,12 @@ function template_list()
             $(".loader").css('margin-top','12%');
         },
         success: function (data) {
+            
+            $('#tree1').tree({
+                data: data
+            });
+
+            
           /*  var template = '<div class="col-md-4 modules_div"> <div class="row">';
              $.each(data, function (index, value) {
                  template+='<div class="main-menu" id="'+value.id+'"><div class="main-module"> '+value.item_name+' <span class="glyphicon glyphicon-chevron-right" style="margin-top:3px;float: right;"></span> </div><div class="new-div">';
@@ -272,7 +278,7 @@ function table(data)
                 {
                      if(value[key] == "Null")
                     {
-                             var Isstd = "Null";
+                             var Isstd = "-";
                     }
                     else
                     {
@@ -285,7 +291,7 @@ function table(data)
                 {
                     if(value[key] == "Null")
                     {
-                             var Disney = "Null";
+                             var Disney = "-";
                     }
                     else
                     {

@@ -67,6 +67,7 @@
     <div class="top-content">
         <div class="buyer-div hidden">
              <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
+                 <option></option>
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
@@ -170,21 +171,23 @@
 <script>
     $(document).ready(function() {
          $('.logo').html('Orders')
-         if (localStorage.getItem("buyer") === null) {
-                localStorage.setItem("buyer", $(".buyer-select option:first").text().toLowerCase());
-             localStorage.setItem("buyer_id", $(".buyer-select option:first").val());
-         }
          $('.buyer-nav-select').html($('.buyer-div').html())
-         sticker_orders();
+         if (localStorage.getItem("buyer") === null) {
+                
+         }
+        else
+        {
+             sticker_orders();
+        }
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
                style: 'btn-default',
                size: 4
             });
-        $('.buyer-select').change(function() {
-        if ($(this).val() != "") {
-            localStorage.setItem("buyer",$(this).find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $(this).find("option:selected").val());
+        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
+        if ($('.buyer-select option:selected').val() != "") {
+            localStorage.setItem("buyer",$('.buyer-select').find("option:selected").text().toLowerCase());
+            localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: base_url + "/admin/order-management/order_sub_modules",
@@ -222,6 +225,8 @@
                 }
             })
         } else {
+            localStorage.removeItem("buyer");
+                localStorage.removeItem("buyer_id");
             location.reload()
         }
     });

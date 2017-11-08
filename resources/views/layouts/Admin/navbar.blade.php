@@ -43,7 +43,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#">Profile</a></li>
                             <li role="separator" class="divider"></li>
-                             <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                             <li> <a class="dropdown-item logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 
                             {{ csrf_field() }}
