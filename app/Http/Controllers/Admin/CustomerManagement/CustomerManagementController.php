@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Customer;
+use App\CustomerContactPersons;
+use App\CustomerBillAddress;
 
 class CustomerManagementController extends Controller
 {
@@ -36,8 +38,9 @@ class CustomerManagementController extends Controller
            if($is_allowed)
            {
                $get_main_module = $module_var->getMainModules();
-               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module) {
-                   return $view->with(['modules' => $get_main_module]);
+               $get_sub_module = $module_var->getSubModules(4);
+               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                   return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                });
                return view('Admin/Customer Management/home');
            }
@@ -58,7 +61,7 @@ class CustomerManagementController extends Controller
     public function customers()
     {
       try{
-            $customers = DB::table('customers')->select('id','company_name','factory_code','contact_person','contact_email','phone_no','courier_choice','account_no','tin_number','pan_number','email')->get();
+            $customers = DB::table('customers')->select('id','company_name','factory_code','courier_choice','account_no','tin_number','pan_number','email')->get();
             return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
           } catch (\Exception $e)
           {

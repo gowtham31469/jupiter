@@ -151,7 +151,7 @@
                               <div class="form-group has-feedback">
                                 {!! Form::label('login_email', 'Username', ['class' => 'form_label']) !!}
                                 <div class="input-group">
-                                  <span class="input-group-addon" id="basic-addon1">@</span>
+                                  <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                   {!! Form::email('login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
                                   <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
@@ -163,8 +163,8 @@
                                 {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                                 <div class="input-group">
                                   {!! Form::text('password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
-                                  <span id="generatePwd" class="input-group-addon" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
-                                  <span class="input-group-addon js-textareacopybtn clipboard" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
+                                  <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
+                                  <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -186,7 +186,7 @@
                                         <div class="form-group has-feedback">
                                           {!! Form::label('contact_phone1', 'Contact Phone No', ['class' => 'form_label']) !!}
                                           <div class="input-group">
-                                            <span class="input-group-addon" id="basic-addon1">+91</span>
+                                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                                             {!! Form::text('contact_phone1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Phone No','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                          </div>
@@ -195,11 +195,17 @@
                                           <div class="form-group has-feedback">
                                             {!! Form::label('contact_email1', 'Contact Email', ['class' => 'form_label']) !!}
                                             <div class="input-group">
-                                              <span class="input-group-addon" id="basic-addon1">@</span>
+                                              <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                               {!! Form::email('contact_email1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
+                                          </div>
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input class="form-check-input" type="checkbox" value="" name="default">
+                                              Make as default contact person
+                                            </label>
                                           </div>
                                         </div>
                                     </div>
@@ -241,11 +247,17 @@
                                           <div class="form-group has-feedback">
                                             {!! Form::label('address_email1', 'Email', ['class' => 'form_label']) !!}
                                             <div class="input-group">
-                                              <span class="input-group-addon" id="basic-addon1">@</span>
+                                              <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                               {!! Form::email('address_email1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
+                                          </div>
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input class="form-check-input" type="checkbox" value="" name="default1">
+                                              Make as default billing address
+                                            </label>
                                           </div>
                                         </div>
                                     </div>
@@ -330,7 +342,7 @@
         else
         {
            e.preventDefault();
-           addSupplier();
+           addCustomer();
         }
       })
 
@@ -347,5 +359,11 @@
               }
           }
       }
+      
+    //   $(':checkbox').on('change', function() {
+    //
+    //   $(':checkbox').not(this).prop('checked', false);
+    //
+    // });
     </script>
     @endsection
