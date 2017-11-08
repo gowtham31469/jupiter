@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
           $table->string('courier_choice');
           $table->string('account_no');
           $table->string('tin_number');
+          $table->string('gstin_number');
           $table->string('pan_number');
           $table->string('email')->unique();
           $table->string('password');

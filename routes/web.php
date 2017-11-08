@@ -164,3 +164,5 @@ Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestr
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
 // Route::post('multi-upload', 'UploadController@csvMultiUpload');
+/** upload csv **/
+Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
