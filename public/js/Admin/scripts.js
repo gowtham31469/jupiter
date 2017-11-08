@@ -1043,7 +1043,7 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
          barcode+=value.BuyerPONo+" | ";
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_label_orders('"+buyer+"','"+buyer_id+"')>Label Orders</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
-      $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table>');
+      $('.top-content').append('<h3><i class="ion-ios-browsers-outline"></i>Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><div class="table-responsive"><table class="table table-bordered"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table></div>');
 
       $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
 
@@ -1503,7 +1503,7 @@ function addRole(permissions)
         }
     })
   }
-  function suppliersListView()
+  function customersListView()
   {
       $('.main-sub-menu').removeClass('hidden');
       $( ".sub_modules a" ).removeClass( "active" )
@@ -1512,7 +1512,7 @@ function addRole(permissions)
       var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
-          url: base_url + "/admin/supplier-management/suppliers",
+          url: base_url + "/admin/customer-management/customers",
           type: "Post",
           dataType:"json",
           data: {_token:csrf_token},
@@ -1521,17 +1521,17 @@ function addRole(permissions)
               $(".loader").css('margin-top','12%');
           },
           success: function (data) {
-            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Supplier Management</a></li><li class="active">Suppliers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Supplier Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addSupplierModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Suppliers</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="suppliers-list-view"><a class="active" href="#" onclick="suppliersListView()"><i class="ion-ios-pricetag"></i>Suppliers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="supplier-table"><table id="suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.suppliers, function(i, item){
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Customer Management</a></li><li class="active">Customers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="customers-list-view"><a class="active" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li></ul><hr/></div>');
+            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.customers, function(i, item){
              var index = i+1;
-             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteUserRoleModal" ></i></a></td></tr>';
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
-            $('#suppliers-list-table').DataTable();
-            $("#suppliers-list-table_filter input").addClass('form-control');
-            $("#suppliers-list-table_filter input").attr('placeholder', 'Data Search');
+            $('#customers-list-table').DataTable();
+            $("#customers-list-table_filter input").addClass('form-control');
+            $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
           },
           error: function (data) {
 
@@ -1542,7 +1542,7 @@ function addRole(permissions)
           }
       })
   }
-  function addSupplier()
+  function addCustomer()
   {
       var factory_code    = $('#factory_code').val();
       var company_name    = $('#company_name').val();
@@ -1827,8 +1827,8 @@ function addRole(permissions)
                        appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                        });
                    $('#merchandiser_buyer').html(appenddata);
-                   var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
-                     $.each(data.suppliers, function (key, value) {
+                   var appenddata1 = "<option value = ''>-- Select Customers --</option>";
+                     $.each(data.customers, function (key, value) {
 
                      appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
                      });
@@ -1936,8 +1936,8 @@ function addRole(permissions)
                      appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                      });
                  $('#edit_merchandiser_buyer').html(appenddata);
-                 var appenddata1 = "<option value = ''>-- Select Suppliers --</option>";
-                   $.each(data.suppliers, function (key, value) {
+                 var appenddata1 = "<option value = ''>-- Select Customers --</option>";
+                   $.each(data.customers, function (key, value) {
 
                    appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
                    });
@@ -2049,3 +2049,105 @@ function addRole(permissions)
            }
        })
      }
+     /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
+     function add(rem,e) {
+       e.preventDefault();
+         var a = []
+         var id = $(rem).attr("data-id");
+         var val = parseInt(id) + 1;
+         $('#addcontact').append('<div id="contact_' + val + '" class="addcontact"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="remove(this)" title="Delete"></i><button type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></button><div id="contact' + val + '" class="panel"><div class="form-group has-feedback"><label for="contact_person' + val + '" class="form_label">Contact Person </label><input class="form-control input-sm " placeholder="Contact Person Name" required="" name="contact_person' + val + '" value="" id="contact_person' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_phone' + val + '" class="form_label">Contact Phone No</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">+91</span><input class="form-control input-sm " placeholder="Contact Phone No" data-minlength="10" data-maxlength="10" required="" onkeypress="return isNumber(event)" name="contact_phone' + val + '" value="" id="contact_phone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_email' + val + '" class="form_label">Contact Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm " placeholder="Contact Email" required="" name="contact_email' + val + '" value="" id="contact_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" value="" name="default"> Make as default contact person</label></div></div></div>')
+         $('#add_customer_form').validator('update');
+         var acc = document.getElementsByClassName("accordion");
+         var i;
+         for (i = 0; i < acc.length; i++) {
+             acc[i].onclick = function() {
+                 this.classList.toggle("active");
+                 var panel = this.nextElementSibling;
+                 if (panel.style.display === "block") {
+                     panel.style.display = "none";
+                 } else {
+                     panel.style.display = "block";
+                 }
+             }
+         }
+         $(rem).attr("data-id", val);
+         var j = 1;
+         $('#addcontact .addcontact').each(function(key, val) {
+             $(this).find(".button-bottom").html("<h4>Contact Person " + j +"</h4>");
+             a.push($(this).attr('id'));
+             j++;
+         })
+         var b = a.join(',');
+         $('#hidden').val(b);
+         $(':checkbox').on('change',function(){
+           var th = $(this), name = th.prop('name');
+           if(th.is(':checked')){
+               $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+            }
+      });
+     }
+
+     function remove(rem) {
+         var a = []
+         var al = $(rem).parent().attr('id');
+         $(rem).parent().remove();
+         var i = 1;
+         $('#addcontact .addcontact').each(function(key, val) {
+             $(this).find(".button-bottom").html("<h4>Contact Person " + i +"</h4>");
+             a.push($(this).attr('id'));
+             i++;
+         })
+         var b = a.join(',');
+         $('#hidden').val(b);
+     }
+     function addAddress(rem,e) {
+       e.preventDefault();
+         var a = []
+         var id = $(rem).attr("data-id");
+         var val = parseInt(id) + 1;
+         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><button type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></button><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control input-sm " required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm " placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Telephone</label><input class="form-control input-sm " placeholder="Telephone" required="" data-minlength="10" data-maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm " placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm " placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" value="" name="default1"> Make as default billing address</label></div></div></div>')
+         $('#add_customer_form').validator('update');
+         var acc = document.getElementsByClassName("accordion");
+         var i;
+         for (i = 0; i < acc.length; i++) {
+             acc[i].onclick = function() {
+                 this.classList.toggle("active");
+                 var panel = this.nextElementSibling;
+                 if (panel.style.display === "block") {
+                     panel.style.display = "none";
+                 } else {
+                     panel.style.display = "block";
+                 }
+             }
+         }
+         $(rem).attr("data-id", val);
+         var j = 1;
+         $('#addbilladdress .addbilladdress').each(function(key, val) {
+             $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
+             a.push($(this).attr('id'));
+             j++;
+         })
+         var b = a.join(',');
+         $('#hidden').val(b);
+         $(':checkbox').on('change',function(){
+           var th = $(this), name = th.prop('name');
+           if(th.is(':checked')){
+               $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+            }
+      });
+     }
+
+     function removeAddress(rem) {
+         var a = []
+         var al = $(rem).parent().attr('id');
+         $(rem).parent().remove();
+         var i = 1;
+         $('#addbilladdress .addbilladdress').each(function(key, val) {
+             $(this).find(".button-bottom").html("<h4>Billing Address " + i +"</h4>");
+             a.push($(this).attr('id'));
+             i++;
+         })
+         var b = a.join(',');
+         $('#hidden').val(b);
+     }
+/** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
