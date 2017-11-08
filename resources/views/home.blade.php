@@ -88,7 +88,7 @@
                     </a>
                 </div>
                 <div class="case-wrapper" title="Item" draggable="false">
-                    <a href="#">
+                    <a href="/admin/upload-csv">
                         <div class="app-icon" style="background-color:#3A539B; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-file-excel-o" title="Item" style=""></i></div>
                         <div class="case-label ellipsis"> <span class="case-label-text">Upload CSV</span> </div>
                         <div class="circle module-remove" style="background-color: rgb(224, 224, 224); color: rgb(33, 33, 33); display: none;">
