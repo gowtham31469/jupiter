@@ -108,7 +108,7 @@
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_email', 'Email', ['class' => 'form_label']) !!}
                           <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1">@</span>
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                             {!! Form::email('buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                           </div>
@@ -117,7 +117,7 @@
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_phone', 'Phone', ['class' => 'form_label']) !!}
                           <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1">+91</span>
+                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                             {!! Form::text('buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          </div>
@@ -159,7 +159,7 @@
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_email', 'Email', ['class' => 'form_label']) !!}
                          <div class="input-group">
-                           <span class="input-group-addon" id="basic-addon1">@</span>
+                           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                            {!! Form::email('edit_buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          </div>
@@ -168,7 +168,7 @@
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_phone', 'Phone', ['class' => 'form_label']) !!}
                          <div class="input-group">
-                           <span class="input-group-addon" id="basic-addon1">+91</span>
+                           <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                            {!! Form::text('edit_buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         </div>
@@ -233,7 +233,7 @@
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_email', 'Email', ['class' => 'form_label']) !!}
                         <div class="input-group">
-                          <span class="input-group-addon" id="basic-addon1">@</span>
+                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                           {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         </div>
@@ -243,15 +243,15 @@
                         {!! Form::label('merchandiser_password', 'Password', ['class' => ' form_label']) !!}
                         <div class="input-group">
                           {!! Form::text('merchandiser_password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
-                          <span id="generatePwd" class="input-group-addon" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
-                          <span class="input-group-addon js-textareacopybtn clipboard" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#merchandiser_password">Copy</span>
+                          <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
+                          <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#merchandiser_password">Copy</span>
                         </div>
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
                         <div class="input-group">
-                          <span class="input-group-addon" id="basic-addon1">+91</span>
+                          <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                           {!! Form::text('merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        </div>
@@ -302,7 +302,7 @@
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_email', 'Email', ['class' => 'form_label']) !!}
                        <div class="input-group">
-                         <span class="input-group-addon" id="basic-addon1">@</span>
+                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                          {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        </div>
@@ -311,7 +311,7 @@
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
                        <div class="input-group">
-                         <span class="input-group-addon" id="basic-addon1">+91</span>
+                         <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                          {!! Form::text('edit_merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                       </div>
