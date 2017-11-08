@@ -1,402 +1,97 @@
-@extends('layouts.Admin.app')
-@if (Auth::guard("web")->user())
-@section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 main">
-              <div class="top-content">
-                  <ol class="breadcrumb">
+@extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 main">
+            <div class="top-content">
+                <ol class="breadcrumb">
                     <li><a href="/admin/dashboard">Dashboard</a></li>
                     <li class="active">Upload CSV</li>
-                  </ol>
-                <h3><i class="ion-ios-browsers-outline"></i>Upload CSV</h3>
-                <ul class="sub-nav-list">
-                    <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-grid"></i>Dashboard</a></li>
-                </ul>
-                <hr/>
-              </div>
-          <div class="clearfix"></div>
-                <div class="main-content">
-                    <div class="loader"></div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart" width="100px" height="100px"></canvas>
+                </ol>
+            </div>
+            <div class="main-content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="parcel-details card">
+                            <h4><a class="btn btn-primary btn-sm pull-right">Upload Parcel Details</a>Parcel Details</h4>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 1 </h5>
+                                        <form action="/file-upload" class="dropzone" id="ParcelDetails1"></form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 2 </h5>
+                                        <form action="/file-upload" class="dropzone" id="ParcelDetails2"></form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart1" width="100px" height="100px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart2" width="100px" height="100px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <h4 class="text-center">Tabel Data</h4>
-                            <div class="table-responsive">
-                                <table class="table table-striped text-center">
+                        <div class="label-details card">
+                            <h4><a class="btn btn-primary btn-sm pull-right">Upload label Details</a>Label Details</h4>
+                            <hr/>
+                            <div class="row">
 
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Product</th>
-                                            <th class="text-center">Payment Date</th>
-                                            <th class="text-center">Status</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr>
-                                            <td>Product1</td>
-                                            <td>23/11/2013</td>
-                                            <td><label class="label label-warning">Pending</label></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Product2</td>
-                                            <td>10/11/2013</td>
-                                            <td><label class="label label-success">Delivered</label></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Product3</td>
-                                            <td>20/10/2013</td>
-                                            <td><label class="label label-info">In Call to confirm</label></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Product4</td>
-                                            <td>20/10/2013</td>
-                                            <td><label class="label label-danger">Declined</label></td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
+                                <div class="col-md-12">
+                                    <div class="">
+                                        <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Label Details File </h5>
+                                        <form action="/file-upload" class="dropzone" id="ParcelDetails1"></form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card"></div>
-                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-     <div class="modal fade" id="addBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add Buyer</h4>
-                </div>
-                {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-                    <div class="modal-body">
-                      <div id="buyer_result"></div>
-                        <div class="form-group has-feedback">
-                          {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                          <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="form-group has-feedback">
-                          {!! Form::label('buyer_email', 'Email', ['class' => 'form_label']) !!}
-                          <div class="input-group">
-                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                            {!! Form::email('buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                          </div>
-                          <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="form-group has-feedback">
-                          {!! Form::label('buyer_phone', 'Phone', ['class' => 'form_label']) !!}
-                          <div class="input-group">
-                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                            {!! Form::text('buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                         </div>
-                         <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="form-group has-feedback">
-                          {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                          <div class="help-block with-errors"></div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::submit('Add Buyer', ['class' => 'btn btn-primary'] ) !!}
-                    </div>
-               {!! Form::close() !!}
+            <div class="col-md-12">
+             <h3>Notes</h3>
+            <p class="info">You can also overwrite all default event actions in the options</p>
+            <p class="info">You can also overwrite all default event actions in the options</p>
+            <p class="info">You can also overwrite all default event actions in the options</p>
+            <p class="info">You can also overwrite all default event actions in the options</p>
             </div>
+           
         </div>
     </div>
-    <div class="modal fade" id="editBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Edit Buyer</h4>
-               </div>
-               {!! Form::open(['id' => 'edit_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                     <div id="edit_buyer_result"></div>
-                     {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
-                       <div class="form-group has-feedback">
-                         {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                         <div class="help-block with-errors"></div>
-                       </div>
-                       <div class="form-group has-feedback">
-                         {!! Form::label('edit_buyer_email', 'Email', ['class' => 'form_label']) !!}
-                         <div class="input-group">
-                           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                           {!! Form::email('edit_buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                         </div>
-                         <div class="help-block with-errors"></div>
-                       </div>
-                       <div class="form-group has-feedback">
-                         {!! Form::label('edit_buyer_phone', 'Phone', ['class' => 'form_label']) !!}
-                         <div class="input-group">
-                           <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                           {!! Form::text('edit_buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                        </div>
-                        <div class="help-block with-errors"></div>
-                       </div>
-                       <div class="form-group has-feedback">
-                         {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
-                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                         <div class="help-block with-errors"></div>
-                       </div>
+</div>
 
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Edit Buyer', ['class' => 'btn btn-primary'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-   <div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Buyer</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                     <div id="delete_buyer_result"></div>
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete buyer. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_buyer_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Delete Buyer', ['class' => 'btn btn-primary'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-   <div class="modal fade" id="addMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Add Merchandiser</h4>
-              </div>
-              {!! Form::open(['id' => 'add_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
-                  <div class="modal-body">
-                    <div id="add_merchandiser_result"></div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_name', 'Name', ['class' => 'form_label']) !!}
-                        {!! Form::text('merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_email', 'Email', ['class' => 'form_label']) !!}
-                        <div class="input-group">
-                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                          {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                        </div>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_password', 'Password', ['class' => ' form_label']) !!}
-                        <div class="input-group">
-                          {!! Form::text('merchandiser_password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
-                          <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
-                          <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#merchandiser_password">Copy</span>
-                        </div>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
-                        <div class="input-group">
-                          <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                          {!! Form::text('merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                       </div>
-                       <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                      {!! Form::submit('Add Merchandiser', ['class' => 'btn btn-primary'] ) !!}
-                  </div>
-             {!! Form::close() !!}
-          </div>
-      </div>
-  </div>
-  <div class="modal fade" id="editMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title" id="myModalLabel">Edit Merchandiser</h4>
-             </div>
-             {!! Form::open(['id' => 'edit_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
-                 <div class="modal-body">
-                   {!! Form::hidden('merchandiser_edit_id',$value = null, array('id'=>'merchandiser_edit_id','class' => 'form-control input-sm')) !!}
-                   <div id="edit_merchandiser_result"></div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_name', 'Name', ['class' => 'form_label']) !!}
-                       {!! Form::text('edit_merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_email', 'Email', ['class' => 'form_label']) !!}
-                       <div class="input-group">
-                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                         {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                       </div>
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_phone', 'Phone', ['class' => 'form_label']) !!}
-                       <div class="input-group">
-                         <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                         {!! Form::text('edit_merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                      </div>
-                      <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::submit('Edit Merchandiser', ['class' => 'btn btn-primary'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
- <div class="modal fade" id="deleteMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title" id="myModalLabel">Delete Merchandiser</h4>
-             </div>
-             {!! Form::open(['id' => 'delete_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
-                 <div class="modal-body">
-                   <div id="delete_buyer_result"></div>
-                     <div class="form-group has-feedback">
-                       <p>You are about to delete buyer. Do you want to proceed?</p>
-                        {!! Form::hidden('id',$value = null, array('id'=>'delete_merchandiser_id','class' => 'form-control input-sm')) !!}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::submit('Delete Merchandiser', ['class' => 'btn btn-primary'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
-    @endsection
-    @else
-    <script type="text/javascript">
-        window.location = "{{ url('/admin') }}";
-    </script>
-    @endif
-    @section('jqueryIncludes')
-   <script type="text/javascript">
-       $( document ).ready(function() {
-         $('#add_buyer_form').trigger("reset");
-         $('#edit_buyer_form').trigger('reset');
-         $('#add_merchandiser_form').trigger('reset');
-         $('#edit_merchandiser_form').trigger('reset');
-         $('#buyer_result').hide();
-         $('#edit_buyer_result').hide();
-         $('#delete_buyer_result').hide();
-         $('#add_merchandiser_result').hide();
-         $('#edit_merchandiser_result').hide();
-       });
 
-        $('#add_buyer_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented())
-        {
 
+@endsection @else
+<script type="text/javascript">
+    window.location = "{{ url('/admin') }}";
+</script>
+@endif @section('jqueryIncludes')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.logo').html('CSV Upload')
+        $('#add_buyer_form').trigger("reset");
+        $('#edit_buyer_form').trigger('reset');
+        $('#add_merchandiser_form').trigger('reset');
+        $('#edit_merchandiser_form').trigger('reset');
+        $('#buyer_result').hide();
+        $('#edit_buyer_result').hide();
+        $('#delete_buyer_result').hide();
+        $('#add_merchandiser_result').hide();
+        $('#edit_merchandiser_result').hide();
+    });
+
+    $('#add_buyer_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            addBuyer();
         }
-        else
-        {
-           e.preventDefault();
-           addBuyer();
-        }
-      })
-      /** To refresh modal **/
-      $('.modal').on('hidden.bs.modal', function (e) {
+    })
+    /** To refresh modal **/
+    $('.modal').on('hidden.bs.modal', function(e) {
         $('#add_buyer_form').trigger("reset");
         $('#add_merchandiser_form').trigger('reset');
         $('#buyer_result').hide();
@@ -405,114 +100,98 @@
         $('#merchandiserr_result').hide();
         $('#edit_merchandiserr_result').hide();
         $('#delete_merchandiserr_result').hide();
-       })
-       // get edit buyer details
-       $(document).on('click','.edit-buyer',function(e){
-           var id = $(this).closest('tr').attr('id');
-           e.preventDefault();
-           getBuyer(id);
-       });
-       /** submit edit buyer form **/
-       $('#edit_buyer_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
+    })
+    // get edit buyer details
+    $(document).on('click', '.edit-buyer', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        e.preventDefault();
+        getBuyer(id);
+    });
+    /** submit edit buyer form **/
+    $('#edit_buyer_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
 
-         }
-         else
-         {
+        } else {
             e.preventDefault();
             editBuyer();
-         }
-       })
-       $('#deleteBuyerModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_buyer_id').attr('value', config);
-       });
-       /** submit delete buyer form **/
-       $('#delete_buyer_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
+        }
+    })
+    $('#deleteBuyerModal').on('show.bs.modal', function(e) {
+        var config = $(e.relatedTarget).data('userid');
+        $('#delete_buyer_id').attr('value', config);
+    });
+    /** submit delete buyer form **/
+    $('#delete_buyer_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
 
-         }
-         else
-         {
+        } else {
             e.preventDefault();
-            var id   = $('#delete_buyer_id').val();
+            var id = $('#delete_buyer_id').val();
             deleteBuyer(id);
-         }
-       })
-       /** generate password **/
-       $("#generatePwd").validator().click(function(){
-       function randomString(length, chars)
-       {
-         var mask = '';
-         if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-         if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-         if (chars.indexOf('#') > -1) mask += '0123456789';
-         if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
-         var result = '';
-         for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
-         return result;
-       }
-         $("#merchandiser_password").val( randomString(10, 'aA#!'));
-         $('#add_merchandiser_form').validator('validate');
-         })
-         /** Copy password to clipboard **/
-         $( document ).ready(function() {
-           var clipboard = new Clipboard('.clipboard');
-           clipboard.on('success', function(e) {
-             $(e.trigger).text("Copied!");
-             e.clearSelection();
-             setTimeout(function() {
-               $(e.trigger).text("Copy");
-             }, 2500);
-           });
-         });
-         $('#add_merchandiser_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
+        }
+    })
+    /** generate password **/
+    $("#generatePwd").validator().click(function() {
+        function randomString(length, chars) {
+            var mask = '';
+            if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+            if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (chars.indexOf('#') > -1) mask += '0123456789';
+            if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
+            var result = '';
+            for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
+            return result;
+        }
+        $("#merchandiser_password").val(randomString(10, 'aA#!'));
+        $('#add_merchandiser_form').validator('validate');
+    })
+    /** Copy password to clipboard **/
+    $(document).ready(function() {
+        var clipboard = new Clipboard('.clipboard');
+        clipboard.on('success', function(e) {
+            $(e.trigger).text("Copied!");
+            e.clearSelection();
+            setTimeout(function() {
+                $(e.trigger).text("Copy");
+            }, 2500);
+        });
+    });
+    $('#add_merchandiser_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
 
-         }
-         else
-         {
+        } else {
             e.preventDefault();
             addMerchandiser();
-         }
-       })
-       // get edit merchandiser details
-       $(document).on('click','.edit-merchandiser',function(e){
-           var id = $(this).closest('tr').attr('id');
-           e.preventDefault();
-           getMerchandiser(id);
-       });
-       /** submit edit merchandiser form **/
-       $('#edit_merchandiser_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
+        }
+    })
+    // get edit merchandiser details
+    $(document).on('click', '.edit-merchandiser', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        e.preventDefault();
+        getMerchandiser(id);
+    });
+    /** submit edit merchandiser form **/
+    $('#edit_merchandiser_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
 
-         }
-         else
-         {
+        } else {
             e.preventDefault();
             editMerchandiser();
-         }
-       })
-       $('#deleteMerchandiserModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_merchandiser_id').attr('value', config);
-       });
-       /** submit delete merchandiser form **/
-       $('#delete_merchandiser_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
+        }
+    })
+    $('#deleteMerchandiserModal').on('show.bs.modal', function(e) {
+        var config = $(e.relatedTarget).data('userid');
+        $('#delete_merchandiser_id').attr('value', config);
+    });
+    /** submit delete merchandiser form **/
+    $('#delete_merchandiser_form').validator().on('submit', function(e) {
+        if (e.isDefaultPrevented()) {
 
-         }
-         else
-         {
+        } else {
             e.preventDefault();
-            var id   = $('#delete_merchandiser_id').val();
+            var id = $('#delete_merchandiser_id').val();
             deleteMerchandiser(id);
-         }
-       })
-    </script>
-    @endsection
+        }
+    })
+</script>
+@endsection

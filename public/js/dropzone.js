@@ -138,7 +138,7 @@
       addRemoveLinks: false,
       previewsContainer: null,
       capture: null,
-      dictDefaultMessage: "Drop files here to upload",
+      dictDefaultMessage: "Click here to upload / Drop files here to upload",
       dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
       dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
       dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
@@ -527,7 +527,7 @@
         this.element.setAttribute("enctype", "multipart/form-data");
       }
       if (this.element.classList.contains("dropzone") && !this.element.querySelector(".dz-message")) {
-        this.element.appendChild(Dropzone.createElement("<div class=\"dz-default dz-message\"><span>" + this.options.dictDefaultMessage + "</span></div>"));
+        this.element.appendChild(Dropzone.createElement("<div class=\"dz-default dz-message\"><i class='fa fa-cloud-upload' aria-hidden='true'></i><span>" + this.options.dictDefaultMessage + "</span></div>"));
       }
       if (this.clickableElements.length) {
         setupHiddenFileInput = (function(_this) {
