@@ -1522,10 +1522,27 @@ function addRole(permissions)
           },
           success: function (data) {
             $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Customer Management</a></li><li class="active">Customers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="customers-list-view"><a class="active" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Actions</th></tr></thead><tbody>';
+            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
             $.each(data.customers, function(i, item){
              var index = i+1;
-             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
+               if(item.is_active === 1)
+               {
+                table += '<td><span class="badge badge-success">Active</span></td>';
+               }
+               else
+               {
+                table += '<td><span class="badge badge-danger">Inactive</span></td>';
+               }
+               if(item.is_active === 1)
+               {
+                table += '<td><a href="#"><i class="fa fa-times fa-lg" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
+               }
+               else
+               {
+                table += '<td><a href="#"><i class="fa fa-check fa-lg" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
+               }
+               table += '<a href="#"><i class="fa fa-pencil fa-lg" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
@@ -2234,3 +2251,49 @@ function addRole(permissions)
          $('#hidden').val(b);
      }
 /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+
+    function make_customer_active(id,csrf_token)
+     {
+      $.ajax({
+           url:base_url + "/admin/customer-management/make-customer-active",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     customersListView();
+                }
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+     }
+
+    function make_customer_inactive(id,csrf_token)
+     {
+      $.ajax({
+           url:base_url + "/admin/customer-management/make-customer-inactive",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     customersListView();
+                }
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
+     }

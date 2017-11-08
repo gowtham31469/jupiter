@@ -58,6 +58,8 @@ Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\Us
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
 Route::post('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
 Route::post('admin/customer-management/add-customer', 'Admin\CustomerManagement\CustomerManagementController@addCustomer');
+Route::put('admin/customer-management/make-customer-active', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerActive');
+Route::put('admin/customer-management/make-customer-inactive', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerInactive');
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');

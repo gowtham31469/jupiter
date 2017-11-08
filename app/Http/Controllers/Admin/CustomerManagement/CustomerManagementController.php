@@ -63,7 +63,7 @@ class CustomerManagementController extends Controller
     {
       try{
             $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax','customers.is_active')
                          ->join('customer_contact_persons','customer_contact_persons.customer_id','customers.id')
                          ->join('customer_bill_address','customer_bill_address.customer_id','customers.id')
                          ->where('customer_bill_address.default_address','=',1)
@@ -178,4 +178,50 @@ class CustomerManagementController extends Controller
             }
             return $result;
       }
+      /**
+       * Make customer active
+       * @author <Praveen>
+       * @return \Illuminate\Http\Response
+       */
+      public function makeCustomerActive(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              Customer::where('id',$id)
+               ->update([
+                 'is_active'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make customer active
+       * @author <Praveen>
+       * @return \Illuminate\Http\Response
+       */
+      public function makeCustomerInactive(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              Customer::where('id',$id)
+               ->update([
+                 'is_active'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
 }
