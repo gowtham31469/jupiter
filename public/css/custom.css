@@ -20,6 +20,7 @@ body {
 .pagename {
     color: #fff !important;
 }
+
 .breadcrumb {
     margin-right: -15px;
     margin-left: -15px;
@@ -87,10 +88,42 @@ body {
     padding-top: calc(40px + 2%)
 }
 
-
-.main{
-    padding-top: 60px;   
+.navbar-default .navbar-toggle {
+    border-color: #273339;
 }
+
+.navbar-toggle {
+    padding: 4px 5px;
+}
+
+.navbar-toggle .icon-bar {
+    width: 20px;
+    height: 2px;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+    background-color: #1b2327;
+}
+
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+    border-color: #273339;
+    background: #273339;
+}
+
+a.dropdown-toggle.profile-dropdown-admin:hover {
+    background: #192428 !important;
+}
+
+.main {
+    padding-top: 50px;
+}
+
 .main-menu {
     padding-top: 100px;
 }
@@ -336,45 +369,52 @@ p.terms {
         transform: rotate(360deg);
     }
 }
-.buyer-nav-select .btn-group.bootstrap-select.js-example-responsive.buyer-select{
+
+.buyer-nav-select .btn-group.bootstrap-select.js-example-responsive.buyer-select {
     margin-top: 3px;
 }
 
-.buyer-nav-select button.btn.dropdown-toggle.btn-default{
+.buyer-nav-select button.btn.dropdown-toggle.btn-default {
     color: #fff;
     background-color: transparent;
     border-color: transparent;
     outline: 0 !important;
 }
-.buyer-nav-select{
+
+.buyer-nav-select {
     padding-bottom: 2px;
 }
-.buyer-nav-select:hover{
-        background: #192327 !important;
+
+.buyer-nav-select:hover {
+    background: #192327 !important;
     color: #fff !important;
 }
-.buyer-nav-select .filter-option{
+
+.buyer-nav-select .filter-option {
     color: #8D99A6;
     font-weight: 500;
     font-size: 13px;
 }
+
 .buyer-nav-select .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width: 215px;
 }
-.profile-dropdown-admin
-{
+
+.profile-dropdown-admin {
     background: transparent !important;
     color: #fff !important;
 }
-.profile-dropdown-admin .well
-{
-    color:#333 !important;
+
+.profile-dropdown-admin .well {
+    color: #333 !important;
 }
-span.navbar-brand.logo{
+
+span.navbar-brand.logo {
     font-weight: bold;
     color: #ffffff;
 }
-span.navbar-brand.logo:hover{
+
+span.navbar-brand.logo:hover {
     font-weight: bold;
     color: #ffffff;
 }
