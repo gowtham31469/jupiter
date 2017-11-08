@@ -39,7 +39,8 @@ Route::get('customer/dashboard', 'Customer\HomeController@index')->name('custome
 Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 
-Route::get('admin/template-management', 'Admin\AdminController@templateManagement');
+Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@dashboard');
+Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
