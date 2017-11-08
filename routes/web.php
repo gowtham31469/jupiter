@@ -58,6 +58,9 @@ Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\Us
 /** customer Management **/
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
 Route::post('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
+Route::post('admin/customer-management/add-customer', 'Admin\CustomerManagement\CustomerManagementController@addCustomer');
+Route::put('admin/customer-management/make-customer-active', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerActive');
+Route::put('admin/customer-management/make-customer-inactive', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerInactive');
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
@@ -165,3 +168,5 @@ Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestr
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
 // Route::post('multi-upload', 'UploadController@csvMultiUpload');
+/** upload csv **/
+Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');

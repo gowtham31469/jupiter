@@ -38,11 +38,37 @@ body {
     color: #fff !important;
 }
 
-.navbar-default {
-    background-color: #263238 !important;
-    border-color: #ebeff2 !important;
+@media (min-width: 768px) {
+    .navbar-default {
+        background-color: #263238 !important;
+        border-color: #ebeff2 !important;
+    }
 }
-
+h3.content-heading{
+        font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+h5.poc_number{
+    font-size: 12px;
+}
+p.info {
+    font-size: 14px;
+    color: #797979;
+    font-weight: 300;
+    margin: 0px;
+}
+.parcel-details sub.pull-right, .label-details sub.pull-right {
+    line-height: 1;
+}
+.label-details, .parcel-details{
+    margin-top: 0% !important;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #273339;
+    border-color: #1f282d;
+}
 .wallpaper {
     background: url(../../images/background.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
@@ -87,8 +113,47 @@ body {
     padding-top: calc(40px + 2%)
 }
 
+
+.navbar-default .navbar-toggle {
+    border-color: #273339;
+}
+
+.navbar-toggle {
+    padding: 4px 5px;
+}
+
+.navbar-toggle .icon-bar {
+    width: 20px;
+    height: 2px;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+    background-color: #1b2327;
+}
+
+@media (max-width: 768px) {
+    .navbar-default {
+        background: #273339 !important;
+    }
+    .navbar-default .navbar-collapse,
+    .navbar-default .navbar-form {
+        border-color: #273339;
+        background: #273339;
+    }
+}
+
+
+a.dropdown-toggle.profile-dropdown-admin:hover {
+    background: #192428 !important;
+}
+
 .main {
-    padding-top: 60px;
+    padding-top: 50px;
 }
 
 .main-menu {

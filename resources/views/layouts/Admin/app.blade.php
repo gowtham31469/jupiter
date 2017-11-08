@@ -42,6 +42,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.0/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
+    <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="{{ asset('js/Admin/scripts.js') }}"></script>
 
