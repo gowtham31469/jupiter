@@ -50,19 +50,5 @@ class UploadCsvController extends Controller
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
    }
-   /**
-    * Show the orchestra customers list view on ajax.
-    * @author <Praveen>
-    * @return \Illuminate\Http\Response
-    */
-    public function customers()
-    {
-      try{
-            $customers = DB::table('customers')->select('id','company_name','factory_code','courier_choice','account_no','tin_number','pan_number','email')->get();
-            return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
-          } catch (\Exception $e)
-          {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-    }
+   
 }

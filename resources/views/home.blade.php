@@ -45,7 +45,7 @@
                     <a href="/admin/customer-management">
                         <div class="app-icon" style="background-color: #8e44ad; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-tag" title="Item" style=""></i></div>
                         <div class="case-label ellipsis">
-                            <div class="circle module-count-list-item hidden" data-doctype="Item" style=""> <span class="circle-text">1</span> </div> <span class="case-label-text">Supplier</span> </div>
+                            <div class="circle module-count-list-item hidden" data-doctype="Item" style=""> <span class="circle-text">1</span> </div> <span class="case-label-text">Customer</span> </div>
                         <div class="circle module-remove" style="background-color: rgb(224, 224, 224); color: rgb(33, 33, 33); display: none;">
                             <div class="circle-text">
                                 <b>×</b>

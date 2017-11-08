@@ -1522,10 +1522,10 @@ function addRole(permissions)
           },
           success: function (data) {
             $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Customer Management</a></li><li class="active">Customers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-grid"></i>Dashboard</a></li><li class="customers-list-view"><a class="active" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li></ul><hr/></div>');
-            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Contact Person</th><th>Contact Email</th><th>Phone</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>PAN Number</th><th>Actions</th></tr></thead><tbody>';
+            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Actions</th></tr></thead><tbody>';
             $.each(data.customers, function(i, item){
              var index = i+1;
-             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td>'+item.contact_person+'</td><td>'+item.contact_email+'</td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.pan_number+'</td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+             table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.phone_no+'</td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td><td><a href="#"><i class="ion-edit edit-user-role" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
@@ -1552,8 +1552,6 @@ function addRole(permissions)
       var gstin_number    =  $('#gstin_number').val();
       var pan_number      =  $('#pan_number').val();
       var login_email     =  $('#login_email').val();
-      var telephone       =  $('#telephone').val();
-      var address_email   =  $('#address_email').val();
       var password        =  $('#password').val();
       var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
 
@@ -1635,48 +1633,51 @@ function addRole(permissions)
       });
                 
       contact_person   = contact_person.join(',');
-      contact_phone    = contact_phone.join('|');
+      contact_phone    = contact_phone.join(',');
       contact_email    = contact_email.join(',');
       default_contact  = default_contact.join(',');
-      address          = address.join(',');
+      address          = address.join('|');
       country          = country.join(',');
       telephone        = telephone.join(',');
       fax              = fax.join(',');
       address_email    = address_email.join(',');
       default_address  = default_address.join(',');
 
-      // $.ajax({
-      //     url: base_url + "/admin/user-management/add-jga-user",
-      //     method: 'POST',
-      //     data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,pan_number:pan_number,login_email:login_email,p:p,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email},
-      //     beforeSend: function () {
-      //       $(".loader").show();
-      //       $(".loader").css('margin-top','12%');
-      //     },
-      //     statusCode: {
-      //          200: function() {
-      //               $('#result').html('User Added Successfully')
-      //               $("#result").addClass("alert alert-success");
-      //               $('#addUserModal').modal('hide');
-      //               usersListView();
-      //          },
-      //          400: function() {
-      //            $('#result').html("Something went wrong!!")
-      //            $("#result").addClass("alert alert-dander");
-      //          },
-      //          409: function() {
-      //               $('#result').html('Email already registered.')
-      //               $("#result").addClass("alert alert-warning");
-      //          }
-      //     },
-      //     error: function (data) {
+      $.ajax({
+          url: base_url + "/admin/customer-management/add-customer",
+          method: 'POST',
+          data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address},
+          beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top','12%');
+          },
+          statusCode: {
+               200: function() {
+                    $('#customer_result').removeAttr('style');
+                    $('#customer_result').html('Customer Added Successfully')
+                    $("#customer_result").addClass("alert alert-success");
+                    $('#addCustomerModal').modal('hide');
+                    customersListView();
+               },
+               400: function() {
+                    $('#customer_result').removeAttr('style');
+                    $('#customer_result').html("Something went wrong!!")
+                    $("#customer_result").addClass("alert alert-dander");
+               },
+               409: function() {
+                    $('#customer_result').removeAttr('style');
+                    $('#customer_result').html('Email already registered.')
+                    $("#customer_result").addClass("alert alert-warning");
+               }
+          },
+          error: function (data) {
 
-      //     },
-      //     complete: function () {
-      //       $(".loader").hide();
-      //       $(".loader").css('margin-top','0%');
-      //     }
-      // })
+          },
+          complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top','0%');
+          }
+      })
    }
    function buyers()
    {

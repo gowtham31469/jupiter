@@ -57,6 +57,7 @@ Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\Us
 /** customer Management **/
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
 Route::post('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
+Route::post('admin/customer-management/add-customer', 'Admin\CustomerManagement\CustomerManagementController@addCustomer');
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');

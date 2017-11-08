@@ -157,7 +157,7 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
-                                {!! Form::label('login_email', 'Username', ['class' => 'form_label']) !!}
+                                {!! Form::label('login_email', 'Email', ['class' => 'form_label']) !!}
                                 <div class="input-group">
                                   <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                   {!! Form::email('login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
