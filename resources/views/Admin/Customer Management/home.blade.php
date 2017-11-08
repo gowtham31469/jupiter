@@ -134,7 +134,15 @@
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('tin_number', 'TIN Number', ['class' => 'form_label']) !!}
-                                  {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required')) !!}
+                                  {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
+                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                  {!! Form::label('gstin_number', 'GSTIN Number', ['class' => 'form_label']) !!}
+                                  {!! Form::text('gstin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GSTIN Number','required','maxlength' => '15','data-minlength' => '15')) !!}
                                   <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
@@ -162,7 +170,7 @@
                               <div class="form-group has-feedback">
                                 {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                                 <div class="input-group">
-                                  {!! Form::text('password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
+                                  {!! Form::text('password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required','data-minlength' => '6')) !!}
                                   <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
                                   <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
                                 </div>
@@ -179,7 +187,7 @@
                                         <div id="contact1" class="panel">
                                           <div class="form-group has-feedback">
                                               {!! Form::label('contact_person1', 'Contact Person', ['class' => 'form_label']) !!}
-                                              {!! Form::text('contact_person1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Person Name','required')) !!}
+                                              {!! Form::text('contact_person1',$value = '', array('class' => 'form-control input-sm contact_person','placeholder' => 'Contact Person Name','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
@@ -187,7 +195,7 @@
                                           {!! Form::label('contact_phone1', 'Contact Phone No', ['class' => 'form_label']) !!}
                                           <div class="input-group">
                                             <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                                            {!! Form::text('contact_phone1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Phone No','data-minlength' => '10','data-maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                                            {!! Form::text('contact_phone1',$value = '', array('class' => 'form-control input-sm contact_phone','placeholder' => 'Contact Phone No','data-minlength' => '10','data-maxlength' => '10','required','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
                                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                          </div>
                                          <div class="help-block with-errors"></div>
@@ -196,14 +204,14 @@
                                             {!! Form::label('contact_email1', 'Contact Email', ['class' => 'form_label']) !!}
                                             <div class="input-group">
                                               <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                              {!! Form::email('contact_email1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Contact Email','required')) !!}
+                                              {!! Form::email('contact_email1',$value = '', array('class' => 'form-control input-sm contact_email','placeholder' => 'Contact Email','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-check">
                                             <label class="form-check-label">
-                                              <input class="form-check-input" type="checkbox" value="" name="default">
+                                              <input class="form-check-input default_contact" type="checkbox" value="" name="default" id="default_contact1">
                                               Make as default contact person
                                             </label>
                                           </div>
@@ -222,25 +230,28 @@
                                         <div id="billaddress1" class="panel">
                                           <div class="form-group has-feedback">
                                             {!! Form::label('address1', 'Address', ['class' => 'form_label']) !!}
-                                            {!! Form::textarea('address1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                                            {!! Form::textarea('address1',$value = '', array('class' => 'form-control input-sm address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                                             <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
                                               {!! Form::label('country1', 'Country', ['class' => 'form_label']) !!}
-                                              {!! Form::text('country1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country','required')) !!}
+                                              {!! Form::text('country1',$value = '', array('class' => 'form-control input-sm country','placeholder' => 'Country','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
-                                              {!! Form::label('telephone1', 'Telephone', ['class' => 'form_label']) !!}
-                                              {!! Form::text('telephone1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Telephone','required','data-minlength' => '10','data-maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
+                                            {!! Form::label('telephone1', 'Phone', ['class' => 'form_label']) !!}
+                                            <div class="input-group">
+                                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
+                                              {!! Form::text('telephone1',$value = '', array('class' => 'form-control input-sm telephone','placeholder' => 'Telephone','required','data-minlength' => '10','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            </div>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
                                               {!! Form::label('fax1', 'Fax', ['class' => 'form_label']) !!}
-                                              {!! Form::text('fax1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
+                                              {!! Form::text('fax1',$value = '', array('class' => 'form-control input-sm fax','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
@@ -248,14 +259,14 @@
                                             {!! Form::label('address_email1', 'Email', ['class' => 'form_label']) !!}
                                             <div class="input-group">
                                               <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                              {!! Form::email('address_email1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                                              {!! Form::email('address_email1',$value = '', array('class' => 'form-control input-sm address_email','placeholder' => 'Email','required')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-check">
                                             <label class="form-check-label">
-                                              <input class="form-check-input" type="checkbox" value="" name="default1">
+                                              <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address1">
                                               Make as default billing address
                                             </label>
                                           </div>
@@ -333,7 +344,7 @@
           }, 2500);
         });
       });
-      /** submit add supplier form **/
+      /** submit add customer form **/
       $('#add_customer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -360,10 +371,5 @@
           }
       }
       
-    //   $(':checkbox').on('change', function() {
-    //
-    //   $(':checkbox').not(this).prop('checked', false);
-    //
-    // });
     </script>
     @endsection

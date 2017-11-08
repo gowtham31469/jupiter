@@ -1538,57 +1538,139 @@ function addRole(permissions)
   }
   function addCustomer()
   {
-      var factory_code    = $('#factory_code').val();
-      var company_name    = $('#company_name').val();
-      var contact_person  = $('#contact_person').val();
-      var contact_phone   = $('#contact_phone').val();
-      var contact_email   = $('#contact_email').val();
-      var courier_choice  = $('#courier_choice').val();
+      var factory_code    =  $('#factory_code').val();
+      var company_name    =  $('#company_name').val();
+      var courier_choice  =  $('#courier_choice').val();
       var account_no      =  $('#account_no').val();
       var tin_number      =  $('#tin_number').val();
+      var gstin_number    =  $('#gstin_number').val();
       var pan_number      =  $('#pan_number').val();
       var login_email     =  $('#login_email').val();
-      var address         =  $('#address').val();
-      var country         =  $('#country').val();
-      var fax             =  $('#pan_number').val();
       var telephone       =  $('#telephone').val();
       var address_email   =  $('#address_email').val();
+      var password        =  $('#password').val();
+      var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
 
+      var contact_person  = [];
+      var contact_phone   = [];
+      var contact_email   = [];
+      var default_contact = [];
 
-      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      var address         = [];
+      var country         = [];
+      var telephone       = [];
+      var fax             = [];
+      var address_email   = [];
+      var default_address = [];
 
-      $.ajax({
-          url: base_url + "/admin/user-management/add-jga-user",
-          method: 'POST',
-          data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,pan_number:pan_number,login_email:login_email,p:p,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email},
-          beforeSend: function () {
-            $(".loader").show();
-            $(".loader").css('margin-top','12%');
-          },
-          statusCode: {
-               200: function() {
-                    $('#result').html('User Added Successfully')
-                    $("#result").addClass("alert alert-success");
-                    $('#addUserModal').modal('hide');
-                    usersListView();
-               },
-               400: function() {
-                 $('#result').html("Something went wrong!!")
-                 $("#result").addClass("alert alert-dander");
-               },
-               409: function() {
-                    $('#result').html('Email already registered.')
-                    $("#result").addClass("alert alert-warning");
-               }
-          },
-          error: function (data) {
-
-          },
-          complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top','0%');
+      $('.contact_person').each(function(i, item)
+      {
+          contact_person[i]    = $(item).val();
+          
+      });
+      $('.contact_phone').each(function(i, item)
+      {
+          contact_phone[i]    = $(item).val();
+          
+      });
+      $('.contact_email').each(function(i, item)
+      {
+          contact_email[i]    = $(item).val();
+          
+      });
+      $('.default_contact').each(function(i, item)
+      {
+          if ($(this).is(':checked'))
+          {
+            default_contact[i]    = 1;
           }
-      })
+          else
+          {
+            default_contact[i]    = 0;
+          }
+          
+      });
+      $('.address').each(function(i, item)
+      {
+          address[i]    = $(item).val();
+          
+      });
+      $('.country').each(function(i, item)
+      {
+          country[i]    = $(item).val();
+          
+      });
+      $('.telephone').each(function(i, item)
+      {
+          telephone[i]    = $(item).val();
+          
+      });
+      $('.fax').each(function(i, item)
+      {
+          fax[i]    = $(item).val();
+          
+      });
+      $('.address_email').each(function(i, item)
+      {
+          address_email[i]    = $(item).val();
+          
+      });
+      $('.default_address').each(function(i, item)
+      {
+        if ($(this).is(':checked'))
+          {
+            default_address[i]    = 1;
+          }
+          else
+          {
+            default_address[i]    = 0;
+          }
+          
+      });
+                
+      contact_person   = contact_person.join(',');
+      contact_phone    = contact_phone.join('|');
+      contact_email    = contact_email.join(',');
+      default_contact  = default_contact.join(',');
+      address          = address.join(',');
+      country          = country.join(',');
+      telephone        = telephone.join(',');
+      fax              = fax.join(',');
+      address_email    = address_email.join(',');
+      default_address  = default_address.join(',');
+
+      // $.ajax({
+      //     url: base_url + "/admin/user-management/add-jga-user",
+      //     method: 'POST',
+      //     data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,pan_number:pan_number,login_email:login_email,p:p,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email},
+      //     beforeSend: function () {
+      //       $(".loader").show();
+      //       $(".loader").css('margin-top','12%');
+      //     },
+      //     statusCode: {
+      //          200: function() {
+      //               $('#result').html('User Added Successfully')
+      //               $("#result").addClass("alert alert-success");
+      //               $('#addUserModal').modal('hide');
+      //               usersListView();
+      //          },
+      //          400: function() {
+      //            $('#result').html("Something went wrong!!")
+      //            $("#result").addClass("alert alert-dander");
+      //          },
+      //          409: function() {
+      //               $('#result').html('Email already registered.')
+      //               $("#result").addClass("alert alert-warning");
+      //          }
+      //     },
+      //     error: function (data) {
+
+      //     },
+      //     complete: function () {
+      //       $(".loader").hide();
+      //       $(".loader").css('margin-top','0%');
+      //     }
+      // })
    }
    function buyers()
    {
@@ -2049,7 +2131,7 @@ function addRole(permissions)
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#addcontact').append('<div id="contact_' + val + '" class="addcontact"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="remove(this)" title="Delete"></i><button type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></button><div id="contact' + val + '" class="panel"><div class="form-group has-feedback"><label for="contact_person' + val + '" class="form_label">Contact Person </label><input class="form-control input-sm " placeholder="Contact Person Name" required="" name="contact_person' + val + '" value="" id="contact_person' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_phone' + val + '" class="form_label">Contact Phone No</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">+91</span><input class="form-control input-sm " placeholder="Contact Phone No" data-minlength="10" data-maxlength="10" required="" onkeypress="return isNumber(event)" name="contact_phone' + val + '" value="" id="contact_phone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_email' + val + '" class="form_label">Contact Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm " placeholder="Contact Email" required="" name="contact_email' + val + '" value="" id="contact_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" value="" name="default"> Make as default contact person</label></div></div></div>')
+         $('#addcontact').append('<div id="contact_' + val + '" class="addcontact"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="remove(this)" title="Delete"></i><button type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></button><div id="contact' + val + '" class="panel"><div class="form-group has-feedback"><label for="contact_person' + val + '" class="form_label">Contact Person </label><input class="form-control input-sm contact_person" placeholder="Contact Person Name" required="" name="contact_person' + val + '" value="" id="contact_person' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_phone' + val + '" class="form_label">Contact Phone No</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm contact_phone" placeholder="Contact Phone No" data-minlength="10" maxlength="10" required="" onkeypress="return isNumber(event)" name="contact_phone' + val + '" value="" id="contact_phone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="contact_email' + val + '" class="form_label">Contact Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm contact_email" placeholder="Contact Email" required="" name="contact_email' + val + '" value="" id="contact_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_contact" type="checkbox" value="" name="default" id="default_contact' + val + '"> Make as default contact person</label></div></div></div>')
          $('#add_customer_form').validator('update');
          var acc = document.getElementsByClassName("accordion");
          var i;
@@ -2099,7 +2181,7 @@ function addRole(permissions)
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><button type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></button><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control input-sm " required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm " placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Telephone</label><input class="form-control input-sm " placeholder="Telephone" required="" data-minlength="10" data-maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm " placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm " placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" value="" name="default1"> Make as default billing address</label></div></div></div>')
+         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 23px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><button type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></button><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control input-sm address" required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Telephone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address' + val + '"> Make as default billing address</label></div></div></div>')
          $('#add_customer_form').validator('update');
          var acc = document.getElementsByClassName("accordion");
          var i;
