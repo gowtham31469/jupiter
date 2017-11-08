@@ -38,11 +38,13 @@ body {
     background: #192327 !important;
     color: #fff !important;
 }
-
-.navbar-default {
+@media (min-width: 768px){
+    .navbar-default {
     background-color: #263238 !important;
     border-color: #ebeff2 !important;
 }
+}
+
 
 .wallpaper {
     background: url(../../images/background.jpg) no-repeat center center fixed;
@@ -109,12 +111,17 @@ body {
 .navbar-default .navbar-toggle:hover {
     background-color: #1b2327;
 }
-
-.navbar-default .navbar-collapse,
+@media (max-width: 768px){
+    .navbar-default{
+        background: #273339 !important;
+    }
+    .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
     border-color: #273339;
     background: #273339;
 }
+}
+
 
 a.dropdown-toggle.profile-dropdown-admin:hover {
     background: #192428 !important;

@@ -10,6 +10,9 @@
     .dynamic-menu{
         display: none;
     }
+    a.dropdown-toggle.profile-dropdown-admin:hover {
+    background: transparent !important;
+}
 </style>
 <div class="col-sm-12 col-md-12 main wallpaper" style="height:100vh">
     <div class="container">
