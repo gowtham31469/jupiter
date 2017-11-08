@@ -45,12 +45,22 @@ body {
         border-color: #ebeff2 !important;
     }
 }
-
+h3.content-heading{
+        font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+h5.poc_number{
+    font-size: 12px;
+}
 p.info {
     font-size: 14px;
     color: #797979;
     font-weight: 300;
     margin: 0px;
+}
+.parcel-details sub.pull-right, .label-details sub.pull-right {
+    line-height: 1;
 }
 .label-details, .parcel-details{
     margin-top: 0% !important;
