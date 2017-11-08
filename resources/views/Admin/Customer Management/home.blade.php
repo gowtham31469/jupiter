@@ -253,6 +253,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input class="form-check-input" type="checkbox" value="" name="default1">
+                                              Make as default billing address
+                                            </label>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
