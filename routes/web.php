@@ -41,6 +41,7 @@ Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderControll
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@dashboard');
 Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
+Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
