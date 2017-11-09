@@ -1542,7 +1542,7 @@ function addRole(permissions)
                {
                 table += '<td><a href="#"><i class="fa fa-check fa-lg" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
                }
-               table += '<a href="#"><i class="fa fa-pencil fa-lg" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+               table += '<a href="#"><i class="fa fa-pencil fa-lg edit-customer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
             });
             table += '</tbody></table></div>';
             $('.main-content').html(table);
@@ -2339,4 +2339,46 @@ function addRole(permissions)
           };
        $("#country" + id).easyAutocomplete(options);
        i++;
+     }
+     var isSubmitting = false;
+     function getCustomer(id)
+     {
+       if(isSubmitting) {
+            return;
+        }
+        isSubmitting = true;
+       $.ajax({
+           url:base_url + "/admin/customer-management/get-customers",
+           dataType:"json",
+           method:"get",
+           data:{id:id},
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           success: function(data){
+               isSubmitting = false;
+               console.log(data)
+               $('#customer_edit_id').val(id);
+               $.each(data.customers, function (key, value) {
+                $('#edit_merchandiser_name').val(data.merchandiser[0].merchandiser_name);
+               });
+               // 
+               // $('#edit_merchandiser_email').val(data.merchandiser[0].email);
+               // $('#edit_merchandiser_phone').val(data.merchandiser[0].merchandiser_phone);
+               // $('#edit_merchandiser_address').val(data.merchandiser[0].merchandiser_address);
+               // $('#edit_merchandiser_supplier').val(data.merchandiser[0].customer_id);
+               // $('#edit_merchandiser_buyer').val(data.merchandiser[0].buyer_id);
+               // $('#editCustomerModal').modal({
+               //      backdrop: 'static',
+               //      keyboard: false
+               // })
+               // $('#edit_merchandiser_form').validator('validate');
+               $('#editCustomerModal').modal('show');
+           },
+           complete: function () {
+             $(".loader").hide();
+             $(".loader").css('margin-top','0%');
+           }
+       })
      }
