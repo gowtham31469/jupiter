@@ -4,7 +4,6 @@ html {}
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 12px !important;
-
 }
 
 .loader-div {
@@ -88,7 +87,7 @@ p.info {
     background-size: cover;
 }
 
-.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav>li>a,
 .navbar-default .navbar-brand {
     color: #8D99A6;
     font-weight: 500;
@@ -102,7 +101,7 @@ p.info {
     font-weight: bold;
 }
 
-.navbar-nav > li > a {
+.navbar-nav>li>a {
     line-height: 10px;
 }
 
@@ -123,6 +122,7 @@ p.info {
 #main-content {
     padding-top: calc(40px + 2%)
 }
+
 
 .navbar-default .navbar-toggle {
     border-color: #273339;
@@ -308,6 +308,7 @@ h4 {
 .bottom-bar .modal-footer{
     padding: 9px;
 }
+
 /*
  * Global add-ons
  */
@@ -317,6 +318,7 @@ h4 {
     border-bottom: 1px solid #eee;
 }
 
+
 /*
  * Top navigation
  * Hide default border to remove 1px line.
@@ -325,6 +327,7 @@ h4 {
 .navbar-fixed-top {
     border: 0;
 }
+
 
 /*
  * Sidebar
@@ -383,6 +386,7 @@ h4 {
     margin: 0 auto 10px;
     display: block;
 }
+
 
 /*
  * Form styles
@@ -478,4 +482,33 @@ span.navbar-brand.logo {
 span.navbar-brand.logo:hover {
     font-weight: bold;
     color: #ffffff;
+}
+
+.jstree-leaf>.jstree-anchor>.jstree-themeicon {
+    background: url("") 0px 0px no-repeat !important;
+}
+.js-card, .preview-tag{
+    margin-top: 0px !important;
+}
+
+.search-tree {
+    position: absolute;
+    left: 0;
+    z-index: 999;
+    top: 0;
+    background: #d8d8d88a;
+    width: 93.5%;
+    padding: 6px;
+    margin-left: 15px;
+}
+
+.jaytree {
+    margin-top: 22px;
+}
+.jstree-default .jstree-search {
+    background:#fff !important;
+    border: 1px dashed #333 !important;
+    color: #263238 !important;
+    font-weight: 700;
+    font-style: normal !important;
 }

@@ -51,7 +51,7 @@ class TemplateManagementCntrl extends Controller
     }    
     public function templateList()
     {
-        $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as name','parent_id')->get()->toArray();
+        $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->get()->toArray();
           /*if($first_level)
           {
             foreach ($first_level as $level1)
@@ -88,5 +88,11 @@ class TemplateManagementCntrl extends Controller
                 return $treefinalData;
        } 
     }   
+    public function templateView(Request $request)
+    {
+         $template_id = $request['template_id'];
+         $treeviewData= DB::table("orchestra_template")->select('*')->where('item_id',$template_id)->get();
+         return json_encode($treeviewData);
+    } 
 }
 

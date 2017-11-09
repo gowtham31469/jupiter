@@ -62,6 +62,11 @@
     .whitening_select+.select2-container--default .select2-selection--single {
         border: 2px solid #dce4ec;
     }
+    
+
+    .jstree-leaf > .jstree-anchor > .fa-folder:before {
+    content: "\f02b";
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -106,7 +111,21 @@
     <div class="clearfix"></div>
 </div>
     <div class="main-content">
-       <div id="tree1"></div>
+        <div class="row">
+        <div class="col-md-4">
+              <div class="search-tree">
+                <input type="text"  id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness">             </div>
+            <div class="card js-card" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative">
+               <div class="jaytree"  id="tree1">
+                </div>
+            </div>    
+        </div>
+         <div class="col-md-8" >
+             <div  class="card preview-tag" style="height:calc(100vh - 110px);">
+            </div> 
+         </div>
+        </div>
+       
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -170,6 +189,7 @@
 @endif @section('jqueryIncludes')
 <script>
     $(document).ready(function() {
+        $('.js-card').niceScroll()
          $('.logo').html('Templates')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("template_buyer") === null) {
