@@ -307,6 +307,8 @@
     @section('jqueryIncludes')
     <script>
     $( document ).ready(function() {
+        
+        $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
       $('#customer_result').hide();
     });
