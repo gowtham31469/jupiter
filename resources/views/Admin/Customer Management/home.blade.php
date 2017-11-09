@@ -183,7 +183,7 @@
                               <div class="col-md-6 ">
                                 <div id="addcontact">
                                     <div id="contact_1" class="addcontact">
-                                        <button type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></button>
+                                        <div type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></div>
                                         <div id="contact1" class="panel">
                                           <div class="form-group has-feedback">
                                               {!! Form::label('contact_person1', 'Contact Person', ['class' => 'form_label']) !!}
@@ -226,7 +226,7 @@
                               <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
                                 <div id="addbilladdress">
                                     <div id="billaddress_1" class="addbilladdress">
-                                        <button type="button" class="accordion button-bottom"><h4>Billing Address 1</h4></button>
+                                        <div type="button" class="accordion button-bottom"><h4>Billing Address 1</h4></div>
                                         <div id="billaddress1" class="panel">
                                           <div class="form-group has-feedback">
                                             {!! Form::label('address1', 'Address', ['class' => 'form_label']) !!}
@@ -242,9 +242,9 @@
                                           </div>
                                           <div class="form-group has-feedback">
                                             {!! Form::label('telephone1', 'Phone', ['class' => 'form_label']) !!}
-                                            <div class="input-group">
+                                            <div class="input-group ">
                                             <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                                              {!! Form::text('telephone1',$value = '', array('class' => 'form-control input-sm telephone','placeholder' => 'Telephone','required','data-minlength' => '10','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
+                                              {!! Form::text('telephone1',$value = '', array('class' => 'form-control input-sm telephone','placeholder' => 'Phone','required','data-minlength' => '10','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
                                               <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                               <div class="help-block with-errors"></div>
@@ -292,6 +292,10 @@
       .fa
       {
         margin-right: 5px;
+      }
+      .easy-autocomplete-container {
+        z-index: 9;
+
       }
     </style>
     @endsection
@@ -388,5 +392,6 @@
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         make_customer_inactive(id,csrf_token)
     });
+
     </script>
     @endsection

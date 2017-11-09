@@ -224,4 +224,19 @@ class CustomerManagementController extends Controller
             }
             return $result;
         }
+        /**
+     * Get countries list.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getCountries()
+    {
+      try {
+            $countries = DB::table('country')->select('id','iso','name')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'countries' => $countries]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
 }
