@@ -50,6 +50,16 @@ h3.content-heading{
     font-weight: 600;
     text-decoration: underline;
 }
+.input-sm {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 0;
+    border-radius: 3px;
+}
+.form-control{
+    box-shadow: none;
+}
 h5.poc_number{
     font-size: 12px;
 }
@@ -277,8 +287,27 @@ li.parent-menu a:hover {
 
 h4 {
     font-weight: bold;
+    font-size: 16px;
 }
-
+.table .form-control {
+    border: 1px solid transparent;
+    outline: 0;
+}
+.table .form-control:hover {
+    border: 1px solid #c1c1c1;
+}
+.bottom-bar {
+    background: #273339;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 99;
+    margin-left: -15px;
+    height: 40px;
+}
+.bottom-bar .modal-footer{
+    padding: 9px;
+}
 /*
  * Global add-ons
  */
