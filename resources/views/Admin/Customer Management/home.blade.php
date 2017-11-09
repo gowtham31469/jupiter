@@ -9,7 +9,6 @@
                     <li><a href="/admin/dashboard">Dashboard</a></li>
                     <li class="active">Customer Management</li>
                   </ol>
-                <h3><i class="ion-ios-browsers-outline"></i>Customer Management</h3>
                 <ul class="sub-nav-list">
                     <li><a class="active" href="#" onClick="window.location.reload()"><i class="ion-grid"></i>Dashboard</a></li>
                     <li class="suppliers-list-view"><a class="" href="#" onclick="customersListView()"><i class="ion-ios-pricetag"></i>Customers</a></li>
@@ -18,74 +17,120 @@
               </div>
           <div class="clearfix"></div>
                 <div class="main-content">
-                    <div class="loader"></div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart" width="100px" height="100px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart1" width="100px" height="100px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <h4 class="text-center">Total Orders</h4>
-                            <canvas id="myChart2" width="100px" height="100px"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <h4 class="text-center">Tabel Data</h4>
-                            <div class="table-responsive">
-                                <table class="table table-striped text-center">
+                  <div class="loader"></div>
+                  <div class="col-md-3">
+                      <div class="card">
+                          <h4>Total Orders</h4>
+                          <span class="numbers">26004</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="card">
+                          <h4>Open Orders</h4>
+                          <span class="numbers">20</span><span class="sub-number">/140</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="card">
+                          <h4>Total Orders</h4>
+                          <span class="numbers">26004</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="card">
+                          <h4>Total Orders</h4>
+                           <span class="numbers">20</span><span class="sub-number">/140</span>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card">
+                          <h4 class="text-center">Tabel Data</h4>
+                          <div class="table-responsive">
+                              <table class="table table-striped text-center">
 
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Product</th>
-                                            <th class="text-center">Payment Date</th>
-                                            <th class="text-center">Status</th>
-                                        </tr>
-                                    </thead>
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center">Product</th>
+                                          <th class="text-center">Payment Date</th>
+                                          <th class="text-center">Status</th>
+                                      </tr>
+                                  </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td>Product1</td>
-                                            <td>23/11/2013</td>
-                                            <td><label class="label label-warning">Pending</label></td>
-                                        </tr>
+                                  <tbody>
+                                      <tr>
+                                          <td>Product1</td>
+                                          <td>23/11/2013</td>
+                                          <td><label class="label label-warning">Pending</label></td>
+                                      </tr>
 
-                                        <tr>
-                                            <td>Product2</td>
-                                            <td>10/11/2013</td>
-                                            <td><label class="label label-success">Delivered</label></td>
-                                        </tr>
+                                      <tr>
+                                          <td>Product2</td>
+                                          <td>10/11/2013</td>
+                                          <td><label class="label label-success">Delivered</label></td>
+                                      </tr>
 
-                                        <tr>
-                                            <td>Product3</td>
-                                            <td>20/10/2013</td>
-                                            <td><label class="label label-info">In Call to confirm</label></td>
-                                        </tr>
+                                      <tr>
+                                          <td>Product3</td>
+                                          <td>20/10/2013</td>
+                                          <td><label class="label label-info">In Call to confirm</label></td>
+                                      </tr>
 
-                                        <tr>
-                                            <td>Product4</td>
-                                            <td>20/10/2013</td>
-                                            <td><label class="label label-danger">Declined</label></td>
-                                        </tr>
-                                    </tbody>
+                                      <tr>
+                                          <td>Product4</td>
+                                          <td>20/10/2013</td>
+                                          <td><label class="label label-danger">Declined</label></td>
+                                      </tr>
+                                  </tbody>
 
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card"></div>
-                    </div>
-                </div>
-            </div>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                       <div class="card">
+                          <h4 class="text-center">Tabel Data</h4>
+                          <div class="table-responsive">
+                              <table class="table table-striped text-center">
+
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center">Product</th>
+                                          <th class="text-center">Payment Date</th>
+                                          <th class="text-center">Status</th>
+                                      </tr>
+                                  </thead>
+
+                                  <tbody>
+                                      <tr>
+                                          <td>Product1</td>
+                                          <td>23/11/2013</td>
+                                          <td><label class="label label-warning">Pending</label></td>
+                                      </tr>
+
+                                      <tr>
+                                          <td>Product2</td>
+                                          <td>10/11/2013</td>
+                                          <td><label class="label label-success">Delivered</label></td>
+                                      </tr>
+
+                                      <tr>
+                                          <td>Product3</td>
+                                          <td>20/10/2013</td>
+                                          <td><label class="label label-info">In Call to confirm</label></td>
+                                      </tr>
+
+                                      <tr>
+                                          <td>Product4</td>
+                                          <td>20/10/2013</td>
+                                          <td><label class="label label-danger">Declined</label></td>
+                                      </tr>
+                                  </tbody>
+
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
         </div>
     </div>
     <div class="modal fade bd-example-modal-lg" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
