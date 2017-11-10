@@ -224,4 +224,35 @@ class CustomerManagementController extends Controller
             }
             return $result;
         }
+        /**
+         * Gets the customer by identifier.
+         *
+         * @param      \Illuminate\Http\Request  $request  The request
+         *
+         * @return     <type>                    The customer by identifier.
+         * 
+         * @author <Praveen>
+         */
+        public function getCustomerById(Request $request)
+        {
+          try {
+                $id = $request['id'];
+                $customer = DB::table('customers')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number')
+                         ->where('customers.id','=',$id)
+                         ->get();
+                $contacts = DB::table('customer_contact_persons')
+                         ->select('customer_contact_persons.*')
+                         ->where('customer_contact_persons.customer_id','=',$id)
+                         ->get();
+                $address = DB::table('customer_bill_address')
+                         ->select('customer_bill_address.*')
+                         ->where('customer_bill_address.customer_id','=',$id)
+                         ->get();
+                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'contacts' => $contacts,'address' => $address]);
+              } catch (\Exception $e)
+              {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
+        }
 }

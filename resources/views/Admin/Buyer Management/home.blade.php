@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                           <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                           <div class="help-block with-errors"></div>
                         </div>
@@ -176,7 +176,7 @@
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
-                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                          <div class="help-block with-errors"></div>
                        </div>
@@ -259,7 +259,7 @@
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         <div class="help-block with-errors"></div>
                       </div>
@@ -319,7 +319,7 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        <div class="help-block with-errors"></div>
                      </div>
