@@ -91,7 +91,12 @@ class TemplateManagementCntrl extends Controller
     public function templateView(Request $request)
     {
          $template_id = $request['template_id'];
-         $treeviewData= DB::table("orchestra_template")->select('*')->where('item_id',$template_id)->get();
+         $treeviewData= DB::table("orchestra_template")
+                                ->select('orchestra_template.*','orchestra_item_master.ref_no','company.name as company_name')
+                                ->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_template.item_id')
+                                ->join('company','company.id','=','orchestra_item_master.company_id')
+                                ->where('item_id',$template_id)
+                                ->get();
          return json_encode($treeviewData);
     } 
 }

@@ -67,6 +67,40 @@
     .jstree-leaf > .jstree-anchor > .fa-folder:before {
     content: "\f02b";
 }
+
+.force-overflow
+{
+	min-height: 450px;
+}
+
+/*
+ *  STYLE 4
+ */
+
+#style-4::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#style-4::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: #F5F5F5;
+}
+
+#style-4::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+	border: 1px solid #555555;
+}
+.descriptionDiv{
+    margin-top:100px;
+    text-align: center;
+}
+    
+    
+
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -112,23 +146,32 @@
 </div>
     <div class="main-content">
         <div class="row">
+              
         <div class="col-md-4">
+            
               <div class="search-tree">
+                  
                 <input type="text"  id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness">             </div>
-            <div class="card js-card" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative">
-               <div class="jaytree"  id="tree1">
+            <div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative">
+               <div class="jaytree force-overflow"  id="tree1">
                 </div>
-            </div>    
+            </div> 
+             <button type="button"class="btn btn-xs btn-success" id="expand" >Expand</button>
+<button type="button" class="btn btn-xs btn-success" style="float: right;" id="collapse" >Collapse</button> 
         </div>
          <div class="col-md-8" >
              <div  class="card preview-tag" style="height:calc(100vh - 110px);">
+                 <div class="loader"></div>
                  <div class="viewDiv">
+                 
+                 </div>
+                  <div class="descriptionDiv">
                  
                  </div>
             </div> 
          </div>
         </div>
-       
+      
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

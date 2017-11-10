@@ -206,6 +206,12 @@ function template_list()
                     },
                     "plugins" : [ "types","search" ]
             });
+            $('#expand').bind("click", function () {
+                $('#tree1').jstree("open_all");
+            });
+            $('#collapse').bind("click", function () {
+                $('#tree1').jstree("close_all");
+            });
 //            .bind("loaded.jstree", function (event, data) {
 //                    $(this).jstree("open_all");
 //                    
@@ -234,7 +240,22 @@ function template_list()
                                 $(".loader").css('margin-top','12%');
                             },
                             success: function (data) {
-                                $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')
+                                if(data.length > 0)
+                                {
+                                     $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                     $('.descriptionDiv').html('<label>Template Name : </label><p>'+data[0].template_name+'</p><label>Reference Number : </label><p>'+data[0].ref_no+'</p><label>Company Name : </label><p>'+data[0].company_name+'</p>')
+                                     $('.descriptionDiv').css('margin-top','20px')
+                                    $('.viewDiv').css('margin-top','0px')
+                                }
+                                else
+                                {
+                                     $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')   
+                                     $('.descriptionDiv').html('<b>Template Not Found</b>');
+                                    $('.descriptionDiv').css('margin-top','0px')
+                                    $('.viewDiv').css('margin-top','140px')
+                                }
+                               
+                                
                             },
                             error: function (data) {
 
