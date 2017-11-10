@@ -205,9 +205,6 @@ function template_list()
                           }
                     },
                     "plugins" : [ "types","search" ]
-            }).bind("loaded.jstree", function (event, data) {
-                    $(this).jstree("open_all");
-                    
             });
             $('.js-card').niceScroll()
               var to = false;
