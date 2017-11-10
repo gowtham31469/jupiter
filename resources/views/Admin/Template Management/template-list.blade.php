@@ -122,6 +122,9 @@
         </div>
          <div class="col-md-8" >
              <div  class="card preview-tag" style="height:calc(100vh - 110px);">
+                 <div class="viewDiv">
+                 
+                 </div>
             </div> 
          </div>
         </div>

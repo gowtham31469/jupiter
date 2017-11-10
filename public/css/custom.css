@@ -512,3 +512,7 @@ span.navbar-brand.logo:hover {
     font-weight: 700;
     font-style: normal !important;
 }
+.viewDiv{
+        width: 400px;
+    margin: 0 auto;
+}

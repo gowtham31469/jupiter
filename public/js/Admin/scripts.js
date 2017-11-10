@@ -205,11 +205,12 @@ function template_list()
                           }
                     },
                     "plugins" : [ "types","search" ]
-            }).bind("loaded.jstree", function (event, data) {
-                    $(this).jstree("open_all");
-                    
             });
-            $('.js-card').niceScroll()
+//            .bind("loaded.jstree", function (event, data) {
+//                    $(this).jstree("open_all");
+//                    
+//            })
+            //$('.js-card').niceScroll()
               var to = false;
               $('#tree1_q').keyup(function () {
                 if(to) { clearTimeout(to); }
@@ -219,6 +220,32 @@ function template_list()
                 }, 250);
               });
             
+            $('#tree1').on('activate_node.jstree', function(e, data) {
+                  if(data.instance.is_leaf(data.node)) {
+                       var template_id = data.node.id;
+                       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                       $.ajax({
+                            url: base_url + "/admin/"+buyer+"/template-management/template-view",
+                            type: "Post",
+                            dataType:"json",
+                            data: {template_id:template_id,_token:csrf_token},
+                            beforeSend: function () {
+                                $(".loader").show();
+                                $(".loader").css('margin-top','12%');
+                            },
+                            success: function (data) {
+                                $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')
+                            },
+                            error: function (data) {
+
+                            },
+                            complete: function () {
+                                $(".loader").hide();
+                                $(".loader").css('margin-top','0%');
+                            }
+                        })
+                  }
+            });
 
             
           /*  var template = '<div class="col-md-4 modules_div"> <div class="row">';
