@@ -189,7 +189,7 @@
 @endif @section('jqueryIncludes')
 <script>
     $(document).ready(function() {
-        $('.js-card').niceScroll()
+        //$('.js-card').niceScroll()
          $('.logo').html('Templates')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("template_buyer") === null) {
