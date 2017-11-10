@@ -18,6 +18,7 @@
     <div class="container">
         <div class="col-md-8 col-md-offset-2">
             <div class="main-menu">
+<!--
                 <div class="case-wrapper" title="Item" draggable="false">
                     <a href="/admin/user-management">
                         <div class="app-icon" style="background-color: #2ecc71; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-users" title="Item" style=""></i></div>
@@ -30,6 +31,7 @@
                         </div>
                     </a>
                 </div>
+-->
                 <div class="case-wrapper" title="Item" draggable="false">
                     <a href="/admin/buyer-management">
                         <div class="app-icon" style="background-color:#3498db; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-shopping-bag" title="Item" style=""></i></div>
