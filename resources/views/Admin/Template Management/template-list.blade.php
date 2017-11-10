@@ -72,7 +72,7 @@
     <div class="top-content">
         <div class="buyer-div hidden">
              <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
-                 <option value=""></option>
+                 <option value="">Select Buyer</option>
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
@@ -206,9 +206,9 @@
             });
         
          $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-            if ($('.buyer-select option:selected').val() != "") {
-                localStorage.setItem("template_buyer",$('.buyer-select').find("option:selected").text().toLowerCase());
-                localStorage.setItem("template_buyer_id", $('.buyer-select').find("option:selected").val());
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                localStorage.setItem("template_buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("template_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 template_list(); 
             } 
             else {

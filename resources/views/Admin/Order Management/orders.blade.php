@@ -67,7 +67,7 @@
     <div class="top-content">
         <div class="buyer-div hidden">
              <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
-                 <option></option>
+                <option value="">Select Buyer</option>
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
@@ -185,9 +185,9 @@
                size: 4
             });
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-        if ($('.buyer-select option:selected').val() != "") {
-            localStorage.setItem("buyer",$('.buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
+        if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+            localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: base_url + "/admin/order-management/order_sub_modules",
