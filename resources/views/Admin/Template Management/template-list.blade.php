@@ -152,12 +152,12 @@
               <div class="search-tree">
                   
                 <input type="text"  id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness">             </div>
-            <div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative">
+            <div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;">
                <div class="jaytree force-overflow"  id="tree1">
                 </div>
             </div> 
-             <button type="button"class="btn btn-xs btn-success" id="expand" >Expand</button>
-<button type="button" class="btn btn-xs btn-success" style="float: right;" id="collapse" >Collapse</button> 
+             <button type="button" style="background-color: #263238;border: #263238;" class="btn btn-xs btn-success" id="expand" >Expand</button>
+<button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;" id="collapse" >Collapse</button> 
         </div>
          <div class="col-md-8" >
              <div  class="card preview-tag" style="height:calc(100vh - 110px);">
