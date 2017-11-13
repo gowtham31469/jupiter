@@ -416,42 +416,8 @@
                             <hr>
                             <div class="row">
                               <div class="col-md-6 ">
-                                <div id="addcontact">
-                                    <div id="contact_1" class="addcontact">
-                                        <div type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></div>
-                                        <div id="contact1" class="panel">
-                                          <div class="form-group has-feedback">
-                                              {!! Form::label('edit_contact_person1', 'Contact Person', ['class' => 'form_label']) !!}
-                                              {!! Form::text('edit_contact_person1',$value = '', array('class' => 'form-control input-sm contact_person','placeholder' => 'Contact Person Name','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                              <div class="help-block with-errors"></div>
-                                          </div>
-                                        <div class="form-group has-feedback">
-                                          {!! Form::label('edit_contact_phone1', 'Contact Phone No', ['class' => 'form_label']) !!}
-                                          <div class="input-group">
-                                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                                            {!! Form::text('edit_contact_phone1',$value = '', array('class' => 'form-control input-sm contact_phone','placeholder' => 'Contact Phone No','data-minlength' => '10','data-maxlength' => '10','required','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
-                                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                         </div>
-                                         <div class="help-block with-errors"></div>
-                                        </div>
-                                          <div class="form-group has-feedback">
-                                            {!! Form::label('edit_contact_email1', 'Contact Email', ['class' => 'form_label']) !!}
-                                            <div class="input-group">
-                                              <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                              {!! Form::email('edit_contact_email1',$value = '', array('class' => 'form-control input-sm contact_email','placeholder' => 'Contact Email','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                            </div>
-                                            <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-check">
-                                            <label class="form-check-label">
-                                              <input class="form-check-input default_contact" type="checkbox" value="" name="default" id="edit_default_contact1">
-                                              Make as default contact person
-                                            </label>
-                                          </div>
-                                        </div>
-                                    </div>
+                                <div id="editAddcontact">
+                                    
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group">
@@ -459,54 +425,8 @@
                                 </div>
                               </div>
                               <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
-                                <div id="addbilladdress">
-                                    <div id="billaddress_1" class="addbilladdress">
-                                        <div type="button" class="accordion button-bottom"><h4>Billing Address 1</h4></div>
-                                        <div id="billaddress1" class="panel">
-                                          <div class="form-group has-feedback">
-                                            {!! Form::label('edit_address1', 'Address', ['class' => 'form_label']) !!}
-                                            {!! Form::textarea('edit_address1',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                            <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-group has-feedback">
-                                              {!! Form::label('edit_country1', 'Country', ['class' => 'form_label']) !!}
-                                              {!! Form::text('edit_country1',$value = '', array('class' => 'form-control input-sm country','placeholder' => 'Country','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                              <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-group has-feedback">
-                                            {!! Form::label('edit_telephone1', 'Phone', ['class' => 'form_label']) !!}
-                                            <div class="input-group ">
-                                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-                                              {!! Form::text('edit_telephone1',$value = '', array('class' => 'form-control input-sm telephone','placeholder' => 'Phone','required','data-minlength' => '10','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                            </div>
-                                              <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-group has-feedback">
-                                              {!! Form::label('edit_fax1', 'Fax', ['class' => 'form_label']) !!}
-                                              {!! Form::text('edit_fax1',$value = '', array('class' => 'form-control input-sm fax','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                              <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-group has-feedback">
-                                            {!! Form::label('edit_address_email1', 'Email', ['class' => 'form_label']) !!}
-                                            <div class="input-group">
-                                              <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                              {!! Form::email('edit_address_email1',$value = '', array('class' => 'form-control input-sm address_email','placeholder' => 'Email','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-                                            </div>
-                                            <div class="help-block with-errors"></div>
-                                          </div>
-                                          <div class="form-check">
-                                            <label class="form-check-label">
-                                              <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address1">
-                                              Make as default billing address
-                                            </label>
-                                          </div>
-                                        </div>
-                                    </div>
+                                <div id="editaddbilladdress">
+                                    
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group">

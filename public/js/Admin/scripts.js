@@ -2416,6 +2416,7 @@ function addRole(permissions)
             return;
         }
         isSubmitting = true;
+        var a = []
        $.ajax({
            url:base_url + "/admin/customer-management/get-customers",
            dataType:"json",
@@ -2430,19 +2431,74 @@ function addRole(permissions)
                console.log(data)
                $('#customer_edit_id').val(id);
                $.each(data.customers, function (key, value) {
-                $('#edit_merchandiser_name').val(data.merchandiser[0].merchandiser_name);
+                $('#edit_factory_code').val(value.factory_code);
+                $('#edit_company_name').val(value.company_name);
+                $('#edit_courier_choice').val(value.courier_choice);
+                $('#edit_account_no').val(value.account_no);
+                $('#edit_tin_number').val(value.tin_number);
+                $('#edit_gstin_number').val(value.gstin_number);
+                $('#edit_pan_number').val(value.pan_number);
+                $('#edit_login_email').val(value.email);
                });
-               // 
-               // $('#edit_merchandiser_email').val(data.merchandiser[0].email);
-               // $('#edit_merchandiser_phone').val(data.merchandiser[0].merchandiser_phone);
-               // $('#edit_merchandiser_address').val(data.merchandiser[0].merchandiser_address);
-               // $('#edit_merchandiser_supplier').val(data.merchandiser[0].customer_id);
-               // $('#edit_merchandiser_buyer').val(data.merchandiser[0].buyer_id);
-               // $('#editCustomerModal').modal({
-               //      backdrop: 'static',
-               //      keyboard: false
-               // })
-               // $('#edit_merchandiser_form').validator('validate');
+
+               $.each(data.address,function(key,value){
+                  key += 1;
+                  var address_html = '<div edit="editbilladdress_' + key + '" class="editaddbilladdress">';
+                  if(key != 1)
+                  {
+                    address_html += '<i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i>';
+                  }
+                  address_html += '<div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="editbilladdress' + key + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + key + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="address' + key + '" cols="50" id="editaddress' + key + '">'+value.address+'</textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + key + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + key + '" value="'+value.country+'" id="editcountry' + key + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + key + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="editbasic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + key + '" value="'+value.telephone+'" id="edittelephone' + key + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + key + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + key + '" value="'+value.fax+'" id="editfax' + key + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + key + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="edit_address_email' + key + '" value="'+value.email+'" id="edit_address_email' + key + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label></div></div></div>';
+                    
+                    $('#editaddbilladdress').append(address_html);
+
+                    if(value.default_address === 1)
+                    {
+                      //address_html += '<div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '" checked> Make as default billing address</label></div>';
+                      $('#edit_default_address'+ key).prop('checked', true);
+                    }
+                    else
+                    {
+                      //address_html += '<div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label></div>';
+                      $('#edit_default_address'+ key).prop('checked', false);
+                    }
+
+                     $('#add_customer_form').validator('update');
+                     autopopulate_country(key);
+                     var acc = document.getElementsByClassName("accordion");
+                     var i;
+                     for (i = 0; i < acc.length; i++) {
+                         acc[i].onclick = function() {
+                             this.classList.toggle("active");
+                             var panel = this.nextElementSibling;
+                             if (panel.style.display === "block") {
+                                 panel.style.display = "none";
+                             } else {
+                                 panel.style.display = "block";
+                             }
+                         }
+                     }
+                     var j = 1;
+                     $('#editaddbilladdress .editaddbilladdress').each(function(key, val) {
+                         $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
+                         a.push($(this).attr('id'));
+                         j++;
+                     })
+                     var b = []
+                     var b = a.join(',');
+                     $('#hidden').val(b);
+                     $(':checkbox').on('change',function(){
+                       var th = $(this), name = th.prop('name');
+                       if(th.is(':checked')){
+                           $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+                        }
+                  });
+               });
+               $('#editCustomerModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+               })
+               $('#edit_customer_form').validator('validate');
                $('#editCustomerModal').modal('show');
            },
            complete: function () {
