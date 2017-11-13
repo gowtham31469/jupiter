@@ -130,7 +130,7 @@ class BuyerManagementController extends Controller
       public function updateBuyerById(Request $request)
       {
         try {
-              $id      = $request['id'];
+              $id                 = $request['id'];
               $input['id']        = Input::get('id');
               $input['email']     = Input::get('email');
               $input['name']      = Input::get('name');

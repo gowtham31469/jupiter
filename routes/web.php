@@ -57,12 +57,14 @@ Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserM
 Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
 /** customer Management **/
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
-Route::post('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
+Route::post('admin/customer-management/customers-list', 'Admin\CustomerManagement\CustomerManagementController@customersList');
 Route::post('admin/customer-management/add-customer', 'Admin\CustomerManagement\CustomerManagementController@addCustomer');
 Route::put('admin/customer-management/make-customer-active', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerActive');
 Route::put('admin/customer-management/make-customer-inactive', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerInactive');
 Route::get('admin/customer-management/get-customers', 'Admin\CustomerManagement\CustomerManagementController@getCustomerById');
-
+Route::put('admin/customer-management/update-customer', 'Admin\CustomerManagement\CustomerManagementController@updateCustomer');
+Route::delete('admin/customer-management/delete-customer', 'Admin\CustomerManagement\CustomerManagementController@deleteCustomerById');
+Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
