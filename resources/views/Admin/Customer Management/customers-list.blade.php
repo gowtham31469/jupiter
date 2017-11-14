@@ -13,7 +13,7 @@
                 </ol>
               </div>
                 <div class="main-sub-menu">
-                  <div class="action-group pull-right">
+                  <div class="action-group pull-right sub-menu-button">
                     <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a>
                   </div>
                 </div>
@@ -430,16 +430,12 @@
          </div>
      </div>
  </div>
-    <style type="text/css">
-      .fa
-      {
-        margin-right: 5px;
-      }
-      .easy-autocomplete-container {
-        z-index: 9;
+ <style type="text/css">
+   .easy-autocomplete-container {
+    z-index: 9;
 
-      }
-    </style>
+    }
+ </style>
     @endsection
     @else
     <script type="text/javascript">
