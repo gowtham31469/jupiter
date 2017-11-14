@@ -423,9 +423,9 @@ p.terms {
     border-radius: 50%;
     left: 50%;
     top: 30%;
-    height:60px;
-    width:60px;
-    animation: spin 1.5s linear infinite;
+    height:40px;
+    width:40px;
+    animation: spin 0.9s linear infinite;
     position: absolute;
 }
 @keyframes spin {

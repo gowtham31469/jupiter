@@ -107,12 +107,12 @@
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
+                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customers --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyers --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -167,12 +167,12 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
+                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customers --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
+                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyers --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>
