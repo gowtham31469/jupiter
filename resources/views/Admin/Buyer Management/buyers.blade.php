@@ -13,7 +13,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-person-add"></i>Add Buyer</a>
+                    <i class="ion-person-add"></i> Add Buyer</a>
                 </div>
               </div>
           <div class="clearfix"></div>
