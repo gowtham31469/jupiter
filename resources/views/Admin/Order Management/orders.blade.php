@@ -62,6 +62,7 @@
     .whitening_select+.select2-container--default .select2-selection--single {
         border: 2px solid #dce4ec;
     }
+    
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
