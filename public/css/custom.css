@@ -428,11 +428,13 @@ p.terms {
     border-top: 3px solid #2c3e50;
     /* Blue */
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1.5s linear infinite;
+    left: 50%;
+    top: 30%;
+    height:40px;
+    width:40px;
+    animation: spin 0.9s linear infinite;
+    position: absolute;
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -623,4 +625,12 @@ tbody{
 }
 .sections{
     width: 100%;
+}
+.sub-menu-button
+{
+    margin-bottom: 20px;
+}
+.fa
+{
+margin-right: 5px;
 }

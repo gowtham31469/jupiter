@@ -59,7 +59,7 @@ class CustomerManagementController extends Controller
     * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
-    public function customers()
+    public function customersList()
     {
       try{
             $customers = DB::table('customers')
@@ -255,4 +255,169 @@ class CustomerManagementController extends Controller
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
         }
+        /**
+         * Update Customers.
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function updateCustomer(Request $request)
+          {
+            try {
+                    $id                       = $request['id'];
+                    $input['factory_code']    = Input::get('factory_code');
+                    $input['company_name']    = Input::get('company_name');
+                    $input['courier_choice']  = Input::get('courier_choice');
+                    $input['account_no']      = Input::get('account_no');
+                    $input['tin_number']      = Input::get('tin_number');
+                    $input['gstin_number']    = Input::get('gstin_number');
+                    $input['pan_number']      = Input::get('pan_number');
+                    $input['email']           = Input::get('login_email');
+                    
+                    $contact_person  = Input::get('contact_person');
+                    $contact_phone   = Input::get('contact_phone');
+                    $contact_email   = Input::get('contact_email');
+                    $default_contact = Input::get('default_contact');
+                    $address         = Input::get('address');
+                    $country         = Input::get('country');
+                    $telephone       = Input::get('telephone');
+                    $fax             = Input::get('fax');
+                    $address_email   = Input::get('address_email');
+                    $default_address = Input::get('default_address');
+
+                    $email_rules     = array('email' => 'unique:customers,email,'.$id);
+                    $emailValidator  = Validator::make($input,$email_rules);
+
+                    if($emailValidator->fails())
+                    {
+                        return response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                    }
+                    else
+                    {
+                      $contact_person  = explode(',',$contact_person);
+                      $contact_phone   = explode(',',$contact_phone);
+                      $contact_email   = explode(',',$contact_email);
+                      $default_contact = explode(',',$default_contact);
+
+                      $address         = explode('|',$address);
+                      $country         = explode(',',$country);
+                      $telephone       = explode(',',$telephone);
+                      $fax             = explode(',',$fax);
+                      $address_email   = explode(',',$address_email);
+                      $default_address = explode(',',$default_address);
+
+                      Customer::where('id',$id)
+                          ->update([
+                          'factory_code'   => $input['factory_code'],
+                          'company_name'   => $input['company_name'],
+                          'courier_choice' => $input['courier_choice'],
+                          'account_no'     => $input['account_no'],
+                          'tin_number'     => $input['tin_number'],
+                          'gstin_number'   => $input['gstin_number'],
+                          'pan_number'     => $input['pan_number'],
+                          'email'          => $input['email']
+                        ]);
+                      CustomerContactPersons::where('customer_id', '=', $id)
+                            ->delete();
+                        $i = 0;
+                        foreach($contact_person as $contact)
+                        {
+                            CustomerContactPersons::create([
+                                'customer_id'            => $id,
+                                'contact_person_name'    => $contact,
+                                'contact_person_email'   => $contact_email[$i],
+                                'contact_person_phone'   => $contact_phone[$i],
+                                'default_contact_person' => $default_contact[$i]
+                            ]);
+                            $i++;
+                        }
+                        CustomerBillAddress::where('customer_id', '=', $id)
+                            ->delete();
+                        $j = 0;
+                        foreach($address as $value)
+                        {
+                            CustomerBillAddress::create([
+                                'customer_id'     => $id,
+                                'address'         => $value,
+                                'country'         => $country[$j],
+                                'email'           => $address_email[$j],
+                                'telephone'       => $telephone[$j],
+                                'fax'             => $fax[$j],
+                                'default_address' => $default_address[$j]
+                            ]);
+                            $j++;
+                        }
+                        $result = response()->json(['error'=> false,'message' =>'success'],200);
+                      
+                    }
+
+                } catch (\Exception $e)
+                {
+                       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+                }
+                return $result;
+          }
+          /**
+         * function to delete Customer.
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function deleteCustomerById(Request $request)
+        {
+          try {
+                    $id        = $request['id'];
+                    $deleted = Customer::where('id', '=', $id)
+                                ->delete();
+                    CustomerBillAddress::where('customer_id', '=', $id)
+                            ->delete();
+                    CustomerContactPersons::where('customer_id', '=', $id)
+                            ->delete();
+                    if($deleted != '')
+                    {
+                      $result = response()->json(['error'=> false,'message' =>'success'],200);
+                    }
+                    else
+                    {
+                      $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                    }
+              } catch (\Exception $e)
+              {
+                     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
+              return $result;
+        }
+      /**
+    * Show the orchestra customers list view on pageload.
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function customers()
+    {
+          try {
+           $module_var = new Modules();
+           $is_allowed = $module_var->permittedModules();
+           $customers = DB::table('customers')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax','customers.is_active')
+                         ->join('customer_contact_persons','customer_contact_persons.customer_id','customers.id')
+                         ->join('customer_bill_address','customer_bill_address.customer_id','customers.id')
+                         ->where('customer_bill_address.default_address','=',1)
+                         ->where('customer_contact_persons.default_contact_person','=',1)
+                         ->get();
+           if($is_allowed)
+           {
+               $get_main_module = $module_var->getMainModules();
+               $get_sub_module = $module_var->getSubModules(4);
+               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                   return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+               });
+               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers]);
+           }
+           else
+           {
+                return redirect('/admin/dashboard');
+           }
+         } catch (\Exception $e)
+         {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+    }
 }
