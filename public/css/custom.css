@@ -336,6 +336,7 @@ h4 {
 .card {
     background-color: #F7F7F7;
     /* just in case there no content*/
+    position: relative;
     min-width: 300px;
     padding: 20px 25px 30px;
     margin-top: 5%;
@@ -515,4 +516,5 @@ span.navbar-brand.logo:hover {
 .viewDiv{
         width: 400px;
     margin: 0 auto;
+    padding-top: 13%
 }
