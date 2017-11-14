@@ -7,7 +7,7 @@
               <div class="top-content">
                   <ol class="breadcrumb">
                 <li>
-                  <a href="/admin/dashboard">Dashboard</a>
+                  <a href="/admin/customer-management">Dashboard</a>
                 </li>
                 <li class="active">Customers</li>
                 </ol>

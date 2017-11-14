@@ -37,9 +37,8 @@ class BuyerManagementController extends Controller
         $is_allowed = $module_var->permittedModules();
         if($is_allowed)
         {
-            $top_mod = "User Management";
             $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(17);
+            $get_sub_module = $module_var->getSubModules(3);
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
@@ -351,5 +350,57 @@ class BuyerManagementController extends Controller
                      $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
               return $result;
+        }
+        /**
+         * Show the buyers list.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function buyers()
+        {
+            $module_var = new Modules();
+            $is_allowed = $module_var->permittedModules();
+            if($is_allowed)
+            {
+                $get_main_module = $module_var->getMainModules();
+                $get_sub_module = $module_var->getSubModules(3);
+                $buyers = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone')->get();
+                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+                });
+                return view('Admin/Buyer Management/buyers')->with(['buyers' => $buyers]);
+            }
+            else
+            {
+                 return redirect('/admin/dashboard');
+            }
+        }
+        /**
+         * Show the merchandisers list.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function merchandisers()
+        {
+            $module_var = new Modules();
+            $is_allowed = $module_var->permittedModules();
+            if($is_allowed)
+            {
+                $get_main_module = $module_var->getMainModules();
+                $get_sub_module = $module_var->getSubModules(3);
+                $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','buyers.buyer_name','customers.company_name')
+             ->join('buyers','buyers.id','=','merchandisers.buyer_id')
+             ->join('customers','customers.id','=','merchandisers.customer_id')->get();
+             $buyers = DB::table('buyers')->select('buyer_name','id')->get();
+             $customers = DB::table('customers')->select('company_name','id')->get();
+                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+                });
+                return view('Admin/Buyer Management/merchandisers')->with(['merchandisers' => $merchandisers,'buyers' => $buyers,'customers' => $customers]);
+            }
+            else
+            {
+                 return redirect('/admin/dashboard');
+            }
         }
 }
