@@ -77,12 +77,12 @@
                             <td><span class="badge badge-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-times fa-lg" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
+                            <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
                           @else
                             <td><a href="#"><i class="fa fa-check fa-lg" aria-hidden="true" title="Make Active" id="make_active"></i></a>
                           @endif
                                <a href="#">
-                                <i class="fa fa-pencil fa-lg edit-customer" title="Edit"></i>
+                                <i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i>
                                </a>
                                <a href="#">
                                 <i class="fa fa-trash fa-lg" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
