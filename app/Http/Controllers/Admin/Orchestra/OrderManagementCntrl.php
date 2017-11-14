@@ -97,11 +97,13 @@ class OrderManagementCntrl extends Controller
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
             }
+                $code=substr($uvc, -3, 2);
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
                 $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
-                $data['orchestra_care_instruction'] = DB::table('orchestra_countries')->select('*')->get(); 
+                $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->select('*')->get(); 
                 $data['orchestra_parts'] = DB::table('orchestra_parts')->select('*')->get();
+                $data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
                 echo json_encode($data);
     }
     public function stickerOrderDetails(Request $request)
