@@ -138,6 +138,15 @@ class OrderManagementCntrl extends Controller
         
         echo json_encode($data);
            
+    }   
+    public function compositionDetails(Request $request)
+    {
+         $lang=$request->lang;
+        
+         $data = DB::table('orchestra_compositions')->select('*')->whereIn('english',$lang)->get();
+        
+         echo json_encode($data);
+           
     }
 }
 
