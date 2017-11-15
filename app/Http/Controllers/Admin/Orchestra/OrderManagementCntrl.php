@@ -97,6 +97,50 @@ class OrderManagementCntrl extends Controller
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
             }
+        
+         // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
+          $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','5')->orWhere('tag_name','hang')->orWhere('id','1')->get()->toArray();
+            if($treeviewData){
+                        $childs = array();
+                        foreach($treeviewData as &$item) 
+                        {
+                        $childs[$item->parent_id][] = &$item;
+                        unset($item);
+                        }
+                        foreach($treeviewData as &$item) 
+                        {
+                            if (isset($childs[$item->id]))
+                            {
+                                $item->children = $childs[$item->id];
+                                unset($item);
+                            }
+                        }
+                        $tree = $childs[0];
+                        $data['treefinalData']=$tree;
+
+               } 
+        
+        $treeviewspecial= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
+            if($treeviewspecial){
+                        $childs = array();
+                        foreach($treeviewspecial as &$item) 
+                        {
+                        $childs[$item->parent_id][] = &$item;
+                        unset($item);
+                        }
+                        foreach($treeviewspecial as &$item) 
+                        {
+                            if (isset($childs[$item->id]))
+                            {
+                                $item->children = $childs[$item->id];
+                                unset($item);
+                            }
+                        }
+                        $tree = $childs[0];
+                        $data['treeviewspecial']=$tree;
+
+               }
+        
                 $code=substr($uvc, -3, 2);
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();

@@ -335,7 +335,15 @@ function table(data)
     for(var key in columnsIn){
          if(key != "id")
          {
-            th += "<th style='text-align: center;'>"+key+"</th>";
+             if(key == "SupplierName" || key == "Style_Name")
+                 {
+                     th += "<th>"+key+"</th>";
+                 }
+             else
+                 {
+                     th += "<th style='text-align: center;'>"+key+"</th>";
+                 }
+            
          }
     }
     $.each(data, function (index, value) {
@@ -375,7 +383,15 @@ function table(data)
                 }
                 else
                 {
-                    tr += '<td align="center">'+value[key]+'</td>';
+                    if(key == "SupplierName" || key == "Style_Name")
+                     {
+                         tr += '<td>'+value[key]+'</td>';
+                     }
+                    else
+                     {
+                        tr += '<td align="center">'+value[key]+'</td>';
+                     }
+                    
                 }
             }
         }
@@ -688,7 +704,9 @@ function label_order_details(uvc)
         success: function (data) {
             orchestra_label_order_details(buyer,buyer_id,uvc,data)
             hangtagmodal(data);
+            specialtags(data);
             washcarelabels(data);
+            
         },
         error: function (data) {
 
@@ -788,10 +806,6 @@ function washcarelabels(data)
                 $(".left-panel").toggleClass('active');
             }) 
 
-            $("#left").click(function(){
-
-
-            })
             $(".backdrop, #close").click(function(){
                 $(".left-panel").removeClass('active');
                 $(".right-panel").removeClass('active');
@@ -1075,69 +1089,202 @@ function add_to_page()
     
    
 }
-function hangtagmodal(data)
+function specialtags(data)
 {
-            var option="<option></option>";
-            var washing_option="<option>Select Option</option>";
-            var whitening_option="<option>Select Option</option>";
-            var dryer_option="<option>Select Option</option>";
-            var ironing_option="<option>Select Option</option>";
-            var cleaning_option="<option>Select Option</option>";
-            var made_option="<option>Select Option</option>";
-            var instruction_option="<option></option>";
-            var parts_option="<option></option>";
-            var composition_option="<option>Select Option</option>";
+     var tr="";
+     $.each(data.order_details, function (index, value) {
+         tr+='<tr><td>'+value.UVC_TCO+'</td><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td class="sum">'+value.Sum+'</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+     });
+            var option="<option value=''>Select Option</option>";
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
+             $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
-             $.each(data.orchestra_countries, function (index, value) {
-                        made_option+="<option value="+value.id+">"+value.english+"</option>";
-                    });
-             $.each(data.orchestra_care_instruction, function (index, value) {
-                        instruction_option+="<option value="+value.id+">"+value.english+"</option>";
-                    });
-             $.each(data.orchestra_parts, function (index, value) {
-                        parts_option+="<option value="+value.id+">"+value.english+"</option>";
-                    });
-             $.each(data.orchestra_composition, function (index, value) {
-                        composition_option+="<option value="+value.id+">"+value.english+"</option>";
-                    });
-             $.each(data.orchestra_care_symbols, function (index, value) {
-                 if(value.category_id == 1)
-                     {
-                          washing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
-                     }
-                 else if(value.category_id == 2)
-                     {
-                          whitening_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
-                     }
-                  else if(value.category_id == 3)
-                     {
-                          dryer_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
-                     }
-                  else if(value.category_id == 4)
-                     {
-                          ironing_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
-                     }
-                  else if(value.category_id == 5)
-                     {
-                          cleaning_option+="<option value="+value.cofreet_symbols+"><img src="+value.cofreet_symbols+">"+value.care_instruction+"</option>";
-                     }
+              $("#clickmespecial").click(function(){
+                $("#specialtagform .backdrop").toggleClass('active');
+                $("#specialtagform .right-panel").toggleClass('active');
+                $('#specialtagform .scalable').toggleClass('active');
+                $("#specialtagform .left-panel").toggleClass('active');
+            }) 
 
+            $(".backdrop, #close").click(function(){
+                $("#specialtagform.left-panel").removeClass('active');
+                $("#specialtagform.right-panel").removeClass('active');
+                $("#specialtagform.backdrop").removeClass('active');
+                $('#specialtagform.scalable').removeClass('active');
+            })
+    
+     $('.selectpicker').selectpicker({
+                       style: 'btn-default',
+                       size: 4
+             });
+    
+            $('#tree2').jstree({ 
+                    'core' : {
+                        'data' : data.treeviewspecial
+                    },
+                    "types" : {
+                          "default" : {
+                            "icon" : "fa fa-folder"
+                          }
+                    },
+                    "plugins" : [ "types","search" ]
             });
-             $('.top-content').append('<div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Hang Tag</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-4 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div><div class="form-group"><label>Style</label> <select class="form-control template-select">'+option+'</select></div></form> </div> <div class="col-md-4"><div class="card-title"><h5>Front</h5></div><br/><div class="sample-artwork"></div></div><div class="col-md-4"><div class="card-title"><h5>Back</h5></div><br/><div class="front-side"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer"><button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save All Items</button><button type="button" class="btn btn-xs btn-info"><i class="ion-android-print"></i>Print Labels and Tags</button></div></div>');
+            $('#expand').bind("click", function () {
+                $('#tree2').jstree("open_all");
+            });
+            $('#collapse').bind("click", function () {
+                $('#tree2').jstree("close_all");
+            });
+//            .bind("loaded.jstree", function (event, data) {
+//                    $(this).jstree("open_all");
+//                    
+//            })
+            //$('.js-card').niceScroll()
+              var to = false;
+              $('#tree2_q').keyup(function () {
+                if(to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                  var v = $('#tree2_q').val();
+                  $('#tree2').jstree(true).search(v);
+                }, 250);
+              });
+            
+            $('#tree2').on('activate_node.jstree', function(e, data) {
+                  if(data.instance.is_leaf(data.node)) {
+                     var buyer =localStorage.getItem("buyer");
+                       var template_id = data.node.id;
+                       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                       $.ajax({
+                            url: base_url + "/admin/"+buyer+"/template-management/template-view",
+                            type: "Post",
+                            dataType:"json",
+                            data: {template_id:template_id,_token:csrf_token},
+                            beforeSend: function () {
+                                $(".loader").show();
+                                $(".loader").css('margin-top','12%');
+                            },
+                            success: function (data) {
+                                if(data.length > 0)
+                                {
+                                     $('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                }
+                                else
+                                {
+                                     $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')   
+                                }
+                               
+                                
+                            },
+                            error: function (data) {
 
-     $('.instruction_select').select2({
-                placeholder: "Select Option",
-                allowClear: true
-             });
+                            },
+                            complete: function () {
+                                $(".loader").hide();
+                                $(".loader").css('margin-top','0%');
+                            }
+                        })
+                  }
+            });
+    
+            $('#specialtagform').validator()
+}
+function hangtagmodal(data)
+{
+     var tr="";
+     $.each(data.order_details, function (index, value) {
+         tr+='<tr><td>'+value.UVC_TCO+'</td><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td class="sum">'+value.Sum+'</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+     });
+            var option="<option value=''>Select Option</option>";
+            $.each(data.orchestra_template_front, function (index, value) {
+                option+="<option value="+value.template_file+">"+value.template_name+"</option>";
+            });
+             $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections scroll"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
-     $('.parts_select').select2({
-                placeholder: "Select Option",
-                allowClear: true
-             });
+              $("#clickmehang").click(function(){
+                $("#hangtagform .backdrop").toggleClass('active');
+                $("#hangtagform .right-panel").toggleClass('active');
+                $('#hangtagform .scalable').toggleClass('active');
+                $("#hangtagform .left-panel").toggleClass('active');
+            }) 
 
+            $(".backdrop, #close").click(function(){
+                $("#hangtagform.left-panel").removeClass('active');
+                $("#hangtagform.right-panel").removeClass('active');
+                $("#hangtagform.backdrop").removeClass('active');
+                $('#hangtagform.scalable').removeClass('active');
+            })
+    
+            $('#tree1').jstree({ 
+                    'core' : {
+                        'data' : data.treefinalData
+                    },
+                    "types" : {
+                          "default" : {
+                            "icon" : "fa fa-folder"
+                          }
+                    },
+                    "plugins" : [ "types","search" ]
+            });
+            $('#expand').bind("click", function () {
+                $('#tree1').jstree("open_all");
+            });
+            $('#collapse').bind("click", function () {
+                $('#tree1').jstree("close_all");
+            });
+//            .bind("loaded.jstree", function (event, data) {
+//                    $(this).jstree("open_all");
+//                    
+//            })
+            //$('.js-card').niceScroll()
+              var to = false;
+              $('#tree1_q').keyup(function () {
+                if(to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                  var v = $('#tree1_q').val();
+                  $('#tree1').jstree(true).search(v);
+                }, 250);
+              });
+            
+            $('#tree1').on('activate_node.jstree', function(e, data) {
+                  if(data.instance.is_leaf(data.node)) {
+                     var buyer =localStorage.getItem("buyer");
+                       var template_id = data.node.id;
+                       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                       $.ajax({
+                            url: base_url + "/admin/"+buyer+"/template-management/template-view",
+                            type: "Post",
+                            dataType:"json",
+                            data: {template_id:template_id,_token:csrf_token},
+                            beforeSend: function () {
+                                $(".loader").show();
+                                $(".loader").css('margin-top','12%');
+                            },
+                            success: function (data) {
+                                if(data.length > 0)
+                                {
+                                     $('.sample-artwork').html('<object id="svg2" style="height: 486px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                }
+                                else
+                                {
+                                     $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')   
+                                }
+                               
+                                
+                            },
+                            error: function (data) {
+
+                            },
+                            complete: function () {
+                                $(".loader").hide();
+                                $(".loader").css('margin-top','0%');
+                            }
+                        })
+                  }
+            });
+    
+            $('#hangtagform').validator()
              var mySVG = document.getElementById("svg2");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
@@ -1222,14 +1369,14 @@ function hangtagmodal(data)
 
 
            }, false);
-             $('.template-select').select2({
-                placeholder: "Select Template",
-                allowClear: true
+             $('.selectpicker').selectpicker({
+                       style: 'btn-default',
+                       size: 4
              });
-             $('.template-select').change(function() {
-                  if($(this).val() != "")
+             $('.template-select.bootstrap-select').on('changed.bs.select', function() {
+                  if($('.template-select option:selected').val() != "")
                   {
-                         $('.sample-artwork').html('<object id="svg1" data="'+$(this).val()+'" style="width:233px;height:500px" type="image/svg+xml"></object>')
+                         $('.sample-artwork').html('<object id="svg1" data="'+$('.template-select option:selected').val()+'" style="width:233px;height:500px" type="image/svg+xml"></object>')
                          var mySVG = document.getElementById("svg1");
                          var svgDoc;
                          mySVG.addEventListener("load",function() {
@@ -1265,7 +1412,7 @@ function hangtagmodal(data)
                   }
                   else
                   {
-                     $('.sample-artwork').html('');
+                      $('.sample-artwork').html('');
                       $('.sample-artwork').css('background','#eee');
                   }
 
@@ -1286,7 +1433,7 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
       $('.top-content').append('<h3 class="content-heading">Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table></div>');
 
-      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
+      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial">Click to edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
 
 
      $('#washcare_label_card').on('click', function (e) {
