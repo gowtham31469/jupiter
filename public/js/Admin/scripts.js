@@ -558,7 +558,7 @@ function barcode_polybag(id,data)
 
                                 }
 
-            JsBarcode("#ean-13", code, { format: "ean13"});
+            JsBarcode("#ean-13", code, { format: "ean13",font:'Calibri, Candara, Segoe,"Segoe UI", Optima, Arial, sans-serif'});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
                 body = document.getElementsByTagName('body')[0],
@@ -634,7 +634,7 @@ function barcode_carton(id,data)
                                      svgDoc.getElementById("size").innerHTML=data.orchestra_parcel_quantity_details[0].Size;
                                 }
 
-            JsBarcode("#ean-13", code, { format: "ean13"});
+            JsBarcode("#ean-13", code, { format: "ean13",font:'Calibri, Candara, Segoe,"Segoe UI", Optima, Arial, sans-serif'});
             var svg = document.getElementById('svgdiv').querySelector('svg'),
                 canvas = document.createElement('canvas'),
                 body = document.getElementsByTagName('body')[0],
