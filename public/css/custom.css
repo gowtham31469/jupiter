@@ -637,3 +637,10 @@ tbody{
 {
 margin-right: 5px;
 }
+@media print{
+    #printmedia{
+        width:150mm;
+        height:100mm;
+        border:1px solid #333;
+    }
+}

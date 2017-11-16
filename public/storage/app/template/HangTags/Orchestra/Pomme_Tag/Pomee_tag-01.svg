@@ -280,14 +280,14 @@
 	</g>
 	<text transform="matrix(1 0 0 1 117.6748 320.9454)" class="st6 st7 st8">€</text>
 	<rect x="62" y="306.5" class="st9" width="41.1" height="22.9"/>
-	<text transform="matrix(1 0 0 1 71.416 320.7729)" class="st6 st7 st8">14</text>
+	<text transform="matrix(1 0 0 1 71.416 320.7729)" class="st6 st7 st8" id="price1">14</text>
 	<rect x="95.3" y="306.4" class="st9" width="42" height="14"/>
-	<text transform="matrix(1 0 0 1 95.3427 314.9601)" class="st6 st7 st10">,95</text>
+	<text transform="matrix(1 0 0 1 95.3427 314.9601)" class="st6 st7 st10" id="price2">,95</text>
 	<text transform="matrix(1 0 0 1 117.6748 347.6964)" class="st3 st7 st8">€</text>
 	<rect x="62" y="333.2" class="st9" width="41.1" height="22.9"/>
-	<text transform="matrix(1 0 0 1 71.416 347.524)" class="st3 st7 st8">14</text>
+	<text transform="matrix(1 0 0 1 71.416 347.524)" class="st3 st7 st8" id="club_price1">14</text>
 	<rect x="95.3" y="333.1" class="st9" width="42" height="14"/>
-	<text transform="matrix(1 0 0 1 95.3427 341.7111)" class="st3 st7 st10">,95</text>
+	<text transform="matrix(1 0 0 1 95.3427 341.7111)" class="st3 st7 st10" id="club_price2">,95</text>
 </g>
 <line class="st11" x1="155.3" y1="326.9" x2="-0.4" y2="326.9"/>
 <g>

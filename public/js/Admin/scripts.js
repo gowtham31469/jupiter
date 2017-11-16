@@ -477,7 +477,7 @@ function orchestra_sticker_order_details(buyer,buyer_id,uvc,data,po)
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('"+buyer+"','"+buyer_id+"')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC "+uvc+" and PO "+po+"</li></ol></div>")
 
- $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC 0F0006 and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover">'+thead+'<tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td>'+ttotal+'</tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input '+disabled+' data-toggle="modal" data-target=".needed_modal" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>'+standard_div+' </div></div>');
+ $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC '+uvc+' and PO '+po+'</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">'+data.orchestra_parcel_details[0].SupplierName+'</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">'+data.orchestra_parcel_details[0].EditionNumber+'</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">'+data.orchestra_parcel_details[0].VersionNumber+'</span></strong></span><span class="sticker-details">Style: <strong><span id="style">'+data.orchestra_parcel_details[0].NomApple+'</span></strong></span><span class="sticker-details">Color: <strong><span id="color">'+data.orchestra_parcel_quantity_details[0].Color+'</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">'+option+'</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>'+head_qty+'</h4><div class="table-responsive"><table class="table table-bordered table-hover">'+thead+'<tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="2">Total</td><td>'+data.orchestra_parcel_details[0].Quantity+'</td>'+ttotal+'</tr></tbody></table></div></div><div class="col-md-4"><h4>'+head_qty1+'</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input '+disabled+' data-toggle="modal" data-target=".needed_modal" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>'+standard_div+' </div></div>');
 
           $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px" class="center-block svg2" data="'+data.carton_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:580px;height:500px" class="center-block" data="'+data.carton_template+'" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3")>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="'+data.polybag_template+'" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="'+data.polybag_template+'" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4")>Print</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
 
@@ -524,11 +524,12 @@ function Popup(data)
     var s = new XMLSerializer();
     var d = data;
     var str = s.serializeToString(d);
-    var mywindow = window.open('', 'new div', 'height=400,width=600');
+    var mywindow = window.open('', 'new div', 'class=printmedia');
     mywindow.document.write('<html><head><title></title>');
     /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    mywindow.document.write('</head><body >');
+    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #eee;width:150mm;height:100mm">');
     mywindow.document.write(str);
+    mywindow.document.write('</div>');
     mywindow.print();
     mywindow.close();
     return true;
@@ -705,6 +706,7 @@ function label_order_details(uvc)
             orchestra_label_order_details(buyer,buyer_id,uvc,data)
             hangtagmodal(data);
             specialtags(data);
+            mainlabels(data);
             washcarelabels(data);
             
         },
@@ -798,7 +800,7 @@ function washcarelabels(data)
                        style: 'btn-default',
                        size: 4
              });
-
+            $('.date').datepicker();
             $("#clickme").click(function(){
                 $(".backdrop").toggleClass('active');
                 $(".right-panel").toggleClass('active');
@@ -1089,6 +1091,107 @@ function add_to_page()
     
    
 }
+function mainlabels(data)
+{
+     var tr="";
+     $.each(data.order_details, function (index, value) {
+         tr+='<tr><td>'+value.UVC_TCO+'</td><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td class="sum">'+value.Sum+'</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" required placeholder="Main & Size Count"><div class="help-block with-errors"></div></div></td></tr>';
+     });
+            var option="<option value=''>Select Option</option>";
+            $.each(data.orchestra_template_front, function (index, value) {
+                option+="<option value="+value.template_file+">"+value.template_name+"</option>";
+            });
+             $('.top-content').append('<form id="mainlabelsform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree3_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Main & Size Labels</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+
+              $("#clickmemain").click(function(){
+                $("#mainlabelsform .backdrop").toggleClass('active');
+                $("#mainlabelsform .right-panel").toggleClass('active');
+                $('#mainlabelsform .scalable').toggleClass('active');
+                $("#mainlabelsform .left-panel").toggleClass('active');
+            }) 
+
+            $(".backdrop, #close").click(function(){
+                $("#mainlabelsform.left-panel").removeClass('active');
+                $("#mainlabelsform.right-panel").removeClass('active');
+                $("#mainlabelsform.backdrop").removeClass('active');
+                $('#mainlabelsform.scalable').removeClass('active');
+            })
+    
+     $('.selectpicker').selectpicker({
+                       style: 'btn-default',
+                       size: 4
+             });
+    
+            $('#tree3').jstree({ 
+                    'core' : {
+                        'data' : data.treeviewmain
+                    },
+                    "types" : {
+                          "default" : {
+                            "icon" : "fa fa-folder"
+                          }
+                    },
+                    "plugins" : [ "types","search" ]
+            });
+            $('#expand').bind("click", function () {
+                $('#tree3').jstree("open_all");
+            });
+            $('#collapse').bind("click", function () {
+                $('#tree3').jstree("close_all");
+            });
+//            .bind("loaded.jstree", function (event, data) {
+//                    $(this).jstree("open_all");
+//                    
+//            })
+            //$('.js-card').niceScroll()
+              var to = false;
+              $('#tree3_q').keyup(function () {
+                if(to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                  var v = $('#tree3_q').val();
+                  $('#tree3').jstree(true).search(v);
+                }, 250);
+              });
+            
+            $('#tree3').on('activate_node.jstree', function(e, data) {
+                  if(data.instance.is_leaf(data.node)) {
+                     var buyer =localStorage.getItem("buyer");
+                       var template_id = data.node.id;
+                       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                       $.ajax({
+                            url: base_url + "/admin/"+buyer+"/template-management/template-view",
+                            type: "Post",
+                            dataType:"json",
+                            data: {template_id:template_id,_token:csrf_token},
+                            beforeSend: function () {
+                                $(".loader").show();
+                                $(".loader").css('margin-top','12%');
+                            },
+                            success: function (data) {
+                                if(data.length > 0)
+                                {
+                                     $('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                }
+                                else
+                                {
+                                     $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')   
+                                }
+                               
+                                
+                            },
+                            error: function (data) {
+
+                            },
+                            complete: function () {
+                                $(".loader").hide();
+                                $(".loader").css('margin-top','0%');
+                            }
+                        })
+                  }
+            });
+    
+            $('#mainlabelsform').validator()
+}
 function specialtags(data)
 {
      var tr="";
@@ -1099,7 +1202,7 @@ function specialtags(data)
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
-             $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+             $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
               $("#clickmespecial").click(function(){
                 $("#specialtagform .backdrop").toggleClass('active');
@@ -1192,6 +1295,7 @@ function specialtags(data)
 }
 function hangtagmodal(data)
 {
+    var order_details = data.order_details;
      var tr="";
      $.each(data.order_details, function (index, value) {
          tr+='<tr><td>'+value.UVC_TCO+'</td><td>'+value.Size+'</td><td>'+value.BarcodeForPricesTags+'</td><td class="sum">'+value.Sum+'</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
@@ -1200,7 +1304,7 @@ function hangtagmodal(data)
             $.each(data.orchestra_template_front, function (index, value) {
                 option+="<option value="+value.template_file+">"+value.template_name+"</option>";
             });
-             $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections scroll"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+             $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select State</label><select data-live-search="true"class="form-control selectpicker input-sm"required><option value="">Select Option</option><option>Applicable</option><option>Not Applicable</option></select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date"data-provide="datepicker"id="datePicker1"><input type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections scroll"><object id="svg2" style="width:427px;height:486px" data="'+data.orchestra_template+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Hang Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
               $("#clickmehang").click(function(){
                 $("#hangtagform .backdrop").toggleClass('active');
@@ -1264,13 +1368,45 @@ function hangtagmodal(data)
                             success: function (data) {
                                 if(data.length > 0)
                                 {
-                                     $('.sample-artwork').html('<object id="svg2" style="height: 486px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                     $('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
                                 }
                                 else
                                 {
                                      $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')   
                                 }
-                               
+                              var mySVG = document.getElementById("svg_hang_front");
+                         var svgDoc;
+                         mySVG.addEventListener("load",function() {
+                              svgDoc = mySVG.contentDocument;
+                             var pri =order_details[0].PrixEurope.split(".")
+
+                             if(pri.length == 1)
+                             {
+                                 var svgItem = svgDoc.getElementById("price1");
+                                 svgItem.innerHTML = innerHTML=order_details[0].PrixEurope;
+                                 svgDoc.getElementById("price2").innerHTML ="";
+                             }
+                             else if(pri.length == 2)
+                             {
+                                 var svgItem = svgDoc.getElementById("price1");
+                                 svgItem.innerHTML = innerHTML=pri[0];
+                                 svgDoc.getElementById("price2").innerHTML =","+pri[1];
+                             }
+                             var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+                             if(pri1.length == 1)
+                             {
+                                 svgDoc.getElementById("club_price1").innerHTML =order_details[0].PrixClubEurope;
+                                 svgDoc.getElementById("club_price2").innerHTML ="";
+                             }
+                             else if(pri1.length == 2)
+                             {
+                                  svgDoc.getElementById("club_price1").innerHTML =pri1[0];
+                                  svgDoc.getElementById("club_price2").innerHTML =","+pri1[1];
+                             }
+
+                         }, false);
+
+                        
                                 
                             },
                             error: function (data) {
@@ -1420,6 +1556,8 @@ function hangtagmodal(data)
 
 
 }
+var washcare=0;
+var mainlabel=0;
 function orchestra_label_order_details(buyer,buyer_id,uvc,data)
 {
     var tr="";
@@ -1431,19 +1569,80 @@ function orchestra_label_order_details(buyer,buyer_id,uvc,data)
          barcode+=value.BuyerPONo+" | ";
      });
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC "+uvc+"</li></ol></div>")
-      $('.top-content').append('<h3 class="content-heading">Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5><hr/><h4>Quantity</h4><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th class="mand">Hang Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Special Tags<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>Main & Size Label<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th><th>WCL<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>'+tr+'<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>'+data.total_qty+'</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">'+data.total_qty+'</td></tr></tbody></table></div>');
+      $('.top-content').append('<h3 class="content-heading">Order Detail for UVC '+uvc+'</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">'+barcode+'  </span></h5>');
 
-      $('.main-content').html('<hr/><h4>Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="'+base_url+'/images/hangtag_sample.png"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial">Click to edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme">Click to edit</p><h5>Washcare label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4" id="washcare_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Washcare Label</p></div></div><div class="col-md-4" id="main_label_card"><div class="card add-card"><p class="text-center add-label"><i class="ion-plus-round"></i><br/>Add Main & Size Label</p></div></div>');
+      $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">Click to edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">Click to edit</p><h5>Washcare Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">Click to edit</p><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" class="form-control input-sm washcarename"><p class="text-center add-label" style="padding: 53px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label</p></div></div><div class="col-md-4" ><div class="card add-card"><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" class="form-control input-sm mainname"><p class="text-center add-label" id="main_label_card" style="padding: 53px 0px;cursor: pointer;">Add Main & Size Label</p></div></div>');
 
+        $.fn.capitalize = function() {
+            $.each(this, function() {
+                this.value = this.value.replace(/\b[a-z]/gi, function($0) {
+                    return $0.toUpperCase();
+                });
+                this.value = this.value.replace(/@([a-z])([^.]*\.[a-z])/gi, function($0, $1) {
+                    console.info(arguments);
+                    return '@' + $0.toUpperCase() + $1.toLowerCase();
+                });
 
+            });
+        }
+
+        $("input").keyup(function(){
+             $(this).capitalize();
+        }).capitalize();
+    
      $('#washcare_label_card').on('click', function (e) {
-          washcare+=1;
-          $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_'+washcare+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right">Click to edit</p> <h5>Washcare label</h5></div><div class="img_artwork"></div></div></div><div class="modal washcare_label_'+washcare+' artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Wash Care Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="sample-artwork1"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="front-side"><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>')
+         
+         if($('.washcarename').val() != "")
+             {
+                 washcare+=1;
+                 if(washcare <=5)
+                 {
+
+                      $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_'+washcare+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash" style="cursor: pointer;">Click to delete</p><p class="pull-right" style="cursor: pointer;margin-right:5px">Click to edit</p> <h5>'+$('.washcarename').val()+' label</h5></div><div class="img_artwork"></div></div></div>')
+                 }
+                 $('.delete-wash').on('click', function (e) {
+                    washcare-=1;
+                    $(this).parent().parent().parent().remove();
+
+                 });
+                 $('.washcarename').val("")
+                 $('.washnameerror').addClass('hidden')
+             }
+             else
+             {
+                 if(washcare <5)
+                 {
+                    $('.washnameerror').removeClass('hidden')
+                 }
+             }
+         
      });
      $('#main_label_card').on('click', function (e) {
-          mainlabel+=1;
-          $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_'+mainlabel+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right">Click to edit</p> <h5>Main & Size Label</h5></div><div class="img_artwork"></div></div></div><div class="modal main_label_'+mainlabel+' artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Main Label</h4></div><div class="modal-body"><div class="container-fluid"><div class="col-md-3 h100"> <div class="card-title"><h5>Options</h5></div><br/><form><div class="form-group"><label>State</label><select class="form-control"><option>Applicable</option><option>Not Applicable</option> </select> </div><div class="form-group"><label>Delivery Date</label><input type="date" class="form-control" placeholder="Date"></div></form> </div> <div class="col-md-6"><div class="card-title"><h5>Art Work</h5></div><br/><div class="sample-artwork1"></div></div><div class="col-md-3"><div class="card-title"><h5>Options</h5></div><br/><div class="front-side"><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div><div id="svg_box"></div></div></div></div> <div class="modal-footer"><button type="button" class="btn btn-primary">Save</button> </div> </div> </div></div>')
-     });
+          if($('.mainname').val() != "")
+             {
+                 mainlabel+=1;
+                 if(mainlabel <=5)
+                 {
+                      $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_'+mainlabel+'" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main" style="cursor: pointer;">Click to delete</p><p class="pull-right" style="cursor: pointer;margin-right:5px">Click to edit</p> <h5>'+$('.mainname').val()+'  Label</h5></div><div class="img_artwork"></div></div></div>')
+                 }
+                 $('.delete-main').on('click', function (e) {
+                     mainlabel-=1;
+                     $(this).parent().parent().parent().remove();
+
+                 });
+                  $('.mainnameerror').addClass('hidden')
+             }
+             else
+             {
+                 if(mainlabel <5)
+                 {
+                     $('.mainname').val("")
+                     $('.mainnameerror').removeClass('hidden')
+                 }
+             }
+         
+     });  
+     
 
 }
 

@@ -141,6 +141,27 @@ class OrderManagementCntrl extends Controller
 
                }
         
+        $treeviewmain= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','4')->orWhere('id','76')->orWhere('tag_name','mainsize')->get()->toArray();
+            if($treeviewmain){
+                        $childs = array();
+                        foreach($treeviewmain as &$item) 
+                        {
+                        $childs[$item->parent_id][] = &$item;
+                        unset($item);
+                        }
+                        foreach($treeviewmain as &$item) 
+                        {
+                            if (isset($childs[$item->id]))
+                            {
+                                $item->children = $childs[$item->id];
+                                unset($item);
+                            }
+                        }
+                        $tree = $childs[0];
+                        $data['treeviewmain']=$tree;
+
+               }
+        
                 $code=substr($uvc, -3, 2);
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
