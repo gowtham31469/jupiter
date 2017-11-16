@@ -7618,9 +7618,9 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgfen/BRgAfBFNdPLtvvIAAAAASUVORK5CYII=" transf
 		</g>
 		<text transform="matrix(1 0 0 1 118.6757 321.543)" class="st11 st12 st13">€</text>
 		<rect x="63" y="306.4" class="st14" width="41.1" height="22.9"/>
-		<text transform="matrix(1 0 0 1 72.4169 320.6875)" class="st11 st12 st13">14</text>
+		<text transform="matrix(1 0 0 1 72.4169 320.6875)" class="st11 st12 st13" id="price1">14</text>
 		<rect x="96.6" y="305.1" class="st14" width="42" height="14"/>
-		<text transform="matrix(1 0 0 1 96.5713 313.7407)" class="st11 st12 st15">,95</text>
+		<text transform="matrix(1 0 0 1 96.5713 313.7407)" class="st11 st12 st15" id="price2">,95</text>
 		<g>
 			<g>
 				<path class="st16" d="M31.5,345.7c-0.4,0.3-1.2,0.4-1.7,0.4c-3.2,0-5.3-2.4-5.3-5.4c0-3,2.2-5.4,5.2-5.4c0.5,0,1.2,0.1,1.7,0.4
@@ -7638,9 +7638,9 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgfen/BRgAfBFNdPLtvvIAAAAASUVORK5CYII=" transf
 		</g>
 		<text transform="matrix(1 0 0 1 118.6762 350.5908)" class="st16 st12 st13">€</text>
 		<rect x="69.3" y="332.6" class="st14" width="45" height="19.1"/>
-		<text transform="matrix(1 0 0 1 86.2992 346.9165)" class="st16 st12 st13">7</text>
+		<text transform="matrix(1 0 0 1 86.2992 346.9165)" class="st16 st12 st13" id="club_price1">7</text>
 		<rect x="96.6" y="332.6" class="st14" width="42" height="14"/>
-		<text transform="matrix(1 0 0 1 96.571 341.1899)" class="st16 st12 st15">,48</text>
+		<text transform="matrix(1 0 0 1 96.571 341.1899)" class="st16 st12 st15" id="club_price2">,48</text>
 	</g>
 </g>
 </svg>

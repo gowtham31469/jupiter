@@ -1703,9 +1703,9 @@ rcbdiaiwl+yvfHp+5e8PT9ypIen7kSd2ILBgRL2RW0YbgkTEaw0qH/hXvD/6Hn/73ov/2Q==" transf
 	</g>
 	<text transform="matrix(1 0 0 1 118.3056 321.543)" class="st9 st10 st11">€</text>
 	<rect x="62.6" y="306.4" class="st12" width="41.1" height="22.9"/>
-	<text transform="matrix(1 0 0 1 72.0468 320.6875)" class="st9 st10 st11">14</text>
+	<text transform="matrix(1 0 0 1 72.0468 320.6875)" class="st9 st10 st11" id="price1">14</text>
 	<rect x="96.2" y="305.1" class="st12" width="42" height="14"/>
-	<text transform="matrix(1 0 0 1 96.2012 313.7407)" class="st9 st10 st13">,95</text>
+	<text transform="matrix(1 0 0 1 96.2012 313.7407)" class="st9 st10 st13" id="price2">,95</text>
 	<g>
 		<g>
 			<path class="st14" d="M31.1,345.7c-0.4,0.3-1.2,0.4-1.7,0.4c-3.2,0-5.3-2.4-5.3-5.4c0-3,2.2-5.4,5.2-5.4c0.5,0,1.2,0.1,1.7,0.4
@@ -1725,9 +1725,9 @@ rcbdiaiwl+yvfHp+5e8PT9ypIen7kSd2ILBgRL2RW0YbgkTEaw0qH/hXvD/6Hn/73ov/2Q==" transf
 		c8.6,0,15.6,9.3,15.6,20.7V334.1z"/>
 	<text transform="matrix(1 0 0 1 118.306 350.5908)" class="st14 st10 st11">€</text>
 	<rect x="69" y="332.6" class="st12" width="45" height="19.1"/>
-	<text transform="matrix(1 0 0 1 85.9291 346.9165)" class="st14 st10 st11">7</text>
+	<text transform="matrix(1 0 0 1 85.9291 346.9165)" class="st14 st10 st11" id="club_price1">7</text>
 	<rect x="96.2" y="332.6" class="st12" width="42" height="14"/>
-	<text transform="matrix(1 0 0 1 96.2009 341.1899)" class="st14 st10 st13">,48</text>
+	<text transform="matrix(1 0 0 1 96.2009 341.1899)" class="st14 st10 st13" id="club_price2">,48</text>
 	<g>
 		<g>
 			<g>
