@@ -637,3 +637,12 @@ tbody{
 {
 margin-right: 5px;
 }
+label.radio-inline {
+    color: #8D99A6;
+    line-height: 1.7;
+
+}
+
+.region-hidden{
+    visibility: hidden;
+}
