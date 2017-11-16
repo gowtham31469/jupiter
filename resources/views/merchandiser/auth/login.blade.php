@@ -31,9 +31,9 @@
                             <button class="btn btn-sm btn-primary btn-block " type="submit">Sign in</button>
                         </form>
                         <!-- /form -->
-                        <a class="btn btn-link" href="{{ url('/merchandiser/password/reset') }}">
-                                    Forgot Your Password?
-                                </a>
+                        <a href="#" class="forgot-password">
+                Forgot the password?
+            </a>
                     </div>
                     <!-- /card-container -->
                 </div>
