@@ -1303,11 +1303,11 @@
 <line class="st2" x1="191.1" y1="45.8" x2="261.9" y2="45.8"/>
 <polygon class="st1" points="191.1,400.2 191.1,272.6 261.9,272.6 261.9,400.2 261.9,527.7 191.1,527.7 "/>
 <line class="st2" x1="261.9" y1="499.4" x2="191.1" y2="499.4"/>
-<text transform="matrix(1 0 0 1 33.5136 340.96)" class="st0 st3 st4" id="size2">2 ANS / 92 cm</text>
+<text transform="matrix(1 0 0 1 33.5136 340.96)" class="st0 st3 st4">2 ANS / 92 cm</text>
 <g>
-	<text transform="matrix(1 0 0 1 43.3459 349.7531)" class="st0 st3 st4" id="size_in_fr_en2">85/49A</text>
+	<text transform="matrix(1 0 0 1 43.3459 349.7531)" class="st0 st3 st4">85/49A</text>
 </g>
-<text transform="matrix(1 0 0 1 36.5409 332.4697)" class="st0 st3 st4" id="parcel_code2">LF000Q\101</text>
+<text transform="matrix(1 0 0 1 36.5409 332.4697)" class="st0 st3 st4">LF000Q\101</text>
 <path class="st0" d="M49.7,375.1c0,0.2,0,0.4-0.1,0.6c-0.1,0.2-0.2,0.3-0.3,0.5c-0.1,0.1-0.3,0.2-0.5,0.3c-0.2,0.1-0.4,0.1-0.6,0.1
 	c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.3-0.2-0.5-0.3c-0.1-0.1-0.2-0.3-0.3-0.5c-0.1-0.2-0.1-0.4-0.1-0.6c0-0.2,0-0.4,0.1-0.6
 	c0.1-0.2,0.2-0.3,0.3-0.5c0.1-0.1,0.3-0.2,0.5-0.3c0.2-0.1,0.4-0.1,0.6-0.1c0.2,0,0.4,0,0.6,0.1c0.2,0.1,0.3,0.2,0.5,0.3
@@ -1322,7 +1322,7 @@
 	c0.1,0,0.1,0.1,0.1,0.2l0.1,0.3C48.8,375.7,48.8,375.8,48.8,375.8 M48.4,374.7C48.4,374.7,48.4,374.7,48.4,374.7
 	c0-0.1,0-0.1-0.1-0.2c0,0,0,0-0.1,0c0,0-0.1,0-0.1,0h-0.2v0.4h0.2c0.1,0,0.2,0,0.2-0.1C48.3,374.8,48.4,374.8,48.4,374.7"/>
 <text transform="matrix(1 0 0 1 49.8992 379.1501)" class="st3 st5">C1416</text>
-<image id="cofreet_symbol1" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGlAAAB5gAAArz/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1336,7 +1336,7 @@ q1jG1XkRq3Wn02IPLzwttcXBuYrGB3hZv3AlIWj+NKcNsuMhOksDdSQGX8YVYLZzNqjKzChRgpqV
 Y5pTpnhC0DQmGORLiRqUldn1KQe/ljd7vOjxwIeiLVh9TwjSdnQwvrjeNirA0pmMfMu/ebHzLv3m
 w0FuWYO5kZnOpix8Se3/AP/Z" transform="matrix(0.3655 0 0 0.3655 23 358)">
 </image>
-<image id="cofreet_symbol2" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGnAAAB6QAAAq//2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1350,7 +1350,7 @@ jNzL6jjr/MpfCBBEdlHyIDq51bYWYgKMyTkBiZbSASWcAMMU8orEtedwPmbsw01p+9ThfjI+/E6Z
 godV7sR3G6YDhnj1VxvqNj2ckjRK9KshocsLBb+aXMcS5KqkAe7H9i69o+GHv+plmlkBDhyKGupA
 9P8A/9k=" transform="matrix(0.3655 0 0 0.3655 35 358)">
 </image>
-<image id="cofreet_symbol3" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGrAAAB8AAAAtT/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1364,7 +1364,7 @@ AgY/AB//2gAIAQEBBj8AwQZUBGoLD1x+aP7h64PbdXprxIPy6SWzsyLIKFkPFhvUHFxZTRrJSZu5
 2l7K0U946F4oxzajCmuRxHeeDvUvbuUBXtjSUy13XhmmPIW8tY7gsjNE/tetPd7TtXo9tcLzikFH
 XSorXbDpFLPFE5LGJJCqZ/TgvDJPG51ZZCDj9xectzWollYs2nHX4//Z" transform="matrix(0.3655 0 0 0.3655 46.5833 358)">
 </image>
-<image id="cofreet_symbol4" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGkAAAB5wAAAqj/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1377,7 +1377,7 @@ AQEBBj8AohpkBG8Fh1130f1r10GU3B1BG4ja8k+PGZXJZyTYknXjRAgiBItcNu+dDFkN5cCWTFc3
 v3TWX7bbI8PC19Rzm/FjDsdqU+5BS/1B8me37Jndrs3Sd9LNPgPiyNe8LSMxWxtvB6azfS4F5MfJ
 ijyYFJJsVvHINfgdgzpZZknVeRTG5UKvAW415zL8Zq85l+M1R5yzTyzxKyqZZC45XFiNfb//2Q==" transform="matrix(0.3655 0 0 0.3655 58.4167 358)">
 </image>
-<image id="cofreet_symbol5" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGnAAAB9AAAAwf/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1392,7 +1392,7 @@ Q4gdORY4urGSMJeWkxW4cZmQknqYnMnLsuI4Bqlj0yqo56DqI9MQbTt6/Wv1Ku4TuKiMAaSqA8Wa
 mNJ/l2WU110H2wyHLqp8lONw3h1KJfzFoQf0UnP37JLZJmtzJkZE+QHMDxwsu3TzbfMoCl4mJ1U5
 nMZ+eFk3S+n3FUzWOQlV8+psSxQSu1s7aooWzEXeqnjT8//Z" transform="matrix(0.3655 0 0 0.3655 71 358)">
 </image>
-<image id="astm_symbol1" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGjAAAB6QAAAsH/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1406,7 +1406,7 @@ AAgBAQEGPwA4hkUZCoJDGTvYTbXv1Wu3PVa7c9HEWQHICeoYx02Vpd38P5kuQpaHJWTHkAJUFqXR
 l82FkRTDsutPyOnxshg8Ey0ajUNDoRQsFhx46KC1aBRpMh/PmSSZD9sjH6DhJi5C3QyqVcdGx10T
 flbVCsxHL1W1HBELY4lCIOQUUHt//9k=" transform="matrix(0.3655 0 0 0.3655 23 384)">
 </image>
-<image id="astm_symbol2"  style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGnAAAB8wAAAsT/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1420,7 +1420,7 @@ HicaxwO4jmMS+olbz+VaWV1XqEZ1EPzGJbdUM63P84yaftOpTU/nDex9g/n9nOOt+2NT2Jy0SXEz
 ZY4lLMTwGJbtz0E5Yl+KDZgEGhGsHAilat3bAJIN7DtbQ8EIldmYDxRUqxOzMT28cIbu5cXBFXVA
 MoPAVx/ql+ww1Gka3ZCY51AyMvwkG4/X/9k=" transform="matrix(0.3655 0 0 0.3655 35 384)">
 </image>
-<image id="astm_symbol3" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGqAAAB9AAAAuD/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1434,7 +1434,7 @@ AAgBAwIGPwAf/9oACAEBAQY/AGyoIDk8MgyIpoRH3mHTQaBOQwNNo4b7PhrZkk/rf7dQ4fpCNmSO
 JrVwVDntPJleTJ4TqSX0+RgJ0szWVamIXmhXrt1E38vJM2bIhTIjdSVkqN9ru8D0alse8nGrISKU
 clS47DyPi40/+dpaK8lLjwzvgdZGgGidiBtYuduvwv8AWdQZno8jYroaTq3zrJGedff7f//Z" transform="matrix(0.3655 0 0 0.3664 46.8125 384.0313)">
 </image>
-<image id="astm_symbol4" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGlAAAB6QAAArP/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1448,7 +1448,7 @@ fy5q3GCNi2mimUwA9yvm9I4PqIhm1MjCLTqcedr4+AF6k3TcoX3jd2UOdOzG12I5Rb8Qaill22KG
 R0VniOJRiLle3ure0QZUTUBVA7AAZABwgjlmeAQMXUoL3JFvKveNZ1t6q941nW3qrUCKZ5zqWVnZ
 xjdc31zfH//Z" transform="matrix(0.3655 0 0 0.3655 59 384)">
 </image>
-<image id="astm_symbol5" style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="33" height="33" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAxQDFAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAGnAAAB9AAAAwf/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACEAIQMBIgACEQEDEQH/
@@ -1464,23 +1464,16 @@ mNJ/l2WU110H2wyHLqp8lONw3h1KJfzFoQf0UnP37JLZJmtzJkZE+QHMDxwsu3TzbfMoCl4mJ1U5
 nMZ+eFk3S+n3FUzWOQlV8+psSxQSu1s7aooWzEXeqnjT8//Z" transform="matrix(0.3655 0 0 0.3655 71 384)">
 </image>
 <text transform="matrix(1 0 0 1 24.5808 406.4094)"><tspan x="0" y="0" class="st3 st6">Fabriqué en - Made in -</tspan><tspan x="10" y="6.5" class="st3 st6">Fabricado en - </tspan><tspan x="10" y="13" class="st3 st6">Fabricado em -</tspan><tspan x="10.9" y="19.5" class="st3 st6">Fabbricato in -</tspan><tspan x="9.1" y="26" class="st3 st6">Vervaardigd in -</tspan><tspan x="-2" y="32.5" class="st3 st6">Hergestellt in - Сделано </tspan><tspan x="3.6" y="39" class="st3 st6">в - </tspan><tspan x="11.4" y="39" class="st7 st6">制造</tspan><tspan x="22.3" y="39" class="st3 st6"> - صنع في - </tspan><tspan x="7.1" y="45.5" class="st3 st6">παράγεται στην - </tspan><tspan x="14.9" y="52" class="st3 st6">üretim yeri </tspan></text>
-<text transform="matrix(1 0 0 1 29.1531 466.3376)" id="text_for_mad_in">
-
-<tspan x="0" y="0" class="st3 st6">Inde - India - India - </tspan><tspan x="0.2" y="6.5" class="st3 st6">India - India - India -</tspan><tspan x="-3" y="13" class="st3 st6">Indien - Индия - </tspan><tspan x="37.8" y="13" class="st7 st6">印度 -</tspan>
-
-</text>
+<text transform="matrix(1 0 0 1 29.1531 466.3376)"><tspan x="0" y="0" class="st3 st6">Inde - India - India - </tspan><tspan x="0.2" y="6.5" class="st3 st6">India - India - India -</tspan><tspan x="-3" y="13" class="st3 st6">Indien - Индия - </tspan><tspan x="37.8" y="13" class="st7 st6">印度 -</tspan></text>
 <text transform="matrix(1 0 0 1 200.2966 89.1711)"><tspan x="0" y="0" class="st8 st9 st10">Tenir éloigné du feu -</tspan><tspan x="-0.2" y="6.7" class="st8 st9 st10">keep away from fire - </tspan><tspan x="-0.5" y="13.4" class="st8 st9 st10">Mantener alejado del </tspan><tspan x="-3.7" y="20.1" class="st8 st9 st10">fuego - manter afastado </tspan><tspan x="-4.2" y="26.8" class="st8 st9 st10">do fogo - tenere lontano </tspan><tspan x="-3.3" y="33.5" class="st8 st9 st10">dal fuoco - van het vuur </tspan><tspan x="1" y="40.2" class="st8 st9 st10">verwijderd houden -</tspan><tspan x="2.2" y="46.9" class="st8 st9 st10">entfernt vom Feuer</tspan><tspan x="-3.5" y="53.6" class="st8 st9 st10"> halten -Держать вдали </tspan><tspan x="1.1" y="60.3" class="st8 st9 st10">от огня - </tspan><tspan x="22.5" y="60.3" class="st8 st7 st10">请远离火 -</tspan><tspan x="-4.6" y="67" class="st8 st11 st10">الابتعاد</tspan><tspan x="11.3" y="67" class="st8 st7 st10"> </tspan><tspan x="12.6" y="67" class="st8 st11 st10">عن</tspan><tspan x="17.4" y="67" class="st8 st7 st10"> </tspan><tspan x="18.6" y="67" class="st8 st11 st10">النار - </tspan><tspan x="30.3" y="67" class="st8 st9 st10">κρατήστε</tspan><tspan x="52.2" y="67" class="st8 st11 st10"> </tspan><tspan x="0.1" y="73.7" class="st8 st9 st10">το</tspan><tspan x="5.4" y="73.7" class="st8 st11 st10"> </tspan><tspan x="6.5" y="73.7" class="st8 st9 st10">μακριά</tspan><tspan x="22.7" y="73.7" class="st8 st11 st10"> </tspan><tspan x="23.7" y="73.7" class="st8 st9 st10">α</tspan><tspan x="26.8" y="73.7" class="st8 st11 st10">π</tspan><tspan x="28.9" y="73.7" class="st8 st9 st10">ό</tspan><tspan x="31.9" y="73.7" class="st8 st11 st10"> </tspan><tspan x="33" y="73.7" class="st8 st9 st10">φωτιά-</tspan><tspan x="2.1" y="80.4" class="st8 st9 st10">Ateşten uzak tutun.</tspan></text>
-<text transform="matrix(1 0 0 1 170.4596 38.8094)" text-anchor="end" class="st12 st10" id="product_family">تي شيرت</text>
-<g>	
-	<text transform="matrix(1 0 0 1 108.2946 48.2461)" id="text_care_instruction"><tspan x="0" y="0" class="st3 st13">Laver avec des coloris </tspan><tspan x="0" y="5.5" class="st3 st13">similaires - Wash with </tspan><tspan x="0" y="11" class="st3 st13">similar colors - Lavar </tspan><tspan x="0" y="16.5" class="st3 st13">con colores similares - </tspan><tspan x="0" y="22" class="st3 st13">Lave com cores </tspan><tspan x="0" y="27.5" class="st3 st13">semelhantes - Lavare </tspan><tspan x="0" y="33" class="st3 st13">con colori uguali - Met </tspan><tspan x="0" y="38.5" class="st3 st13">dezelfde kleuren </tspan><tspan x="0" y="44" class="st3 st13">wassen - Mit </tspan><tspan x="0" y="49.5" class="st3 st13">gleichartigen farben </tspan></text>
+<text transform="matrix(1 0 0 1 148.4596 38.8094)" class="st12 st10">تي شيرت</text>
+<g>
+	<text transform="matrix(1 0 0 1 108.2946 48.2461)"><tspan x="0" y="0" class="st3 st13">Laver avec des coloris </tspan><tspan x="0" y="5.5" class="st3 st13">similaires - Wash with </tspan><tspan x="0" y="11" class="st3 st13">similar colors - Lavar </tspan><tspan x="0" y="16.5" class="st3 st13">con colores similares - </tspan><tspan x="0" y="22" class="st3 st13">Lave com cores </tspan><tspan x="0" y="27.5" class="st3 st13">semelhantes - Lavare </tspan><tspan x="0" y="33" class="st3 st13">con colori uguali - Met </tspan><tspan x="0" y="38.5" class="st3 st13">dezelfde kleuren </tspan><tspan x="0" y="44" class="st3 st13">wassen - Mit </tspan><tspan x="0" y="49.5" class="st3 st13">gleichartigen farben </tspan></text>
 	<text transform="matrix(1 0 0 1 108.2946 111.2461)"><tspan x="0" y="0" class="st3 st13">Laver avec des coloris </tspan><tspan x="0" y="5.5" class="st3 st13">similaires - Wash with </tspan><tspan x="0" y="11" class="st3 st13">similar colors - Lavar </tspan><tspan x="0" y="16.5" class="st3 st13">con colores similares - </tspan><tspan x="0" y="22" class="st3 st13">Lave com cores </tspan><tspan x="0" y="27.5" class="st3 st13">semelhantes - Lavare </tspan><tspan x="0" y="33" class="st3 st13">con colori uguali - Met </tspan><tspan x="0" y="38.5" class="st3 st13">dezelfde kleuren </tspan><tspan x="0" y="44" class="st3 st13">wassen - Mit </tspan><tspan x="0" y="49.5" class="st3 st13">gleichartigen farben</tspan><tspan x="0" y="55" class="st3 st13">waschen - Мыть с  </tspan></text>
 	<text transform="matrix(1 0 0 1 108.2946 179.2461)"><tspan x="0" y="0" class="st3 st13">Laver avec des coloris </tspan><tspan x="0" y="5.5" class="st3 st13">similaires - Wash with </tspan><tspan x="0" y="11" class="st3 st13">similar colors - Lavar </tspan><tspan x="0" y="16.5" class="st3 st13">con colores similares - </tspan><tspan x="0" y="22" class="st3 st13">Lave com cores </tspan><tspan x="0" y="27.5" class="st3 st13">semelhantes - Lavare </tspan><tspan x="0" y="33" class="st3 st13">con colori uguali - Met </tspan><tspan x="0" y="38.5" class="st3 st13">dezelfde kleuren </tspan><tspan x="0" y="44" class="st3 st13"> </tspan></text>
 </g>
-
 <text transform="matrix(1 0 0 1 108.67 340.5043)"><tspan x="0" y="0" class="st3 st10">100% Coton - Cotton - </tspan><tspan x="0" y="6.5" class="st3 st10">Algodón - Algodão - </tspan><tspan x="0" y="13" class="st3 st10">Cotone - Katoen - </tspan><tspan x="0" y="19.5" class="st3 st10">Baumwolle - Хлопок - </tspan><tspan x="0" y="26" class="st7 st10">棉</tspan><tspan x="5.5" y="26" class="st3 st10"> - قطن - Βαμβάκι - </tspan><tspan x="0" y="32.5" class="st3 st10">Pamuk </tspan></text>
-<image style="overflow:visible;"  id ="barcode" width="54" height="92" xlink:href="" transform="matrix(0.7696 0 0 1.2309 32.2533 42.421)translate(30) rotate(45 50 50) ">
-<text transform="matrix(1 0 0 1 108.67 340.5043)" id="parts_composition"><tspan x="0" y="0" class="st3 st10" >100% Coton - Cotton - </tspan><tspan x="0" y="6.5" class="st3 st10">Algodón - Algodão - </tspan><tspan x="0" y="13" class="st3 st10">Cotone - Katoen - </tspan><tspan x="0" y="19.5" class="st3 st10">Baumwolle - Хлопок - </tspan><tspan x="0" y="26" class="st7 st10">棉</tspan><tspan x="5.5" y="26" class="st3 st10"> - قطن - Βαμβάκι - </tspan><tspan x="0" y="32.5" class="st3 st10">Pamuk </tspan></text>
-<image style="overflow:visible;" id ="barcode" width="54" height="92" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAXgBeAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
+<image style="overflow:visible;" width="54" height="92" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEAXgBeAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
 EAMCAwYAAAHOAAACPQAAAzz/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoX
 Hh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa
 JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIAJUANwMBIgACEQEDEQH/
@@ -1529,10 +1522,10 @@ bh1yBUhhTqzGLa+X96MFgNzbGHob7JlZeBcn96OgJ/MNhwFgmW6ijJMalipFeoGo9eJoLiJjbmNl
 lNIvJQ6s612Yli5mgn5W6n6eGYVYtuKk7FwXubpIUJJ4calqA7tTYFlFK8yBi4L0qC20Cm77cnl8
 jefy7Pa7MR+Tyj9PybPZ7Ps//9k=" transform="matrix(0.3618 0 0 0.3618 40.1667 190.75)">
 </image>
-<text transform="matrix(1 0 0 1 35.7638 175.71)" class="st0 st3 st4" id="size1">3 ANS / 98cm</text>
+<text transform="matrix(1 0 0 1 35.7638 175.71)" class="st0 st3 st4">3 ANS / 98cm</text>
 <g>
-	<text transform="matrix(1 0 0 1 44.7626 183.5031)" class="st0 st3 st4" id="size_in_fr_en1">90/52A</text>
+	<text transform="matrix(1 0 0 1 44.7626 183.5031)" class="st0 st3 st4">90/52A</text>
 </g>
-<text transform="matrix(1 0 0 1 36.9576 167.2197)" class="st0 st3 st4" id="parcel_code1">LF000Q\102</text>
+<text transform="matrix(1 0 0 1 36.9576 167.2197)" class="st0 st3 st4">LF000Q\102</text>
 <text transform="matrix(0.9604 0 0 1 38.5 221.8354)" class="st3 st14">www.lafibredutri.fr</text>
 </svg>
