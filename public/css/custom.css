@@ -122,8 +122,11 @@ p.info {
 
 #main-content {
     padding-top: calc(40px + 2%)
+       
 }
-
+.main-content{
+     padding-bottom:100px;
+}
 
 .navbar-default .navbar-toggle {
     border-color: #273339;
