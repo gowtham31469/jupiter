@@ -23,7 +23,7 @@
         @include('layouts.Customer.navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
-                window.location = "{{ url('/admin/login') }}";
+                window.location = "{{ url('/customer/login') }}";
             </script>
         @endif
         @yield('content')
