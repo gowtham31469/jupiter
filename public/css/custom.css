@@ -660,3 +660,9 @@ a:focus, a:hover {
 .div-max.scroll {
     height: calc(100vh - 20px) !important;
 }
+.select-buyer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
