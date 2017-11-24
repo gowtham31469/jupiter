@@ -96,6 +96,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="main-content">
+    
         <div class="loader"></div>
         <div class="col-md-3">
             <div class="card">
