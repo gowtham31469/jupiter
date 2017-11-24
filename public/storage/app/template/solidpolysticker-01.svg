@@ -6,7 +6,7 @@
 	.st0{fill:none;stroke:#010101;stroke-width:1.5;stroke-miterlimit:10;}
 	.st1{fill:#F06492;}
 	.st2{fill:#010101;}
-	.st3{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;font-weight:bold;font-family:'Calibri-Bold';}
+	.st3{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;font-weight:bold;}
 	.st4{font-size:17px;}
 	.st5{font-size:19px;}
 </style>
