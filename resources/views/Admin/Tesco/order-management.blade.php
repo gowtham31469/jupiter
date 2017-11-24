@@ -2,6 +2,7 @@
 @if (Auth::guard("web")->user())
 @section('content')
 <body id="pages-empty-page" data-layout="top-navigation-1" data-background="light" data-sidebar="light" data-navbar="dark" data-top-navigation="dark" data-controller="pages" data-view="empty-page" data-collapsed="false" data-fullscreen="false" data-logo="dark" class="pace-done">
+
     <div id="fakeloader"></div>
     <div class="container-fluid">
         <div class="row">
