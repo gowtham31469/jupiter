@@ -108,9 +108,6 @@
 </div>
     <div class="main-content">
        <div class="select-buyer">
-           <img src="../../images/select-buyer.png" class="img-responsive"
-           
-
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
