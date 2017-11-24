@@ -107,7 +107,6 @@
     <div class="clearfix"></div>
 </div>
     <div class="main-content">
-       
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
