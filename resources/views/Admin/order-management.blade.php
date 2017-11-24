@@ -63,7 +63,7 @@
         border: 2px solid #dce4ec;
     }
 </style>
-<div class="col-sm-12 col-md-12 main">
+<div class="col-sm-12 col-md-12 main"> 
     <div class="top-content">
         <ol class="breadcrumb">
             <li><a href="/admin/dashboard">Dashboard</a></li>

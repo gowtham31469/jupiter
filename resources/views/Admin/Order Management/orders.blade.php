@@ -107,6 +107,7 @@
     <div class="clearfix"></div>
 </div>
     <div class="main-content">
+
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -170,6 +171,9 @@
 @endif @section('jqueryIncludes')
 <script>
     $(document).ready(function() {
+        $('.select-buyer').click(function(){
+            $('.select-buyer').addClass('hidden');
+        })
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("buyer") === null) {
