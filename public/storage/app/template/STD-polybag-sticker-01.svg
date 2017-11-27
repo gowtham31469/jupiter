@@ -6,8 +6,8 @@
 	.st0{display:none;fill:#FFFFFF;}
 	.st1{fill:#010101;}
 	.st2{fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;}
-	.st3{font-family:'Calibri-Bold';font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;font-weight:bold;}
-	.st4{font-size:9px;}
+	.st3{font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif !important;font-weight:bold;font-family:'Calibri-Bold';}
+    .st4{font-size:9px;}
 	.st5{font-size:14px;}
 	.st6{font-size:17px;}
 	.st7{font-size:10px;}
