@@ -538,7 +538,7 @@ function Popup(data)
     var mywindow = window.open('', 'new div', 'class=printmedia');
     mywindow.document.write('<html><head><title></title>');
     /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #000;width:150mm;height:100mm">');
+    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
     mywindow.document.write(str);
     mywindow.document.write('</div>');
     mywindow.print();
@@ -905,13 +905,13 @@ function washcarelabels(data)
                             if($('.made_in_select option:selected').val() != "")
                             {
                                 
-                              var text_for_mad_in = '<tspan x="0" y="0" class="st3 st6">' +$('select.made_in_select').find(':selected').data('french') +"-"+ $('select.made_in_select').find(':selected').data('english') +"-"+ $('select.made_in_select').find(':selected').data('spanish') +"-"+ $('select.made_in_select').find(':selected').data('portuguese') +"-"+ $('select.made_in_select').find(':selected').data('italian') +"-"+ $('select.made_in_select').find(':selected').data('dutch') +"-"+ $('select.made_in_select').find(':selected').data('german') +"-"+ 
-                              $('select.made_in_select').find(':selected').data('russian') +"-"+ 
-                              $('select.made_in_select').find(':selected').data('chinese') +"-"+ 
-                              $('select.made_in_select').find(':selected').data('arabic') +"-"+ 
-                              $('select.made_in_select').find(':selected').data('greek') +"-"+ 
-                              $('select.made_in_select').find(':selected').data('turkish')+'</tspan>';
-                              svgDoc.getElementById("text_for_mad_in").innerHTML=text_for_mad_in;
+                              var text_for_mad_in =  '<p>'+$('select.made_in_select').find(':selected').data('french') +" - "+ $('select.made_in_select').find(':selected').data('english') +" - "+ $('select.made_in_select').find(':selected').data('spanish') + " - "+ $('select.made_in_select').find(':selected').data('portuguese') +" - "+ $('select.made_in_select').find(':selected').data('italian') + " - "+ $('select.made_in_select').find(':selected').data('dutch') +" - "+ $('select.made_in_select').find(':selected').data('german') +" - "+ 
+                              $('select.made_in_select').find(':selected').data('russian') +" - "+ 
+                              $('select.made_in_select').find(':selected').data('chinese') +" - "+ 
+                              $('select.made_in_select').find(':selected').data('arabic') +" - "+ 
+                              $('select.made_in_select').find(':selected').data('greek') +" - "+ 
+                              $('select.made_in_select').find(':selected').data('turkish')+'</p>';
+                              svgDoc.getElementById("country").innerHTML=text_for_mad_in;
                               
                             }
                             else
@@ -927,12 +927,12 @@ function washcarelabels(data)
                             {
                                 svgDoc.getElementById("text_care_instruction").innerHTML="";
                                 $('.care_instruction_select option:selected').each(function(){
-                                    var value ='<tspan>' +$(this).data('french') +"-"+ $(this).data('english') +"-"+ $(this).data('spanish') +"-"+ $(this).data('portuguese') +"-"+ $(this).data('italian') +"-"+ $(this).data('dutch') +"-"+ $(this).data('german') +"-"+ 
+                                    var value ='<p class="text_pragraph">' +$(this).data('french') +"-"+ $(this).data('english') +"-"+ $(this).data('spanish') +"-"+ $(this).data('portuguese') +"-"+ $(this).data('italian') +"-"+ $(this).data('dutch') +"-"+ $(this).data('german') +"-"+ 
                               $(this).data('russian') +"-"+ 
                               $(this).data('chinese') +"-"+ 
                               $(this).data('arabic') +"-"+ 
                               $(this).data('greek') +"-"+ 
-                              $(this).data('turkish')+'</tspan>';
+                              $(this).data('turkish')+'</p>';
                                     svgDoc.getElementById("text_care_instruction").innerHTML+=value;
                                 });
                               
@@ -1075,7 +1075,7 @@ function add_to_page()
     var buyer =localStorage.getItem("buyer");
     if($('.parts_select option:selected').val() != "Select Option")
     {
-        svgDoc.getElementById("parts_composition").innerHTML+=$('select.parts_select').find(':selected').data('french') + "-" + $('select.parts_select').find(':selected').data('english')+ "-" +$('select.parts_select').find(':selected').data('spanish')+ "-" +$('select.parts_select').find(':selected').data('portuguese')+ "-" + $('select.parts_select').find(':selected').data('italian')+ "-" + $('select.parts_select').find(':selected').data('dutch')+ "-" + $('select.parts_select').find(':selected').data('german')+ "-" + $('select.parts_select').find(':selected').data('russian')+ "-" +$('select.parts_select').find(':selected').data('chinese')+ "-" +$('select.parts_select').find(':selected').data('arabic')+ "-" + $('select.parts_select').find(':selected').data('greek')+ "-" + $('select.parts_select').find(':selected').data('turkish');
+        svgDoc.getElementById("parts_composition").innerHTML+='<p class="text_pragraph">'+$('select.parts_select').find(':selected').data('french') + "-" + $('select.parts_select').find(':selected').data('english')+ "-" +$('select.parts_select').find(':selected').data('spanish')+ "-" +$('select.parts_select').find(':selected').data('portuguese')+ "-" + $('select.parts_select').find(':selected').data('italian')+ "-" + $('select.parts_select').find(':selected').data('dutch')+ "-" + $('select.parts_select').find(':selected').data('german')+ "-" + $('select.parts_select').find(':selected').data('russian')+ "-" +$('select.parts_select').find(':selected').data('chinese')+ "-" +$('select.parts_select').find(':selected').data('arabic')+ "-" + $('select.parts_select').find(':selected').data('greek')+ "-" + $('select.parts_select').find(':selected').data('turkish')+'</p>';
     }
     $.ajax({
         url: base_url + "/admin/"+buyer+"/order-management/compositions-details",
@@ -1090,7 +1090,7 @@ function add_to_page()
                   $('#composition_table_qty tr').each(function(){
                     if($(this).find('.comp').text() == value.english)
                         {
-                            svgDoc.getElementById("parts_composition").innerHTML+=value.french + "-" + value.english+ "-" + value.spanish+ "-" + value.portuguese+ "-" + value.italian+ "-" + value.dutch+ "-" + value.german+ "-" + value.russian+ "-" + value.chinese+ "-" + value.arabic+ "-" + value.greek+ "-" + value.turkish;
+                            svgDoc.getElementById("parts_composition").innerHTML+='<p class="text_pragraph">'+value.french + "-" + value.english+ "-" + value.spanish+ "-" + value.portuguese+ "-" + value.italian+ "-" + value.dutch+ "-" + value.german+ "-" + value.russian+ "-" + value.chinese+ "-" + value.arabic+ "-" + value.greek+ "-" + value.turkish+'</p>';
                         }
                 })
             });
@@ -1196,7 +1196,7 @@ function mainlabels(data)
                             success: function (data) {
                                 if(data.length > 0)
                                 {
-                                     $('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
+                                     $('.sample-artwork').html('<object id="svg2" style="height: 225px;" class="center-block svg2" data="'+data[0].template_file+'" type="image/svg+xml"></object>')   
                                 }
                                 else
                                 {
