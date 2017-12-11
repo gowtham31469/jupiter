@@ -14,7 +14,10 @@ use App\User;
 use App\UserRole;
 use App\RolePermissionMdl;
 use Hash;
-
+/**
+ * User management controller
+ * @author <Praveen>
+ */
 class UserManagementController extends Controller
 {
   /**
