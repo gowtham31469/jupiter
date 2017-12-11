@@ -12,7 +12,7 @@
               </div>
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
-                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false" onclick="getBuyersMerchandisers()"><i class="ion-person-add"></i> Add Merchandiser</a>
+                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false" onclick="getBuyersMerchandisers()"><i class="ion-person-add"></i>Add Merchandiser</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -43,8 +43,8 @@
                           <td>{{ $value->merchandiser_phone }}</td>
                           <td>{{ $value->merchandiser_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil fa-lg edit-merchandiser" title="Edit"></i></a>
+                            <a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -107,12 +107,12 @@
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customers --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
+                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyers --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -167,12 +167,12 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customers --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
+                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyers --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
+                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>

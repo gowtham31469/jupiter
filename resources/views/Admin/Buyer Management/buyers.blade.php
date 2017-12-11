@@ -13,7 +13,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-person-add"></i> Add Buyer</a>
+                    <i class="ion-person-add"></i>Add Buyer</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -40,8 +40,7 @@
                           <td>{{ $value->buyer_phone }}</td>
                           <td>{{ $value->buyer_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil fa-lg edit-buyer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach
