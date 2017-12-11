@@ -2117,6 +2117,10 @@ function addRole(permissions)
         }
     })
   }
+  /**
+   * To show all customers list
+   * @author <praveen>
+   */
   function customersListView()
   {
       $('.main-sub-menu').removeClass('hidden');
@@ -2174,6 +2178,10 @@ function addRole(permissions)
           }
       })
   }
+  /**
+   * Adds a customer.
+   * @author <praveen>
+   */
   function addCustomer()
   {
       var factory_code    =  $('#factory_code').val();
@@ -2311,6 +2319,10 @@ function addRole(permissions)
           }
       })
    }
+   /**
+    * Function to show all buyers list
+    * @author <praveen>
+    */
    function buyers()
    {
       $('.main-sub-menu').removeClass('hidden');
@@ -2351,6 +2363,10 @@ function addRole(permissions)
            }
        })
    }
+   /**
+    * Adds a buyer.
+    * @author <praveen>
+    */
    function addBuyer()
    {
        var name       = $('#buyer_name').val();
@@ -2395,6 +2411,11 @@ function addRole(permissions)
            }
        })
     }
+    /**
+     * Function for get buyers details for editing
+     * @author <praveen>
+     *
+     */
    var isSubmitting = false;
    function getBuyer(id)
    {
@@ -2431,6 +2452,10 @@ function addRole(permissions)
          }
      })
    }
+   /**
+    * Function for edit buyer
+    * @author <praveen>
+    */
    function editBuyer()
    {
      var id         = $('#buyer_edit_id').val();
@@ -2473,6 +2498,10 @@ function addRole(permissions)
          }
      })
    }
+   /**
+    * Function for delete buyer
+    * @author <praveen>
+    */
    function deleteBuyer(id)
    {
      var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -2515,7 +2544,10 @@ function addRole(permissions)
     }
       return true;
     }
-
+    /**
+     * Function for merchandiser page
+     * @author <praveen>
+     */
     function merchandiser()
     {
       $('.main-sub-menu').removeClass('hidden');
@@ -2581,6 +2613,7 @@ function addRole(permissions)
     }
     /**
      * Adds a merchandiser.
+     * @author <praveen>
      */
     function addMerchandiser()
     {
@@ -2631,7 +2664,7 @@ function addRole(permissions)
      }
      /**
       * To get all merchandiser list
-      *
+      * @author <praveen>
       */
      var isSubmitting = false;
      function getMerchandiser(id)
@@ -2694,6 +2727,10 @@ function addRole(permissions)
            }
        })
      }
+     /**
+      * Function to update merchandiser details
+      * @author <praveen>
+      */
      function editMerchandiser()
      {
        var id         = $('#merchandiser_edit_id').val();
@@ -2739,6 +2776,11 @@ function addRole(permissions)
            }
        })
      }
+     /**
+      * To delete merchandiser
+      * @author <praveen>
+      *
+      */
      function deleteMerchandiser(id)
      {
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -2772,7 +2814,10 @@ function addRole(permissions)
        })
      }
      /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
-
+     /**
+      * Adds a contact person.
+      * @author <praveen>
+      */
      function addContact(rem,e) {
        e.preventDefault();
          var a = []
@@ -2797,7 +2842,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * Removes a  contact person.
+      *
+      * @author <praveen>
+      */
      function removeContact(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -2812,7 +2861,10 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#add_customer_form').validator('update');
      }
-
+     /**
+      * Adds an contact address.
+      * @author <praveen>
+      */
      function addAddress(rem,e) {
        e.preventDefault();
          var a = []
@@ -2838,7 +2890,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * Removes an contact address.
+      *
+      * @author <praveen>
+      */
      function removeAddress(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -2853,7 +2909,12 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#add_customer_form').validator('update');
      }
-/** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+ /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+ /**
+  * To auto populate country
+  *
+  * @author <praveen>
+  */
     function autopopulateCountry(id)
      {
             var options = {
@@ -2892,6 +2953,11 @@ function addRole(permissions)
           };
        $("#country" + id).easyAutocomplete(options);
      }
+    /**
+     * Edit auto-autopopulate country(In customer form)
+     *
+     * @author <praveen>
+     */
      function editAutopopulateCountry(id)
      {
           var options = {
@@ -2931,6 +2997,11 @@ function addRole(permissions)
           };
        $("#editcountry" + id).easyAutocomplete(options);
      }
+     /**
+      * Makes a customer active.
+      *
+      * @author <praveen>
+      */
     function makeCustomerActive(id,csrf_token)
      {
       $.ajax({
@@ -2953,7 +3024,11 @@ function addRole(permissions)
            }
        })
      }
-
+     /**
+      * Makes a customer inactive.
+      *
+      * @author <praveen>
+      */
     function makeCustomerInactive(id,csrf_token)
      {
       $.ajax({
@@ -2978,6 +3053,11 @@ function addRole(permissions)
      }
 
      var isSubmitting = false;
+     /**
+      * Gets the customer.
+      *
+      * @author <praveen>
+      */
      function getCustomer(id)
      {
        if(isSubmitting) 
@@ -3104,6 +3184,11 @@ function addRole(permissions)
        })
      }
      /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins(for editing)**/
+      /**
+       * To edit contact person
+       *
+       * @author <praveen>
+       */
      function editAddContact(rem,e) {
        e.preventDefault();
          var a = []
@@ -3128,7 +3213,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * To remove contact person while editing
+      *
+      * @param      {<type>}  rem     The rem
+      */
      function editRemoveContact(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -3143,6 +3232,11 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#edit_customer_form').validator('update');
      }
+     /**
+      * To add contact address while editing
+      *
+      * @param      {<type>}  rem     The rem
+      */
      function editAddAddress(rem,e) {
        e.preventDefault();
          var a = []
@@ -3168,7 +3262,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * To remove contact address while editing
+      *
+      * @param      {<type>}  rem     The rem
+      */
      function editRemoveAddress(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -3184,7 +3282,11 @@ function addRole(permissions)
          $('#edit_customer_form').validator('update');
      }
     /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends(for editing)**/
-
+    /**
+      * To update customer details
+      *
+      * @param      {<type>}  rem     The rem
+      */
     function editCustomer()
   {
       var id              =  $('#customer_edit_id').val();
@@ -3322,6 +3424,11 @@ function addRole(permissions)
           }
       })
    }
+    /**
+     * To delete customer
+     *
+     * @author    <praveen>
+     */
    function deleteCustomer(id)
    {
      var csrf_token = $('meta[name="csrf-token"]').attr('content');
