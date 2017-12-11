@@ -14,7 +14,10 @@ use Hash;
 use App\Customer;
 use App\CustomerContactPersons;
 use App\CustomerBillAddress;
-
+/**
+ * Customer management controller
+ * @author <Praveen>
+ */
 class CustomerManagementController extends Controller
 {
   /**
@@ -77,7 +80,8 @@ class CustomerManagementController extends Controller
           }
     }
     /**
-     * Add Customers.
+     * Add Customers to jga.
+     * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -180,8 +184,9 @@ class CustomerManagementController extends Controller
       }
       /**
        * Make customer active
+       * @param customer id
        * @author <Praveen>
-       * @return \Illuminate\Http\Response
+       * @return boolean true or false
        */
       public function makeCustomerActive(Request $request)
       {
@@ -202,9 +207,9 @@ class CustomerManagementController extends Controller
             return $result;
         }
       /**
-       * Make customer active
+       * Make customer in-active
        * @author <Praveen>
-       * @return \Illuminate\Http\Response
+       * @return boolean true or false
        */
       public function makeCustomerInactive(Request $request)
       {
@@ -226,11 +231,8 @@ class CustomerManagementController extends Controller
         }
         /**
          * Gets the customer by identifier.
-         *
-         * @param      \Illuminate\Http\Request  $request  The request
-         *
-         * @return     <type>                    The customer by identifier.
-         * 
+         * @param customer id
+         * @return The customer by identifier.
          * @author <Praveen>
          */
         public function getCustomerById(Request $request)
@@ -256,9 +258,10 @@ class CustomerManagementController extends Controller
               }
         }
         /**
-         * Update Customers.
+         * Update Customer by id.
+         * @param \Illuminate\Http\Request
          * @author <Praveen>
-         * @return \Illuminate\Http\Response
+         * @return boolean true or false
          */
         public function updateCustomer(Request $request)
           {
@@ -357,9 +360,10 @@ class CustomerManagementController extends Controller
                 return $result;
           }
           /**
-         * function to delete Customer.
+         * function to delete Customer by id.
+         * @param customer id
          * @author <Praveen>
-         * @return \Illuminate\Http\Response
+         * @return boolean true or false
          */
         public function deleteCustomerById(Request $request)
         {

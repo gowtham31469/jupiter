@@ -2325,11 +2325,6 @@ function addRole(permissions)
     */
    function buyers()
    {
-      $('.main-sub-menu').removeClass('hidden');
-      $( ".sub_modules a" ).removeClass( "active" )
-      $('.sticker_orders a').addClass("active")
-      $('.main-content').html('<div class="loader"></div>');
-      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
            url: base_url + "/admin/buyer-management/buyers-list",
@@ -2341,8 +2336,8 @@ function addRole(permissions)
                $(".loader").css('margin-top','12%');
            },
            success: function (data) {
-               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Buyers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Buyer</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-social-codepen"></i>Dashboard</a></li><li><a class="active" href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li><li class="roles-list-view"><a class="" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandiser</a></li></ul><hr/></div>');
-               var table = '<div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
+               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/buyer-management">Dashboard</a></li><li class="active">Buyers</li></ol>');
+               var table = '<div class="loader"></div><div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.buyers, function(i, item){
                 var index = i+1;
                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a></td></tr>';
@@ -2550,11 +2545,6 @@ function addRole(permissions)
      */
     function merchandiser()
     {
-      $('.main-sub-menu').removeClass('hidden');
-      $( ".sub_modules a" ).removeClass( "active" )
-      $('.sticker_orders a').addClass("active")
-      $('.main-content').html('<div class="loader"></div>');
-      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
            url: base_url + "/admin/buyer-management/merchandiser-list",
@@ -2565,35 +2555,35 @@ function addRole(permissions)
                $(".loader").show();
                $(".loader").css('margin-top','12%');
                $.ajax({
-                   url: base_url + "/admin/buyer-management/get-buyers",
-                   method: 'get',
-                   success: function (data) {
-                     var appenddata = "<option value = ''>-- Select Buyers --</option>";
-                       $.each(data.buyers, function (key, value) {
+                 url: base_url + "/admin/buyer-management/get-buyers",
+                 method: 'get',
+                 success: function (data) {
+                   var appenddata = "<option value = ''>-- Select Buyers --</option>";
+                     $.each(data.buyers, function (key, value) {
 
-                       appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
-                       });
-                   $('#merchandiser_buyer').html(appenddata);
-                   var appenddata1 = "<option value = ''>-- Select Customers --</option>";
-                     $.each(data.customers, function (key, value) {
-
-                     appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
+                     appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                      });
-                 $('#merchandiser_supplier').html(appenddata1);
-                   },
-                   error: function (data) {
+                 $('#merchandiser_buyer').html(appenddata);
+                 var appenddata1 = "<option value = ''>-- Select Customers --</option>";
+                   $.each(data.customers, function (key, value) {
 
-                   },
-                   complete: function () {
-                   }
-               })
+                   appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
+                   });
+               $('#merchandiser_supplier').html(appenddata1);
+                 },
+                 error: function (data) {
+
+                 },
+                 complete: function () {
+                 }
+             })
            },
            success: function (data) {
-               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li><a href="">Buyer Management</a></li><li class="active">Merchandisers</li></ol><h3><i class="ion-ios-browsers-outline"></i>Buyer Management</h3><div class="main-sub-menu"><div class="action-group pull-right"><a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Merchandiser</a></div><ul class="sub-nav-list"><li><a href=""><i class="ion-social-codepen"></i>Dashboard</a></li><li><a  href="#" onclick="buyers()"><i class="ion-ios-pricetag"></i>Buyers</a></li><li class="roles-list-view"><a class="active" href="#" onclick="merchandiser()"><i class="ion-ios-pricetag"></i>Merchandisers</a></li></ul><hr/></div>');
-               var table = '<div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Supplier Name</th><th>Buyer Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
+               $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li class="active">Merchandisers</li></ol>');
+               var table = '<div class="loader"></div><div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Supplier Name</th><th>Buyer Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.merchandisers, function(i, item){
                 var index = i+1;
-                table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="ion-edit edit-merchandiser" title="Edit"></i></a><a href="#"><i class="ion-trash-a" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
+                table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
                });
                table += '</tbody></table></div>';
                $('.main-content').html(table);
