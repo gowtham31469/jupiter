@@ -41,7 +41,7 @@
                           <td>{{ $value->buyer_address }}</td>
                           <td>
                             <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
+                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach

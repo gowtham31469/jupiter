@@ -44,7 +44,7 @@
                           <td>{{ $value->merchandiser_address }}</td>
                           <td>
                             <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
+                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach
