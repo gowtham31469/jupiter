@@ -442,8 +442,17 @@ function addRole(permissions)
         }
     })
   }
+  /**
+   * To show all customers list
+   * @author <praveen>
+   */
   function customersListView()
   {
+      $('.main-sub-menu').removeClass('hidden');
+      $( ".sub_modules a" ).removeClass( "active" )
+       $('.sticker_orders a').addClass("active")
+      $('.main-content').html('<div class="loader"></div>');
+      var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/customer-management/customers-list",
@@ -455,8 +464,8 @@ function addRole(permissions)
               $(".loader").css('margin-top','12%');
           },
           success: function (data) {
-            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/customer-management">Dashboard</a></li><li class="active">Customers</li></ol>');
-            var table = '<div class="loader"></div><div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li class="active">Customers</li></ol>');
+            var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
             $.each(data.customers, function(i, item){
              var index = i+1;
              table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
@@ -494,6 +503,10 @@ function addRole(permissions)
           }
       })
   }
+  /**
+   * Adds a customer.
+   * @author <praveen>
+   */
   function addCustomer()
   {
       var factory_code    =  $('#factory_code').val();
@@ -631,6 +644,10 @@ function addRole(permissions)
           }
       })
    }
+   /**
+    * Function to show all buyers list
+    * @author <praveen>
+    */
    function buyers()
    {
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -648,7 +665,6 @@ function addRole(permissions)
                var table = '<div class="loader"></div><div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.buyers, function(i, item){
                 var index = i+1;
-
                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a></td></tr>';
                });
                table += '</tbody></table></div>';
@@ -667,6 +683,10 @@ function addRole(permissions)
            }
        })
    }
+   /**
+    * Adds a buyer.
+    * @author <praveen>
+    */
    function addBuyer()
    {
        var name       = $('#buyer_name').val();
@@ -711,6 +731,11 @@ function addRole(permissions)
            }
        })
     }
+    /**
+     * Function for get buyers details for editing
+     * @author <praveen>
+     *
+     */
    var isSubmitting = false;
    function getBuyer(id)
    {
@@ -747,6 +772,10 @@ function addRole(permissions)
          }
      })
    }
+   /**
+    * Function for edit buyer
+    * @author <praveen>
+    */
    function editBuyer()
    {
      var id         = $('#buyer_edit_id').val();
@@ -789,6 +818,10 @@ function addRole(permissions)
          }
      })
    }
+   /**
+    * Function for delete buyer
+    * @author <praveen>
+    */
    function deleteBuyer(id)
    {
      var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -831,7 +864,10 @@ function addRole(permissions)
     }
       return true;
     }
-
+    /**
+     * Function for merchandiser page
+     * @author <praveen>
+     */
     function merchandiser()
     {
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -872,7 +908,6 @@ function addRole(permissions)
                var table = '<div class="loader"></div><div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Supplier Name</th><th>Buyer Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.merchandisers, function(i, item){
                 var index = i+1;
-
                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
                });
                table += '</tbody></table></div>';
@@ -891,6 +926,10 @@ function addRole(permissions)
            }
        })
     }
+    /**
+     * Adds a merchandiser.
+     * @author <praveen>
+     */
     function addMerchandiser()
     {
         var name                   = $('#merchandiser_name').val();
@@ -938,6 +977,10 @@ function addRole(permissions)
             }
         })
      }
+     /**
+      * To get all merchandiser list
+      * @author <praveen>
+      */
      var isSubmitting = false;
      function getMerchandiser(id)
      {
@@ -999,6 +1042,10 @@ function addRole(permissions)
            }
        })
      }
+     /**
+      * Function to update merchandiser details
+      * @author <praveen>
+      */
      function editMerchandiser()
      {
        var id         = $('#merchandiser_edit_id').val();
@@ -1044,6 +1091,11 @@ function addRole(permissions)
            }
        })
      }
+     /**
+      * To delete merchandiser
+      * @author <praveen>
+      *
+      */
      function deleteMerchandiser(id)
      {
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -1077,7 +1129,10 @@ function addRole(permissions)
        })
      }
      /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
-
+     /**
+      * Adds a contact person.
+      * @author <praveen>
+      */
      function addContact(rem,e) {
        e.preventDefault();
          var a = []
@@ -1102,7 +1157,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * Removes a  contact person.
+      *
+      * @author <praveen>
+      */
      function removeContact(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -1117,7 +1176,10 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#add_customer_form').validator('update');
      }
-
+     /**
+      * Adds an contact address.
+      * @author <praveen>
+      */
      function addAddress(rem,e) {
        e.preventDefault();
          var a = []
@@ -1143,7 +1205,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * Removes an contact address.
+      *
+      * @author <praveen>
+      */
      function removeAddress(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -1158,7 +1224,12 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#add_customer_form').validator('update');
      }
-/** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+ /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+ /**
+  * To auto populate country
+  *
+  * @author <praveen>
+  */
     function autopopulateCountry(id)
      {
             var options = {
@@ -1197,6 +1268,11 @@ function addRole(permissions)
           };
        $("#country" + id).easyAutocomplete(options);
      }
+    /**
+     * Edit auto-autopopulate country(In customer form)
+     *
+     * @author <praveen>
+     */
      function editAutopopulateCountry(id)
      {
           var options = {
@@ -1229,13 +1305,18 @@ function addRole(permissions)
                 },
 
                 onClickEvent: function() {
-                  var value = $("#edit_country" + id).getSelectedItemData().code;
-                  $("#edit_country" + id).val(value).trigger("change");
+                  var value = $("#editcountry" + id).getSelectedItemData().code;
+                  $("#editcountry" + id).val(value).trigger("change");
                 }
            }
           };
-       $("#edit_country" + id).easyAutocomplete(options);
+       $("#editcountry" + id).easyAutocomplete(options);
      }
+     /**
+      * Makes a customer active.
+      *
+      * @author <praveen>
+      */
     function makeCustomerActive(id,csrf_token)
      {
       $.ajax({
@@ -1258,7 +1339,11 @@ function addRole(permissions)
            }
        })
      }
-
+     /**
+      * Makes a customer inactive.
+      *
+      * @author <praveen>
+      */
     function makeCustomerInactive(id,csrf_token)
      {
       $.ajax({
@@ -1283,6 +1368,11 @@ function addRole(permissions)
      }
 
      var isSubmitting = false;
+     /**
+      * Gets the customer.
+      *
+      * @author <praveen>
+      */
      function getCustomer(id)
      {
        if(isSubmitting) 
@@ -1409,12 +1499,17 @@ function addRole(permissions)
        })
      }
      /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins(for editing)**/
+      /**
+       * To edit contact person
+       *
+       * @author <praveen>
+       */
      function editAddContact(rem,e) {
        e.preventDefault();
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#editContact').append('<div id="edit_contact_' + val + '" class="editcontact"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveContact(this)" title="Delete"></i><div type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></div><div id="edit_contact_person' + val + '" class="panel"><div class="form-group has-feedback"><label for="edit_contact_person' + val + '" class="form_label">Contact Person </label><input class="form-control input-sm edit_contact_person" placeholder="Contact Person Name" required="" name="edit_contact_person' + val + '" value="" id="edit_contact_person' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_contact_phone' + val + '" class="form_label">Contact Phone No</label><div class="input-group"><span class="input-group-addon input-sm " id="edit-basic-addon1">+91</span><input class="form-control input-sm edit_contact_phone" placeholder="Contact Phone No" data-minlength="10" maxlength="10" required="" onkeypress="return isNumber(event)" name="edit_contact_phone' + val + '" value="" id="edit_contact_phone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_contact_email' + val + '" class="form_label">Contact Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_contact_email" placeholder="Contact Email" required="" name="edit_contact_email' + val + '" value="" id="edit_contact_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_contact" type="checkbox" value="" name="default" id="edit_default_contact' + val + '"> Make as default contact person</label></div></div></div>')
+         $('#editContact').append('<div id="editcontact_' + val + '" class="editcontact"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveContact(this)" title="Delete"></i><div type="button" class="accordion button-bottom"><h4>Contact Person 1</h4></div><div id="edit_contact_person' + val + '" class="panel"><div class="form-group has-feedback"><label for="edit_contact_person' + val + '" class="form_label">Contact Person </label><input class="form-control input-sm edit_contact_person" placeholder="Contact Person Name" required="" name="edit_contact_person' + val + '" value="" id="edit_contact_person' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_contact_phone' + val + '" class="form_label">Contact Phone No</label><div class="input-group"><span class="input-group-addon input-sm " id="edit-basic-addon1">+91</span><input class="form-control input-sm edit_contact_phone" placeholder="Contact Phone No" data-minlength="10" maxlength="10" required="" onkeypress="return isNumber(event)" name="edit_contact_phone' + val + '" value="" id="edit_contact_phone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_contact_email' + val + '" class="form_label">Contact Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_contact_email" placeholder="Contact Email" required="" name="edit_contact_email' + val + '" value="" id="edit_contact_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_contact" type="checkbox" value="" name="default" id="edit_default_contact' + val + '"> Make as default contact person</label></div></div></div>')
          $('#edit_customer_form').validator('update');
          
          $(rem).attr("data-id", val);
@@ -1433,7 +1528,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * To remove contact person while editing
+      *
+      * @author <praveen>
+      */
      function editRemoveContact(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -1448,12 +1547,17 @@ function addRole(permissions)
          $('#hidden').val(b);
          $('#edit_customer_form').validator('update');
      }
+     /**
+      * To add contact address while editing
+      *
+      * @author <praveen>
+      */
      function editAddAddress(rem,e) {
        e.preventDefault();
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + val + '" class="form_label">Address</label><textarea class="form-control  edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + val + '" cols="50" id="edit_address' + val + '"></textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + val + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + val + '" value="" id="edit_country' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + val + '" value="" id="edit_telephone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="edit_fax' + val + '" value="" id="edit_fax' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div></div></div>')
+         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="editaddress' + val + '" cols="50" id="editaddress' + val + '"></textarea><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editcountry' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="editcountry' + val + '" value="" id="editcountry' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edittelephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edittelephone' + val + '" value="" id="edittelephone' + val + '" type="text"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editfax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="editfax' + val + '" value="" id="editfax' + val + '" type="text"><span class="glyphicon form-control-feedback"></span><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"><span class="glyphicon form-control-feedback"></span></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div></div></div>')
          $('#edit_customer_form').validator('update');
          editAutopopulateCountry(val);
          
@@ -1473,7 +1577,11 @@ function addRole(permissions)
             }
       });
      }
-
+     /**
+      * To remove contact address while editing
+      *
+      * @author <praveen>
+      */
      function editRemoveAddress(rem) {
          var a = []
          var al = $(rem).parent().attr('id');
@@ -1489,7 +1597,10 @@ function addRole(permissions)
          $('#edit_customer_form').validator('update');
      }
     /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends(for editing)**/
-
+    /**
+      * To update customer details
+      * @author <praveen>
+      */
     function editCustomer()
   {
       var id              =  $('#customer_edit_id').val();
@@ -1627,6 +1738,11 @@ function addRole(permissions)
           }
       })
    }
+    /**
+     * To delete customer
+     *
+     * @author    <praveen>
+     */
    function deleteCustomer(id)
    {
      var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -1659,29 +1775,3 @@ function addRole(permissions)
          }
      })
    }
-     function getBuyersMerchandisers()
-     {
-      $.ajax({
-                 url: base_url + "/admin/buyer-management/get-buyers",
-                 method: 'get',
-                 success: function (data) {
-                   var appenddata = "<option value = ''>-- Select Buyers --</option>";
-                     $.each(data.buyers, function (key, value) {
-
-                     appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
-                     });
-                 $('#merchandiser_buyer').html(appenddata);
-                 var appenddata1 = "<option value = ''>-- Select Customers --</option>";
-                   $.each(data.customers, function (key, value) {
-
-                   appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
-                   });
-               $('#merchandiser_supplier').html(appenddata1);
-                 },
-                 error: function (data) {
-
-                 },
-                 complete: function () {
-                 }
-             })
-     }
