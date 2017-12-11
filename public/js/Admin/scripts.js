@@ -3206,7 +3206,7 @@ function addRole(permissions)
      /**
       * To remove contact person while editing
       *
-      * @param      {<type>}  rem     The rem
+      * @author <praveen>
       */
      function editRemoveContact(rem) {
          var a = []
@@ -3225,7 +3225,7 @@ function addRole(permissions)
      /**
       * To add contact address while editing
       *
-      * @param      {<type>}  rem     The rem
+      * @author <praveen>
       */
      function editAddAddress(rem,e) {
        e.preventDefault();
@@ -3255,7 +3255,7 @@ function addRole(permissions)
      /**
       * To remove contact address while editing
       *
-      * @param      {<type>}  rem     The rem
+      * @author <praveen>
       */
      function editRemoveAddress(rem) {
          var a = []
@@ -3274,8 +3274,7 @@ function addRole(permissions)
     /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends(for editing)**/
     /**
       * To update customer details
-      *
-      * @param      {<type>}  rem     The rem
+      * @author <praveen>
       */
     function editCustomer()
   {
