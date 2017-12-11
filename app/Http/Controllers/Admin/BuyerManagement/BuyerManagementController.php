@@ -402,8 +402,8 @@ class BuyerManagementController extends Controller
                 $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','buyers.buyer_name','customers.company_name')
              ->join('buyers','buyers.id','=','merchandisers.buyer_id')
              ->join('customers','customers.id','=','merchandisers.customer_id')->get();
-             $buyers = DB::table('buyers')->select('buyer_name','id')->get();
-             $customers = DB::table('customers')->select('company_name','id')->get();
+             $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
+             $customers = DB::table('customers')->pluck('company_name','id')->all();
                 View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                 });

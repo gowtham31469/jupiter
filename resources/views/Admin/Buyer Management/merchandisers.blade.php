@@ -107,12 +107,12 @@
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
+                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']+ $customers),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']+ $buyers),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                   </div>
@@ -238,6 +238,7 @@
         $('#edit_buyer_result').hide();
         $('#delete_buyer_result').hide();
         $('#merchandiser_result').hide();
+        $('#add_merchandiser_result').hide();
         $('#edit_merchandiser_result').hide();
         $('#delete_merchandiser_result').hide();
        })
