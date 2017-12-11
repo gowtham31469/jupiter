@@ -2579,6 +2579,9 @@ function addRole(permissions)
            }
        })
     }
+    /**
+     * Adds a merchandiser.
+     */
     function addMerchandiser()
     {
         var name                   = $('#merchandiser_name').val();
@@ -2626,6 +2629,10 @@ function addRole(permissions)
             }
         })
      }
+     /**
+      * To get all merchandiser list
+      *
+      */
      var isSubmitting = false;
      function getMerchandiser(id)
      {
