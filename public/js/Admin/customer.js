@@ -308,12 +308,12 @@
          $('#hidden').val(b);
          $('#add_customer_form').validator('update');
      }
- /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
- /**
-  * To auto populate country
-  *
-  * @author <praveen>
-  */
+   /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
+   /**
+    * To auto populate country
+    *
+    * @author <praveen>
+    */
     function autopopulateCountry(id)
      {
             var options = {
@@ -822,11 +822,11 @@
           }
       })
    }
-    /**
-     * To delete customer
-     *
-     * @author    <praveen>
-     */
+  /**
+   * To delete customer
+   *
+   * @author    <praveen>
+   */
    function deleteCustomer(id)
    {
      var csrf_token = $('meta[name="csrf-token"]').attr('content');
