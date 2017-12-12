@@ -451,11 +451,6 @@ function addCustomer()
   function makeCustomerActive(id,csrf_token)
    {
     try{
-          if(isSubmitting) 
-          {
-              return;
-          }
-          isSubmitting = true;
           $.ajax({
                url:base_url + "/admin/customer-management/make-customer-active",
                dataType:"json",
@@ -490,11 +485,6 @@ function addCustomer()
   function makeCustomerInactive(id,csrf_token)
    {
     try{
-         if(isSubmitting) 
-          {
-              return;
-          }
-          isSubmitting = true;
           $.ajax({
                url:base_url + "/admin/customer-management/make-customer-inactive",
                dataType:"json",
