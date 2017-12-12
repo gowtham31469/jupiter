@@ -430,6 +430,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/users.js') }}"></script>
     <script>
     $( document ).ready(function() {
         $(".logo").html('Users').addClass('pagename');

@@ -443,6 +443,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
         

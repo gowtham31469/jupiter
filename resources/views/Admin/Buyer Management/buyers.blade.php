@@ -185,6 +185,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
          $('.logo').html('Buyers & Merchandisers')

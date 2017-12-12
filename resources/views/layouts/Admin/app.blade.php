@@ -33,7 +33,7 @@
         @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
         @elseif(!Auth::guest())
             <script type="text/javascript">
-                window.location = "{{ url('/admin/login') }}";
+       customer         window.location = "{{ url('/admin/login') }}";
             </script>
         @endif
         @yield('content')
@@ -49,9 +49,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/Admin/customer.js') }}"></script>
-    <script src="{{ asset('js/Admin/users.js') }}"></script>
-    <script src="{{ asset('js/Admin/buyers.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
