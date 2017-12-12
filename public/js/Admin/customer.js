@@ -11,8 +11,10 @@
     try{
           $('.main-sub-menu').removeClass('hidden');
           $( ".sub_modules a" ).removeClass( "active" )
-           $('.sticker_orders a').addClass("active")
+          $('.sticker_orders a').addClass("active")
           $('.main-content').html('<div class="loader"></div>');
+          $('#edit_buyer').selectpicker('refresh');
+          $('#buyer').selectpicker('refresh');
           var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
           var csrf_token = $('meta[name="csrf-token"]').attr('content');
           $.ajax({
@@ -97,6 +99,8 @@ function addCustomer()
         var address_email   = [];
         var default_address = [];
 
+        var buyers = [];
+
         $('.contact_person').each(function(i, item)
         {
             contact_person[i]    = $(item).val();
@@ -161,7 +165,10 @@ function addCustomer()
             }
             
         });
-                  
+        $.each($("#buyer option:selected"), function(){
+          buyers.push($(this).val());
+        });
+        console.log(buyers)          
         contact_person   = contact_person.join(',');
         contact_phone    = contact_phone.join(',');
         contact_email    = contact_email.join(',');
@@ -172,11 +179,12 @@ function addCustomer()
         fax              = fax.join(',');
         address_email    = address_email.join(',');
         default_address  = default_address.join(',');
+        buyer            = buyers.join(',');
 
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer},
             beforeSend: function () {
               $(".loader").show();
               $(".loader").css('margin-top','12%');
@@ -515,7 +523,7 @@ function addCustomer()
    }
 
  /**
-  * Gets the customer.
+  * Gets the customer by id for editing.
   * @param id
   * @author <praveen>
   */
@@ -574,6 +582,10 @@ function addCustomer()
                       {
                         $('#edit_default_address'+ key).prop('checked', false);
                       }
+                      $.each(data.buyers, function (key, item) {
+                       $('#edit_buyer option[value=' + item.buyer_id + ']').prop('selected', true);
+                       $('#edit_buyer').selectpicker('refresh');
+                      });
 
                          var j = 1;
                          $('#editbilladdress .editbilladdress').each(function(key, val) {
@@ -591,7 +603,17 @@ function addCustomer()
                             }
                           });
                   $('#edit_address').attr("data-id", key);
-                 });
+                 
+                 $.each(data.customers, function (key, value) {
+                  $('#edit_factory_code').val(value.factory_code);
+                  $('#edit_company_name').val(value.company_name);
+                  $('#edit_courier_choice').val(value.courier_choice);
+                  $('#edit_account_no').val(value.account_no);
+                  $('#edit_tin_number').val(value.tin_number);
+                  $('#edit_gstin_number').val(value.gstin_number);
+                  $('#edit_pan_number').val(value.pan_number);
+                  $('#edit_login_email').val(value.email);
+                 });});
 
                  $.each(data.contacts,function(key,value){
                    key += 1;
@@ -796,6 +818,8 @@ function addCustomer()
           var address_email   = [];
           var default_address = [];
 
+          var buyers          = [];
+
           $('.edit_contact_person').each(function(i, item)
           {
               contact_person[i]    = $(item).val();
@@ -860,6 +884,10 @@ function addCustomer()
               }
               
           });
+          $.each($("#edit_buyer option:selected"), function(){
+            buyers.push($(this).val());
+          });
+
                     
           contact_person   = contact_person.join(',');
           contact_phone    = contact_phone.join(',');
@@ -871,11 +899,12 @@ function addCustomer()
           fax              = fax.join(',');
           address_email    = address_email.join(',');
           default_address  = default_address.join(',');
+          buyer            = buyers.join(',');
 
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer},
               beforeSend: function () {
                 $(".loader").show();
                 $(".loader").css('margin-top','12%');

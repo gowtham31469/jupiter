@@ -185,6 +185,13 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('buyer', 'Select Buyer * :', ['class' => 'form_label']) !!}
+                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
                             </div>
                             <hr>
                             <div class="row">
@@ -375,6 +382,13 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('edit_buyer', 'Select Buyer * :', ['class' => 'form_label']) !!}
+                                  {{ Form::select('edit_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
                             </div>
                             <hr>
                             <div class="row">
@@ -454,7 +468,9 @@
       $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-            autopopulateCountry(0)
+      autopopulateCountry(0)
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
     });
     /** restrict special characters **/
     $('input').on('input', function() {
@@ -472,6 +488,8 @@
     $('.modal').on('hidden.bs.modal', function (e) {
       $('#add_customer_form').trigger('reset');
       $('#customer_result').hide();
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
      })
     /** generate password **/
     $("#generatePwd").validator().click(function(){
@@ -574,5 +592,6 @@
             deleteCustomer(id);
          }
        })
+       
     </script>
     @endsection
