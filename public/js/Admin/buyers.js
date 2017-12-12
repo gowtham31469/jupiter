@@ -24,18 +24,18 @@
               table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a></td></tr>';
              });
              table += '</tbody></table></div>';
-             $('.main-content').html(table);
+              $('.main-content').html(table);
               $('#buyers-list-table').DataTable();
               $("#buyers-list-table_filter input").addClass('form-control input-sm');
               $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
-               $('#buyers-list-table_length select').addClass('form-control input-sm');
+              $('#buyers-list-table_length select').addClass('form-control input-sm');
          },
          error: function (data) {
-
+            console.log(data);
          },
          complete: function () {
-             $(".loader").hide();
-             $(".loader").css('margin-top','0%');
+              $(".loader").hide();
+              $(".loader").css('margin-top','0%');
          }
      })
  }
@@ -68,9 +68,9 @@
                    buyers();
               },
               400: function() {
-                $('#buyer_result').removeAttr('style');
-                $('#buyer_result').html("Something went wrong!!")
-                $("#buyer_result").addClass("alert alert-dander");
+                   $('#buyer_result').removeAttr('style');
+                   $('#buyer_result').html("Something went wrong!!")
+                   $("#buyer_result").addClass("alert alert-dander");
               },
               409: function() {
                    $('#buyer_result').removeAttr('style');
@@ -79,11 +79,11 @@
               }
          },
          error: function (data) {
-
+            console.log(data);
          },
          complete: function () {
-           $(".loader").hide();
-           $(".loader").css('margin-top','0%');
+                   $(".loader").hide();
+                   $(".loader").css('margin-top','0%');
          }
      })
   }
@@ -122,9 +122,12 @@
            $('#edit_buyer_form').validator('validate');
            $('#editBuyerModal').modal('show');
        },
+       error: function (data) {
+            console.log(data);
+       },
        complete: function () {
-         $(".loader").hide();
-         $(".loader").css('margin-top','0%');
+           $(".loader").hide();
+           $(".loader").css('margin-top','0%');
        }
    })
   }
@@ -158,9 +161,9 @@
                  buyers();
             },
             400: function() {
-              $('#edit_buyer_result').removeAttr('style');
-              $('#edit_buyer_result').html("Something went wrong!!")
-              $("#edit_buyer_result").addClass("alert alert-dander");
+                 $('#edit_buyer_result').removeAttr('style');
+                 $('#edit_buyer_result').html("Something went wrong!!")
+                 $("#edit_buyer_result").addClass("alert alert-dander");
             },
             409: function() {
                  $('#edit_buyer_result').removeAttr('style');
@@ -168,9 +171,12 @@
                  $("#edit_buyer_result").addClass("alert alert-warning");
             }
        },
+       error: function (data) {
+            console.log(data);
+       },
        complete: function () {
-         $(".loader").hide();
-         $(".loader").css('margin-top','0%');
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
        }
    })
  }
@@ -199,14 +205,17 @@
                  buyers();
             },
             400: function() {
-              $('#delete_buyer_result').removeAttr('style');
-              $('#delete_buyer_result').html("Something went wrong!!")
-              $("#delete_buyer_result").addClass("alert alert-dander");
+                 $('#delete_buyer_result').removeAttr('style');
+                 $('#delete_buyer_result').html("Something went wrong!!")
+                 $("#delete_buyer_result").addClass("alert alert-dander");
             }
        },
+       error: function (data) {
+            console.log(data);
+       },
        complete: function () {
-         $(".loader").hide();
-         $(".loader").css('margin-top','0%');
+                $(".loader").hide();
+                $(".loader").css('margin-top','0%');
        }
    })
  }
@@ -244,7 +253,7 @@
              $('#merchandiser_supplier').html(appenddata1);
                },
                error: function (data) {
-
+                  console.log(data);
                },
                complete: function () {
                }
@@ -258,18 +267,18 @@
               table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
              });
              table += '</tbody></table></div>';
-             $('.main-content').html(table);
+              $('.main-content').html(table);
               $('#merchandisers-list-table').DataTable();
               $("#merchandisers-list-table_filter input").addClass('form-control input-sm');
               $("#merchandisers-list-table_filter input").attr('placeholder', 'Data Search');
-               $('#merchandisers-list-table_length select').addClass('form-control input-sm');
+              $('#merchandisers-list-table_length select').addClass('form-control input-sm');
          },
          error: function (data) {
-
+            console.log(data);
          },
          complete: function () {
-             $(".loader").hide();
-             $(".loader").css('margin-top','0%');
+              $(".loader").hide();
+              $(".loader").css('margin-top','0%');
          }
      })
   }
@@ -305,9 +314,9 @@
                     merchandiser();
                },
                400: function() {
-                 $('#add_merchandiser_result').removeAttr('style');
-                 $('#add_merchandiser_result').html("Something went wrong!!")
-                 $("#add_merchandiser_result").addClass("alert alert-dander");
+                    $('#add_merchandiser_result').removeAttr('style');
+                    $('#add_merchandiser_result').html("Something went wrong!!")
+                    $("#add_merchandiser_result").addClass("alert alert-dander");
                },
                409: function() {
                     $('#add_merchandiser_result').removeAttr('style');
@@ -316,11 +325,11 @@
                }
           },
           error: function (data) {
-
+            console.log(data);
           },
           complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top','0%');
+                    $(".loader").hide();
+                    $(".loader").css('margin-top','0%');
           }
       })
    }
@@ -352,16 +361,16 @@
 
                    appenddata += "<option value = '"+value.id+"'>" +value.buyer_name+" </option>";
                    });
-               $('#edit_merchandiser_buyer').html(appenddata);
-               var appenddata1 = "<option value = ''>-- Select Customers --</option>";
-                 $.each(data.customers, function (key, value) {
+                   $('#edit_merchandiser_buyer').html(appenddata);
+                   var appenddata1 = "<option value = ''>-- Select Customers --</option>";
+                     $.each(data.customers, function (key, value) {
 
-                 appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
-                 });
-             $('#edit_merchandiser_supplier').html(appenddata1);
+                     appenddata1 += "<option value = '"+value.id+"'>" +value.company_name+" </option>";
+                     });
+                 $('#edit_merchandiser_supplier').html(appenddata1);
                },
                error: function (data) {
-
+                  console.log(data);
                },
                complete: function () {
                }
@@ -383,9 +392,12 @@
              $('#edit_merchandiser_form').validator('validate');
              $('#editMerchandiserModal').modal('show');
          },
+         error: function (data) {
+            console.log(data);
+         },
          complete: function () {
-           $(".loader").hide();
-           $(".loader").css('margin-top','0%');
+             $(".loader").hide();
+                $(".loader").css('margin-top','0%');
          }
      })
    }
@@ -422,9 +434,9 @@
                    merchandiser();
               },
               400: function() {
-                $('#edit_merchandiser_result').removeAttr('style');
-                $('#edit_merchandiser_result').html("Something went wrong!!")
-                $("#edit_merchandiser_result").addClass("alert alert-dander");
+                   $('#edit_merchandiser_result').removeAttr('style');
+                   $('#edit_merchandiser_result').html("Something went wrong!!")
+                   $("#edit_merchandiser_result").addClass("alert alert-dander");
               },
               409: function() {
                    $('#edit_merchandiser_result').removeAttr('style');
@@ -432,9 +444,12 @@
                    $("#edit_merchandiser_result").addClass("alert alert-warning");
               }
          },
+         error: function (data) {
+            console.log(data);
+         },
          complete: function () {
-           $(".loader").hide();
-           $(".loader").css('margin-top','0%');
+                   $(".loader").hide();
+                   $(".loader").css('margin-top','0%');
          }
      })
    }
@@ -464,14 +479,17 @@
                    merchandiser();
               },
               400: function() {
-                $('#delete_merchandiser_result').removeAttr('style');
-                $('#delete_merchandiser_result').html("Something went wrong!!")
-                $("#delete_merchandiser_result").addClass("alert alert-dander");
+                   $('#delete_merchandiser_result').removeAttr('style');
+                   $('#delete_merchandiser_result').html("Something went wrong!!")
+                   $("#delete_merchandiser_result").addClass("alert alert-dander");
               }
          },
+         error: function (data) {
+            console.log(data);
+         },
          complete: function () {
-           $(".loader").hide();
-           $(".loader").css('margin-top','0%');
+                   $(".loader").hide();
+                   $(".loader").css('margin-top','0%');
          }
      })
    }

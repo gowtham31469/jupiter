@@ -281,7 +281,7 @@
             addMerchandiser();
          }
        })
-       // get edit merchandiser details
+       /** get edit merchandiser details **/ss
        $(document).on('click','.edit-merchandiser',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();

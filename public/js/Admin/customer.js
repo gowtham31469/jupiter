@@ -52,7 +52,7 @@
             autopopulateCountry(0)
           },
           error: function (data) {
-
+            console.log(data);
           },
           complete: function () {
               $(".loader").hide();
@@ -193,8 +193,8 @@ function addCustomer()
              }
         },
         error: function (data) {
-
-        },
+            console.log(data);
+         },
         complete: function () {
           $(".loader").hide();
           $(".loader").css('margin-top','0%');
@@ -417,6 +417,9 @@ function addCustomer()
                    customersListView();
               }
          },
+         error: function (data) {
+            console.log(data);
+         },
          complete: function () {
            $(".loader").hide();
            $(".loader").css('margin-top','0%');
@@ -443,6 +446,9 @@ function addCustomer()
               200: function() {
                    customersListView();
               }
+         },
+         error: function (data) {
+            console.log(data);
          },
          complete: function () {
            $(".loader").hide();
@@ -512,21 +518,21 @@ function addCustomer()
                     $('#edit_default_address'+ key).prop('checked', false);
                   }
 
-                   var j = 1;
-                   $('#editbilladdress .editbilladdress').each(function(key, val) {
-                       $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
-                       a.push($(this).attr('id'));
-                       j++;
-                   })
-                   var b = []
-                   var b = a.join(',');
-                   $('#hidden').val(b);
-                   $(':checkbox').on('change',function(){
-                     var th = $(this), name = th.prop('name');
-                     if(th.is(':checked')){
-                         $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
-                      }
-                });
+                     var j = 1;
+                     $('#editbilladdress .editbilladdress').each(function(key, val) {
+                         $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
+                         a.push($(this).attr('id'));
+                         j++;
+                     })
+                     var b = []
+                     var b = a.join(',');
+                     $('#hidden').val(b);
+                     $(':checkbox').on('change',function(){
+                       var th = $(this), name = th.prop('name');
+                       if(th.is(':checked')){
+                           $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+                        }
+                      });
               $('#edit_address').attr("data-id", key);
              });
 
@@ -574,6 +580,9 @@ function addCustomer()
              })
              $('#edit_customer_form').validator('update');
              $('#editCustomerModal').modal('show');
+         },
+         error: function (data) {
+            console.log(data);
          },
          complete: function () {
           $('#edit_customer_form').validator('validate');
@@ -814,11 +823,11 @@ function addCustomer()
                }
           },
           error: function (data) {
-
+            console.log(data);
           },
           complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top','0%');
+                    $(".loader").hide();
+                    $(".loader").css('margin-top','0%');
           }
       })
    }
@@ -848,14 +857,17 @@ function addCustomer()
                    customersListView();
               },
               400: function() {
-                $('#delete_result').removeAttr('style');
-                $('#delete_result').html("Something went wrong!!")
-                $("#delete_result").addClass("alert alert-dander");
+                   $('#delete_result').removeAttr('style');
+                   $('#delete_result').html("Something went wrong!!")
+                   $("#delete_result").addClass("alert alert-dander");
               }
          },
+         error: function (data) {
+            console.log(data);
+         },
          complete: function () {
-           $(".loader").hide();
-           $(".loader").css('margin-top','0%');
+                   $(".loader").hide();
+                   $(".loader").css('margin-top','0%');
          }
      })
    }

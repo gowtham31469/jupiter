@@ -526,19 +526,19 @@
               }
           }
       }
-    // to activate customers
+    /** to activate customers **/
     $(document).on('click', '#make_active', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerActive(id,csrf_token)
     });
-    // to deactivate customers
+    /** to deactivate customers **/
     $(document).on('click', '#make_inactive', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerInactive(id,csrf_token)
     });
-    // get edit customer details
+    /** get edit customer details **/
        $(document).on('click','.edit-customer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -556,6 +556,7 @@
            editCustomer();
         }
       })
+      /** assign id for delete modal **/
     $('#deleteCustomerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_customer_id').attr('value', config);

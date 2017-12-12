@@ -199,7 +199,7 @@
          $('#edit_buyer_result').hide();
          $('#delete_buyer_result').hide();
        });
-
+       /** Add buyer form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -218,7 +218,7 @@
         $('#edit_buyer_result').hide();
         $('#delete_buyer_result').hide();
        })
-       // get edit buyer details
+       /** get edit buyer details **/
        $(document).on('click','.edit-buyer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -236,6 +236,7 @@
             editBuyer();
          }
        })
+       /** assign id for delete modal **/
        $('#deleteBuyerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_buyer_id').attr('value', config);
