@@ -1,4 +1,6 @@
-/* Buyer & Merchandisers script */
+/* Buyer & Merchandisers script 
+ * @author <praveen>
+ */
 
  /**
   * Function to show all buyers list
@@ -89,6 +91,7 @@
   }
   /**
    * Function for get buyers details for editing
+   * @param id
    * @author <praveen>
    *
    */
@@ -182,6 +185,7 @@
  }
  /**
   * Function for delete buyer
+  * @param id
   * @author <praveen>
   */
  function deleteBuyer(id)
@@ -335,6 +339,7 @@
    }
    /**
     * To get all merchandiser list
+    * @param id
     * @author <praveen>
     */
    var isSubmitting = false;
@@ -455,6 +460,7 @@
    }
    /**
     * To delete merchandiser
+    * @param id
     * @author <praveen>
     *
     */

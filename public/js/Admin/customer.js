@@ -1,4 +1,6 @@
-/* Customer management script*/
+/* Customer management script
+ * @author <praveen>
+ */
 /**
  * To show all customers list
  * @author <praveen>
@@ -311,7 +313,7 @@ function addCustomer()
  /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
  /**
   * To auto populate country
-  *
+  * @param id
   * @author <praveen>
   */
    function autopopulateCountry(id)
@@ -354,7 +356,7 @@ function addCustomer()
    }
  /**
   * Edit auto-autopopulate country(In customer form)
-  *
+  * @param id
   * @author <praveen>
   */
  function editAutopopulateCountry(id)
@@ -398,7 +400,7 @@ function addCustomer()
  }
  /**
   * Makes a customer active.
-  *
+  * @param id,csrf_token
   * @author <praveen>
   */
   function makeCustomerActive(id,csrf_token)
@@ -428,7 +430,7 @@ function addCustomer()
    }
  /**
   * Makes a customer inactive.
-  *
+  * @param id,csrf_token
   * @author <praveen>
   */
   function makeCustomerInactive(id,csrf_token)
@@ -460,7 +462,7 @@ function addCustomer()
   var isSubmitting = false;
  /**
   * Gets the customer.
-  *
+  * @param id
   * @author <praveen>
   */
    function getCustomer(id)
@@ -833,7 +835,7 @@ function addCustomer()
    }
   /**
    * To delete customer
-   *
+   * @param id
    * @author    <praveen>
    */
    function deleteCustomer(id)
