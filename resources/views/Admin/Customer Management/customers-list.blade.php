@@ -187,7 +187,7 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
-                                {!! Form::label('buyer', 'Select Buyer * :', ['class' => 'form_label']) !!}
+                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
                                   {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -384,7 +384,7 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
-                                {!! Form::label('edit_buyer', 'Select Buyer * :', ['class' => 'form_label']) !!}
+                                {!! Form::label('edit_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
                                   {{ Form::select('edit_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_buyer','required')) }}
                                 <div class="help-block with-errors"></div>
                               </div>
