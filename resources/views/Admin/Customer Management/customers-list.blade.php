@@ -14,7 +14,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -25,7 +25,7 @@
                       <thead>
                         <tr>
                           <th>Id</th>
-                          <th>Company Name</th>
+                          <th>Customer Name</th>
                           <th>Factory Code</th>
                           <th>Default Contact</th>
                           <th>Courier Choice</th>
@@ -182,6 +182,13 @@
                                   <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
                                   <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
                                 </div>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -375,6 +382,13 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('edit_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('edit_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
                             </div>
                             <hr>
                             <div class="row">
@@ -443,6 +457,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
         
@@ -453,7 +468,9 @@
       $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-            autopopulateCountry(0)
+      autopopulateCountry(0)
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
     });
     /** restrict special characters **/
     $('input').on('input', function() {
@@ -471,6 +488,8 @@
     $('.modal').on('hidden.bs.modal', function (e) {
       $('#add_customer_form').trigger('reset');
       $('#customer_result').hide();
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
      })
     /** generate password **/
     $("#generatePwd").validator().click(function(){
@@ -525,19 +544,19 @@
               }
           }
       }
-    // to activate customers
+    /** to activate customers **/
     $(document).on('click', '#make_active', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerActive(id,csrf_token)
     });
-    // to deactivate customers
+    /** to deactivate customers **/
     $(document).on('click', '#make_inactive', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerInactive(id,csrf_token)
     });
-    // get edit customer details
+    /** get edit customer details **/
        $(document).on('click','.edit-customer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -555,6 +574,7 @@
            editCustomer();
         }
       })
+      /** assign id for delete modal **/
     $('#deleteCustomerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_customer_id').attr('value', config);
@@ -572,5 +592,6 @@
             deleteCustomer(id);
          }
        })
+       
     </script>
     @endsection

@@ -215,6 +215,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
          $('.logo').html('Buyers & Merchandisers')
@@ -280,7 +281,7 @@
             addMerchandiser();
          }
        })
-       // get edit merchandiser details
+       /** get edit merchandiser details **/
        $(document).on('click','.edit-merchandiser',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
