@@ -74,42 +74,13 @@
                     @endforeach
               </select>
         </div>
-           
-<!--
-        <ol class="breadcrumb">
-            <li><a href="/admin/dashboard">Dashboard</a></li>
-            <li class="active">Order Management</li>
-        </ol>
-        <form class="navbar-form pull-right" style="margin-top:0px;">
-            <label style="color: #333; margin-right: 10px;"><i class="ion-crop"></i>Select Buyer</label>
-            <select class="js-example-responsive buyer-select">
-                  <option></option>
-                    @foreach($buyers as $buyer)
-                    <option value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-                    @endforeach
-              </select>
-        </form>
-        <h3><i class="ion-ios-browsers-outline"></i>Order Management</h3>
-
-        <div class="main-sub-menu hidden">
-            <div class="action-group pull-right">
-               <a href="#" class=" btn btn-primary btn-sm"><i class="ion-upload"></i>Upload Data</a> 
-                <a href="#" id="uploadModal" data-target="#uploadData" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-upload"></i>Upload Data</a>
-            </div>
-            <ul class="sub-nav-list">
-                <li class="dashboard sub_modules"><a href=""><i class="ion-grid"></i>Dashboard</a></li>
-                <li class="sticker_orders sub_modules"><a href="#" onclick="sticker_orders()"><i class="ion-social-codepen"></i>Sticker Orders</a></li>
-                <li class="label_orders sub_modules"><a class="" href="#" onclick="label_orders()"><i class="ion-ios-pricetag"></i>Label Orders</a></li>
-            </ul>
-            <hr/>
-        </div>
-    </div>-->
     <div class="clearfix"></div>
 </div>
     <div class="main-content">
-          <div class="select-buyer">
-        <img src="../../images/select-buyer.png" class="img-responsive">
+        <div class="select-buyer">
+            
         </div>
+    </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -169,7 +140,8 @@
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
 </script>
-@endif @section('jqueryIncludes')
+@endif @section('jqueryIncludes')      
+<script src="{{ asset('js/Admin/order.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('.select-buyer').click(function(){
@@ -178,11 +150,11 @@
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("buyer") === null) {
-                
+                $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
          }
         else
         {
-             sticker_orders();
+             orders();
         }
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
@@ -206,20 +178,8 @@
 
                 },
                 success: function(data) {
-                    //                         $('.sub-nav-list').html('<li class="dashboard sub_modules"><a href="" ><i class="ion-grid"></i>Dashboard</a></li>')
-                    //                         $.each(data, function (index, value) {
-                    //                            $('.sub-nav-list').append('<li class="'+value.module_name.toLowerCase().replace(" ", "_")+' sub_modules"><a href="#" onclick="'+value.url_path+'"><i class="'+value.image+'"></i>'+value.module_name+'</a></li>')
-                    //                        });
-                    //                         $('.main-sub-menu').removeClass('hidden');
-
-                    //                        if(data[0].module_name == "Label Orders")
-                    //                            {
-                    //                                label_orders();
-                    //                            }
-                    //                         if(data[0].module_name == "Sticker Orders")
-                    //                             {
-                    sticker_orders();
-                    //}                        
+                  
+                   orders();                    
                 },
                 error: function(data) {
 
@@ -239,16 +199,5 @@
    
     
 </script>
-<script src="{{ asset('js/dropzone.js') }}"></script>
-<script type="text/javascript">
-    Dropzone.options.imageUpload = {
-        maxFilesize: 10,
-        acceptedFiles: ".csv",
-        ".xls"
-    };
-    $('.modal').on('hidden.bs.modal', function(e) {
-        $('#uploadMultiData').trigger("reset");
-        $('#uploadData').trigger('reset');
-    })
-</script>
+
 @endsection

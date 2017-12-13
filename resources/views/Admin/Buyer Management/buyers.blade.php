@@ -13,7 +13,7 @@
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
                   <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="ion-person-add"></i>Add Buyer</a>
+                    <i class="ion-person-add"></i> Add Buyer</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -40,7 +40,8 @@
                           <td>{{ $value->buyer_phone }}</td>
                           <td>{{ $value->buyer_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil fa-lg edit-buyer" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-buyer" title="Edit"></i></a>
+                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -184,6 +185,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
          $('.logo').html('Buyers & Merchandisers')
@@ -197,7 +199,7 @@
          $('#edit_buyer_result').hide();
          $('#delete_buyer_result').hide();
        });
-
+       /** Add buyer form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -216,7 +218,7 @@
         $('#edit_buyer_result').hide();
         $('#delete_buyer_result').hide();
        })
-       // get edit buyer details
+       /** get edit buyer details **/
        $(document).on('click','.edit-buyer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -234,6 +236,7 @@
             editBuyer();
          }
        })
+       /** assign id for delete modal **/
        $('#deleteBuyerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_buyer_id').attr('value', config);

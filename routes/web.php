@@ -40,9 +40,11 @@ Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dash
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
+Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 
-Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@dashboard');
-Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
+
+Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
+//Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
@@ -156,6 +158,8 @@ Route::post('admin/orchestra/order-management/back-sticker-orders', 'Admin\Orche
 Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@stickerOrders');
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
+
+Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderManagementCntrl@Orders');
 
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');

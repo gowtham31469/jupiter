@@ -14,7 +14,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i>Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -25,7 +25,7 @@
                       <thead>
                         <tr>
                           <th>Id</th>
-                          <th>Company Name</th>
+                          <th>Customer Name</th>
                           <th>Factory Code</th>
                           <th>Default Contact</th>
                           <th>Courier Choice</th>
@@ -77,15 +77,15 @@
                             <td><span class="badge badge-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-times fa-lg" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
+                            <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
                           @else
-                            <td><a href="#"><i class="fa fa-check fa-lg" aria-hidden="true" title="Make Active" id="make_active"></i></a>
+                            <td><a href="#"><i class="fa fa-check fa-lg fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
                           @endif
                                <a href="#">
-                                <i class="fa fa-pencil fa-lg edit-customer" title="Edit"></i>
+                                <i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i>
                                </a>
                                <a href="#">
-                                <i class="fa fa-trash fa-lg" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
+                                <i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
                                </a>
                              </td>
                          </tr>
@@ -182,6 +182,13 @@
                                   <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
                                   <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
                                 </div>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -375,6 +382,13 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
+                                {!! Form::label('edit_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('edit_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
                             </div>
                             <hr>
                             <div class="row">
@@ -443,6 +457,7 @@
     </script>
     @endif
     @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
         
@@ -453,7 +468,9 @@
       $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-            autopopulateCountry(0)
+      autopopulateCountry(0)
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
     });
     /** restrict special characters **/
     $('input').on('input', function() {
@@ -471,6 +488,8 @@
     $('.modal').on('hidden.bs.modal', function (e) {
       $('#add_customer_form').trigger('reset');
       $('#customer_result').hide();
+      $('#edit_buyer').selectpicker('refresh');
+      $('#buyer').selectpicker('refresh');
      })
     /** generate password **/
     $("#generatePwd").validator().click(function(){
@@ -525,19 +544,19 @@
               }
           }
       }
-    // to activate customers
+    /** to activate customers **/
     $(document).on('click', '#make_active', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerActive(id,csrf_token)
     });
-    // to deactivate customers
+    /** to deactivate customers **/
     $(document).on('click', '#make_inactive', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         makeCustomerInactive(id,csrf_token)
     });
-    // get edit customer details
+    /** get edit customer details **/
        $(document).on('click','.edit-customer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
@@ -555,6 +574,7 @@
            editCustomer();
         }
       })
+      /** assign id for delete modal **/
     $('#deleteCustomerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_customer_id').attr('value', config);
@@ -572,5 +592,6 @@
             deleteCustomer(id);
          }
        })
+       
     </script>
     @endsection

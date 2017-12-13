@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
-
+/**
+ * Buyer management controller
+ * @author <Praveen>
+ */
 class BuyerManagementController extends Controller
 {
     /**
@@ -50,7 +53,7 @@ class BuyerManagementController extends Controller
         }
     }
     /**
-     * Buyers list page.
+     * Buyers list page show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -65,7 +68,8 @@ class BuyerManagementController extends Controller
           }
     }
     /**
-     * Add buyers.
+     * Add buyers for JGA.
+     * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -107,6 +111,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Get buyer details by ID for editing.
+       * @param buyer id
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -123,6 +128,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Update buyer by id.
+       * @param buyer id
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -161,7 +167,8 @@ class BuyerManagementController extends Controller
             return $result;
         }
     /**
-     * function to delete buyer.
+     * function to delete buyer by id.
+     * @param buyer id
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -186,7 +193,7 @@ class BuyerManagementController extends Controller
           return $result;
     }
     /**
-     * get all buyers.
+     * get all buyers and customers list for dropdown.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -202,7 +209,7 @@ class BuyerManagementController extends Controller
           }
     }
     /**
-     * Show Merchandisers list page.
+     * Show Merchandisers list page on ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -221,7 +228,8 @@ class BuyerManagementController extends Controller
             echo json_encode($merchandisers);
     }
     /**
-     * Add Merchandisers.
+     * Add Merchandisers to jga. 
+     * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -269,6 +277,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Get buyer details by ID for editing.
+       * @param Merchandiser id
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -285,6 +294,7 @@ class BuyerManagementController extends Controller
       }
       /**
        * Update merchandiser by id.
+       * @param Merchandiser id
        * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
@@ -327,7 +337,8 @@ class BuyerManagementController extends Controller
             return $result;
         }
         /**
-         * function to delete Merchandiser.
+         * function to delete Merchandiser by id.
+         * @param Merchandiser id
          * @author <Praveen>
          * @return \Illuminate\Http\Response
          */
@@ -352,7 +363,7 @@ class BuyerManagementController extends Controller
               return $result;
         }
         /**
-         * Show the buyers list.
+         * Show the buyers list on pageload.
          *
          * @return \Illuminate\Http\Response
          */
@@ -376,7 +387,7 @@ class BuyerManagementController extends Controller
             }
         }
         /**
-         * Show the merchandisers list.
+         * Show the merchandisers list on pageload.
          *
          * @return \Illuminate\Http\Response
          */
@@ -391,8 +402,8 @@ class BuyerManagementController extends Controller
                 $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','buyers.buyer_name','customers.company_name')
              ->join('buyers','buyers.id','=','merchandisers.buyer_id')
              ->join('customers','customers.id','=','merchandisers.customer_id')->get();
-             $buyers = DB::table('buyers')->select('buyer_name','id')->get();
-             $customers = DB::table('customers')->select('company_name','id')->get();
+             $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
+             $customers = DB::table('customers')->pluck('company_name','id')->all();
                 View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                 });

@@ -14,7 +14,11 @@ use Hash;
 use App\Customer;
 use App\CustomerContactPersons;
 use App\CustomerBillAddress;
-
+use App\CustomerBuyers;
+/**
+ * Customer management controller
+ * @author <Praveen>
+ */
 class CustomerManagementController extends Controller
 {
   /**
@@ -77,7 +81,8 @@ class CustomerManagementController extends Controller
           }
     }
     /**
-     * Add Customers.
+     * Add Customers to jga.
+     * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
@@ -104,6 +109,7 @@ class CustomerManagementController extends Controller
                 $fax             = $request['fax'];
                 $address_email   = $request['address_email'];
                 $default_address = $request['default_address'];
+                $buyer           = $request['buyer'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -123,6 +129,7 @@ class CustomerManagementController extends Controller
                   $fax             = explode(',',$fax);
                   $address_email   = explode(',',$address_email);
                   $default_address = explode(',',$default_address);
+                  $buyers          = explode(',',$buyer);
 
                   $insert_Id = Customer::insertGetId([
                                 'factory_code'   => $factory_code,
@@ -164,6 +171,13 @@ class CustomerManagementController extends Controller
                         ]);
                         $j++;
                     }
+                    foreach($buyers as $buyer)
+                    {
+                        CustomerBuyers::create([
+                            'customer_id'     => $insert_Id,
+                            'buyer_id'        => $buyer
+                        ]);
+                    }
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
                   }
                   else
@@ -180,8 +194,9 @@ class CustomerManagementController extends Controller
       }
       /**
        * Make customer active
+       * @param customer id
        * @author <Praveen>
-       * @return \Illuminate\Http\Response
+       * @return boolean true or false
        */
       public function makeCustomerActive(Request $request)
       {
@@ -202,9 +217,9 @@ class CustomerManagementController extends Controller
             return $result;
         }
       /**
-       * Make customer active
+       * Make customer in-active
        * @author <Praveen>
-       * @return \Illuminate\Http\Response
+       * @return boolean true or false
        */
       public function makeCustomerInactive(Request $request)
       {
@@ -226,11 +241,8 @@ class CustomerManagementController extends Controller
         }
         /**
          * Gets the customer by identifier.
-         *
-         * @param      \Illuminate\Http\Request  $request  The request
-         *
-         * @return     <type>                    The customer by identifier.
-         * 
+         * @param customer id
+         * @return The customer by identifier.
          * @author <Praveen>
          */
         public function getCustomerById(Request $request)
@@ -241,6 +253,10 @@ class CustomerManagementController extends Controller
                          ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number')
                          ->where('customers.id','=',$id)
                          ->get();
+                $buyers = DB::table('customer_buyers')
+                         ->select('customer_buyers.buyer_id')
+                         ->where('customer_buyers.customer_id','=',$id)
+                         ->get();
                 $contacts = DB::table('customer_contact_persons')
                          ->select('customer_contact_persons.*')
                          ->where('customer_contact_persons.customer_id','=',$id)
@@ -249,16 +265,17 @@ class CustomerManagementController extends Controller
                          ->select('customer_bill_address.*')
                          ->where('customer_bill_address.customer_id','=',$id)
                          ->get();
-                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'contacts' => $contacts,'address' => $address]);
+                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'contacts' => $contacts,'address' => $address,'buyers' => $buyers]);
               } catch (\Exception $e)
               {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
         }
         /**
-         * Update Customers.
+         * Update Customer by id.
+         * @param \Illuminate\Http\Request
          * @author <Praveen>
-         * @return \Illuminate\Http\Response
+         * @return boolean true or false
          */
         public function updateCustomer(Request $request)
           {
@@ -283,6 +300,7 @@ class CustomerManagementController extends Controller
                     $fax             = Input::get('fax');
                     $address_email   = Input::get('address_email');
                     $default_address = Input::get('default_address');
+                    $buyer           = Input::get('buyer');
 
                     $email_rules     = array('email' => 'unique:customers,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);
@@ -304,6 +322,7 @@ class CustomerManagementController extends Controller
                       $fax             = explode(',',$fax);
                       $address_email   = explode(',',$address_email);
                       $default_address = explode(',',$default_address);
+                      $buyers          = explode(',',$buyer);
 
                       Customer::where('id',$id)
                           ->update([
@@ -346,6 +365,15 @@ class CustomerManagementController extends Controller
                             ]);
                             $j++;
                         }
+                        CustomerBuyers::where('customer_id', '=', $id)
+                            ->delete();
+                        foreach($buyers as $buyer)
+                        {
+                            CustomerBuyers::create([
+                                'customer_id'     => $id,
+                                'buyer_id'        => $buyer
+                            ]);
+                        }
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
                     }
@@ -357,9 +385,10 @@ class CustomerManagementController extends Controller
                 return $result;
           }
           /**
-         * function to delete Customer.
+         * function to delete Customer by id.
+         * @param customer id
          * @author <Praveen>
-         * @return \Illuminate\Http\Response
+         * @return boolean true or false
          */
         public function deleteCustomerById(Request $request)
         {
@@ -395,6 +424,7 @@ class CustomerManagementController extends Controller
           try {
            $module_var = new Modules();
            $is_allowed = $module_var->permittedModules();
+           $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
            $customers = DB::table('customers')
                          ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax','customers.is_active')
                          ->join('customer_contact_persons','customer_contact_persons.customer_id','customers.id')
@@ -409,7 +439,7 @@ class CustomerManagementController extends Controller
                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                });
-               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers]);
+               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers,'buyers' => $buyers]);
            }
            else
            {
