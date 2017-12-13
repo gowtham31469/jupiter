@@ -63,7 +63,7 @@
     </div>
     <div class="main-content">
          <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
+            
         </div>
 
     </div>
@@ -138,7 +138,7 @@
             $('.logo').html('Templates')
             $('.buyer-nav-select').html($('.buyer-div').html())
             if (localStorage.getItem("template_buyer") === null) {
-
+                $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
             } else {
                 template_list();
             }

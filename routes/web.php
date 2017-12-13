@@ -40,6 +40,8 @@ Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dash
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
+Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
+
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
