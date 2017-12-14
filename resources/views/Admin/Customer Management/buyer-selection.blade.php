@@ -8,17 +8,17 @@
         min-height: 450px;
     }
 
-    #style-4::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    .style-4::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
         background-color: #F5F5F5;
     }
 
-    #style-4::-webkit-scrollbar {
-        width: 5px;
+    .style-4::-webkit-scrollbar {
+        width: 1px;
         background-color: #F5F5F5;
     }
 
-    #style-4::-webkit-scrollbar-thumb {
+    .style-4::-webkit-scrollbar-thumb {
         background-color: #000000;
         border: 1px solid #555555;
     }
@@ -44,10 +44,56 @@
         border-bottom: 1px solid #cacaca;
         padding-bottom: 8px;
     }
+
     p.delta {
         display: inline-block;
         margin-right: 30px;
     }
+
+    .sidebar {
+        position: fixed;
+        top: 40px;
+        bottom: 0;
+        left: 0;
+        z-index: 997;
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 200px;
+        /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+    ul.customer-select{
+        padding-left: 0px;
+    }
+
+    ul.customer-select li>a {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        color: #333;
+        cursor: pointer;
+        padding-right: 40px;
+        padding-left: 20px;
+    }
+    ul.customer-select li{
+        list-style-type: none;
+        
+    }
+    ul.customer-select>li>a:focus, ul.customer-select>li>a:hover {
+    text-decoration: none;
+    background-color: #eee;
+}
+    .template-block{
+        margin-left: 200px;
+    }
+    .sidebar h4{
+            padding-left: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    }
+    
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -62,8 +108,44 @@
         <div class="clearfix"></div>
     </div>
     <div class="main-content">
-         <div class="select-buyer">
-            
+        <div class="sidebar style-4">
+            <h4>Select Customer</h4>
+            <ul class="customer-select">
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+                <li><a>S P Apperals</a></li>
+                <li><a>Enrich Exports</a></li>
+                <li><a>Wizroots Technologies</a></li>
+            </ul>
+        </div>
+<div class="template-block"></div>
+        <div class="select-buyer">
+
         </div>
 
     </div>
@@ -130,10 +212,10 @@
     <script src="{{ asset('js/Admin/pricing.js') }}"></script>
     <script>
         $(document).ready(function() {
-             $('.select-buyer').click(function(){
-            $('.select-buyer').addClass('hidden');
-        })
-            
+            $('.select-buyer').click(function() {
+                $('.select-buyer').addClass('hidden');
+            })
+
             //$('.js-card').niceScroll()
             $('.logo').html('Customers');
             $('.buyer-nav-select').html($('.buyer-div').html())
