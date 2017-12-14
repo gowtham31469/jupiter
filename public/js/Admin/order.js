@@ -18,14 +18,21 @@ function orders() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            var newObj = data.sticker_orders.concat(data.label_orders);
-            $('.main-content').html(table(newObj));
-            $('#datatable-example-2').DataTable({
-                "pageLength": 25
-            });
-            $("#datatable-example-2_filter input").addClass('form-control input-sm');
-            $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-            $('#datatable-example-2_length select').addClass('form-control input-sm');
+            if(buyer == "orchestra")
+            {
+                var newObj = data.sticker_orders.concat(data.label_orders);
+                $('.main-content').html(table(newObj));
+                $('#datatable-example-2').DataTable({
+                    "pageLength": 25
+                });
+                $("#datatable-example-2_filter input").addClass('form-control input-sm');
+                $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+                $('#datatable-example-2_length select').addClass('form-control input-sm');
+            }
+            else
+            {
+                $('.main-content').html('<div class="container-fluid"><div class="row"><div class="col-md-4"><div class="card"><h4>Create Order For UK</h4><hr/><form><label>Order type</label><select class="form-control"><option>PO Upload</option><option>Manual Entry</option></select><br/><label>Select Template</label><div><input class="search-input form-control" placeholder="Search for Awesomeness"></div><div id="jstree"></div></form><label>Upload PO</label><div class="row"><h5>Multiple File upload</h5><div class="col-md-6"><div class="dropzone" id="dropzoneFileUpload"></div></div><div class="col-md-6"></div></div><div class="row"><h5>Single File upload</h5><div class="col-md-12"></div></div><br/><button class="btn btn-primary btn-block">Create Order</button></div></div><div class="col-md-8"><div class="card"><h4>Sample Template for referance</h4><hr/><div class="row"><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="clearfix"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block"></div></div></div></div></div></div>')
+            }
         },
         error: function (data) {
 
