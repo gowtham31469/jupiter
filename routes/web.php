@@ -46,6 +46,9 @@ Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderCont
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
+
+
+Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
@@ -179,6 +182,8 @@ Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'Up
 // Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
 
 Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
+
+Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\TemplateManagementCntrl@templateList');
 
 Route::get('multi-upload', 'UploadController@multiUploadView');
 Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);

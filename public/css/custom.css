@@ -127,9 +127,6 @@ p.info {
     padding-top: calc(40px + 2%)
        
 }
-.main-content{
-     padding-bottom:100px;
-}
 
 .navbar-default .navbar-toggle {
     border-color: #273339;
@@ -528,12 +525,7 @@ span.navbar-brand.logo:hover {
     font-weight: 700;
     font-style: normal !important;
 }
-.viewDiv{
-        width: 400px;
-    margin: 0 auto;
-    padding-top: 13%
 
-}
 /*
 .card {
     margin-top: 80px;
@@ -672,4 +664,9 @@ a:focus, a:hover {
 }
 .img_artwork img {
     max-height: 193px;
+}
+
+.viewDiv object {
+    max-height: 300px;
+    max-width: 300px
 }
