@@ -18,14 +18,83 @@ function orders() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            var newObj = data.sticker_orders.concat(data.label_orders);
-            $('.main-content').html(table(newObj));
-            $('#datatable-example-2').DataTable({
-                "pageLength": 25
-            });
-            $("#datatable-example-2_filter input").addClass('form-control input-sm');
-            $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-            $('#datatable-example-2_length select').addClass('form-control input-sm');
+            if(buyer == "orchestra")
+            {
+                var newObj = data.sticker_orders.concat(data.label_orders);
+                $('.main-content').html(table(newObj));
+                $('#datatable-example-2').DataTable({
+                    "pageLength": 25
+                });
+                $("#datatable-example-2_filter input").addClass('form-control input-sm');
+                $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+                $('#datatable-example-2_length select').addClass('form-control input-sm');
+            }
+            else
+            {
+                $('.main-content').html('<div class="container-fluid"><div class="row"><div class="col-md-4"><div class="card"><h4>Create Order For UK</h4><hr/><form><label>Order type</label><select class="form-control"><option>PO Upload</option><option>Manual Entry</option></select><br/><label>Select Template</label><div><input class="search-input form-control" placeholder="Search for Awesomeness"></div><div id="jstree"></div></form><label>Upload PO</label><div class="row"><h5>Multiple File upload</h5><div class="col-md-6"></div><div class="col-md-6"></div></div><div class="row"><h5>Single File upload</h5><div class="col-md-12"></div></div><br/><button class="btn btn-primary btn-block">Create Order</button></div></div><div class="col-md-8"><div class="card"><h4>Sample Template for reference</h4><hr/><div class="row"><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="clearfix"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div></div></div></div></div></div>')
+
+                $(".search-input").keyup(function() {
+                var searchString = $(this).val();
+                    console.log(searchString);
+                    $('#jstree').jstree('search', searchString);
+                });
+
+                $('#jstree').jstree({
+                        'core': {
+                            'data': [{
+                                "id": 1,
+                                "text": "Stickers",
+                                "parent_id": 0,
+                                "children": [{
+                                    "id": 2,
+                                    "text": "Carton & Polybag Stickers",
+                                    "parent_id": 1,
+                                    "children": [{
+                                        "id": 3,
+                                        "text": "CE",
+                                        "parent_id": 2,
+                                        "children": [{
+                                            "id": "5,6,7",
+                                            "text": "TCL 1 , TCL 2 & TSL 1",
+                                            "parent_id": 3
+                                        }, {
+                                            "id": "8,9",
+                                            "text": "TCL 4 & TSL 3",
+                                            "parent_id": 3
+                                        }, {
+                                            "id": "10,11",
+                                            "text": "THL 1 & THL 3",
+                                            "parent_id": 3
+                                        }]
+                                    }, {
+                                        "id": 4,
+                                        "text": "UK",
+                                        "parent_id": 2,
+                                        "children": [{
+                                            "id": "12,13,14",
+                                            "text": "TCL 1 , TCL 2 & TSL 1",
+                                            "parent_id": 4
+                                        }, {
+                                            "id": "15,16",
+                                            "text": "TCL 4 & TSL 3",
+                                            "parent_id": 4
+                                        }, {
+                                            "id": "17,18",
+                                            "text": "THL 1 & THL 3",
+                                            "parent_id": 4
+                                        }]
+                                    }]
+                                }]
+                            }]
+                        },
+                        "types": {
+                            "default": {
+                                "icon": "fa fa-folder"
+                            }
+                        },
+                        "plugins": ["types", "search"]
+                    });
+            }
         },
         error: function (data) {
 
@@ -778,7 +847,7 @@ function hangtagmodal(data) {
                     if (data.length > 0) {
                         $('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                     }
                     var mySVG = document.getElementById("svg_hang_front");
                     var svgDoc;
@@ -1039,7 +1108,7 @@ function treestructure(data, tree) {
                     if (data.length > 0) {
                         $('.sample-artwork').html('<object id="svg2" style="height: 370px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                     } else {
-                        $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                        $('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                     }
 
 

@@ -158,7 +158,6 @@ Route::get('/erp/dashboard', function(){
 //Order Management
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
-Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
 Route::post('admin/orchestra/order-management/back-label-orders', 'Admin\Orchestra\OrderManagementCntrl@backLabelOrders');
 Route::post('admin/orchestra/order-management/back-sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@backStickerOrders');
@@ -170,11 +169,13 @@ Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderMan
 
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
-
+/** Tesco order-management**/
+Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
+Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
+Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
-Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
 

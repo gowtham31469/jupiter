@@ -38,7 +38,12 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-              $('.main-content').html('<div class="row"><div class="col-md-4"><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div><button type="button" style="background-color: #263238;border: #263238;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;" id="collapse">Collapse</button></div><div class="col-md-8"><div class="card preview-tag" style="height:calc(100vh - 110px);"><div class="loader"></div><div class="viewDiv"> </div><div class="descriptionDiv">  </div></div> </div> </div>')
+            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 110px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
+
+
+            //            <div class="template-form"><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div></div>
+
+
 
             $('#tree1').jstree({
                 'core': {
@@ -50,13 +55,11 @@ function price_template_list() {
                     }
                 },
                 "plugins": ["types", "search"]
+            }).on('loaded.jstree', function () {
+                $('#tree1').jstree('open_all');
             });
-            $('#expand').bind("click", function () {
-                $('#tree1').jstree("open_all");
-            });
-            $('#collapse').bind("click", function () {
-                $('#tree1').jstree("close_all");
-                 });
+
+
             var to = false;
             $('#tree1_q').keyup(function () {
                 if (to) {
@@ -85,7 +88,7 @@ function price_template_list() {
                             $(".loader").css('margin-top', '12%');
                         },
                         success: function (data) {
-                          
+
                             if (data.length > 0) {
                                 $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                                 $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')

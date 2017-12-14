@@ -6,6 +6,7 @@
   * Function to show all buyers list
   * @author <praveen>
   */
+ var isSubmitting = false;
  function buyers()
  {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -103,7 +104,7 @@
    * @author <praveen>
    *
    */
-  var isSubmitting = false;
+  
   function getBuyer(id)
   {
     try{
@@ -370,7 +371,6 @@
     * @param id
     * @author <praveen>
     */
-   var isSubmitting = false;
    function getMerchandiser(id)
    {
     try{
