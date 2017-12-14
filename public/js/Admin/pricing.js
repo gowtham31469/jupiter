@@ -1,6 +1,31 @@
 function price_template_list() {
     var buyer = localStorage.getItem("pricing_buyer");
+    var buyer_id = localStorage.getItem("pricing_buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url:base_url + "/admin/customer-management/get-buyers-customers",
+        type:"GET",
+        dataType:"json",
+        data :{
+            _token: csrf_token,
+            buyer_id:buyer_id,
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    });
+
     $.ajax({
         url: base_url + "/admin/" + buyer + "/template-management/template-list",
         type: "Post",

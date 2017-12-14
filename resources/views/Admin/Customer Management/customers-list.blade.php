@@ -5,11 +5,11 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
-                  <ol class="breadcrumb">
-                <li>
-                  <a href="/admin/customer-management">Dashboard</a>
-                </li>
-                <li class="active">Customers</li>
+                <ol class="breadcrumb">
+                  <li>
+                    <a href="/admin/customer-management">Dashboard</a>
+                  </li>
+                  <li class="active">Customers</li>
                 </ol>
               </div>
                 <div class="main-sub-menu">

@@ -73,6 +73,7 @@ Route::put('admin/customer-management/update-customer', 'Admin\CustomerManagemen
 Route::delete('admin/customer-management/delete-customer', 'Admin\CustomerManagement\CustomerManagementController@deleteCustomerById');
 Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
 Route::get('admin/customer-management/pricing-taxation','Admin\CustomerManagement\CustomerManagementController@custumerPriceList');
+Route::get('admin/customer-management/get-buyers-customers','Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
 
 
 /** buyer Management **/

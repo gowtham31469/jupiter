@@ -470,4 +470,18 @@ class CustomerManagementController extends Controller
              return redirect('/admin/dashboard');
         }
     }
+
+    /**
+     * Method to get all the customers for a specific buyer
+     * @param  Request $request buyer id 
+     * @return json list of all customers
+     */
+    public function getBuyersCustomers(Request $request) {
+      $customer_list = DB::table('customers')
+                      ->join('customer_buyers', 'customer_buyers.customer_id', 'customers.id' )
+                      ->where('customer_buyers.buyer_id',$request->buyer_id)
+                      ->pluck('customers.company_name', 'customers.id');
+      return response()->json(['customer_list' => $customer_list]);
+
+    }
 }

@@ -142,7 +142,7 @@
             } else {
                 price_template_list();
             }
-            $('.buyer-select').val(localStorage.getItem("pricing_buyer_id"))
+            $('.buyer-select').val(localStorage.getItem("pricing_buyer_id"));
             $('.buyer-nav-select .buyer-select').selectpicker({
                 style: 'btn-default',
                 size: 4
