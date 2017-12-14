@@ -21,15 +21,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <!--                    <li><a>Buyer : </a></li>-->
                 <li class="dropdown buyer-nav-select"></li>
-                <li class="region-hidden"><a href="" class="label-text" disabled="disabled">Select Region</a></li>
-                <li class="radio region-hidden">
-                    <label class="radio-inline">
-            <input type="radio" name="gr" value="0" onchange="val(this)">UK</label>
-                    <label class="radio-inline">
-            <input type="radio" name="gr" value="1" onchange="val(this)">CE</label>
-                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a>
 
