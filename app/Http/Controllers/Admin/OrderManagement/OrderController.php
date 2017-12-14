@@ -10,6 +10,7 @@ use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use PDF;
 
 class OrderController extends Controller
 {
@@ -74,5 +75,30 @@ class OrderController extends Controller
              return redirect('/admin/dashboard');
         }
 
+    }    
+    public function printPdf(Request $request)
+    {
+      
+        
+//        $svg=$request->svg;
+//        $html_content="hai";
+//        PDF::SetTitle('sample pdf');
+//        PDF::SetFont('calibrib');
+//        PDF::AddPage(); public_path('/storage/app/template/std-carton-sticker-02.svg')
+//        PDF::ImageSVG($file = url('/storage/app/template/std-carton-sticker-02.svg'), $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+//        PDF::Output('solid.pdf', 'D');
+        
+            $svg=urldecode($request->svg);
+       
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
     }
 }

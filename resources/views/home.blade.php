@@ -112,7 +112,7 @@
     @section('jqueryIncludes')
 <script>
  $( document ).ready(function() {
-    $(".logo").html('Jupiter Knitting Accessories');
+    $(".logo").html('Jupiter Garments Accessories');
  })
 </script>
 @endsection
