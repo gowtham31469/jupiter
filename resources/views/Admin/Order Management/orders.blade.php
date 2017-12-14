@@ -83,7 +83,7 @@
 </div>
     <div class="main-content">
         <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
+            
         </div>
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -155,7 +155,7 @@
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("buyer") === null) {
-                
+                $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
          }
         else
         {
