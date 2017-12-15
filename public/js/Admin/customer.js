@@ -451,6 +451,11 @@ function addCustomer()
   function makeCustomerActive(id,csrf_token)
    {
     try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
           $.ajax({
                url:base_url + "/admin/customer-management/make-customer-active",
                dataType:"json",
@@ -462,13 +467,14 @@ function addCustomer()
                data:{_token:csrf_token,id:id},
                statusCode: {
                     200: function() {
-                         customersListView();
+                        isSubmitting = false; 
                     }
                },
                error: function (data) {
                   console.log(data);
                },
                complete: function () {
+                 customersListView();
                  $(".loader").hide();
                  $(".loader").css('margin-top','0%');
                }
@@ -485,6 +491,11 @@ function addCustomer()
   function makeCustomerInactive(id,csrf_token)
    {
     try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
           $.ajax({
                url:base_url + "/admin/customer-management/make-customer-inactive",
                dataType:"json",
@@ -496,13 +507,14 @@ function addCustomer()
                data:{_token:csrf_token,id:id},
                statusCode: {
                     200: function() {
-                         customersListView();
+                         isSubmitting = false;
                     }
                },
                error: function (data) {
                   console.log(data);
                },
                complete: function () {
+                 customersListView();
                  $(".loader").hide();
                  $(".loader").css('margin-top','0%');
                }

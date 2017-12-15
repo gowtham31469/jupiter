@@ -414,7 +414,7 @@ class CustomerManagementController extends Controller
               }
               return $result;
         }
-      /**
+    /**
     * Show the orchestra customers list view on pageload.
     * @author <Praveen>
     * @return \Illuminate\Http\Response
@@ -449,5 +449,39 @@ class CustomerManagementController extends Controller
          {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
+    }
+    /**
+     * Method to load the buyer templates in custumer module
+     * @return [type] [description]
+     */
+    public function custumerPriceList() {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed) {
+            $get_main_module = $module_var->getMainModules();
+            $get_sub_module = $module_var->getSubModules(4);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/Customer Management/buyer-selection',['buyers' => $buyers]);
+        } else {
+             return redirect('/admin/dashboard');
+        }
+    }
+
+    /**
+     * Method to get all the customers for a specific buyer
+     * @param  Request $request buyer id 
+     * @return json list of all customers
+     */
+    public function getBuyersCustomers(Request $request) {
+      $customer_list = DB::table('customers')
+                      ->join('customer_buyers', 'customer_buyers.customer_id', 'customers.id' )
+                      ->where('customer_buyers.buyer_id',$request->buyer_id)
+                      ->pluck('customers.company_name', 'customers.id');
+      return response()->json(['customer_list' => $customer_list]);
+
     }
 }

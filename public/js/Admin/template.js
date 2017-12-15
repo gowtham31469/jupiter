@@ -183,14 +183,18 @@ function template_list() {
                                         $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
                                         $('.descriptionDiv').css('margin-top', '20px')
                                         $('.viewDiv').css('margin-top', '0px')
-                                    } else {
-                                        $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+
+                                    }
+                                    else
+                                    {
+                                        $('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+
                                         $('.descriptionDiv').html('<b>Template Not Found</b>');
                                         $('.descriptionDiv').css('margin-top', '0px')
                                         $('.viewDiv').css('margin-top', '140px')
                                     }
                                 } else {
-                                    $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                                    $('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                                     $('.descriptionDiv').html('<b>Template Not Found</b>');
                                     $('.descriptionDiv').css('margin-top', '0px')
                                     $('.viewDiv').css('margin-top', '140px')
