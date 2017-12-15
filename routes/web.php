@@ -49,6 +49,7 @@ Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestr
 
 
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
+Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
 Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');

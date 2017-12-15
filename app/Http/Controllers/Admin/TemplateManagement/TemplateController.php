@@ -74,5 +74,18 @@ class TemplateController extends Controller
              return redirect('/admin/dashboard');
         }
 
-    }
+    } 
+//    public function base64ToJpeg(Request $request)
+//    {
+//            $output_file=  public_path('/storage/app/template/barcode.svg');
+//            $ifp = fopen($output_file , 'wb' ); 
+//
+//            $data = explode( ',', $request->src );
+//
+//            fwrite( $ifp, base64_decode( $data[ 1 ] ) );
+//
+//            fclose( $ifp ); 
+//            print_r(url('/storage/app/template/barcode.svg'));
+//          
+//    }
 }

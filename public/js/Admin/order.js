@@ -911,11 +911,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
     $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
     $('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
 
-    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">Click to edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="img_artwork"><img src="' +
-        base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">Click to edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="img_artwork"><img src="' +
-        base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">Click to edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Washcare Label</b></h5></div><div class="img_artwork"><img src="' +
-        base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">Click to edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5>Main & Size Label</h5> <div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div>');
+    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">Click to edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="' +
+        base_url + '/images/ht_default.png" class="img-responsive center-block"><p class="text-center">No Image preview</p></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">Click to edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">Click to edit</p><h5>Washcare Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">Click to edit</p><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" class="form-control input-sm washcarename"><p class="text-center add-label" style="padding: 53px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label</p></div></div><div class="col-md-4" ><div class="card add-card"><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" class="form-control input-sm mainname"><p class="text-center add-label" id="main_label_card" style="padding: 53px 0px;cursor: pointer;">Add Main & Size Label</p></div></div>');
 
     $.fn.capitalize = function () {
         $.each(this, function () {
@@ -940,7 +937,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             washcare += 1;
             if (washcare <= 5) {
 
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px">Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b>' + $('.washcarename').val() + ' label</b></h5></div><div class="img_artwork"></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash" style="cursor: pointer;">Click to delete</p><p class="pull-right" style="cursor: pointer;margin-right:5px">Click to edit</p> <h5>' + $('.washcarename').val() + ' label</h5></div><div class="img_artwork"></div></div></div>')
             }
             $('.delete-wash').on('click', function (e) {
                 washcare -= 1;
@@ -1102,6 +1099,25 @@ function jsbarcode(code, id, svgDoc) {
 
     //Check in browsers
     //
-
-    svgDoc.getElementById(id).setAttribute('xlink:href', img.src);
+//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//                        $.ajax({
+//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+//                            type: "Post",
+//                            data: {
+//                                src: img.src,
+//                                _token: csrf_token
+//                            },
+//                            beforeSend: function () {
+//                                $(".loader").show();
+//                                $(".loader").css('margin-top', '12%');
+//                            },
+//                            success: function (data) {
+//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+//                                
+//                            },
+//                            error: function (data) {
+//                               
+//                            }
+//                        })
+svgDoc.getElementById(id).innerHTML = svg_xml;
 }

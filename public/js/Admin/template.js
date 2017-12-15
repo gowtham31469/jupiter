@@ -16,6 +16,7 @@ function template_list() {
             $('.main-content').html('<div class="row"><div class="col-md-4"><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div><button type="button" style="background-color: #263238;border: #263238;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;" id="collapse">Collapse</button></div><div class="col-md-8"><div class="card preview-tag" style="height:calc(100vh - 110px);"><div class="loader"></div><div class="viewDiv"> </div><div class="descriptionDiv">  </div></div> </div> </div>')
 
             if (buyer == "tesco") {
+                $('.descriptionDiv').addClass('hidden')
                 $('#tree1').jstree({
                     'core': {
                         'data': [{
@@ -105,12 +106,18 @@ function template_list() {
                                 $(".loader").css('margin-top', '12%');
                             },
                             success: function (data) {
-                              $('.viewDiv').html('');
-                               $.each(data, function (index, value) {
-                                      $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object></div>')
-                                      $('.viewDiv').css('width','100%')
-                                });
+                                $('.viewDiv').html('');
+                                $.each(data, function (index, value) {
+                                    if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
 
+                                    } else {
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
+
+                                    }
+                                });
+                                $('.viewDiv').css('width', '100%')
+                                
                             },
                             error: function (data) {
 
@@ -171,15 +178,12 @@ function template_list() {
                             success: function (data) {
 
                                 if (data.length > 0) {
-                                    if(data[0].template_file != "")
-                                    {
+                                    if (data[0].template_file != "") {
                                         $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                                         $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
                                         $('.descriptionDiv').css('margin-top', '20px')
                                         $('.viewDiv').css('margin-top', '0px')
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                                         $('.descriptionDiv').html('<b>Template Not Found</b>');
                                         $('.descriptionDiv').css('margin-top', '0px')

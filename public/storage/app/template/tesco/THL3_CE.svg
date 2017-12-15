@@ -1,1 +1,57 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 329.53 212.26"><defs><style>.cls-1{font-size:28px;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-9{fill:#231f20;font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT;}.cls-2{font-size:10px;}.cls-3{font-size:11px;}.cls-4{font-size:18px;}.cls-5{font-size:8px;}.cls-6{letter-spacing:0.6em;}.cls-7{letter-spacing:2.1em;}.cls-8{letter-spacing:1.82em;}.cls-9{font-size:15px;}.cls-10{letter-spacing:4.3em;}</style></defs><title>THL3_CE</title><text class="cls-1" transform="translate(250.07 23.98)">XXXX</text><text class="cls-1" transform="translate(10.08 23.98)">REPLEN-SINGLE</text><text class="cls-2" transform="translate(189.15 63.37)">Dept: </text><text class="cls-3" transform="translate(271.16 63.37)">LADIESWEAR</text><text class="cls-2" transform="translate(189.15 76.38)">Brand: </text><text class="cls-3" transform="translate(271.16 76.38)">F&amp;F</text><text class="cls-3" transform="translate(271.16 89.38)">YES / NO</text><text class="cls-2" transform="translate(189.15 89.38)">RFID Compliant:</text><text class="cls-2" transform="translate(189.15 50.36)">Pieces per shroud: </text><text class="cls-3" transform="translate(271.16 50.36)">X</text><text class="cls-4" transform="translate(87.44 55.94)">012698515</text><text class="cls-5" transform="translate(0.08 102.28) scale(0.85 1)">CE Style Ref (VPN/OPTION ID):</text><text class="cls-2" transform="translate(87.44 102.28)">123-4567</text><text class="cls-2" transform="translate(0.08 116.71)">Short Description:<tspan class="cls-6" x="74.32" y="0"> </tspan><tspan x="83.11" y="0"> </tspan></text><text class="cls-2" transform="translate(87.44 116.71)">CHK SS V NECK STRP T20</text><text class="cls-2" transform="translate(0.08 131.13)">EQOS Code:<tspan class="cls-7" x="48.77" y="0"> </tspan><tspan x="72.57" y="0"> </tspan></text><text class="cls-2" transform="translate(87.44 131.13)">XXX</text><text class="cls-2" transform="translate(0.08 145.56)">Supplier Name:<tspan class="cls-8" x="61.9" y="0"> </tspan><tspan x="82.94" y="0"> </tspan></text><text class="cls-2" transform="translate(87.44 145.56)">AB Clothing</text><text class="cls-9" transform="translate(0.08 55.94)">ORMS TPND: </text><text class="cls-9" transform="translate(0.08 75.84)">ORMS PO No: </text><text class="cls-4" transform="translate(87.44 75.84)">460-81998</text><text class="cls-2" transform="translate(0.08 89.86)">UK Style Ref:<tspan class="cls-10" x="53.5" y="0"> </tspan><tspan x="99.31" y="0"> </tspan></text><text class="cls-2" transform="translate(87.09 89.86)">AB123456</text><text class="cls-3" transform="translate(271.16 102.39)">YES / NO</text><text class="cls-2" transform="translate(189.15 102.39)">Tag At Source:</text><text class="cls-2" transform="translate(0 209.89)">MANUFACTURED DATE: MONTH,YEAR</text><image width="331" height="178" transform="translate(33.02 153.83) scale(0.24 0.24)" xlink:href="../28_15_Barcode.png"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT;}
+	.st2{font-size:28px;}
+	.st3{font-size:10px;}
+	.st4{font-size:11px;}
+	.st5{font-size:18px;}
+	.st6{font-size:8px;}
+	.st7{letter-spacing:5;}
+	.st8{letter-spacing:21;}
+	.st9{letter-spacing:18;}
+	.st10{font-size:15px;}
+	.st11{letter-spacing:43;}
+</style>
+<g>
+	<rect class="st0" width="360" height="226.8"/>
+</g>
+<text transform="matrix(1 0 0 1 263.9623 35.133)" class="st1 st2">XXXX</text>
+<text transform="matrix(1 0 0 1 23.9746 35.133)" class="st1 st2">REPLEN-SINGLE</text>
+<g>
+	<text transform="matrix(1 0 0 1 203.0502 74.5198)" class="st1 st3">Dept: </text>
+	<text transform="matrix(1 0 0 1 285.0561 74.5198)" class="st1 st4">LADIESWEAR</text>
+	<text transform="matrix(1 0 0 1 203.0502 87.5269)" class="st1 st3">Brand: </text>
+	<text transform="matrix(1 0 0 1 285.0561 87.5269)" class="st1 st4">F&amp;F</text>
+	<text transform="matrix(1 0 0 1 285.0561 100.534)" class="st1 st4">YES / NO</text>
+	<text transform="matrix(1 0 0 1 203.0502 100.534)" class="st1 st3">RFID Compliant:</text>
+</g>
+<text transform="matrix(1 0 0 1 203.0502 61.5129)" class="st1 st3">Pieces per shroud: </text>
+<text transform="matrix(1 0 0 1 285.0561 61.5129)" class="st1 st4">X</text>
+<text transform="matrix(1 0 0 1 101.3371 67.0918)" class="st1 st5">012698515</text>
+<g>
+	<text transform="matrix(0.85 0 0 1 13.9752 113.4344)" class="st1 st6">CE Style Ref (VPN/OPTION ID):</text>
+</g>
+<text transform="matrix(1 0 0 1 101.3371 113.4345)" class="st1 st3">123-4567</text>
+<text transform="matrix(1 0 0 1 13.9752 127.8587)"><tspan x="0" y="0" class="st1 st3">Short Description:</tspan><tspan x="74.3" y="0" class="st1 st3 st7"> </tspan><tspan x="83.1" y="0" class="st1 st3"> </tspan></text>
+<text transform="matrix(1 0 0 1 101.3361 127.8586)" class="st1 st3">CHK SS V NECK STRP T20</text>
+<text transform="matrix(1 0 0 1 13.9752 142.2824)"><tspan x="0" y="0" class="st1 st3">EQOS Code:</tspan><tspan x="48.8" y="0" class="st1 st3 st8"> </tspan><tspan x="72.6" y="0" class="st1 st3"> </tspan></text>
+<text transform="matrix(1 0 0 1 101.3361 142.2826)" class="st1 st3">XXX</text>
+<text transform="matrix(1 0 0 1 13.9752 156.7067)"><tspan x="0" y="0" class="st1 st3">Supplier Name:</tspan><tspan x="61.9" y="0" class="st1 st3 st9"> </tspan><tspan x="82.9" y="0" class="st1 st3"> </tspan></text>
+<text transform="matrix(1 0 0 1 101.3361 156.7067)" class="st1 st3">AB Clothing</text>
+<text transform="matrix(1 0 0 1 13.9752 67.0918)" class="st1 st10">ORMS TPND: </text>
+<text transform="matrix(1 0 0 1 13.9752 86.9894)" class="st1 st10">ORMS PO No: </text>
+<text transform="matrix(1 0 0 1 101.3372 86.9891)" class="st1 st5">460-81998</text>
+<text transform="matrix(1 0 0 1 13.9752 101.0101)"><tspan x="0" y="0" class="st1 st3">UK Style Ref:</tspan><tspan x="53.5" y="0" class="st1 st3 st11"> </tspan><tspan x="99.3" y="0" class="st1 st3"> </tspan></text>
+<text transform="matrix(1 0 0 1 100.9875 101.0068)" class="st1 st3">AB123456</text>
+<text transform="matrix(1 0 0 1 285.0561 113.5411)" class="st1 st4">YES / NO</text>
+<text transform="matrix(1 0 0 1 203.0502 113.5411)" class="st1 st3">Tag At Source:</text>
+<g>
+	<text transform="matrix(1 0 0 1 13.8955 221.0394)" class="st1 st3">MANUFACTURED DATE: MONTH,YEAR</text>
+</g>
+<image style="overflow:visible;" width="331" height="178" xlink:href=""  transform="matrix(0.2398 0 0 0.2389 46.9134 164.9764)">
+</image>
+</svg>
