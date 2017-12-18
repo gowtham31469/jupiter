@@ -15,7 +15,6 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            console.log(data.customer_list.length)
             if(data.customer_list.length === 0){
                 $('.customer-select').html('<li>No Customers</li>');
             } else {
@@ -136,5 +135,22 @@ function price_template_list() {
 
 
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><div class="col-md-4"><form><div class="form-group"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" ></div></div><div class="col-md-4"><div class="form-group"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="text"></div></div><div class="col-md-4"><div class="form-group"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="text"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><form role="form" data-toggle="validator" id="priceForm"><div class="col-md-4"><div class="form-group has-feedback"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" id="name" ></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="number" id="price" step="0.01"></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="number" id="tax"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+
+    $('#priceForm').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           savePricing();
+        }
+      });
+}
+
+
+function savePricing() {
+    console.log('savePricing');
 }
