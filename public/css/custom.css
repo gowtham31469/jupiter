@@ -706,3 +706,6 @@ a:hover {
     max-height: 400px;
     max-width: 500px
 }
+.text_artwork, .text_artwork table, .text_artwork table > tbody  {
+    font-size: 10px !important;
+}
