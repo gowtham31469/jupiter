@@ -480,7 +480,8 @@ class CustomerManagementController extends Controller
       $customer_list = DB::table('customers')
                       ->join('customer_buyers', 'customer_buyers.customer_id', 'customers.id' )
                       ->where('customer_buyers.buyer_id',$request->buyer_id)
-                      ->pluck('customers.company_name', 'customers.id');
+                      ->select('customers.company_name', 'customers.id')
+                      ->get();
       return response()->json(['customer_list' => $customer_list]);
 
     }
