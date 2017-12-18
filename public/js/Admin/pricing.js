@@ -46,7 +46,7 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 110px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
+            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
 
 
             //            <div class="template-form"><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div></div>
@@ -135,7 +135,7 @@ function price_template_list() {
 
 
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><form role="form" data-toggle="validator" id="priceForm"><div class="col-md-4"><div class="form-group has-feedback"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" id="name" ></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="number" id="price" step="0.01"></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="number" id="tax"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:30px;">Artwork Configuration</h4><div class="col-md-4"><form><div class="form-group"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" ></div></div><div class="col-md-4"><div class="form-group"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="text"></div></div><div class="col-md-4"><div class="form-group"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="text"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
 
     $('#priceForm').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -148,9 +148,4 @@ function showPricing() {
            savePricing();
         }
       });
-}
-
-
-function savePricing() {
-    console.log('savePricing');
 }
