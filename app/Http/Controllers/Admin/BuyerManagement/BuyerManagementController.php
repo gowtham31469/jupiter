@@ -33,6 +33,7 @@ class BuyerManagementController extends Controller
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
+     * @author <Praveen>
      */
     public function index()
     {

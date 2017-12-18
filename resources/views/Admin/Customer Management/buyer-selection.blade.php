@@ -111,99 +111,13 @@
         <div class="sidebar style-4">
             <h4>Select Customer</h4>
             <ul class="customer-select">
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
             </ul>
         </div>
-<div class="template-block"></div>
+    <div class="template-block"></div>
         <div class="select-buyer">
-
-        </div>
-
-    </div>
-    <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Upload Data</h4>
-                </div>
-                <div class="modal-body" class="dropzone" id="dropzoneFileUpload">
-                    {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'upload']) !!}
-                </div>
-                <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="uploadMultiData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Upload Multiple Data Files</h4>
-                </div>
-                <div class="modal-body" class="dropzone" id="dropzoneMultiFileUpload">
-                    {!! Form::open([ 'route' => [ 'dropzone.multi-store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'multi-upload','multiple'=>"true"]) !!}
-                </div>
-                <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header alert-warning">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <p class="modal-title" id="myModalLabel">SUPPLIER IS SOLELY RESPONSIBLE TO CHOOSE CORRECT AGE GROUP. IN CASE OF ANY WRONG SELECTION, <strong>ORCHESTRA/JUPITER</strong> ARE NOT LAIBLE FOR CONSEQUENCES THERE OFF.</p>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header alert-danger">
-                    <button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <p>Use this column only if needed</p>
-                </div>
-            </div>
-        </div>
-    </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
