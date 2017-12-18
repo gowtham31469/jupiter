@@ -15,7 +15,16 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            console.log(data)
+            console.log(data.customer_list.length)
+            if(data.customer_list.length === 0){
+                $('.customer-select').html('<li>No Customers</li>');
+            } else {
+                var list = '';
+                $.each(data.customer_list, function(){
+                    list += '<li id="'+this.id+'"><a>'+this.company_name+'</a></li>';
+                });
+                $('.customer-select').html(list);
+            }
         },
         error: function (data) {
 
@@ -38,7 +47,7 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 110px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
+            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
 
 
             //            <div class="template-form"><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div></div>
@@ -93,12 +102,13 @@ function price_template_list() {
                                 $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
                                 $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
                                 $('.descriptionDiv').css('margin-top', '20px')
-                                $('.viewDiv').css('margin-top', '0px')
+                                $('.viewDiv').css('margin-top', '0px');
+                                setTimeout(function(){ showPricing(); }, 400);
                             } else {
                                 $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                                 $('.descriptionDiv').html('<b>Template Not Found</b>');
                                 $('.descriptionDiv').css('margin-top', '0px')
-                                $('.viewDiv').css('margin-top', '140px')
+                                $('.viewDiv').css('margin-top', '140px');
                             }
 
 
@@ -122,4 +132,9 @@ function price_template_list() {
             $(".loader").css('margin-top', '0%');
         }
     })
+}
+
+
+function showPricing() {
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:30px;">Artwork Configuration</h4><div class="col-md-4"><form><div class="form-group"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" ></div></div><div class="col-md-4"><div class="form-group"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="text"></div></div><div class="col-md-4"><div class="form-group"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="text"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
 }

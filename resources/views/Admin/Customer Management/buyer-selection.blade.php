@@ -1,98 +1,6 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <style>
-    .jstree-leaf>.jstree-anchor>.fa-folder:before {
-        content: "\f02b";
-    }
-
-    .force-overflow {
-        min-height: 450px;
-    }
-
-    .style-4::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
-        background-color: #F5F5F5;
-    }
-
-    .style-4::-webkit-scrollbar {
-        width: 1px;
-        background-color: #F5F5F5;
-    }
-
-    .style-4::-webkit-scrollbar-thumb {
-        background-color: #000000;
-        border: 1px solid #555555;
-    }
-
-    .descriptionDiv {
-        background: #fff;
-        padding: 10px;
-        margin-left: -13px;
-        text-align: center;
-        margin-bottom: 11px;
-        position: absolute;
-        bottom: 0;
-        width: 97%;
-        border: 1px dashed #333;
-    }
-
-    .descriptionDiv span {
-        font-weight: 400;
-    }
-
-    .descriptionDiv h4 {
-        color: #333;
-        border-bottom: 1px solid #cacaca;
-        padding-bottom: 8px;
-    }
-
-    p.delta {
-        display: inline-block;
-        margin-right: 30px;
-    }
-
-    .sidebar {
-        position: fixed;
-        top: 40px;
-        bottom: 0;
-        left: 0;
-        z-index: 997;
-        display: block;
-        overflow-x: hidden;
-        overflow-y: auto;
-        width: 200px;
-        /* Scrollable contents if viewport is shorter than content. */
-        background-color: #f5f5f5;
-        border-right: 1px solid #eee;
-    }
-    ul.customer-select{
-        padding-left: 0px;
-    }
-
-    ul.customer-select li>a {
-        position: relative;
-        display: block;
-        padding: 10px 15px;
-        color: #333;
-        cursor: pointer;
-        padding-right: 40px;
-        padding-left: 20px;
-    }
-    ul.customer-select li{
-        list-style-type: none;
-        
-    }
-    ul.customer-select>li>a:focus, ul.customer-select>li>a:hover {
-    text-decoration: none;
-    background-color: #eee;
-}
-    .template-block{
-        margin-left: 200px;
-    }
-    .sidebar h4{
-            padding-left: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
-    }
+   
     
 </style>
 <div class="col-sm-12 col-md-12 main">
@@ -111,99 +19,13 @@
         <div class="sidebar style-4">
             <h4>Select Customer</h4>
             <ul class="customer-select">
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
-                <li><a>S P Apperals</a></li>
-                <li><a>Enrich Exports</a></li>
-                <li><a>Wizroots Technologies</a></li>
             </ul>
         </div>
-<div class="template-block"></div>
+    <div class="template-block"></div>
         <div class="select-buyer">
-
-        </div>
-
-    </div>
-    <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Upload Data</h4>
-                </div>
-                <div class="modal-body" class="dropzone" id="dropzoneFileUpload">
-                    {!! Form::open([ 'route' => [ 'dropzone.store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'upload']) !!}
-                </div>
-                <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="uploadMultiData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Upload Multiple Data Files</h4>
-                </div>
-                <div class="modal-body" class="dropzone" id="dropzoneMultiFileUpload">
-                    {!! Form::open([ 'route' => [ 'dropzone.multi-store' ], 'files' => true, 'enctype' => 'multipart/form-data', 'class' => 'dropzone', 'id' => 'multi-upload','multiple'=>"true"]) !!}
-                </div>
-                <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header alert-warning">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <p class="modal-title" id="myModalLabel">SUPPLIER IS SOLELY RESPONSIBLE TO CHOOSE CORRECT AGE GROUP. IN CASE OF ANY WRONG SELECTION, <strong>ORCHESTRA/JUPITER</strong> ARE NOT LAIBLE FOR CONSEQUENCES THERE OFF.</p>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header alert-danger">
-                    <button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <p>Use this column only if needed</p>
-                </div>
-            </div>
-        </div>
-    </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
