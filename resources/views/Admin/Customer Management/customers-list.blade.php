@@ -111,7 +111,6 @@
                                 <div class="form-group has-feedback">
                                     {!! Form::label('factory_code', 'Factory Code', ['class' => 'form_label']) !!}
                                     {!! Form::text('factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required')) !!}
-                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -119,7 +118,6 @@
                                 <div class="form-group has-feedback">
                                     {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
                                     {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
-                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -127,7 +125,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
                                   {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','required')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -135,7 +132,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -143,7 +139,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -151,7 +146,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('gstin_number', 'GSTIN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('gstin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GSTIN Number','required','maxlength' => '15','data-minlength' => '15')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -159,7 +153,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('pan_number', 'PAN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('pan_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PAN Number','required','data-minlength' => '10','maxlength' => '10')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -169,7 +162,6 @@
                                 <div class="input-group">
                                   <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                   {!! Form::email('login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -203,7 +195,6 @@
                                           <div class="form-group has-feedback">
                                               {!! Form::label('contact_person0', 'Contact Person', ['class' => 'form_label']) !!}
                                               {!! Form::text('contact_person0',$value = '', array('class' => 'form-control input-sm contact_person','placeholder' => 'Contact Person Name','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                         <div class="form-group has-feedback">
@@ -211,7 +202,6 @@
                                           <div class="input-group">
                                             <span class="input-group-addon input-sm" id="basic-addon0">+91</span>
                                             {!! Form::text('contact_phone0',$value = '', array('class' => 'form-control input-sm contact_phone','placeholder' => 'Contact Phone No','data-minlength' => '10','data-maxlength' => '10','required','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
-                                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                          </div>
                                          <div class="help-block with-errors"></div>
                                         </div>
@@ -220,7 +210,6 @@
                                             <div class="input-group">
                                               <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                               {!! Form::email('contact_email0',$value = '', array('class' => 'form-control input-sm contact_email','placeholder' => 'Contact Email','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
@@ -246,13 +235,11 @@
                                           <div class="form-group has-feedback">
                                             {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
                                             {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                                            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
                                               {!! Form::label('country0', 'Country', ['class' => 'form_label']) !!}
                                               {!! Form::text('country0',$value = '', array('class' => 'form-control input-sm country','placeholder' => 'Country','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
@@ -260,14 +247,12 @@
                                             <div class="input-group ">
                                             <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                                               {!! Form::text('telephone0',$value = '', array('class' => 'form-control input-sm telephone','placeholder' => 'Phone','required','data-minlength' => '10','maxlength' => '10','onkeypress' => 'return isNumber(event)')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
                                               {!! Form::label('fax0', 'Fax', ['class' => 'form_label']) !!}
                                               {!! Form::text('fax0',$value = '', array('class' => 'form-control input-sm fax','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                               <div class="help-block with-errors"></div>
                                           </div>
                                           <div class="form-group has-feedback">
@@ -275,7 +260,6 @@
                                             <div class="input-group">
                                               <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                               {!! Form::email('address_email0',$value = '', array('class' => 'form-control input-sm address_email','placeholder' => 'Email','required')) !!}
-                                              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
@@ -319,7 +303,6 @@
                                 <div class="form-group has-feedback">
                                     {!! Form::label('edit_factory_code', 'Factory Code', ['class' => 'form_label']) !!}
                                     {!! Form::text('edit_factory_code',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Factory Code','required')) !!}
-                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -327,7 +310,6 @@
                                 <div class="form-group has-feedback">
                                     {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
                                     {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
-                                    <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -335,7 +317,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('edit_courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
                                   {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','required')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -343,7 +324,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -351,7 +331,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('edit_tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('edit_tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -359,7 +338,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('edit_gstin_number', 'GSTIN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('edit_gstin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GSTIN Number','required','maxlength' => '15','data-minlength' => '15')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -367,7 +345,6 @@
                               <div class="form-group has-feedback">
                                   {!! Form::label('edit_pan_number', 'PAN Number', ['class' => 'form_label']) !!}
                                   {!! Form::text('edit_pan_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PAN Number','required','data-minlength' => '10','maxlength' => '10')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -377,7 +354,6 @@
                                 <div class="input-group">
                                   <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                                   {!! Form::email('edit_login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
-                                  <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
