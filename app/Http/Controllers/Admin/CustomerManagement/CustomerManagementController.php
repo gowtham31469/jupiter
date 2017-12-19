@@ -515,4 +515,26 @@ class CustomerManagementController extends Controller
         return response()->json(['message' => 'success'], 200);
 
     }
+
+    /**
+     * Method to get price and tax details of a customer per template
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getPriceTax(Request $request) {
+
+        $price_list = DB::table('price_taxation')->where([
+                          'customer_id' => $request->customer_id,
+                          'buyer_id'    => $request->buyer_id,
+                          'template_id' => $request->template_id
+                        ])->get();
+        if($price_list->count()) {
+          return response()->json(['price_list' => $price_list], 200);
+        } else {
+          return response()->json(['price_list' => 'empty'], 204);
+        }
+        
+
+    }
+
 }

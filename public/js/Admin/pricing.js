@@ -62,7 +62,8 @@ function price_template_list() {
                 "plugins": ["types", "search"]
             }).on('loaded.jstree', function () {
                 $('#tree1').jstree('open_all');
-            });
+            }).bind("refresh.jstree", function (e, data) 
+                { $(this).jstree("open_all");});
 
 
             var to = false;
@@ -146,6 +147,8 @@ function showPricing() {
            savePricing();
         }
       });
+
+    getSavedPriceTax();
 }
 
 
@@ -174,7 +177,7 @@ function savePricing() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            
+            //incluude toast
         },
         error: function (data) {
             console.log(data);
@@ -182,6 +185,63 @@ function savePricing() {
         complete: function () {
             $(".loader").hide();
             $(".loader").css('margin-top', '0%');
+            showSnackbar();
         }
     });
 }
+
+function getSavedPriceTax() {
+    var customer_id = localStorage.getItem("customer_id");
+    var template_id = localStorage.getItem("template_id");
+    var buyer_id    = localStorage.getItem("pricing_buyer_id");
+    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url:base_url + "/admin/customer-management/get-price-tax",
+        type:"GET",
+        dataType:"json",
+        data :{
+            _token: csrf_token,
+            customer_id:customer_id,
+            buyer_id:buyer_id,
+            template_id:template_id
+        },
+        statusCode: {
+            204: function () {
+                console.log('No Price details found for this combination');
+            },
+            500: function () {
+                console.log('Internal server error in /admin/customer-management/get-price-tax API');
+            }, 
+            200: function(data) {
+                $.each(data.price_list, function(i,val) {
+                    $('#name').val(val.custom_name);
+                    $('#price').val(val.price);
+                    $('#tax').val(val.tax);
+                }) 
+            }
+        },
+        complete: function () {
+        }
+    });
+}
+
+
+function showSnackbar() {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar")
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+
+$('.customer-select').on('click', 'li', function() {
+    $('.customer-select li a').removeClass('active');
+    localStorage.setItem("customer_id", this.id);
+    $(this).find('a').addClass('active');
+    $('#tree1').jstree('refresh');
+    $('.viewDiv').empty();
+})
