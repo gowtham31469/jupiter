@@ -205,39 +205,39 @@
                size: 4
             });
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-        if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-            localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/order-management/order_sub_modules",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    _token: csrf_token,
-                    buyer: $(this).find("option:selected").text().toLowerCase()
-                },
-                beforeSend: function() {
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType: "json",
+                    data: {
+                        _token: csrf_token,
+                        buyer: $(this).find("option:selected").text().toLowerCase()
+                    },
+                    beforeSend: function() {
 
-                },
-                success: function(data) {
-                  
-                   orders();                    
-                },
-                error: function(data) {
+                    },
+                    success: function(data) {
+                      
+                       orders();                    
+                    },
+                    error: function(data) {
 
-                },
-                complete: function() {
-                    $(".loader").hide();
-                    $(".loader").css('margin-top', '0%');
-                }
-            })
-        } else {
-            localStorage.removeItem("buyer");
+                    },
+                    complete: function() {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top', '0%');
+                    }
+                })
+            } else {
+                localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
-            location.reload()
-        }
-    });
+                location.reload()
+            }
+        });
         $(".order_type").change(function(){
             var selectedType = $(".order_type option:selected").val();
             if (selectedType === '1') 
@@ -252,16 +252,6 @@
             }
             
         });
-        $('#create_order_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-         }
-        })
     });
 </script>
 
