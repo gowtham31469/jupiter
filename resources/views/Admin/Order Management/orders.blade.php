@@ -239,12 +239,10 @@
         }
     });
     });
-    $(document).ready(function(){
-        $("select.order_type").change(function(){
-            var selectedCountry = $(".order_type option:selected").val();
-            console.log(selectedCountry)
-        });
-    });
+    $(".order_type").change(function(){
+                    var selectedCountry = $(".order_type option:selected").val();
+                    console.log(selectedCountry)
+                });
 </script>
 
 @endsection
