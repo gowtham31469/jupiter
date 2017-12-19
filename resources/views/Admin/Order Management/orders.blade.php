@@ -62,7 +62,50 @@
     .whitening_select+.select2-container--default .select2-selection--single {
         border: 2px solid #dce4ec;
     }
-    
+.files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 106px 0px 50px 24%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+}
+.files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+ }
+.files{ position:relative}
+.files:after {  pointer-events: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 50px;
+    right: 0;
+    height: 56px;
+    content: "";
+    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+    display: block;
+    margin: 0 auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.color input{ background-color:#f1f1f1;}
+.files:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;  pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}    
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -195,6 +238,30 @@
             location.reload()
         }
     });
+        $(".order_type").change(function(){
+            var selectedType = $(".order_type option:selected").val();
+            if (selectedType === '1') 
+            {
+                $("#single_file").removeClass("hidden");
+                $("#multiple_file").removeClass("hidden");
+            }
+            else
+            {
+                $("#single_file").addClass("hidden");
+                $("#multiple_file").addClass("hidden");
+            }
+            
+        });
+        $('#create_order_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+         }
+        })
     });
 </script>
 
