@@ -32,14 +32,27 @@ function orders() {
             }
             else
             {
-                $('.main-content').html('<div class="container-fluid"><div class="row"><div class="col-md-4"><div class="card"><h4>Create Order For UK</h4><hr/><form><label>Order type</label><select class="form-control"><option>PO Upload</option><option>Manual Entry</option></select><br/><label>Select Template</label><div><input class="search-input form-control" placeholder="Search for Awesomeness"></div><div id="jstree"></div></form><label>Upload PO</label><div class="row"><h5>Multiple File upload</h5><div class="col-md-6"></div><div class="col-md-6"></div></div><div class="row"><h5>Single File upload</h5><div class="col-md-12"></div></div><br/><button class="btn btn-primary btn-block">Create Order</button></div></div><div class="col-md-8"><div class="card"><h4>Sample Template for reference</h4><hr/><div class="row"><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="clearfix"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div></div></div></div></div></div>')
+                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form><label>Order type</label><select class="form-control order_type"  required><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><br/><label>Select Template</label><div><input class="search-input form-control" placeholder="Search for Awesomeness"></div><div id="jstree"></div><div class="po-upload"><div class="form-group files hidden" id="single_file" ><label>Upload PO<sub>(Single File upload)</sub></label><input type="file" class="form-control" multiple=""></div><div class="form-group files hidden" id="multiple_file" ><label>Upload PO<sub>(Multiple File upload)</sub></label><input type="file" class="form-control" multiple=""></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div><div class="col-md-8"><div class="card"><h4>Sample Template for reference</h4><hr/><div class="row"><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="clearfix"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div></div></div></div></div></div>')
 
                 $(".search-input").keyup(function() {
                 var searchString = $(this).val();
                     console.log(searchString);
                     $('#jstree').jstree('search', searchString);
                 });
-
+                $(".order_type").change(function(){
+		            var selectedType = $(".order_type option:selected").val();
+		            if (selectedType === '1') 
+		            {
+		            	$("#single_file").removeClass("hidden");
+		            	$("#multiple_file").removeClass("hidden");
+		            }
+		            else
+		            {
+		            	$("#single_file").addClass("hidden");
+		            	$("#multiple_file").addClass("hidden");
+		            }
+		            
+		        });
                 $('#jstree').jstree({
                         'core': {
                             'data': [{
