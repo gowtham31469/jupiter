@@ -238,11 +238,31 @@
             location.reload()
         }
     });
+        $(".order_type").change(function(){
+            var selectedType = $(".order_type option:selected").val();
+            if (selectedType === '1') 
+            {
+                $("#single_file").removeClass("hidden");
+                $("#multiple_file").removeClass("hidden");
+            }
+            else
+            {
+                $("#single_file").addClass("hidden");
+                $("#multiple_file").addClass("hidden");
+            }
+            
+        });
+        $('#create_order_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+         }
+        })
     });
-    $(".order_type").change(function(){
-                    var selectedCountry = $(".order_type option:selected").val();
-                    console.log(selectedCountry)
-                });
 </script>
 
 @endsection
