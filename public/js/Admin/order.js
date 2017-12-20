@@ -52,7 +52,6 @@ function orders() {
 			            }
 			            
 			        });
-	                
 	                $('.descriptionDiv').addClass('hidden')
 	                $('#jstree').jstree({
 	                    'core': {
@@ -107,8 +106,12 @@ function orders() {
 	                            "icon": "fa fa-folder"
 	                        }
 	                    },
-	                    "plugins": ["types", "search"]
-	                });
+	                    "plugins": ["types", "search","conditionalselect"],
+                        conditionalselect : function (node) { return this.is_leaf(node); }
+	                }).on('loaded.jstree', function () {
+                        $('#jstree').jstree('open_all');
+                    }).bind("refresh.jstree", function (e, data) 
+                        { $(this).jstree("open_all");});
 	                
 
 	                $('#jstree').on('activate_node.jstree', function (e, data) {
