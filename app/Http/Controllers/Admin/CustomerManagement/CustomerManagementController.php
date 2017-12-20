@@ -67,13 +67,53 @@ class CustomerManagementController extends Controller
     {
       try{
             $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax','customers.is_active')
-                         ->join('customer_contact_persons','customer_contact_persons.customer_id','customers.id')
-                         ->join('customer_bill_address','customer_bill_address.customer_id','customers.id')
-                         ->where('customer_bill_address.default_address','=',1)
-                         ->where('customer_contact_persons.default_contact_person','=',1)
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
                          ->get();
+             foreach ($customers as $value) 
+             {
+                $customer_id = $value->id;
+                $default_contact = DB::table('customer_contact_persons')
+                         ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
+                         ->where('customer_contact_persons.customer_id','=',$customer_id)
+                         ->where('customer_contact_persons.default_contact_person','=',1)
+                         ->first();
+                if($default_contact)
+                {
+                  $value->contact_person = $default_contact->contact_person;
+                  $value->contact_email  = $default_contact->contact_email;
+                  $value->phone_no       = $default_contact->phone_no;
+                }
+                else
+                {
+                  $value->contact_person = "N/A";
+                  $value->contact_email  = "N/A";
+                  $value->phone_no       = "N/A";
+                }
+                
 
+                $default_address = DB::table('customer_bill_address')
+                         ->select('customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax')
+                         ->where('customer_bill_address.customer_id','=',$customer_id)
+                         ->where('customer_bill_address.default_address','=',1)
+                         ->first();
+                if($default_address)
+                {
+                  $value->address   = $default_address->address;
+                  $value->country   = $default_address->country;
+                  $value->email     = $default_address->email;
+                  $value->telephone = $default_address->telephone;
+                  $value->fax       = $default_address->fax;
+                }
+                else
+                {
+                  $value->address   = "N/A";
+                  $value->country   = "N/A";
+                  $value->email     = "N/A";
+                  $value->telephone = "N/A";
+                  $value->fax       = "N/A";
+                }
+                
+              }            
             return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
           } catch (\Exception $e)
           {
@@ -426,12 +466,53 @@ class CustomerManagementController extends Controller
            $is_allowed = $module_var->permittedModules();
            $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
            $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no','customers.gstin_number','customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax','customers.is_active')
-                         ->join('customer_contact_persons','customer_contact_persons.customer_id','customers.id')
-                         ->join('customer_bill_address','customer_bill_address.customer_id','customers.id')
-                         ->where('customer_bill_address.default_address','=',1)
-                         ->where('customer_contact_persons.default_contact_person','=',1)
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
                          ->get();
+             foreach ($customers as $value) 
+             {
+                $customer_id = $value->id;
+                $default_contact = DB::table('customer_contact_persons')
+                         ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
+                         ->where('customer_contact_persons.customer_id','=',$customer_id)
+                         ->where('customer_contact_persons.default_contact_person','=',1)
+                         ->first();
+                if($default_contact)
+                {
+                  $value->contact_person = $default_contact->contact_person;
+                  $value->contact_email  = $default_contact->contact_email;
+                  $value->phone_no       = $default_contact->phone_no;
+                }
+                else
+                {
+                  $value->contact_person = "N/A";
+                  $value->contact_email  = "N/A";
+                  $value->phone_no       = "N/A";
+                }
+                
+
+                $default_address = DB::table('customer_bill_address')
+                         ->select('customer_bill_address.address','customer_bill_address.country','customer_bill_address.email','customer_bill_address.telephone','customer_bill_address.fax')
+                         ->where('customer_bill_address.customer_id','=',$customer_id)
+                         ->where('customer_bill_address.default_address','=',1)
+                         ->first();
+                if($default_address)
+                {
+                  $value->address   = $default_address->address;
+                  $value->country   = $default_address->country;
+                  $value->email     = $default_address->email;
+                  $value->telephone = $default_address->telephone;
+                  $value->fax       = $default_address->fax;
+                }
+                else
+                {
+                  $value->address   = "N/A";
+                  $value->country   = "N/A";
+                  $value->email     = "N/A";
+                  $value->telephone = "N/A";
+                  $value->fax       = "N/A";
+                }
+                
+              }  
            if($is_allowed)
            {
                $get_main_module = $module_var->getMainModules();
