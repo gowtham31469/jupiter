@@ -56,6 +56,7 @@
             </div>
         </div>
     </div>
+    <div id="snackbar"><span class="snackbar_span"></span></div>
    <div class="modal fade" id="addMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -69,7 +70,6 @@
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_name', 'Name', ['class' => 'form_label']) !!}
                         {!! Form::text('merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
@@ -77,7 +77,6 @@
                         <div class="input-group">
                           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                           {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         </div>
                         <div class="help-block with-errors"></div>
                       </div>
@@ -95,14 +94,12 @@
                         <div class="input-group">
                           <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                           {!! Form::text('merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                          <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        </div>
                        <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_address', 'Address', ['class' => 'form_label']) !!}
                         {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
@@ -138,7 +135,6 @@
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_name', 'Name', ['class' => 'form_label']) !!}
                        {!! Form::text('edit_merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
@@ -146,7 +142,6 @@
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
                          {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        </div>
                        <div class="help-block with-errors"></div>
                      </div>
@@ -155,14 +150,12 @@
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
                          {!! Form::text('edit_merchandiser_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                       </div>
                       <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
                        {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                       <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
