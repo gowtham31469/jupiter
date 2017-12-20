@@ -34,11 +34,11 @@
                  table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
                    if(item.is_active === 1)
                    {
-                    table += '<td><span class="badge badge-success">Active</span></td>';
+                    table += '<td><span class="label label-success">Active</span></td>';
                    }
                    else
                    {
-                    table += '<td><span class="badge badge-danger">Inactive</span></td>';
+                    table += '<td><span class="label label-danger">Inactive</span></td>';
                    }
                    if(item.is_active === 1)
                    {

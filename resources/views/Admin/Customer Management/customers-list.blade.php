@@ -72,9 +72,9 @@
                             </dl>
                           </td>
                           @if($value->is_active === 1)
-                            <td><span class="badge badge-success">Active</span></td>
+                            <td><span class="label label-success">Active</span></td>
                           @else
-                            <td><span class="badge badge-danger">Inactive</span></td>
+                            <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
                             <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
