@@ -214,11 +214,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
-                                          <div class="form-check">
+                                          <div class="form-check form-group has-feedback">
                                             <label class="form-check-label">
                                               <input class="form-check-input default_contact" type="checkbox" value="" name="default" id="default_contact0">
                                               Make as default contact person
                                             </label>
+                                            <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
                                     </div>
@@ -264,11 +265,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
-                                          <div class="form-check">
+                                          <div class="form-check form-group has-feedback">
                                             <label class="form-check-label">
                                               <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address0">
                                               Make as default billing address
                                             </label>
+                                            <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
                                     </div>
