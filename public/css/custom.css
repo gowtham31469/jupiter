@@ -11,6 +11,10 @@ hr {
     border-top: 1px solid #cacaca;
 }
 
+td > a > i{
+    color:#263238;
+    
+}
 .loader-div {
     height: 100%;
     width: 100%;
@@ -92,6 +96,11 @@ p.info {
     color: #fff;
     background-color: #273339;
     border-color: #1f282d;
+}
+.btn-primary:hover{
+    background-color: #03A9F4;
+    color: #ffffff;
+    border-color: #2196F3;
 }
 
 .wallpaper {
@@ -194,8 +203,7 @@ a.dropdown-toggle.profile-dropdown-admin:hover {
     transition: 0.5s ease;
 }
 
-.grid-menu {
-    padding-left: 18px;
+.grid-menu i {
     color: #fff !important;
 }
 
@@ -800,8 +808,8 @@ ul.customer-select li > a {
     padding-left: 20px;
 }
 ul.customer-select li > a.active {
-    background: #00d7b0a1;
-    color: #040404;
+    background: #03A9F4;
+    color: #ffffff;
     font-weight: bold;
 }
 ul.customer-select li {
@@ -823,4 +831,8 @@ ul.customer-select > li > a:hover {
     padding-left: 20px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 8px;
+}
+
+span.filter-option img {
+    height: 15px;
 }
