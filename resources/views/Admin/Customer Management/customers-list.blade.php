@@ -96,6 +96,7 @@
               </div>
             </div>
           </div>
+           <div id="snackbar"><span class="snackbar_span"></span></div>
     <div class="modal fade bd-example-modal-lg" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

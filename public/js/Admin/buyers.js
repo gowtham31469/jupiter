@@ -69,16 +69,16 @@
              },
              statusCode: {
                   200: function() {
-                       $('#buyer_result').removeAttr('style');
-                       $('#buyer_result').html('Buyer Added Successfully')
-                       $("#buyer_result").addClass("alert alert-success");
+                       $('.snackbar_span').html("Buyer Added Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
                        $('#addBuyerModal').modal('hide');
                        buyers();
                   },
                   400: function() {
-                       $('#buyer_result').removeAttr('style');
-                       $('#buyer_result').html("Something went wrong!!")
-                       $("#buyer_result").addClass("alert alert-dander");
+                       $('.snackbar_span').html("Something went wrong!!");
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
                   },
                   409: function() {
                        $('#buyer_result').removeAttr('style');
@@ -171,16 +171,16 @@
            data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
            statusCode: {
                 200: function() {
-                     $('#edit_buyer_result').removeAttr('style');
-                     $('#edit_buyer_result').html('Buyer Updated Successfully')
-                     $("#edit_buyer_result").addClass("alert alert-success");
+                     $('.snackbar_span').html('Buyer Updated Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
                      $('#editBuyerModal').modal('hide');
                      buyers();
                 },
                 400: function() {
-                     $('#edit_buyer_result').removeAttr('style');
-                     $('#edit_buyer_result').html("Something went wrong!!")
-                     $("#edit_buyer_result").addClass("alert alert-dander");
+                     $('.snackbar_span').html("Something went wrong!!");
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
                 },
                 409: function() {
                      $('#edit_buyer_result').removeAttr('style');
@@ -220,16 +220,16 @@
            data:{_token:csrf_token,id:id},
            statusCode: {
                 200: function() {
-                     $('#delete_buyer_result').removeAttr('style');
-                     $('#delete_buyer_result').html('Buyer deleted Successfully')
-                     $("#delete_buyer_result").addClass("alert alert-success");
+                     $('.snackbar_span').html('Buyer deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
                      $('#deleteBuyerModal').modal('hide');
                      buyers();
                 },
                 400: function() {
-                     $('#delete_buyer_result').removeAttr('style');
-                     $('#delete_buyer_result').html("Something went wrong!!")
-                     $("#delete_buyer_result").addClass("alert alert-dander");
+                     $('.snackbar_span').html("Something went wrong!!");
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
                 }
            },
            error: function (data) {
@@ -337,16 +337,16 @@
               },
               statusCode: {
                    200: function() {
-                        $('#add_merchandiser_result').removeAttr('style');
-                        $('#add_merchandiser_result').html('Merchandiser Added Successfully')
-                        $("#add_merchandiser_result").addClass("alert alert-success");
+                        $('.snackbar_span').html('Merchandiser Added Successfully');
+                        $('#snackbar').css('background-color','#1abb9c');
+                        showSnackbar();
                         $('#addMerchandiserModal').modal('hide');
                         merchandiser();
                    },
                    400: function() {
-                        $('#add_merchandiser_result').removeAttr('style');
-                        $('#add_merchandiser_result').html("Something went wrong!!")
-                        $("#add_merchandiser_result").addClass("alert alert-dander");
+                        $('.snackbar_span').html("Something went wrong!!");
+                        $('#snackbar').css('background-color','#F44336');
+                        showSnackbar();
                    },
                    409: function() {
                         $('#add_merchandiser_result').removeAttr('style');
@@ -465,16 +465,16 @@
              data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address,supplier:supplier,buyer:buyer},
              statusCode: {
                   200: function() {
-                       $('#edit_merchandiser_result').removeAttr('style');
-                       $('#edit_merchandiser_result').html('Merchandiser Updated Successfully')
-                       $("#edit_merchandiser_result").addClass("alert alert-success");
+                       $('.snackbar_span').html('Merchandiser Updated Successfully');
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
                        $('#editMerchandiserModal').modal('hide');
                        merchandiser();
                   },
                   400: function() {
-                       $('#edit_merchandiser_result').removeAttr('style');
-                       $('#edit_merchandiser_result').html("Something went wrong!!")
-                       $("#edit_merchandiser_result").addClass("alert alert-dander");
+                       $('.snackbar_span').html('Something went wrong');
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
                   },
                   409: function() {
                        $('#edit_merchandiser_result').removeAttr('style');
@@ -515,16 +515,16 @@
                data:{_token:csrf_token,id:id},
                statusCode: {
                     200: function() {
-                         $('#delete_merchandiser_result').removeAttr('style');
-                         $('#delete_merchandiser_result').html('Merchandiser deleted Successfully')
-                         $("#delete_merchandiser_result").addClass("alert alert-success");
+                         $('.snackbar_span').html('Merchandiser deleted Successfully');
+                         $('#snackbar').css('background-color','#1abb9c');
+                         showSnackbar();
                          $('#deleteMerchandiserModal').modal('hide');
                          merchandiser();
                     },
                     400: function() {
-                         $('#delete_merchandiser_result').removeAttr('style');
-                         $('#delete_merchandiser_result').html("Something went wrong!!")
-                         $("#delete_merchandiser_result").addClass("alert alert-dander");
+                         $('.snackbar_span').html('Something went wrong');
+                         $('#snackbar').css('background-color','#F44336');
+                         showSnackbar();
                     }
                },
                error: function (data) {
@@ -552,4 +552,19 @@
     } catch (e) {
      console.log("Error:"+e)
    }
+  }
+  /** [showSnackbar function] */
+  function showSnackbar() {
+    try{
+      // Get the snackbar DIV
+      var x = document.getElementById("snackbar")
+
+      // Add the "show" class to DIV
+      x.className = "show";
+
+      // After 3 seconds, remove the show class from DIV
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      } catch (e) {
+       console.log("Error:"+e)
+     }
   }

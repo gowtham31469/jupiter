@@ -191,16 +191,16 @@ function addCustomer()
             },
             statusCode: {
                  200: function() {
-                      $('#customer_result').removeAttr('style');
-                      $('#customer_result').html('Customer Added Successfully')
-                      $("#customer_result").addClass("alert alert-success");
+                      $('.snackbar_span').html('Customer Added Successfully');
+                      $('#snackbar').css('background-color','#1abb9c');
+                      showSnackbar();
                       $('#addCustomerModal').modal('hide');
                       customersListView();
                  },
                  400: function() {
-                      $('#customer_result').removeAttr('style');
-                      $('#customer_result').html("Something went wrong!!")
-                      $("#customer_result").addClass("alert alert-dander");
+                      $('.snackbar_span').html('Something went wrong');
+                      $('#snackbar').css('background-color','#F44336');
+                      showSnackbar();
                  },
                  409: function() {
                       $('#customer_result').removeAttr('style');
@@ -468,6 +468,9 @@ function addCustomer()
                statusCode: {
                     200: function() {
                         isSubmitting = false; 
+                        $('.snackbar_span').html('Customer is active now ');
+                        $('#snackbar').css('background-color','#1abb9c');
+                        showSnackbar();
                     }
                },
                error: function (data) {
@@ -508,6 +511,9 @@ function addCustomer()
                statusCode: {
                     200: function() {
                          isSubmitting = false;
+                         $('.snackbar_span').html('Customer is inactive now ');
+                         $('#snackbar').css('background-color','#1abb9c');
+                         showSnackbar();
                     }
                },
                error: function (data) {
@@ -913,16 +919,16 @@ function addCustomer()
               },
               statusCode: {
                    200: function() {
-                        $('#customer_upadte_result').removeAttr('style');
-                        $('#customer_upadte_result').html('Customer Updated Successfully')
-                        $("#customer_upadte_result").addClass("alert alert-success");
+                        $('.snackbar_span').html('Customer Updated Successfully');
+                        $('#snackbar').css('background-color','#1abb9c');
+                        showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
                    },
                    400: function() {
-                        $('#customer_upadte_result').removeAttr('style');
-                        $('#customer_upadte_result').html("Something went wrong!!")
-                        $("#customer_upadte_result").addClass("alert alert-dander");
+                        $('.snackbar_span').html('Something went wrong');
+                        $('#snackbar').css('background-color','#F44336');
+                        showSnackbar();
                    },
                    409: function() {
                         $('#customer_upadte_result').removeAttr('style');
@@ -962,16 +968,16 @@ function addCustomer()
              data:{_token:csrf_token,id:id},
              statusCode: {
                   200: function() {
-                       $('#delete_result').removeAttr('style');
-                       $('#delete_result').html('Customer deleted Successfully')
-                       $("#delete_result").addClass("alert alert-success");
+                       $('.snackbar_span').html('Customer deleted Successfully');
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
                        $('#deleteCustomerModal').modal('hide');
                        customersListView();
                   },
                   400: function() {
-                       $('#delete_result').removeAttr('style');
-                       $('#delete_result').html("Something went wrong!!")
-                       $("#delete_result").addClass("alert alert-dander");
+                       $('.snackbar_span').html('Something went wrong');
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
                   }
              },
              error: function (data) {
@@ -986,3 +992,18 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+   /** [showSnackbar function] */
+  function showSnackbar() {
+    try{
+      // Get the snackbar DIV
+      var x = document.getElementById("snackbar")
+
+      // Add the "show" class to DIV
+      x.className = "show";
+
+      // After 3 seconds, remove the show class from DIV
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
