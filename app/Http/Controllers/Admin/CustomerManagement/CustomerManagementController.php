@@ -584,15 +584,29 @@ class CustomerManagementController extends Controller
         if ($validator->fails()) {
              return response()->json(['error' => true,'error' => $validator], 409);
         }
+        $isExists = DB::table('price_taxation')->where([
+            'customer_id' => $request->customer_id,
+            'buyer_id'    => $request->buyer_id,
+            'template_id' => $request->template_id])->pluck('id');
+        if($isExists->count()) {
+          DB::table('price_taxation')
+              ->where('id',$isExists[0])
+              ->update([
+                  'custom_name' => $request->custom_name,
+                  'price'       => $request->price,
+                  'tax'         => $request->tax
+                ]) ;
+        } else {
+            DB::table('price_taxation')->insert([
+            'customer_id' => $request->customer_id,
+            'buyer_id'    => $request->buyer_id,
+            'template_id' => $request->template_id,
+            'custom_name' => $request->custom_name,
+            'price'       => $request->price,
+            'tax'         => $request->tax
+          ]);
+        }
 
-        DB::table('price_taxation')->insert([
-          'customer_id' => $request->customer_id,
-          'buyer_id'    => $request->buyer_id,
-          'template_id' => $request->template_id,
-          'custom_name' => $request->custom_name,
-          'price'       => $request->price,
-          'tax'         => $request->tax
-        ]);
         return response()->json(['message' => 'success'], 200);
 
     }
