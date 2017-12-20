@@ -152,6 +152,7 @@ class UploadController extends Controller
 	        $extension  = $request->file('file')->getClientOriginalExtension();
         	$data  = Excel::load($path, function($reader) {})->get();
         	$filename = strtok($filename, " ");
+        	return $request->file('file')->getClientOriginalName();
         	if ($filename =="ParcelDetails_File1_ORCHESTRA")
         	{
         		$data_exists = OrchestraParcelDetails::select()->get();

@@ -183,7 +183,7 @@ Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManag
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
 
-// Route::get('upload', 'UploadController@index');
+Route::get('upload', 'UploadController@index');
 Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
 // Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
 

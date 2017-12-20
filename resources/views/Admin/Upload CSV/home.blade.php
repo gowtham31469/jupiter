@@ -12,36 +12,41 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="parcel-details card">
-                            <h4><a class="btn btn-primary btn-sm pull-right">Upload Parcel Details</a>Parcel Details</h4>
+                            <h4><a class="btn btn-primary btn-sm pull-right upload-parcel-details">Upload Parcel Details</a>Parcel Details</h4>
                             <hr/>
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="">
                                         <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 1 </h5>
-                                        <form action="/file-upload" class="dropzone" id="ParcelDetails1"></form>
+                                        <form action="/file-upload" class="dropzone" id="parcel-details-1">
+                                             {{ csrf_field() }}
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
                                         <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Parcel Detail File - 2 </h5>
-                                        <form action="/file-upload" class="dropzone" id="ParcelDetails2"></form>
+                                        <form action="/file-upload" class="dropzone" id="parcel-details-2">
+                                             {{ csrf_field() }}
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-4">
                         <div class="label-details card">
-                            <h4><a class="btn btn-primary btn-sm pull-right">Upload label Details</a>Label Details</h4>
+                            <h4><a class="btn btn-primary btn-sm pull-right upload-label-details">Upload label Details</a>Label Details</h4>
                             <hr/>
                             <div class="row">
 
                                 <div class="col-md-12">
                                     <div class="">
                                         <h5><sub class="pull-right"> (Supported Files : .csv)</sub>Label Details File </h5>
-                                        <form action="/file-upload" class="dropzone" id="ParcelDetails1"></form>
+                                       <form method="post"  class="dropzone" id="label-details">
+                                            {{ csrf_field() }}
+                                       </form>
                                     </div>
                                 </div>
                             </div>
@@ -69,129 +74,80 @@
 </script>
 @endif @section('jqueryIncludes')
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.logo').html('CSV Upload')
-        $('#add_buyer_form').trigger("reset");
-        $('#edit_buyer_form').trigger('reset');
-        $('#add_merchandiser_form').trigger('reset');
-        $('#edit_merchandiser_form').trigger('reset');
-        $('#buyer_result').hide();
-        $('#edit_buyer_result').hide();
-        $('#delete_buyer_result').hide();
-        $('#add_merchandiser_result').hide();
-        $('#edit_merchandiser_result').hide();
-    });
+    Dropzone.options.labelDetails = {
+      // Prevents Dropzone from uploading dropped files immediately
+        url:"order-management/multi-upload",
+        autoProcessQueue: false,
+        maxFilesize: 10,
+        maxFiles:1,
+        acceptedFiles: ".csv, .xlsx, .xls",
 
-    $('#add_buyer_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+        init: function() {
+            var submitButton = document.querySelector(".upload-label-details")
+                myDropzone = this; // closure
 
-        } else {
-            e.preventDefault();
-            addBuyer();
-        }
-    })
-    /** To refresh modal **/
-    $('.modal').on('hidden.bs.modal', function(e) {
-        $('#add_buyer_form').trigger("reset");
-        $('#add_merchandiser_form').trigger('reset');
-        $('#buyer_result').hide();
-        $('#edit_buyer_result').hide();
-        $('#delete_buyer_result').hide();
-        $('#merchandiserr_result').hide();
-        $('#edit_merchandiserr_result').hide();
-        $('#delete_merchandiserr_result').hide();
-    })
-    // get edit buyer details
-    $(document).on('click', '.edit-buyer', function(e) {
-        var id = $(this).closest('tr').attr('id');
-        e.preventDefault();
-        getBuyer(id);
-    });
-    /** submit edit buyer form **/
-    $('#edit_buyer_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+            submitButton.addEventListener("click", function() {
+              myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
 
-        } else {
-            e.preventDefault();
-            editBuyer();
-        }
-    })
-    $('#deleteBuyerModal').on('show.bs.modal', function(e) {
-        var config = $(e.relatedTarget).data('userid');
-        $('#delete_buyer_id').attr('value', config);
-    });
-    /** submit delete buyer form **/
-    $('#delete_buyer_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+            // You might want to show the submit button only when 
+            // files are dropped here:
+            this.on("addedfile", function() {
+              // Show submit button here and/or inform user to click it.
+            });
 
-        } else {
-            e.preventDefault();
-            var id = $('#delete_buyer_id').val();
-            deleteBuyer(id);
         }
-    })
-    /** generate password **/
-    $("#generatePwd").validator().click(function() {
-        function randomString(length, chars) {
-            var mask = '';
-            if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-            if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            if (chars.indexOf('#') > -1) mask += '0123456789';
-            if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
-            var result = '';
-            for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
-            return result;
-        }
-        $("#merchandiser_password").val(randomString(10, 'aA#!'));
-        $('#add_merchandiser_form').validator('validate');
-    })
-    /** Copy password to clipboard **/
-    $(document).ready(function() {
-        var clipboard = new Clipboard('.clipboard');
-        clipboard.on('success', function(e) {
-            $(e.trigger).text("Copied!");
-            e.clearSelection();
-            setTimeout(function() {
-                $(e.trigger).text("Copy");
-            }, 2500);
-        });
-    });
-    $('#add_merchandiser_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+    };
 
-        } else {
-            e.preventDefault();
-            addMerchandiser();
-        }
-    })
-    // get edit merchandiser details
-    $(document).on('click', '.edit-merchandiser', function(e) {
-        var id = $(this).closest('tr').attr('id');
-        e.preventDefault();
-        getMerchandiser(id);
-    });
-    /** submit edit merchandiser form **/
-    $('#edit_merchandiser_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+    Dropzone.options.parcelDetails1 = {
+      // Prevents Dropzone from uploading dropped files immediately
+        url:"order-management/multi-upload",
+        autoProcessQueue: false,
+        maxFilesize: 10,
+        maxFiles:1,
+        acceptedFiles: ".csv, .xlsx, .xls",
 
-        } else {
-            e.preventDefault();
-            editMerchandiser();
-        }
-    })
-    $('#deleteMerchandiserModal').on('show.bs.modal', function(e) {
-        var config = $(e.relatedTarget).data('userid');
-        $('#delete_merchandiser_id').attr('value', config);
-    });
-    /** submit delete merchandiser form **/
-    $('#delete_merchandiser_form').validator().on('submit', function(e) {
-        if (e.isDefaultPrevented()) {
+        init: function() {
+            var submitButton = document.querySelector(".upload-parcel-details")
+                myDropzone1 = this; // closure
 
-        } else {
-            e.preventDefault();
-            var id = $('#delete_merchandiser_id').val();
-            deleteMerchandiser(id);
+            submitButton.addEventListener("click", function() {
+              myDropzone1.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            // You might want to show the submit button only when 
+            // files are dropped here:
+            this.on("addedfile", function() {
+              // Show submit button here and/or inform user to click it.
+            });
         }
-    })
+    };
+
+    Dropzone.options.parcelDetails2 = {
+      // Prevents Dropzone from uploading dropped files immediately
+        url:"order-management/multi-upload",
+        autoProcessQueue: false,
+        maxFilesize: 10,
+        maxFiles:1,
+        acceptedFiles: ".csv, .xlsx, .xls",
+
+        init: function() {
+            var submitButton = document.querySelector(".upload-parcel-details")
+                myDropzone2 = this; // closure
+
+            submitButton.addEventListener("click", function() {
+              myDropzone2.processQueue(); // Tell Dropzone to process all queued files.
+            });
+
+            // You might want to show the submit button only when 
+            // files are dropped here:
+            this.on("addedfile", function() {
+              // Show submit button here and/or inform user to click it.
+            });
+
+        }
+    };
+
+
 </script>
 @endsection

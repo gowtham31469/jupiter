@@ -29,7 +29,7 @@
              Dropzone.options.imageUpload = {
               maxFilesize    :  10,
               maxFiles       :   2,
-              acceptedFiles  : ".csv"
+              acceptedFiles  : ".xls"
               };
          </script>
 @endsection
