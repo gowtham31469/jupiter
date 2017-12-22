@@ -15,7 +15,6 @@ function price_template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            console.log(data.customer_list.length)
             if(data.customer_list.length === 0){
                 $('.customer-select').html('<li>No Customers</li>');
             } else {
@@ -24,6 +23,8 @@ function price_template_list() {
                     list += '<li id="'+this.id+'"><a>'+this.company_name+'</a></li>';
                 });
                 $('.customer-select').html(list);
+                $('.customer-select li a').first().addClass('active');
+                localStorage.setItem("customer_id", $('.customer-select li').first().attr('id').toLowerCase());
             }
         },
         error: function (data) {
@@ -49,11 +50,6 @@ function price_template_list() {
         success: function (data) {
             $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
 
-
-            //            <div class="template-form"><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div><div class="col-md-4"><div class="form-group"><label for="buyer_name" class="form_label text-left">Po Number</label><input class="form-control input-sm " placeholder="PO Number" required="" type="text" value=""></div></div></div>
-
-
-
             $('#tree1').jstree({
                 'core': {
                     'data': data
@@ -66,7 +62,8 @@ function price_template_list() {
                 "plugins": ["types", "search"]
             }).on('loaded.jstree', function () {
                 $('#tree1').jstree('open_all');
-            });
+            }).bind("refresh.jstree", function (e, data) 
+                { $(this).jstree("open_all");});
 
 
             var to = false;
@@ -83,6 +80,7 @@ function price_template_list() {
             $('#tree1').on('activate_node.jstree', function (e, data) {
                 if (data.instance.is_leaf(data.node)) {
                     var template_id = data.node.id;
+                    localStorage.setItem("template_id", data.node.id);
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         url: base_url + "/admin/" + buyer + "/template-management/template-view",
@@ -103,7 +101,6 @@ function price_template_list() {
                                 $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
                                 $('.descriptionDiv').css('margin-top', '20px')
                                 $('.viewDiv').css('margin-top', '0px');
-                                setTimeout(function(){ showPricing(); }, 400);
                             } else {
                                 $('.viewDiv').html('<img style="width:160px;height:150px;object-fit:cover;margin-left: 118px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
                                 $('.descriptionDiv').html('<b>Template Not Found</b>');
@@ -117,6 +114,7 @@ function price_template_list() {
 
                         },
                         complete: function () {
+                            setTimeout(function(){ showPricing(); }, 400);
                             $(".loader").hide();
                             $(".loader").css('margin-top', '0%');
                         }
@@ -136,5 +134,114 @@ function price_template_list() {
 
 
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:30px;">Artwork Configuration</h4><div class="col-md-4"><form><div class="form-group"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" ></div></div><div class="col-md-4"><div class="form-group"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="text"></div></div><div class="col-md-4"><div class="form-group"><label for="taxation" class="form_label text-left">Taxation</label><input class="form-control input-sm " placeholder="Enter Tax" required type="text"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="col-md-4"><div class="form-group has-feedback"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Customers Custom Name" required type="text" id="name" ></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="number" id="price" step="0.01"></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="taxation" class="form_label text-left">Tax</label><input class="form-control input-sm " placeholder="Enter Tax" required type="number" id="tax" step="0.01"></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+
+    $('#priceForm').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           savePricing();
+        }
+      });
+
+    getSavedPriceTax();
 }
+
+
+function savePricing() {
+
+    var customer_id = localStorage.getItem("customer_id");
+    var template_id = localStorage.getItem("template_id");
+    var buyer_id    = localStorage.getItem("pricing_buyer_id");
+    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url:base_url + "/admin/customer-management/save-price-tax",
+        type:"POST",
+        dataType:"json",
+        data :{
+            _token: csrf_token,
+            customer_id:customer_id,
+            buyer_id:buyer_id,
+            template_id:template_id,
+            custom_name:$('#name').val(),
+            price:$('#price').val(),
+            tax:$('#tax').val()
+
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        success: function (data) {
+            //incluude toast
+        },
+        error: function (data) {
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+            showSnackbar();
+        }
+    });
+}
+
+function getSavedPriceTax() {
+    var customer_id = localStorage.getItem("customer_id");
+    var template_id = localStorage.getItem("template_id");
+    var buyer_id    = localStorage.getItem("pricing_buyer_id");
+    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url:base_url + "/admin/customer-management/get-price-tax",
+        type:"GET",
+        dataType:"json",
+        data :{
+            _token: csrf_token,
+            customer_id:customer_id,
+            buyer_id:buyer_id,
+            template_id:template_id
+        },
+        statusCode: {
+            204: function () {
+                console.log('No Price details found for this combination');
+            },
+            500: function () {
+                console.log('Internal server error in /admin/customer-management/get-price-tax API');
+            }, 
+            200: function(data) {
+                $.each(data.price_list, function(i,val) {
+                    $('#name').val(val.custom_name);
+                    $('#price').val(val.price);
+                    $('#tax').val(val.tax);
+                }) 
+            }
+        },
+        complete: function () {
+        }
+    });
+}
+
+
+function showSnackbar() {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar")
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+
+$('.customer-select').on('click', 'li', function() {
+    $('.customer-select li a').removeClass('active');
+    localStorage.setItem("customer_id", this.id);
+    $(this).find('a').addClass('active');
+    $('#tree1').jstree('refresh');
+    $('.viewDiv').empty();
+})

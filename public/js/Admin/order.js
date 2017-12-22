@@ -32,83 +32,154 @@ function orders() {
             }
             else
             {
-                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form><label>Order type</label><select class="form-control order_type"  required><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><br/><label>Select Template</label><div><input class="search-input form-control" placeholder="Search for Awesomeness"></div><div id="jstree"></div><div class="po-upload"><div class="form-group files hidden" id="single_file" ><label>Upload PO<sub>(Single File upload)</sub></label><input type="file" class="form-control" multiple=""></div><div class="form-group files hidden" id="multiple_file" ><label>Upload PO<sub>(Multiple File upload)</sub></label><input type="file" class="form-control" multiple=""></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div><div class="col-md-8"><div class="card"><h4>Sample Template for reference</h4><hr/><div class="row"><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="clearfix"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div><div class="col-md-6"><img src="../../images/img1.png" class="img-responsive center-block pad-top"></div></div></div></div></div></div>')
+                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form id = "create_order_form" data-toggle = "validator" role = "form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><div class="help-block with-errors"></div></div><br><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div id="jstree""></div></div><div class="form-group"><div class="po-upload"><div class="form-group files hidden" id="single_file"><label>Upload PO<sub>(Single File upload)</sub></label><input class="form-control" multiple="" type="file"></div><div class="form-group files hidden" id="multiple_file"><label>Upload PO<sub>(Multiple File upload)</sub></label><input class="form-control" multiple="" type="file"></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div></div><div class="col-md-8"><div class="card" style="height:calc(100vh - 100px);"><h4>Template Preview</h4><hr/><div class="row"><div class="loader"></div><div class="viewDiv"><img style="height:150px;object-fit:cover;margin-top: 122px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png"></div><div class="descriptionDiv"></div></div></div></div></div></div>')
 
-                $(".search-input").keyup(function() {
-                var searchString = $(this).val();
-                    console.log(searchString);
-                    $('#jstree').jstree('search', searchString);
-                });
-                $(".order_type").change(function(){
-		            var selectedType = $(".order_type option:selected").val();
-		            if (selectedType === '1') 
-		            {
-		            	$("#single_file").removeClass("hidden");
-		            	$("#multiple_file").removeClass("hidden");
-		            }
-		            else
-		            {
-		            	$("#single_file").addClass("hidden");
-		            	$("#multiple_file").addClass("hidden");
-		            }
-		            
-		        });
-                $('#jstree').jstree({
-                        'core': {
-                            'data': [{
-                                "id": 1,
-                                "text": "Stickers",
-                                "parent_id": 0,
-                                "children": [{
-                                    "id": 2,
-                                    "text": "Carton & Polybag Stickers",
-                                    "parent_id": 1,
-                                    "children": [{
-                                        "id": 3,
-                                        "text": "CE",
-                                        "parent_id": 2,
-                                        "children": [{
-                                            "id": "5,6,7",
-                                            "text": "TCL 1 , TCL 2 & TSL 1",
-                                            "parent_id": 3
-                                        }, {
-                                            "id": "8,9",
-                                            "text": "TCL 4 & TSL 3",
-                                            "parent_id": 3
-                                        }, {
-                                            "id": "10,11",
-                                            "text": "THL 1 & THL 3",
-                                            "parent_id": 3
-                                        }]
-                                    }, {
-                                        "id": 4,
-                                        "text": "UK",
-                                        "parent_id": 2,
-                                        "children": [{
-                                            "id": "12,13,14",
-                                            "text": "TCL 1 , TCL 2 & TSL 1",
-                                            "parent_id": 4
-                                        }, {
-                                            "id": "15,16",
-                                            "text": "TCL 4 & TSL 3",
-                                            "parent_id": 4
-                                        }, {
-                                            "id": "17,18",
-                                            "text": "THL 1 & THL 3",
-                                            "parent_id": 4
-                                        }]
-                                    }]
-                                }]
-                            }]
-                        },
-                        "types": {
-                            "default": {
-                                "icon": "fa fa-folder"
+	                $(".search-input").keyup(function() {
+	                var searchString = $(this).val();
+	                    $('#jstree').jstree('search', searchString);
+	                });
+	                $(".order_type").change(function(){
+			            var selectedType = $(".order_type option:selected").val();
+			            if (selectedType === '1') 
+			            {
+			            	$("#single_file").removeClass("hidden");
+			            	$("#multiple_file").removeClass("hidden");
+			            }
+			            else
+			            {
+			            	$("#single_file").addClass("hidden");
+			            	$("#multiple_file").addClass("hidden");
+			            }
+			            
+			        });
+	                $('.descriptionDiv').addClass('hidden')
+	                $('#jstree').jstree({
+	                    'core': {
+	                        'data': [{
+	                            "id": 1,
+	                            "text": "Stickers",
+	                            "parent_id": 0,
+	                            "children": [{
+	                                "id": 2,
+	                                "text": "Carton & Polybag Stickers",
+	                                "parent_id": 1,
+	                                "children": [{
+	                                    "id": 3,
+	                                    "text": "CE",
+	                                    "parent_id": 2,
+	                                    "children": [{
+	                                        "id": "5,6,7",
+	                                        "text": "TCL 1 , TCL 2 & TSL 1",
+	                                        "parent_id": 3
+	                                    }, {
+	                                        "id": "8,9",
+	                                        "text": "TCL 4 & TSL 3",
+	                                        "parent_id": 3
+	                                    }, {
+	                                        "id": "10,11",
+	                                        "text": "THL 1 & THL 3",
+	                                        "parent_id": 3
+	                                    }]
+	                                }, {
+	                                    "id": 4,
+	                                    "text": "UK",
+	                                    "parent_id": 2,
+	                                    "children": [{
+	                                        "id": "12,13,14",
+	                                        "text": "TCL 1 , TCL 2 & TSL 1",
+	                                        "parent_id": 4
+	                                    }, {
+	                                        "id": "15,16",
+	                                        "text": "TCL 4 & TSL 3",
+	                                        "parent_id": 4
+	                                    }, {
+	                                        "id": "17,18",
+	                                        "text": "THL 1 & THL 3",
+	                                        "parent_id": 4
+	                                    }]
+	                                }]
+	                            }]
+	                        }]
+	                    },
+	                    "types": {
+	                        "default": {
+	                            "icon": "fa fa-folder"
+	                        }
+	                    },
+	                    "plugins": ["types", "search","conditionalselect"],
+                        conditionalselect : function (node) { return this.is_leaf(node); }
+	                }).on('loaded.jstree', function () {
+                        $('#jstree').jstree('open_all');
+                    }).bind("refresh.jstree", function (e, data) 
+                        { $(this).jstree("open_all");});
+	                
+
+	                $('#jstree').on('activate_node.jstree', function (e, data) {
+	                    if (data.instance.is_leaf(data.node)) {
+	                        var template_id = data.node.id;
+	                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	                        $.ajax({
+	                            url: base_url + "/admin/" + buyer + "/template-management/template-view",
+	                            type: "Post",
+	                            dataType: "json",
+	                            data: {
+	                                template_id: template_id,
+	                                _token: csrf_token
+	                            },
+	                            beforeSend: function () {
+	                                $(".loader").show();
+	                                $(".loader").css('margin-top', '12%');
+	                            },
+	                            success: function (data) {
+	                            	if (data.length > 0) 
+	                            	{
+	                            		$('.viewDiv').html('');
+	                            		$.each(data, function (index, value) {
+	                                    if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") 
+	                                    {
+	                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
+
+	                                    } 
+	                                    else 
+	                                    {
+	                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
+
+	                                    }
+	                                 });
+	                            	}
+	                            	else
+	                            	{
+	                            		$('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+
+	                                        $('.descriptionDiv').html('<b>Template Not Found</b>');
+	                                        $('.descriptionDiv').css('margin-top', '0px')
+	                                        $('.viewDiv').css('margin-top', '140px')
+	                            	}
+	                                $('.viewDiv').css('width', '100%')
+                                
+                            },
+                            error: function (data) {
+
+                            },
+                            complete: function () {
+                                $(".loader").hide();
+                                $(".loader").css('margin-top', '0%');
                             }
-                        },
-                        "plugins": ["types", "search"]
-                    });
+                        })
+                    }
+                });
             }
+            $('#create_order_form').validator().on('submit', function (e) {
+	         if (e.isDefaultPrevented())
+	         {
+
+	         }
+	         else
+	         {
+	            e.preventDefault();
+	         }
+	       })
+
         },
         error: function (data) {
 
@@ -243,7 +314,8 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
     $('.top-content').append('  <h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details">Age Group: <strong><span id="ageGroup">  <select name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details">Delivery Date: <strong><span id="dDate"> <input type="date" ></span></strong></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-bordered table-hover">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
 
-    $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px;border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
+    $('.main-content').html('<hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:1.5px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:580px;height:500px" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="bottom-bar"><div class="modal-footer">  <button type="button" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
+
 
     barcode_carton('svg2', data)
     barcode_carton('svg3', data)
@@ -1319,13 +1391,14 @@ function treestructure(data, tree) {
         }
     });
 }
+      
 
 function jsbarcode(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
         format: "ean13",
         width: 5.99,
         height: 343,
-        fontSize:50
+        fontSize: 50
     });
     var svg = document.getElementById('svgdiv').querySelector('svg'),
         canvas = document.createElement('canvas'),

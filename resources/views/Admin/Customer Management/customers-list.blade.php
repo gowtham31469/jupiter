@@ -72,9 +72,9 @@
                             </dl>
                           </td>
                           @if($value->is_active === 1)
-                            <td><span class="badge badge-success">Active</span></td>
+                            <td><span class="label label-success">Active</span></td>
                           @else
-                            <td><span class="badge badge-danger">Inactive</span></td>
+                            <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
                             <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
@@ -96,6 +96,7 @@
               </div>
             </div>
           </div>
+           <div id="snackbar"><span class="snackbar_span"></span></div>
     <div class="modal fade bd-example-modal-lg" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -213,11 +214,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
-                                          <div class="form-check">
+                                          <div class="form-check form-group has-feedback">
                                             <label class="form-check-label">
                                               <input class="form-check-input default_contact" type="checkbox" value="" name="default" id="default_contact0">
                                               Make as default contact person
                                             </label>
+                                            <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
                                     </div>
@@ -263,11 +265,12 @@
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
-                                          <div class="form-check">
+                                          <div class="form-check form-group has-feedback">
                                             <label class="form-check-label">
                                               <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address0">
                                               Make as default billing address
                                             </label>
+                                            <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
                                     </div>
