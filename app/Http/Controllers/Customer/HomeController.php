@@ -32,6 +32,7 @@ class HomeController extends Controller
     {
 
             $module_var = new Modules();
+            
             //get permitted menus
 
             $top_mod = "Dashboard";

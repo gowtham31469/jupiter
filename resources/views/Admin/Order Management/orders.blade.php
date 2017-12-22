@@ -62,7 +62,50 @@
     .whitening_select+.select2-container--default .select2-selection--single {
         border: 2px solid #dce4ec;
     }
-    
+.files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 106px 0px 50px 24%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+}
+.files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+ }
+.files{ position:relative}
+.files:after {  pointer-events: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 50px;
+    right: 0;
+    height: 56px;
+    content: "";
+    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+    display: block;
+    margin: 0 auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.color input{ background-color:#f1f1f1;}
+.files:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;  pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}    
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -78,7 +121,7 @@
 </div>
     <div class="main-content">
         <div class="select-buyer">
-            
+            <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
     </div>
 <div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -144,13 +187,15 @@
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script>
     $(document).ready(function() {
+        localStorage.removeItem("hang_tag");
+         localStorage.removeItem("special_tag");
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
          if (localStorage.getItem("buyer") === null) {
-                $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+                
          }
         else
         {
@@ -162,42 +207,54 @@
                size: 4
             });
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-        if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-            localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/order-management/order_sub_modules",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    _token: csrf_token,
-                    buyer: $(this).find("option:selected").text().toLowerCase()
-                },
-                beforeSend: function() {
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType: "json",
+                    data: {
+                        _token: csrf_token,
+                        buyer: $(this).find("option:selected").text().toLowerCase()
+                    },
+                    beforeSend: function() {
 
-                },
-                success: function(data) {
-                  
-                   orders();                    
-                },
-                error: function(data) {
+                    },
+                    success: function(data) {
+                      
+                       orders();                    
+                    },
+                    error: function(data) {
 
-                },
-                complete: function() {
-                    $(".loader").hide();
-                    $(".loader").css('margin-top', '0%');
-                }
-            })
-        } else {
-            localStorage.removeItem("buyer");
+                    },
+                    complete: function() {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top', '0%');
+                    }
+                })
+            } else {
+                localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
-            location.reload()
-        }
+                location.reload()
+            }
+        });
+        $(".order_type").change(function(){
+            var selectedType = $(".order_type option:selected").val();
+            if (selectedType === '1') 
+            {
+                $("#single_file").removeClass("hidden");
+                $("#multiple_file").removeClass("hidden");
+            }
+            else
+            {
+                $("#single_file").addClass("hidden");
+                $("#multiple_file").addClass("hidden");
+            }
+            
+        });
     });
-    });
-   
-    
 </script>
 
 @endsection
