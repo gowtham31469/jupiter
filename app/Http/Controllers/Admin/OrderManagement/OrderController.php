@@ -89,7 +89,8 @@ class OrderController extends Controller
 //        PDF::Output('solid.pdf', 'D');
         
             $svg=urldecode($request->svg);
-       
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);

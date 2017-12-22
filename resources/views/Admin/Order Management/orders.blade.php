@@ -187,6 +187,8 @@
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script>
     $(document).ready(function() {
+        localStorage.removeItem("hang_tag");
+         localStorage.removeItem("special_tag");
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })

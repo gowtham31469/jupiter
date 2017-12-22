@@ -13,7 +13,7 @@ class AddCompanyToOrchestraItemMaster extends Migration
      */
     public function up()
     {
-       Schema::table('orchestra_item_master', function($table) {
+       /*Schema::table('orchestra_item_master', function($table) {
 		$table->integer('company_id')->unsigned();
 		$table->string('ref_no');
    	 });
@@ -22,7 +22,7 @@ class AddCompanyToOrchestraItemMaster extends Migration
              $table->foreign('company_id')
                 ->references('id')->on('company')
                 ->onDelete('cascade');
-        });
+        });*/
     }
 
     /**

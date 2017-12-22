@@ -13,7 +13,7 @@ class CreateTescoItemMasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('tesco_item_master', function (Blueprint $table) {
+       /* Schema::create('tesco_item_master', function (Blueprint $table) {
             $table->increments('id');
 	    $table->integer('company_id')->unsigned();;
 	    $table->integer('parent_id')->unsigned();;
@@ -21,7 +21,7 @@ class CreateTescoItemMasterTable extends Migration
             $table->string('ref_no');
             $table->timestampsTz();
 	    $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
-        });
+        });*/
     }
 
     /**

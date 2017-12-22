@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
 use Response;
+use App\HangTagOrders;
+use App\HangTagOrdersQty;
+use App\SpecialTagOrders;
+use App\SpecialTagOrdersQty;
 use View;
 use DB;
 
@@ -85,6 +89,7 @@ class OrderManagementCntrl extends Controller
             {
                 $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','2')->get();
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
+                $data['orchestra_template_id']=2;
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','1')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
@@ -93,6 +98,7 @@ class OrderManagementCntrl extends Controller
             {
                 $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','1')->get();
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
+                $data['orchestra_template_id']=1;
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
@@ -163,6 +169,25 @@ class OrderManagementCntrl extends Controller
                }
         
                 $code=substr($uvc, -3, 2);
+                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_hang_tag_orders']) > 0)
+        {
+            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->get();
+        }
+        else
+        {
+            $data['orchestra_hang_tag_orders_qty']="";
+        }
+         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_special_tag_orders']) > 0)
+        {
+            $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->where('ost_id',$data['orchestra_special_tag_orders']{0}->id)->get();
+        }
+        else
+        {
+            $data['orchestra_special_tag_orders_qty']="";
+        }
+                
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
                 $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
@@ -211,6 +236,64 @@ class OrderManagementCntrl extends Controller
          $data = DB::table('orchestra_compositions')->select('*')->whereIn('english',$lang)->get();
         
          echo json_encode($data);
+           
+    } 
+    public function setHangTag(Request $request)
+    {
+        $delivery_date = $request->delivery_date;
+        $template_front_id = $request->template_front_id;
+        $template_back_id = $request->template_back_id;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+        $uvc_tco = explode(',',$request->uvc_tco);
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $inserted = HangTagOrders::create([
+                                'uvc' => $uvc,
+                                'template_front_id'      => $template_front_id,
+                                'template_back_id'      => $template_back_id,
+                                'delivery_date'    => $delivery_date, 
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                     ]);
+        $i=0;
+        foreach($tot_qty_table as $value)
+        {
+             HangTagOrdersQty::create([
+                                'oht_id' => $inserted->id,
+                                'size'      => $size[$i],
+                                'uvc_tco'      => $uvc_tco[$i],
+                                'quantity'    => $value
+                     ]);
+            $i++;
+        }
+           
+    }
+    public function setSpecialTag(Request $request)
+    {
+        $delivery_date = $request->delivery_date;
+        $template_front_id = $request->template_front_id;
+        $tot_qty_table = explode(',',$request->tot_qty_table);
+        $uvc_tco = explode(',',$request->uvc_tco);
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $inserted = SpecialTagOrders::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $template_front_id,
+                                'delivery_date'    => $delivery_date, 
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                     ]);
+        $i=0;
+        foreach($tot_qty_table as $value)
+        {
+             SpecialTagOrdersQty::create([
+                                'ost_id' => $inserted->id,
+                                'size'      => $size[$i],
+                                'uvc_tco'      => $uvc_tco[$i],
+                                'quantity'    => $value
+                     ]);
+            $i++;
+        }
            
     }
 }
