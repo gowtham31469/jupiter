@@ -75,6 +75,27 @@ class OrderController extends Controller
              return redirect('/admin/dashboard');
         }
 
+    }       
+    public function orderStatus()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $get_main_module = $module_var->getMainModules();
+            $get_sub_module = $module_var->getSubModules(9);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/Order Management/order-status',['buyers' => $buyers]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+
     }    
     public function printPdf(Request $request)
     {
