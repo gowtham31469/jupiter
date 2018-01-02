@@ -83,7 +83,7 @@
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_password', 'Password', ['class' => ' form_label']) !!}
                         <div class="input-group">
-                          {!! Form::text('merchandiser_password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required')) !!}
+                          {!! Form::text('merchandiser_password',$value = '', array('class' => 'form-control input-sm js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
                           <span id="generatePwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
                           <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#merchandiser_password">Copy</span>
                         </div>
