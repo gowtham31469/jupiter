@@ -171,7 +171,7 @@ class CustomerManagementController extends Controller
                   $default_address = explode(',',$default_address);
                   $buyers          = explode(',',$buyer);
 
-                  $insert_Id = Customer::insertGetId([
+                  $customer = Customer::create([
                                 'factory_code'   => $factory_code,
                                 'company_name'   => $company_name,
                                 'courier_choice' => $courier_choice,
@@ -182,7 +182,7 @@ class CustomerManagementController extends Controller
                                 'pan_number'     => $pan_number,
                                 'email'          => $login_email
                               ]);
-                  
+                  $insert_Id = $customer->id; 
                   if($insert_Id != '')
                   {
                     $i = 0;
