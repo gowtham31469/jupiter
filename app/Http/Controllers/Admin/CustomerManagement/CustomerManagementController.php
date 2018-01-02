@@ -290,9 +290,17 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password')
                          ->where('customers.id','=',$id)
                          ->get();
+                if ($customer{0}->password != "" || $customer{0}->password != Null || $customer{0}->password != null || $customer{0}->password != NULL) 
+                {
+                  $customer{0}->password = 1;
+                }
+                else
+                {
+                  $customer{0}->password = 0;
+                }
                 $buyers = DB::table('customer_buyers')
                          ->select('customer_buyers.buyer_id')
                          ->where('customer_buyers.customer_id','=',$id)
@@ -329,6 +337,7 @@ class CustomerManagementController extends Controller
                     $input['gstin_number']    = Input::get('gstin_number');
                     $input['pan_number']      = Input::get('pan_number');
                     $input['email']           = Input::get('login_email');
+                    $input['password']        = Hash::make(Input::get('p'));
                     
                     $contact_person  = Input::get('contact_person');
                     $contact_phone   = Input::get('contact_phone');
@@ -373,7 +382,8 @@ class CustomerManagementController extends Controller
                           'tin_number'     => $input['tin_number'],
                           'gstin_number'   => $input['gstin_number'],
                           'pan_number'     => $input['pan_number'],
-                          'email'          => $input['email']
+                          'email'          => $input['email'],
+                          'password'       => $input['password']
                         ]);
                       CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
