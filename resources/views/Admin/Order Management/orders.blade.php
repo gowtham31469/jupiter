@@ -189,6 +189,9 @@
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
          localStorage.removeItem("special_tag");
+         localStorage.removeItem("main_label");
+        localStorage.removeItem("wash_label"); 
+        localStorage.removeItem("wash_composition");
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })

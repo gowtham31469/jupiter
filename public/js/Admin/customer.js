@@ -546,7 +546,7 @@ function addCustomer()
           var a = []
           $('#editContact').html('');
           $('#editbilladdress').html('');
-
+          $('#edit_password').val('');
          $.ajax({
              url:base_url + "/admin/customer-management/get-customers",
              dataType:"json",
@@ -559,16 +559,27 @@ function addCustomer()
              success: function(data){
                  isSubmitting = false;
                  $('#customer_edit_id').val(id);
-                 $.each(data.customers, function (key, value) {
-                  $('#edit_factory_code').val(value.factory_code);
-                  $('#edit_company_name').val(value.company_name);
-                  $('#edit_courier_choice').val(value.courier_choice);
-                  $('#edit_account_no').val(value.account_no);
-                  $('#edit_tin_number').val(value.tin_number);
-                  $('#edit_gstin_number').val(value.gstin_number);
-                  $('#edit_pan_number').val(value.pan_number);
-                  $('#edit_login_email').val(value.email);
-                 });
+                 
+                  $('#edit_factory_code').val(data.customers[0].factory_code);
+                  $('#edit_company_name').val(data.customers[0].company_name);
+                  $('#edit_courier_choice').val(data.customers[0].courier_choice);
+                  $('#edit_account_no').val(data.customers[0].account_no);
+                  $('#edit_tin_number').val(data.customers[0].tin_number);
+                  $('#edit_gstin_number').val(data.customers[0].gstin_number);
+                  $('#edit_pan_number').val(data.customers[0].pan_number);
+                  $('#edit_login_email').val(data.customers[0].email);
+                  if(data.customers[0].password === 1)
+                   {
+                    $('.edit_pwd').addClass('hidden');
+                    $('#edit_password').prop('required',false)
+                   }
+                   else
+                   {
+                    $('.edit_pwd').removeClass('hidden');
+                    $('#edit_password').prop('required',true)
+                    $('#edit_password').attr('minlength',6)
+                   }
+                 
 
                  $.each(data.address,function(key,value){
                    key += 1;
@@ -812,6 +823,7 @@ function addCustomer()
           var gstin_number    =  $('#edit_gstin_number').val();
           var pan_number      =  $('#edit_pan_number').val();
           var login_email     =  $('#edit_login_email').val();
+          var password        =  $('#edit_password').val();
           var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
 
           var contact_person  = [];
@@ -912,7 +924,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password},
               beforeSend: function () {
                 $(".loader").show();
                 $(".loader").css('margin-top','12%');

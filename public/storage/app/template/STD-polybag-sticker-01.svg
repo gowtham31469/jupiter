@@ -1,78 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 425.2 283.46" style="enable-background:new 0 0 425.2 283.46;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-width:0.7491;}
-	.st1{fill:#010101;}
-	.st2{fill:#FFFFFF;}
-	.st3{font-family:'Calibri'; font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; !important}
-	.st4{font-size:12.204px;}
-	.st5{fill:none;stroke:#010101;stroke-width:1.0006;stroke-miterlimit:10;}
-	.st6{font-family:'Calibri-Bold';}
-	.st7{font-size:17px;}
-	.st8{font-size:10px;}
-	.st9{font-size:10.004px;}
-	.st10{font-size:14.004px;}
-	.st11{font-size:12px;}
-	.st12{font-size:14px;}
-	.st13{font-size:9px;}
-	.st14{fill:#231F20;}
+	 viewBox="0 0 411 269.3" style="enable-background:new 0 0 411 269.3;" xml:space="preserve">
 
-</style>
-<rect x="0.02" y="0.14" class="st0" width="424.82" height="283.14"/>
-<path class="st1" d="M418.13,7.47L7.09,7.47v269.16l411.05-0.01V7.47z M417.13,8.47v267.16H7.89V8.47H417.13z"/>
-<rect x="140.25" y="174.05" class="st2" width="142.8" height="86.66"/>
-<text transform="matrix(1 0 0 1 146.3535 254.6033)" class="st3 st4">3</text>
-<rect x="161" y="180.15" width="1.22" height="68.35"/>
-<rect x="163.44" y="180.15" width="1.22" height="68.35"/>
-<rect x="165.88" y="180.15" width="2.44" height="61.03"/>
-<rect x="171.98" y="180.15" width="1.22" height="61.03"/>
-<rect x="174.42" y="180.15" width="4.88" height="61.03"/>
-<rect x="180.52" y="180.15" width="1.22" height="61.03"/>
-<rect x="182.96" y="180.15" width="2.44" height="61.03"/>
-<rect x="187.85" y="180.15" width="2.44" height="61.03"/>
-<rect x="191.51" y="180.15" width="2.44" height="61.03"/>
-<rect x="196.39" y="180.15" width="2.44" height="61.03"/>
-<rect x="200.05" y="180.15" width="2.44" height="61.03"/>
-<rect x="204.93" y="180.15" width="2.44" height="61.03"/>
-<rect x="208.59" y="180.15" width="1.22" height="61.03"/>
-<rect x="213.48" y="180.15" width="2.44" height="61.03"/>
-<text transform="matrix(1 0 0 1 171.7363 254.6033)" class="st3 st4">531114</text>
-<rect x="217.14" y="180.15" width="1.22" height="68.35"/>
-<rect x="219.58" y="180.15" width="1.22" height="68.35"/>
-<rect x="222.02" y="180.15" width="2.44" height="61.03"/>
-<rect x="226.9" y="180.15" width="2.44" height="61.03"/>
-<rect x="230.56" y="180.15" width="3.66" height="61.03"/>
-<rect x="235.45" y="180.15" width="1.22" height="61.03"/>
-<rect x="239.11" y="180.15" width="1.22" height="61.03"/>
-<rect x="242.77" y="180.15" width="3.66" height="61.03"/>
-<rect x="247.65" y="180.15" width="1.22" height="61.03"/>
-<rect x="251.31" y="180.15" width="3.66" height="61.03"/>
-<rect x="256.19" y="180.15" width="3.66" height="61.03"/>
-<rect x="261.08" y="180.15" width="1.22" height="61.03"/>
-<rect x="264.74" y="180.15" width="3.66" height="61.03"/>
-<rect x="269.62" y="180.15" width="1.22" height="61.03"/>
-<text transform="matrix(1 0 0 1 229.1006 254.6033)" class="st3 st4">195599</text>
-<rect x="273.28" y="180.15" width="1.22" height="68.35"/>
-<rect x="275.72" y="180.15" width="1.22" height="68.35"/>
-<line class="st5" x1="7.21" y1="47.2" x2="89.55" y2="47.2"/>
-<line class="st5" x1="89.06" y1="6.75" x2="89.06" y2="47.68"/>
-<line class="st5" x1="89.06" y1="47.2" x2="417.45" y2="47.2"/>
-<line class="st5" x1="89.06" y1="47.2" x2="89.06" y2="91.42"/>
-<line class="st5" x1="88.58" y1="90.99" x2="228.22" y2="90.99"/>
-<line class="st5" x1="227.74" y1="47.2" x2="227.74" y2="91.42"/>
-<line class="st5" x1="227.74" y1="90.99" x2="417.45" y2="90.99"/>
-<line class="st5" x1="6.9" y1="91.02" x2="88.75" y2="91.02"/>
+<rect style="fill:#FFFFFF;" width="411" height="269.3"/>
+<rect x="-7.1" y="-7.1" style="display:none;fill:#FFFFFF;" width="425" height="283"/>
+<!--
+<image style="overflow:visible;" width="679" height="396" xlink:href="DD6C6FE0.png"  transform="matrix(0.2226 0 0 0.1861 128.9704 173.0472)">
+</image>
+-->
+    <g id="barcode" width="679" height="396" transform="matrix(0.2226 0 0 0.1861 128.9704 173.0472)" ></g>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="0.2" y1="39.8" x2="82.5" y2="39.8"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="82" y1="-0.6" x2="82" y2="40.3"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="82" y1="39.8" x2="410.2" y2="39.8"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="82" y1="39.8" x2="82" y2="84"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="81.6" y1="83.6" x2="221.1" y2="83.6"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="220.6" y1="39.8" x2="220.6" y2="84"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="220.6" y1="83.6" x2="410.2" y2="83.6"/>
+<line style="fill:none;stroke:#010101;stroke-width:1.0001;stroke-miterlimit:10;" x1="-0.1" y1="83.6" x2="81.7" y2="83.6"/>
 
-<text transform="matrix(1 0 0 1 112.833 74.1907)" class="st1 st6 st7">NM510B#1\1</text>
-    <foreignObject x="-0.5" y="109" height="100" width="100%">
+<text transform="matrix(1 0 0 1 99.7067 24.2448)" style="fill:#010101; font-family:'Calibri-Bold';font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif !important; font-weight:bold; font-size:9px;" >570 BOULEVARD JULES CESAR, ACTIPARC 62 223 SAINT LAURENT BLANGY</text>
+<text transform="matrix(1 0 0 1 5.4699 24.7506)" style="fill:#010101; font-family:'Calibri-Bold';font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif !important; font-weight:bold; font-size:14px;">ORCHESTRA</text>
+<text transform="matrix(1 0 0 1 225.8425 66.2897)" style="fill:#010101; font-family:'Calibri-Bold';font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif !important; font-weight:bold; font-size:14px;" id="theme">SOUS  VETEMENTS GAPE A1</text>
+<text transform="matrix(1 0 0 1 105.7849 66.7965)" style="fill:#010101; font-family:'Calibri-Bold';font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif !important; font-weight:bold; font-size:17px;" id="parcel_code">OB5102#1\1</text>
+
+<g>
+	<circle style="fill:#010101;" id="round" cx="39.9" cy="61.2" r="16.7"/>
+</g>
+<foreignObject x="-7.5" y="109" height="100" width="101.75%">
       <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
               <style>
-              .sumanth{font-size:9px; width: 100.5%;}
+              .sumanth{font-size:9px; width: 105%;}
                   table td{border:0.5px solid #000;   }
-                  table td {padding: 4px;padding-left: 9px;padding-right: 9px;}
+                  table td {padding: 4px;padding-left: 10px;padding-right: 10px;}
                   table {border-collapse: collapse;}
               </style>
               </head>
@@ -81,69 +42,32 @@
           <table class="sumanth">
           <tr>
               <td>Size:</td>
-              <td>Bhat</td>
-              <td>Size:</td>
-              <td>Bhat</td>
-              <td>Size:</td>
-              <td>Bhat</td>
-              <td>Size:</td>
-              <td>Bhat</td>
-              <td>Size:</td>
-              <td>Bhat</td>
+              <td>2 ANS</td>
+              <td>3 ANS</td>
+              <td>4 ANS</td>
+              <td>5 ANS</td>
+              <td>6 ANS</td>
+              <td>8 ANS</td>
+              <td>10 ANS</td>
+              <td>Total</td>
               </tr>
           <tr>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
-              <td>Bhat</td>
+              <td>ERCU</td>
+              <td>2</td>
+              <td>2</td>
+              <td>2</td>
+              <td>2</td>
+              <td>3</td>
+              <td>3</td>
+              <td>3</td>
+              <td>17</td>
               </tr>
           </table>
           </div>
               </body>
         </html>
  </foreignObject>
-<!--
-<text transform="matrix(1 0 0 1 336.3652 151.6648)" class="st1 st6 st8">1</text>
-<text transform="matrix(1 0 0 1 381.8164 150.8982)" class="st1 st6 st8">16</text>
-<text transform="matrix(1 0 0 1 81.5762 151.575)" class="st1 st6 st8">1</text>
-<text transform="matrix(1 0 0 1 123.8154 151.2361)" class="st1 st6 st8">2</text>
-<text transform="matrix(1 0 0 1 207.9575 151.2361)" class="st1 st6 st8">3</text>
-<text transform="matrix(1 0 0 1 166.3931 151.575)" class="st1 st6 st9">4</text>
-<text transform="matrix(1 0 0 1 251.5488 151.2361)" class="st1 st6 st8">3</text>
-<text transform="matrix(1 0 0 1 294.127 151.2361)" class="st1 st6 st8">2</text>
--->
-<path class="st1" d="M63.67,68.62c0,2.22-0.42,4.35-1.27,6.4c-0.85,2.05-2.06,3.86-3.63,5.43c-1.57,1.57-3.38,2.78-5.43,3.63
-	c-2.05,0.85-4.18,1.27-6.4,1.27c-2.22,0-4.35-0.42-6.4-1.27c-2.05-0.85-3.86-2.06-5.43-3.63c-1.57-1.57-2.78-3.38-3.63-5.43
-	c-0.85-2.05-1.27-4.18-1.27-6.4c0-2.22,0.42-4.35,1.27-6.4c0.85-2.05,2.06-3.86,3.63-5.43c1.57-1.57,3.38-2.78,5.43-3.63
-	c2.05-0.85,4.18-1.27,6.4-1.27c2.22,0,4.35,0.42,6.4,1.27c2.05,0.85,3.86,2.06,5.43,3.63c1.57,1.57,2.78,3.38,3.63,5.43
-	S63.67,66.4,63.67,68.62"/>
-<!--
-<line class="st5" x1="7.41" y1="117.03" x2="417.74" y2="117.03"/>
-<line class="st5" x1="7.41" y1="137.44" x2="417.74" y2="137.44"/>
-<line class="st5" x1="7.41" y1="157.85" x2="417.74" y2="157.85"/>
-<line class="st5" x1="63.55" y1="117.03" x2="63.55" y2="157.85"/>
--->
-<!--
-<text transform="matrix(1 0 0 1 21.1865 132.8445)" class="st6 st10">Size:</text>
-<text transform="matrix(1 0 0 1 69.1636 132.8445)" class="st6 st11">2 ANS</text>
-<text transform="matrix(1 0 0 1 111.0151 132.8445)" class="st6 st11">3 ANS</text>
-<text transform="matrix(1 0 0 1 153.8872 132.8445)" class="st6 st11">4 ANS</text>
-<text transform="matrix(1 0 0 1 195.7388 132.8445)" class="st6 st11">5 ANS</text>
-<text transform="matrix(1 0 0 1 238.6104 132.8445)" class="st6 st11">6 ANS</text>
-<text transform="matrix(1 0 0 1 280.4619 132.8445)" class="st6 st11">8 ANS</text>
-<text transform="matrix(1 0 0 1 320.2725 132.8445)" class="st6 st11">10 ANS</text>
--->
-<text transform="matrix(1 0 0 1 12.5581 31.835)" class="st6 st12">ORCHESTRA</text>
-<text transform="matrix(1 0 0 1 106.75 32.3293)" class="st6 st13">570 BOULEVARD JULES CESAR, ACTIPARC 62 223 SAINT LAURENT BLANGY</text>
-<text transform="matrix(1 0 0 1 232.8337 73.4993)" class="st6 st12">SOUS  VETEMENTS GAPE A1</text>
-<!--
-<text transform="matrix(1 0 0 1 375.0941 132.0633)" class="st14 st6 st11">Total</text>
-<text transform="matrix(1 0 0 1 23.6113 151.0335)" class="st14 st6 st13">ERCU</text>
--->
+
+
+
 </svg>
