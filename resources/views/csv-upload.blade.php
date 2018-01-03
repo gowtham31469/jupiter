@@ -19,6 +19,7 @@
 @endsection
 @section('jqueryIncludes')
 <script type="text/javascript">
+    
     // var csrf_token        = $('meta[name="csrf-token"]').attr('content');
     // var myAwesomeDropzone = new Dropzone("#dropzoneFileUpload", {
     //      url: "multi-upload",

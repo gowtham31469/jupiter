@@ -5,9 +5,11 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
+<!--
                   <ol class="breadcrumb">
                     <li class="active">Dashboard</li>
                   </ol>
+-->
               </div>
           <div class="clearfix"></div>
                 <div class="main-content">
