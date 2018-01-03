@@ -13,14 +13,14 @@ class CreateCustomerBuyersTable extends Migration
      */
     public function up()
     {
-        // Schema::create('customer_buyers', function (Blueprint $table) {
-        //     $table->increments('id');
-        //     $table->integer('customer_id')->unsigned();
-        //     $table->integer('buyer_id')->unsigned();
-        //     $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-        //     $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');
-        //     $table->timestamps();
-        // });
+        Schema::create('customer_buyers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('customer_id')->unsigned();
+            $table->integer('buyer_id')->unsigned();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -169,6 +169,13 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
+                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
                                 {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                                 <div class="input-group">
                                   {!! Form::text('password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
@@ -179,11 +186,13 @@
                               </div>
                             </div>
                             <div class="col-md-6">
-                              <div class="form-group has-feedback">
-                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
-                                <div class="help-block with-errors"></div>
-                              </div>
+                            <div class="form-check form-group has-feedback">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
+                                Proforma Invoice(PI) required ? 
+                              </label>
+                              <div class="help-block with-errors"></div>
+                            </div>
                             </div>
                             </div>
                             <hr>
@@ -378,6 +387,15 @@
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-check form-group has-feedback">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
+                                Proforma Invoice(PI) required ? 
+                              </label>
+                              <div class="help-block with-errors"></div>
+                            </div>
                             </div>
                             </div>
                             <hr>
