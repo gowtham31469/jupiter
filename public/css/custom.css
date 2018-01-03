@@ -812,6 +812,10 @@ ul.customer-select li > a.active {
     color: #ffffff;
     font-weight: bold;
 }
+ul.customer-select li > a.active:hover{
+    color: #333;
+    background: #dddddd;
+}
 ul.customer-select li {
     list-style-type: none;
 
@@ -884,4 +888,8 @@ However, delay the fade out process for 2.5 seconds */
 }
 .btn i{
     margin-right: 5px;
+}
+span.sticker-details {
+    display: inline-block;
+    margin-right: 25px;
 }
