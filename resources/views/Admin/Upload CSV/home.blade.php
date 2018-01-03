@@ -1,4 +1,5 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-md-12 main">
@@ -75,6 +76,7 @@
     window.location = "{{ url('/admin') }}";
 </script>
 @endif @section('jqueryIncludes')
+
 <script type="text/javascript">
         $(document).ready(function(){
         $('.logo').html('Upload CSV');
