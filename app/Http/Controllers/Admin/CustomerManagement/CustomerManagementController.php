@@ -646,4 +646,15 @@ class CustomerManagementController extends Controller
 
     }
 
+    public function templateView(Request $request) {
+          $treeviewData= DB::table("tesco_template")
+                                ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name')
+                                ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
+                                ->join('company','company.id','=','tesco_item_master.company_id')
+                                ->where('item_id',$request['template_id'])
+                                ->get();
+         
+         return json_encode($treeviewData);
+    }
+
 }
