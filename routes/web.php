@@ -205,3 +205,6 @@ Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store'
 // Route::post('multi-upload', 'UploadController@csvMultiUpload');
 /** upload csv **/
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
+
+/** Settings **/
+Route::get('admin/settings', 'Admin\Settings\Orchestra\AgeGroupController@index');

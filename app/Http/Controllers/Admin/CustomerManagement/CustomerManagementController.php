@@ -150,6 +150,7 @@ class CustomerManagementController extends Controller
                 $address_email   = $request['address_email'];
                 $default_address = $request['default_address'];
                 $buyer           = $request['buyer'];
+                $pi_required     = $request['pi_required'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -180,7 +181,8 @@ class CustomerManagementController extends Controller
                                 'tin_number'     => $tin_number,
                                 'gstin_number'   => $gstin_number,
                                 'pan_number'     => $pan_number,
-                                'email'          => $login_email
+                                'email'          => $login_email,
+                                'pi_required'    => $pi_required
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -290,7 +292,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required')
                          ->where('customers.id','=',$id)
                          ->get();
                 if ($customer{0}->password != "" || $customer{0}->password != Null || $customer{0}->password != null || $customer{0}->password != NULL) 
@@ -337,6 +339,7 @@ class CustomerManagementController extends Controller
                     $input['gstin_number']    = Input::get('gstin_number');
                     $input['pan_number']      = Input::get('pan_number');
                     $input['email']           = Input::get('login_email');
+                    $input['pi_required']     = Input::get('pi_required');
                     $input['password']        = Hash::make(Input::get('p'));
                     
                     $contact_person  = Input::get('contact_person');
@@ -383,7 +386,8 @@ class CustomerManagementController extends Controller
                           'gstin_number'   => $input['gstin_number'],
                           'pan_number'     => $input['pan_number'],
                           'email'          => $input['email'],
-                          'password'       => $input['password']
+                          'password'       => $input['password'],
+                          'pi_required'    => $input['pi_required']
                         ]);
                       CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
