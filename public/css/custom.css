@@ -983,3 +983,9 @@ span.sticker-details {
         color: #ffffff;
         border-color: #2196F3;
     }
+   .options{
+            padding: 3px 10px 3px 10px;
+    }
+.table td{
+    vertical-align: middle !important;
+}
