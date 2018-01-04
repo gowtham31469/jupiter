@@ -24,6 +24,7 @@ function orders() {
         success: function (data) {
             if (buyer == "orchestra") {
                 var newObj = data.sticker_orders.concat(data.label_orders);
+                console.log(newObj);
                 $('.main-content').html(table(newObj));
                 $('#datatable-example-2').DataTable({
                     "pageLength": 25
@@ -202,22 +203,109 @@ function orderStatus() {
                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders)));
 
                 $('.main-content').html(table(newObj));
-                $('#datatable-example-2').DataTable({
-                    "pageLength": 25
+                var $tableSel = $('#datatable-example-2');
+                $tableSel.DataTable({
+                    "pageLength": 25,
+                    initComplete: function () {
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="seasonNumber"> <option disabled selected>Select Season</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right">Apply Filter</button><button id="reset" class="btn btn-default input-sm pull-right">Clear</button><div class="clearfix"></div></div></div>');
+
+                        //For Order Status Filter
+                        this.api().columns(2).every( function () {
+                            var column = this;
+                            var select = $('#supplierName')
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+             
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+                            select.append( '<option value=""> </option>' );
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append('<option value="'+d+'">'+d+'</option>')
+                            } );
+                        });
+
+                        //For UVC Number Filter
+                        this.api().columns(0).every( function () {
+                            var column = this;
+                            var select = $('#uvcNumber')
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+             
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+                            select.append( '<option value=""> </option>' );
+                            column.data().unique().sort().each( function ( d, j ) {
+                                console.log(d,j);
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        });
+
+                        //For Season Filter
+                        this.api().columns(3).every( function () {
+                            var column = this;
+                            var select = $('#seasonNumber')
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+             
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+                            select.append( '<option value=""> </option>' );
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        });
+                    }
                 });
-                $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-                $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker"> <option disabled selected>Select Order Status</option> <option>Ketchup</option> <option>Relish</option></select></div><div class="col-md-3"><select class="selectpicker"> <option disabled selected>Select UVC</option> <option>Ketchup</option> <option>Relish</option></select></div><div class="col-md-3"><select class="selectpicker"> <option disabled selected>Select Season</option> <option>Ketchup</option> <option>Relish</option></select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right">Apply Filter</button><button id="reset" class="btn btn-default input-sm pull-right">Clear</button><div class="clearfix"></div></div></div>');
+
                 $("#reset").on("click", function () {
-                   $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh') ;
+                    $('.selectpicker').selectpicker('val', 1);
+                    $('.selectpicker').selectpicker('refresh');
+                    // Clear the filter. Unlike normal filters in Datatables,
+                    // custom filters need to be removed from the afnFiltering array.
+                    $.fn.dataTableExt.afnFiltering.length = 0;
+                    $tableSel.dataTable().fnDraw();
                 });
+
                 $('.selectpicker').selectpicker();
-                $('input[name="daterange"]').daterangepicker();
+
+
+                $('input[name="daterange"]').daterangepicker({
+
+                    },
+                    function(start, end, label) {
+                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                        filterByDate(4, start, end); // We call our filter function
+                        $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
+                });
+
+
+                // Clear the filter. Unlike normal filters in Datatables,
+                // custom filters need to be removed from the afnFiltering array.
+                $('.cancelBtn').on('click', function(e){
+                    e.preventDefault();
+                    $.fn.dataTableExt.afnFiltering.length = 0;
+                    $tableSel.dataTable().fnDraw();
+                });
                 $("#datatable-example-2_filter input").addClass('form-control input-sm');
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
-            } else {}
+            } else {
+
+            }
         },
         error: function (data) {
 
@@ -231,6 +319,38 @@ function orderStatus() {
 
 function showFilter() {
     $('.filter-window').toggle();
+}
+
+/* Our main filter function
+ * We pass the column location, the start date, and the end date
+ */
+var filterByDate = function(column, startDate, endDate) {
+  // Custom filter syntax requires pushing the new filter to the global filter array
+        $.fn.dataTableExt.afnFiltering.push(
+            function( oSettings, aData, iDataIndex ) {
+                var rowDate = normalizeDate(aData[column]),
+              start = normalizeDate(startDate),
+              end = normalizeDate(endDate);
+          
+          // If our date from the row is between the start and end
+          if (start <= rowDate && rowDate <= end) {
+            return true;
+          } else if (rowDate >= start && end === '' && start !== ''){
+            return true;
+          } else if (rowDate <= end && start === '' && end !== ''){
+            return true;
+          } else {
+            return false;
+          }
+        }
+        );
+    };
+
+// converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220
+var normalizeDate = function(dateString) {
+  var date = new Date(dateString);
+  var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
+  return normalized;
 }
 
 function table(data) {
@@ -268,7 +388,7 @@ function table(data) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+                    tr += '<td align="center">' + value[key] + '</td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
                 } else {
