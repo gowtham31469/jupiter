@@ -1,12 +1,15 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-md-12 main">
             <div class="top-content">
+<!--
                 <ol class="breadcrumb">
                     <li><a href="/admin/dashboard">Dashboard</a></li>
                     <li class="active">Upload CSV</li>
                 </ol>
+-->
             </div>
             <div class="main-content">
                 <div class="row">
@@ -73,7 +76,11 @@
     window.location = "{{ url('/admin') }}";
 </script>
 @endif @section('jqueryIncludes')
+
 <script type="text/javascript">
+        $(document).ready(function(){
+        $('.logo').html('Upload CSV');
+    })
     Dropzone.options.labelDetails = {
       // Prevents Dropzone from uploading dropped files immediately
         url:"order-management/multi-upload",
