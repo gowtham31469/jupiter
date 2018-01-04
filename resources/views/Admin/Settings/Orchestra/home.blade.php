@@ -15,90 +15,79 @@
         <div class="select-buyer">
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
-        <!--metadata design - Akshay Bhat -->
-        <div class="sidebar style-4">
-            <h4>Metadata</h4>
-            <ul class="customer-select">
-                <li><a class="active">Garments</a></li>
-                <li><a>size chart</a></li>
-                <li><a>countries</a></li>
-                <li><a>Product family</a></li>
-                <li><a>Special Instructions</a></li>
-                <li><a>Compositions</a></li>
-                <li><a>Parts</a></li>
-                <li><a>age group</a></li>
-                <li><a>Season</a></li>
-                <li><a>Region</a></li>
-                <li><a>Flags</a></li>
-                <li><a>Items</a></li>
-                <li><a>Cylinder Radius</a></li>
-            </ul>
-        </div>
-        <div class="template-block">
-            <div class="top-content">
-                <h3 class="content-heading">Garments - Metadata</h3>
-            </div>
-            <div class="table-responsive">
-               
-                <table class="table table-bordered">
-                    <caption><span>Some Sample text</span>  <button class="btn btn-primary btn-sm pull-right">Add data</button></caption>
-
-                    <thead>
-                        <tr>
-                            <th>Data 1</th>
-                            <th>Data 2</th>
-                            <th>Data 3</th>
-                            <th>Data 4</th>
-                            <th>Data 5</th>
-                            <th>Operations</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 4</td>
-                            <td>Data 5</td>
-                            <td><button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 4</td>
-                            <td>Data 5</td>
-                            <td><button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 4</td>
-                            <td>Data 5</td>
-                            <td><button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
-                        </tr>
-                        <tr>
-                            <td>Data 1</td>
-                            <td>Data 2</td>
-                            <td>Data 3</td>
-                            <td>Data 4</td>
-                            <td>Data 5</td>
-                            <td><button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button class="filterbtn options" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
-
-        <!--metadata design - Akshay Bhat -->
     </div>
+    {{-- Add Orchestra Garments Modal --}}
+    <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraGarmentsLabel">Add Garment</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('garment_name', 'Garment Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add Garment', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Garment</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_orchestra_garments_id',$value = null, array('id'=>'edit_orchestra_garments_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_garment_name', 'Garment Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Edit Garment', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+   <div class="modal fade" id="deleteOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Garment</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_garment_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra garment. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_garment_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete Garment', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+    <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -118,7 +107,7 @@
             if (localStorage.getItem("buyer") === null) {
 
             } else {
-                // orders();
+                settings();
             }
             $('.buyer-select').val(localStorage.getItem("buyer_id"))
             $('.buyer-nav-select .buyer-select').selectpicker({
@@ -126,51 +115,75 @@
                 size: 4
             });
             $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-                if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                if ($('.buyer-nav-select .buyer-select option:selected').val() != "") 
+                {
                     localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                     localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: base_url + "/admin/order-management/order_sub_modules",
-                        type: "Post",
-                        dataType: "json",
-                        data: {
-                            _token: csrf_token,
-                            buyer: $(this).find("option:selected").text().toLowerCase()
-                        },
-                        beforeSend: function() {
-
-                        },
-                        success: function(data) {
-
-                            orders();
-                        },
-                        error: function(data) {
-
-                        },
-                        complete: function() {
-                            $(".loader").hide();
-                            $(".loader").css('margin-top', '0%');
-                        }
-                    })
-                } else {
+                    settings();
+                } 
+                else 
+                {
                     localStorage.removeItem("buyer");
                     localStorage.removeItem("buyer_id");
                     location.reload()
                 }
             });
-            $(".order_type").change(function() {
-                var selectedType = $(".order_type option:selected").val();
-                if (selectedType === '1') {
-                    $("#single_file").removeClass("hidden");
-                    $("#multiple_file").removeClass("hidden");
-                } else {
-                    $("#single_file").addClass("hidden");
-                    $("#multiple_file").addClass("hidden");
-                }
+        /** Add orchestra garment form validation **/
+        $('#add_orchestra_garments_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
-            });
-        });
+        }
+        else
+        {
+           e.preventDefault();
+           addOrchestraGarments();
+        }
+      })
+      /** To refresh modal **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#add_orchestra_garments_form').trigger("reset");
+       })
+      /** get edit orchestra garment details **/
+       $(document).on('click','.edit-orchestra-garments',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           getOrchestraGarmentById(id);
+       });
+       /** submit edit orchestra garment form **/
+       $('#edit_orchestra_garments_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            editOrchestraGarments();
+         }
+       })
+       /** assign id for delete modal **/
+       $('#deleteOrchestraGarmentsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_garment_id').attr('value', config);
+       });
+       /** submit delete orchestra garment form **/
+       $('#delete_orchestra_garment_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_orchestra_garment_id').val();
+            deleteOrchestraGarment(id);
+         }
+       })
+       $('.meta-data-list').on('click', 'li', function() {
+                alert('Nobody Wins!');
+        })
+    });
     </script>
 
     @endsection
