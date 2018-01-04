@@ -43,6 +43,7 @@ Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orch
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
+Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');

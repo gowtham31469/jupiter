@@ -108,53 +108,8 @@ class OrderController extends Controller
 //        PDF::AddPage(); public_path('/storage/app/template/std-carton-sticker-02.svg')
 //        PDF::ImageSVG($file = url('/storage/app/template/std-carton-sticker-02.svg'), $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
 //        PDF::Output('solid.pdf', 'D');
-        
-        
-        
-        
-        
-             
-//            $svg=urldecode($request->svg);
-//         define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//         define ('PDF_FONT_NAME_DATA', 'calibrib');
-////          print_r($svg);
-//        PDF::setImageScale(1);
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
-//        PDF::SetFont('calibrib');
-//        PDF::AddPage();
-//        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-//          $tbl = '<table  border="1" cellpadding="1" cellspacing="1">
-//              <tr>
-//                          <td>Size:</td>
-//                          <td>2 ANS</td>
-//                          <td>3 ANS</td>
-//                          <td>4 ANS</td>
-//                          <td>5 ANS</td>
-//                          <td>6 ANS</td>
-//                          <td>8 ANS</td>
-//                          </tr>
-//                      <tr>
-//                          <td>ERCU</td>
-//                          <td>2</td>
-//                          <td>2</td>
-//                          <td>2</td>
-//                          <td>2</td>
-//                          <td>3</td>
-//                          <td>3</td>
-//                          </tr>
-//            </table>';
-//        PDF::SetFillColor(255, 255, 255);
-//        PDF::SetTextColor(0, 0, 0);
-//
-//        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-//        PDF::writeHTMLCell(147, '', '12', '100', $tbl, '', 1, 1, true, '', true);
-//
-//       
-//        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-//        print_r(url('/storage/app/template/solid1.pdf'));
-        
-            $svg=urldecode($request->svg);
+    
+         $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
@@ -167,6 +122,101 @@ class OrderController extends Controller
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
+    } 
+    public function printPdfTable(Request $request)
+    {
+      
+        
+//        $svg=$request->svg;
+//        $html_content="hai";
+//        PDF::SetTitle('sample pdf');
+//        PDF::SetFont('calibrib');
+//        PDF::AddPage(); public_path('/storage/app/template/std-carton-sticker-02.svg')
+//        PDF::ImageSVG($file = url('/storage/app/template/std-carton-sticker-02.svg'), $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+//        PDF::Output('solid.pdf', 'D');
+    
+        
+         $svg=urldecode($request->svg);
+         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+         define ('PDF_FONT_NAME_DATA', 'calibrib');
+//          print_r($svg);
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        $td_size="";
+        $td_col="";
+        $total=0;
+        $size=explode(',',$request->size);
+        $qty=explode(',',$request->qty);
+        $i=0;
+        foreach($size as $val)
+        {
+            if($val != "")
+            {
+                $td_size.="<td>".$val."</td>";
+                $td_col.="<td>".$qty[$i]."</td>";
+            }
+            $total+=$qty[$i];
+            $i++;
+        }
+          $tbl = '<table  border="0.5" style="text-align:center">
+              <tr>
+                          <td>Size:</td>
+                          '.$td_size.'
+                          <td>Total</td>
+                          </tr>
+                      <tr>
+                          <td>ERCU</td>
+                          '.$td_col.'
+                          <td>'.$total.'</td>
+                          </tr>
+            </table>';
+        PDF::SetFillColor(255, 255, 255);
+        PDF::SetTextColor(0, 0, 0);
+        
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::writeHTMLCell(147, '', '11.5', '55', $tbl, '', 1, 1, true, '', true);
+        
+  
+        
+        $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 'auto',
+            'vpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'calibrib',
+            'fontsize' => 12,
+            'stretchtext' => 4
+        );
+         PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
+
+       
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
+        
+//            $svg=urldecode($request->svg);
+//         define ('PDF_FONT_NAME_MAIN', 'calibrib');
+//         define ('PDF_FONT_NAME_DATA', 'calibrib');
+////          print_r($svg);
+//        PDF::setImageScale(1);
+//        PDF::setPrintHeader(false);
+//        PDF::setPrintFooter(false);
+//        PDF::SetFont('calibrib');
+//        PDF::AddPage();
+//        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+//        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+//        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+//        print_r(url('/storage/app/template/solid1.pdf'));
     }
      public function printPdfSmall(Request $request)
     {

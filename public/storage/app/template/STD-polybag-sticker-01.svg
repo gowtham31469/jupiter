@@ -3,7 +3,7 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 411 269.3" style="enable-background:new 0 0 411 269.3;" xml:space="preserve">
 
-<rect style="fill:#FFFFFF;" width="411" height="269.3"/>
+
 <rect x="-7.1" y="-7.1" style="display:none;fill:#FFFFFF;" width="425" height="283"/>
 <!--
 <image style="overflow:visible;" width="679" height="396" xlink:href="DD6C6FE0.png"  transform="matrix(0.2226 0 0 0.1861 128.9704 173.0472)">
@@ -31,7 +31,7 @@
       <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
               <style>
-              .sumanth{font-size:9px; width: 105%;}
+              .cartontable{font-size:9px; width: 105%;font-family:'Calibri-Bold';font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif !important; font-weight:bold;}
                   table td{border:0.5px solid #000;   }
                   table td {padding: 4px;padding-left: 10px;padding-right: 10px;}
                   table {border-collapse: collapse;}
@@ -39,7 +39,7 @@
               </head>
           <body>
                <div >
-          <table class="sumanth">
+          <table class="cartontable" id="cartontable">
           <tr>
               <td>Size:</td>
               <td>2 ANS</td>
