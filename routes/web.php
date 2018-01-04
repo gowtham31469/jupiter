@@ -209,4 +209,9 @@ Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store'
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
 
 /** Settings **/
-Route::get('admin/settings', 'Admin\Settings\Orchestra\AgeGroupController@index');
+Route::get('admin/settings', 'Admin\Settings\Orchestra\OrchestraSettings@index');
+Route::post('admin/orchestra/settings', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
+Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
+Route::get('admin/orchestra/get-orchestra-garments-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraGarmentsById');
+Route::put('admin/orchestra/update-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraGarmentsById');
+Route::delete('admin/orchestra/delete-orchestra-garment', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraGarmentsById');
