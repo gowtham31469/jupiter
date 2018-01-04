@@ -39,11 +39,12 @@ class AgeGroupController extends Controller
         if($is_allowed)
         {
             $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(3);
+            $get_sub_module = $module_var->getSubModules(40);
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
-            return view('Admin/Buyer Management/home');
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/Settings/Orchestra/home')->with(['buyers' => $buyers]);
         }
         else
         {
