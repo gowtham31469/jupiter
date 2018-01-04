@@ -48,28 +48,11 @@ function settings() {
                 $('.main-content').html(tesco_metadata)
             }
             /** make side bar active  */
-    //         $('.meta-data-list').on('click', 'li', function() {
-    //             $('.meta-data-list li a').removeClass('active');
-    //             localStorage.setItem("metadata_id", this.id);
-    //             $(this).find('a').addClass('active');
-    //             var meta_data = localStorage.getItem("metadata_id");
-				// switch (meta_data) { 
-				// 	case '1': 
-				// 		alert('jQuery Wins!');
-				// 		break;
-				// 	case '2': 
-				// 		alert('prototype Wins!');
-				// 		break;
-				// 	case '3': 
-				// 		alert('mootools Wins!');
-				// 		break;		
-				// 	case '4': 
-				// 		alert('dojo Wins!');
-				// 		break;
-				// 	default:
-				// 		alert('Nobody Wins!');
-				// }
-    //         })
+            $('.meta-data-list').on('click', 'li', function() {
+                $('.meta-data-list li a').removeClass('active');
+                localStorage.setItem("metadata_id", this.id);
+                $(this).find('a').addClass('active');
+            })
 
         },
         error: function (data) {
