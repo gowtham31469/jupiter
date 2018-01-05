@@ -2,7 +2,6 @@
  * @author <praveen>
  */
 
-
 var isSubmitting = false;
 /**
   * Function to Settings home page
@@ -12,9 +11,9 @@ function settings() {
   try{
     $('.main-content').html('<div class="loader"></div>');
     /** Orchestra metadata sidebar */
-    var orchestra_metadata = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1"><a class="active">Garments</a></li><li id="2"  onclick="orchestraSizeChart()"><a>size chart</a></li><li id="3" onclick="orchestraCountries()"><a>countries</a></li><li id="4" onclick="orchestraProductFamily()"><a>Product family</a></li><li id="5" onclick="orchestraSpecialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="orchestraCompositions()"><a>Compositions</a></li><li id="7" onclick="orchestraParts()"><a>Parts</a></li><li id="8" onclick="orchestraAgeGroup()"><a>age group</a></li><li id="9" onclick="orchestraSeason()"><a>Season</a></li><li id="10" onclick="orchestraRegion()"><a>Region</a></li><li id="11" onclick="orchestraFlags()"><a>Flags</a></li><li id="12" onclick="orchestraItems()"><a>Items</a></li><li id="13" onclick="orchestraCylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
     /** Tesco metadata sidebar */
-    var tesco_metadata = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1"><a class="active">Garments</a></li><li id="2"  onclick="tescoSizeChart()"><a>size chart</a></li><li id="3" onclick="tescoCountries()"><a>countries</a></li><li id="4" onclick="tescoProductFamily()"><a>Product family</a></li><li id="5" onclick="tescoSpecialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="tescoCompositions()"><a>Compositions</a></li><li id="7" onclick="tescoParts()"><a>Parts</a></li><li id="8" onclick="tescoAgeGroup()"><a>age group</a></li><li id="9" onclick="tescoSeason()"><a>Season</a></li><li id="10" onclick="tescoRegion()"><a>Region</a></li><li id="11" onclick="tescoFlags()"><a>Flags</a></li><li id="12" onclick="tescoItems()"><a>Items</a></li><li id="13" onclick="tescoCylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -31,13 +30,14 @@ function settings() {
         success: function (data) {
             if (buyer == "orchestra") 
             {
-                orchestra_metadata += '<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garments</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
 	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraGarmentsModal" ></i></a></td></tr>';
 	             });
 	             orchestra_metadata += '</tbody></table></div>';
 	             $('.main-content').html(orchestra_metadata)
+               
 	              $('#orchestra-garments-list-table').DataTable();
 	              $("#orchestra-garments-list-table_filter input").addClass('form-control input-sm');
 	              $("#orchestra-garments-list-table_filter input").attr('placeholder', 'Data Search');
@@ -47,12 +47,6 @@ function settings() {
             {
                 $('.main-content').html(tesco_metadata)
             }
-            /** make side bar active  */
-            $('.meta-data-list').on('click', 'li', function() {
-                $('.meta-data-list li a').removeClass('active');
-                localStorage.setItem("metadata_id", this.id);
-                $(this).find('a').addClass('active');
-            })
 
         },
         error: function (data) {
@@ -101,7 +95,7 @@ function showSnackbar() {
              },
              statusCode: {
                   200: function() {
-                       $('.snackbar_span').html("Garments Added Successfully");
+                       $('.snackbar_span').html("Garment Added Successfully");
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraGarmentsModal').modal('hide');
@@ -131,7 +125,6 @@ function showSnackbar() {
    * @author <praveen>
    *
    */
-  
   function getOrchestraGarmentById(id)
   {
     try{
@@ -192,7 +185,7 @@ function showSnackbar() {
            data:{_token:csrf_token,id:id,name:name},
            statusCode: {
                 200: function() {
-                       $('.snackbar_span').html("Garments Updated Successfully");
+                       $('.snackbar_span').html("Garment Updated Successfully");
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraGarmentsModal').modal('hide');
@@ -256,27 +249,247 @@ function showSnackbar() {
 	 console.log("Error:"+e)
   }
   }
-function orchestraSizeChart() {
-  try{
-    alert('orchestraSizeChart')
-    
-    } catch (e) {
+  /**
+  * To delete orchestra garment
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function ageGroup() {
+    try{
+      $('.main-content').html('<div class="loader"></div>');
+      /** Orchestra metadata sidebar */
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+      /** Tesco metadata sidebar */
+      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+      var buyer = localStorage.getItem("buyer");
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/" + buyer + "/settings/age-group",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          beforeSend: function () {
+              $(".loader").show();
+              $(".loader").css('margin-top', '12%');
+          },
+          success: function (data) {
+              if (buyer == "orchestra") 
+              {
+                  var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
+                 $.each(data.orchestra_agegroups, function(i, item){
+                  var index = i+1;
+                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraAgeGroupModal" ></i></a></td></tr>';
+                 });
+                 orchestra_metadata += '</tbody></table></div>';
+                 $('.main-content').html(orchestra_metadata)
+                 
+                  $('#orchestra-age-group-list-table').DataTable();
+                  $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
+                  $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
+                  $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
+              } 
+              else 
+              {
+                  $('.main-content').html(tesco_metadata)
+              }
+              
+              /** make side bar active  */
+               $('.meta-data-list li').on('click', function () {
+                $(this).siblings().removeClass('active');
+                $(this).addClass('active');
+               });
+
+          },
+          error: function (data) {
+
+          },
+          complete: function () {
+              $(".loader").hide();
+              $(".loader").css('margin-top', '0%');
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+  /**
+  * Adds a orchestra age group.
+  * @author <praveen>
+  */
+ function addOrchestraAgegroup()
+ {
+    try{
+         var name       = $('#age_group_name').val();
+         var color       = $('#color_name').val();
+         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+         $.ajax({
+             url: base_url + "/admin/orchestra/add-orchestra-agegroup",
+             method: 'POST',
+             data: {_token:csrf_token,name:name,color:color},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             statusCode: {
+                  200: function() {
+                       $('.snackbar_span').html("Age Group Added Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#addOrchestraAgeGroupModal').modal('hide');
+                       ageGroup()
+                  },
+                  400: function() {
+                       $('.snackbar_span').html("Something went wrong!!");
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
+                  }
+             },
+             error: function (data) {
+                console.log(data);
+             },
+             complete: function () {
+                       $(".loader").hide();
+                       $(".loader").css('margin-top','0%');
+             }
+         })
+     } catch (e) {
      console.log("Error:"+e)
    }
-}
-function orchestraCountries() {
-  try{
-    alert('orchestraCountries')
-    
-    } catch (e) {
+  }
+  /**
+   * Function for get orchestra age group details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getOrchestraAgeGroupById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-agegroup-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_agegroup_id').val(id);
+                 $('#edit_age_group_name').val(data.orchestra_age_group[0].age_group_name); 
+                 $('#edit_color_name').val(data.orchestra_age_group[0].color);
+                 $('#editOrchestraAgeGroupModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_orchestra_agegroup_form').validator('validate');
+                 $('#editOrchestraAgeGroupModal').modal('show');
+             },
+             error: function (data) {
+                  console.log(data);
+             },
+             complete: function () {
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
+             }
+         })
+   } catch (e) {
      console.log("Error:"+e)
    }
-}
-function orchestraProductFamily() {
+  }
+  /**
+  * Function for edit orchestra age-group details
+  * @author <praveen>
+  */
+ function editOrchestraAgeGroup()
+ {
   try{
-    alert('orchestraProductFamily')
-    
-    } catch (e) {
+       var id         = $('#edit_orchestra_agegroup_id').val();
+       var name       = $('#edit_age_group_name').val();
+       var color      = $('#edit_color_name').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-agegroup",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,name:name,color:color},
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Age Group Updated Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#editOrchestraAgeGroupModal').modal('hide');
+                       ageGroup()
+                  }
+           },
+           error: function (data) {
+                console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+   } catch (e) {
      console.log("Error:"+e)
    }
-}
+ } 
+ /**
+  * To delete orchestra age-group
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function deleteOrchestraAgeGroup(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/delete-orchestra-agegroup",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('.snackbar_span').html('Age Group deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
+                     $('#deleteOrchestraAgeGroupModal').modal('hide');
+                     ageGroup();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+   console.log("Error:"+e)
+  }
+  }
+ 

@@ -215,3 +215,8 @@ Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\
 Route::get('admin/orchestra/get-orchestra-garments-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraGarmentsById');
 Route::put('admin/orchestra/update-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraGarmentsById');
 Route::delete('admin/orchestra/delete-orchestra-garment', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraGarmentsById');
+Route::post('admin/orchestra/settings/age-group', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraAgeGroup');
+Route::post('admin/orchestra/add-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraAgeGroup');
+Route::get('admin/orchestra/get-orchestra-agegroup-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraAgeGroupById');
+Route::put('admin/orchestra/update-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraAgeGroupById');
+Route::delete('admin/orchestra/delete-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraAgegroupsById');

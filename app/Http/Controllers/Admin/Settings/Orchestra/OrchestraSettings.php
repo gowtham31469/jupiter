@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\OrchestraGarments;
+use App\OrchestraAgeGroup;
 /**
  * Orchestra Age Group controller
  * @author <Praveen>
@@ -137,25 +138,137 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
-     * function to delete buyer by id.
-     * @param buyer id
+     * function to delete garment by id.
+     * @param garment id
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
     public function deleteOrchestraGarmentsById(Request $request)
     {
       try {
-                $id        = $request['id'];
-                $deleted = OrchestraGarments::where('id', '=', $id)
-                            ->delete();
-                if($deleted != '')
-                {
-                  $result = response()->json(['error'=> false,'message' =>'success'],200);
-                }
-                else
-                {
-                  $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                }
+            $id        = $request['id'];
+            $deleted = OrchestraGarments::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+    /**
+     * Orchestra metadata age group list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function orchestraAgeGroup()
+    {
+      try {
+            $orchestra_agegroups = DB::table('orchestra_age_group')->select('id','age_group_name','color')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'orchestra_agegroups' => $orchestra_agegroups]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+    /**
+     * Add orchestra age group.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrchestraAgeGroup(Request $request)
+    {
+        try {
+            $inserted = OrchestraAgeGroup::create([
+                        'age_group_name' => $request['name'],
+                        'color'          => $request['color']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Get orchestra age group details by ID for editing.
+     * @param orchestra age-group id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrchestraAgeGroupById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $orchestra_age_group = DB::table('orchestra_age_group')->select('id','age_group_name','color')->where('orchestra_age_group.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'orchestra_age_group' => $orchestra_age_group]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update garment by id.
+    * @param garment id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateOrchestraAgeGroupById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $name      = $request['name'];
+          $color     = $request['color'];          
+          OrchestraAgeGroup::where('id',$id)
+           ->update([
+             'age_group_name' => $name,
+             'color'          => $color
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * function to delete age group by id.
+     * @param age group id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteOrchestraAgegroupsById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = OrchestraAgeGroup::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
           } catch (\Exception $e)
           {
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
