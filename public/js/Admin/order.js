@@ -209,7 +209,7 @@ function orderStatus() {
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right">Apply Filter</button><button id="reset" class="btn btn-default input-sm pull-right">Clear</button><div class="clearfix"></div></div></div>');
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
                         //For Custom Filters
                         this.api().columns().every( function (i) {
@@ -250,12 +250,16 @@ function orderStatus() {
                 });
 
                 $("#reset").on("click", function () {
-                    $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh');
-                    // Clear the filter. Unlike normal filters in Datatables,
-                    // custom filters need to be removed from the afnFiltering array.
+                    $('#uvcNumber').val('').change();
+                    $('#supplierName').val('').change();
+                    $('#selectStatus').val('').change();
                     $.fn.dataTableExt.afnFiltering.length = 0;
                     $tableSel.dataTable().fnDraw();
+                    $('input[name="daterange"]').val('Filter by Order Date');
+                    $( 'input[name="daterange"]' ).datepicker("refresh");
+                    $('.selectpicker').selectpicker('val', 1);
+                    $('.selectpicker').selectpicker('refresh');
+                    
                 });
 
                 $('.selectpicker').selectpicker();
@@ -269,6 +273,8 @@ function orderStatus() {
                         filterByDate(4, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                 });
+
+                $('input[name="daterange"]').val('Filter by Order Date');
 
 
                 // Clear the filter. Unlike normal filters in Datatables,
