@@ -9,6 +9,7 @@
                     @endforeach
               </select>
         </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
     <div class="main-content">
@@ -25,6 +26,11 @@
     <script src="{{ asset('js/Admin/pricing.js') }}"></script>
     <script>
         $(document).ready(function() {
+        	var buyer_count = $('#invisible__count_id').val();
+        	if(buyer_count == 1)
+        	{
+        		 
+        	}
             $('.select-buyer').click(function() {
                 $('.select-buyer').addClass('hidden');
             })
