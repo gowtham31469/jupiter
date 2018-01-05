@@ -209,13 +209,25 @@ function orderStatus() {
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="seasonNumber"> <option disabled selected>Select Season</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right">Apply Filter</button><button id="reset" class="btn btn-default input-sm pull-right">Clear</button><div class="clearfix"></div></div></div>');
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right">Apply Filter</button><button id="reset" class="btn btn-default input-sm pull-right">Clear</button><div class="clearfix"></div></div></div>');
 
-                        //For Order Status Filter
-                        this.api().columns(2).every( function () {
+                        //For Custom Filters
+                        this.api().columns().every( function (i) {
                             var column = this;
-                            var select = $('#supplierName')
-                                .on( 'change', function () {
+                            if(i === 0 || i === 2 || i === 6) {
+                                var select;
+                                switch(i) {
+                                    case 0:
+                                        select = $('#uvcNumber')
+                                        break;
+                                    case 2:
+                                        select = $('#supplierName')
+                                        break;
+                                    case 6:
+                                        select = $('#selectStatus')
+                                        break;
+                                }
+                                select.on( 'change', function () {
                                     var val = $.fn.dataTable.util.escapeRegex(
                                         $(this).val()
                                     );
@@ -223,51 +235,17 @@ function orderStatus() {
                                     column
                                         .search( val ? '^'+val+'$' : '', true, false )
                                         .draw();
-                                } );
-                            select.append( '<option value=""> </option>' );
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append('<option value="'+d+'">'+d+'</option>')
-                            } );
+                                });
+                                select.append( '<option value=""> </option>' );
+                                column.data().unique().sort().each( function ( d, j ) {
+                                    cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
+                                    select.append('<option value="'+cleanText+'">'+cleanText+'</option>')
+                                });
+                            }
+                            
                         });
 
-                        //For UVC Number Filter
-                        this.api().columns(0).every( function () {
-                            var column = this;
-                            var select = $('#uvcNumber')
-                                .on( 'change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-             
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false )
-                                        .draw();
-                                } );
-                            select.append( '<option value=""> </option>' );
-                            column.data().unique().sort().each( function ( d, j ) {
-                                console.log(d,j);
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
-                        });
-
-                        //For Season Filter
-                        this.api().columns(3).every( function () {
-                            var column = this;
-                            var select = $('#seasonNumber')
-                                .on( 'change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-             
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false )
-                                        .draw();
-                                } );
-                            select.append( '<option value=""> </option>' );
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
-                        });
+                        
                     }
                 });
 
@@ -388,7 +366,7 @@ function table(data) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-                    tr += '<td align="center">' + value[key] + '</td>';
+                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
                 } else {
