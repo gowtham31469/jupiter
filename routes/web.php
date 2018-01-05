@@ -32,7 +32,6 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
-Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 
 
 
@@ -114,10 +113,7 @@ Route::group(['middleware' => 'customer_guest'], function()
 Route::group(['middleware' => 'customer_auth'], function()
 {
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
-	Route::get('/customer/dashboard', function(){
-	  return view('customer.home');
-	});
-
+	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 });
 
 
