@@ -215,4 +215,14 @@ Route::post('admin/orchestra/settings/age-group', 'Admin\Settings\Orchestra\Orch
 Route::post('admin/orchestra/add-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraAgeGroup');
 Route::get('admin/orchestra/get-orchestra-agegroup-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraAgeGroupById');
 Route::put('admin/orchestra/update-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraAgeGroupById');
-Route::delete('admin/orchestra/delete-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraAgegroupsById');
+Route::delete('admin/orchestra/delete-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraAgeGroupsById');
+Route::post('admin/orchestra/settings/countries', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraCountries');
+Route::post('admin/orchestra/add-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraCountry');
+Route::get('admin/orchestra/get-orchestra-country-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraCountryById');
+Route::put('admin/orchestra/update-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraCountryById');
+Route::delete('admin/orchestra/delete-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraCountryById');
+Route::post('admin/orchestra/settings/productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraProductFamily');
+Route::post('admin/orchestra/add-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraProductFamily');
+Route::get('admin/orchestra/get-orchestra-productfamily-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraProductFamilyById');
+Route::put('admin/orchestra/update-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraProductFamilyById');
+Route::delete('admin/orchestra/delete-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraProductFamilyById');
