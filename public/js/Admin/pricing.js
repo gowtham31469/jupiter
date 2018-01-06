@@ -83,7 +83,7 @@ function price_template_list() {
                     localStorage.setItem("template_id", data.node.id);
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: base_url + "/admin/" + buyer + "/template-management/template-view",
+                        url: base_url + "/admin/" + buyer + "/customer-management/template-view",
                         type: "Post",
                         dataType: "json",
                         data: {

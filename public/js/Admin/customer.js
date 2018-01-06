@@ -42,13 +42,13 @@
                    }
                    if(item.is_active === 1)
                    {
-                    table += '<td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
                    }
                    else
                    {
-                    table += '<td><a href="#"><i class="fa fa-check fa-lg fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
                    }
-                   table += '<a href="#"><i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+                   table += '<a href="#"><i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
                 });
                 table += '</tbody></table></div>';
                 $('.main-content').html(table);
@@ -86,6 +86,7 @@ function addCustomer()
         var login_email     =  $('#login_email').val();
         var password        =  $('#password').val();
         var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
+        var pi_required     =  $('#pi_required').is(':checked')?1:0;
 
         var contact_person  = [];
         var contact_phone   = [];
@@ -184,7 +185,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer,pi_required:pi_required},
             beforeSend: function () {
               $(".loader").show();
               $(".loader").css('margin-top','12%');
@@ -568,6 +569,14 @@ function addCustomer()
                   $('#edit_gstin_number').val(data.customers[0].gstin_number);
                   $('#edit_pan_number').val(data.customers[0].pan_number);
                   $('#edit_login_email').val(data.customers[0].email);
+                  if(data.customers[0].pi_required === 1)
+                  {
+                    $('#edit_pi_required').prop('checked', true);
+                  }
+                  else
+                  {
+                    $('#edit_pi_required').prop('checked', false);
+                  }
                   if(data.customers[0].password === 1)
                    {
                     $('.edit_pwd').addClass('hidden');
@@ -825,6 +834,7 @@ function addCustomer()
           var login_email     =  $('#edit_login_email').val();
           var password        =  $('#edit_password').val();
           var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
+          var pi_required     =  $('#edit_pi_required').is(':checked')?1:0;
 
           var contact_person  = [];
           var contact_phone   = [];
@@ -924,7 +934,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password,pi_required:pi_required},
               beforeSend: function () {
                 $(".loader").show();
                 $(".loader").css('margin-top','12%');
@@ -936,11 +946,6 @@ function addCustomer()
                         showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
-                   },
-                   400: function() {
-                        $('.snackbar_span').html('Something went wrong');
-                        $('#snackbar').css('background-color','#F44336');
-                        showSnackbar();
                    },
                    409: function() {
                         $('#customer_upadte_result').removeAttr('style');

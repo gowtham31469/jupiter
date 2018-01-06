@@ -32,7 +32,6 @@ $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
-Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 
 
 
@@ -43,6 +42,7 @@ Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orch
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
+Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -79,6 +79,7 @@ Route::get('admin/customer-management/pricing-taxation','Admin\CustomerManagemen
 Route::get('admin/customer-management/get-buyers-customers','Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
 Route::post('admin/customer-management/save-price-tax', 'Admin\CustomerManagement\CustomerManagementController@savePriceTax');
 Route::get('admin/customer-management/get-price-tax', 'Admin\CustomerManagement\CustomerManagementController@getPriceTax');
+Route::post('admin/tesco/customer-management/template-view', 'Admin\CustomerManagement\CustomerManagementController@templateView');
 
 
 
@@ -112,10 +113,7 @@ Route::group(['middleware' => 'customer_guest'], function()
 Route::group(['middleware' => 'customer_auth'], function()
 {
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
-	Route::get('/customer/dashboard', function(){
-	  return view('customer.home');
-	});
-
+	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 });
 
 
@@ -212,3 +210,28 @@ Route::post('admin/upload-label-details', 'Admin\UploadCSV\UploadCsvController@u
 Route::post('admin/upload-parcel-details-file-one','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileOne');
 Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileTwo');
 Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
+
+
+/** Settings **/
+Route::get('admin/settings', 'Admin\Settings\Orchestra\OrchestraSettings@index');
+Route::post('admin/orchestra/settings', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
+Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
+Route::get('admin/orchestra/get-orchestra-garments-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraGarmentsById');
+Route::put('admin/orchestra/update-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraGarmentsById');
+Route::delete('admin/orchestra/delete-orchestra-garment', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraGarmentsById');
+Route::post('admin/orchestra/settings/age-group', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraAgeGroup');
+Route::post('admin/orchestra/add-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraAgeGroup');
+Route::get('admin/orchestra/get-orchestra-agegroup-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraAgeGroupById');
+Route::put('admin/orchestra/update-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraAgeGroupById');
+Route::delete('admin/orchestra/delete-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraAgeGroupsById');
+Route::post('admin/orchestra/settings/countries', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraCountries');
+Route::post('admin/orchestra/add-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraCountry');
+Route::get('admin/orchestra/get-orchestra-country-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraCountryById');
+Route::put('admin/orchestra/update-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraCountryById');
+Route::delete('admin/orchestra/delete-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraCountryById');
+Route::post('admin/orchestra/settings/productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraProductFamily');
+Route::post('admin/orchestra/add-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraProductFamily');
+Route::get('admin/orchestra/get-orchestra-productfamily-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraProductFamilyById');
+Route::put('admin/orchestra/update-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraProductFamilyById');
+Route::delete('admin/orchestra/delete-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraProductFamilyById');
+
