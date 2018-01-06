@@ -79,7 +79,6 @@ class UploadCsvController extends Controller
             {
                 // $data = Excel::load($path, function($reader) {})->get();
                 $data =  $upload_obj->csv_to_array($path,$delimiter);
-                return $data ;
                 $data_exists = OrchestraItemDetails::select()->get();
                 $upload_obj->isCustomerExists($data);
                 if (count($data_exists)>0)
@@ -104,7 +103,9 @@ class UploadCsvController extends Controller
                               $order_size = DB::table('orchestra_item_details')->where('Collection',$data[$key]['Collection'])->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('Size',$data[$key]['Size'])->select('*')->get();
                               if (count($order_size)>0)
                               {
-                                $upload_obj->updateOrchestraItemDetails($data,$key);
+
+                                 $upload_obj->updateOrchestraItemDetails($order_size,$data,$key);
+
                               }
                               else
                               {
@@ -158,6 +159,23 @@ class UploadCsvController extends Controller
       }
       return $result;
     }
+    
+    public function getCSVUpdate()
+    {
+      try
+      {
+          $updates =  DB::table('temp_orchestra_item_details')->get();
+          $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
+      }
+      catch (Exception $e)
+      {
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+
+      return $result;
+      
+    }
+
 
     /**
      * method to upload the parcel details csv
@@ -176,6 +194,7 @@ class UploadCsvController extends Controller
         // $data  = Excel::load($path, function($reader) {})->get();
         $filename = strtok($filename, " ");
         $data     =  $upload_obj->csv_to_array($path,$delimiter);
+        
           if (preg_match('/ParcelDetails_File1_ORCHESTRA/',$filename))
           {
             $data_exists = OrchestraParcelDetails::select()->get();
@@ -195,7 +214,7 @@ class UploadCsvController extends Controller
                         $parcel_edition = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->select('*')->get();
                         if (count($parcel_edition))
                         {
-                          $parcel_std = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->where('IsSTD',$value->isstd)->select('*')->get();
+                          $parcel_std = DB::table('orchestra_parcel_details')->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('EditionNumber',$data[$key]['EditionNumber'])->where('IsSTD',$data[$key]['IsSTD'])->select('*')->get();
                           if (count($parcel_std)>0)
                           {
                             // foreach ($parcel_std as $vals)
@@ -209,7 +228,7 @@ class UploadCsvController extends Controller
                             //      ->where('EditionNumber',$data[$key]['EditionNumber'])
                             //      ->delete();
                             //   }
-                            //   // $upload_obj->updateOrchestraParcelDetails($value);
+                              $upload_obj->updateOrchestraParcelDetails($data,$key);
                             // }
                           }
                           else
@@ -277,6 +296,7 @@ class UploadCsvController extends Controller
         // $data  = Excel::load($path, function($reader) {})->get();
         $filename = strtok($filename, " ");
         $data     =  $upload_obj->csv_to_array($path,$delimiter);
+       
           if (preg_match('/ParcelDetails_File2_ORCHESTRA/',$filename))
           {
             $data_exists = OrchestraParcelQuantityDetails::select()->get();
@@ -360,5 +380,5 @@ class UploadCsvController extends Controller
       }
       return $result;
     }
-   
+    
 }

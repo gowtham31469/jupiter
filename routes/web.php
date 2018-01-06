@@ -211,3 +211,4 @@ Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
 Route::post('admin/upload-label-details', 'Admin\UploadCSV\UploadCsvController@uploadLabelDetails');
 Route::post('admin/upload-parcel-details-file-one','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileOne');
 Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileTwo');
+Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
