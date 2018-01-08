@@ -198,7 +198,7 @@ class OrderController extends Controller
             'fontsize' => 12,
             'stretchtext' => 4
         );
-         PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
+         ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
        
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');

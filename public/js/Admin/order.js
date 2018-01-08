@@ -576,7 +576,14 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     if($age != 0)
     {
         $('#age').val($age);
-        var mySVG = document.getElementById("svg1");
+        var mySVG1 = document.getElementById("svg1");
+        var svgDoc1;
+        mySVG1.addEventListener("load", function () {
+            svgDoc1 = mySVG1.contentDocument;
+            svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+        }, false);
+		
+		var mySVG = document.getElementById("svg4");
         var svgDoc;
         mySVG.addEventListener("load", function () {
             svgDoc = mySVG.contentDocument;
@@ -787,7 +794,7 @@ function barcode_polybag(id, data) {
             svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
         }
-        //jsbarcode(code, 'barcode', svgDoc)
+        jsbarcode(code, 'barcode', svgDoc)
     }, false);
 
 }
