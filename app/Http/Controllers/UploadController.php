@@ -150,7 +150,7 @@ class UploadController extends Controller
 	        $path  		= $request->file('file')->getRealPath();
 	        $filename	= $request->file('file')->getClientOriginalName();
 	        $extension  = $request->file('file')->getClientOriginalExtension();
-        	$data  = Excel::load($path, function($reader) {})->get();
+        	$data    = Excel::load($path, function($reader) {})->get();
         	$filename = strtok($filename, " ");
         	return $request->file('file')->getClientOriginalName();
         	if ($filename =="ParcelDetails_File1_ORCHESTRA")

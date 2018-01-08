@@ -5,16 +5,18 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
+<!--
                 <ol class="breadcrumb">
                   <li>
                     <a href="/admin/customer-management">Dashboard</a>
                   </li>
                   <li class="active">Customers</li>
                 </ol>
+-->
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i> Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -77,15 +79,15 @@
                             <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
+                            <td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
                           @else
-                            <td><a href="#"><i class="fa fa-check fa-lg fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
                           @endif
                                <a href="#">
-                                <i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i>
+                                <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i>
                                </a>
                                <a href="#">
-                                <i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
+                                <i class="fa fa-trash filterbtn options fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
                                </a>
                              </td>
                          </tr>
@@ -169,6 +171,13 @@
                             </div>
                             <div class="col-md-6">
                               <div class="form-group has-feedback">
+                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group has-feedback">
                                 {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                                 <div class="input-group">
                                   {!! Form::text('password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
@@ -179,11 +188,13 @@
                               </div>
                             </div>
                             <div class="col-md-6">
-                              <div class="form-group has-feedback">
-                                {!! Form::label('buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                                  {{ Form::select('buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'buyer','required')) }}
-                                <div class="help-block with-errors"></div>
-                              </div>
+                            <div class="form-check form-group has-feedback">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
+                                Proforma Invoice(PI) required ? 
+                              </label>
+                              <div class="help-block with-errors"></div>
+                            </div>
                             </div>
                             </div>
                             <hr>
@@ -378,6 +389,15 @@
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-check form-group has-feedback">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
+                                Proforma Invoice(PI) required ? 
+                              </label>
+                              <div class="help-block with-errors"></div>
+                            </div>
                             </div>
                             </div>
                             <hr>

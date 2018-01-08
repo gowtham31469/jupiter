@@ -12,11 +12,13 @@
                     <div class="container-fluid">
 				<div class="row">
                                     <div class="col">
+<!--
                                         <ol class="breadcrumb icon-angle-right">
                                             <li><a href="{{url('admin/dashboard')}}">Dashboard</a>
                                             </li>
                                             <li class="active">Template List</li>
                                         </ol>
+-->
                                     </div>
                                 </div>
                         <div class="row">
