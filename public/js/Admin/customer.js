@@ -42,13 +42,13 @@
                    }
                    if(item.is_active === 1)
                    {
-                    table += '<td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
                    }
                    else
                    {
-                    table += '<td><a href="#"><i class="fa fa-check fa-lg fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
                    }
-                   table += '<a href="#"><i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+                   table += '<a href="#"><i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
                 });
                 table += '</tbody></table></div>';
                 $('.main-content').html(table);
@@ -946,11 +946,6 @@ function addCustomer()
                         showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
-                   },
-                   400: function() {
-                        $('.snackbar_span').html('Something went wrong');
-                        $('#snackbar').css('background-color','#F44336');
-                        showSnackbar();
                    },
                    409: function() {
                         $('#customer_upadte_result').removeAttr('style');

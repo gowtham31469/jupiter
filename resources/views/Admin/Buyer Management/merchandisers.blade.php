@@ -14,7 +14,7 @@
               </div>
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
-                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false" onclick="getBuyersMerchandisers()"><i class="ion-person-add"></i>Add Merchandiser</a>
+                  <a href="#" data-target="#addMerchandiserModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i>Add Merchandiser</a>
                 </div>
               </div>
           <div class="clearfix"></div>
@@ -45,8 +45,8 @@
                           <td>{{ $value->merchandiser_phone }}</td>
                           <td>{{ $value->merchandiser_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil fa-lg fa-button edit-merchandiser" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit"></i></a>
+                            <a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
                           </td>
                          </tr>
                          @endforeach

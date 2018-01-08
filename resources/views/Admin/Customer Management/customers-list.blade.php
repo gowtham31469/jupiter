@@ -16,7 +16,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-person-add"></i> Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -79,15 +79,15 @@
                             <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-times fa-lg fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
+                            <td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
                           @else
-                            <td><a href="#"><i class="fa fa-check fa-lg fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
                           @endif
                                <a href="#">
-                                <i class="fa fa-pencil fa-lg edit-customer fa-button" title="Edit"></i>
+                                <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i>
                                </a>
                                <a href="#">
-                                <i class="fa fa-trash fa-lg fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
+                                <i class="fa fa-trash filterbtn options fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
                                </a>
                              </td>
                          </tr>
