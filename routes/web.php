@@ -239,3 +239,8 @@ Route::post('admin/orchestra/add-orchestra-special-instructions', 'Admin\Setting
 Route::get('admin/orchestra/get-orchestra-special-instruction-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSpecialInstructionById');
 Route::put('admin/orchestra/update-orchestra-special-instruction', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSpecialInstructionById');
 Route::delete('admin/orchestra/delete-orchestra-special-instruction', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraSpecialInstructionById');
+Route::post('admin/orchestra/settings/compositions', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraCompositions');
+Route::post('admin/orchestra/add-orchestra-compositions', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraCompositions');
+Route::get('admin/orchestra/get-orchestra-composition-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraCompositionById');
+Route::put('admin/orchestra/update-orchestra-composition', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraCompositionById');
+Route::delete('admin/orchestra/delete-orchestra-composition', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraCompositionById');

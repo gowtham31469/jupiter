@@ -15,6 +15,7 @@ use App\OrchestraAgeGroup;
 use App\OrchestraCountries;
 use App\OrchestraProductFamily;
 use App\OrchestraSpecialInstructions;
+use App\OrchestraCompositions;
 /**
  * Orchestra Age Group controller
  * @author <Praveen>
@@ -639,6 +640,137 @@ class OrchestraSettings extends Controller
       try {
             $id        = $request['id'];
             $deleted = OrchestraSpecialInstructions::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+    /**
+     * Orchestra Compositions list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function orchestraCompositions()
+    {
+      try {
+            $orchestra_compositions = DB::table('orchestra_compositions')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'orchestra_compositions' => $orchestra_compositions]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+    /**
+     * Add orchestra Compositions.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrchestraCompositions(Request $request)
+    {
+        try {
+            $inserted = OrchestraCompositions::create([
+                        'english'    => $request['english'],
+                        'french'     => $request['french'],
+                        'spanish'    => $request['spanish'],
+                        'portuguese' => $request['portuguese'],
+                        'italian'    => $request['italian'],
+                        'dutch'      => $request['dutch'],
+                        'german'     => $request['german'],
+                        'russian'    => $request['russian'],
+                        'chinese'    => $request['chinese'],
+                        'arabic'     => $request['arabic'],
+                        'greek'      => $request['greek'],
+                        'turkish'    => $request['turkish']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Get orchestra Compositions details by ID for editing.
+     * @param orchestra Compositions id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrchestraCompositionById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $orchestra_composition = DB::table('orchestra_compositions')->select('*')->where('orchestra_compositions.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'orchestra_composition' => $orchestra_composition]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update orchestra Composition by id.
+    * @param orchestra Composition id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateOrchestraCompositionById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+                   
+          OrchestraCompositions::where('id',$id)
+           ->update([
+            'english'    => $request['english'],
+            'french'     => $request['french'],
+            'spanish'    => $request['spanish'],
+            'portuguese' => $request['portuguese'],
+            'italian'    => $request['italian'],
+            'dutch'      => $request['dutch'],
+            'german'     => $request['german'],
+            'russian'    => $request['russian'],
+            'chinese'    => $request['chinese'],
+            'arabic'     => $request['arabic'],
+            'greek'      => $request['greek'],
+            'turkish'    => $request['turkish']
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * function to delete Composition by id.
+     * @param Composition id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteOrchestraCompositionById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = OrchestraCompositions::where('id', '=', $id)
                         ->delete();
             if($deleted != '')
             {

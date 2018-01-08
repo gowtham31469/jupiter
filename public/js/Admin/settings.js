@@ -1006,65 +1006,65 @@ function countries() {
   }
   }
   /**
-* Function to special instructions home page
-* @author <praveen>
-*/
-function specialInstruction() {
-  try{
-    $('.main-content').html('<div class="loader"></div>');
-    /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
-    /** Tesco metadata sidebar */
-    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/settings/special-instructions",
-        type: "POST",
-        dataType: "json",
-        data: {
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-            $(".loader").css('margin-top', '12%');
-        },
-        success: function (data) {
-            if (buyer == "orchestra") 
-            {
-                var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
-               $.each(data.orchestra_specialinstructions, function(i, item){
-                var index = i+1;
-                orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSpecialInstructionModal" ></i></a></td></tr>';
-               });
-               orchestra_metadata += '</tbody></table></div>';
-               $('.main-content').html(orchestra_metadata)
-               
-                $('#orchestra-special-instruction-list-table').DataTable({
-                  'scrollX':true
-                });
-                $("#orchestra-special-instruction-list-table_filter input").addClass('form-control input-sm');
-                $("#orchestra-special-instruction-list-table_filter input").attr('placeholder', 'Data Search');
-                $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
-            } 
-            else 
-            {
-                $('.main-content').html(tesco_metadata)
+    * Function to special instructions home page
+    * @author <praveen>
+    */
+    function specialInstruction() {
+      try{
+        $('.main-content').html('<div class="loader"></div>');
+        /** Orchestra metadata sidebar */
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+        /** Tesco metadata sidebar */
+        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
+        var buyer = localStorage.getItem("buyer");
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/" + buyer + "/settings/special-instructions",
+            type: "POST",
+            dataType: "json",
+            data: {
+                _token: csrf_token
+            },
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            success: function (data) {
+                if (buyer == "orchestra") 
+                {
+                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_specialinstructions, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSpecialInstructionModal" ></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.main-content').html(orchestra_metadata)
+                   
+                    $('#orchestra-special-instruction-list-table').DataTable({
+                      'scrollX':true
+                    });
+                    $("#orchestra-special-instruction-list-table_filter input").addClass('form-control input-sm');
+                    $("#orchestra-special-instruction-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
+                } 
+                else 
+                {
+                    $('.main-content').html(tesco_metadata)
+                }
+
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
             }
-
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
-        }
-    })
-    } catch (e) {
-     console.log("Error:"+e)
-   }
-}
+        })
+        } catch (e) {
+         console.log("Error:"+e)
+       }
+    }
 /**
   * Adds orchestra special-instruction.
   * @author <praveen>
@@ -1253,6 +1253,273 @@ function specialInstruction() {
                      showSnackbar();
                      $('#deleteOrchestraSpecialInstructionModal').modal('hide');
                      specialInstruction();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+   console.log("Error:"+e)
+  }
+  }
+  /**
+    * Function to compositions home page
+    * @author <praveen>
+    */
+    function compositions() {
+      try{
+        $('.main-content').html('<div class="loader"></div>');
+        /** Orchestra metadata sidebar */
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+        /** Tesco metadata sidebar */
+        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
+        var buyer = localStorage.getItem("buyer");
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/" + buyer + "/settings/compositions",
+            type: "POST",
+            dataType: "json",
+            data: {
+                _token: csrf_token
+            },
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            success: function (data) {
+                if (buyer == "orchestra") 
+                {
+                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_compositions, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraCompositionModal" ></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.main-content').html(orchestra_metadata)
+                   
+                    $('#orchestra-composition-list-table').DataTable({
+                      'scrollX':true
+                    });
+                    $("#orchestra-composition-list-table_filter input").addClass('form-control input-sm');
+                    $("#orchestra-composition-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#orchestra-composition-list-table_length select').addClass('form-control input-sm');
+                } 
+                else 
+                {
+                    $('.main-content').html(tesco_metadata)
+                }
+
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
+            }
+        })
+        } catch (e) {
+         console.log("Error:"+e)
+       }
+    }
+ /**
+  * Adds orchestra composition.
+  * @author <praveen>
+  */
+ function addOrchestraComposition()
+ {
+    try{
+         var english    = $('#english_co').val();
+         var french     = $('#french_co').val();
+         var spanish    = $('#spanish_co').val();
+         var portuguese = $('#portuguese_co').val();
+         var italian    = $('#italian_co').val();
+         var dutch      = $('#dutch_co').val();
+         var german     = $('#german_co').val();
+         var russian    = $('#russian_co').val();
+         var chinese    = $('#chinese_co').val();
+         var arabic     = $('#arabic_co').val();
+         var greek      = $('#greek_co').val();
+         var turkish    = $('#turkish_co').val();
+         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+         $.ajax({
+             url: base_url + "/admin/orchestra/add-orchestra-compositions",
+             method: 'POST',
+             data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             statusCode: {
+                  200: function() {
+                       $('.snackbar_span').html("Composition Added Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#addOrchestraCompositionModal').modal('hide');
+                       compositions() 
+                  },
+                  400: function() {
+                       $('.snackbar_span').html("Something went wrong!!");
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
+                  }
+             },
+             error: function (data) {
+                console.log(data);
+             },
+             complete: function () {
+                       $(".loader").hide();
+                       $(".loader").css('margin-top','0%');
+             }
+         })
+     } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+   * Function for get orchestra Composition details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getOrchestraCompositionById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-composition-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_composition_id').val(id);
+                 $('#edit_english_co').val(data.orchestra_composition[0].english); 
+                 $('#edit_french_co').val(data.orchestra_composition[0].french); 
+                 $('#edit_spanish_co').val(data.orchestra_composition[0].spanish); 
+                 $('#edit_portuguese_co').val(data.orchestra_composition[0].portuguese); 
+                 $('#edit_italian_co').val(data.orchestra_composition[0].italian); 
+                 $('#edit_dutch_co').val(data.orchestra_composition[0].dutch); 
+                 $('#edit_german_co').val(data.orchestra_composition[0].german); 
+                 $('#edit_russian_co').val(data.orchestra_composition[0].russian); 
+                 $('#edit_chinese_co').val(data.orchestra_composition[0].chinese); 
+                 $('#edit_arabic_co').val(data.orchestra_composition[0].arabic); 
+                 $('#edit_greek_co').val(data.orchestra_composition[0].greek); 
+                 $('#edit_turkish_co').val(data.orchestra_composition[0].turkish); 
+                 $('#editOrchestraCompositionModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_orchestra_composition_form').validator('validate');
+                 $('#editOrchestraCompositionModal').modal('show');
+             },
+             error: function (data) {
+                  console.log(data);
+             },
+             complete: function () {
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+  * Function for edit Composition instruction
+  * @author <praveen>
+  */
+ function editOrchestraComposition()
+ {
+  try{
+       var id         = $('#edit_orchestra_composition_id').val();
+       var english    = $('#edit_english_co').val();
+       var french     = $('#edit_french_co').val();
+       var spanish    = $('#edit_spanish_co').val();
+       var portuguese = $('#edit_portuguese_co').val();
+       var italian    = $('#edit_italian_co').val();
+       var dutch      = $('#edit_dutch_co').val();
+       var german     = $('#edit_german_co').val();
+       var russian    = $('#edit_russian_co').val();
+       var chinese    = $('#edit_chinese_co').val();
+       var arabic     = $('#edit_arabic_co').val();
+       var greek      = $('#edit_greek_co').val();
+       var turkish    = $('#edit_turkish_co').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-composition",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Composition Updated Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#editOrchestraCompositionModal').modal('hide');
+                       compositions()
+                  }
+           },
+           error: function (data) {
+                console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ } 
+ /**
+  * To delete orchestra Composition
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function deleteOrchestraComposition(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/delete-orchestra-composition",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('.snackbar_span').html('Composition Deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
+                     $('#deleteOrchestraCompositionModal').modal('hide');
+                     compositions();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
