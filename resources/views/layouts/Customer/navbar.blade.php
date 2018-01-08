@@ -15,9 +15,9 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav dynamic-menu">
-                        <li><a class="" href="#">Create Order</a></li>
-                        <li><a class="" href="#">Order Status</a></li>
-                        <li><a class="" href="#">ReOrder</a></li>
+                        <li><a class="create-order-link" href="#">Create Order</a></li>
+                        <li><a class="order-status-link" href="#">Order Status</a></li>
+                        <li><a class="reorder-link" href="#">ReOrder</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

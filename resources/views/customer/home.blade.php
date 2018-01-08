@@ -7,7 +7,7 @@
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
-              </select>
+            </select>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
