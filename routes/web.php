@@ -234,4 +234,8 @@ Route::post('admin/orchestra/add-orchestra-productfamily', 'Admin\Settings\Orche
 Route::get('admin/orchestra/get-orchestra-productfamily-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraProductFamilyById');
 Route::put('admin/orchestra/update-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraProductFamilyById');
 Route::delete('admin/orchestra/delete-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraProductFamilyById');
-
+Route::post('admin/orchestra/settings/special-instructions', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSpecialInstructions');
+Route::post('admin/orchestra/add-orchestra-special-instructions', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSpecialInstructions');
+Route::get('admin/orchestra/get-orchestra-special-instruction-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSpecialInstructionById');
+Route::put('admin/orchestra/update-orchestra-special-instruction', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSpecialInstructionById');
+Route::delete('admin/orchestra/delete-orchestra-special-instruction', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraSpecialInstructionById');

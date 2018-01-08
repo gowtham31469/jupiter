@@ -14,6 +14,7 @@ use App\OrchestraGarments;
 use App\OrchestraAgeGroup;
 use App\OrchestraCountries;
 use App\OrchestraProductFamily;
+use App\OrchestraSpecialInstructions;
 /**
  * Orchestra Age Group controller
  * @author <Praveen>
@@ -507,6 +508,137 @@ class OrchestraSettings extends Controller
       try {
             $id        = $request['id'];
             $deleted = OrchestraProductFamily::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+    /**
+     * Orchestra metadata special instructions list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function orchestraSpecialInstructions()
+    {
+      try {
+            $orchestra_specialinstructions = DB::table('orchestra_care_instruction')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'orchestra_specialinstructions' => $orchestra_specialinstructions]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+    /**
+     * Add orchestra special instructions.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrchestraSpecialInstructions(Request $request)
+    {
+        try {
+            $inserted = OrchestraSpecialInstructions::create([
+                        'english'    => $request['english'],
+                        'french'     => $request['french'],
+                        'spanish'    => $request['spanish'],
+                        'portuguese' => $request['portuguese'],
+                        'italian'    => $request['italian'],
+                        'dutch'      => $request['dutch'],
+                        'german'     => $request['german'],
+                        'russian'    => $request['russian'],
+                        'chinese'    => $request['chinese'],
+                        'arabic'     => $request['arabic'],
+                        'greek'      => $request['greek'],
+                        'turkish'    => $request['turkish']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Get orchestra special instructions details by ID for editing.
+     * @param orchestra special instructions id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrchestraSpecialInstructionById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $orchestra_special_instruction = DB::table('orchestra_care_instruction')->select('*')->where('orchestra_care_instruction.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'orchestra_special_instruction' => $orchestra_special_instruction]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update orchestra special instruction by id.
+    * @param orchestra special instruction id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateOrchestraSpecialInstructionById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+                   
+          OrchestraSpecialInstructions::where('id',$id)
+           ->update([
+            'english'    => $request['english'],
+            'french'     => $request['french'],
+            'spanish'    => $request['spanish'],
+            'portuguese' => $request['portuguese'],
+            'italian'    => $request['italian'],
+            'dutch'      => $request['dutch'],
+            'german'     => $request['german'],
+            'russian'    => $request['russian'],
+            'chinese'    => $request['chinese'],
+            'arabic'     => $request['arabic'],
+            'greek'      => $request['greek'],
+            'turkish'    => $request['turkish']
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * function to delete special instruction by id.
+     * @param special instruction id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteOrchestraSpecialInstructionById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = OrchestraSpecialInstructions::where('id', '=', $id)
                         ->delete();
             if($deleted != '')
             {
