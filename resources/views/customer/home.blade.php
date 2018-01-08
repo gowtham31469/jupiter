@@ -134,5 +134,5 @@
         window.location = "{{ url('/customer') }}";
     </script>
     @endif @section('jqueryIncludes')
-    <script src="{{ asset('js/Customer/customer-order.js') }}"></script>
+    <script src="{{ asset('js/Customer/customer-dashboard.js') }}"></script>
     @endsection
