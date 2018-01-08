@@ -253,3 +253,8 @@ Route::post('admin/orchestra/add-orchestra-parts', 'Admin\Settings\Orchestra\Orc
 Route::get('admin/orchestra/get-orchestra-part-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraPartById');
 Route::put('admin/orchestra/update-orchestra-part', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraPartById');
 Route::delete('admin/orchestra/delete-orchestra-part', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraPartById');
+Route::post('admin/orchestra/settings/size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSizeCharts');
+Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSizeCharts');
+Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
+Route::put('admin/orchestra/update-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSizeChartById');
+Route::delete('admin/orchestra/delete-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraSizeChartById');

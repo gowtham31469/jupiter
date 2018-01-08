@@ -17,6 +17,8 @@ use App\OrchestraProductFamily;
 use App\OrchestraSpecialInstructions;
 use App\OrchestraCompositions;
 use App\OrchestraParts;
+use App\OrchestraSizeCharts;
+
 /**
  * Orchestra Age Group controller
  * @author <Praveen>
@@ -903,6 +905,119 @@ class OrchestraSettings extends Controller
       try {
             $id        = $request['id'];
             $deleted = OrchestraParts::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+    /**
+     * Orchestra Size Charts list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function orchestraSizeCharts()
+    {
+      try {
+            $orchestra_size_chart = DB::table('orchestra_size_chart')->select('id','age','cm','in')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'orchestra_size_charts' => $orchestra_size_chart]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+    /**
+     * Add orchestra Size Charts.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrchestraSizeCharts(Request $request)
+    {
+        try {
+            $inserted = OrchestraSizeCharts::create([
+                        'age'    => $request['age'],
+                        'cm'     => $request['cm'],
+                        'in'     => $request['in']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Get orchestra Size Chart details by ID for editing.
+     * @param orchestra Size Chart id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrchestraSizeChartById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $orchestra_size_chart = DB::table('orchestra_size_chart')->select('*')->where('orchestra_size_chart.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'orchestra_size_chart' => $orchestra_size_chart]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update orchestra size chart by id.
+    * @param orchestra size chart id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateOrchestraSizeChartById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+                   
+          OrchestraSizeCharts::where('id',$id)
+           ->update([
+            'age'    => $request['age'],
+            'cm'     => $request['cm'],
+            'in'     => $request['in']
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * function to delete Orchestra Size Chart by id.
+     * @param size chart id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteOrchestraSizeChartById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = OrchestraSizeCharts::where('id', '=', $id)
                         ->delete();
             if($deleted != '')
             {

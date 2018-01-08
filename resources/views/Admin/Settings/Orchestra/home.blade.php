@@ -1248,6 +1248,115 @@
            </div>
        </div>
    </div>
+   {{-- Add Orchestra size chart Modal --}}
+    <div class="modal fade" id="addOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraSizeChartLabel">Add Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('age', 'Age', ['class' => 'form_label']) !!}
+                          {!! Form::text('age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
+                          {!! Form::number('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','min' => '0','max' => '999')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
+                          {!! Form::number('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','min' => '0','max' => '999')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add Size chart', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Edit Orchestra size chart Modal --}}
+    <div class="modal fade" id="editOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraSizeChartLabel">Edit Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_size_chart_id',$value = null, array('id'=>'edit_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_age', 'Age', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
+                          {!! Form::number('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','min' => '0','max' => '999')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
+                          {!! Form::number('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','min' => '0','max' => '999')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Edit Size Chart', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Delete Orchestra Part Modal --}}
+   <div class="modal fade" id="deleteOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra size chart. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete Size Chart', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
     <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
     <script type="text/javascript">
@@ -1298,6 +1407,7 @@
         $('#add_orchestra_special_instruction_form').trigger("reset");
         $('#add_orchestra_composition_form').trigger("reset");
         $('#add_orchestra_part_form').trigger("reset");
+        $('#add_orchestra_size_chart_form').trigger("reset");
        })
         /** Add orchestra garment form validation **/
         $('#add_orchestra_garments_form').validator().on('submit', function (e) {
@@ -1633,6 +1743,54 @@
             e.preventDefault();
             var id   = $('#delete_orchestra_part_id').val();
             deleteOrchestraPart(id);
+         }
+       })
+       /** Add orchestra size chart form validation **/
+        $('#add_orchestra_size_chart_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             addOrchestraSizeChart();
+          }
+        })
+        /** get edit orchestra size chart details **/
+       $(document).on('click','.edit-orchestra-size-chart',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           getOrchestraSizeChartById(id);
+       });
+        /** submit edit orchestra size chart form **/
+       $('#edit_orchestra_size_chart_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            editOrchestraSizeChart();
+         }
+       })
+       /** assign id for delete size chart modal **/
+       $('#deleteOrchestraSizeChartModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_size_chart_id').attr('value', config);
+       });
+       /** submit delete orchestra size chart form **/
+       $('#delete_orchestra_size_chart_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_orchestra_size_chart_id').val();
+            deleteOrchestraSizeChart(id);
          }
        })
     });

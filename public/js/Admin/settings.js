@@ -3,6 +3,43 @@
  */
 
 var isSubmitting = false;
+/**  Validation for numeric values **/
+ function isNumber(evt) {
+  try{
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+        {
+            return false;
+        }
+          return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+/**  Validation for numeric values with dot**/
+ function isNumberKey(evt){
+  try{
+       var charCode = (evt.which) ? evt.which : event.keyCode
+
+       if (charCode == 46)
+       {
+           var inputValue = $("#inputfield").val()
+           if (inputValue.indexOf('.') < 1)
+           {
+               return true;
+           }
+           return false;
+       }
+       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+       {
+           return false;
+       }
+       return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
 /**
   * Function to Settings home page
   * @author <praveen>
@@ -1787,6 +1824,246 @@ function countries() {
                      showSnackbar();
                      $('#deleteOrchestraPartModal').modal('hide');
                      parts();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+   console.log("Error:"+e)
+  }
+  }
+  /**
+    * Function to size chart  home page
+    * @author <praveen>
+    */
+    function sizeChart() {
+      try{
+        $('.main-content').html('<div class="loader"></div>');
+        /** Orchestra metadata sidebar */
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+        /** Tesco metadata sidebar */
+        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
+        var buyer = localStorage.getItem("buyer");
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/" + buyer + "/settings/size-chart",
+            type: "POST",
+            dataType: "json",
+            data: {
+                _token: csrf_token
+            },
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            success: function (data) {
+                if (buyer == "orchestra") 
+                {
+                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_size_charts, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSizeChartModal" ></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.main-content').html(orchestra_metadata)
+                   
+                    $('#orchestra-size-chart-list-table').DataTable({
+                      'scrollX':true
+                    });
+                    $("#orchestra-size-chart-list-table_filter input").addClass('form-control input-sm');
+                    $("#orchestra-size-chart-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
+                } 
+                else 
+                {
+                    $('.main-content').html(tesco_metadata)
+                }
+
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
+            }
+        })
+        } catch (e) {
+         console.log("Error:"+e)
+       }
+    }
+ /**
+  * Adds orchestra size chart.
+  * @author <praveen>
+  */
+ function addOrchestraSizeChart()
+ {
+    try{
+         var age    = $('#age').val();
+         var cm     = $('#cm').val();
+         var inch    = $('#inch').val();
+         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+         $.ajax({
+             url: base_url + "/admin/orchestra/add-orchestra-size-chart",
+             method: 'POST',
+             data: {_token:csrf_token,age:age,in:inch,cm:cm},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             statusCode: {
+                  200: function() {
+                       $('.snackbar_span').html("Size Chart Added Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#addOrchestraSizeChartModal').modal('hide');
+                       sizeChart(); 
+                  },
+                  400: function() {
+                       $('.snackbar_span').html("Something went wrong!!");
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
+                  }
+             },
+             error: function (data) {
+                console.log(data);
+             },
+             complete: function () {
+                       $(".loader").hide();
+                       $(".loader").css('margin-top','0%');
+             }
+         })
+     } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+   * Function for get orchestra Size Chart details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getOrchestraSizeChartById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-size-chart-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_size_chart_id').val(id);
+                 $('#edit_age').val(data.orchestra_size_chart[0].age); 
+                 $('#edit_cm').val(data.orchestra_size_chart[0].cm); 
+                 $('#edit_inch').val(data.orchestra_size_chart[0].in); 
+                 $('#editOrchestraSizeChartModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_orchestra_size-chart_form').validator('validate');
+                 $('#editOrchestraSizeChartModal').modal('show');
+             },
+             error: function (data) {
+                  console.log(data);
+             },
+             complete: function () {
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+  * Function for edit Size Chart instruction
+  * @author <praveen>
+  */
+ function editOrchestraSizeChart()
+ {
+  try{
+       var id         = $('#edit_orchestra_size_chart_id').val();
+       var age        = $('#edit_age').val();
+       var cm         = $('#edit_cm').val();
+       var inch       = $('#edit_inch').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-size-chart",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data: {_token:csrf_token,id:id,age:age,cm:cm,in:inch},
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Size Chart Updated Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#editOrchestraSizeChartModal').modal('hide');
+                       sizeChart();
+                  }
+           },
+           error: function (data) {
+                console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ } 
+ /**
+  * To delete orchestra Part
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function deleteOrchestraSizeChart(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/delete-orchestra-size-chart",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('.snackbar_span').html('Size Chart Deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
+                     $('#deleteOrchestraSizeChartModal').modal('hide');
+                     sizeChart();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
