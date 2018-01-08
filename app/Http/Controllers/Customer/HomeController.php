@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use App\Classes\Modules;
+
 use Response;
 use View;
+use DB;
+use Auth;
 
 class HomeController extends Controller
 {
-    private $modules_permission;
     /**
      * Create a new controller instance.
      *
@@ -20,31 +21,29 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('customer_auth');
     }
 
     /**
      * Show the application dashboard.
-     *
+     * @author [Praveen] <[praveen@wizroots.com]>
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
-            $module_var = new Modules();
-            
-            //get permitted menus
-
-            $top_mod = "Dashboard";
-            $get_main_module = $module_var->getMainModules();
-            View::composer('layouts.Customer.navbar', function($view) use ($get_main_module) {
-                return $view->with(['modules' => $get_main_module]);
-            });
-           /* $get_sub_module = $module_var->getSubModules(1);
-            View::composer('layouts.Admin.sidebar', function($view) use ($get_sub_module,$top_mod) {
-                return $view->with(['modules' => $get_sub_module,'top_mod' => $top_mod]);
-            });*/
-            return view('customer/home');
-
+        try{
+            $customer_id = Auth::guard('web_customer')->user()->id;
+            $buyers = DB::table('buyers')
+                          ->select('buyers.*')
+                          ->join('customer_buyers','customer_buyers.buyer_id','buyers.id')
+                          ->where('customer_buyers.customer_id',$customer_id)
+                          ->get();
+            $buyer_count = count($buyers);
+            return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+        } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+        
     }
 }
