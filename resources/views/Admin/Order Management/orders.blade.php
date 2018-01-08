@@ -192,6 +192,8 @@
          localStorage.removeItem("main_label");
         localStorage.removeItem("wash_label"); 
         localStorage.removeItem("wash_composition");
+        localStorage.removeItem("deletemain");
+        localStorage.removeItem("deletewash");
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })

@@ -17,6 +17,12 @@ use App\MainLabelOrdersQty;
 use App\WashLabelOrders;
 use App\WashLabelOrdersQty;
 use App\WashCareComposition;
+use App\SolidCartonStickerOrders;
+use App\SolidCartonStickerOrdersQty;
+use App\SolidPolyStickerOrders;
+use App\SolidPolyStickerOrdersQty;
+use App\StandardCartonStickers;
+use App\StandardPolyStickers;
 use View;
 use DB;
 
@@ -59,6 +65,7 @@ class OrderManagementCntrl extends Controller
         }
         
     } 
+    
     public function labelOrders()
     {
             $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
@@ -233,7 +240,7 @@ class OrderManagementCntrl extends Controller
             }
             $value1->care_instruction=$care_instructions;
         }
-                
+                $data['merchandisers']=DB::table('merchandisers')->select('*')->get();
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
                 $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();
@@ -244,7 +251,8 @@ class OrderManagementCntrl extends Controller
     }
     public function stickerOrderDetails(Request $request)
     {
-         $po=$request->po;
+        $po=$request->po;
+        $uvc=$request->uvc;
         
          $data['orchestra_parcel_quantity_details'] = DB::table('orchestra_parcel_quantity_details')->select('*')->where('BuyerPONo',$po)->get();
         
@@ -253,6 +261,57 @@ class OrderManagementCntrl extends Controller
         $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();
         
         
+       
+        
+        $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_solid_carton_sticker_orders']) > 0)
+        {
+            $data['carton_id']=$data['orchestra_solid_carton_sticker_orders'][0]->id;
+        }
+        else
+        {
+            $data['carton_id']="null";
+        }
+        foreach($data['orchestra_solid_carton_sticker_orders'] as $value)
+        {
+            $orchestra_solid_carton_sticker_orders_qty=DB::table('orchestra_solid_carton_sticker_orders_qty')->select('*')->where('oscs_id',$value->id)->get();
+            $value->qty=$orchestra_solid_carton_sticker_orders_qty;
+        }
+        
+        $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_solid_poly_bag_sticker_orders']) > 0)
+        {
+             $data['poly_id']=$data['orchestra_solid_poly_bag_sticker_orders'][0]->id;
+        }
+        else
+        {
+             $data['poly_id']="null";
+        }
+        foreach($data['orchestra_solid_poly_bag_sticker_orders'] as $value1)
+        {
+            $orchestra_solid_poly_bag_sticker_orders_qty=DB::table('orchestra_solid_poly_bag_sticker_order_qty')->select('*')->where('ospbs_id',$value1->id)->get();
+            $value1->qty=$orchestra_solid_poly_bag_sticker_orders_qty;
+        }
+        
+        $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_standard_carton_sticker_orders']) > 0)
+        {
+            $data['std_carton_id']=$data['orchestra_standard_carton_sticker_orders'][0]->id;
+        }
+        else
+        {
+            $data['std_carton_id']="null";
+        }
+        
+        $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('uvc',$uvc)->get();
+        if(count($data['orchestra_standard_polybag_sticker_orders']) > 0)
+        {
+             $data['std_poly_id']=$data['orchestra_standard_polybag_sticker_orders'][0]->id;
+        }
+        else
+        {
+             $data['std_poly_id']="null";
+        }
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
@@ -462,6 +521,228 @@ class OrderManagementCntrl extends Controller
         }
        
            
+    } 
+    public function setSolidStickers(Request $request)
+    {
+        $delivery_date = $request->delivery_date;
+        $carton_template_id = $request->carton_template_id; 
+        $polybag_template_id = $request->polybag_template_id;
+        $tot_qty_poly = explode(',',$request->tot_qty_poly);
+        $tot_qty_carton = explode(',',$request->tot_qty_carton); 
+        $size = explode(',',$request->size);
+        $uvc =$request->uvc;
+        $height =$request->height; 
+        $age =$request->age;
+        $po =$request->po;
+        $carton_id =$request->carton_id; 
+        $poly_id =$request->poly_id; 
+        $group_id =$request->group_id;
+        if($poly_id != "null")
+        {
+            SolidPolyStickerOrders::where('id',$poly_id)
+                   ->update([
+                        'uvc'              => $uvc,
+                        'template_id'      => $polybag_template_id,
+                        'po'               => $po,
+                        'height'           => $height, 
+                        'delivery_date'    => $delivery_date, 
+                        'svg_path'         => "", 
+                        'status'           => "Approved",
+                        'group_id'    => $age,
+                  ]);
+            
+                 $deleted = SolidPolyStickerOrdersQty::where('ospbs_id', '=', $poly_id)
+                            ->delete();
+            
+                $j=0;
+                foreach($tot_qty_poly as $value)
+                {
+                     SolidPolyStickerOrdersQty::create([
+                                        'ospbs_id' => $poly_id,
+                                        'size'      => $size[$j],
+                                        'quantity'    => $value,
+                                        'quantity_sets'    => $value
+                             ]);
+                    $j++;
+                }
+        }
+        else
+        {
+              $inserted_poly = SolidPolyStickerOrders::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $polybag_template_id,
+                                'po'               => $po,
+                                'height'           => $height, 
+                                'delivery_date'    => $delivery_date, 
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                                'group_id'    => $age,
+                     ]);
+                $j=0;
+                foreach($tot_qty_poly as $value)
+                {
+                     SolidPolyStickerOrdersQty::create([
+                                        'ospbs_id' => $inserted_poly->id,
+                                        'size'      => $size[$j],
+                                        'quantity'    => $value,
+                                        'quantity_sets'    => $value
+                             ]);
+                    $j++;
+                }
+        }
+        if($carton_id != "null")
+        {
+              SolidCartonStickerOrders::where('id',$carton_id)
+                   ->update([
+                        'uvc'              => $uvc,
+                        'template_id'      => $carton_template_id,
+                        'po'               => $po,
+                        'height'           => $height, 
+                        'delivery_date'    => $delivery_date, 
+                        'svg_path'         => "", 
+                        'status'           => "Approved",
+                  ]);
+                $deleted = SolidCartonStickerOrdersQty::where('oscs_id', '=', $carton_id)
+                            ->delete();
+                $i=0;
+                foreach($tot_qty_carton as $value)
+                {
+                     SolidCartonStickerOrdersQty::create([
+                                        'oscs_id' => $carton_id,
+                                        'size'      => $size[$i],
+                                        'quantity'      => $value,
+                                        'quantity_sets'    => $value
+                             ]);
+                    $i++;
+                }
+            
+            
+        }
+        else
+        {
+               $inserted = SolidCartonStickerOrders::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $carton_template_id,
+                                'po'               => $po,
+                                'height'           => $height, 
+                                'delivery_date'    => $delivery_date, 
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                     ]);
+                $i=0;
+                foreach($tot_qty_carton as $value)
+                {
+                     SolidCartonStickerOrdersQty::create([
+                                        'oscs_id' => $inserted->id,
+                                        'size'      => $size[$i],
+                                        'quantity'    => $value,
+                                        'quantity_sets'    => $value
+                             ]);
+                    $i++;
+                }
+            
+                
+                
+            
+              
+        }
+       
+           
+    }
+    public function setStandardStickers(Request $request)
+    {
+        $delivery_date = $request->delivery_date;
+        $carton_template_id = $request->carton_template_id; 
+        $polybag_template_id = $request->polybag_template_id;
+        $uvc =$request->uvc;
+        $height =$request->height; 
+        $age =$request->age;
+        $po =$request->po;
+        $carton_id =$request->carton_id; 
+        $poly_id =$request->poly_id; 
+        $group_id =$request->group_id;
+        
+        $no_of_carton =$request->no_of_carton;
+        $total_polybag =$request->total_polybag;
+        $final_order_qty_sets =$request->final_order_qty_sets;
+        $order_qty =$request->order_qty;
+        $final_order_qty =$request->final_order_qty;
+        
+        if($poly_id != "null")
+        {
+            StandardPolyStickers::where('id',$poly_id)
+                   ->update([
+                        'uvc'              => $uvc,
+                        'template_id'      => $polybag_template_id,
+                        'po'               => $po,
+                        'height'           => $height, 
+                        'delivery_date'    => $delivery_date, 
+                        'no_of_carton'    => $no_of_carton, 
+                        'total_polybag'    => $total_polybag, 
+                        'final_order_qty_sets'    => $final_order_qty_sets, 
+                        'order_qty'    => $order_qty, 
+                        'final_order_qty'    => $final_order_qty, 
+                        'svg_path'         => "", 
+                        'status'           => "Approved",
+                        'group_id'    => $age,
+                  ]);
+        }
+        else
+        {
+              $inserted_poly = StandardPolyStickers::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $polybag_template_id,
+                                'po'               => $po,
+                                'height'           => $height, 
+                                'delivery_date'    => $delivery_date, 
+                                'no_of_carton'    => $no_of_carton, 
+                                'total_polybag'    => $total_polybag, 
+                                'final_order_qty_sets'    => $final_order_qty_sets, 
+                                'order_qty'    => $order_qty, 
+                                'final_order_qty'    => $final_order_qty,
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                                'group_id'    => $age,
+                     ]);
+                
+        }
+        if($carton_id != "null")
+        {
+              StandardCartonStickers::where('id',$carton_id)
+                   ->update([
+                        'uvc'              => $uvc,
+                        'template_id'      => $carton_template_id,
+                        'po'               => $po,
+                        'height'           => $height, 
+                        'delivery_date'    => $delivery_date, 
+                        'no_of_carton'    => $no_of_carton, 
+                        'total_polybag'    => $total_polybag, 
+                        'final_order_qty_sets'    => $final_order_qty_sets, 
+                        'order_qty'    => $order_qty, 
+                        'final_order_qty'    => $final_order_qty,
+                        'svg_path'         => "", 
+                        'status'           => "Approved",
+                  ]);
+        }
+        else
+        {
+               $inserted = StandardCartonStickers::create([
+                                'uvc' => $uvc,
+                                'template_id'      => $carton_template_id,
+                                'po'               => $po,
+                                'height'           => $height, 
+                                'delivery_date'    => $delivery_date, 
+                                'no_of_carton'    => $no_of_carton, 
+                                'total_polybag'    => $total_polybag, 
+                                'final_order_qty_sets'    => $final_order_qty_sets, 
+                                'order_qty'    => $order_qty, 
+                                'final_order_qty'    => $final_order_qty,
+                                'svg_path'    => "", 
+                                'status'    => "Approved",
+                     ]);
+        }
+       
+           
     }
     public function setWashLabel(Request $request)
     {
@@ -479,6 +760,7 @@ class OrderManagementCntrl extends Controller
         $dryer_select = $request->dryer_select; 
         $ironing_select= $request->ironing_select; 
         $cleaning_select= $request->cleaning_select; 
+        $merchandisers= $request->merchandisers; 
         $made_in_select = $request->made_in_select; 
         $care_instruction_select = $request->care_instruction_select; 
         if($id != "null")
@@ -487,6 +769,7 @@ class OrderManagementCntrl extends Controller
                    ->update([
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
+                        'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
                         'delivery_date'    => $delivery_date, 
                         'washing_id'      => $washing_select,
@@ -548,6 +831,7 @@ class OrderManagementCntrl extends Controller
                $inserted = WashLabelOrders::create([
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
+                                'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
                                 'delivery_date'    => $delivery_date, 
                                 'washing_id'      => $washing_select,
@@ -602,6 +886,14 @@ class OrderManagementCntrl extends Controller
         }
        
            
+    }
+    public function removeMainLabel(Request $request)
+    {
+         $deleted = MainLabelOrders::where('id', '=', $request->id)->delete();
+    }
+    public function removeWashLabel(Request $request)
+    {
+         $deleted = WashLabelOrders::where('id', '=', $request->id)->delete();
     }
 }
 
