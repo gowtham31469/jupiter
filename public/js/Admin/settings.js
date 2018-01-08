@@ -1539,3 +1539,270 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+  /**
+    * Function to parts home page
+    * @author <praveen>
+    */
+    function parts() {
+      try{
+        $('.main-content').html('<div class="loader"></div>');
+        /** Orchestra metadata sidebar */
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li></ul></div>';
+        /** Tesco metadata sidebar */
+        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="9" onclick="season()"><a>Season</a></li><li id="10" onclick="region()"><a>Region</a></li><li id="11" onclick="flags()"><a>Flags</a></li><li id="12" onclick="items()"><a>Items</a></li><li id="13" onclick="cylinderRadius()"><a>Cylinder Radius</a></li><li id="14" onclick="department()"><a>Department</a></li><li id="15" onclick="brand()"><a>Brand</a></li></ul></div>';
+        var buyer = localStorage.getItem("buyer");
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/" + buyer + "/settings/parts",
+            type: "POST",
+            dataType: "json",
+            data: {
+                _token: csrf_token
+            },
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            success: function (data) {
+                if (buyer == "orchestra") 
+                {
+                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_parts, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraPartModal" ></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.main-content').html(orchestra_metadata)
+                   
+                    $('#orchestra-part-list-table').DataTable({
+                      'scrollX':true
+                    });
+                    $("#orchestra-part-list-table_filter input").addClass('form-control input-sm');
+                    $("#orchestra-part-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#orchestra-part-list-table_length select').addClass('form-control input-sm');
+                } 
+                else 
+                {
+                    $('.main-content').html(tesco_metadata)
+                }
+
+            },
+            error: function (data) {
+
+            },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
+            }
+        })
+        } catch (e) {
+         console.log("Error:"+e)
+       }
+    }
+ /**
+  * Adds orchestra part.
+  * @author <praveen>
+  */
+ function addOrchestraPart()
+ {
+    try{
+         var english    = $('#english_pa').val();
+         var french     = $('#french_pa').val();
+         var spanish    = $('#spanish_pa').val();
+         var portuguese = $('#portuguese_pa').val();
+         var italian    = $('#italian_pa').val();
+         var dutch      = $('#dutch_pa').val();
+         var german     = $('#german_pa').val();
+         var russian    = $('#russian_pa').val();
+         var chinese    = $('#chinese_pa').val();
+         var arabic     = $('#arabic_pa').val();
+         var greek      = $('#greek_pa').val();
+         var turkish    = $('#turkish_pa').val();
+         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+         $.ajax({
+             url: base_url + "/admin/orchestra/add-orchestra-parts",
+             method: 'POST',
+             data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             statusCode: {
+                  200: function() {
+                       $('.snackbar_span').html("Part Added Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#addOrchestraPartModal').modal('hide');
+                       parts(); 
+                  },
+                  400: function() {
+                       $('.snackbar_span').html("Something went wrong!!");
+                       $('#snackbar').css('background-color','#F44336');
+                       showSnackbar();
+                  }
+             },
+             error: function (data) {
+                console.log(data);
+             },
+             complete: function () {
+                       $(".loader").hide();
+                       $(".loader").css('margin-top','0%');
+             }
+         })
+     } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+   * Function for get orchestra Part details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getOrchestraPartById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-part-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_part_id').val(id);
+                 $('#edit_english_pa').val(data.orchestra_part[0].english); 
+                 $('#edit_french_pa').val(data.orchestra_part[0].french); 
+                 $('#edit_spanish_pa').val(data.orchestra_part[0].spanish); 
+                 $('#edit_portuguese_pa').val(data.orchestra_part[0].portuguese); 
+                 $('#edit_italian_pa').val(data.orchestra_part[0].italian); 
+                 $('#edit_dutch_pa').val(data.orchestra_part[0].dutch); 
+                 $('#edit_german_pa').val(data.orchestra_part[0].german); 
+                 $('#edit_russian_pa').val(data.orchestra_part[0].russian); 
+                 $('#edit_chinese_pa').val(data.orchestra_part[0].chinese); 
+                 $('#edit_arabic_pa').val(data.orchestra_part[0].arabic); 
+                 $('#edit_greek_pa').val(data.orchestra_part[0].greek); 
+                 $('#edit_turkish_pa').val(data.orchestra_part[0].turkish); 
+                 $('#editOrchestraPartModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_orchestra_part_form').validator('validate');
+                 $('#editOrchestraPartModal').modal('show');
+             },
+             error: function (data) {
+                  console.log(data);
+             },
+             complete: function () {
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+  * Function for edit Part instruction
+  * @author <praveen>
+  */
+ function editOrchestraPart()
+ {
+  try{
+       var id         = $('#edit_orchestra_part_id').val();
+       var english    = $('#edit_english_pa').val();
+       var french     = $('#edit_french_pa').val();
+       var spanish    = $('#edit_spanish_pa').val();
+       var portuguese = $('#edit_portuguese_pa').val();
+       var italian    = $('#edit_italian_pa').val();
+       var dutch      = $('#edit_dutch_pa').val();
+       var german     = $('#edit_german_pa').val();
+       var russian    = $('#edit_russian_pa').val();
+       var chinese    = $('#edit_chinese_pa').val();
+       var arabic     = $('#edit_arabic_pa').val();
+       var greek      = $('#edit_greek_pa').val();
+       var turkish    = $('#edit_turkish_pa').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-part",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Part Updated Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#editOrchestraPartModal').modal('hide');
+                       parts();
+                  }
+           },
+           error: function (data) {
+                console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ } 
+ /**
+  * To delete orchestra Part
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function deleteOrchestraPart(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/delete-orchestra-part",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('.snackbar_span').html('Part Deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
+                     $('#deleteOrchestraPartModal').modal('hide');
+                     parts();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+   console.log("Error:"+e)
+  }
+  }

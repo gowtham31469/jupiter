@@ -883,7 +883,7 @@
             </div>
         </div>
     </div>
-    {{-- Edit Orchestra special instructions Modal --}}
+    {{-- Edit Orchestra composition Modal --}}
     <div class="modal fade" id="editOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraCompositionLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -989,7 +989,7 @@
             </div>
         </div>
     </div>
-    {{-- Delete Orchestra special instruction Modal --}}
+    {{-- Delete Orchestra composition Modal --}}
    <div class="modal fade" id="deleteOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -1008,6 +1008,241 @@
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
                        {!! Form::submit('Delete Composition', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+   {{-- Add Orchestra parts Modal --}}
+    <div class="modal fade" id="addOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraPartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraPartLabel">Add Part</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english_pa', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french_pa', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('italian_pa', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('german_pa', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('russian_pa', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('greek_pa', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Add Part', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Edit Orchestra Part Modal --}}
+    <div class="modal fade" id="editOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraPartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraPartLabel">Edit Part</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_part_id',$value = null, array('id'=>'edit_orchestra_part_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english_pa', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french_pa', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_italian_pa', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_german_pa', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_russian_pa', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_greek_pa', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Edit Part', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    {{-- Delete Orchestra Part Modal --}}
+   <div class="modal fade" id="deleteOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Part</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra part. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_part_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete Part', ['class' => 'btn btn-primary'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1062,6 +1297,7 @@
         $('#add_orchestra_productfamily_form').trigger("reset");
         $('#add_orchestra_special_instruction_form').trigger("reset");
         $('#add_orchestra_composition_form').trigger("reset");
+        $('#add_orchestra_part_form').trigger("reset");
        })
         /** Add orchestra garment form validation **/
         $('#add_orchestra_garments_form').validator().on('submit', function (e) {
@@ -1349,6 +1585,54 @@
             e.preventDefault();
             var id   = $('#delete_orchestra_composition_id').val();
             deleteOrchestraComposition(id);
+         }
+       })
+       /** Add orchestra part form validation **/
+        $('#add_orchestra_part_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             addOrchestraPart();
+          }
+        })
+        /** get edit orchestra part details **/
+       $(document).on('click','.edit-orchestra-part',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           getOrchestraPartById(id);
+       });
+        /** submit edit orchestra part form **/
+       $('#edit_orchestra_part_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            editOrchestraPart();
+         }
+       })
+       /** assign id for delete Part modal **/
+       $('#deleteOrchestraPartModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_part_id').attr('value', config);
+       });
+       /** submit delete orchestra part form **/
+       $('#delete_orchestra_part_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_orchestra_part_id').val();
+            deleteOrchestraPart(id);
          }
        })
     });
