@@ -82,8 +82,13 @@ function price_template_list() {
                     var template_id = data.node.id;
                     localStorage.setItem("template_id", data.node.id);
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: base_url + "/admin/" + buyer + "/customer-management/template-view",
+                    if(buyer === 'tesco') {
+                        var url = base_url + "/admin/" + buyer + "/customer-management/template-view";
+                    } else {
+                        var url =  base_url + "/admin/" + buyer + "/template-management/template-view";
+                    }
+                                        $.ajax({
+                        url: url,
                         type: "Post",
                         dataType: "json",
                         data: {

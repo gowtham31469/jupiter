@@ -9,7 +9,8 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <span class="navbar-brand logo" href="#">Customer</span>
+                    <a class="navbar-brand grid-menu" href="/customer/dashboard"><i class="fa fa-th" aria-hidden="true"></i></a>   
+                    <span class="navbar-brand logo" href="#">JGA</span>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
