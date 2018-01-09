@@ -489,7 +489,7 @@
       $('#make_inactive').tooltip('toggle')
       $('#make_active').tooltip('show')
       $('#make_active').tooltip('toggle')
-      $('.dataTables_length select').addClass('form-control');
+      $('.customers-list-table_length select').addClass('form-control');
     });
     /** restrict special characters **/
     $('input').on('input', function() {
