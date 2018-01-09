@@ -1,17 +1,33 @@
-@extends('layouts.merchandiser.app')
+@extends('layouts.merchandiser.app') @section('content')
+	<div class="col-sm-12 col-md-12 main">
+	<div class="main-content">
+		<table class="table table-striped table-hover table-condensed" id="example">
+			<thead>
+				<tr>
+					<th>UVC</th>
+					<th>Artwork</th>
+					<th>Supplier Name</th>
+					<th>Season</th>
+					<th>Order Date</th>
+					<th>Delivery Date</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				 @foreach($orders as $order)
+					<tr>
+						<td>{{  $order->UVC }}</td>
+						<td>{{  $order->Artwork }}</td>
+						<td>{{  $order->SupplierName }}</td>
+						<td>{{  $order->Season }}</td>
+						<td>{{  $order->OrderDate }}</td>
+						<td>{{  $order->DeliveryDate }}</td>
+						<td>{{  $order->Status }}</td>
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-success">
-                <div class="panel-heading">Merchandiser's Dashboard</div>
+					</tr>
+				 @endforeach
 
-                <div class="panel-body">
-                    Greetings.. Merchandiser
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+			</tbody>
+		</table>
+	</div>
 @endsection
