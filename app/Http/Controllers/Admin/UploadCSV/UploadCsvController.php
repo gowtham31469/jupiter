@@ -45,7 +45,9 @@ class UploadCsvController extends Controller
           View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
-          return view('Admin/Upload CSV/home');
+
+          $csv_updates =  DB::table('temp_orchestra_item_details')->get();
+          return view('Admin/Upload CSV/home',['csv_updates' => $csv_updates]);
         }
         else
         {
@@ -70,6 +72,7 @@ class UploadCsvController extends Controller
         if($request->hasFile('file'))
         {
             ini_set('max_execution_time', 1000);
+            $changes = 0;
             $delimiter=';';
             $path = $request->file('file')->getRealPath();
             $filename = $request->file('file')->getClientOriginalName();
@@ -103,9 +106,7 @@ class UploadCsvController extends Controller
                               $order_size = DB::table('orchestra_item_details')->where('Collection',$data[$key]['Collection'])->where('UVC',$data[$key]['UVC'])->where('BuyerPONo',$data[$key]['BuyerPONo'])->where('VersionNumber',$data[$key]['VersionNumber'])->where('Size',$data[$key]['Size'])->select('*')->get();
                               if (count($order_size)>0)
                               {
-
                                  $upload_obj->updateOrchestraItemDetails($order_size,$data,$key);
-
                               }
                               else
                               {
@@ -132,7 +133,9 @@ class UploadCsvController extends Controller
                       $upload_obj->insertOrchestraItemDetails($data,$key);
                     }
                   }
-                  $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully'], 200);
+                 
+                  $csv_updates =  DB::table('temp_orchestra_item_details')->get();
+                  $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','csv_updates'=>$csv_updates], 200);
                 }
                 else
                 {
@@ -164,7 +167,7 @@ class UploadCsvController extends Controller
     {
       try
       {
-          $updates =  DB::table('temp_orchestra_item_details')->get();
+          $item_details_updates =  DB::table('temp_orchestra_item_details')->get();
           $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
       }
       catch (Exception $e)
