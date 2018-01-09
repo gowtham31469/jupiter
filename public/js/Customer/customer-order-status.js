@@ -5,6 +5,7 @@ $(document).ready(function() {
         $('.buyer-select option:first').remove();
         localStorage.setItem("pricing_buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
         localStorage.setItem("pricing_buyer_id", $('.buyer-select').find("option:selected").val());
+        orderStatus();
       }
 
       $('.select-buyer').click(function() {
@@ -15,7 +16,7 @@ $(document).ready(function() {
       if (localStorage.getItem("pricing_buyer") === null) {
         $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
       } else {
-        //price_template_list();
+        orderStatus();
       }
       $('.buyer-select').val(localStorage.getItem("pricing_buyer_id"));
       $('.buyer-select').selectpicker({
@@ -27,6 +28,7 @@ $(document).ready(function() {
         if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
             localStorage.setItem("pricing_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
             localStorage.setItem("pricing_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+            orderStatus();
         } else {
             localStorage.removeItem("pricing_buyer");
             localStorage.removeItem("pricing_buyer_id");
@@ -37,11 +39,11 @@ $(document).ready(function() {
 
 function orderStatus() {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = localStorage.getItem("status_buyer");
+    var buyer = localStorage.getItem("pricing_buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/order-status",
-        type: "Post",
+        url: base_url + "/customer/" + buyer + "/order-status",
+        type: "POST",
         dataType: "json",
         data: {
             _token: csrf_token

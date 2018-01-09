@@ -115,6 +115,11 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
+	//ORCHESTRA 
+	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
+
+	//TESCO
+	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderController@tescoOrderStatus');
 });
 
 
