@@ -7,14 +7,125 @@
                     @foreach($buyers as $buyer)
                     <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
                     @endforeach
-              </select>
+            </select>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
     <div class="main-content">
-        <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
+        <div class="select-buyer"></div>
+        <div class="loader"></div>
+        <div class="col-md-3">
+            <div class="card">
+                <h4>Total Orders</h4>
+                <span class="numbers">26004</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h4>Open Orders</h4>
+                <span class="numbers">20</span><span class="sub-number">/140</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h4>Total Orders</h4>
+                <span class="numbers">26004</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h4>Total Orders</h4>
+                 <span class="numbers">20</span><span class="sub-number">/140</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <h4 class="text-center">Tabel Data</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped text-center">
+
+                        <thead>
+                            <tr>
+                                <th class="text-center">Product</th>
+                                <th class="text-center">Payment Date</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Product1</td>
+                                <td>23/11/2013</td>
+                                <td><label class="label label-warning">Pending</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product2</td>
+                                <td>10/11/2013</td>
+                                <td><label class="label label-success">Delivered</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product3</td>
+                                <td>20/10/2013</td>
+                                <td><label class="label label-info">In Call to confirm</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product4</td>
+                                <td>20/10/2013</td>
+                                <td><label class="label label-danger">Declined</label></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+             <div class="card">
+                <h4 class="text-center">Tabel Data</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped text-center">
+
+                        <thead>
+                            <tr>
+                                <th class="text-center">Product</th>
+                                <th class="text-center">Payment Date</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Product1</td>
+                                <td>23/11/2013</td>
+                                <td><label class="label label-warning">Pending</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product2</td>
+                                <td>10/11/2013</td>
+                                <td><label class="label label-success">Delivered</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product3</td>
+                                <td>20/10/2013</td>
+                                <td><label class="label label-info">In Call to confirm</label></td>
+                            </tr>
+
+                            <tr>
+                                <td>Product4</td>
+                                <td>20/10/2013</td>
+                                <td><label class="label label-danger">Declined</label></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <div id="snackbar">Saved</div>
@@ -23,41 +134,5 @@
         window.location = "{{ url('/customer') }}";
     </script>
     @endif @section('jqueryIncludes')
-    <script src="{{ asset('js/Admin/pricing.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-        	var buyer_count = $('#invisible__count_id').val();
-        	if(buyer_count == 1)
-        	{
-        		 
-        	}
-            $('.select-buyer').click(function() {
-                $('.select-buyer').addClass('hidden');
-            })
-
-            $('.buyer-nav-select').html($('.buyer-div').html())
-            if (localStorage.getItem("pricing_buyer") === null) {
-                $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
-            } else {
-                //price_template_list();
-            }
-            $('.buyer-select').val(localStorage.getItem("pricing_buyer_id"));
-            $('.buyer-nav-select .buyer-select').selectpicker({
-                style: 'btn-default',
-                size: 4
-            });
-
-            $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-                if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-                    localStorage.setItem("pricing_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-                    localStorage.setItem("pricing_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-                    //price_template_list();
-                } else {
-                    localStorage.removeItem("pricing_buyer");
-                    localStorage.removeItem("pricing_buyer_id");
-                    location.reload()
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('js/Customer/customer-dashboard.js') }}"></script>
     @endsection
