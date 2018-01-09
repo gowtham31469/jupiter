@@ -83,7 +83,7 @@ class HomeController extends Controller
                           ->where('customer_buyers.customer_id',$customer_id)
                           ->get();
             $buyer_count = count($buyers);
-            return view('customer/customer-order-status')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
         } catch (\Exception $e) {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         

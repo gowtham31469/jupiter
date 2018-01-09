@@ -118,7 +118,6 @@ function orderStatus() {
 
                 $('.selectpicker').selectpicker();
 
-
                 $('input[name="daterange"]').daterangepicker({
 
                     },
