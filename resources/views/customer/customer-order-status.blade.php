@@ -1,4 +1,5 @@
 @extends('layouts.Customer.app') @if (Auth::guard("web_customer")->user()) @section('content')
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-div hidden">
