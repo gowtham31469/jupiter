@@ -129,9 +129,7 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-	Route::get('/merchandiser/dashboard', function(){
-	  return view('merchandiser.home');
-	});
+	Route::get('/merchandiser/dashboard', 'MerchandiserAuth\LoginController@dashboard');
 
 });
 
