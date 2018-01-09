@@ -65,12 +65,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
-    @yield('jqueryIncludes')
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script>
-        $('.logout-button').click(function() 
+<script>
+$('.logout-button').click(function() 
         {
             localStorage.clear();
         });
@@ -94,70 +92,6 @@
             return this.href == url;
         }).parent('li').addClass('current-page').find('a').addClass('active');
     });
-
-        var myDoughnutChart = new Chart(myChart, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
-            }]
-        });
-        var myDoughnutChart = new Chart(myChart1, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
-
-            }]
-        });
-        var myDoughnutChart = new Chart(myChart2, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
-
-            }]
-        });
-//         $('.buyer-select').select2({
-//            placeholder: "Buyer Listing",
-//            allowClear: true
-//        });
     </script>
     @yield('jqueryIncludes')
 </body>

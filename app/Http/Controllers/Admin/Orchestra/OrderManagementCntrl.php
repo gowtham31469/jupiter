@@ -240,7 +240,18 @@ class OrderManagementCntrl extends Controller
             }
             $value1->care_instruction=$care_instructions;
         }
-                $data['merchandisers']=DB::table('merchandisers')->select('*')->get();
+		        $factory = $data['order_details']{0}->FactoryCode;
+		  		$data['customers']=DB::table('customers')->where('factory_code',$factory)->select('*')->get();
+				if(count($data['customers']) > 0)
+				{
+					$cust_id = $data['customers']{0}->id;
+					$data['merchandisers']=DB::table('merchandisers')->where('customer_id',$cust_id)->where('buyer_id','1')->select('*')->get();
+				}
+				else
+				{
+					$data['merchandisers']="";
+				}
+				
                 $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->select('*')->get();
                 $data['orchestra_composition'] = DB::table('orchestra_compositions')->select('*')->get();
                 $data['orchestra_countries'] = DB::table('orchestra_countries')->select('*')->get();

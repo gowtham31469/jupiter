@@ -529,7 +529,7 @@
      console.log("Error:"+e)
    }
    }
- /**  Validation for mobile number **/
+ /**  Validation for numeric values **/
  function isNumber(evt) {
   try{
       evt = (evt) ? evt : window.event;

@@ -9,15 +9,17 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <span class="navbar-brand logo" href="#">Customer</span>
+                    <a class="navbar-brand grid-menu" href="/customer/dashboard"><i class="fa fa-th" aria-hidden="true"></i></a>   
+                    <span class="navbar-brand logo" href="#">JGA</span>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav dynamic-menu">
-                        <li><a class="" href="#">Create Order</a></li>
-                        <li><a class="" href="#">Order Status</a></li>
-                        <li><a class="" href="#">ReOrder</a></li>
+                        <li><a  href="{{ url('/customer/dashboard') }}">Dashboard</a></li>
+                        <li><a  href="{{ url('/customer/create-order') }}">Create Order</a></li>
+                        <li><a  href="{{ url('/customer/order-status') }}">Order Status</a></li>
+                        <li><a  href="{{ url('/customer/reorder') }}">ReOrder</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
