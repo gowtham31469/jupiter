@@ -198,15 +198,10 @@ Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestr
 
 Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\TemplateManagementCntrl@templateList');
 
-Route::get('multi-upload', 'UploadController@multiUploadView');
-
-Route::post('admin/order-management/multi-upload', ['as'=>'dropzone.multi-store','uses'=>'UploadController@csvMultiUpload']);
-// Route::post('multi-upload', 'UploadController@csvMultiUpload');
-
 /** upload csv **/
 
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
-Route::post('admin/upload-label-details', 'Admin\UploadCSV\UploadCsvController@uploadLabelDetails');
+Route::post('admin/upload-label-details','Admin\UploadCSV\UploadCsvController@uploadLabelDetails');
 Route::post('admin/upload-parcel-details-file-one','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileOne');
 Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvController@uploadParcelDetailsFileTwo');
 Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');

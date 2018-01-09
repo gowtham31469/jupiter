@@ -123,15 +123,16 @@
             });
             this.on("queuecomplete", function (file)
             {
-                getUpdateDetails();
+                
             });
-            this.on("success", function(file, responseText){ 
+            this.on("success", function(file, response){ 
+                 console.log(response);
                 $('.dz-remove').hide();
                 this.removeFile(file);
                 $(".upload-label-details").addClass("hidden");
                 
             });
-            this.on("error", function(file, responseText) {
+            this.on("error", function(file, response) {
                  alert('error');
                  this.removeFile(file);
                  $(".upload-label-details").addClass("hidden");
@@ -172,11 +173,11 @@
             this.on("complete", function(file){        
                  this.removeFile(file);
             });
-            this.on("success", function(file, responseText){ 
+            this.on("success", function(file, response){ 
                 $('.dz-remove').hide();
                  this.removeFile(file);
             });
-            this.on("error", function(file, responseText) {
+            this.on("error", function(file, response) {
                  alert('error');
                  this.removeFile(file);
                  $(".upload-parcel-details").addClass("hidden");
@@ -213,11 +214,11 @@
             this.on("complete", function(file){        
                  this.removeFile(file);
             });
-            this.on("success", function(file, responseText){ 
+            this.on("success", function(file, response){ 
                 $('.dz-remove').hide();
                  this.removeFile(file);
             });
-            this.on("error", function(file, responseText) {
+            this.on("error", function(file, response) {
                 alert('error');
                 this.removeFile(file);
                 $(".upload-parcel-details").addClass("hidden");
@@ -230,19 +231,6 @@
         myDropzone1.processQueue();
         myDropzone2.processQueue();
     });
-    function getUpdateDetails()
-    {
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            url: base_url + "/admin/csv-updates",
-            type: "get",
-           
-            statusCode: {
-                 200: function(data) {
-                    alert("success")
-                 },
-            }
-        })
-    }
+ 
 </script>
 @endsection
