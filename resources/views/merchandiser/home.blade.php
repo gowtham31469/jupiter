@@ -22,7 +22,11 @@
 						<td>{{  $order->Season }}</td>
 						<td>{{  $order->OrderDate }}</td>
 						<td>{{  $order->DeliveryDate }}</td>
-						<td>{{  $order->Status }}</td>
+						@if($order->Status == "Pending")
+						<td><span class="label label-Pending">{{  $order->Status }}</span></td>
+						@else
+						<td><span class="label label-Approved">Approved</span></td>
+						@endif
 
 					</tr>
 				 @endforeach
