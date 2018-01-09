@@ -45,8 +45,8 @@
                           <td>{{ $value->merchandiser_phone }}</td>
                           <td>{{ $value->merchandiser_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit" data-placement="left"></i></a>
+                            <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-merchandiser" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" data-placement="left"></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -223,6 +223,10 @@
          $('#add_merchandiser_result').hide();
          $('#edit_merchandiser_result').hide();
          $('#delete_merchandiser_result').hide();
+         $('.edit-merchandiser').tooltip('show')
+         $('.edit-merchandiser').tooltip('toggle')
+         $('.delete-merchandiser').tooltip('show')
+         $('.delete-merchandiser').tooltip('toggle')
        });
 
         
