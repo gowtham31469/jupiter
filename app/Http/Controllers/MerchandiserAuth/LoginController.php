@@ -39,9 +39,4 @@ class LoginController extends Controller
        $this->performLogout($request);
        return redirect("/merchandiser");
    } 
-   public function dashboard(Request $request)
-   {
-         $orders = DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_wash_care_label_orders.uvc')->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw('"WashCareLabel" as Artwork'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_item_details.Collection as Season','merchandisers.merchandiser_name')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_wash_care_label_orders.id')->get();
-         return view('merchandiser.home',['orders' => $orders]);
-   }
 }

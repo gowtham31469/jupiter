@@ -12,9 +12,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			
           <span class="navbar-brand logo" href="#">JGA</span>
-					<ul class="nav navbar-nav dynamic-menu">
-                                 <li class="current-page"><a class="active" href="#">Orders</a></li>
-                     </ul>
+			<ul class="nav navbar-nav dynamic-menu">
+             <li class="current-page"><a class="active" href="#">Pending Orders</a></li>
+             <li class="past-page"><a href="#">Past Orders</a></li>
+             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown buyer-nav-select"></li>
                 <li class="dropdown">
