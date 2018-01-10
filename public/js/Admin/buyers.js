@@ -21,14 +21,17 @@
              $(".loader").css('margin-top','12%');
          },
          success: function (data) {
-             $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/buyer-management">Dashboard</a></li><li class="active">Buyers</li></ol>');
              var table = '<div class="loader"></div><div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
              $.each(data.buyers, function(i, item){
               var index = i+1;
-              table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a></td></tr>';
+              table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a></td></tr>';
              });
              table += '</tbody></table></div>';
               $('.main-content').html(table);
+              $('.edit-buyer').tooltip('show')
+              $('.edit-buyer').tooltip('toggle')
+              $('.delete-buyer').tooltip('show')
+              $('.delete-buyer').tooltip('toggle')
               $('#buyers-list-table').DataTable();
               $("#buyers-list-table_filter input").addClass('form-control input-sm');
               $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -281,14 +284,17 @@
                  })
                },
                success: function (data) {
-                   $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li class="active">Merchandisers</li></ol>');
                    var table = '<div class="loader"></div><div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Supplier Name</th><th>Buyer Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.merchandisers, function(i, item){
                     var index = i+1;
-                    table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" ></i></a></td></tr>';
+                    table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.company_name+'</td><td>'+item.buyer_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-merchandiser" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" data-placement="left"></i></a></td></tr>';
                    });
                    table += '</tbody></table></div>';
                     $('.main-content').html(table);
+                    $('.edit-merchandiser').tooltip('show')
+                    $('.edit-merchandiser').tooltip('toggle')
+                    $('.delete-merchandiser').tooltip('show')
+                    $('.delete-merchandiser').tooltip('toggle')
                     $('#merchandisers-list-table').DataTable();
                     $("#merchandisers-list-table_filter input").addClass('form-control input-sm');
                     $("#merchandisers-list-table_filter input").attr('placeholder', 'Data Search');

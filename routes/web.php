@@ -117,6 +117,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
+	Route::get('customer/create-order', 'Customer\HomeController@customerOrders');
 	//ORCHESTRA 
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
