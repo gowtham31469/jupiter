@@ -62,7 +62,7 @@
                 $('#customers-list-table').DataTable();
                 $("#customers-list-table_filter input").addClass('form-control');
                 $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-                $('.customers-list-table_length select').addClass('form-control');
+                $('.dataTables_length select').addClass('form-control');
                 autopopulateCountry(0)
               },
               error: function (data) {
