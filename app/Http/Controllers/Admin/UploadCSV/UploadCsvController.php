@@ -41,7 +41,8 @@ class UploadCsvController extends Controller
         if($is_allowed)
         {
           $get_main_module = $module_var->getMainModules();
-          $get_sub_module = $module_var->getSubModules(33);
+          $get_sub_module = $module_var->getSubModules(34);
+          
           View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
