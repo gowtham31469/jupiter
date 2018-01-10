@@ -654,7 +654,91 @@ function printDiv(data, isstd) {
     }
 
 }
+function printHangDiv(data) {
+ 
+        var a = document.getElementById('svg_hang_front');
+        var svgDoc = a.contentDocument;
+        var svgRoot = svgDoc.documentElement;
+	
+	 	var a1 = document.getElementById(data);
+        var svgDoc1 = a1.contentDocument;
+        var svgRoot1 = svgDoc1.documentElement;
+	
+        PopupHang(svgRoot,svgRoot1);
+}
+function printSpecialDiv(data) {
+ 
+        var a = document.getElementById(data);
+        var svgDoc = a.contentDocument;
+        var svgRoot = svgDoc.documentElement;
+	
+        PopupSpecial(svgRoot);
+}
+function PopupSpecial(data) {
+    var s = new XMLSerializer();
+    var d = data;
+    var str = s.serializeToString(d);
+    var svg = encodeURI(str)
+    var success = false;
+    var url = "";
+    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/order-management/print-special-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+            svg: svg
+        },
+        async: false,
+        success: function (data) {
+            success = true;
+            url = data;
+        },
+        error: function (data) {
 
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
+    }
+}
+function  PopupHang(svgRoot,svgRoot1)
+{
+	var s = new XMLSerializer();
+    var d = svgRoot;
+    var str = s.serializeToString(d);
+    var svg = encodeURI(str)	
+	
+	var s1 = new XMLSerializer();
+    var d1 = svgRoot1;
+    var str1 = s1.serializeToString(d1);
+    var svg1 = encodeURI(str1)
+	
+    var success = false;
+    var url = "";
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/order-management/print-hang-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+            svg: svg,
+			svg1:svg1
+        },
+        async: false,
+        success: function (data) {
+            success = true;
+            url = data;
+        },
+        error: function (data) {
+
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
+    }
+}
 function Popup(data) {
     //    var s = new XMLSerializer();
     //    var d = data;
@@ -1576,7 +1660,7 @@ function specialtags(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Special Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">'+ttots+'</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Special Tag</h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">'+ttots+'</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button><button type="button" class="btn btn-primary" onclick=printSpecialDiv("svg2")>Print</button>  </div> </div>  <div class="backdrop"></div></form>');
 
 	$('#specialtagform .tot_qty_table').keyup(function(){
 		var tot_qty_table_carton_final=0;
@@ -1653,7 +1737,7 @@ function hangtagmodal(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><label >Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><object class="center-block" id="svg2" style="height:486px" data="' + data.orchestra_template + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">'+ttots+'</td></tr></tbody></table></div> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><label >Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><object class="center-block" id="svg2" style="height:486px" data="' + data.orchestra_template + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">'+ttots+'</td></tr></tbody></table></div> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary" onclick=printHangDiv("svg2")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
 
 	
 	$('#hangtagform .tot_qty_table').keyup(function(){
@@ -1875,7 +1959,7 @@ function hangtagmodal(data) {
         svgDoc.getElementById("theme").innerHTML = data.order_details[0].Theme;
         svgDoc.getElementById("size").innerHTML = size[0];
         svgDoc.getElementById("size_list").innerHTML = data.order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
-        svgDoc.getElementById("cm").innerHTML = data.order_details[0].cm + "cm";
+        svgDoc.getElementById("cm").innerHTML = data.order_details[0].cm;
         svgDoc.getElementById("in").innerHTML = data.order_details[0].in;
         if (size[1] == "ANS") {
             svgDoc.getElementById("size_french").innerHTML = size[1];
@@ -1886,7 +1970,7 @@ function hangtagmodal(data) {
             svgDoc.getElementById("size_english").innerHTML = "months";
         }
         var code = data.order_details[0].BarcodeForPricesTags.toString();
-        jsbarcode(code, "bhat", svgDoc)
+        jsbarcode_hang(code, "barcode1", svgDoc)
 
 
     }, false);
@@ -2215,6 +2299,78 @@ function jsbarcode(code, id, svgDoc) {
         format: "ean13",
         width: 5.99,
         height: 343,
+        fontSize: 50
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '50px');
+    svg.setAttribute('font-family', 'calibrib');
+
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+    // img.src - contains base64 URI from svg
+    console.log(img.src);
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    //Check in browsers
+    //
+    //                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    //                        $.ajax({
+    //                            url: base_url + "/admin/template-management/base64_to_jpeg",
+    //                            type: "Post",
+    //                            data: {
+    //                                src: img.src,
+    //                                _token: csrf_token
+    //                            },
+    //                            beforeSend: function () {
+    //                                $(".loader").show();
+    //                                $(".loader").css('margin-top', '12%');
+    //                            },
+    //                            success: function (data) {
+    //                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+    //                                
+    //                            },
+    //                            error: function (data) {
+    //                               
+    //                            }
+    //                        })
+    svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+function jsbarcode_hang(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 4.25,
+        height: 230,
         fontSize: 50
     });
     var svg = document.getElementById('svgdiv').querySelector('svg'),
