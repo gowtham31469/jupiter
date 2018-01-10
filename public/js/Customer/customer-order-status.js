@@ -118,11 +118,12 @@ function orderStatus() {
 
                 $('.selectpicker').selectpicker();
 
-
                 $('input[name="daterange"]').daterangepicker({
 
                     },
                     function(start, end, label) {
+                        $.fn.dataTableExt.afnFiltering.length = 0;
+                        $tableSel.dataTable().fnDraw();
                         // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         filterByDate(4, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering

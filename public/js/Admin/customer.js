@@ -27,7 +27,6 @@
                   $(".loader").css('margin-top','12%');
               },
               success: function (data) {
-                $('.top-content').html('<ol class="breadcrumb"><li><a href="/admin/dashboard">Dashboard</a></li><li class="active">Customers</li></ol>');
                 var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
@@ -42,19 +41,28 @@
                    }
                    if(item.is_active === 1)
                    {
-                    table += '<td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>';
                    }
                    else
                    {
-                    table += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>';
+                    table += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>';
                    }
-                   table += '<a href="#"><i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i></a></td></tr>';
+                   table += '<a href="#"><i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-customer" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" data-placement="left"></i></a></td></tr>';
                 });
                 table += '</tbody></table></div>';
                 $('.main-content').html(table);
+                $('.edit-customer').tooltip('show')
+                $('.edit-customer').tooltip('toggle')
+                $('.delete-customer').tooltip('show')
+                $('.delete-customer').tooltip('toggle')
+                $('#make_inactive').tooltip('show')
+                $('#make_inactive').tooltip('toggle')
+                $('#make_active').tooltip('show')
+                $('#make_active').tooltip('toggle')
                 $('#customers-list-table').DataTable();
                 $("#customers-list-table_filter input").addClass('form-control');
                 $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
+                $('.dataTables_length select').addClass('form-control');
                 autopopulateCountry(0)
               },
               error: function (data) {
