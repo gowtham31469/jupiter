@@ -13,8 +13,8 @@
 			
           <span class="navbar-brand logo" href="#">JGA</span>
 			<ul class="nav navbar-nav dynamic-menu">
-             <li class="current-page"><a class="active" href="#">Pending Orders</a></li>
-             <li class="past-page"><a href="#">Past Orders</a></li>
+             <li><a href="{{ url('/merchandiser/pending-orders') }}">Pending Orders</a></li>
+             <li><a  href="{{ url('/merchandiser/past-orders') }}">Past Orders</a></li>
              </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown buyer-nav-select"></li>

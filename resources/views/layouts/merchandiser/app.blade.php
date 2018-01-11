@@ -75,6 +75,13 @@
 		$('.logout-button').click(function() {
 			localStorage.clear();
 		});
+		 $(function () {
+        var url = window.location;
+        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+        $('.dynamic-menu a').filter(function () {
+            return this.href == url;
+        }).parent('li').addClass('current-page').find('a').addClass('active');
+    });
 	</script>
 	@yield('jqueryIncludes')
 </body>

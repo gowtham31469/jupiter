@@ -135,10 +135,11 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-	Route::get('/merchandiser/dashboard', 'Merchandiser\HomeController@index');
+	Route::get('/merchandiser/pending-orders', 'Merchandiser\HomeController@index');
 	Route::get('/merchandiser/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
+	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
 
 });
 

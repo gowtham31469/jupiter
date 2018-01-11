@@ -25,7 +25,7 @@ class RedirectIfMerchandiserAuthenticated
           //If request comes from logged in seller, he will
           //be redirected to seller's home page.
           if (Auth::guard('web_merchandiser')->check()) {
-              return redirect('/merchandiser/dashboard');
+              return redirect('/merchandiser/pending-orders');
           }
           return $next($request);
     }
