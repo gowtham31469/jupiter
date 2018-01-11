@@ -55,6 +55,13 @@ class OrderController extends Controller
         }
 
     }
+	
+	 /**
+	 * Show the Order dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
     public function orders()
     {
         $module_var = new Modules();
@@ -75,7 +82,14 @@ class OrderController extends Controller
              return redirect('/admin/dashboard');
         }
 
-    }       
+    }    
+	
+	 /**
+	 * Show the Order Status dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
     public function orderStatus()
     {
         $module_var = new Modules();
@@ -97,6 +111,13 @@ class OrderController extends Controller
         }
 
     }    
+	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
     public function printPdf(Request $request)
     {
       
@@ -123,6 +144,13 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     } 
+	
+	/**
+	 * Print Preview For Hang Tag
+	 *
+	 * @return pdf
+	 */
+	
 	public function printHangPdf(Request $request)
     {
         $svg=urldecode($request->svg); 
@@ -144,6 +172,13 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     } 	
+	
+	/**
+	 * Print Preview For Special Tag
+	 *
+	 * @return pdf
+	 */
+	
 	public function printSpecialPdf(Request $request)
     {
         $svg=urldecode($request->svg); 
@@ -161,6 +196,14 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     } 
+	
+	/**
+	 * Print Preview For Standard Poly Bag Stickers
+	 * It Contains Dynamic Table
+	 * This Function is used to create dynamic table
+	 * @return pdf
+	 */
+	
     public function printPdfTable(Request $request)
     {
       
@@ -256,6 +299,13 @@ class OrderController extends Controller
 //        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
 //        print_r(url('/storage/app/template/solid1.pdf'));
     }
+	
+	/**
+	 * Print Preview For 100 * 70 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
      public function printPdfSmall(Request $request)
     {
       

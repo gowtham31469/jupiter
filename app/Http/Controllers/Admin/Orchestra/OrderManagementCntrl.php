@@ -40,7 +40,7 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the order dashboard.
      *
      * @return \Illuminate\Http\Response
      */
@@ -66,7 +66,7 @@ class OrderManagementCntrl extends Controller
         
     } 
     
-    public function labelOrders()
+    /*public function labelOrders()
     {
             $orders = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
             echo json_encode($orders);
@@ -82,13 +82,28 @@ class OrderManagementCntrl extends Controller
             $data['orders'] = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
             $data['buyer'] =DB::table('buyers')->select('*')->get();
             echo json_encode($data);
-    }
+    }*/
+	
+	
+	 /**
+     * Show the orders List.
+     *
+     * @return Json Value
+     */
+	
     public function Orders()
     {
             $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select('id','UVC',DB::raw('"Null" as Season'),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw('"Stickers" as OrderType'),DB::raw('"Null" as Disney'))->get();
             $data['label_orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season',DB::raw('"-" as BuyerPONo'),'SupplierName','Description','Style_Name','Disney',DB::raw('"Null" as Type'),'Quantity',DB::raw('"Labels" as OrderType'))->groupBy('UVC')->get();
             echo json_encode($data);
     } 
+	
+	/**
+     * Show the orders status List.
+     *
+     * @return Json Value
+     */
+	
     public function orderStatus()
     {
             $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_hang_tag_orders.uvc')->select('orchestra_hang_tag_orders.uvc as UVC',DB::raw('"-" as BuyerPONo'),DB::raw('"HangTag" as Artwork'),'orchestra_item_details.SupplierName as 	SupplierName','orchestra_item_details.Collection as Season','orchestra_hang_tag_orders.created_at as OrderDate','orchestra_hang_tag_orders.delivery_date as DeliveryDate','orchestra_hang_tag_orders.status as Status')->groupBy('orchestra_item_details.UVC')->get();
@@ -101,10 +116,18 @@ class OrderManagementCntrl extends Controller
         
             echo json_encode($data);
     }
+	
+	/**
+     * Show the label orders details.
+     *
+     * @return Json Value
+     */
+	
     public function labelOrderDetails(Request $request)
     {
             $uvc=$request->uvc;
-            $data['order_details'] = DB::table('orchestra_item_details') ->leftJoin('orchestra_size_chart','orchestra_item_details.Size','=','orchestra_size_chart.age')->select('*',DB::raw("sum(Quantity) as Sum"))->where('UVC',$uvc)->groupBy('Size')->get();
+            $data['order_details'] = DB::table('orchestra_item_details') ->leftJoin('orchestra_size_chart','orchestra_item_details.Size','=','orchestra_size_chart.age')->select('*',DB::raw("sum(Quantity) as Sum"))->where('UVC',$uvc)->groupBy('Size')->orderBy('orchestra_item_details.id')->get();
+		
             $data['barcode'] = DB::table('orchestra_item_details')->select('*')->where('UVC',$uvc)->groupBy('BuyerPONo')->get();
         
             $total_qty = DB::table('orchestra_item_details')->select('*',DB::raw("sum(Quantity) as total_qty"))->where('UVC',$uvc)->groupBy('UVC')->get();
@@ -120,22 +143,8 @@ class OrderManagementCntrl extends Controller
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','1')->get();
                 $data['orchestra_template_front']=$orchestra_template_front;
-            }
-            else
-            {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','1')->get();
-                $data['orchestra_template']=$orchestra_template{0}->template_file;
-                $data['orchestra_template_id']=1;
-                
-                $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl.svg";
-                $data['orchestra_wash_template_id']=1;
-                
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
-                $data['orchestra_template_front']=$orchestra_template_front;
-            }
-        
-         // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
-          $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','5')->orWhere('tag_name','hang')->orWhere('id','1')->get()->toArray();
+				
+				 $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','5')->orWhere('tag_name','Disney')->orWhere('id','1')->get()->toArray();
             if($treeviewData){
                         $childs = array();
                         foreach($treeviewData as &$item) 
@@ -155,6 +164,43 @@ class OrderManagementCntrl extends Controller
                         $data['treefinalData']=$tree;
 
                } 
+            }
+            else
+            {
+                $orchestra_template = DB::table('orchestra_template')->select('*')->where('id','1')->get();
+                $data['orchestra_template']=$orchestra_template{0}->template_file;
+                $data['orchestra_template_id']=1;
+                
+                $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl.svg";
+                $data['orchestra_wash_template_id']=1;
+                
+                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','0')->get();
+                $data['orchestra_template_front']=$orchestra_template_front;
+				
+				 $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','5')->orWhere('tag_name','hang')->orWhere('id','1')->get()->toArray();
+            if($treeviewData){
+                        $childs = array();
+                        foreach($treeviewData as &$item) 
+                        {
+                        $childs[$item->parent_id][] = &$item;
+                        unset($item);
+                        }
+                        foreach($treeviewData as &$item) 
+                        {
+                            if (isset($childs[$item->id]))
+                            {
+                                $item->children = $childs[$item->id];
+                                unset($item);
+                            }
+                        }
+                        $tree = $childs[0];
+                        $data['treefinalData']=$tree;
+
+               } 
+            }
+        
+         // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
+         
         
         $treeviewspecial= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
             if($treeviewspecial){
@@ -260,6 +306,14 @@ class OrderManagementCntrl extends Controller
                 $data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
                 echo json_encode($data);
     }
+	
+	/**
+     * Show the sticker orders details.
+     *
+     * @return Json Value
+     */
+	
+	
     public function stickerOrderDetails(Request $request)
     {
         $po=$request->po;
@@ -348,7 +402,14 @@ class OrderManagementCntrl extends Controller
         
         echo json_encode($data);
            
-    }   
+    }
+	
+	/**
+     * This Function is used to get the Composition Details.
+     *
+     * @return Json Value
+     */
+	
     public function compositionDetails(Request $request)
     {
          $lang=$request->lang;
@@ -358,6 +419,13 @@ class OrderManagementCntrl extends Controller
          echo json_encode($data);
            
     } 
+	
+	/**
+     * This Function is used to save the Hang Tag Details.
+     *
+     * @return Void
+     */
+	
     public function setHangTag(Request $request)
     {
         $delivery_date = $request->delivery_date;
@@ -417,6 +485,14 @@ class OrderManagementCntrl extends Controller
         }
            
     }
+	
+	
+	/**
+     * This Function is used to save the Special Tag Details.
+     *
+     * @return Void
+     */
+	
     public function setSpecialTag(Request $request)
     {
         $delivery_date = $request->delivery_date;
@@ -473,6 +549,13 @@ class OrderManagementCntrl extends Controller
         }
            
     } 
+	
+	/**
+     * This Function is used to save the Main and Size Labels Details.
+     *
+     * @return Void
+     */
+	
     public function setMainLabel(Request $request)
     {
         $delivery_date = $request->delivery_date;
@@ -533,6 +616,13 @@ class OrderManagementCntrl extends Controller
        
            
     } 
+	
+	/**
+     * This Function is used to save the Solid Sticker Details.
+     *
+     * @return Void
+     */
+	
     public function setSolidStickers(Request $request)
     {
         $delivery_date = $request->delivery_date;
@@ -660,6 +750,13 @@ class OrderManagementCntrl extends Controller
        
            
     }
+	
+	/**
+     * This Function is used to save the Standard Sticker Details.
+     *
+     * @return Void
+     */
+	
     public function setStandardStickers(Request $request)
     {
         $delivery_date = $request->delivery_date;
@@ -755,6 +852,13 @@ class OrderManagementCntrl extends Controller
        
            
     }
+	
+	/**
+     * This Function is used to save the Wash Care Label Details.
+     *
+     * @return Void
+     */
+	
     public function setWashLabel(Request $request)
     {
         
@@ -898,10 +1002,25 @@ class OrderManagementCntrl extends Controller
        
            
     }
+	
+	/**
+     * This Function is used to delete the Extra Main and size Label Details.
+     *
+     * @return Void
+     */
+	
     public function removeMainLabel(Request $request)
     {
          $deleted = MainLabelOrders::where('id', '=', $request->id)->delete();
     }
+	
+	
+	/**
+     * This Function is used to delete the Extra Wash Care Label Details.
+     *
+     * @return Void
+     */
+	
     public function removeWashLabel(Request $request)
     {
          $deleted = WashLabelOrders::where('id', '=', $request->id)->delete();
