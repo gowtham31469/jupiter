@@ -31,9 +31,10 @@ function orders() {
         },
         success: function (data) {
             if (buyer == "orchestra") {
+                var path = base_url + "/admin/" + buyer + "/order-management/orders"
                 var newObj = data.sticker_orders.concat(data.label_orders);
                 console.log(newObj);
-                $('.main-content').html(table(newObj));
+                $('.main-content').html(table(newObj,path));
                 $('#datatable-example-2').DataTable({
                     "pageLength": 25
                 });
@@ -215,9 +216,12 @@ function orderStatus() {
         },
         success: function (data) {
             if (buyer == "orchestra") {
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                //aswathy
+                var path = base_url + "/admin/" + buyer + "/order-management/order-status";
 
-                $('.main-content').html(table(newObj));
+                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+                //based on path extra column will append in the datatable
+                $('.main-content').html(table(newObj,path));
                 var $tableSel = $('#datatable-example-2');
                 $tableSel.DataTable({
                     "pageLength": 25,
@@ -363,7 +367,7 @@ var normalizeDate = function (dateString) {
  */
 
 
-function table(data) {
+function table(data,path) {
     var th = "";
     var tr = "";
     var columnsIn = data[0];
@@ -378,7 +382,11 @@ function table(data) {
 
         }
     }
-    th += "<th style='text-align: center;'>Operations</th>";
+    if (path==base_url + "/admin/orchestra/order-management/order-status")
+    {
+       th += "<th style='text-align: center;'>Operations</th>";
+    }
+    
     $.each(data, function (index, value) {
         tr += '<tr id="' + value.id + '">';
         for (var key in columnsIn) {
@@ -413,7 +421,11 @@ function table(data) {
                 }
             }
         }
-        tr += '<td align="center"><a href="#"  data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+        if (path==base_url + "/admin/orchestra/order-management/order-status")
+        {
+         tr += '<td align="center"><a href="#"  data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+        }
+       
         tr += '</tr>';
     })
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';

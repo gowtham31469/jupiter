@@ -14,9 +14,7 @@
         <div class="clearfix"></div>
     </div>
 
-
     <div class="main-content">
-
         <div class="select-buyer">
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
