@@ -43,6 +43,8 @@ Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orch
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
+Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
+Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -135,7 +137,11 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-	Route::get('/merchandiser/dashboard', 'MerchandiserAuth\LoginController@dashboard');
+	Route::get('/merchandiser/pending-orders', 'Merchandiser\HomeController@index');
+	Route::get('/merchandiser/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
+	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
+	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
+	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
 
 });
 

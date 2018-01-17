@@ -55,6 +55,13 @@ class OrderController extends Controller
         }
 
     }
+	
+	 /**
+	 * Show the Order dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
     public function orders()
     {
         $module_var = new Modules();
@@ -75,7 +82,14 @@ class OrderController extends Controller
              return redirect('/admin/dashboard');
         }
 
-    }       
+    }    
+	
+	 /**
+	 * Show the Order Status dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
     public function orderStatus()
     {
         $module_var = new Modules();
@@ -97,6 +111,13 @@ class OrderController extends Controller
         }
 
     }    
+	
+	/**
+	 * Print Preview For 150 * 100 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
     public function printPdf(Request $request)
     {
       
@@ -123,6 +144,66 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     } 
+	
+	/**
+	 * Print Preview For Hang Tag
+	 *
+	 * @return pdf
+	 */
+	
+	public function printHangPdf(Request $request)
+    {
+        $svg=urldecode($request->svg); 
+		$svg1=urldecode($request->svg1); 
+        define ('PDF_FONT_NAME_MAIN', 'calibrib');
+        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+		PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+        //PDF::SetTextColor(0, 0, 0);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '55', '125', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
+		PDF::ImageSVG('@' . $svg1, $x=82.5, $y=12.5, '55', '125', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
+    } 	
+	
+	/**
+	 * Print Preview For Special Tag
+	 *
+	 * @return pdf
+	 */
+	
+	public function printSpecialPdf(Request $request)
+    {
+        $svg=urldecode($request->svg); 
+        define ('PDF_FONT_NAME_MAIN', 'calibrib');
+        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+        //PDF::SetTextColor(0, 0, 0);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '145', '95', $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
+    } 
+	
+	/**
+	 * Print Preview For Standard Poly Bag Stickers
+	 * It Contains Dynamic Table
+	 * This Function is used to create dynamic table
+	 * @return pdf
+	 */
+	
     public function printPdfTable(Request $request)
     {
       
@@ -218,6 +299,13 @@ class OrderController extends Controller
 //        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
 //        print_r(url('/storage/app/template/solid1.pdf'));
     }
+	
+	/**
+	 * Print Preview For 100 * 70 Size Stickers
+	 *
+	 * @return pdf
+	 */
+	
      public function printPdfSmall(Request $request)
     {
       
