@@ -60,9 +60,47 @@ class HomeController extends Controller
       public function getWCLById(Request $request)
       {
         try {
-              $id = $request['id'];
-              $wcl_orders_qty = DB::table('orchestra_wash_care_label_orders_qty')->select('size','uvc_tco','quantity')->where('orchestra_wash_care_label_orders_qty.owcl_id',$id)->get();
-              return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty],200);
+				$id = $request['id'];
+				$wcl_orders_qty = DB::table('orchestra_wash_care_label_orders_qty')->select('size','uvc_tco','quantity')->where('orchestra_wash_care_label_orders_qty.owcl_id',$id)->get();
+			
+				//To get Wash care label composition
+				
+			    $wcl_orders = DB::table('orchestra_wash_care_label_orders')->select('*')->where('orchestra_wash_care_label_orders.id',$id)->get();
+			    $uvc = $wcl_orders{0}->uvc; 
+			    $made_in_id = $wcl_orders{0}->made_in_id;
+			    $care_instruction_id = explode(',',$wcl_orders{0}->care_instruction_id);
+			
+				 $care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_id)->get(); 
+			
+			    $made_in= DB::table('orchestra_countries')->select('*')->where('id',$made_in_id)->get();
+			
+			    $template="/storage/app/template/orchestra_wcl.svg";
+				foreach($wcl_orders as $value1)
+				{
+					$orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->get();
+					$value1->qty=$orchestra_wash_label_orders_qty;
+
+					 $orchestra_wash_care_composition=DB::table('orchestra_wash_care_composition')->leftJoin('orchestra_compositions','orchestra_compositions.id','=','orchestra_wash_care_composition.composition_id')->leftJoin('orchestra_parts','orchestra_parts.id','=','orchestra_wash_care_composition.parts_id')->select('orchestra_wash_care_composition.*','orchestra_compositions.french','orchestra_compositions.english','orchestra_compositions.spanish','orchestra_compositions.portuguese','orchestra_compositions.italian','orchestra_compositions.dutch','orchestra_compositions.german','orchestra_compositions.russian','orchestra_compositions.chinese','orchestra_compositions.arabic','orchestra_compositions.greek','orchestra_compositions.turkish','orchestra_parts.french as parts_french','orchestra_parts.english as parts_english','orchestra_parts.spanish as parts_spanish','orchestra_parts.portuguese as parts_portuguese','orchestra_parts.italian as parts_italian','orchestra_parts.dutch as parts_dutch','orchestra_parts.german as parts_german','orchestra_parts.russian as parts_russian','orchestra_parts.chinese as parts_chinese','orchestra_parts.arabic as parts_arabic','orchestra_parts.greek as parts_greek','orchestra_parts.turkish as parts_turkish')->orderBy('orchestra_wash_care_composition.id','asc')->where('owcl_id',$value1->id)->get();
+					 $value1->composition=$orchestra_wash_care_composition;
+					$care_instructions=array();
+					foreach(explode(',',$value1->care_instruction_id) as $value2)
+					{
+						array_push($care_instructions,$value2);
+					}
+					$value1->care_instruction=$care_instructions;
+				}
+			
+				//To get Order Details like UVC,Size
+			
+				$order_details = DB::table('orchestra_item_details') ->leftJoin('orchestra_size_chart','orchestra_item_details.Size','=','orchestra_size_chart.age')->select('*',DB::raw("sum(Quantity) as Sum"))->where('UVC',$uvc)->groupBy('Size')->orderBy('orchestra_item_details.id')->get();
+			
+			    $code=substr($uvc, -4, 2);
+				
+				//To get Product Family
+			    $product_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
+			
+                // $data['orchestra_wash_template_id']=2;
+                return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty, 'template' => $template,'order_details'=>$order_details,'care_instruction'=>$care_instruction,'orchestra_wash_care_label_orders'=>$wcl_orders,'product_family'=>$product_family,'made_in'=>$made_in],200);
             } catch (\Exception $e)
             {
               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

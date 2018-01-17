@@ -253,7 +253,7 @@ class OrderManagementCntrl extends Controller
 
                }
         
-                $code=substr($uvc, -3, 2);
+                $code=substr($uvc, -4, 2);
                 $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*')->where('uvc',$uvc)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {

@@ -47,7 +47,7 @@
                 <h4>Washcare Label</h4>
                 <hr>
                  <div class="section-1 sections">
-                    <div class="sample-artwork" style="text-align:center"><img style="height: calc(100vh - 150px); box-sizing: border-box;" src="../../images/wcl_default.png"></div>
+                    <div class="sample-artwork" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
                 </div>
             </div>
             <div class="col-md-5">
