@@ -411,6 +411,7 @@ function table(data,path) {
                     tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
+                   
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
                         tr += '<td>' + value[key] + '</td>';
@@ -423,7 +424,7 @@ function table(data,path) {
         }
         if (path==base_url + "/admin/orchestra/order-management/order-status")
         {
-         tr += '<td align="center"><a href="#"  data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+         tr += '<td align="center"><a href="#"  data-toggle="modal" data-target="#profoma-invoice"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
         }
        
         tr += '</tr>';
