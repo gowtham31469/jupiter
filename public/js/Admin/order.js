@@ -1152,367 +1152,373 @@ function label_order_details(uvc) {
  */
 
 function washcarelabels(data, dataid) {
-    var washing_option = "<option value=''>Select Option</option>";
-    var whitening_option = "<option value=''>Select Option</option>";
-    var dryer_option = "<option value=''>Select Option</option>";
-    var ironing_option = "<option value=''>Select Option</option>";
-    var cleaning_option = "<option value=''>Select Option</option>";
-    var made_option = "<option value=''>Select Option</option>";
-    var instruction_option = "";
-    var parts_option = "<option>Select Option</option>";
-    var composition_option = "<option>Select Option</option>";
+	var washing_option = "<option value=''>Select Option</option>";
+	var whitening_option = "<option value=''>Select Option</option>";
+	var dryer_option = "<option value=''>Select Option</option>";
+	var ironing_option = "<option value=''>Select Option</option>";
+	var cleaning_option = "<option value=''>Select Option</option>";
+	var made_option = "<option value=''>Select Option</option>";
+	var instruction_option = "";
+	var parts_option = "<option>Select Option</option>";
+	var composition_option = "<option>Select Option</option>";
 
 
-    $.each(data.orchestra_countries, function (index, value) {
-        made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
-    });
-    $.each(data.orchestra_care_instruction, function (index, value) {
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
-    });
-    $.each(data.orchestra_parts, function (index, value) {
-        parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
-    });
-    $.each(data.orchestra_composition, function (index, value) {
-        composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
-    });
-    $.each(data.orchestra_care_symbols, function (index, value) {
-        if (value.category_id == 1) {
-            washing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
-        } else if (value.category_id == 2) {
-            whitening_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + value.care_instruction + "</option>";
-        } else if (value.category_id == 3) {
-            dryer_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
-        } else if (value.category_id == 4) {
-            ironing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
-        } else if (value.category_id == 5) {
-            cleaning_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
-        }
+	$.each(data.orchestra_countries, function (index, value) {
+		made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+	});
+	$.each(data.orchestra_care_instruction, function (index, value) {
+		instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+	});
+	$.each(data.orchestra_parts, function (index, value) {
+		parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+	});
+	$.each(data.orchestra_composition, function (index, value) {
+		composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-russian='" + value.russian + "' data-chinese='" + value.chinese + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' data-turkish='" + value.turkish + "' value=" + value.id + ">" + value.english + "</option>";
+	});
+	$.each(data.orchestra_care_symbols, function (index, value) {
+		if (value.category_id == 1) {
+			washing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+		} else if (value.category_id == 2) {
+			whitening_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + value.care_instruction + "</option>";
+		} else if (value.category_id == 3) {
+			dryer_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+		} else if (value.category_id == 4) {
+			ironing_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+		} else if (value.category_id == 5) {
+			cleaning_option += "<option data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + value.care_instruction + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + value.care_instruction + "</option>";
+		}
 
-    });
-
-
-    var tr = "";
-    $qu = 0;
-    var ttots = 0;
-    if (data.orchestra_wash_care_label_orders != "") {
-        if (dataid != "") {
-            dataid1 = dataid;
-        } else {
-            dataid1 = 0;
-        }
-        if (data.orchestra_wash_care_label_orders.length > dataid1) {
-            $de_date = data.orchestra_wash_care_label_orders[dataid1].delivery_date
-
-            $de_date1 = $de_date.split('-');
-            $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
-
-            $delivery_date = $de_date_fin;
-            $exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
-        } else {
-            $delivery_date = "";
-            $exist_id = "";
-        }
-
-    } else {
-        $delivery_date = "";
-        $exist_id = "";
-    }
-    $.each(data.order_details, function (index, value) {
-        if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
-            } else {
-                $wash_label_count = "";
-            }
-
-        } else {
-            $wash_label_count = "";
-        }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
-        $qu++;
-        ttots += parseInt($wash_label_count);
-    });
-    $('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4> <hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+	});
 
 
-    $('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#washcarelabelform' + dataid + ' tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
-            }
-        })
-        $('#washcarelabelform' + dataid + ' .tot_qty_table_fin').text(tot_qty_table_carton_final);
-    });
+	var tr = "";
+	$qu = 0;
+	var ttots = 0;
+	if (data.orchestra_wash_care_label_orders != "") {
+		if (dataid != "") {
+			dataid1 = dataid;
+		} else {
+			dataid1 = 0;
+		}
+		if (data.orchestra_wash_care_label_orders.length > dataid1) {
+			$de_date = data.orchestra_wash_care_label_orders[dataid1].delivery_date
 
-    $('#washcarelabelform' + dataid).validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+			$de_date1 = $de_date.split('-');
+			$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
 
-        } else {
-            e.preventDefault();
-            setWashCareLabelStatus(dataid)
-        }
-    })
+			$delivery_date = $de_date_fin;
+			$exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
+			$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p>";
+			$status=data.orchestra_wash_care_label_orders[dataid1].status;
+		} else {
+			$delivery_date = "";
+			$exist_id = "";
+			$comment = "<h4>Comments :</h4><p>No data Found</p>";
+			$status="";
+		}
 
-    $('.extra_percentage').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        if ($(this).val() != "") {
-            var per = $(this).val();
-            $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                var sum = $(this).find('.sum').text();
-                var per_qty = (parseInt(sum) / 100) * parseInt(per);
-                var tot_qty = parseInt(sum) + parseInt(per_qty);
-                $(this).find('.tot_qty_table').val(tot_qty);
-                if ($(this).find('.tot_qty_table').val() != undefined) {
-                    tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
-                }
-            })
-            $(this).parent().parent().parent().parent().parent().find('.tot_qty_table_fin').text(tot_qty_table_carton_final);
-        } else {
-            $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                $(this).find('.tot_qty_table').val("");
-            })
-        }
+	} else {
+		$delivery_date = "";
+		$exist_id = "";
+		$comment = "<h4>Comments</h4><p>No data Found</p>";
+		$status="";
+	}
+	$.each(data.order_details, function (index, value) {
+		if (data.orchestra_wash_care_label_orders != "") {
+			if (dataid != "") {
+				dataid1 = dataid;
+			} else {
+				dataid1 = 0;
+			}
+			if (data.orchestra_wash_care_label_orders.length > dataid1) {
+				$wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
+			} else {
+				$wash_label_count = "";
+			}
 
-    })
-
-    selectpicker()
-
-    var date = new Date();
-    date.setDate(date.getDate() + 7);
-
-    var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-
-    //$('.date').datepicker({startDate: '+1d'});
-    $('.hang_delivery_date').datepicker({
-        startDate: '1/7/2018'
-    });
-    $('.special_delivery_date').datepicker({
-        startDate: dateMsg
-    });
-    $('.wash_delivery_date').datepicker({
-        startDate: dateMsg
-    });
-    $('.main_delivery_date').datepicker({
-        startDate: dateMsg
-    });
-    $("#clickme" + dataid).click(function () {
-        composition_percentage_global = 0;
-        $('.composition_select' + dataid).prop('disabled', false)
-        $('.parts_select' + dataid).prop('disabled', false)
-        $(".parts_select" + dataid).val('');
-        $('.parts_select' + dataid).selectpicker('refresh');
-        $(".composition_select" + dataid).val('');
-        $('.composition_select' + dataid).selectpicker('refresh');
-        $(".composition_percent" + dataid).val('');
-        $('.add_to_list' + dataid).removeAttr('disabled')
-        $('#composition_table_qty' + dataid).html("")
-        $('.composition_percent' + dataid).removeAttr('disabled')
-
-        $('.washlabelnameqty' + dataid).text($('.washlabelname' + dataid).text())
-        $("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
-        $("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
-        $('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
-        $("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
-    })
-
-    $(".backdrop, #close").click(function () {
-        $("#washcarelabelform" + dataid + " .left-panel").removeClass('active');
-        $("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
-        $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
-        $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
-    })
-
-    var mySVG = document.getElementById("washcare_svg" + dataid);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-
-        //$('.washing_select'+dataid+' option[data-id="1"]').prop('selected', true)
-
-        if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
-                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-                $('.care_instruction_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].care_instruction);
-                svgDoc.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
-                        $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
-                    svgDoc.getElementById("text_care_instruction").innerHTML += value;
-                });
-
-                $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
-
-                $('.merchandisers' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].merchandisers_id);
-
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
-                $('.whitening_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].whitening_id);
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
-                $('.dryer_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].dryer_id);
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
-                $('.ironing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].ironing_id);
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
-                $('.cleaning_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].cleaning_id);
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
-
-                var page_id = 0;
-                $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
-                    if (value.page_id != page_id) {
-                        add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
-                        if (value.parts_english != null) {
-                            svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_russian + "-" + value.parts_chinese + "-" + value.parts_arabic + "-" + value.parts_greek + "-" + value.parts_turkish + '</p>';
-                        }
-
-                    }
-
-                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german + "-" + value.russian + "-" + value.chinese + "-" + value.arabic + "-" + value.greek + "-" + value.turkish + '</p>';
-
-                    page_id = value.page_id;
-
-                });
-            }
-
-        }
+		} else {
+			$wash_label_count = "";
+		}
+		tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+		$qu++;
+		ttots += parseInt($wash_label_count);
+	});
+	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4>'+$status+' <hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div> '+ $comment +' </div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-info pull-right input-sm" type="submit" id="left">Preview & Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
 
-        $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            // alert()
-            if ($('.washing_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', "");
-            }
+	$('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		$('#washcarelabelform' + dataid + ' tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table').val() != undefined) {
+				tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+			}
+		})
+		$('#washcarelabelform' + dataid + ' .tot_qty_table_fin').text(tot_qty_table_carton_final);
+	});
+
+	$('#washcarelabelform' + dataid).validator().on('submit', function (e) {
+		if (e.isDefaultPrevented()) {
+
+		} else {
+			e.preventDefault();
+			setWashCareLabelStatus(dataid)
+		}
+	})
+
+	$('.extra_percentage').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		if ($(this).val() != "") {
+			var per = $(this).val();
+			$(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+				var sum = $(this).find('.sum').text();
+				var per_qty = (parseInt(sum) / 100) * parseInt(per);
+				var tot_qty = parseInt(sum) + parseInt(per_qty);
+				$(this).find('.tot_qty_table').val(tot_qty);
+				if ($(this).find('.tot_qty_table').val() != undefined) {
+					tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+				}
+			})
+			$(this).parent().parent().parent().parent().parent().find('.tot_qty_table_fin').text(tot_qty_table_carton_final);
+		} else {
+			$(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+				$(this).find('.tot_qty_table').val("");
+			})
+		}
+
+	})
+
+	selectpicker()
+
+	var date = new Date();
+	date.setDate(date.getDate() + 7);
+
+	var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+	//$('.date').datepicker({startDate: '+1d'});
+	$('.hang_delivery_date').datepicker({
+		startDate: '1/7/2018'
+	});
+	$('.special_delivery_date').datepicker({
+		startDate: dateMsg
+	});
+	$('.wash_delivery_date').datepicker({
+		startDate: dateMsg
+	});
+	$('.main_delivery_date').datepicker({
+		startDate: dateMsg
+	});
+	$("#clickme" + dataid).click(function () {
+		composition_percentage_global = 0;
+		$('.composition_select' + dataid).prop('disabled', false)
+		$('.parts_select' + dataid).prop('disabled', false)
+		$(".parts_select" + dataid).val('');
+		$('.parts_select' + dataid).selectpicker('refresh');
+		$(".composition_select" + dataid).val('');
+		$('.composition_select' + dataid).selectpicker('refresh');
+		$(".composition_percent" + dataid).val('');
+		$('.add_to_list' + dataid).removeAttr('disabled')
+		$('#composition_table_qty' + dataid).html("")
+		$('.composition_percent' + dataid).removeAttr('disabled')
+
+		$('.washlabelnameqty' + dataid).text($('.washlabelname' + dataid).text())
+		$("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
+		$("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
+		$('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
+		$("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
+	})
+
+	$(".backdrop, #close").click(function () {
+		$("#washcarelabelform" + dataid + " .left-panel").removeClass('active');
+		$("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
+		$("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
+		$('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
+	})
+
+	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		svgDoc = mySVG.contentDocument;
+
+		//$('.washing_select'+dataid+' option[data-id="1"]').prop('selected', true)
+
+		if (data.orchestra_wash_care_label_orders != "") {
+			if (dataid != "") {
+				dataid1 = dataid;
+			} else {
+				dataid1 = 0;
+			}
+
+			if (data.orchestra_wash_care_label_orders.length > dataid1) {
+				$('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
+				var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+				svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+				$('.care_instruction_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].care_instruction);
+				svgDoc.getElementById("text_care_instruction").innerHTML = "";
+				$('.care_instruction_select' + dataid + ' option:selected').each(function () {
+					var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
+						$(this).data('russian') + "-" +
+						$(this).data('chinese') + "-" +
+						$(this).data('arabic') + "-" +
+						$(this).data('greek') + "-" +
+						$(this).data('turkish') + '</p>';
+					svgDoc.getElementById("text_care_instruction").innerHTML += value;
+				});
+
+				$('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
+
+				$('.merchandisers' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].merchandisers_id);
+
+				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
+				$('.whitening_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].whitening_id);
+				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
+				$('.dryer_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].dryer_id);
+				svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
+				$('.ironing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].ironing_id);
+				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
+				$('.cleaning_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].cleaning_id);
+				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
+
+				var page_id = 0;
+				$.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
+					if (value.page_id != page_id) {
+						add_page_composition += 1;
+						$('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+						if (value.parts_english != null) {
+							svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_russian + "-" + value.parts_chinese + "-" + value.parts_arabic + "-" + value.parts_greek + "-" + value.parts_turkish + '</p>';
+						}
+
+					}
+
+					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german + "-" + value.russian + "-" + value.chinese + "-" + value.arabic + "-" + value.greek + "-" + value.turkish + '</p>';
+
+					page_id = value.page_id;
+
+				});
+			}
+
+		}
 
 
-        });
-        $('.whitening_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.whitening_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', "");
-            }
-        });
-        $('.dryer_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.dryer_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.ironing_select' + dataid + '.bootstrap-select').change(function () {
-            if ($('.ironing_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.cleaning_select' + dataid + '.bootstrap-select').change(function () {
-            if ($('.cleaning_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.made_in_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
-
-                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
-                    $('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-
-            } else {
-
-            }
+		$('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+			// alert()
+			if ($('.washing_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
+			} else {
+				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', "");
+				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', "");
+			}
 
 
-        });
+		});
+		$('.whitening_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+			if ($('.whitening_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
+			} else {
+				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', "");
+				svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', "");
+			}
+		});
+		$('.dryer_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+			if ($('.dryer_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
+			} else {
+				svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', "");
+				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', "");
+			}
 
-        $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('russian') + "-" +
-                        $(this).data('chinese') + "-" +
-                        $(this).data('arabic') + "-" +
-                        $(this).data('greek') + "-" +
-                        $(this).data('turkish') + '</p>';
-                    svgDoc.getElementById("text_care_instruction").innerHTML += value;
-                });
+		});
+		$('.ironing_select' + dataid + '.bootstrap-select').change(function () {
+			if ($('.ironing_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
+			} else {
+				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', "");
+				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', "");
+			}
+
+		});
+		$('.cleaning_select' + dataid + '.bootstrap-select').change(function () {
+			if ($('.cleaning_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
+			} else {
+				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', "");
+				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', "");
+			}
+
+		});
+		$('.made_in_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+			if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
+
+				var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('arabic') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('greek') + " - " +
+					$('select.made_in_select' + dataid).find(':selected').data('turkish') + '</p>';
+				svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+
+			} else {
+
+			}
 
 
-            } else {
+		});
 
-            }
-
-
-        });
-
-
-        var size = data.order_details[0].Size.split(" ")
-        if (size[1] == "ANS") {
-            var size1 = "years";
-        } else {
-            var size1 = "months";
-        }
-        svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
-        svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
-        svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
-        svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
-        svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-        svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+		$('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+			if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
+				svgDoc.getElementById("text_care_instruction").innerHTML = "";
+				$('.care_instruction_select' + dataid + ' option:selected').each(function () {
+					var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
+						$(this).data('russian') + "-" +
+						$(this).data('chinese') + "-" +
+						$(this).data('arabic') + "-" +
+						$(this).data('greek') + "-" +
+						$(this).data('turkish') + '</p>';
+					svgDoc.getElementById("text_care_instruction").innerHTML += value;
+				});
 
 
-        var code = data.order_details[0].BarcodeForPricesTags.toString();
-        jsbarcode(code, 'barcode', svgDoc)
+			} else {
 
-    }, false);
+			}
+
+
+		});
+
+
+		var size = data.order_details[0].Size.split(" ")
+		if (size[1] == "ANS") {
+			var size1 = "years";
+		} else {
+			var size1 = "months";
+		}
+		svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
+		svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
+		svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
+		svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
+		svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm / " + data.order_details[0].in + "in";
+		svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+		svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+
+
+		var code = data.order_details[0].BarcodeForPricesTags.toString();
+		jsbarcodewash(code, 'barcode', svgDoc)
+
+	}, false);
 }
 
 
@@ -2647,6 +2653,86 @@ function jsbarcode(code, id, svgDoc) {
     //                            }
     //                        })
     svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode for Wash Care Labels.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodewash(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
+	svg.setAttribute('width', '100px');
+	svg.setAttribute('height', '115px');
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	//Check in browsers
+	//
+	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//                        $.ajax({
+	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+	//                            type: "Post",
+	//                            data: {
+	//                                src: img.src,
+	//                                _token: csrf_token
+	//                            },
+	//                            beforeSend: function () {
+	//                                $(".loader").show();
+	//                                $(".loader").css('margin-top', '12%');
+	//                            },
+	//                            success: function (data) {
+	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+	//                                
+	//                            },
+	//                            error: function (data) {
+	//                               
+	//                            }
+	//                        })
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
 /**
