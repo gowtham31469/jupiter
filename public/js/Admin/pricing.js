@@ -1,3 +1,6 @@
+/**
+ * Method to pull and render the template hierarchy of a buyer
+ */
 function price_template_list() {
     var buyer = localStorage.getItem("pricing_buyer");
     var buyer_id = localStorage.getItem("pricing_buyer_id");
@@ -137,7 +140,9 @@ function price_template_list() {
     })
 }
 
-
+/**
+ * Method to show the pricing details on a template click
+ */
 function showPricing() {
     $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="col-md-4"><div class="form-group has-feedback"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name" ></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="price" class="form_label text-left">Price</label><input class="form-control input-sm " placeholder="Price in INR" required type="number" id="price" step="0.01"></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="taxation" class="form_label text-left">Tax</label><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" id="tax" step="0.01"><div class="input-group-addon">%</div></div></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
 
@@ -156,7 +161,9 @@ function showPricing() {
     getSavedPriceTax();
 }
 
-
+/**
+ * AJAX function to save the price and tax details of a template to the db
+ */
 function savePricing() {
 
     var customer_id = localStorage.getItem("customer_id");
@@ -194,7 +201,9 @@ function savePricing() {
         }
     });
 }
-
+/**
+ * Method to pull the saved tax details of a customer from the db
+ */
 function getSavedPriceTax() {
     var customer_id = localStorage.getItem("customer_id");
     var template_id = localStorage.getItem("template_id");
@@ -230,19 +239,21 @@ function getSavedPriceTax() {
     });
 }
 
-
+/**
+ * To show the snackbar
+ */
 function showSnackbar() {
     // Get the snackbar DIV
     var x = document.getElementById("snackbar")
-
     // Add the "show" class to DIV
     x.className = "show";
-
     // After 3 seconds, remove the show class from DIV
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
-
+/**
+ * JS Tree function is refreshed when a new customer name is clicked
+ */
 $('.customer-select').on('click', 'li', function() {
     $('.customer-select li a').removeClass('active');
     localStorage.setItem("customer_id", this.id);
