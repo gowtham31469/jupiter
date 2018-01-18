@@ -147,7 +147,7 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=2;
                 
-                $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl.svg";
+                $data['orchestra_wash_template']="/storage/app/template/orchestra_wcl_disney.svg";
                 $data['orchestra_wash_template_id']=2;
                 
                 $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','2')->where('Disney','1')->get();
