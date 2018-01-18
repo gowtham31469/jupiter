@@ -1269,14 +1269,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::number('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','min' => '0','max' => '999')) !!}
+                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::number('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','min' => '0','max' => '999')) !!}
+                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
@@ -1312,14 +1312,14 @@
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
-                          {!! Form::number('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','min' => '0','max' => '999')) !!}
+                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
-                          {!! Form::number('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','min' => '0','max' => '999')) !!}
+                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                       </div>
