@@ -216,12 +216,10 @@
             if (selectedType === '1') 
             {
                 $("#single_file").removeClass("hidden");
-                $("#multiple_file").removeClass("hidden");
             }
             else
             {
                 $("#single_file").addClass("hidden");
-                $("#multiple_file").addClass("hidden");
             }
             
         });
