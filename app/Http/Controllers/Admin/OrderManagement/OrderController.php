@@ -332,6 +332,7 @@ class OrderController extends Controller
     {
         try 
         {
+            $po_number = $request->po_number;
             $result = response()->json(['error'=> false,'message' =>'success'],200);    
         }
         catch (Exception $e)

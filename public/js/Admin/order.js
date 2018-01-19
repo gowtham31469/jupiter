@@ -257,7 +257,7 @@ function table(data,path) {
         if (key != "id") {
             if (key == "SupplierName" || key == "Style_Name") {
                 th += "<th>" + key + "</th>";
-            } else if (key != "pi_required") {
+            } else if ((key != "pi_required")&&(key != "tableName")) {
                 th += "<th style='text-align: center;'>" + key + "</th>";
             }
 
@@ -297,7 +297,7 @@ function table(data,path) {
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
                         tr += '<td>' + value[key] + '</td>';
-                    } else if (key != "pi_required") {
+                    } else if ((key != "pi_required")&&(key != "tableName")){
                         tr += '<td align="center">' + value[key] + '</td>';
                     }
                 }
