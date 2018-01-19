@@ -106,12 +106,14 @@ class OrderManagementCntrl extends Controller
 	
     public function orderStatus()
     {
-            $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_hang_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_hang_tag_orders.uvc as UVC',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"HangTag" as ArtworkType'),'orchestra_item_details.SupplierName as 	SupplierName','orchestra_item_details.Collection as Season','orchestra_hang_tag_orders.created_at as OrderDate','orchestra_hang_tag_orders.delivery_date as DeliveryDate','orchestra_hang_tag_orders.status as Status', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
-        
-        return $data['orchestra_hang_tag_orders'];
+            $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_hang_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_hang_tag_orders.uvc as UVC',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Hang Tag" as ArtworkType'),'orchestra_item_details.SupplierName as 	SupplierName','orchestra_item_details.Collection as Season','orchestra_hang_tag_orders.created_at as OrderDate','orchestra_hang_tag_orders.delivery_date as DeliveryDate','orchestra_hang_tag_orders.status as Status', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+
             $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_special_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_special_tag_orders.uvc as UVC',DB::raw('"Special Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"SpecialTag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_special_tag_orders.created_at as OrderDate','orchestra_special_tag_orders.delivery_date as DeliveryDate','orchestra_special_tag_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+
+            $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_special_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_special_tag_orders.uvc as UVC',DB::raw('"Special Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Special Tag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_special_tag_orders.created_at as OrderDate','orchestra_special_tag_orders.delivery_date as DeliveryDate','orchestra_special_tag_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+
         
-            $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_main_label_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_main_label_orders.uvc as UVC','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"-" as BuyerPONo'),DB::raw('"MainLabel" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_main_label_orders.created_at as OrderDate','orchestra_main_label_orders.delivery_date as DeliveryDate','orchestra_main_label_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_main_label_orders.id')->get();
+            $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_main_label_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_main_label_orders.uvc as UVC','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"-" as BuyerPONo'),DB::raw('"Main & Size Label" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_main_label_orders.created_at as OrderDate','orchestra_main_label_orders.delivery_date as DeliveryDate','orchestra_main_label_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_main_label_orders.id')->get();
         
             $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_wash_care_label_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_wash_care_label_orders.uvc as UVC','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"-" as BuyerPONo'),DB::raw('"WashCareLabel" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_wash_care_label_orders.id')->get();
 		
@@ -446,6 +448,24 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
+		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		if(count($factory) > 0)
+		{
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$status="PI Approval Pending";
+			}
+			else
+			{
+				$status="PO Approval Pending";
+			}
+		}
+		else
+		{
+			$status="";
+		}
+		
         if($id != "null")
         {
             HangTagOrders::where('id',$id)
@@ -455,7 +475,7 @@ class OrderManagementCntrl extends Controller
                         'template_back_id'      => $template_back_id,
                         'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
-                        'status'    => "Approved",
+                        'status'    => $status,
                   ]);
                 $deleted = HangTagOrdersQty::where('oht_id', '=', $id)
                             ->delete();
@@ -479,7 +499,7 @@ class OrderManagementCntrl extends Controller
                                     'template_back_id'      => $template_back_id,
                                     'delivery_date'    => $delivery_date, 
                                     'svg_path'    => "", 
-                                    'status'    => "Approved",
+                                    'status'    => $status,
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -512,6 +532,23 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
+		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		if(count($factory) > 0)
+		{
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$status="PI Approval Pending";
+			}
+			else
+			{
+				$status="PO Approval Pending";
+			}
+		}
+		else
+		{
+			$status="";
+		}
         if($id != "null")
         {
             SpecialTagOrders::where('id',$id)
@@ -520,7 +557,7 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $template_front_id,
                         'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
-                        'status'    => "Approved",
+                        'status'    => $status,
                   ]);
                 $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
                             ->delete();
@@ -543,7 +580,7 @@ class OrderManagementCntrl extends Controller
                                     'template_id'      => $template_front_id,
                                     'delivery_date'    => $delivery_date, 
                                     'svg_path'    => "", 
-                                    'status'    => "Approved",
+                                    'status'    => $status,
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -576,6 +613,23 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
+		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		if(count($factory) > 0)
+		{
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$status="PI Approval Pending";
+			}
+			else
+			{
+				$status="PO Approval Pending";
+			}
+		}
+		else
+		{
+			$status="";
+		}
         if($id != "null")
         {
               MainLabelOrders::where('id',$id)
@@ -585,7 +639,7 @@ class OrderManagementCntrl extends Controller
                         'template_name'      => $template_name,
                         'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
-                        'status'    => "Approved",
+                        'status'    => $status,
                   ]);
                 $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
                             ->delete();
@@ -609,7 +663,7 @@ class OrderManagementCntrl extends Controller
                                 'template_name'      => $template_name,
                                 'delivery_date'    => $delivery_date, 
                                 'svg_path'    => "", 
-                                'status'    => "Approved",
+                                'status'    => $status,
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -648,6 +702,23 @@ class OrderManagementCntrl extends Controller
         $carton_id =$request->carton_id; 
         $poly_id =$request->poly_id; 
         $group_id =$request->group_id;
+		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		if(count($factory) > 0)
+		{
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$status="PI Approval Pending";
+			}
+			else
+			{
+				$status="PO Approval Pending";
+			}
+		}
+		else
+		{
+			$status="";
+		}
         if($poly_id != "null")
         {
             SolidPolyStickerOrders::where('id',$poly_id)
@@ -658,7 +729,7 @@ class OrderManagementCntrl extends Controller
                         'height'           => $height, 
                         'delivery_date'    => $delivery_date, 
                         'svg_path'         => "", 
-                        'status'           => "Approved",
+                        'status'           => $status,
                         'group_id'    => $age,
                   ]);
             
@@ -686,7 +757,7 @@ class OrderManagementCntrl extends Controller
                                 'height'           => $height, 
                                 'delivery_date'    => $delivery_date, 
                                 'svg_path'    => "", 
-                                'status'    => "Approved",
+                                'status'    => $status,
                                 'group_id'    => $age,
                      ]);
                 $j=0;
@@ -711,7 +782,7 @@ class OrderManagementCntrl extends Controller
                         'height'           => $height, 
                         'delivery_date'    => $delivery_date, 
                         'svg_path'         => "", 
-                        'status'           => "Approved",
+                        'status'           => $status,
                   ]);
                 $deleted = SolidCartonStickerOrdersQty::where('oscs_id', '=', $carton_id)
                             ->delete();
@@ -738,7 +809,7 @@ class OrderManagementCntrl extends Controller
                                 'height'           => $height, 
                                 'delivery_date'    => $delivery_date, 
                                 'svg_path'    => "", 
-                                'status'    => "Approved",
+                                'status'    => $status,
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -785,6 +856,24 @@ class OrderManagementCntrl extends Controller
         $final_order_qty_sets =$request->final_order_qty_sets;
         $order_qty =$request->order_qty;
         $final_order_qty =$request->final_order_qty;
+		
+		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		if(count($factory) > 0)
+		{
+			$pi_required=$factory{0}->pi_required;
+			if($pi_required == 1)
+			{
+				$status="PI Approval Pending";
+			}
+			else
+			{
+				$status="PO Approval Pending";
+			}
+		}
+		else
+		{
+			$status="";
+		}
         
         if($poly_id != "null")
         {
@@ -801,7 +890,7 @@ class OrderManagementCntrl extends Controller
                         'order_qty'    => $order_qty, 
                         'final_order_qty'    => $final_order_qty, 
                         'svg_path'         => "", 
-                        'status'           => "Approved",
+                        'status'           => $status,
                         'group_id'    => $age,
                   ]);
         }
@@ -819,7 +908,7 @@ class OrderManagementCntrl extends Controller
                                 'order_qty'    => $order_qty, 
                                 'final_order_qty'    => $final_order_qty,
                                 'svg_path'    => "", 
-                                'status'    => "Approved",
+                                'status'    => $status,
                                 'group_id'    => $age,
                      ]);
                 
@@ -839,7 +928,7 @@ class OrderManagementCntrl extends Controller
                         'order_qty'    => $order_qty, 
                         'final_order_qty'    => $final_order_qty,
                         'svg_path'         => "", 
-                        'status'           => "Approved",
+                        'status'           => $status,
                   ]);
         }
         else
@@ -856,7 +945,7 @@ class OrderManagementCntrl extends Controller
                                 'order_qty'    => $order_qty, 
                                 'final_order_qty'    => $final_order_qty,
                                 'svg_path'    => "", 
-                                'status'    => "Approved",
+                                'status'    => $status,
                      ]);
         }
        
@@ -905,7 +994,7 @@ class OrderManagementCntrl extends Controller
                         'made_in_id'      => $made_in_select,
                         'care_instruction_id'      => $care_instruction_select,
                         'svg_path'    => "", 
-                        'status'    => "Pending",
+                        'status'    => "Buyer Approval Pending",
                   ]);
                 $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                             ->delete();
@@ -967,7 +1056,7 @@ class OrderManagementCntrl extends Controller
                                 'made_in_id'      => $made_in_select,
                                 'care_instruction_id'      => $care_instruction_select,
                                 'svg_path'    => "", 
-                                'status'    => "Pending",
+                                'status'    => "Buyer Approval Pending",
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
