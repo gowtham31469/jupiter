@@ -28,19 +28,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Purchase Order Number</label>
-                        <input type="text" class="form-control" placeholder="Purchase Order Number">
+                       <!--  <label>Purchase Order Number</label>
+                        <input type="text" class="form-control po" placeholder="Purchase Order Number"> -->
+                        {!! Form::label('po', 'Purchase Order Number', ['class' => 'form_label']) !!}
+                          {!! Form::text('po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Purchase Order Number','required','onkeypress' => 'return isNumber(event)')) !!}
                     </div>
                     <div class="form-group">
                         <label>Upload Purchase Order</label>
                         <form action="/file-upload" class="dropzone">
-                                           
-                                        </form>
+                        </form>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary upload-po" onclick="savePO()">Save changes</button>
                 </div>
             </div>
         </div>
@@ -287,6 +288,28 @@
                 }
             });
         });
+        function isNumber(evt)
+        {
+            try
+            {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57))
+                {
+                    return false;
+                }
+                  return true;
+            }
+            catch (e)
+            {
+             console.log("Error:"+e)
+            }
+        }
+        function savePO()
+        {
+            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            
+        }
     </script>
 
     @endsection
