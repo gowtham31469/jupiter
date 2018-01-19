@@ -105,7 +105,23 @@
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
-}    
+}   
+/** Style tesco create order forms**/
+.input-fields {
+ margin-bottom: 20px;
+ }
+ .input-fields input,
+ select {
+ width: 100%;
+ height: 20px;
+ -ms-box-sizing: content-box;
+ -moz-box-sizing: content-box;
+ box-sizing: content-box;
+ -webkit-box-sizing: content-box;
+ }
+ .order-details-notes {
+ font-weight: 300;
+ }
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -151,6 +167,7 @@
 </script>
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script>
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
@@ -165,13 +182,17 @@
         })
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
-         if (localStorage.getItem("buyer") === null) {
-                
-         }
-        else
-        {
-             orders();
-        }
+            if (localStorage.getItem("buyer") === null) {
+                    
+            }
+            else if(localStorage.getItem("buyer") === 'orchestra')
+            {
+                 orders();
+            }
+            else
+            {
+                tescoOrders();
+            }
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
                style: 'btn-default',
@@ -182,20 +203,27 @@
                 localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                var buyer = $(this).find("option:selected").text().toLowerCase();
                 $.ajax({
                     url: base_url + "/admin/order-management/order_sub_modules",
                     type: "Post",
                     dataType: "json",
                     data: {
                         _token: csrf_token,
-                        buyer: $(this).find("option:selected").text().toLowerCase()
+                        buyer: buyer
                     },
                     beforeSend: function() {
 
                     },
                     success: function(data) {
-                      
-                       orders();                    
+                       if(buyer === 'orchestra')
+                        {
+                             orders();
+                        }
+                        else
+                        {
+                            tescoOrders();
+                        }                  
                     },
                     error: function(data) {
 
