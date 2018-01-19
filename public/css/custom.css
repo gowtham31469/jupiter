@@ -639,6 +639,7 @@ span.navbar-brand.logo:hover {
     min-height: 300px;
     overflow-x: hidden;
     overflow-y: scroll;
+    padding-right: 10px;
 }
 
 
@@ -657,10 +658,7 @@ span.navbar-brand.logo:hover {
     border: 0px solid #bbbbbb;
 }
 
-tbody {
-    color: #585858;
-    font-size: 12px;
-}
+
 
 .sections {
     width: 100%;
@@ -1044,4 +1042,27 @@ span.sticker-details {
 
 #solidform .form-control {
     margin-bottom: -15px;
+}
+.tot_qty_table {
+    height: 20px;
+    margin-bottom: -13px;
+}
+
+.qty-table-modal input,
+.qty-table-modal input::-webkit-input-placeholder {
+    font-size: 9px;
+    line-height: 3;
+    font-weight: 100;
+}
+button.btn.btn-info.pull-right.input-sm.add_to_list {
+    margin-top: 10px;
+}
+
+.bootstrap-select li a{
+        font-size: 12px;
+    font-weight: 200;
+}
+
+.bootstrap-select li a img{
+height:15px;
 }
