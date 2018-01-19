@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buyer extends Model
 {
-     protected $fillable = [
-      'buyer_name','buyer_address','buyer_email','buyer_phone'
-  ];
+	/**
+      * The table associated with the model.
+      *
+      * @var string
+      */
+      protected $table = 'buyers';
+
+     /**
+      * The attributes that are mass assignable.
+      *
+      * @var array
+      */
+      protected $fillable = ['buyer_name','buyer_address','buyer_email','buyer_phone'];
 }

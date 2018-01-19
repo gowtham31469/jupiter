@@ -5,14 +5,6 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
-<!--
-                <ol class="breadcrumb">
-                  <li>
-                    <a href="/admin/customer-management">Dashboard</a>
-                  </li>
-                  <li class="active">Customers</li>
-                </ol>
--->
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
@@ -79,15 +71,15 @@
                             <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-times filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive"></i></a>
+                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
                           @else
-                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active"></i></a>
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
                           @endif
                                <a href="#">
-                                <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit"></i>
+                                <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
                                </a>
                                <a href="#">
-                                <i class="fa fa-trash filterbtn options fa-button" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" ></i>
+                                <i class="fa fa-trash filterbtn options fa-button delete-customer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" data-placement="left"></i>
                                </a>
                              </td>
                          </tr>
@@ -481,6 +473,15 @@
       autopopulateCountry(0)
       $('#edit_buyer').selectpicker('refresh');
       $('#buyer').selectpicker('refresh');
+      $('.edit-customer').tooltip('show')
+      $('.edit-customer').tooltip('toggle')
+      $('.delete-customer').tooltip('show')
+      $('.delete-customer').tooltip('toggle')
+      $('#make_inactive').tooltip('show')
+      $('#make_inactive').tooltip('toggle')
+      $('#make_active').tooltip('show')
+      $('#make_active').tooltip('toggle')
+      $('.dataTables_length select').addClass('form-control');
     });
     /** restrict special characters **/
     $('input').on('input', function() {

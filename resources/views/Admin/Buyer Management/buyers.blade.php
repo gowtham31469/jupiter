@@ -5,12 +5,6 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 main">
               <div class="top-content">
-<!--
-                  <ol class="breadcrumb">
-                    <li><a href="/admin/buyer-management">Dashboard</a></li>
-                    <li class="active">Buyers</li>
-                  </ol>
--->
               </div>
               <div class="main-sub-menu">
                 <div class="action-group pull-right sub-menu-button">
@@ -42,8 +36,8 @@
                           <td>{{ $value->buyer_phone }}</td>
                           <td>{{ $value->buyer_address }}</td>
                           <td>
-                            <a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-button filterbtn options" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" ></i></a>
+                            <a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a>
+                            <a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -192,6 +186,10 @@
          $('#buyer_result').hide();
          $('#edit_buyer_result').hide();
          $('#delete_buyer_result').hide();
+         $('.edit-buyer').tooltip('show')
+         $('.edit-buyer').tooltip('toggle')
+         $('.delete-buyer').tooltip('show')
+         $('.delete-buyer').tooltip('toggle')
        });
        /** Add buyer form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {

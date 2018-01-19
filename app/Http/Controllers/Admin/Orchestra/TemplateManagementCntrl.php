@@ -49,6 +49,9 @@ class TemplateManagementCntrl extends Controller
         }
         
     }    
+	/**
+		To Show Template List
+	*/
     public function templateList()
     {
         $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->get()->toArray();
@@ -88,6 +91,9 @@ class TemplateManagementCntrl extends Controller
                 return $treefinalData;
        } 
     }   
+	/**
+		To Show Template When Click Tree Node
+	*/
     public function templateView(Request $request)
     {
          $template_id = $request['template_id'];

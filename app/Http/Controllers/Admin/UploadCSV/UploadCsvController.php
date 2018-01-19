@@ -41,7 +41,8 @@ class UploadCsvController extends Controller
         if($is_allowed)
         {
           $get_main_module = $module_var->getMainModules();
-          $get_sub_module = $module_var->getSubModules(33);
+          $get_sub_module = $module_var->getSubModules(34);
+          
           View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
@@ -163,21 +164,21 @@ class UploadCsvController extends Controller
       return $result;
     }
     
-    public function getCSVUpdate()
-    {
-      try
-      {
-          $item_details_updates =  DB::table('temp_orchestra_item_details')->get();
-          $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
-      }
-      catch (Exception $e)
-      {
-        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
+    // public function getCSVUpdate()
+    // {
+    //   try
+    //   {
+    //       $item_details_updates =  DB::table('temp_orchestra_item_details')->get();
+    //       $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
+    //   }
+    //   catch (Exception $e)
+    //   {
+    //     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    //   }
 
-      return $result;
+    //   return $result;
       
-    }
+    // }
 
 
     /**

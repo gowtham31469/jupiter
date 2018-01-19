@@ -6,8 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrchestraSizeCharts extends Model
 {
-    protected $table = 'orchestra_size_chart';
-     protected $fillable = [
-      'age','cm','in'
-     ];
+	/**
+      * The table associated with the model.
+      *
+      * @var string
+      */
+      protected $table = 'orchestra_size_chart';
+
+     /**
+      * The attributes that are mass assignable.
+      *
+      * @var array
+      */
+      protected $fillable = ['age','cm','in'];
 }

@@ -43,7 +43,9 @@ Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orch
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
 Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\OrderController@printPdfSmall');
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
-
+Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
+Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
+Route::post('admin/orchestra/set-po', 'Admin\OrderManagement\OrderController@setCustomerPO');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -115,6 +117,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
+	Route::get('customer/create-order', 'Customer\HomeController@customerOrders');
 	//ORCHESTRA 
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
@@ -134,7 +137,11 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
 	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
-	Route::get('/merchandiser/dashboard', 'MerchandiserAuth\LoginController@dashboard');
+	Route::get('/merchandiser/pending-orders', 'Merchandiser\HomeController@index');
+	Route::get('/merchandiser/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
+	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
+	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
+	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
 
 });
 
@@ -198,8 +205,8 @@ Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManag
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
 
-Route::get('upload', 'UploadController@index');
-Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
+// Route::get('upload', 'UploadController@index');
+// Route::post('admin/order-management/upload', ['as'=>'dropzone.store','uses'=>'UploadController@csvUpload']);
 // Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'HomeController@dropzoneStore']);
 
 Route::post('admin/orchestra/template-management/template-list', 'Admin\Orchestra\TemplateManagementCntrl@templateList');
@@ -215,7 +222,7 @@ Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvCon
 Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
 
 
-/** Settings **/
+/**orchestra Settings Page**/
 Route::get('admin/settings', 'Admin\Settings\Orchestra\OrchestraSettings@index');
 Route::post('admin/orchestra/settings', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
 Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
