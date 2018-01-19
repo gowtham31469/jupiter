@@ -6,8 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrchestraParts extends Model
 {
-    protected $table = 'orchestra_parts';
-     protected $fillable = [
-      'french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english'
-     ];
+	/**
+      * The table associated with the model.
+      *
+      * @var string
+      */
+      protected $table = 'orchestra_parts';
+
+     /**
+      * The attributes that are mass assignable.
+      *
+      * @var array
+      */
+      protected $fillable = ['french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english'];
 }
