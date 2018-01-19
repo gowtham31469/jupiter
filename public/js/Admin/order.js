@@ -1235,7 +1235,7 @@ function washcarelabels(data, dataid) {
 
 				$('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
 
-				$('.merchandisers' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].merchandisers_id);
+				$('.merchandisers').selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].merchandisers_id);
 
 				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
 				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
@@ -3047,7 +3047,7 @@ function setWashLabel(index, dataid, id) {
     var wash_finals = JSON.stringify(wash_fins['wash_composition' + dataid]);
 
     var delivery_date = $('#wash_delivery_date' + dataid).val();
-    var merchandisers = $('.merchandisers' + dataid + ' option:selected').val();
+    var merchandisers = $('.merchandisers option:selected').val();
     delivery_date = delivery_date.split('/');
     delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
     var template_front_id = $('#wash_label_id').val();
@@ -3130,10 +3130,11 @@ function setWashLabel(index, dataid, id) {
  */
 
 function save_label_orders() {
+	alert("in")
     var finish = 0;
     if (localStorage.getItem("wash_label") != null) {
 
-
+		alert("ins")
         if ($('.merchandisers').find("option:selected").val() != "") {
             //alert("suc")
             var wash_json = JSON.parse(localStorage.getItem("wash_label"));
