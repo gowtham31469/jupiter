@@ -1,13 +1,15 @@
 /**
- * This Function is used to Show all the list of orders like label orders and sticker orders.
- *
+ * This Function is used to show tesco orders page and template selection.
+ * @author Praveenss
  * @return View
  */
 
 function tescoOrders() {
     $('.main-content').html('<div class="loader"></div>');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
+    try {
+        /** ajax call to load tesco order page **/
+        $.ajax({
         url: base_url + "/admin/tesco/order-management/orders",
         type: "Post",
         dataType: "json",
@@ -56,16 +58,16 @@ function tescoOrders() {
                                         "id": "5,6,7",
                                         "text": "TCL 1 , TCL 2 & TSL 1",
                                         "parent_id": 3
-	                                    }, {
+                                        }, {
                                         "id": "8,9",
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 3
-	                                    }, {
+                                        }, {
                                         "id": "10,11",
                                         "text": "THL 1 & THL 3",
                                         "parent_id": 3
-	                                    }]
-	                                }, {
+                                        }]
+                                    }, {
                                     "id": 4,
                                     "text": "UK",
                                     "parent_id": 2,
@@ -73,18 +75,18 @@ function tescoOrders() {
                                         "id": "12,13,14",
                                         "text": "TCL 1 , TCL 2 & TSL 1",
                                         "parent_id": 4
-	                                    }, {
+                                        }, {
                                         "id": "15,16",
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 4
-	                                    }, {
+                                        }, {
                                         "id": "17,18",
                                         "text": "THL 1 & THL 3",
                                         "parent_id": 4
-	                                    }]
-	                                }]
-	                            }]
-	                        }]
+                                        }]
+                                    }]
+                                }]
+                            }]
                     },
                     "types": {
                         "default": {
@@ -150,25 +152,45 @@ function tescoOrders() {
                         })
                     }
                 });
-            $('#create_order_form').validator().on('submit', function (e) {
-                if (e.isDefaultPrevented()) {
+                /** bootstrap validator for form **/
+                $('#create_order_form').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
 
-                } else {
-                    e.preventDefault();
-                }
-            })
+                    } else {
+                        e.preventDefault();
+                        createOrders();
+                    }
+                })
 
         },
         error: function (data) {
 
         },
         complete: function () {
+            
             $(".loader").hide();
             $(".loader").css('margin-top', '0%');
         }
-    })
+     })
+    } catch(e) {
+        // error statements
+        console.log("Error:"+e)
+    }
 }
+/**
+ * This Function is used to show create tesco orders page.
+ * @author Praveenss
+ * @return View
+ */
 
+function createOrders() {
+    try {
+        $('.main-content').html('<h1>HAiiiii i</h1>');
+    } catch(e) {
+        // error statements
+        console.log("Error:"+e)
+    }
+}
 
 
 
