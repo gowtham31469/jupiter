@@ -107,6 +107,7 @@
     text-align: center;
 }   
 /** Style tesco create order forms**/
+/*
 .input-fields {
  margin-bottom: 20px;
  }
@@ -122,6 +123,7 @@
  .order-details-notes {
  font-weight: 300;
  }
+*/
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
