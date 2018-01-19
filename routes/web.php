@@ -45,7 +45,7 @@ Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
-
+Route::post('admin/orchestra/set-po', 'Admin\OrderManagement\OrderController@setCustomerPO');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');

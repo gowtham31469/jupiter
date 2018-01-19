@@ -9,6 +9,28 @@ var deletemain = [];
 var deletewash = [];
 
 /**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt)
+{
+    try
+    {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+        {
+            return false;
+        }
+          return true;
+    }
+    catch (e)
+    {
+     console.log("Error:"+e)
+    }
+}
+/**
  * This Function is used to Show all the list of orders like label orders and sticker orders.
  *
  * @return View

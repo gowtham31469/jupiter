@@ -164,21 +164,21 @@ class UploadCsvController extends Controller
       return $result;
     }
     
-    public function getCSVUpdate()
-    {
-      try
-      {
-          $item_details_updates =  DB::table('temp_orchestra_item_details')->get();
-          $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
-      }
-      catch (Exception $e)
-      {
-        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
+    // public function getCSVUpdate()
+    // {
+    //   try
+    //   {
+    //       $item_details_updates =  DB::table('temp_orchestra_item_details')->get();
+    //       $result = response()->json(['error' =>false,'message' => 'Uploaded Successfully','updates'=>$updates], 200);
+    //   }
+    //   catch (Exception $e)
+    //   {
+    //     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    //   }
 
-      return $result;
+    //   return $result;
       
-    }
+    // }
 
 
     /**

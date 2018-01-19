@@ -19,30 +19,31 @@
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade po-details" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
+                {!! Form::open(['id' => 'add_po_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
                     <div class="form-group">
                        <!--  <label>Purchase Order Number</label>
                         <input type="text" class="form-control po" placeholder="Purchase Order Number"> -->
                         {!! Form::label('po', 'Purchase Order Number', ['class' => 'form_label']) !!}
-                          {!! Form::text('po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Purchase Order Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                          {!! Form::text('po',$value = '', array('class' => 'form-control input-sm po ','placeholder' => 'Purchase Order Number','required','onkeypress' => 'return isNumber(event)')) !!}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group ">
                         <label>Upload Purchase Order</label>
-                        <form action="/file-upload" class="dropzone">
-                        </form>
+                    <div class="dropzone dropzone-previews" id="po-pdf"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary upload-po" onclick="savePO()">Save changes</button>
+                     {!! Form::submit('Save changes', ['class' => 'btn btn-primary upload-po'] ) !!}
                 </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
@@ -225,6 +226,7 @@
             </div>
         </div>
     </div>
+     <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -288,28 +290,54 @@
                 }
             });
         });
-        function isNumber(evt)
-        {
-            try
-            {
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if (charCode > 31 && (charCode < 48 || charCode > 57))
-                {
-                    return false;
-                }
-                  return true;
-            }
-            catch (e)
-            {
-             console.log("Error:"+e)
-            }
+     $('#add_po_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             savePO();
+          }
+        })    
+    Dropzone.autoDiscover = false;
+    jQuery(document).ready(function() {
+      var buyer = localStorage.getItem("status_buyer");
+      $("div#po-pdf").dropzone({
+        url: base_url + "/admin/" + buyer + "/set-po",
+        // autoProcessQueue: false,
+        acceptedFiles: ".pdf",
+        addRemoveLinks: true,
+        maxFiles:1,
+        });
+    });
+    function savePO()
+    {
+        var buyer = localStorage.getItem("status_buyer");
+        var po_number = $('.po').val();
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+        url: base_url + "/admin/" + buyer + "/set-po",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            po_number:po_number
+        },
+        success: function (data) {
+            $('.po-details').modal('hide');
+        },
+        error: function (data) {
+            alert("error")
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
         }
-        function savePO()
-        {
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            
-        }
+    })
+    }
+
     </script>
 
     @endsection
