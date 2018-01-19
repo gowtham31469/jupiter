@@ -222,7 +222,7 @@ Route::post('admin/upload-parcel-details-file-two','Admin\UploadCSV\UploadCsvCon
 Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
 
 
-/** Settings **/
+/**orchestra Settings Page**/
 Route::get('admin/settings', 'Admin\Settings\Orchestra\OrchestraSettings@index');
 Route::post('admin/orchestra/settings', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
 Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
