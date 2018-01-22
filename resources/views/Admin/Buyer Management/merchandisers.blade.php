@@ -52,7 +52,11 @@
             </div>
         </div>
     </div>
+
+    {{-- Snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
+
+    {{-- Add merchandiser modal --}}
    <div class="modal fade" id="addMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -111,12 +115,14 @@
                   </div>
                   <div class="modal-footer">
                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                      {!! Form::submit('Add Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                      {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
                   </div>
              {!! Form::close() !!}
           </div>
       </div>
   </div>
+  
+  {{-- Edit merchandiser modal --}}
   <div class="modal fade" id="editMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog" role="document">
          <div class="modal-content">
@@ -126,6 +132,7 @@
              </div>
              {!! Form::open(['id' => 'edit_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
                  <div class="modal-body">
+                  {{-- hidden id for edit functionality --}}
                    {!! Form::hidden('merchandiser_edit_id',$value = null, array('id'=>'merchandiser_edit_id','class' => 'form-control input-sm')) !!}
                    <div id="edit_merchandiser_result"></div>
                      <div class="form-group has-feedback">
@@ -167,12 +174,14 @@
                  </div>
                  <div class="modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::submit('Edit Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                     {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
      </div>
  </div>
+
+ {{-- Delete merchandiser modal --}}
  <div class="modal fade" id="deleteMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog" role="document">
          <div class="modal-content">
@@ -191,7 +200,7 @@
                  </div>
                  <div class="modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::submit('Delete Merchandiser', ['class' => 'btn btn-primary'] ) !!}
+                     {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -207,6 +216,7 @@
     <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
+        /* Show logo on left side */
          $('.logo').html('Buyers & Merchandisers')
          $('#merchandisers-list-table').DataTable();
          $("#merchandisers-list-table_filter input").addClass('form-control input-sm');
@@ -224,7 +234,7 @@
        });
 
         
-      /** To refresh modal **/
+      /** To refresh modal while hidden**/
       $('.modal').on('hidden.bs.modal', function (e) {
         $('#add_buyer_form').trigger("reset");
         $('#add_merchandiser_form').trigger('reset');
@@ -236,7 +246,7 @@
         $('#edit_merchandiser_result').hide();
         $('#delete_merchandiser_result').hide();
        })
-       /** generate password **/
+       /** generate random password **/
        $("#generatePwd").validator().click(function(){
        function randomString(length, chars)
        {
@@ -252,7 +262,7 @@
          $("#merchandiser_password").val( randomString(10, 'aA#!'));
          $('#add_merchandiser_form').validator('validate');
          })
-         /** Copy password to clipboard **/
+         /** Copy random password to clipboard **/
          $( document ).ready(function() {
            var clipboard = new Clipboard('.clipboard');
            clipboard.on('success', function(e) {
@@ -263,6 +273,7 @@
              }, 2500);
            });
          });
+         /* To validate add merchandiser form*/
          $('#add_merchandiser_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
@@ -271,13 +282,15 @@
          else
          {
             e.preventDefault();
+            /* call addMerchandiser function from buyers.js*/
             addMerchandiser();
          }
        })
-       /** get edit merchandiser details **/
+       /** get merchandiser details for editing  on click**/
        $(document).on('click','.edit-merchandiser',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
+           /* call getMerchandiser function from buyers.js*/
            getMerchandiser(id);
        });
        /** submit edit merchandiser form **/
@@ -289,9 +302,11 @@
          else
          {
             e.preventDefault();
+            /* call editMerchandiser function from buyers.js*/
             editMerchandiser();
          }
        })
+       /** assign id for delete merchandiser modal **/
        $('#deleteMerchandiserModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_merchandiser_id').attr('value', config);
@@ -306,6 +321,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_merchandiser_id').val();
+            /* call deleteMerchandiser function from buyers.js*/
             deleteMerchandiser(id);
          }
        })

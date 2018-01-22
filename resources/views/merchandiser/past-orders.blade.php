@@ -61,6 +61,7 @@
             $('#past-orders-table_length select').addClass('form-control input-sm');
             $('.selectpicker').selectpicker();
         });
+
       /** Filter funtionality */
       var $tableSel = $('#past-orders-table');
         $tableSel.DataTable({
@@ -110,6 +111,7 @@
                 });
             }
         });
+
         /** Reset filter */
         $("#reset").on("click", function() {
             $('#uvcNumber').val('').change();
@@ -125,6 +127,7 @@
             $('.selectpicker').selectpicker('refresh');
 
         });
+
         $('input[name="daterange"]').daterangepicker({
 
             },
@@ -136,6 +139,7 @@
             });
 
         $('input[name="daterange"]').val('Filter by Order Date');
+
         /*Clear the filter. Unlike normal filters in Datatables,
         custom filters need to be removed from the afnFiltering array.*/
         $('.cancelBtn').on('click', function(e) {
@@ -143,9 +147,12 @@
             $.fn.dataTableExt.afnFiltering.length = 0;
             $tableSel.dataTable().fnDraw();
         });
+
+        // Toggle filter menu functionality
         function showFilter() {
         $('.filter-window').toggle();
         }
+
         /* Our main filter function
         * We pass the column location, the start date, and the end date
         */
@@ -170,11 +177,12 @@
             }
         );
         };
+        
         /*converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220*/
         var normalizeDate = function(dateString) {
-        var date = new Date(dateString);
-        var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
-        return normalized;
+            var date = new Date(dateString);
+            var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
+            return normalized;
         }
         /** filter functionality ends */
     </script>
