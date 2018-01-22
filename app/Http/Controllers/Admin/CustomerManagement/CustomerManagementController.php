@@ -67,10 +67,26 @@ class CustomerManagementController extends Controller
     {
       try{
             $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active','customers.account_holder','customers.ifsc_code','customers.bank','customers.branch')
                          ->get();
              foreach ($customers as $value) 
              {
+                if($value->account_holder == "null")
+                {
+                  $value->account_holder   = "N/A";
+                }
+                if($value->ifsc_code == "null")
+                {
+                  $value->ifsc_code   = "N/A";
+                }
+                if($value->bank == "null")
+                {
+                  $value->bank   = "N/A";
+                }
+                if($value->branch == "null")
+                {
+                  $value->branch   = "N/A";
+                }
                 $customer_id = $value->id;
                 $default_contact = DB::table('customer_contact_persons')
                          ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
@@ -151,6 +167,10 @@ class CustomerManagementController extends Controller
                 $default_address = $request['default_address'];
                 $buyer           = $request['buyer'];
                 $pi_required     = $request['pi_required'];
+                $account_holder  = $request['account_holder'];
+                $ifsc_code       = $request['ifsc_code'];
+                $bank            = $request['bank'];
+                $branch          = $request['branch'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -182,7 +202,11 @@ class CustomerManagementController extends Controller
                                 'gstin_number'   => $gstin_number,
                                 'pan_number'     => $pan_number,
                                 'email'          => $login_email,
-                                'pi_required'    => $pi_required
+                                'pi_required'    => $pi_required,
+                                'account_holder' => $account_holder,
+                                'ifsc_code'      => $ifsc_code,
+                                'bank'           => $bank,
+                                'branch'         => $branch
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -292,7 +316,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank')
                          ->where('customers.id','=',$id)
                          ->get();
                 if ($customer{0}->password != "" || $customer{0}->password != Null || $customer{0}->password != null || $customer{0}->password != NULL) 
@@ -341,7 +365,11 @@ class CustomerManagementController extends Controller
                     $input['email']           = Input::get('login_email');
                     $input['pi_required']     = Input::get('pi_required');
                     $input['password']        = Hash::make(Input::get('p'));
-                    
+                    $input['account_holder']  = Input::get('account_holder');
+                    $input['ifsc_code']       = Input::get('ifsc_code');
+                    $input['bank']            = Input::get('bank');
+                    $input['branch']          = Input::get('branch');
+
                     $contact_person  = Input::get('contact_person');
                     $contact_phone   = Input::get('contact_phone');
                     $contact_email   = Input::get('contact_email');
@@ -353,6 +381,7 @@ class CustomerManagementController extends Controller
                     $address_email   = Input::get('address_email');
                     $default_address = Input::get('default_address');
                     $buyer           = Input::get('buyer');
+                    
 
                     $email_rules     = array('email' => 'unique:customers,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);
@@ -387,7 +416,12 @@ class CustomerManagementController extends Controller
                           'pan_number'     => $input['pan_number'],
                           'email'          => $input['email'],
                           'password'       => $input['password'],
-                          'pi_required'    => $input['pi_required']
+                          'pi_required'    => $input['pi_required'],
+                          'account_holder' => $input['account_holder'],
+                          'ifsc_code'      => $input['ifsc_code'],
+                          'bank'           => $input['bank'],
+                          'branch'         => $input['branch']
+
                         ]);
                       CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
@@ -447,21 +481,21 @@ class CustomerManagementController extends Controller
         public function deleteCustomerById(Request $request)
         {
           try {
-                    $id        = $request['id'];
-                    $deleted = Customer::where('id', '=', $id)
-                                ->delete();
-                    CustomerBillAddress::where('customer_id', '=', $id)
-                            ->delete();
-                    CustomerContactPersons::where('customer_id', '=', $id)
-                            ->delete();
-                    if($deleted != '')
-                    {
-                      $result = response()->json(['error'=> false,'message' =>'success'],200);
-                    }
-                    else
-                    {
-                      $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                    }
+                  $id        = $request['id'];
+                  $deleted = Customer::where('id', '=', $id)
+                              ->delete();
+                  CustomerBillAddress::where('customer_id', '=', $id)
+                          ->delete();
+                  CustomerContactPersons::where('customer_id', '=', $id)
+                          ->delete();
+                  if($deleted != '')
+                  {
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
+                  }
+                  else
+                  {
+                    $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                  }
               } catch (\Exception $e)
               {
                      $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -480,10 +514,26 @@ class CustomerManagementController extends Controller
            $is_allowed = $module_var->permittedModules();
            $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
            $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active','customers.account_holder','customers.ifsc_code','customers.bank','customers.branch')
                          ->get();
              foreach ($customers as $value) 
              {
+                if($value->account_holder == "null")
+                {
+                  $value->account_holder   = "N/A";
+                }
+                if($value->ifsc_code == "null")
+                {
+                  $value->ifsc_code   = "N/A";
+                }
+                if($value->bank == "null")
+                {
+                  $value->bank   = "N/A";
+                }
+                if($value->branch == "null")
+                {
+                  $value->branch   = "N/A";
+                }
                 $customer_id = $value->id;
                 $default_contact = DB::table('customer_contact_persons')
                          ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')

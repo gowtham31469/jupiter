@@ -20,8 +20,6 @@
                           <tr>
                             <th>Id</th>
                             <th>Merchandiser Name</th>
-                            <th>Supplier Name</th>
-                            <th>Buyer Name</th>
                             <th>Merchandiser Email</th>
                             <th>Merchandiser Phone</th>
                             <th>Merchandiser Address</th>
@@ -33,8 +31,6 @@
                         <tr id="{{$value->id}}">
                           <td>{{ $loop->iteration }}</td>
                           <td>{{ $value->merchandiser_name }}</td>
-                          <td>{{ $value->company_name }}</td>
-                          <td>{{ $value->buyer_name }}</td>
                           <td>{{ $value->email }}</td>
                           <td>{{ $value->merchandiser_phone }}</td>
                           <td>{{ $value->merchandiser_address }}</td>
@@ -102,16 +98,6 @@
                         {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                         <div class="help-block with-errors"></div>
                       </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_supplier',(['' => '-- Select Customer --']+ $customers),'',array('class' => 'form-control input-sm','id'=>'merchandiser_supplier','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
-                      <div class="form-group has-feedback">
-                        {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']+ $buyers),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
                   </div>
                   <div class="modal-footer">
                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
@@ -159,16 +145,6 @@
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
                        {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_supplier', 'Select Customer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_supplier',(['' => '-- Select Customer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_supplier','required')) }}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                     <div class="form-group has-feedback">
-                       {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
-                       {{  Form::select('edit_merchandiser_buyer',(['' => '-- Select Buyer --']),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>

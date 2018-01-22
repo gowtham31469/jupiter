@@ -23,7 +23,7 @@
                           <th>Factory Code</th>
                           <th>Default Contact</th>
                           <th>Courier Choice</th>
-                          <th>Account Number</th>
+                          <th>Bank Details</th>
                           <th>TIN Number</th>
                           <th>GSTIN Number</th>
                           <th>PAN Number</th>
@@ -49,7 +49,20 @@
                             </dl>
                           </td>
                           <td>{{ $value->courier_choice }}</td>
-                          <td>{{ $value->account_no }}</td>
+                          <td>
+                            <dl>
+                              <dt>Account Holder:</dt>
+                              <dd>{{ $value->account_holder }}</dd>
+                              <dt>Account No:</dt>
+                              <dd>{{ $value->account_no }}</dd>
+                              <dt>Bank:</dt>
+                              <dd>{{ $value->bank }}</dd>
+                              <dt>IFSC:</dt>
+                              <dd>{{ $value->ifsc_code }}</dd>
+                              <dt>Branch:</dt>
+                              <dd>{{ $value->branch }}</dd>
+                            </dl>
+                          </td>
                           <td>{{ $value->tin_number }}</td>
                           <td>{{ $value->gstin_number }}</td>
                           <td>{{ $value->pan_number }}</td>
@@ -129,13 +142,6 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
                                 {!! Form::label('tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                                 {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
                                 <div class="help-block with-errors"></div>
@@ -193,13 +199,13 @@
                           </div>
                           </div>
                           </div>
-                          <h4>Bank Details</h4>
+                          <h4><strong>Bank Details</strong></h4>
                           <hr>
                           <div class="row">
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                                {!! Form::label('account_holder', 'Account Holder', ['class' => 'form_label']) !!}
+                                {!! Form::text('account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -212,27 +218,27 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                                {!! Form::label('ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
+                                {!! Form::text('ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                                {!! Form::label('bank', 'Bank Name', ['class' => 'form_label']) !!}
+                                {!! Form::text('bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                                {!! Form::label('branch', 'Bank Branch', ['class' => 'form_label']) !!}
+                                {!! Form::textarea('branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
                         </div>
-                        <h4>Contact Information</h4>
+                        <h4><strong>Contact Information</strong></h4>
                           <hr>
                           <div class="row">
                             <div class="col-md-6 ">
@@ -374,13 +380,6 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
-                        {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                        <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group has-feedback">
                         {!! Form::label('edit_tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                         {!! Form::text('edit_tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
                         <div class="help-block with-errors"></div>
@@ -438,7 +437,47 @@
                   </div>
                   </div>
                   </div>
-                  <hr>
+                  <h4><strong>Bank Details</strong></h4>
+                          <hr>
+                          <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('edit_account_holder', 'Account Holder', ['class' => 'form_label']) !!}
+                                {!! Form::text('edit_account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
+                                {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('edit_ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
+                                {!! Form::text('edit_ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('edit_bank', 'Bank Name', ['class' => 'form_label']) !!}
+                                {!! Form::text('edit_bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('edit_branch', 'Bank Branch', ['class' => 'form_label']) !!}
+                                {!! Form::textarea('edit_branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <h4><strong>Contact Information</strong></h4>
+                          <hr>
                   <div class="row">
                     <div class="col-md-6 ">
                       <div id="editContact">
