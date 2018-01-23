@@ -27,10 +27,10 @@
                   $(".loader").css('margin-top','12%');
               },
               success: function (data) {
-                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Bank Details</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
-                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
+                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td><dl><dt>Account Holder:</dt><dd>'+item.account_holder+'</dd><dt>Account No:</dt><dd>'+item.account_no+'</dd><dt>Bank:</dt><dd>'+item.bank+'</dd><dt>IFSC:</dt><dd>'+item.ifsc_code+'</dd><dt>Branch:</dt><dd>'+item.branch+'</dd></dl></td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
                    if(item.is_active === 1)
                    {
                     table += '<td><span class="label label-success">Active</span></td>';
@@ -88,6 +88,10 @@ function addCustomer()
         var company_name    =  $('#company_name').val();
         var courier_choice  =  $('#courier_choice').val();
         var account_no      =  $('#account_no').val();
+        var account_holder  =  $('#account_holder').val();
+        var ifsc_code       =  $('#ifsc_code').val();
+        var bank            =  $('#bank').val();
+        var branch          =  $('#branch').val();
         var tin_number      =  $('#tin_number').val();
         var gstin_number    =  $('#gstin_number').val();
         var pan_number      =  $('#pan_number').val();
@@ -193,7 +197,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer,pi_required:pi_required},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch},
             beforeSend: function () {
               $(".loader").show();
               $(".loader").css('margin-top','12%');
@@ -577,6 +581,10 @@ function addCustomer()
                   $('#edit_gstin_number').val(data.customers[0].gstin_number);
                   $('#edit_pan_number').val(data.customers[0].pan_number);
                   $('#edit_login_email').val(data.customers[0].email);
+                  $('#edit_account_holder').val(data.customers[0].account_holder);
+                  $('#edit_ifsc_code').val(data.customers[0].ifsc_code);
+                  $('#edit_bank').val(data.customers[0].bank);
+                  $('#edit_branch').val(data.customers[0].branch);
                   if(data.customers[0].pi_required === 1)
                   {
                     $('#edit_pi_required').prop('checked', true);
@@ -843,6 +851,10 @@ function addCustomer()
           var password        =  $('#edit_password').val();
           var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
           var pi_required     =  $('#edit_pi_required').is(':checked')?1:0;
+          var account_holder  =  $('#edit_account_holder').val();
+          var ifsc_code       =  $('#edit_ifsc_code').val();
+          var bank            =  $('#edit_bank').val();
+          var branch          =  $('#edit_branch').val();
 
           var contact_person  = [];
           var contact_phone   = [];
@@ -942,7 +954,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password,pi_required:pi_required},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch},
               beforeSend: function () {
                 $(".loader").show();
                 $(".loader").css('margin-top','12%');

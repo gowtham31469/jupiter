@@ -39,6 +39,7 @@
             })
 
             //$('.js-card').niceScroll()
+            /* Show logo on left side */
             $('.logo').html('Customers');
             $('.buyer-nav-select').html($('.buyer-div').html())
             if (localStorage.getItem("pricing_buyer") === null) {

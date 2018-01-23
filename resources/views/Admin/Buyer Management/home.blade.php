@@ -139,6 +139,7 @@
     <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
+        /* Show logo on left side */
          $('.logo').html('Buyers & Merchandisers')
          $('#add_buyer_form').trigger("reset");
          $('#edit_buyer_form').trigger('reset');

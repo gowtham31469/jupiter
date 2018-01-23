@@ -329,7 +329,7 @@ class OrderManagementCntrl extends Controller
 				if(count($data['customers']) > 0)
 				{
 					$cust_id = $data['customers']{0}->id;
-					$data['merchandisers']=DB::table('merchandisers')->where('customer_id',$cust_id)->where('buyer_id','1')->select('*')->get();
+					$data['merchandisers']=DB::table('merchandisers')->select('*')->get();
 				}
 				else
 				{
