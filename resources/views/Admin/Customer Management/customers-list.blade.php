@@ -216,22 +216,47 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-check form-group has-feedback">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
+                                  Proforma Invoice(PI) required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                              <div class="form-check form-group has-feedback">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="advance_payment" id="advance_payment">
+                                  Advance Payment Method required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
                           <div class="col-md-6">
-                          <div class="form-check form-group has-feedback">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
-                              Proforma Invoice(PI) required ? 
-                            </label>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                          <div class="form-check form-group has-feedback">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="checkbox" value="" name="advance_payment" id="advance_payment">
-                              Advance Payment Method required ? 
-                            </label>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                          </div>
+                            <div class="form-check form-group has-feedback freight-charge">
+                              <label class="form-check-label">Is Freight Charge Free ? 
+                                <input type="radio" id="freight_charge_free"  name="optradio" value="Yes" required="true" style="margin-left: 10px;"> Yes
+                                <input type="radio" id="freight_charge_req" name="optradio" value="No" required="true" style="margin-left: 10px;"> No
+                              </label> 
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          
+                            <div class="form-group has-feedback freight_charge_div" style="display: none;">
+                              <div class="col-md-4">
+                                {!! Form::label('freight_charge', 'Freight Charge', ['class' => 'form_label']) !!}
+                                <br>
+                                <strong>(in ₹ per gm)</strong>
+                              </div>
+                              <div class="col-md-4">
+                                {!! Form::text('freight_charge',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'In INR','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                           </div>
                           </div>
                           <h4><strong>Bank Details</strong></h4>
                           <hr>
@@ -482,23 +507,48 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                  <div class="form-check form-group has-feedback">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
-                      Proforma Invoice(PI) required ? 
-                    </label>
-                    <div class="help-block with-errors"></div>
                   </div>
-                  <div class="form-check form-group has-feedback">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-check form-group has-feedback">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" name="edit_advance_payment" id="edit_advance_payment">
-                        Advance Payment Method required ? 
+                        <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
+                        Proforma Invoice(PI) required ? 
                       </label>
                       <div class="help-block with-errors"></div>
                     </div>
+                    <div class="form-check form-group has-feedback">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" value="" name="edit_advance_payment" id="edit_advance_payment">
+                          Advance Payment Method required ? 
+                        </label>
+                        <div class="help-block with-errors"></div>
+                      </div>
                   </div>
                   </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-check form-group has-feedback edit-freight-charge">
+                        <label class="form-check-label">Is Freight Charge Free ? 
+                          <input type="radio" id="edit_freight_charge_free"  name="editoptradio" value="Yes" required="true" style="margin-left: 10px;"> Yes
+                          <input type="radio" id="edit_freight_charge_req" name="editoptradio" value="No" required="true" style="margin-left: 10px;"> No
+                        </label> 
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    
+                      <div class="form-group has-feedback edit_freight_charge_div" style="display: none;">
+                        <div class="col-md-4">
+                          {!! Form::label('edit_freight_charge', 'Freight Charge', ['class' => 'form_label']) !!}
+                          <br>
+                          <strong>(in ₹ per gm)</strong>
+                        </div>
+                        <div class="col-md-4">
+                          {!! Form::text('edit_freight_charge',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'In INR','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                      </div>
+                     </div>
+                    </div>
                   <h4><strong>Bank Details</strong></h4>
                       <hr>
                       <div class="row">
@@ -636,6 +686,7 @@
       $('#make_active').tooltip('show')
       $('#make_active').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
+      $('div.freight_charge_div').hide()
     });
 
     /** restrict special characters (except @, ., _ **/
@@ -661,6 +712,8 @@
       $('#edit_payment_terms').selectpicker('refresh');
       $('#place_of_supply').selectpicker('refresh');
       $('#edit_place_of_supply').selectpicker('refresh');
+      $('div.freight_charge_div').hide();
+      $('div.edit_freight_charge_div').hide();
      })
 
     /** Generate random password for customer **/
@@ -781,6 +834,47 @@
         deleteCustomer(id);
      }
     })
-       
+    /**
+     * To hide and show freight charge textbox based on radio button click(for adding customer form)
+     */
+    $(document).ready(function($) {
+      $('#freight_charge_req').click(function() {
+         if($('#freight_charge_req').is(':checked'))
+         $('div.freight_charge_div').show();
+          /** Clear textbox value on textbox hide */
+          $('#freight_charge').val('')
+          /** Add required for textbox **/
+         $('#freight_charge').prop('required',true)
+      });
+      $('#freight_charge_free').click(function() {
+         if($('#freight_charge_free').is(':checked'))
+          $('div.freight_charge_div').hide();
+          /** Clear textbox value on textbox hide */
+          $('#freight_charge').val('')
+          /** Remove required from textbox **/
+          $('#freight_charge').prop('required',false)
+      });
+     });  
+    /**
+     * To hide and show freight charge textbox based on radio button click(for editing customer form)
+     */
+    $(document).ready(function($) {
+      $('#edit_freight_charge_req').click(function() {
+         if($('#edit_freight_charge_req').is(':checked'))
+         $('div.edit_freight_charge_div').show();
+         /** Clear textbox value on textbox hide */
+         $('#edit_freight_charge').val('')
+         /** Add required for textbox **/
+         $('#edit_freight_charge').prop('required',true)
+      });
+      $('#edit_freight_charge_free').click(function() {
+         if($('#edit_freight_charge_free').is(':checked'))
+          $('div.edit_freight_charge_div').hide();
+          /** Clear textbox value on textbox hide */
+          $('#edit_freight_charge').val('')
+          /** Remove required from textbox **/
+          $('#edit_freight_charge').prop('required',false)
+      });
+     });  
     </script>
     @endsection

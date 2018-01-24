@@ -41,6 +41,14 @@
             console.log(data);
          },
          complete: function () {
+              /** [To make top menu active] */
+              $(function () {
+                  var url = window.location;
+                  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                  $('.dynamic-menu a').filter(function () {
+                      return this.href == url;
+                  }).parent('li').addClass('current-page').find('a').addClass('active');
+              });
               $(".loader").hide();
               $(".loader").css('margin-top','0%');
          }
@@ -281,6 +289,14 @@
                   console.log(data);
                },
                complete: function () {
+                    /** [To make top menu active] */
+                    $(function () {
+                        var url = window.location;
+                        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                        $('.dynamic-menu a').filter(function () {
+                            return this.href == url;
+                        }).parent('li').addClass('current-page').find('a').addClass('active');
+                    });
                     $(".loader").hide();
                     $(".loader").css('margin-top','0%');
                }
