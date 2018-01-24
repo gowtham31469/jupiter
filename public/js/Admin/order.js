@@ -9,6 +9,28 @@ var deletemain = [];
 var deletewash = [];
 
 /**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt)
+{
+    try
+    {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+        {
+            return false;
+        }
+          return true;
+    }
+    catch (e)
+    {
+     console.log("Error:"+e)
+    }
+}
+/**
  * This Function is used to Show all the list of orders like label orders and sticker orders.
  *
  * @return View
@@ -235,7 +257,7 @@ function table(data,path) {
         if (key != "id") {
             if (key == "SupplierName" || key == "Style_Name") {
                 th += "<th>" + key + "</th>";
-            } else {
+            } else if ((key != "pi_required")&&(key != "tableName")) {
                 th += "<th style='text-align: center;'>" + key + "</th>";
             }
 
@@ -243,10 +265,11 @@ function table(data,path) {
     }
     if (path==base_url + "/admin/orchestra/order-management/order-status")
     {
-       th += "<th style='text-align: center;'>Operations</th>";
+       th += "<th style='text-align: center;'>Actions</th>";
     }
-    
+    var className = [];
     $.each(data, function (index, value) {
+
         tr += '<tr id="' + value.id + '">';
         for (var key in columnsIn) {
             if (key != "id") {
@@ -270,21 +293,30 @@ function table(data,path) {
                     tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
+                   
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
                         tr += '<td>' + value[key] + '</td>';
-                    } else {
+                    } else if ((key != "pi_required")&&(key != "tableName")){
                         tr += '<td align="center">' + value[key] + '</td>';
                     }
-
+                }
+            }
+            if (key == "pi_required")
+            {
+                if (path==base_url + "/admin/orchestra/order-management/order-status")
+                {
+                    if (value[key]==1)
+                    {    
+                      tr += '<td align="center"><a href="#" data-toggle="modal" data-target="#profoma-invoice"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                    }
+                    else{
+                        tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                    }   
                 }
             }
         }
-        if (path==base_url + "/admin/orchestra/order-management/order-status")
-        {
-         tr += '<td align="center"><a href="#"  data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
-        }
-       
+               
         tr += '</tr>';
     })
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
@@ -2174,7 +2206,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
     $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
         base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">Main & Size Label</b></h5> <div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div></div><div id="add_modal"></div><div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="bottom-bar"><div class="modal-footer"> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Save</button></div></div>');
+        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div></div><div id="add_modal"></div><div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="bottom-bar"><div class="modal-footer"> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button></div></div>');
 
 
     //    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View & Edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="' +
@@ -2918,7 +2950,7 @@ function setSpecialTag(id) {
 
 function setMainLabel(index, dataid, id) {
     var delivery_date = $('#main_delivery_date' + dataid).val();
-    alert(delivery_date)
+    // alert(delivery_date)
     delivery_date = delivery_date.split('/');
     delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
     var template_id = $('#' + index).find('#tree3' + dataid).jstree('get_selected', true);
@@ -3130,7 +3162,6 @@ function setWashLabel(index, dataid, id) {
  */
 
 function save_label_orders() {
-	alert("in")
     var finish = 0;
     if (localStorage.getItem("wash_label") != null) {
 

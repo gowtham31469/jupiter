@@ -18,5 +18,5 @@ class CustomerBillAddress extends Model
       *
       * @var array
       */
-      protected $fillable = ['customer_id', 'address', 'country','email','telephone','fax','default_address'];
+      protected $fillable = ['customer_id', 'address', 'country','email','telephone','fax','is_billing_address','is_shipping_address'];
 }

@@ -134,7 +134,7 @@
     <script src="{{ asset('js/Admin/customer.js') }}"></script>
     <script>
     $( document ).ready(function() {
-        
+      /* Show logo on left side */  
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
       $('#customer_result').hide();

@@ -106,23 +106,52 @@ class OrderManagementCntrl extends Controller
 	
     public function orderStatus()
     {
-            $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_hang_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_hang_tag_orders.uvc as UVC',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Hang Tag" as ArtworkType'),'orchestra_item_details.SupplierName as 	SupplierName','orchestra_item_details.Collection as Season','orchestra_hang_tag_orders.created_at as OrderDate','orchestra_hang_tag_orders.delivery_date as DeliveryDate','orchestra_hang_tag_orders.status as Status', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
-        
-            $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_special_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_special_tag_orders.uvc as UVC',DB::raw('"Special Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Special Tag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_special_tag_orders.created_at as OrderDate','orchestra_special_tag_orders.delivery_date as DeliveryDate','orchestra_special_tag_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+            $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_hang_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_hang_tag_orders.uvc as UVC',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Hang Tag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_hang_tag_orders.created_at as OrderDate','orchestra_hang_tag_orders.delivery_date as DeliveryDate','orchestra_hang_tag_orders.status as Status', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+            foreach ($data['orchestra_hang_tag_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_hang_tag_orders";
+            }
+
+            $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_special_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_special_tag_orders.uvc as UVC',DB::raw('"Special Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"SpecialTag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_special_tag_orders.created_at as OrderDate','orchestra_special_tag_orders.delivery_date as DeliveryDate','orchestra_special_tag_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+            foreach ($data['orchestra_hang_tag_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_special_tag_orders";
+            }
+            // $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_special_tag_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_special_tag_orders.uvc as UVC',DB::raw('"Special Tag" as TemplateName'),DB::raw('"-" as BuyerPONo'),DB::raw('"Special Tag" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_special_tag_orders.created_at as OrderDate','orchestra_special_tag_orders.delivery_date as DeliveryDate','orchestra_special_tag_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->get();
+
         
             $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_main_label_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_main_label_orders.uvc as UVC','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"-" as BuyerPONo'),DB::raw('"Main & Size Label" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_main_label_orders.created_at as OrderDate','orchestra_main_label_orders.delivery_date as DeliveryDate','orchestra_main_label_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_main_label_orders.id')->get();
-        
+            foreach ($data['orchestra_main_label_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_main_label_orders";
+            }
             $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_wash_care_label_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->select('orchestra_wash_care_label_orders.uvc as UVC','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"-" as BuyerPONo'),DB::raw('"WashCareLabel" as ArtworkType'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_item_details.Collection as Season', 'customers.pi_required')->groupBy('orchestra_item_details.UVC')->groupBy('orchestra_wash_care_label_orders.id')->get();
 		
-		
+		    foreach ($data['orchestra_wash_care_label_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_wash_care_label_orders";
+            }
 			$data['orchestra_solid_carton_sticker_orders'] = DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_solid_carton_sticker_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_solid_carton_sticker_orders.uvc as UVC',DB::raw('"Solid Carton Stickers" as TemplateName'),'orchestra_parcel_details.BuyerPONo',DB::raw('"Solid Carton Stickers" as ArtworkType'),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_solid_carton_sticker_orders.created_at as OrderDate','orchestra_solid_carton_sticker_orders.delivery_date as DeliveryDate','orchestra_solid_carton_sticker_orders.status as Status', 'customers.pi_required',DB::raw('"-" as Season'))->where('orchestra_parcel_details.IsSTD',0)->get();
-		
+		      
+            foreach ($data['orchestra_solid_carton_sticker_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_solid_carton_sticker_orders";
+            }
 			$data['orchestra_solid_poly_bag_sticker_orders'] = DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_solid_poly_bag_sticker_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_solid_poly_bag_sticker_orders.uvc as UVC',DB::raw('"Solid Poly Bag Stickers" as TemplateName'),'orchestra_parcel_details.BuyerPONo',DB::raw('"Solid Poly Bag Stickers" as ArtworkType'),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_solid_poly_bag_sticker_orders.created_at as OrderDate','orchestra_solid_poly_bag_sticker_orders.delivery_date as DeliveryDate','orchestra_solid_poly_bag_sticker_orders.status as Status', 'customers.pi_required',DB::raw('"-" as Season'))->where('orchestra_parcel_details.IsSTD',0)->get();
-		
+		   foreach ($data['orchestra_solid_poly_bag_sticker_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_solid_poly_bag_sticker_orders";
+            }
 			$data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_carton_sticker_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_standard_carton_sticker_orders.uvc as UVC',DB::raw('"Standard Carton Stickers" as TemplateName'),'orchestra_parcel_details.BuyerPONo',DB::raw('"Standard Carton Stickers" as ArtworkType'),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_standard_carton_sticker_orders.created_at as OrderDate','orchestra_standard_carton_sticker_orders.delivery_date as DeliveryDate','orchestra_standard_carton_sticker_orders.status as Status', 'customers.pi_required',DB::raw('"-" as Season'))->where('orchestra_parcel_details.IsSTD',1)->get();
-		
+		    foreach ($data['orchestra_standard_carton_sticker_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_standard_carton_sticker_orders";
+            }
 			$data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_parcel_details','orchestra_parcel_details.UVC','=','orchestra_standard_polybag_sticker_orders.uvc')->leftjoin('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->select('orchestra_standard_polybag_sticker_orders.uvc as UVC',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),'orchestra_parcel_details.BuyerPONo',DB::raw('"Standard Poly Bag Stickers" as ArtworkType'),'orchestra_parcel_details.SupplierName as SupplierName','orchestra_standard_polybag_sticker_orders.created_at as OrderDate','orchestra_standard_polybag_sticker_orders.delivery_date as DeliveryDate','orchestra_standard_polybag_sticker_orders.status as Status', 'customers.pi_required',DB::raw('"-" as Season'))->where('orchestra_parcel_details.IsSTD',1)->get();
-        
+            foreach ($data['orchestra_standard_polybag_sticker_orders'] as $key => $value)
+            {
+               $value->tableName= "orchestra_standard_polybag_sticker_orders";
+            }
             echo json_encode($data);
     }
 	
@@ -300,7 +329,7 @@ class OrderManagementCntrl extends Controller
 				if(count($data['customers']) > 0)
 				{
 					$cust_id = $data['customers']{0}->id;
-					$data['merchandisers']=DB::table('merchandisers')->where('customer_id',$cust_id)->where('buyer_id','1')->select('*')->get();
+					$data['merchandisers']=DB::table('merchandisers')->select('*')->get();
 				}
 				else
 				{

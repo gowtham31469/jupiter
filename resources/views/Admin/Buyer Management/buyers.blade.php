@@ -49,7 +49,11 @@
             </div>
         </div>
     </div>
+
+    {{-- Snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
+
+    {{-- Add buyer modal --}}
      <div class="modal fade" id="addBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -89,12 +93,14 @@
                     </div>
                     <div class="modal-footer">
                         {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::submit('Add Buyer', ['class' => 'btn btn-primary'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
         </div>
     </div>
+
+    {{-- Edit buyer modal --}}
     <div class="modal fade" id="editBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -105,6 +111,7 @@
                {!! Form::open(['id' => 'edit_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
                      <div id="edit_buyer_result"></div>
+                     {{-- hidden id for edit functionality --}}
                      {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
@@ -136,12 +143,14 @@
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Edit Buyer', ['class' => 'btn btn-primary'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
        </div>
    </div>
+
+   {{-- Delete buyer modal --}}
    <div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -160,12 +169,13 @@
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Delete Buyer', ['class' => 'btn btn-primary'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
        </div>
    </div>
+   
     @endsection
     @else
     <script type="text/javascript">
@@ -176,6 +186,7 @@
     <script src="{{ asset('js/Admin/buyers.js') }}"></script>
    <script type="text/javascript">
        $( document ).ready(function() {
+         /* Show logo on left side*/
          $('.logo').html('Buyers & Merchandisers')
          $('#buyers-list-table').DataTable();
          $("#buyers-list-table_filter input").addClass('form-control input-sm');
@@ -191,7 +202,8 @@
          $('.delete-buyer').tooltip('show')
          $('.delete-buyer').tooltip('toggle')
        });
-       /** Add buyer form validation **/
+
+       /** Add buyer bootstrap form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
         {
@@ -200,23 +212,28 @@
         else
         {
            e.preventDefault();
+           /* call addBuyer function from buyers.js*/
            addBuyer();
         }
       })
-      /** To refresh modal **/
+
+      /** To refresh modal while hidden **/
       $('.modal').on('hidden.bs.modal', function (e) {
         $('#add_buyer_form').trigger("reset");
         $('#buyer_result').hide();
         $('#edit_buyer_result').hide();
         $('#delete_buyer_result').hide();
        })
-       /** get edit buyer details **/
+
+       /** Get edit buyer details on click**/
        $(document).on('click','.edit-buyer',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
+           /* call getBuyer function from buyers.js*/
            getBuyer(id);
        });
-       /** submit edit buyer form **/
+
+       /** Submit edit buyer form **/
        $('#edit_buyer_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
@@ -225,14 +242,17 @@
          else
          {
             e.preventDefault();
+            /* call getBuyer function from buyers.js*/
             editBuyer();
          }
        })
-       /** assign id for delete modal **/
+
+       /** assign id for delete buyer modal **/
        $('#deleteBuyerModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_buyer_id').attr('value', config);
        });
+
        /** submit delete buyer form **/
        $('#delete_buyer_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
@@ -243,8 +263,10 @@
          {
             e.preventDefault();
             var id   = $('#delete_buyer_id').val();
+            /* call deleteBuyer function from buyers.js*/
             deleteBuyer(id);
          }
        })
+
     </script>
     @endsection
