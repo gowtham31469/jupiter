@@ -257,7 +257,7 @@ function table(data,path) {
         if (key != "id") {
             if (key == "SupplierName" || key == "Style_Name") {
                 th += "<th>" + key + "</th>";
-            } else if ((key != "pi_required")&&(key != "tableName")) {
+            } else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")) {
                 th += "<th style='text-align: center;'>" + key + "</th>";
             }
 
@@ -290,6 +290,7 @@ function table(data,path) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
+
                     tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
@@ -297,7 +298,7 @@ function table(data,path) {
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
                         tr += '<td>' + value[key] + '</td>';
-                    } else if ((key != "pi_required")&&(key != "tableName")){
+                    } else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")){
                         tr += '<td align="center">' + value[key] + '</td>';
                     }
                 }
@@ -305,12 +306,13 @@ function table(data,path) {
             if (key == "pi_required")
             {
                 if (path==base_url + "/admin/orchestra/order-management/order-status")
-                {
+                { 
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" data-toggle="modal" data-target="#profoma-invoice"><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.UVC+'","'+value.BuyerPONo+'","'+value.template_id+'","'+value.tableName+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }
-                    else{
+                    else
+                    {
                         tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }   
                 }
@@ -321,6 +323,38 @@ function table(data,path) {
     })
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 
+}
+
+function showProfomaInvoice(uvc,po,template_id,table_name)
+{
+    alert(po)
+    $('#uvc_number').text(uvc)
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/" + buyer + "/order-management/sticker-order-details",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            po: po,
+            uvc: uvc
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        success: function (data) {
+            $('#profoma-invoice').modal('show')
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+    
 }
 
 /**
