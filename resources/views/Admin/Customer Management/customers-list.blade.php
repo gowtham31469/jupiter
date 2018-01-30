@@ -24,9 +24,9 @@
                           <th>Default Contact</th>
                           <th>Courier Choice</th>
                           <th>Bank Details</th>
-                          <th>TIN Number</th>
-                          <th>GSTIN Number</th>
-                          <th>PAN Number</th>
+                          <th>TIN No.</th>
+                          <th>GSTIN No.</th>
+                          <th>PAN No.</th>
                           <th>Billing Address</th>
                           <th>Shipping Address</th>
                           <th>Status</th>
@@ -223,6 +223,13 @@
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
                                   Proforma Invoice(PI) required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                              <div class="form-check form-group has-feedback po-required-div"  style="display: none;">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="po_required" id="po_required">
+                                  Purchase Order(PO) required ? 
                                 </label>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -514,6 +521,13 @@
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
                         Proforma Invoice(PI) required ? 
+                      </label>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-check form-group has-feedback edit-po-required-div"  style="display: none;">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" name="edit_po_required" id="edit_po_required">
+                        Purchase Order(PO) required ? 
                       </label>
                       <div class="help-block with-errors"></div>
                     </div>
@@ -875,6 +889,41 @@
           /** Remove required from textbox **/
           $('#edit_freight_charge').prop('required',false)
       });
-     });  
+     }); 
+
+     /** [ To hide/show PO required checkbox based on PI required checkbox] */
+     $(document).ready(function($) {
+      // While adding customer
+      $('#pi_required').click(function() {
+         if($('#pi_required').is(':checked'))
+         {
+          $('div.po-required-div').show();
+          /** [ uncheck po required checkbox on page load ] */
+          $('input:checkbox[name=po_required]').prop('checked',false);
+         }
+         else
+         {
+          $('div.po-required-div').hide();
+          /** [ uncheck po required checkbox while hidden ] */
+          $('input:checkbox[name=po_required]').prop('checked',false);
+         }
+      });
+
+      // While editing customer
+      $('#edit_pi_required').click(function() {
+         if($('#edit_pi_required').is(':checked'))
+         {
+          $('div.edit-po-required-div').show();
+          /** [ uncheck po required checkbox on page load ] */
+          $('input:checkbox[name=edit_po_required]').prop('checked',false);
+         }
+         else
+         {
+          $('div.edit-po-required-div').hide();
+          /** [ uncheck po required checkbox while hidden ] */
+          $('input:checkbox[name=edit_po_required]').prop('checked',false);
+         }
+      });
+     }); 
     </script>
     @endsection
