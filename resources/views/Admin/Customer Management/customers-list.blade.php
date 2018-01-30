@@ -28,6 +28,7 @@
                           <th>GSTIN Number</th>
                           <th>PAN Number</th>
                           <th>Billing Address</th>
+                          <th>Shipping Address</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
@@ -69,13 +70,25 @@
                           <td>
                             <dl>
                               <dt>Address:</dt>
-                              <dd>{{ $value->address }},{{ $value->country }}</dd>
+                              <dd>{{ $value->bill_address }},{{ $value->bill_country }}</dd>
                               <dt>Email:</dt>
-                              <dd>{{ $value->email }}</dd>
+                              <dd>{{ $value->bill_email }}</dd>
                               <dt>Phone:</dt>
-                              <dd>{{ $value->telephone }}</dd>
+                              <dd>{{ $value->bill_telephone }}</dd>
                               <dt>Fax:</dt>
-                              <dd>{{ $value->fax }}</dd>
+                              <dd>{{ $value->bill_fax }}</dd>
+                            </dl>
+                          </td>
+                          <td>
+                            <dl>
+                              <dt>Address:</dt>
+                              <dd>{{ $value->ship_address }},{{ $value->ship_country }}</dd>
+                              <dt>Email:</dt>
+                              <dd>{{ $value->ship_email }}</dd>
+                              <dt>Phone:</dt>
+                              <dd>{{ $value->ship_telephone }}</dd>
+                              <dt>Fax:</dt>
+                              <dd>{{ $value->ship_fax }}</dd>
                             </dl>
                           </td>
                           @if($value->is_active === 1)
@@ -180,6 +193,20 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
+                              {!! Form::label('payment_terms', 'Select Payment Terms', ['class' => 'form_label']) !!}
+                                {{ Form::select('payment_terms',(['' => '-- Select payment terms --']+ $payment_terms),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'payment_terms','required')) }}
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                              {!! Form::label('place_of_supply', 'Select Place Of Supply', ['class' => 'form_label']) !!}
+                                {{ Form::select('place_of_supply',(['' => '-- Select place of supply --']+ $place_of_supply),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'place_of_supply','required')) }}
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
                               {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                               <div class="input-group">
                                 {!! Form::text('password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
@@ -189,15 +216,47 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-check form-group has-feedback">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
+                                  Proforma Invoice(PI) required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                              <div class="form-check form-group has-feedback">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="advance_payment" id="advance_payment">
+                                  Advance Payment Method required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
                           <div class="col-md-6">
-                          <div class="form-check form-group has-feedback">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
-                              Proforma Invoice(PI) required ? 
-                            </label>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                          </div>
+                            <div class="form-check form-group has-feedback freight-charge">
+                              <label class="form-check-label">Is Freight Charge Free ? 
+                                <input type="radio" id="freight_charge_free"  name="optradio" value="Yes" required="true" style="margin-left: 10px;"> Yes
+                                <input type="radio" id="freight_charge_req" name="optradio" value="No" required="true" style="margin-left: 10px;"> No
+                              </label> 
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          
+                            <div class="form-group has-feedback freight_charge_div" style="display: none;">
+                              <div class="col-md-4">
+                                {!! Form::label('freight_charge', 'Freight Charge', ['class' => 'form_label']) !!}
+                                <br>
+                                <strong>(in ₹ per gm)</strong>
+                              </div>
+                              <div class="col-md-4">
+                                {!! Form::text('freight_charge',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'In INR','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                           </div>
                           </div>
                           <h4><strong>Bank Details</strong></h4>
                           <hr>
@@ -285,7 +344,7 @@
                             <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
                               <div id="addbilladdress">
                                   <div id="billaddress_0" class="addbilladdress">
-                                      <div type="button" class="accordion button-bottom"><h4>Billing Address 1</h4></div>
+                                      <div type="button" class="accordion button-bottom"><h4>Address 1</h4></div>
                                       <div id="billaddress0" class="panel">
                                         <div class="form-group has-feedback">
                                           {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
@@ -325,12 +384,19 @@
                                           </label>
                                           <div class="help-block with-errors"></div>
                                         </div>
+                                        <div class="form-check form-group has-feedback">
+                                          <label class="form-check-label">
+                                            <input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="shipping_address0">
+                                            Make as default shipping address
+                                          </label>
+                                          <div class="help-block with-errors"></div>
+                                        </div>
                                       </div>
                                   </div>
                               </div>
                               <div class="clearfix"></div>
                               <div class="form-group">
-                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Billing Address</button>
+                                  <button type="button" onclick="addAddress(this,event)" data-id="0" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
                               </div>
                             </div>
                           </div>
@@ -416,6 +482,20 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('edit_payment_terms', 'Select Payment Terms', ['class' => 'form_label']) !!}
+                        {{ Form::select('edit_payment_terms',(['' => '-- Select payment terms --']+ $payment_terms),'',array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','id' => 'edit_payment_terms','required')) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('edit_place_of_supply', 'Select Place Of Supply', ['class' => 'form_label']) !!}
+                        {{ Form::select('edit_place_of_supply',(['' => '-- Select place of supply --']+ $place_of_supply),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_place_of_supply','required')) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
                   <div class="col-md-6 edit_pwd hidden">
                     <div class="form-group has-feedback">
                       {!! Form::label('edit_password', 'Password', ['class' => ' form_label']) !!}
@@ -427,86 +507,118 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                  <div class="form-check form-group has-feedback">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
-                      Proforma Invoice(PI) required ? 
-                    </label>
-                    <div class="help-block with-errors"></div>
                   </div>
-                  </div>
-                  </div>
-                  <h4><strong>Bank Details</strong></h4>
-                          <hr>
-                          <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('edit_account_holder', 'Account Holder', ['class' => 'form_label']) !!}
-                                {!! Form::text('edit_account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('edit_ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
-                                {!! Form::text('edit_ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('edit_bank', 'Bank Name', ['class' => 'form_label']) !!}
-                                {!! Form::text('edit_bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('edit_branch', 'Bank Branch', ['class' => 'form_label']) !!}
-                                {!! Form::textarea('edit_branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <h4><strong>Contact Information</strong></h4>
-                          <hr>
                   <div class="row">
-                    <div class="col-md-6 ">
-                      <div id="editContact">
-                          
+                    <div class="col-md-6">
+                    <div class="form-check form-group has-feedback">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
+                        Proforma Invoice(PI) required ? 
+                      </label>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-check form-group has-feedback">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" value="" name="edit_advance_payment" id="edit_advance_payment">
+                          Advance Payment Method required ? 
+                        </label>
+                        <div class="help-block with-errors"></div>
                       </div>
-                      <div class="clearfix"></div>
-                      <div class="form-group">
-                          <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
+                  </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-check form-group has-feedback edit-freight-charge">
+                        <label class="form-check-label">Is Freight Charge Free ? 
+                          <input type="radio" id="edit_freight_charge_free"  name="editoptradio" value="Yes" required="true" style="margin-left: 10px;"> Yes
+                          <input type="radio" id="edit_freight_charge_req" name="editoptradio" value="No" required="true" style="margin-left: 10px;"> No
+                        </label> 
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    
+                      <div class="form-group has-feedback edit_freight_charge_div" style="display: none;">
+                        <div class="col-md-4">
+                          {!! Form::label('edit_freight_charge', 'Freight Charge', ['class' => 'form_label']) !!}
+                          <br>
+                          <strong>(in ₹ per gm)</strong>
+                        </div>
+                        <div class="col-md-4">
+                          {!! Form::text('edit_freight_charge',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'In INR','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                      </div>
+                     </div>
+                    </div>
+                  <h4><strong>Bank Details</strong></h4>
+                      <hr>
+                      <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_account_holder', 'Account Holder', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_bank', 'Bank Name', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_branch', 'Bank Branch', ['class' => 'form_label']) !!}
+                            {!! Form::textarea('edit_branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
-                      <div id="editbilladdress">
-                          
-                      </div>
-                      <div class="clearfix"></div>
-                      <div class="form-group">
-                          <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Billing Address</button>
-                      </div>
-                    </div>
+                    <h4><strong>Contact Information</strong></h4>
+                      <hr>
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div id="editContact">
+                      
                   </div>
-               </div>
-                  <div class="modal-footer">
-                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                      {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+                  <div class="clearfix"></div>
+                  <div class="form-group">
+                      <button type="button" id="edit_contact" onclick="editAddContact(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Contact Person</button>
                   </div>
-                 {!! Form::close() !!}
-          </div>
+                </div>
+                <div class="col-md-6" style="border-left: 1px solid #ecf0f1;">
+                  <div id="editbilladdress">
+                      
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="form-group">
+                      <button type="button" id="edit_address" onclick="editAddAddress(this,event)" data-id="1" class='btn btn-primary'><i class="ion ion-plus"></i> Address</button>
+                  </div>
+                </div>
+              </div>
+           </div>
+              <div class="modal-footer">
+                  {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                  {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+              </div>
+             {!! Form::close() !!}
       </div>
-    </div>
+  </div>
+</div>
     
     {{-- Delete customer modal --}}
     <div class="modal fade" id="deleteCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -559,6 +671,10 @@
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
+      $('#payment_terms').selectpicker('refresh');
+      $('#edit_payment_terms').selectpicker('refresh');
+      $('#place_of_supply').selectpicker('refresh');
+      $('#edit_place_of_supply').selectpicker('refresh');
       $('#edit_buyer').selectpicker('refresh');
       $('#buyer').selectpicker('refresh');
       $('.edit-customer').tooltip('show')
@@ -570,6 +686,7 @@
       $('#make_active').tooltip('show')
       $('#make_active').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
+      $('div.freight_charge_div').hide()
     });
 
     /** restrict special characters (except @, ., _ **/
@@ -591,6 +708,12 @@
       $('#customer_result').hide();
       $('#edit_buyer').selectpicker('refresh');
       $('#buyer').selectpicker('refresh');
+      $('#payment_terms').selectpicker('refresh');
+      $('#edit_payment_terms').selectpicker('refresh');
+      $('#place_of_supply').selectpicker('refresh');
+      $('#edit_place_of_supply').selectpicker('refresh');
+      $('div.freight_charge_div').hide();
+      $('div.edit_freight_charge_div').hide();
      })
 
     /** Generate random password for customer **/
@@ -711,6 +834,47 @@
         deleteCustomer(id);
      }
     })
-       
+    /**
+     * To hide and show freight charge textbox based on radio button click(for adding customer form)
+     */
+    $(document).ready(function($) {
+      $('#freight_charge_req').click(function() {
+         if($('#freight_charge_req').is(':checked'))
+         $('div.freight_charge_div').show();
+          /** Clear textbox value on textbox hide */
+          $('#freight_charge').val('')
+          /** Add required for textbox **/
+         $('#freight_charge').prop('required',true)
+      });
+      $('#freight_charge_free').click(function() {
+         if($('#freight_charge_free').is(':checked'))
+          $('div.freight_charge_div').hide();
+          /** Clear textbox value on textbox hide */
+          $('#freight_charge').val('')
+          /** Remove required from textbox **/
+          $('#freight_charge').prop('required',false)
+      });
+     });  
+    /**
+     * To hide and show freight charge textbox based on radio button click(for editing customer form)
+     */
+    $(document).ready(function($) {
+      $('#edit_freight_charge_req').click(function() {
+         if($('#edit_freight_charge_req').is(':checked'))
+         $('div.edit_freight_charge_div').show();
+         /** Clear textbox value on textbox hide */
+         $('#edit_freight_charge').val('')
+         /** Add required for textbox **/
+         $('#edit_freight_charge').prop('required',true)
+      });
+      $('#edit_freight_charge_free').click(function() {
+         if($('#edit_freight_charge_free').is(':checked'))
+          $('div.edit_freight_charge_div').hide();
+          /** Clear textbox value on textbox hide */
+          $('#edit_freight_charge').val('')
+          /** Remove required from textbox **/
+          $('#edit_freight_charge').prop('required',false)
+      });
+     });  
     </script>
     @endsection

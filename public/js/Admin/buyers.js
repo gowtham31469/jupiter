@@ -41,6 +41,14 @@
             console.log(data);
          },
          complete: function () {
+              /** [To make top menu active] */
+              $(function () {
+                  var url = window.location;
+                  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                  $('.dynamic-menu a').filter(function () {
+                      return this.href == url;
+                  }).parent('li').addClass('current-page').find('a').addClass('active');
+              });
               $(".loader").hide();
               $(".loader").css('margin-top','0%');
          }
@@ -71,6 +79,7 @@
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+                  /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html("Buyer Added Successfully");
                        $('#snackbar').css('background-color','#1abb9c');
@@ -125,12 +134,14 @@
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
+                 /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#buyer_edit_id').val(id);
                  $('#edit_buyer_name').val(data.buyer[0].buyer_name);
                  $('#edit_buyer_email').val(data.buyer[0].buyer_email);
                  $('#edit_buyer_phone').val(data.buyer[0].buyer_phone);
                  $('#edit_buyer_address').val(data.buyer[0].buyer_address);
+                 /** [ Backdrop for bootstrap modal ] */
                  $('#editBuyerModal').modal({
                       backdrop: 'static',
                       keyboard: false
@@ -173,6 +184,7 @@
            method:"put",
            data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
            statusCode: {
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer Updated Successfully');
                      $('#snackbar').css('background-color','#1abb9c');
@@ -217,6 +229,7 @@
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer deleted Successfully');
                      $('#snackbar').css('background-color','#1abb9c');
@@ -281,6 +294,14 @@
                   console.log(data);
                },
                complete: function () {
+                    /** [To make top menu active] */
+                    $(function () {
+                        var url = window.location;
+                        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                        $('.dynamic-menu a').filter(function () {
+                            return this.href == url;
+                        }).parent('li').addClass('current-page').find('a').addClass('active');
+                    });
                     $(".loader").hide();
                     $(".loader").css('margin-top','0%');
                }
@@ -312,6 +333,7 @@
                 $(".loader").css('margin-top','12%');
               },
               statusCode: {
+                   /** [Show response status based on HTTP status code] */
                    200: function() {
                         $('.snackbar_span').html('Merchandiser Added Successfully');
                         $('#snackbar').css('background-color','#1abb9c');
@@ -364,12 +386,14 @@
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
+                 /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#merchandiser_edit_id').val(id);
                  $('#edit_merchandiser_name').val(data.merchandiser[0].merchandiser_name);
                  $('#edit_merchandiser_email').val(data.merchandiser[0].email);
                  $('#edit_merchandiser_phone').val(data.merchandiser[0].merchandiser_phone);
                  $('#edit_merchandiser_address').val(data.merchandiser[0].merchandiser_address);
+                 /** [ Backdrop for bootstrap modal ] */
                  $('#editMerchandiserModal').modal({
                       backdrop: 'static',
                       keyboard: false
@@ -413,6 +437,7 @@
              method:"put",
              data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
              statusCode: {
+                  /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Merchandiser Updated Successfully');
                        $('#snackbar').css('background-color','#1abb9c');
@@ -458,6 +483,7 @@
                method:"delete",
                data:{_token:csrf_token,id:id},
                statusCode: {
+                    /** [Show response status based on HTTP status code] */
                     200: function() {
                          $('.snackbar_span').html('Merchandiser deleted Successfully');
                          $('#snackbar').css('background-color','#1abb9c');
