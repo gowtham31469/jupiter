@@ -1092,7 +1092,11 @@ class OrderManagementCntrl extends Controller
        
            
     }
-
+    /**
+     * method to get all the details for profoma invoice generation
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function getProfomaInvoice(Request $request)
     {
 

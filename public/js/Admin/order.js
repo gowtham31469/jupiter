@@ -328,7 +328,14 @@ function table(data,path) {
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 
 }
-
+/**
+ * call the method for getting all the details for profoma invoice generation
+ * @param  {[type]} uvc         [description]
+ * @param  {[type]} po          [description]
+ * @param  {[type]} template_id [description]
+ * @param  {[type]} table_name  [description]
+ * @return profoma invoice
+ */
 function showProfomaInvoice(uvc,po,template_id,table_name)
 {
     $('#uvc_number').text(uvc)
