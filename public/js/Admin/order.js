@@ -1018,7 +1018,16 @@ function label_order_details(uvc) {
                     if (index == 0) {
                         mainlabels(data, "");
                     } else {
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + index + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + index + '"  style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + index + '">' + value.template_name + " - Main & Size Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+						if(data.orchestra_main_label_orders != "")
+						{
+							var str=data.orchestra_main_label_orders[index].status;
+							$main_status=str.replace(/ /g, "");
+						}
+						else
+						{
+							$main_status="";
+						}
+                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + index + '" data-backdrop="static" data-keyboard="false"> <span class="label label-'+$main_status+' label-status">'+$main_status+'</span>   <div class="card-title"><p class="pull-right delete-main' + index + '"  style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + index + '">' + value.template_name + " - Main & Size Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
                         $('.delete-main' + index).on('click', function (e) {
                             deletemain.push(value.id)
                             localStorage.setItem("deletemain", JSON.stringify(deletemain));
@@ -1042,7 +1051,16 @@ function label_order_details(uvc) {
                     if (index == 0) {
                         washcarelabels(data, "");
                     } else {
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + "Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+						if(data.orchestra_wash_care_label_orders != "")
+						{
+							var str=data.orchestra_wash_care_label_orders[index].status;
+							$wash_status=str.replace(/ /g, "");
+						}
+						else
+						{
+							$wash_status="";
+						}
+                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + "Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
                         $('.delete-wash' + index).on('click', function (e) {
                             deletewash.push(value.id)
                             localStorage.setItem("deletewash", JSON.stringify(deletewash));
@@ -1137,7 +1155,15 @@ function washcarelabels(data, dataid) {
 
 			$delivery_date = $de_date_fin;
 			$exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
-			$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p>";
+			if(data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment != "")
+			{
+				$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p>";
+			}
+			else
+			{
+				$comment = "<h4>Comments :</h4><p>No data Found</p>";
+			}
+			
 			$status=data.orchestra_wash_care_label_orders[dataid1].status;
 		} else {
 			$delivery_date = "";
@@ -1176,7 +1202,7 @@ function washcarelabels(data, dataid) {
 		ttots += parseInt($wash_label_count);
 
 	});
-	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4>'+$status+' <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div> '+ $comment +' </div></div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4>'+$status+' <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table>'+ $comment +'<hr> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
    
 	$('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -1241,23 +1267,33 @@ function washcarelabels(data, dataid) {
 		startDate: dateMsg
 	});
 	$("#clickme" + dataid).click(function () {
-		composition_percentage_global = 0;
-		$('.composition_select' + dataid).prop('disabled', false)
-		$('.parts_select' + dataid).prop('disabled', false)
-		$(".parts_select" + dataid).val('');
-		$('.parts_select' + dataid).selectpicker('refresh');
-		$(".composition_select" + dataid).val('');
-		$('.composition_select' + dataid).selectpicker('refresh');
-		$(".composition_percent" + dataid).val('');
-		$('.add_to_list' + dataid).removeAttr('disabled')
-		$('#composition_table_qty' + dataid).html("")
-		$('.composition_percent' + dataid).removeAttr('disabled')
+		
+	   if( $('.merchandisers option:selected').val() != "")
+	   {
+			composition_percentage_global = 0;
+			$('.composition_select' + dataid).prop('disabled', false)
+			$('.parts_select' + dataid).prop('disabled', false)
+			$(".parts_select" + dataid).val('');
+			$('.parts_select' + dataid).selectpicker('refresh');
+			$(".composition_select" + dataid).val('');
+			$('.composition_select' + dataid).selectpicker('refresh');
+			$(".composition_percent" + dataid).val('');
+			$('.add_to_list' + dataid).removeAttr('disabled')
+			$('#composition_table_qty' + dataid).html("")
+			$('.composition_percent' + dataid).removeAttr('disabled')
 
-		$('.washlabelnameqty' + dataid).text($('.washlabelname' + dataid).text())
-		$("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
-		$("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
-		$('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
-		$("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
+			$('.washlabelnameqty' + dataid).text($('.washlabelname' + dataid).text())
+			$("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
+			$("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
+			$('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
+			$("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
+		    $('.merchandiser_error').addClass('hidden')
+	   }
+	   else
+	   {
+				$('.merchandiser_error').removeClass('hidden')
+	   }
+		
 	})
 
 	$(".backdrop, #close").click(function () {
@@ -2240,11 +2276,55 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
     $.each(data.merchandisers, function (index, value) {
         merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
     });
+	if(data.orchestra_hang_tag_orders != "")
+	{
+		var str=data.orchestra_hang_tag_orders[0].status;
+		$hang_status=str.replace(/ /g, "");
+	}
+	else
+	{
+		$hang_status="";
+	}
+	if(data.orchestra_special_tag_orders != "")
+	{
+		var str=data.orchestra_special_tag_orders[0].status;
+		$special_status=str.replace(/ /g, "");
+	}
+	else
+	{
+		$special_status="";
+	}
+	if(data.orchestra_wash_care_label_orders != "")
+	{
+		var str=data.orchestra_wash_care_label_orders[0].status;
+		$wash_status=str.replace(/ /g, "");
+		var wash_enable="";
+	}
+	else
+	{
+		$wash_status="";
+		var wash_enable="display:none";
+	}
+	if(data.orchestra_main_label_orders != "")
+	{
+		var str=data.orchestra_main_label_orders[0].status;
+		$main_status=str.replace(/ /g, "");
+		var main_enable="";
+	}
+	else
+	{
+		$main_status="";
+		var main_enable="display:none";
+	}
 
-    $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-submitted label-status">Submitted</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-Approved label-status">Approved</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-        base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-ppending label-status">PO. Pending</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div></div></div></div><div id="add_modal"></div><div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px; margin-bottom:80px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button></div></div>');
+    $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+        base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
+        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button></div></div>');
 
+	//card for wcl and main and size labels
+	
+	//<div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px; margin-bottom:80px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div>
+	
 
     //    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View & Edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="' +
     //        base_url + '/images/ht_default.png" class="img-responsive center-block"><p class="text-center">No Image preview</p></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit</p><h5>Washcare Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit</p><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" class="form-control input-sm washcarename"><p class="text-center add-label" style="padding: 53px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label</p></div></div><div class="col-md-4" ><div class="card add-card"><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" class="form-control input-sm mainname"><p class="text-center add-label" id="main_label_card" style="padding: 53px 0px;cursor: pointer;">Add Main & Size Label</p></div></div>');
@@ -2271,7 +2351,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
         if ($('.washcarename').val() != "") {
             washcare += 1;
             if (washcare <= 5) {
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">' + $('.washcarename').val() + ' - Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
             }
             $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -2324,7 +2404,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
         if ($('.mainname').val() != "") {
             mainlabel += 1;
             if (mainlabel <= 5) {
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">' + $('.mainname').val() + ' - Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
                 var data = localStorage.getItem("label_order_data");
                 mainlabels(JSON.parse(data), mainlabel);
             }
