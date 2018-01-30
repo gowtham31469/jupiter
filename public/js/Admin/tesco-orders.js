@@ -6,6 +6,7 @@
 
 function tescoOrders() {
     $('.main-content').html('<div class="loader"></div>');
+    $('.template-error').html('');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     try {
         /** ajax call to load tesco order page **/
@@ -21,22 +22,31 @@ function tescoOrders() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card" > <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form"> <div class="form-group has-feedback"><label for="order_type" class="form_label">Search / Select Purchase Order</label><select class="form-control selectpicker" title="Search / Select PO" data-live-search="true" name="Search PO" required=""><option value="1">PO12345</option><option value="2">PO098765</option></select> <div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select> <div class="help-block with-errors"></div></div><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"> </div><div id="jstree"></div><div class="form-group "> <div class="po-upload hidden"> <div class="form-group files" id="single_file "><label>Upload PO</label><input class="form-control " multiple=" " type="file "></div></div></div><button class="btn btn-primary btn-block ">Create Order</button></form></div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "></div><div class="viewDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>')
+                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card" > <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select> <div class="help-block with-errors"></div></div> <div class="form-group has-feedback po-number-search" style="display: none;"><label for="order_type" class="form_label">Search / Select Purchase Order</label><select class="form-control selectpicker" title="Search / Select PO" data-live-search="true" name="Search PO"><option value="1">PO12345</option><option value="2">PO098765</option></select> <div class="help-block with-errors"></div></div><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div class="template-error"></div></div><div id="jstree"></div><div class="form-group "> <div class="po-upload hidden"> <div class="form-group files" id="single_file "><label>Upload PO</label><input class="form-control " multiple=" " type="file "></div></div></div><button class="btn btn-primary btn-block ">Create Order</button></form></div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "></div><div class="viewDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>')
 
+                /** [ Search  functionality foe jstree nodes ] */
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
                     $('#jstree').jstree('search', searchString);
                 });
+
+                /** [ Load selectpicker ] */
                 $('.selectpicker').selectpicker();
+
+                /** [ Hide/Show PO upload div, PO number search based on order type selected ] */
                 $(".order_type").change(function () {
                     var selectedType = $(".order_type option:selected").val();
                     if (selectedType === '1') {
                         $(".po-upload").removeClass("hidden");
+                        $(".po-number-search").show();
                     } else {
                         $(".po-upload").addClass("hidden");
+                        $(".po-number-search").hide();
                     }
 
                 });
+
+                /** Show tesco templates hierarchy */
                 $('.descriptionDiv').addClass('hidden')
                 $('#jstree').jstree({
                     'core': {
@@ -96,13 +106,21 @@ function tescoOrders() {
                         return this.is_leaf(node);
                     }
                 }).on('loaded.jstree', function () {
+                    /** Show expanded jstree  */
                     $('#jstree').jstree('open_all');
                 }).bind("refresh.jstree", function (e, data) {
+                    /** Show expanded jstree  */
                     $(this).jstree("open_all");
-                });
+                }).bind('before.jstree', function(event, data){ 
+                    /** [Make only leaf-nodes selectable ] */
+                    if(data.instance.is_leaf(data.args[0])){ 
+                       return false; 
+                    } 
+                })
 
-
+                /** Get tempalte preview based on template selection  */
                 $('#jstree').on('activate_node.jstree', function (e, data) {
+                    $('.template-error').html('')
                     if (data.instance.is_leaf(data.node)) {
                         var template_id = data.node.id;
                         var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -150,13 +168,38 @@ function tescoOrders() {
                         })
                     }
                 });
-                /** bootstrap validator for form **/
+
+                /** [To get selected leaf node] */
+                var template_id = 0;
+                $('#jstree').on('activate_node.jstree', function (e, data) {
+                    if (data.instance.is_leaf(data.node) != '') 
+                    {
+                        template_id = data.node.id;
+                    }
+                });
+
+                /** [bootstrap validator for create tesco order form] **/
                 $('#create_order_form').validator().on('submit', function (e) {
+
                     if (e.isDefaultPrevented()) {
 
-                    } else {
+                    }
+                    else 
+                    {
                         e.preventDefault();
-                        createOrders();
+                        
+                        /** [Check if leaf node( template ) selected or not] **/
+                        if (template_id != 0) 
+                        {
+                            console.log(template_id)
+                            $('.template-error').html('')
+                            createOrders();
+                        }
+                        else
+                        {
+                            /**  [Show validation error message] **/
+                            $('.template-error').html('<span style="color:#a94442">Please select a template in the list.</span>');
+                        }
                     }
                 })
 
@@ -183,7 +226,12 @@ function tescoOrders() {
 
 function createOrders() {
     try {
-        $('.main-content').html('<div class="container"><div class="row"><h2><u>Order details for:<span>TGAM_121232</span></u></h2><hr><div class="row input-fields"><div class="col-md-4 col-sm-12"><table><tr><p>PO Number</p></tr><tr><input type="text" /></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>UK Style Reference</p></tr><tr><input type="text" /></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>Global Style Reference</p></tr><tr><input type="text" /></tr></table></div></div><div class="row input-fields"><div class="col-md-4 col-sm-12"><table><tr><p>Season Code</p></tr><tr><input type="text" /></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>Short Description</p></tr><tr><input type="text" /></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>E0OS Site Code</p></tr><tr><input type="text" /></tr></table></div></div><div class="row input-fields"><div class="col-md-4 col-sm-12"><table><tr><p>Brand</p></tr><tr><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>Supplier Code & Name</p></tr><tr><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select></tr></table></div><div class="col-md-4 col-sm-12"><table><tr><p>Department</p></tr><tr><select><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option>x<option value="audi">Audi</option></select></tr></table></div></div><div class="row"><div class="col-md-6"><div class="pull-left"><h4>Note:<span class="order-details-notes">This is a sample note.</span></h4></div></div><div class="col-md-6"><div class="pull-right"><h4>RFID Complaint</h4><input type="radio" name="Yes" value="yes" checked> Yes<input type="radio" name="No" value="no"> No</div></div></div></div></div>');
+        $('.top-content').html('<span class="pull-right">Please Note : If any select list does not contain required information, please contact Administrator</span><h3 class="content-heading">Order details for:TGAM_121232</h3>');
+        $('.main-content').html(' <hr> <div class="col-md-3"> <div class="form-group"> <label for="name">PO Number</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">UK Style Ref.</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">CE Style Ref.</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">Season Code</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">Short Description</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">EQOS Site Code</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <div class="form-group"> <label for="name">Manufactured Date</label> <input type="text" class="form-control" id="" placeholder="Enter PO. Number"> </div></div><div class="col-md-3"> <label for="name">Department</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div> <div class="clearfix"></div><div class="col-md-3"><label>Brand</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div><div class="col-md-3"><label>Supplier Code & Name</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div><div class="col-md-3"><label>RFID Compliant</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div><div class="col-md-3"><label>Tag At Source</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p><button class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div> <div class="table-responsive"><table class="table table-bordered text-center"> <thead> <tr> <th rowspan="2">Line No.</th> <th rowspan="2">TPND</th> <th rowspan="2">ITF Barcode</th> <th rowspan="2">Units per carton</th> <th colspan="3">TCL1</th> <th colspan="3">TCL2</th> <th colspan="3">TSL1</th> <th rowspan="2">Actions</th> </tr><tr><th>Select</th><th>Count</th><th>Event</th><th>Select</th><th>Count</th><th>Event</th><th>Select</th><th>Count</th><th>Event</th></tr></thead> <tbody> <tr> <td>1</td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button" title="" ></i></a></td></tr><tr> <td>2</td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button" title="" ></i></a></td></tr><tr> <td>3</td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><div class="form-group"> <input type="text" class="form-control input-sm"> </div></td><td><div class="checkbox"> <label> <input type="checkbox"> </label> </div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button" title="" ></i></a></td></tr></tbody> </table></div><hr><h4>Order Preview</h4><div class="row"> <div class="col-md-4"> <div class="card add-card"> <div class="card-title"> <h5><b>TCL 1</b></h5> </div><div class="row"> <div class="col-md-8 col-md-offset-2"> <div class="img_artwork"> <img src="/images/wcl_default.png" class="img-responsive center-block"> </div></div></div></div></div><div class="col-md-4"> <div class="card add-card"> <div class="card-title"> <h5><b>TCL 1</b></h5> </div><div class="row"> <div class="col-md-8 col-md-offset-2"> <div class="img_artwork"> <img src="/images/wcl_default.png" class="img-responsive center-block"> </div></div></div></div></div><div class="col-md-4"> <div class="card add-card"> <div class="card-title"> <h5><b>TCL 1</b></h5> </div><div class="row"> <div class="col-md-8 col-md-offset-2"> <div class="img_artwork"> <img src="/images/wcl_default.png" class="img-responsive center-block"> </div></div></div></div></div></div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left">Please save or submit changes before closing page.</span><button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Cancel</button> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button><button class="btn btn-warning btn-xs"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button></div></div>');
+        $(".card").css("margin-bottom", "80px");
+        $('.selectpicker').selectpicker();
+
+        
     } catch(e) {
         // error statements
         console.log("Error:"+e)

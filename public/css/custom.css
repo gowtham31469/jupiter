@@ -4,9 +4,11 @@ html {}
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 12px !important;
-    background-color: #ffffff;
+    background-color: #f5f5f5;
 }
-
+table{
+    background:#fff;
+}
 hr {
     border-top: 1px solid #cacaca;
 }
@@ -337,7 +339,10 @@ h4 {
 .bottom-bar .modal-footer {
     padding: 9px;
 }
-
+.bottom-bar .btn{
+    margin-right: 5px;
+    margin-left: 5px;
+}
 /*
  * Global add-ons
  */
@@ -633,6 +638,12 @@ span.navbar-brand.logo:hover {
     background: #fff;
     padding: 15px;
 }
+@media only screen and (max-width: 500px) {
+    .div-max{
+        display: none;
+    }
+}
+
 
 .scroll {
     height: calc(100vh - 130px);
@@ -791,7 +802,7 @@ p.delta {
     overflow-y: auto;
     width: 200px;
     /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     border-right: 1px solid #eee;
 }
 
@@ -940,6 +951,12 @@ span.sticker-details {
     margin-right: 25px;
     max-width: 250px;
 }
+.label-status{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
 
 .label-draft {
     background: #333;
@@ -958,6 +975,9 @@ span.sticker-details {
 }
 
 .label-ppending {
+    background: #9b59b6;
+}
+.label-BuyerApprovalPending {
     background: #9b59b6;
 }
 
@@ -1036,8 +1056,13 @@ span.sticker-details {
     padding: 3px 10px 3px 10px;
 }
 
-.table td {
+.table td, .table th {
     vertical-align: middle !important;
+    text-align: center;
+}
+.table .form-group {
+    margin-bottom: 0px;
+    padding: 0px;
 }
 
 #solidform .form-control {

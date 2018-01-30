@@ -217,9 +217,7 @@ class BuyerManagementController extends Controller
     public function merchandiserList()
     {
       try {
-             $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','buyers.buyer_name','customers.company_name')
-             ->join('buyers','buyers.id','=','merchandisers.buyer_id')
-             ->join('customers','customers.id','=','merchandisers.customer_id')->get();
+             $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone')->get();
 
             return response()->json(['error'=>'false','message' =>'success', 'merchandisers' => $merchandisers]);
           } catch (\Exception $e)
@@ -242,8 +240,6 @@ class BuyerManagementController extends Controller
                 $phone                 = $request['phone'];
                 $address               = $request['address'];
                 $password              = Hash::make($request['p']);
-                $merchandiser_buyer    = $request['merchandiser_buyer'];
-                $merchandiser_supplier = $request['merchandiser_supplier'];
                 $email_exists = Merchandiser::where('email',$email)->select('id')->get();
                 if(count($email_exists) > 0)
                 {
@@ -252,8 +248,6 @@ class BuyerManagementController extends Controller
                 else
                 {
                   $inserted = Merchandiser::create([
-                                'buyer_id'               => $merchandiser_buyer,
-                                'customer_id'            => $merchandiser_supplier,
                                 'merchandiser_name'      => $name,
                                 'email'                  => $email,
                                 'password'               => $password,
@@ -286,7 +280,7 @@ class BuyerManagementController extends Controller
       {
         try {
               $id = $request['id'];
-              $merchandiser = DB::table('merchandisers')->select('id','buyer_id','customer_id','merchandiser_name','email','merchandiser_address','merchandiser_phone')->where('merchandisers.id',$id)->get();
+              $merchandiser = DB::table('merchandisers')->select('id','merchandiser_name','email','merchandiser_address','merchandiser_phone')->where('merchandisers.id',$id)->get();
               return response()->json(['error'=>'false','message' =>'success', 'merchandiser' => $merchandiser]);
             } catch (\Exception $e)
             {
@@ -308,8 +302,6 @@ class BuyerManagementController extends Controller
               $input['name']      = Input::get('name');
               $input['address']   = Input::get('address');
               $input['phone']     = Input::get('phone');
-              $input['supplier']  = Input::get('supplier');
-              $input['buyer']     = Input::get('buyer');
               $email_rules = array('email' => 'unique:merchandisers,email,'.$id);
               $emailValidator = Validator::make($input ,$email_rules);
 
@@ -321,8 +313,6 @@ class BuyerManagementController extends Controller
               {
                   Merchandiser::where('id',$id)
                    ->update([
-                     'buyer_id'               => $input['buyer'],
-                     'customer_id'            => $input['supplier'],
                      'merchandiser_name'      => $input['name'],
                      'email'                  => $input['email'],
                      'merchandiser_address'   => $input['address'],
@@ -400,15 +390,11 @@ class BuyerManagementController extends Controller
             {
                 $get_main_module = $module_var->getMainModules();
                 $get_sub_module = $module_var->getSubModules(3);
-                $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone','buyers.buyer_name','customers.company_name')
-             ->join('buyers','buyers.id','=','merchandisers.buyer_id')
-             ->join('customers','customers.id','=','merchandisers.customer_id')->get();
-             $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
-             $customers = DB::table('customers')->pluck('company_name','id')->all();
+                $merchandisers = DB::table('merchandisers')->select('merchandisers.id','merchandiser_name','merchandisers.email','merchandiser_address','merchandiser_phone')->get();
                 View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                 });
-                return view('Admin/Buyer Management/merchandisers')->with(['merchandisers' => $merchandisers,'buyers' => $buyers,'customers' => $customers]);
+                return view('Admin/Buyer Management/merchandisers')->with(['merchandisers' => $merchandisers]);
             }
             else
             {

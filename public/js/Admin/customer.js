@@ -13,6 +13,11 @@
           $( ".sub_modules a" ).removeClass( "active" )
           $('.sticker_orders a').addClass("active")
           $('.main-content').html('<div class="loader"></div>');
+          /** Refresh bootstrap selectpicker **/
+          $('#payment_terms').selectpicker('refresh');
+          $('#edit_payment_terms').selectpicker('refresh');
+          $('#place_of_supply').selectpicker('refresh');
+          $('#edit_place_of_supply').selectpicker('refresh');
           $('#edit_buyer').selectpicker('refresh');
           $('#buyer').selectpicker('refresh');
           var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
@@ -27,10 +32,10 @@
                   $(".loader").css('margin-top','12%');
               },
               success: function (data) {
-                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Account Number</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Bank Details</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
-                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.account_no+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.address+','+item.country+'</dd><dt>Email:</dt><dd>'+item.email+'</dd><dt>Phone:</dt><dd>'+item.telephone+'</dd><dt>Fax:</dt><dd>'+item.fax+'</dd></dl></td>';
+                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td><dl><dt>Account Holder:</dt><dd>'+item.account_holder+'</dd><dt>Account No:</dt><dd>'+item.account_no+'</dd><dt>Bank:</dt><dd>'+item.bank+'</dd><dt>IFSC:</dt><dd>'+item.ifsc_code+'</dd><dt>Branch:</dt><dd>'+item.branch+'</dd></dl></td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.bill_address+','+item.bill_country+'</dd><dt>Email:</dt><dd>'+item.bill_email+'</dd><dt>Phone:</dt><dd>'+item.bill_telephone+'</dd><dt>Fax:</dt><dd>'+item.bill_fax+'</dd></dl></td><td><dl><dt>Address:</dt><dd>'+item.ship_address+','+item.ship_country+'</dd><dt>Email:</dt><dd>'+item.ship_email+'</dd><dt>Phone:</dt><dd>'+item.ship_telephone+'</dd><dt>Fax:</dt><dd>'+item.ship_fax+'</dd></dl></td>';
                    if(item.is_active === 1)
                    {
                     table += '<td><span class="label label-success">Active</span></td>';
@@ -69,6 +74,14 @@
                 console.log(data);
               },
               complete: function () {
+                  /** [To make top menu active] */
+                  $(function () {
+                      var url = window.location;
+                      $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                      $('.dynamic-menu a').filter(function () {
+                          return this.href == url;
+                      }).parent('li').addClass('current-page').find('a').addClass('active');
+                  });
                   $(".loader").hide();
                   $(".loader").css('margin-top','0%');
               }
@@ -84,47 +97,65 @@
 function addCustomer()
 {
   try{
-        var factory_code    =  $('#factory_code').val();
-        var company_name    =  $('#company_name').val();
-        var courier_choice  =  $('#courier_choice').val();
-        var account_no      =  $('#account_no').val();
-        var tin_number      =  $('#tin_number').val();
-        var gstin_number    =  $('#gstin_number').val();
-        var pan_number      =  $('#pan_number').val();
-        var login_email     =  $('#login_email').val();
-        var password        =  $('#password').val();
-        var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
-        var pi_required     =  $('#pi_required').is(':checked')?1:0;
+        var factory_code        =  $('#factory_code').val();
+        var company_name        =  $('#company_name').val();
+        var courier_choice      =  $('#courier_choice').val();
+        var account_no          =  $('#account_no').val();
+        var account_holder      =  $('#account_holder').val();
+        var ifsc_code           =  $('#ifsc_code').val();
+        var bank                =  $('#bank').val();
+        var branch              =  $('#branch').val();
+        var tin_number          =  $('#tin_number').val();
+        var gstin_number        =  $('#gstin_number').val();
+        var pan_number          =  $('#pan_number').val();
+        var login_email         =  $('#login_email').val();
+        var password            =  $('#password').val();
+        var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
+        var pi_required         =  $('#pi_required').is(':checked')?1:0;
+        var payment_term        =  $("#payment_terms option:selected").val();
+        var place_of_supply     =  $("#place_of_supply option:selected").val();
+        var advance_payment     =  $('#advance_payment').is(':checked')?1:0;
+        var freight_charge_free =  $('#freight_charge_free').is(':checked')?1:0;
+        var freight_cost        =  $('#freight_charge').val();
+        var po_required         =  $('#po_required').is(':checked')?1:0;
 
+        /** @type {Array} [initializing empty arrays] */
         var contact_person  = [];
         var contact_phone   = [];
         var contact_email   = [];
         var default_contact = [];
-
         var address         = [];
         var country         = [];
         var telephone       = [];
         var fax             = [];
         var address_email   = [];
-        var default_address = [];
+        var billing_address = [];
+        var shipping_address = [];
 
         var buyers = [];
-
+        
+        /** [Create array of contact person for multiple contact details] */
         $('.contact_person').each(function(i, item)
         {
             contact_person[i]    = $(item).val();
             
         });
+
+        /** [Create array of contact phone for multiple contact details] */
         $('.contact_phone').each(function(i, item)
         {
             contact_phone[i]    = $(item).val();
             
         });
+
+        /** [Create array of contact email for multiple contact details] */
         $('.contact_email').each(function(i, item)
         {
             contact_email[i]    = $(item).val();
             
         });
+
+        /** [Create array of default contact  or not (checkbox values)] */
         $('.default_contact').each(function(i, item)
         {
             if ($(this).is(':checked'))
@@ -137,21 +168,29 @@ function addCustomer()
             }
             
         });
+
+        /** [Create array of multiple address for address ] */
         $('.address').each(function(i, item)
         {
             address[i]    = $(item).val();
             
         });
+
+        /** [Create array of multiple country for address ] */
         $('.country').each(function(i, item)
         {
             country[i]    = $(item).val();
             
         });
+
+        /** [Create array of multiple telephone for address ] */
         $('.telephone').each(function(i, item)
         {
             telephone[i]    = $(item).val();
             
         });
+
+        /** [Create array of multiple fax for address ] */
         $('.fax').each(function(i, item)
         {
             fax[i]    = $(item).val();
@@ -162,22 +201,47 @@ function addCustomer()
             address_email[i]    = $(item).val();
             
         });
+
+        /** [Create array of billing address or not (checkbox values)] */
         $('.default_address').each(function(i, item)
         {
           if ($(this).is(':checked'))
             {
-              default_address[i]    = 1;
+              billing_address[i]    = 1;
             }
             else
             {
-              default_address[i]    = 0;
+              billing_address[i]    = 0;
             }
             
         });
+
+        /** [Create array of shipping address or not (checkbox values)] */
+        $('.shipping_address').each(function(i, item)
+        {
+          if ($(this).is(':checked'))
+            {
+              shipping_address[i]    = 1;
+            }
+            else
+            {
+              shipping_address[i]    = 0;
+            }
+            
+        });
+
+        /** [Set freight cost id null, set freight cost as 0] **/
+        if(freight_cost == '')
+        {
+          freight_cost = 0;
+        }
+
+        /** [Create array of multi selected buyers] */
         $.each($("#buyer option:selected"), function(){
           buyers.push($(this).val());
         });
-        console.log(buyers)          
+
+        /** [Joining array values using some delimiters] */
         contact_person   = contact_person.join(',');
         contact_phone    = contact_phone.join(',');
         contact_email    = contact_email.join(',');
@@ -187,18 +251,20 @@ function addCustomer()
         telephone        = telephone.join(',');
         fax              = fax.join(',');
         address_email    = address_email.join(',');
-        default_address  = default_address.join(',');
+        billing_address  = billing_address.join(',');
+        shipping_address  = shipping_address.join(',');
         buyer            = buyers.join(',');
 
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,buyer:buyer,pi_required:pi_required},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_cost:freight_cost,freight_charge_free:freight_charge_free,po_required:po_required},
             beforeSend: function () {
               $(".loader").show();
               $(".loader").css('margin-top','12%');
             },
             statusCode: {
+                 /** [Show response status based on HTTP status code] */
                  200: function() {
                       $('.snackbar_span').html('Customer Added Successfully');
                       $('#snackbar').css('background-color','#1abb9c');
@@ -234,6 +300,7 @@ function addCustomer()
   try{
         evt = (evt) ? evt : window.event;
         var charCode = (evt.which) ? evt.which : evt.keyCode;
+        //Checking key stroke values for numeric values
         if (charCode > 31 && (charCode < 48 || charCode > 57))
         {
             return false;
@@ -243,10 +310,33 @@ function addCustomer()
      console.log("Error:"+e)
    }
   }
-    
+ /**  Validation for numeric values with dot**/
+ function isNumberKey(evt){
+  try{
+       var charCode = (evt.which) ? evt.which : event.keyCode
+
+       if (charCode == 46)
+       {
+           var inputValue = $("#inputfield").val()
+           if (inputValue.indexOf('.') < 1)
+           {
+               return true;
+           }
+           return false;
+       }
+       //Checking key stroke values for numeric values
+       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+       {
+           return false;
+       }
+       return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }   
 /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
  /**
-  * Adds a contact person.
+  * Adds a contact person forms dynamically on button click.
   * @author <praveen>
   */
    function addContact(rem,e) {
@@ -259,12 +349,16 @@ function addCustomer()
              $('#add_customer_form').validator('update'); 
               
              $(rem).attr("data-id", val); 
+
+             /** [ Create dynamic add address button ] */
              var j = 1; 
              $('#addcontact .addcontact').each(function(key, val) { 
                  $(this).find(".button-bottom").html("<h4>Contact Person " + j +"</h4>"); 
                  a.push($(this).attr('id')); 
                  j++; 
              }) 
+
+             /** [ Make only 1 default contact person selected ] */
              var b = a.join(','); 
              $('#hidden').val(b); 
              $(':checkbox').on('change',function(){ 
@@ -278,7 +372,7 @@ function addCustomer()
      }
    }
  /**
-  * Removes a  contact person.
+  * Removes a  contact person form dynamically on button click.
   *
   * @author <praveen>
   */
@@ -301,7 +395,7 @@ function addCustomer()
      }
    }
  /**
-  * Adds an contact address.
+  * Adds an contact address form dynamically on button click.
   * @author <praveen>
   */
    function addAddress(rem,e) {
@@ -310,17 +404,21 @@ function addCustomer()
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address' + val + '"> Make as default billing address</label></div></div></div>')
+         $('#addbilladdress').append('<div id="billaddress_' + val + '" class="addbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="removeAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="billaddress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="address' + val + '" cols="50" id="address' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="country' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="country' + val + '" value="" id="country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="telephone' + val + '" value="" id="telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="fax' + val + '" value="" id="fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="basic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address' + val + '"> Make as default billing address</label></div><div class="form-check"><label class="form-check-label"><input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="shipping_address' + val + '"> Make as default shipping address</label></div></div></div>')
          $('#add_customer_form').validator('update');
          autopopulateCountry(val);
          
          $(rem).attr("data-id", val);
+
+         /** [ Create dynamic add address button ] */
          var j = 1;
          $('#addbilladdress .addbilladdress').each(function(key, val) {
-             $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
+             $(this).find(".button-bottom").html("<h4>Address " + j +"</h4>");
              a.push($(this).attr('id'));
              j++;
          })
+
+         /** [ Make only 1 default bill address, shipping address selected ] */
          var b = a.join(',');
          $('#hidden').val(b);
          $(':checkbox').on('change',function(){
@@ -334,7 +432,7 @@ function addCustomer()
    }
    }
  /**
-  * Removes an contact address.
+  * Removes an contact address form dynamically on button click.
   *
   * @author <praveen>
   */
@@ -345,7 +443,7 @@ function addCustomer()
          $(rem).parent().remove();
          var i = 1;
          $('#addbilladdress .addbilladdress').each(function(key, val) {
-             $(this).find(".button-bottom").html("<h4>Billing Address " + i +"</h4>");
+             $(this).find(".button-bottom").html("<h4>Address " + i +"</h4>");
              a.push($(this).attr('id'));
              i++;
          })
@@ -358,7 +456,7 @@ function addCustomer()
    }
  /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
  /**
-  * To auto populate country
+  * To auto populate country from stored json file
   * @param id
   * @author <praveen>
   */
@@ -405,7 +503,7 @@ function addCustomer()
     }
    }
  /**
-  * Edit auto-autopopulate country(In customer form)
+  * Edit auto-autopopulate country(In customer form)  from stored json file
   * @param id
   * @author <praveen>
   */
@@ -475,6 +573,7 @@ function addCustomer()
                method:"put",
                data:{_token:csrf_token,id:id},
                statusCode: {
+                    /** [Show response status based on HTTP status code] */
                     200: function() {
                         isSubmitting = false; 
                         $('.snackbar_span').html('Customer is active now ');
@@ -518,6 +617,7 @@ function addCustomer()
                method:"put",
                data:{_token:csrf_token,id:id},
                statusCode: {
+                    /** [Show response status based on HTTP status code] */
                     200: function() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Customer is inactive now ');
@@ -566,6 +666,7 @@ function addCustomer()
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
+                 /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#customer_edit_id').val(id);
                  
@@ -577,14 +678,42 @@ function addCustomer()
                   $('#edit_gstin_number').val(data.customers[0].gstin_number);
                   $('#edit_pan_number').val(data.customers[0].pan_number);
                   $('#edit_login_email').val(data.customers[0].email);
+                  $('#edit_account_holder').val(data.customers[0].account_holder);
+                  $('#edit_ifsc_code').val(data.customers[0].ifsc_code);
+                  $('#edit_bank').val(data.customers[0].bank);
+                  $('#edit_branch').val(data.customers[0].branch);
+                  $('#edit_place_of_supply').val(data.customers[0].place_of_supply);
+                  $('#edit_payment_terms').val(data.customers[0].payment_terms);
+                  
+                  $('#edit_place_of_supply').selectpicker('refresh');
+                  $('#edit_payment_terms').selectpicker('refresh');
+
+                  /** [PI required field checked or not checkbox ] */
                   if(data.customers[0].pi_required === 1)
                   {
                     $('#edit_pi_required').prop('checked', true);
+
+                    //Show PO required checkbox
+                    $('div.edit-po-required-div').show();
+                    /** [PO required field checked or not checkbox ] */
+                    if(data.customers[0].po_required === 1)
+                    {
+
+                      $('#edit_po_required').prop('checked', true);
+                    }
+                    else
+                    {
+                      $('#edit_po_required').prop('checked', false);
+                    }
                   }
                   else
                   {
+                    //Hide PO required checkbox
+                    $('div.edit-po-required-div').hide();
                     $('#edit_pi_required').prop('checked', false);
                   }
+
+                  /** [if already password entered,Hide password input field. Othewise show] */
                   if(data.customers[0].password === 1)
                    {
                     $('.edit_pwd').addClass('hidden');
@@ -596,8 +725,33 @@ function addCustomer()
                     $('#edit_password').prop('required',true)
                     $('#edit_password').attr('minlength',6)
                    }
-                 
 
+                   /** [Advance payment method checked or not checkbox ] */
+                   if(data.customers[0].is_advance_payment === 1)
+                    {
+                      $('#edit_advance_payment').prop('checked', true);
+                    }
+                    else
+                    {
+                      $('#edit_advance_payment').prop('checked', false);
+                    }
+
+                    /** [ Dynamic hide and show of freight cost textbox, based on radio button selection ] */
+                    if(data.customers[0].is_freight_cost_free === 1)
+                    {
+                      $('#edit_freight_charge_free').prop('checked', true);
+                      $('#edit_freight_charge_req').prop('checked', false);
+                      $('div.edit_freight_charge_div').hide();
+                    }
+                    else
+                    {
+                      $('#edit_freight_charge_req').prop('checked', true);
+                      $('#edit_freight_charge_free').prop('checked', false);
+                      $('div.edit_freight_charge_div').show();
+                      $('#edit_freight_charge').val(data.customers[0].freight_cost);
+                    }
+
+                 /** [Create dyanmic address form ] */
                  $.each(data.address,function(key,value){
                    key += 1;
                     var address_html = '<div edit="editbilladdress_' + key + '" class="editbilladdress">';
@@ -605,12 +759,14 @@ function addCustomer()
                     {
                       address_html += '<i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i>';
                     }
-                    address_html += '<div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="editbilladdress' + key + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + key + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + key + '" cols="50" id="edit_address' + key + '">'+value.address+'</textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + key + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + key + '" value="'+value.country+'" id="edit_country' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + key + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="editbasic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + key + '" value="'+value.telephone+'" id="edit_telephone' + key + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + key + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="edit_fax' + key + '" value="'+value.fax+'" id="edit_fax' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + key + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + key + '" value="'+value.email+'" id="edit_address_email' + key + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label></div></div></div>';
+                    address_html += '<div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + key + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + key + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + key + '" cols="50" id="edit_address' + key + '">'+value.address+'</textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + key + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + key + '" value="'+value.country+'" id="edit_country' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + key + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="editbasic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + key + '" value="'+value.telephone+'" id="edit_telephone' + key + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + key + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="edit_fax' + key + '" value="'+value.fax+'" id="edit_fax' + key + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + key + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="edit-basic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + key + '" value="'+value.email+'" id="edit_address_email' + key + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + key + '"> Make as default billing address</label></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + key + '"> Make as default shipping address</label></div></div></div>';
                       
                       $('#editbilladdress').append(address_html);
 
                       editAutopopulateCountry(key);
-                      if(value.default_address === 1)
+
+                      /** [ billing address or not (checkbox)] */
+                      if(value.is_billing_address === 1)
                       {
                         $('#edit_default_address'+ key).prop('checked', true);
                       }
@@ -618,26 +774,41 @@ function addCustomer()
                       {
                         $('#edit_default_address'+ key).prop('checked', false);
                       }
+
+                      /** [ Shipping address or not (checkbox)] */
+                      if(value.is_shipping_address === 1)
+                      {
+                        $('#edit_shipping_address'+ key).prop('checked', true);
+                      }
+                      else
+                      {
+                        $('#edit_shipping_address'+ key).prop('checked', false);
+                      }
+
+                      /** [ Buyers multi selectpicker value populating ] */
                       $.each(data.buyers, function (key, item) {
                        $('#edit_buyer option[value=' + item.buyer_id + ']').prop('selected', true);
                        $('#edit_buyer').selectpicker('refresh');
                       });
+                     
+                     /** [ Create dynamic add address button ] */
+                     var j = 1;
+                     $('#editbilladdress .editbilladdress').each(function(key, val) {
+                         $(this).find(".button-bottom").html("<h4>Address " + j +"</h4>");
+                         a.push($(this).attr('id'));
+                         j++;
+                     })
 
-                         var j = 1;
-                         $('#editbilladdress .editbilladdress').each(function(key, val) {
-                             $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
-                             a.push($(this).attr('id'));
-                             j++;
-                         })
-                         var b = []
-                         var b = a.join(',');
-                         $('#hidden').val(b);
-                         $(':checkbox').on('change',function(){
-                           var th = $(this), name = th.prop('name');
-                           if(th.is(':checked')){
-                               $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
-                            }
-                          });
+                     /** [ Make only 1 default bill address, shipping address selected ] */
+                     var b = []
+                     var b = a.join(',');
+                     $('#hidden').val(b);
+                     $(':checkbox').on('change',function(){
+                       var th = $(this), name = th.prop('name');
+                       if(th.is(':checked')){
+                           $(':checkbox[name="'  + name + '"]').not($(this)).prop('checked',false);
+                        }
+                      });
                   $('#edit_address').attr("data-id", key);
                  
                  $.each(data.customers, function (key, value) {
@@ -649,8 +820,10 @@ function addCustomer()
                   $('#edit_gstin_number').val(value.gstin_number);
                   $('#edit_pan_number').val(value.pan_number);
                   $('#edit_login_email').val(value.email);
-                 });});
-
+                 });
+               });
+                
+                /** [Create dyanmic contact person form ] */
                  $.each(data.contacts,function(key,value){
                    key += 1;
                     var contact_html = '<div id="edit_contact_' + key + '" class="editcontact">';
@@ -663,6 +836,8 @@ function addCustomer()
                       $('#editContact').append(contact_html);
 
                       editAutopopulateCountry(key);
+
+                       /** [ default contact person check box ] */
                       if(value.default_contact_person === 1)
                       {
                         $('#edit_default_contact'+ key).prop('checked', true);
@@ -672,12 +847,15 @@ function addCustomer()
                         $('#edit_default_contact'+ key).prop('checked', false);
                       }
 
+                      /** [ Create dynamic add address button ] */
                        var j = 1;
                        $('#editContact .editcontact').each(function(key, val) {
                            $(this).find(".button-bottom").html("<h4>Contact Person " + j +"</h4>");
                            a.push($(this).attr('id'));
                            j++;
                        })
+
+                       /** [ Make only 1 default contact person selected ] */
                        var b = []
                        var b = a.join(',');
                        $('#hidden').val(b);
@@ -689,6 +867,8 @@ function addCustomer()
                     });
                   $('#edit_contact').attr("data-id", key);
                  });
+
+                 /** [ Backdrop for bootstrap modal ] */
                  $('#editCustomerModal').modal({
                       backdrop: 'static',
                       keyboard: false
@@ -725,12 +905,16 @@ function addCustomer()
          $('#edit_customer_form').validator('update');
          
          $(rem).attr("data-id", val);
+
+         /** [ Create dynamic add address button ] */
          var j = 1;
          $('#editContact .editcontact').each(function(key, val) {
              $(this).find(".button-bottom").html("<h4>Contact Person " + j +"</h4>");
              a.push($(this).attr('id'));
              j++;
          })
+
+         /** [ Make only 1 default contact person selected ] */
          var b = a.join(',');
          $('#hidden').val(b);
          $(':checkbox').on('change',function(){
@@ -777,17 +961,21 @@ function addCustomer()
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Billing Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="editaddress' + val + '" cols="50" id="editaddress' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editcountry' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="editcountry' + val + '" value="" id="editcountry' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edittelephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edittelephone' + val + '" value="" id="edittelephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editfax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="editfax' + val + '" value="" id="editfax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div></div></div>')
+         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="editaddress' + val + '" cols="50" id="editaddress' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editcountry' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="editcountry' + val + '" value="" id="editcountry' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edittelephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edittelephone' + val + '" value="" id="edittelephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editfax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="editfax' + val + '" value="" id="editfax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div><div class="form-check"><label class="form-check-label"><input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + val + '"> Make as default shipping address</label></div></div></div>')
          $('#edit_customer_form').validator('update');
          editAutopopulateCountry(val);
          
          $(rem).attr("data-id", val);
+
+         /** [ Create dynamic add address button ] */
          var j = 1;
          $('#editbilladdress .editbilladdress').each(function(key, val) {
-             $(this).find(".button-bottom").html("<h4>Billing Address " + j +"</h4>");
+             $(this).find(".button-bottom").html("<h4>Address " + j +"</h4>");
              a.push($(this).attr('id'));
              j++;
          })
+
+         /** [ Make only 1 default bill address, shipping address selected ] */
          var b = a.join(',');
          $('#hidden').val(b);
          $(':checkbox').on('change',function(){
@@ -812,7 +1000,7 @@ function addCustomer()
          $(rem).parent().remove();
          var i = 1;
          $('#editbilladdress .editbilladdress').each(function(key, val) {
-             $(this).find(".button-bottom").html("<h4>Billing Address " + i +"</h4>");
+             $(this).find(".button-bottom").html("<h4>Address " + i +"</h4>");
              a.push($(this).attr('id'));
              i++;
          })
@@ -831,18 +1019,28 @@ function addCustomer()
   function editCustomer()
   {
     try{
-          var id              =  $('#customer_edit_id').val();
-          var factory_code    =  $('#edit_factory_code').val();
-          var company_name    =  $('#edit_company_name').val();
-          var courier_choice  =  $('#edit_courier_choice').val();
-          var account_no      =  $('#edit_account_no').val();
-          var tin_number      =  $('#edit_tin_number').val();
-          var gstin_number    =  $('#edit_gstin_number').val();
-          var pan_number      =  $('#edit_pan_number').val();
-          var login_email     =  $('#edit_login_email').val();
-          var password        =  $('#edit_password').val();
-          var csrf_token      =  $('meta[name="csrf-token"]').attr('content');
-          var pi_required     =  $('#edit_pi_required').is(':checked')?1:0;
+          var id                  =  $('#customer_edit_id').val();
+          var factory_code        =  $('#edit_factory_code').val();
+          var company_name        =  $('#edit_company_name').val();
+          var courier_choice      =  $('#edit_courier_choice').val();
+          var account_no          =  $('#edit_account_no').val();
+          var tin_number          =  $('#edit_tin_number').val();
+          var gstin_number        =  $('#edit_gstin_number').val();
+          var pan_number          =  $('#edit_pan_number').val();
+          var login_email         =  $('#edit_login_email').val();
+          var password            =  $('#edit_password').val();
+          var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
+          var pi_required         =  $('#edit_pi_required').is(':checked')?1:0;
+          var account_holder      =  $('#edit_account_holder').val();
+          var ifsc_code           =  $('#edit_ifsc_code').val();
+          var bank                =  $('#edit_bank').val();
+          var branch              =  $('#edit_branch').val();
+          var payment_term        =  $("#edit_payment_terms option:selected").val();
+          var place_of_supply     =  $("#edit_place_of_supply option:selected").val();
+          var advance_payment     =  $('#edit_advance_payment').is(':checked')?1:0;
+          var freight_charge_free =  $('#edit_freight_charge_free').is(':checked')?1:0;
+          var freight_cost        =  $('#edit_freight_charge').val();
+          var po_required         =  $('#edit_po_required').is(':checked')?1:0;
 
           var contact_person  = [];
           var contact_phone   = [];
@@ -854,25 +1052,34 @@ function addCustomer()
           var telephone       = [];
           var fax             = [];
           var address_email   = [];
-          var default_address = [];
+          var billing_address = [];
+          var shipping_address = [];
+
 
           var buyers          = [];
 
+          /** [Create array of contact person for multiple contact details] */
           $('.edit_contact_person').each(function(i, item)
           {
               contact_person[i]    = $(item).val();
               
           });
+
+          /** [Create array of contact phone for multiple contact details] */
           $('.edit_contact_phone').each(function(i, item)
           {
               contact_phone[i]    = $(item).val();
               
           });
+
+          /** [Create array of contact email for multiple contact details] */
           $('.edit_contact_email').each(function(i, item)
           {
               contact_email[i]    = $(item).val();
               
           });
+
+          /** [Create array of default contact  or not (checkbox values)] */
           $('.edit_default_contact').each(function(i, item)
           {
               if ($(this).is(':checked'))
@@ -885,48 +1092,82 @@ function addCustomer()
               }
               
           });
+
+          /** [Create array of multiple address for address ] */
           $('.edit_address').each(function(i, item)
           {
               address[i]    = $(item).val();
               
           });
+
+          /** [Create array of multiple country for address ] */
           $('.edit_country').each(function(i, item)
           {
               country[i]    = $(item).val();
               
           });
+
+          /** [Create array of multiple telephone for address ] */  
           $('.edit_telephone').each(function(i, item)
           {
               telephone[i]    = $(item).val();
               
           });
+
+          /** [Create array of multiple fax for address ] */
           $('.edit_fax').each(function(i, item)
           {
               fax[i]    = $(item).val();
               
           });
+
+          /** [Create array of multiple email for address ] */
           $('.edit_address_email').each(function(i, item)
           {
               address_email[i]    = $(item).val();
               
           });
+
+          /** [Create array of billing address or not (checkbox values)] */
           $('.edit_default_address').each(function(i, item)
           {
             if ($(this).is(':checked'))
               {
-                default_address[i]    = 1;
+                billing_address[i]    = 1;
               }
               else
               {
-                default_address[i]    = 0;
+                billing_address[i]    = 0;
               }
               
           });
+
+          /** [Create array of shipping address or not (checkbox values)] */
+          $('.edit_shipping_address').each(function(i, item)
+          {
+            if ($(this).is(':checked'))
+              {
+                shipping_address[i]    = 1;
+              }
+              else
+              {
+                shipping_address[i]    = 0;
+              }
+              
+          });
+
+          /** [Set freight cost id null, set freight cost as 0] **/
+          if(freight_cost == '')
+          {
+            freight_cost = 0;
+          }
+
+          /** [Create array of multi selected buyers] */
           $.each($("#edit_buyer option:selected"), function(){
             buyers.push($(this).val());
           });
 
-                    
+          /** [Joining array values using some delimiters] */          
           contact_person   = contact_person.join(',');
           contact_phone    = contact_phone.join(',');
           contact_email    = contact_email.join(',');
@@ -936,18 +1177,20 @@ function addCustomer()
           telephone        = telephone.join(',');
           fax              = fax.join(',');
           address_email    = address_email.join(',');
-          default_address  = default_address.join(',');
+          billing_address  = billing_address.join(',');
+          shipping_address  = shipping_address.join(',');
           buyer            = buyers.join(',');
 
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,default_address:default_address,id:id,buyer:buyer,p:password,pi_required:pi_required},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_charge_free:freight_charge_free,freight_cost:freight_cost,po_required:po_required},
               beforeSend: function () {
                 $(".loader").show();
                 $(".loader").css('margin-top','12%');
               },
               statusCode: {
+                   /** [Show response status based on HTTP status code] */
                    200: function() {
                         $('.snackbar_span').html('Customer Updated Successfully');
                         $('#snackbar').css('background-color','#1abb9c');
@@ -992,6 +1235,7 @@ function addCustomer()
              method:"delete",
              data:{_token:csrf_token,id:id},
              statusCode: {
+                  /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Customer deleted Successfully');
                        $('#snackbar').css('background-color','#1abb9c');

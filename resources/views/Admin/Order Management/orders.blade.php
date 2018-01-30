@@ -172,9 +172,11 @@
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script>
     $(document).ready(function() {
+
+        /** Clear localstorage data */
         localStorage.removeItem("hang_tag");
-         localStorage.removeItem("special_tag");
-         localStorage.removeItem("main_label");
+        localStorage.removeItem("special_tag");
+        localStorage.removeItem("main_label");
         localStorage.removeItem("wash_label"); 
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
@@ -182,8 +184,12 @@
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })
+
+        /** Show logo in navbar */
          $('.logo').html('Orders')
-         $('.buyer-nav-select').html($('.buyer-div').html())
+        $('.buyer-nav-select').html($('.buyer-div').html())
+
+            /** [ Show create order page based on buyer selection ] */
             if (localStorage.getItem("buyer") === null) {
                     
             }
@@ -195,11 +201,15 @@
             {
                 tescoOrders();
             }
+
+        /** Buyer selectpicker style */
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
                style: 'btn-default',
                size: 4
             });
+
+        /** [ Show dynamic sub modules in navbar ] */
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
             if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
                 localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
@@ -218,6 +228,7 @@
 
                     },
                     success: function(data) {
+                       /**  [ Show orders page based on buyer selection ] */
                        if(buyer === 'orchestra')
                         {
                              orders();
@@ -240,18 +251,6 @@
                 localStorage.removeItem("buyer_id");
                 location.reload()
             }
-        });
-        $(".order_type").change(function(){
-            var selectedType = $(".order_type option:selected").val();
-            if (selectedType === '1') 
-            {
-                $("#single_file").removeClass("hidden");
-            }
-            else
-            {
-                $("#single_file").addClass("hidden");
-            }
-            
         });
     });
 </script>
