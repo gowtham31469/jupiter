@@ -216,6 +216,7 @@ class CustomerManagementController extends Controller
                 $advance_payment      = $request['advance_payment'];
                 $freight_charge_free  = $request['freight_charge_free'];
                 $freight_cost         = $request['freight_cost'];
+                $po_required          = $request['po_required'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -257,7 +258,8 @@ class CustomerManagementController extends Controller
                                 'freight_cost'         => $freight_cost,
                                 'is_freight_cost_free' => $freight_charge_free,
                                 'payment_terms'        => $payment_term,
-                                'is_advance_payment'   => $advance_payment
+                                'is_advance_payment'   => $advance_payment,
+                                'po_required'          => $po_required
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -368,7 +370,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.is_advance_payment','customers.is_freight_cost_free','customers.freight_cost')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.is_advance_payment','customers.is_freight_cost_free','customers.freight_cost','customers.po_required')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -427,6 +429,7 @@ class CustomerManagementController extends Controller
                     $input['advance_payment']     = Input::get('advance_payment');
                     $input['freight_cost']        = Input::get('freight_cost');
                     $input['freight_charge_free'] = Input::get('freight_charge_free');
+                    $input['po_required']         = Input::get('po_required');
                     
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -485,7 +488,8 @@ class CustomerManagementController extends Controller
                           'payment_terms'      => $input['payment_term'],
                           'is_advance_payment' => $input['advance_payment'],
                           'freight_cost'       => $input['freight_cost'],
-                          'is_freight_cost_free'=> $input['freight_charge_free']
+                          'is_freight_cost_free'=> $input['freight_charge_free'],
+                          'po_required'        => $input['po_required']
                         ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)
