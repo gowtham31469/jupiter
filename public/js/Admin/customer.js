@@ -692,6 +692,8 @@ function addCustomer()
                   if(data.customers[0].pi_required === 1)
                   {
                     $('#edit_pi_required').prop('checked', true);
+
+                    //Show PO required checkbox
                     $('div.edit-po-required-div').show();
                     /** [PO required field checked or not checkbox ] */
                     if(data.customers[0].po_required === 1)
@@ -706,6 +708,7 @@ function addCustomer()
                   }
                   else
                   {
+                    //Hide PO required checkbox
                     $('div.edit-po-required-div').hide();
                     $('#edit_pi_required').prop('checked', false);
                   }

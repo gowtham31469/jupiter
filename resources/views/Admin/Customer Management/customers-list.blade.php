@@ -893,6 +893,7 @@
 
      /** [ To hide/show PO required checkbox based on PI required checkbox] */
      $(document).ready(function($) {
+      // While adding customer
       $('#pi_required').click(function() {
          if($('#pi_required').is(':checked'))
          {
@@ -907,6 +908,8 @@
           $('input:checkbox[name=po_required]').prop('checked',false);
          }
       });
+
+      // While editing customer
       $('#edit_pi_required').click(function() {
          if($('#edit_pi_required').is(':checked'))
          {
