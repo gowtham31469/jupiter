@@ -977,6 +977,9 @@ span.sticker-details {
 .label-ppending {
     background: #9b59b6;
 }
+.label-BuyerApprovalPending {
+    background: #9b59b6;
+}
 
 .label-papproved {
     background: #1abc9c;
