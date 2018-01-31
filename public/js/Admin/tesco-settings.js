@@ -62,10 +62,29 @@ function tescoSettings() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoBrandsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Brand</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Brands</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Brand Name</th><th>Actions</th></tr></thead><tbody>';
+                var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoBrandsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Brand</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Brands</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Brand Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.tesco_brands, function(i, item){
 	              var index = i+1;
-	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deletetescobrandsModal" data-placement="left"></i></a></td></tr>';
+	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td>';
+                if(item.is_active === 1)
+                   {
+                    tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                   }
+                   else
+                   {
+                    tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                   }
+                   if(item.is_active === 1)
+                   {
+                    tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Disabled" id="make_disabled" data-placement="left"></i></a>';
+                   }
+                   else
+                   {
+                    tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Enabled" id="make_enabled" data-placement="left"></i></a>';
+                   }
+
+
+                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deletetescobrandsModal" data-placement="left"></i></a></td></tr>';
 	             });
 	             tesco_metadata += '</tbody></table></div>';
 	             $('.main-content').html(tesco_metadata)

@@ -31,7 +31,7 @@ class TescoSettings extends Controller
     public function tescoBrands()
     {
       try {
-            $tesco_brand = DB::table('tesco_brand')->select('id','brnad','is_enabled')->get();
+            $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
           {
