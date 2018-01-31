@@ -1,6 +1,6 @@
 /**
  * This Function is used to show tesco orders page and template selection.
- * @author Praveenss
+ * @author Praveen
  * @return View
  */
 
@@ -222,7 +222,7 @@ function tescoOrders() {
 }
 /**
  * This Function is used to show create tesco orders page.
- * @author Praveenss
+ * @author Praveen
  * @return View
  */
 
