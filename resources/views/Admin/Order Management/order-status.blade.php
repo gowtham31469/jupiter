@@ -56,7 +56,7 @@
                         <button class="btn btn-danger btn-xs">Reject</button>
                         <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>
                     </div>
-                    <h5><strong>Proforma Invoice for <span>UVC0F0008</span></strong></h5>
+                    <h5><strong>Proforma Invoice for <span id="uvc_number">UVC0F0001</span></strong></h5>
 
                 </div>
                 <div class="modal-body">

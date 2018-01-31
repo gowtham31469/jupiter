@@ -361,10 +361,7 @@ class OrderManagementCntrl extends Controller
         
          $data['orchestra_parcel_details']= DB::table('orchestra_parcel_details')->select('*')->where('BuyerPONo',$po)->groupBy('BuyerPONo')->get();
         
-        $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();
-        
-        
-       
+        $data['orchestra_age_group']= DB::table('orchestra_age_group')->select('*')->get();      
         
         $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('uvc',$uvc)->get();
         if(count($data['orchestra_solid_carton_sticker_orders']) > 0)
@@ -851,12 +848,7 @@ class OrderManagementCntrl extends Controller
                                         'quantity_sets'    => $value
                              ]);
                     $i++;
-                }
-            
-                
-                
-            
-              
+                }             
         }
        
            
@@ -1131,6 +1123,18 @@ class OrderManagementCntrl extends Controller
         }
        
            
+    }
+    /**
+     * method to get all the details for profoma invoice generation
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getProfomaInvoice(Request $request)
+    {
+
+        $po=$request->po;
+        $uvc=$request->uvc;
+        return $po;
     }
 	
 	/**

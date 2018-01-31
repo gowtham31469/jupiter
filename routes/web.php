@@ -183,6 +183,7 @@ Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orc
 Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderManagementCntrl@Orders');
 Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\OrderManagementCntrl@orderStatus');
 
+Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
@@ -264,3 +265,7 @@ Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestr
 Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
 Route::put('admin/orchestra/update-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSizeChartById');
 Route::delete('admin/orchestra/delete-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraSizeChartById');
+
+
+/**tesco Settings Page**/
+Route::post('admin/tesco/settings', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
