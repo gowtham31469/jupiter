@@ -265,3 +265,7 @@ Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestr
 Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
 Route::put('admin/orchestra/update-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSizeChartById');
 Route::delete('admin/orchestra/delete-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@deleteOrchestraSizeChartById');
+
+
+/**tesco Settings Page**/
+Route::post('admin/tesco/settings', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');

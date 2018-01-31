@@ -41,17 +41,17 @@ var isSubmitting = false;
    }
   }
 /**
-  * Function to Settings home page
+  * Function to Tesco Settings home page
   * @author <praveen>
   */
-function settings() {
+function tescoSettings() {
   try{
     $('.main-content').html('<div class="loader"></div>');
-    /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+    /** tesco metadata sidebar */
+    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoSettings()"><a class="active">Brands</a></li><li id="2" onclick="department()"><a>Departments</a></li><li id="3" onclick="suppliers()"><a>Suppliers</a></li><li id="4"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/orchestra/settings",
+        url: base_url + "/admin/tesco/settings",
         type: "POST",
         dataType: "json",
         data: {
@@ -62,21 +62,21 @@ function settings() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
-	             $.each(data.orchestra_garments, function(i, item){
+                var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoBrandsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Brand</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Brands</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Brand Name</th><th>Actions</th></tr></thead><tbody>';
+	             $.each(data.tesco_brands, function(i, item){
 	              var index = i+1;
-	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-garments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraGarmentsModal" data-placement="left"></i></a></td></tr>';
+	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deletetescobrandsModal" data-placement="left"></i></a></td></tr>';
 	             });
-	             orchestra_metadata += '</tbody></table></div>';
-	             $('.main-content').html(orchestra_metadata)
-                $('.edit-orchestra-garments').tooltip('show')
-                $('.edit-orchestra-garments').tooltip('toggle')
-                $('.delete-orchestra-garments').tooltip('show')
-                $('.delete-orchestra-garments').tooltip('toggle')
-	              $('#orchestra-garments-list-table').DataTable();
-	              $("#orchestra-garments-list-table_filter input").addClass('form-control input-sm');
-	              $("#orchestra-garments-list-table_filter input").attr('placeholder', 'Data Search');
-	              $('#orchestra-garments-list-table_length select').addClass('form-control input-sm');
+	             tesco_metadata += '</tbody></table></div>';
+	             $('.main-content').html(tesco_metadata)
+                $('.edit-tesco-brands').tooltip('show')
+                $('.edit-tesco-brands').tooltip('toggle')
+                $('.delete-tesco-brands').tooltip('show')
+                $('.delete-tesco-brands').tooltip('toggle')
+	              $('#tesco-brands-list-table').DataTable();
+	              $("#tesco-brands-list-table_filter input").addClass('form-control input-sm');
+	              $("#tesco-brands-list-table_filter input").attr('placeholder', 'Data Search');
+	              $('#tesco-brands-list-table_length select').addClass('form-control input-sm');
 
         },
         error: function (data) {
@@ -106,17 +106,17 @@ function showSnackbar() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 /**
-  * Adds a orchestra garments.
+  * Adds a tesco brands.
   * @author <praveen>
   */
- function addOrchestraGarments()
+ function addTescoBrands()
  {
     try{
          var name       = $('#garment_name').val();
          var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
          $.ajax({
-             url: base_url + "/admin/orchestra/add-orchestra-garments",
+             url: base_url + "/admin/tesco/add-tesco-brands",
              method: 'POST',
              data: {_token:csrf_token,name:name},
              beforeSend: function () {
@@ -125,11 +125,11 @@ function showSnackbar() {
              },
              statusCode: {
                   200: function() {
-                       $('.snackbar_span').html("Garment Added Successfully");
+                       $('.snackbar_span').html("Brand Added Successfully");
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
-                       $('#addOrchestraGarmentsModal').modal('hide');
-                       settings()
+                       $('#addTescoBrandsModal').modal('hide');
+                       tescoSettings()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
@@ -150,12 +150,12 @@ function showSnackbar() {
    }
   }
   /**
-   * Function for get orchestra garments details for editing
+   * Function for get tesco brands details for editing
    * @param id
    * @author <praveen>
    *
    */
-  function getOrchestraGarmentById(id)
+  function getTescoBrandById(id)
   {
     try{
          if(isSubmitting) {
@@ -163,7 +163,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
          $.ajax({
-             url:base_url + "/admin/orchestra/get-orchestra-garments-details",
+             url:base_url + "/admin/tesco/get-tesco-brands-details",
              dataType:"json",
              method:"get",
              data:{id:id},
@@ -173,14 +173,14 @@ function showSnackbar() {
              },
              success: function(data){
                  isSubmitting = false;
-                 $('#edit_orchestra_garments_id').val(id);
-                 $('#edit_garment_name').val(data.orchestra_garments[0].garment_name);
-                 $('#editOrchestraGarmentsModal').modal({
+                 $('#edit_tesco_brands_id').val(id);
+                 $('#edit_brand_name').val(data.tesco_brands[0].brand);
+                 $('#editTescoBrandsModal').modal({
                       backdrop: 'static',
                       keyboard: false
                  })
-                 $('#edit_orchestra_garments_form').validator('validate');
-                 $('#editOrchestraGarmentsModal').modal('show');
+                 $('#edit_tesco_brands_form').validator('validate');
+                 $('#editTescoBrandsModal').modal('show');
              },
              error: function (data) {
                   console.log(data);
@@ -195,17 +195,17 @@ function showSnackbar() {
    }
   }
   /**
-  * Function for edit orchestra garments details
+  * Function for edit tesco brands details
   * @author <praveen>
   */
- function editOrchestraGarments()
+ function editTescoBrands()
  {
   try{
-       var id         = $('#edit_orchestra_garments_id').val();
-       var name       = $('#edit_garment_name').val();
+       var id         = $('#edit_tesco_brands_id').val();
+       var name       = $('#edit_brand_name').val();
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        $.ajax({
-           url:base_url + "/admin/orchestra/update-orchestra-garments",
+           url:base_url + "/admin/tesco/update-tesco-brands",
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
@@ -215,11 +215,11 @@ function showSnackbar() {
            data:{_token:csrf_token,id:id,name:name},
            statusCode: {
                 200: function() {
-                       $('.snackbar_span').html("Garment Updated Successfully");
+                       $('.snackbar_span').html("Brand Updated Successfully");
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
-                       $('#editOrchestraGarmentsModal').modal('hide');
-                       settings()
+                       $('#editTescoBrandsModal').modal('hide');
+                       tescoSettings()
                   }
            },
            error: function (data) {
@@ -235,17 +235,17 @@ function showSnackbar() {
    }
  }
  /**
-  * To delete orchestra garment
+  * To delete tesco garment
   * @param id
   * @author <praveen>
   *
   */
-  function deleteOrchestraGarment(id)
+  function deleteTescoBrand(id)
   {
   try{
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-garment",
+           url:base_url + "/admin/tesco/delete-tesco-garment",
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
@@ -255,11 +255,11 @@ function showSnackbar() {
            data:{_token:csrf_token,id:id},
            statusCode: {
                 200: function() {
-                     $('.snackbar_span').html('Garment Deleted Successfully');
+                     $('.snackbar_span').html('Brand Deleted Successfully');
                      $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
-                     $('#deleteOrchestraGarmentsModal').modal('hide');
-                     settings();
+                     $('#deleteTescoBrandsModal').modal('hide');
+                     tescoSettings();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');

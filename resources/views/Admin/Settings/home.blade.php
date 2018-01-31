@@ -1391,6 +1391,7 @@
     </script>
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-settings.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
@@ -1403,13 +1404,19 @@
         /* Show logo on left side */
         $('.logo').html('Settings')
         $('.buyer-nav-select').html($('.buyer-div').html())
-
+         
         // Check if buyer selected or not
+        /* call settings function from settings.js*/
+        /**  [ Show settings page based on buyer selection ] */
         if (localStorage.getItem("buyer") === null) {
 
-        } else {
-          /* call settings function from settings.js*/
-            settings();
+        }else if(localStorage.getItem("buyer") === 'orchestra')
+        {
+            orchestraSettings();
+        }
+        else
+        {
+            tescoSettings();
         }
 
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
@@ -1423,8 +1430,17 @@
             {
                 localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var buyer = $(this).find("option:selected").text().toLowerCase();
                 /* call settings function from settings.js*/
-                settings();
+                /**  [ Show settings page based on buyer selection ] */
+               if(buyer === 'orchestra')
+                {
+                     orchestraSettings();
+                }
+                else
+                {
+                    tescoSettings();
+                } 
             } 
             else 
             {
