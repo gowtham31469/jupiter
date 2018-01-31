@@ -131,7 +131,7 @@ function showSnackbar() {
  function addTescoBrands()
  {
     try{
-         var name       = $('#garment_name').val();
+         var name       = $('#brand_name').val();
          var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
          $.ajax({
