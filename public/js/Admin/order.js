@@ -54,10 +54,24 @@ function orders() {
                 var path = base_url + "/admin/orchestra/order-management/orders"
                 var newObj = data.sticker_orders.concat(data.label_orders);
                 console.log(newObj);
-                $('.main-content').html(table(newObj,path));
-                $('#datatable-example-2').DataTable({
-                    "pageLength": 25
-                });
+			    var search_string= localStorage.getItem("search_string");
+			//alert(search_string)
+                $('.main-content').html(table(newObj,path)); 
+				$('.top-content').html("");
+				if(search_string != null)
+				{
+					  $('#datatable-example-2').DataTable({
+                    	  "pageLength": 25,
+						  "oSearch": { "sSearch": search_string }
+                	  });
+				}
+				else
+				{
+					$('#datatable-example-2').DataTable({
+                    	"pageLength": 25
+                	});
+				}
+              
                 $("#datatable-example-2_filter input").addClass('form-control input-sm');
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
@@ -388,6 +402,8 @@ function order_details(uvc, po) {
  */
 
 function sticker_order_details(uvc, po) {
+	var search_string = $('.dataTables_filter input').val();
+	localStorage.setItem("search_string", search_string);
     $('.main-content').html('<div class="loader"></div>');
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
@@ -471,7 +487,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
         var head_qty = "Quantity for Standard Stickers";
         var head_qty1 = "Standard Parcel/Carton Sticker";
-        var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control input-sm"></div>';
+        var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="text" onkeypress="return checkNumbersOnly(event)" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div>';
     } else {
         $no_of_carton = "";
         var disabled = 'disabled="disabled"';
@@ -514,10 +530,14 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
                 $height = data.orchestra_solid_carton_sticker_orders[0].height;
             }
             $age = data.orchestra_solid_poly_bag_sticker_orders[0].group_id;
+			var num = 600 * 395 * $height
+			var val = num / (1000 * 1000 * 1000)
+			$parcelVolume = val;
 
         } else {
             $delivery_date = "";
             $height = "";
+			$parcelVolume = "";
             $age = 0;
         }
 
@@ -532,7 +552,9 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
     });
     // $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('" + buyer + "','" + buyer_id + "')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC " + uvc + " and PO " + po + "</li></ol></div>")
 
-    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return checkNumbersOnly(event)"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -996,6 +1018,9 @@ function barcode_carton(id, data) {
  */
 
 function label_order_details(uvc) {
+	
+	var search_string = $('.dataTables_filter input').val();
+	localStorage.setItem("search_string", search_string);
     $('.main-content').html('<div class="loader"></div>');
     // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
     // var buyer_id=$('.buyer-select').val()
@@ -1203,13 +1228,21 @@ function washcarelabels(data, dataid) {
 		}
 
 
-		tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+		tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm tot_qty_table" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
 
 		$qu++;
 		ttots += parseInt($wash_label_count);
 
 	});
-	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4>'+$status+' <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table>'+ $comment +'<hr> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+	if(isNaN(ttots))
+		{
+			ttots=0;
+		}
+	else
+		{
+			ttots=ttots;
+		}
+	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4>'+$status+' <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" style=width:100%" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-3 sections"> <h5>Parts</h5> <select class="selectpicker parts_select' + dataid + '"  data-live-search="true"> ' + parts_option + '  </select> </div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" disabled onclick="add_to_page(' + dataid + ')">Add To Page</button><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label> <table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table></div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table>'+ $comment +'<hr> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
    
 	$('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -1232,6 +1265,7 @@ function washcarelabels(data, dataid) {
 	})
 
 	$('.extra_percentage').keyup(function () {
+		
 		var tot_qty_table_carton_final = 0;
 		if ($(this).val() != "") {
 			var per = $(this).val();
@@ -1246,9 +1280,11 @@ function washcarelabels(data, dataid) {
 			})
 			$(this).parent().parent().parent().parent().parent().find('.tot_qty_table_fin').text(tot_qty_table_carton_final);
 		} else {
+			
 			$(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
 				$(this).find('.tot_qty_table').val("");
 			})
+			$(this).parent().parent().parent().parent().parent().find('.tot_qty_table_fin').text("0");
 		}
 
 	})
@@ -1708,15 +1744,23 @@ function mainlabels(data, dataid) {
         } else {
             $main_label_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Main & Size Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)"  type="text" class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Main & Size Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($main_label_count);
         $qu++;
     });
+	if(isNaN(ttots))
+		{
+			ttots=0;
+		}
+	else
+		{
+			ttots=ttots;
+		}
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main & Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main & Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
     $('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -1795,15 +1839,23 @@ function specialtags(data) {
         } else {
             $special_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" value="' + $special_tag_count + '" class="form-control input-sm tot_qty_table" required placeholder="Special Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" value="' + $special_tag_count + '" class="form-control input-sm tot_qty_table" required placeholder="Special Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($special_tag_count);
         $qu++;
     });
+	if(isNaN(ttots))
+		{
+			ttots=0;
+		}
+	else
+		{
+			ttots=ttots;
+		}
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button><button type="button" class="btn btn-primary" onclick=printSpecialDiv("svg2")>Print</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm tot_qty_table" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button><button type="button" class="btn btn-primary" onclick=printSpecialDiv("svg2")>Print</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -1845,6 +1897,19 @@ function specialtags(data) {
 }
 
 /**
+ * This Function is used to restrict alpha numeric and special characters.
+ * 
+ * @return boolean
+ */
+
+ function checkNumbersOnly(e){
+	
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+               return false;
+    }
+}
+
+/**
  * This Function is Sub Function of #label_order_details.
  * To integrate Hang Tag Information
  * @return Hang Tag View
@@ -1877,15 +1942,24 @@ function hangtagmodal(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
         $qu++;
     });
+	
+	if(isNaN(ttots))
+		{
+			ttots=0;
+		}
+	else
+		{
+			ttots=ttots;
+		}
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary" onclick=printHangDiv("svg2")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary" onclick=printHangDiv("svg2")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
 
 
     $('#hangtagform .tot_qty_table').keyup(function () {
@@ -2326,10 +2400,10 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
     $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
         base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button></div></div>');
+        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
 
 	//card for wcl and main and size labels
-	
+	//<button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button>
 	//<div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px; margin-bottom:80px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div>
 	
 
@@ -2389,22 +2463,22 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 $('.washnameerror').removeClass('hidden')
             }
         }
-        $('.extra_percentage').keyup(function () {
-            if ($(this).val() != "") {
-                var per = $(this).val();
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    var sum = $(this).find('.sum').text();
-                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-                    $(this).find('.tot_qty_table').val(tot_qty);
-                })
-            } else {
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    $(this).find('.tot_qty_table').val("");
-                })
-            }
-
-        })
+//        $('.extra_percentage').keyup(function () {
+//            if ($(this).val() != "") {
+//                var per = $(this).val();
+//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+//                    var sum = $(this).find('.sum').text();
+//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
+//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
+//                    $(this).find('.tot_qty_table').val(tot_qty);
+//                })
+//            } else {
+//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+//                    $(this).find('.tot_qty_table').val("");
+//                })
+//            }
+//
+//        })
 
     });
     $('#main_label_card').on('click', function (e) {
@@ -2443,22 +2517,22 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 $('.mainnameerror').removeClass('hidden')
             }
         }
-        $('.extra_percentage').keyup(function () {
-            if ($(this).val() != "") {
-                var per = $(this).val();
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    var sum = $(this).find('.sum').text();
-                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-                    $(this).find('.tot_qty_table').val(tot_qty);
-                })
-            } else {
-                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                    $(this).find('.tot_qty_table').val("");
-                })
-            }
-
-        })
+//        $('.extra_percentage').keyup(function () {
+//            if ($(this).val() != "") {
+//                var per = $(this).val();
+//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+//                    var sum = $(this).find('.sum').text();
+//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
+//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
+//                    $(this).find('.tot_qty_table').val(tot_qty);
+//                })
+//            } else {
+//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+//                    $(this).find('.tot_qty_table').val("");
+//                })
+//            }
+//
+//        })
 
     });
 
@@ -2850,6 +2924,7 @@ function setHangTagStatus() {
     var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("hang_tag", exist_id);
+		setHangTag(localStorage.getItem("hang_tag"))
         $('#hang_template_error').addClass('hidden')
         $("#hangtagform .left-panel").removeClass('active');
         $("#hangtagform .right-panel").removeClass('active');
@@ -2877,6 +2952,7 @@ function setSpecialTagStatus() {
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("special_tag", exist_id);
+		setSpecialTag(localStorage.getItem("special_tag"))
         $('#special_template_error').addClass('hidden')
         $("#specialtagform .left-panel").removeClass('active');
         $("#specialtagform .right-panel").removeClass('active');
@@ -2896,15 +2972,16 @@ function setSpecialTagStatus() {
 
 function setMainLabelStatus(dataid) {
     if ($('#mainlabelsform' + dataid).find('#exist_id' + dataid).val() != "") {
-        main_label['mainlabelsform' + dataid] = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
+       var value = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
     } else {
-        main_label['mainlabelsform' + dataid] = "null";
+       var value = "null";
     }
 
     var main_lab = JSON.stringify(main_label);
     var template_id = $('#mainlabelsform' + dataid).find('#tree3' + dataid).jstree('get_selected', true);
     if (template_id != "") {
         localStorage.setItem("main_label", main_lab);
+		setMainLabel('mainlabelsform' + dataid, dataid, value)
         $('#main_template_error' + dataid).addClass('hidden')
         $("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
@@ -2924,9 +3001,9 @@ function setMainLabelStatus(dataid) {
 
 function setWashCareLabelStatus(dataid) {
     if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
-        wash_label['washcarelabelform' + dataid] = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
+       var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
     } else {
-        wash_label['washcarelabelform' + dataid] = "null";
+        var value = "null";
     }
 
     var wash_lab = JSON.stringify(wash_label);
@@ -2937,6 +3014,7 @@ function setWashCareLabelStatus(dataid) {
     if (i != 0) {
         $('#wash_composition_error' + dataid).addClass('hidden')
         localStorage.setItem("wash_label", wash_lab);
+		setWashLabel('washcarelabelform' + dataid, dataid, value)
         $("#washcarelabelform" + dataid + " .left-panel").removeClass('active');
         $("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
         $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
