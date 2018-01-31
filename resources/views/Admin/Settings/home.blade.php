@@ -1382,6 +1382,31 @@
            </div>
        </div>
    </div>
+
+   {{-- Add Tesco Brand Modal --}}
+   <div class="modal fade" id="addTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoBrandsLabel">Add Brand</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
 
@@ -1390,7 +1415,8 @@
         window.location = "{{ url('/admin') }}";
     </script>
     @endif @section('jqueryIncludes')
-    <script src="{{ asset('js/Admin/settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-settings.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
@@ -1403,13 +1429,19 @@
         /* Show logo on left side */
         $('.logo').html('Settings')
         $('.buyer-nav-select').html($('.buyer-div').html())
-
+         
         // Check if buyer selected or not
+        /* call settings function from settings.js*/
+        /**  [ Show settings page based on buyer selection ] */
         if (localStorage.getItem("buyer") === null) {
 
-        } else {
-          /* call settings function from settings.js*/
-            settings();
+        }else if(localStorage.getItem("buyer") === 'orchestra')
+        {
+            orchestraSettings();
+        }
+        else
+        {
+            tescoSettings();
         }
 
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
@@ -1423,8 +1455,17 @@
             {
                 localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var buyer = $(this).find("option:selected").text().toLowerCase();
                 /* call settings function from settings.js*/
-                settings();
+                /**  [ Show settings page based on buyer selection ] */
+               if(buyer === 'orchestra')
+                {
+                     orchestraSettings();
+                }
+                else
+                {
+                    tescoSettings();
+                } 
             } 
             else 
             {

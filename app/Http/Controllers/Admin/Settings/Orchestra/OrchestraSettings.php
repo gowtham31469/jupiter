@@ -53,7 +53,7 @@ class OrchestraSettings extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/Settings/Orchestra/home')->with(['buyers' => $buyers]);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers]);
         }
         else
         {
