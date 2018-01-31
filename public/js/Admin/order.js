@@ -7,6 +7,7 @@ var wash_label = {};
 var wash_composition = {};
 var deletemain = [];
 var deletewash = [];
+
 //$('body').css("background","#f3f3f3")
 /**
  * method to check the input value is a number or not
@@ -269,7 +270,7 @@ function table(data,path) {
     }
     $.each(data, function (index, value) {
 
-        tr += '<tr id="' + value.id + '">';
+        tr += '<tr class="trClass" id="' + value.id + '">';
         for (var key in columnsIn) {
             if (key != "id") {
                 if (key == "Type") {
@@ -307,7 +308,7 @@ function table(data,path) {
             { 
                 if (key == "PONumber")
                 { 
-                    tr += '<td class="text-center"> <div class="input-group"> <input type="text" class="form-control input-sm" placeholder="Enter PO"> <span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default">Save</button> </span> </div></td>';
+                    tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.UVC+'","'+value.BuyerPONo+'","'+value.template_id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
                 }
                 if (key == "pi_required")
                 {    
@@ -329,6 +330,63 @@ function table(data,path) {
 
 }
 /**
+ * method pass the po number for
+ * @param {[type]} obj         [description]
+ * @param {[type]} uvc         [description]
+ * @param {[type]} po          [description]
+ * @param {[type]} template_id [description]
+ * @param {[type]} table_name  [description]
+ */
+function setPO(obj,uvc,po,template_id,table_name)
+{
+   var po_number  = $(obj).closest('tr').find('.po').val();
+   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/orchestra/order-management/set-po-number",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            po: po,
+            po_number:po_number,
+            template_id:template_id,
+            uvc: uvc
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        success: function (data) {
+           $('.snackbar_span').html('Purchase Order Number added Successfully');
+           $('#snackbar').css('background-color','#1abb9c');
+           showSnackbar();
+        },
+        error: function (data){
+
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+
+}
+ /** [showSnackbar function] */
+  function showSnackbar() {
+    try{
+      // Get the snackbar DIV
+      var x = document.getElementById("snackbar")
+
+      // Add the "show" class to DIV
+      x.className = "show";
+
+      // After 3 seconds, remove the show class from DIV
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+/**
  * call the method for getting all the details for profoma invoice generation
  * @param  {[type]} uvc         [description]
  * @param  {[type]} po          [description]
@@ -347,6 +405,7 @@ function showProfomaInvoice(uvc,po,template_id,table_name)
         data: {
             _token: csrf_token,
             po: po,
+            template_id:template_id,
             uvc: uvc
         },
         beforeSend: function () {

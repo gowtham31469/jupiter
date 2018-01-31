@@ -226,16 +226,24 @@
             </div>
         </div>
     </div>
+    {{-- Show snackbar html code --}}
      <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
     </script>
     @endif @section('jqueryIncludes')
+
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script>
+        $(document).ready(function(){
+            $('#po-submit').prop('disabled',true);
+            $('#po').keyup(function(){
+                $('#po-submit').prop('disabled', this.value == "" ? true : false);     
+            })
+        }); 
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
         })

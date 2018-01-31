@@ -1092,6 +1092,15 @@ class OrderManagementCntrl extends Controller
        
            
     }
+
+    public function setPONumber(Request $request)
+    {
+        $po_number=$request->po_number;
+        $po=$request->po;
+        $uvc=$request->uvc;
+        $template_id=$request->template_id;
+        return $po_number;
+    }
     /**
      * method to get all the details for profoma invoice generation
      * @param  Request $request [description]
