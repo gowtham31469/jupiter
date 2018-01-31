@@ -1390,7 +1390,7 @@
         window.location = "{{ url('/admin') }}";
     </script>
     @endif @section('jqueryIncludes')
-    <script src="{{ asset('js/Admin/settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
