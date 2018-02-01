@@ -1498,6 +1498,68 @@
         </div>
     </div>
 
+    {{-- Edit Tesco Department Modal --}}
+    <div class="modal fade" id="editTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Department</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_pantone_name', 'Pantone Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_rbg_name', 'RBG Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
+   {{-- Delete Tesco Departments Modal --}}
+   <div class="modal fade" id="deleteTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Department</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_department_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco department. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_department_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
 
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
@@ -2073,7 +2135,7 @@
          }
        })
 
-       /** assign id for delete size chart modal **/
+       /** assign id for delete tesco brands modal **/
        $('#deleteTescoBrandsModal').on('show.bs.modal', function (e) {
            var config = $(e.relatedTarget).data('userid');
            $('#delete_tesco_brand_id').attr('value', config);
@@ -2123,6 +2185,48 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
              addTescoDepartments();
           }
         })
+        /** get edit Tesco Department details **/
+        $(document).on('click','.edit-tesco-departments',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoDepartmentsById function from settings.js*/
+           getTescoDepartmentsById(id);
+       });
+        
+              /** submit edit tesco departments form **/
+              $('#edit_tesco_departments_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoDepartments function from tesco-settings.js*/
+            editTescoDepartments();
+         }
+       })
+
+       /** assign id for delete tesco department modal **/
+       $('#deleteTescoDepartmentsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_tesco_department_id').attr('value', config);
+       });
+
+       /** submit delete Tesco Department  form **/
+       $('#delete_tesco_department_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_tesco_department_id').val();
+            /* call deleteTescoBrand function from tesco-settings.js*/
+            deleteTescoDepartment(id);
+         }
+       })
 
     });
     </script>

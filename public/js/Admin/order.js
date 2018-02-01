@@ -7,6 +7,7 @@ var wash_label = {};
 var wash_composition = {};
 var deletemain = [];
 var deletewash = [];
+
 //$('body').css("background","#f3f3f3")
 /**
  * method to check the input value is a number or not
@@ -283,7 +284,7 @@ function table(data,path) {
     }
     $.each(data, function (index, value) {
 
-        tr += '<tr id="' + value.id + '">';
+        tr += '<tr class="trClass" id="' + value.id + '">';
         for (var key in columnsIn) {
             if (key != "id") {
                 if (key == "Type") {
@@ -321,13 +322,21 @@ function table(data,path) {
             { 
                 if (key == "PONumber")
                 { 
-                    tr += '<td class="text-center"> <div class="input-group"> <input type="text" class="form-control input-sm" placeholder="Enter PO"> <span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default">Save</button> </span> </div></td>';
+                   if (value[key]==null)
+                   {
+                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
+                   }
+                   else
+                   {
+                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
+                   }
+                   
                 }
                 if (key == "pi_required")
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.UVC+'","'+value.BuyerPONo+'","'+value.template_id+'","'+value.tableName+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }
                     else
                     {
@@ -343,6 +352,74 @@ function table(data,path) {
 
 }
 /**
+ * method pass the po number for
+ * @param {[type]} obj         [description]
+ * @param {[type]} uvc         [description]
+ * @param {[type]} po          [description]
+ * @param {[type]} template_id [description]
+ * @param {[type]} table_name  [description]
+ */
+function setPO(obj,id,table_name)
+{
+   var po_number  = $(obj).closest('tr').find('.po').val();
+   var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/orchestra/order-management/set-po-number",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            table_name: table_name,
+            po_number:po_number,
+            id:id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function()
+            {
+               $('.snackbar_span').html('Purchase Order Number added Successfully');
+               $('#snackbar').css('background-color','#1abb9c');
+               showSnackbar();
+               orderStatus();
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+
+}
+ /** [showSnackbar function] */
+  function showSnackbar() {
+    try{
+      // Get the snackbar DIV
+      var x = document.getElementById("snackbar")
+
+      // Add the "show" class to DIV
+      x.className = "show";
+
+      // After 3 seconds, remove the show class from DIV
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+/**
  * call the method for getting all the details for profoma invoice generation
  * @param  {[type]} uvc         [description]
  * @param  {[type]} po          [description]
@@ -350,8 +427,9 @@ function table(data,path) {
  * @param  {[type]} table_name  [description]
  * @return profoma invoice
  */
-function showProfomaInvoice(uvc,po,template_id,table_name)
+function showProfomaInvoice(id,table_name,uvc)
 {
+    alert(uvc)
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -360,15 +438,27 @@ function showProfomaInvoice(uvc,po,template_id,table_name)
         dataType: "json",
         data: {
             _token: csrf_token,
-            po: po,
-            uvc: uvc
+            table_name: table_name,
+            id:id,
+            uvc:uvc
         },
         beforeSend: function () {
             $(".loader").show();
             $(".loader").css('margin-top', '12%');
         },
-        success: function (data) {
-            $('#profoma-invoice').modal('show')
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function()
+            {
+               $('#profoma-invoice').modal('show')
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
         },
         error: function (data) {
 
@@ -1063,6 +1153,7 @@ function label_order_details(uvc) {
                         $('.delete-main' + index).on('click', function (e) {
                             deletemain.push(value.id)
                             localStorage.setItem("deletemain", JSON.stringify(deletemain));
+							removeMainLabel(value.id)
                             $('#mainlabelsform' + index).remove()
                             mainlabel -= 1;
                             $(this).parent().parent().parent().remove();
@@ -1096,6 +1187,7 @@ function label_order_details(uvc) {
                         $('.delete-wash' + index).on('click', function (e) {
                             deletewash.push(value.id)
                             localStorage.setItem("deletewash", JSON.stringify(deletewash));
+							removeWashLabel(value.id)
                             $('#washcarelabelform' + index).remove()
                             washcare -= 1;
                             $(this).parent().parent().parent().remove();
@@ -1717,16 +1809,19 @@ function mainlabels(data, dataid) {
             $delivery_date = $de_date_fin;
             $template_id = data.orchestra_main_label_orders[dataid1].template_id;
             $exist_id = data.orchestra_main_label_orders[dataid1].id;
+			$main_count=data.orchestra_main_label_orders[dataid1].final_qty;
         } else {
             $delivery_date = "";
             $template_id = "";
             $exist_id = "";
+			$main_count="";
         }
 
     } else {
         $delivery_date = "";
         $template_id = "";
         $exist_id = "";
+		$main_count="";
     }
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_main_label_orders != "") {
@@ -1760,7 +1855,7 @@ function mainlabels(data, dataid) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main & Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main Labels</span></h4> <hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty' + dataid + '" value="'+$main_count+'" onkeypress="return checkNumbersOnly(event)" placeholder="Main Label Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
     $('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -1782,7 +1877,7 @@ function mainlabels(data, dataid) {
     $("#clickmemain" + dataid).click(function () {
         // $('.sample-artwork').html("")
         //alert($('.mainlabelname'+dataid).text())
-        $('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
+        //$('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
         $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
         $('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
@@ -1826,36 +1921,19 @@ function specialtags(data) {
         $delivery_date = $de_date_fin;
         $template_id = data.orchestra_special_tag_orders[0].template_id;
         $exist_id = data.orchestra_special_tag_orders[0].id;
+		$special_tag_count=data.orchestra_special_tag_orders[0].final_qty;
     } else {
         $delivery_date = "";
         $template_id = "";
         $exist_id = "";
+		$special_tag_count="";
     }
-    var ttots = 0;
-    $.each(data.order_details, function (index, value) {
-        if (data.orchestra_special_tag_orders != "") {
-
-            $special_tag_count = data.orchestra_special_tag_orders_qty[$qu].quantity;
-        } else {
-            $special_tag_count = "";
-        }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" value="' + $special_tag_count + '" class="form-control input-sm tot_qty_table" required placeholder="Special Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
-        ttots += parseInt($special_tag_count);
-        $qu++;
-    });
-	if(isNaN(ttots))
-		{
-			ttots=0;
-		}
-	else
-		{
-			ttots=ttots;
-		}
+ 	
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm tot_qty_table" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button><button type="button" class="btn btn-primary" onclick=printSpecialDiv("svg2")>Print</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><hr> <div class="section-1 sections scroll"><div class="loader"></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button><button type="button" class="btn btn-primary" onclick=printSpecialDiv("svg2")>Print</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -2430,30 +2508,34 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
     $('#washcare_label_card').on('click', function (e) {
 
         if ($('.washcarename').val() != "") {
-            washcare += 1;
+          
+			
             if (washcare <= 5) {
+				  washcare += 1;
                 $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+				
+				$('.delete-wash' + washcare).on('click', function (e) {
+
+					if (localStorage.getItem('wash_label') != null) {
+						var opop = JSON.parse(localStorage.getItem('wash_label'));
+						if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+						} else {
+							delete opop['washcarelabelform' + $(this).attr('id')];
+						}
+
+
+						localStorage.setItem('wash_label', JSON.stringify(opop))
+					}
+
+					$('#washcarelabelform' + $(this).attr('id')).remove()
+					washcare -= 1;
+					$(this).parent().parent().parent().remove();
+
+
+            	});
             }
-            $('.delete-wash' + washcare).on('click', function (e) {
-
-                if (localStorage.getItem('wash_label') != null) {
-                    var opop = JSON.parse(localStorage.getItem('wash_label'));
-                    if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
-
-                    } else {
-                        delete opop['washcarelabelform' + $(this).attr('id')];
-                    }
-
-
-                    localStorage.setItem('wash_label', JSON.stringify(opop))
-                }
-
-                $('#washcarelabelform' + $(this).attr('id')).remove()
-                washcare -= 1;
-                $(this).parent().parent().parent().remove();
-
-
-            });
+         
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
             var data = localStorage.getItem("label_order_data");
@@ -2483,13 +2565,13 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
     });
     $('#main_label_card').on('click', function (e) {
         if ($('.mainname').val() != "") {
-            mainlabel += 1;
+            
             if (mainlabel <= 5) {
+				mainlabel += 1;
                 $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
                 var data = localStorage.getItem("label_order_data");
                 mainlabels(JSON.parse(data), mainlabel);
-            }
-            $('.delete-main' + mainlabel).on('click', function (e) {
+				$('.delete-main' + mainlabel).on('click', function (e) {
                 if (localStorage.getItem('main_label') != null) {
                     var opop = JSON.parse(localStorage.getItem('main_label'));
                     if (opop['mainlabelsform' + $(this).attr('id')] === undefined) {
@@ -2508,7 +2590,9 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 $(this).parent().parent().parent().remove();
 
 
-            });
+				 });
+            }
+           
             $('.mainname').val("")
             $('.mainnameerror').addClass('hidden')
         } else {
@@ -3094,7 +3178,8 @@ function setHangTag(id) {
 
 
 function setSpecialTag(id) {
-    var delivery_date = $('#special_delivery_date').val();
+    var delivery_date = $('#special_delivery_date').val(); 
+	var special_qty = $('.special_qty').val();
     delivery_date = delivery_date.split('/');
     delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
@@ -3123,7 +3208,7 @@ function setSpecialTag(id) {
             delivery_date: delivery_date_fin,
             template_front_id: template_front_id,
             id: id,
-            tot_qty_table: tot_qty_table_fin,
+            tot_qty_table: special_qty,
             uvc_tco: uvc_tco_fin,
             uvc: $('#uvc_id').val(),
             size: size_fin,
@@ -3152,6 +3237,7 @@ function setSpecialTag(id) {
 
 function setMainLabel(index, dataid, id) {
     var delivery_date = $('#main_delivery_date' + dataid).val();
+	var main_label_qty = $('.main_label_qty' + dataid).val();
     // alert(delivery_date)
     delivery_date = delivery_date.split('/');
     delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
@@ -3184,6 +3270,7 @@ function setMainLabel(index, dataid, id) {
             id: id,
             template_name: template_name,
             tot_qty_table: tot_qty_table_fin,
+			main_label_qty: main_label_qty,
             uvc_tco: uvc_tco_fin,
             uvc: $('#uvc_id').val(),
             size: size_fin,

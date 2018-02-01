@@ -254,7 +254,7 @@ function showSnackbar() {
    }
  }
  /**
-  * To delete tesco garment
+  * To delete tesco brands
   * @param id
   * @author <praveen>
   *
@@ -486,5 +486,139 @@ function tescoDepartment() {
       console.log("Error:"+e)
     }
    }
+/**
+   * Function for get tesco department details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getTescoDepartmentsById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/tesco/get-tesco-departments-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             beforeSend: function () {
+               $(".loader").show();
+               $(".loader").css('margin-top','12%');
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_tesco_departments_id').val(id);
+                 $('#edit_department_name').val(data.tesco_departments[0].department);
+                 $('#edit_pantone_name').val(data.tesco_departments[0].pantone);
+                 $('#edit_rbg_name').val(data.tesco_departments[0].rbg);
 
+                 $('#editTescoDepartmentsModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_tesco_departments_form').validator('validate');
+                 $('#editTescoDepartmentsModal').modal('show');
+             },
+             error: function (data) {
+                  console.log(data);
+             },
+             complete: function () {
+                 $(".loader").hide();
+                 $(".loader").css('margin-top','0%');
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  /**
+  * Function for edit tesco department details
+  * @author <praveen>
+  */
+ function editTescoDepartments()
+ {
+  try{
+       var id         = $('#edit_tesco_departments_id').val();
+       var department       = $('#edit_department_name').val();
+       var pantone = $('#edit_pantone_name').val();
+       var rbg = $('#edit_rbg_name').val();
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-departments",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,department:department,pantone:pantone,rbg:rbg},
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Department Updated Successfully");
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                       $('#editTescoDepartmentsModal').modal('hide');
+                       tescoDepartment()
+                  }
+           },
+           error: function (data) {
+                console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
+ /**
+  * To delete tesco department
+  * @param id
+  * @author <praveen>
+  *
+  */
+  function deleteTescoDepartment(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/tesco/delete-tesco-department",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+                200: function() {
+                     $('.snackbar_span').html('Department Deleted Successfully');
+                     $('#snackbar').css('background-color','#1abb9c');
+                     showSnackbar();
+                     $('#deleteTescoDepartmentsModal').modal('hide');
+                     tescoBrands();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     $('#snackbar').css('background-color','#F44336');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+	 console.log("Error:"+e)
+  }
+  }
    
