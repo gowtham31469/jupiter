@@ -282,3 +282,10 @@ Route::post('admin/tesco/add-tesco-departments', 'Admin\Settings\Tesco\TescoSett
 Route::get('admin/tesco/get-tesco-departments-details', 'Admin\Settings\Tesco\TescoSettings@getTescoDepartmentsById');
 Route::put('admin/tesco/update-tesco-departments', 'Admin\Settings\Tesco\TescoSettings@updateTescoDepartmentsById');
 Route::delete('admin/tesco/delete-tesco-department', 'Admin\Settings\Tesco\TescoSettings@deleteTescoDepartmentsById');
+Route::post('admin/tesco/settings/suppliers', 'Admin\Settings\Tesco\TescoSettings@tescoSuppliers');
+Route::post('admin/tesco/add-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@addTescoSuppliers');
+Route::get('/admin/tesco/get-tesco-suppliers-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSuppliersById');
+Route::put('/admin/tesco/update-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@updateTescoSuppliersById');
+Route::delete('admin/tesco/delete-tesco-supplier', 'Admin\Settings\Tesco\TescoSettings@deleteTescoSuppliersById');
+Route::put('/admin/tesco/make-supplier-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierEnabled');
+Route::put('/admin/tesco/make-supplier-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierDisabled');
