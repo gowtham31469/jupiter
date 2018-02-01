@@ -551,7 +551,8 @@ class OrderManagementCntrl extends Controller
     {
         $delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
-        $tot_qty_table = explode(',',$request->tot_qty_table);
+        //$tot_qty_table = explode(',',$request->tot_qty_table);
+		$tot_qty_table =$request->tot_qty_table;
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
@@ -581,22 +582,23 @@ class OrderManagementCntrl extends Controller
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
                         'delivery_date'    => $delivery_date, 
-                        'svg_path'    => "", 
+                        'svg_path'    => "",
+					    'final_qty'    => $tot_qty_table, 
                         'status'    => $status,
                   ]);
-                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
-                            ->delete();
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     SpecialTagOrdersQty::create([
-                                        'ost_id' => $id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
+//                $deleted = SpecialTagOrdersQty::where('ost_id', '=', $id)
+//                            ->delete();
+//                $i=0;
+//                foreach($tot_qty_table as $value)
+//                {
+//                     SpecialTagOrdersQty::create([
+//                                        'ost_id' => $id,
+//                                        'size'      => $size[$i],
+//                                        'uvc_tco'      => $uvc_tco[$i],
+//                                        'quantity'    => $value
+//                             ]);
+//                    $i++;
+//                }
         }
         else
         {
@@ -605,19 +607,20 @@ class OrderManagementCntrl extends Controller
                                     'template_id'      => $template_front_id,
                                     'delivery_date'    => $delivery_date, 
                                     'svg_path'    => "", 
+				 					'final_qty'    => $tot_qty_table,
                                     'status'    => $status,
                          ]);
-            $i=0;
-            foreach($tot_qty_table as $value)
-            {
-                 SpecialTagOrdersQty::create([
-                                    'ost_id' => $inserted->id,
-                                    'size'      => $size[$i],
-                                    'uvc_tco'      => $uvc_tco[$i],
-                                    'quantity'    => $value
-                         ]);
-                $i++;
-            }
+//            $i=0;
+//            foreach($tot_qty_table as $value)
+//            {
+//                 SpecialTagOrdersQty::create([
+//                                    'ost_id' => $inserted->id,
+//                                    'size'      => $size[$i],
+//                                    'uvc_tco'      => $uvc_tco[$i],
+//                                    'quantity'    => $value
+//                         ]);
+//                $i++;
+//            }
         }
            
     } 
@@ -637,6 +640,7 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
+		$main_label_qty =$request->main_label_qty;
         $id =$request->id;
 		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
 		if(count($factory) > 0)
@@ -665,6 +669,7 @@ class OrderManagementCntrl extends Controller
                         'template_name'      => $template_name,
                         'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
+					    'final_qty'    => $main_label_qty, 
                         'status'    => $status,
                   ]);
                 $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
@@ -687,7 +692,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
                                 'template_name'      => $template_name,
-                                'delivery_date'    => $delivery_date, 
+                                'delivery_date'    => $delivery_date,
+				   				'final_qty'    => $main_label_qty, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
                      ]);
