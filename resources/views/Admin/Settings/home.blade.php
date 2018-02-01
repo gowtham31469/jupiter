@@ -1383,6 +1383,9 @@
        </div>
    </div>
 
+
+<!-- Tesco Modals -->
+
    {{-- Add Tesco Brand Modal --}}
    <div class="modal fade" id="addTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
         <div class="modal-dialog" role="document">
@@ -1407,6 +1410,95 @@
             </div>
         </div>
     </div>
+    
+    {{-- Edit Tesco Brands Modal --}}
+    <div class="modal fade" id="editTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Brand</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
+{{-- Delete Orchestra Garments Modal --}}
+   <div class="modal fade" id="deleteTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Brand</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_brand_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco brand. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_brand_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
+
+   {{-- Add Tesco Department Modal --}}
+   <div class="modal fade" id="addTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoDepartmentLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoDepartmentLabel">Add Department</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('pantone', 'Pantone', ['class' => 'form_label']) !!}
+                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('rbg', 'RBG', ['class' => 'form_label']) !!}
+                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
 
@@ -1441,7 +1533,7 @@
         }
         else
         {
-            tescoSettings();
+          tescoBrands();
         }
 
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
@@ -1464,7 +1556,7 @@
                 }
                 else
                 {
-                    tescoSettings();
+                  tescoBrands();
                 } 
             } 
             else 
@@ -1485,6 +1577,8 @@
         $('#add_orchestra_composition_form').trigger("reset");
         $('#add_orchestra_part_form').trigger("reset");
         $('#add_orchestra_size_chart_form').trigger("reset");
+        $('#add_tesco_brands_form').trigger("reset");
+        $('#add_tesco_departments_form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -1942,6 +2036,93 @@
             deleteOrchestraSizeChart(id);
          }
        })
+
+       /** Add Tesco Brand form validation **/
+       $('#add_tesco_brands_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addTescoBrands function from settings.js*/
+             addTescoBrands();
+          }
+        })
+
+        /** get edit orchestra garment details **/
+       $(document).on('click','.edit-tesco-brands',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoBrandById function from settings.js*/
+           getTescoBrandById(id);
+       });
+
+       /** submit edit orchestra garment form **/
+       $('#edit_tesco_brands_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoBrands function from tesco-settings.js*/
+            editTescoBrands();
+         }
+       })
+
+       /** assign id for delete size chart modal **/
+       $('#deleteTescoBrandsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_tesco_brand_id').attr('value', config);
+       });
+
+       /** submit delete orchestra size chart form **/
+       $('#delete_tesco_brand_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_tesco_brand_id').val();
+            /* call deleteTescoBrand function from tesco-settings.js*/
+            deleteTescoBrand(id);
+         }
+       })
+
+        /** To Enable  Brand  on click **/
+    $(document).on('click', '#make_enabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeBrandEnabled function from tesco-settings.js*/
+        makeBrandEnabled(id,csrf_token)
+    });
+
+    /** To disable Brand  on click **/
+    $(document).on('click', '#make_disabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeBrandDisabled function from tesco-settings.js*/
+        makeBrandDisabled(id,csrf_token)
+    });
+
+/** Add Tesco Brand form validation **/
+$('#add_tesco_departments_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addTescoDepartments function from  tesco-settings.js*/
+             addTescoDepartments();
+          }
+        })
 
     });
     </script>

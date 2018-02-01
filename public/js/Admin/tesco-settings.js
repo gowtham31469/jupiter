@@ -44,14 +44,14 @@ var isSubmitting = false;
   * Function to Tesco Settings home page
   * @author <praveen>
   */
-function tescoSettings() {
+function tescoBrands() {
   try{
     $('.main-content').html('<div class="loader"></div>');
     /** tesco metadata sidebar */
-    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoSettings()"><a class="active">Brands</a></li><li id="2" onclick="department()"><a>Departments</a></li><li id="3" onclick="suppliers()"><a>Suppliers</a></li><li id="4"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="suppliers()"><a>Suppliers</a></li><li id="4"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/tesco/settings",
+        url: base_url + "/admin/tesco/settings/brands",
         type: "POST",
         dataType: "json",
         data: {
@@ -66,7 +66,7 @@ function tescoSettings() {
 	             $.each(data.tesco_brands, function(i, item){
 	              var index = i+1;
 	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td>';
-                if(item.is_active === 1)
+                if(item.is_enabled === 1)
                    {
                     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
                    }
@@ -74,7 +74,7 @@ function tescoSettings() {
                    {
                     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
                    }
-                   if(item.is_active === 1)
+                   if(item.is_enabled === 1)
                    {
                     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Disabled" id="make_disabled" data-placement="left"></i></a>';
                    }
@@ -84,7 +84,7 @@ function tescoSettings() {
                    }
 
 
-                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deletetescobrandsModal" data-placement="left"></i></a></td></tr>';
+                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoBrandsModal" data-placement="left"></i></a></td></tr>';
 	             });
 	             tesco_metadata += '</tbody></table></div>';
 	             $('.main-content').html(tesco_metadata)
@@ -148,7 +148,7 @@ function showSnackbar() {
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addTescoBrandsModal').modal('hide');
-                       tescoSettings()
+                       tescoBrands()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
@@ -238,7 +238,7 @@ function showSnackbar() {
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editTescoBrandsModal').modal('hide');
-                       tescoSettings()
+                       tescoBrands()
                   }
            },
            error: function (data) {
@@ -264,7 +264,7 @@ function showSnackbar() {
   try{
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        $.ajax({
-           url:base_url + "/admin/tesco/delete-tesco-garment",
+           url:base_url + "/admin/tesco/delete-tesco-brand",
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
@@ -278,7 +278,7 @@ function showSnackbar() {
                      $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteTescoBrandsModal').modal('hide');
-                     tescoSettings();
+                     tescoBrands();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
@@ -298,3 +298,193 @@ function showSnackbar() {
 	 console.log("Error:"+e)
   }
   }
+
+  /**
+  * Makes a Brand Enabled.
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeBrandEnabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/tesco/make-brand-enabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top','12%');
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                       isSubmitting = false; 
+                       $('.snackbar_span').html('Brand is enabled ');
+                       $('#snackbar').css('background-color','#1abb9c');
+                       showSnackbar();
+                   }
+              },
+              error: function (data) {
+                 console.log(data);
+              },
+              complete: function () {
+                tescoBrands();
+                $(".loader").hide();
+                $(".loader").css('margin-top','0%');
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
+/**
+ * Makes a Brand Diabled
+ * @param id,csrf_token
+ * @author <praveen>
+ */
+ function makeBrandDisabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/tesco/make-brand-disabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top','12%');
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                        isSubmitting = false;
+                        $('.snackbar_span').html('Brand is disabled ');
+                        $('#snackbar').css('background-color','#1abb9c');
+                        showSnackbar();
+                   }
+              },
+              error: function (data) {
+                 console.log(data);
+              },
+              complete: function () {
+                tescoBrands();
+                $(".loader").hide();
+                $(".loader").css('margin-top','0%');
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
+
+  /**
+  * Function to Tesco Department home page
+  * @author <praveen>
+  */
+function tescoDepartment() {
+    try{
+      $('.main-content').html('<div class="loader"></div>');
+      /** tesco metadata sidebar */
+      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a>Brands</a></li><li id="2" onclick="tescoDepartment()"><a class="active">Departments</a></li><li id="3" onclick="suppliers()"><a>Suppliers</a></li><li id="4"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/departments",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          beforeSend: function () {
+              $(".loader").show();
+              $(".loader").css('margin-top', '12%');
+          },
+          success: function (data) {
+                  var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.tesco_department, function(i, item){
+                    var index = i+1;
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-departments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoDepartmentsModal" data-placement="left"></i></a></td></tr>';
+                   });
+                   tesco_metadata += '</tbody></table></div>';
+                   $('.main-content').html(tesco_metadata)
+                  $('.edit-tesco-departments').tooltip('show')
+                  $('.edit-tesco-departments').tooltip('toggle')
+                  $('.delete-tesco-departments').tooltip('show')
+                  $('.delete-tesco-departments').tooltip('toggle')
+                    $('#tesco-departments-list-table').DataTable();
+                    $("#tesco-departments-list-table_filter input").addClass('form-control input-sm');
+                    $("#tesco-departments-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#tesco-departments-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function (data) {
+  
+          },
+          complete: function () {
+              $(".loader").hide();
+              $(".loader").css('margin-top', '0%');
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+}
+
+/**
+  * Adds a tesco Department.
+  * @author <praveen>
+  */
+  function addTescoDepartments()
+  {
+     try{
+          var department       = $('#department_name').val();
+          var pantone       = $('#pantone').val();
+          var rbg = $('#rbg').val();
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/tesco/add-tesco-departments",
+              method: 'POST',
+              data: {_token:csrf_token,department:department,pantone:pantone,rbg:rbg},
+              beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top','12%');
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Department Added Successfully");
+                        $('#snackbar').css('background-color','#1abb9c');
+                        showSnackbar();
+                        $('#addTescoDepartmentsModal').modal('hide');
+                        tescoDepartment()
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        $('#snackbar').css('background-color','#F44336');
+                        showSnackbar();
+                   }
+              },
+              error: function (data) {
+                 console.log(data);
+              },
+              complete: function () {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top','0%');
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+
+   
