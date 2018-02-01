@@ -270,4 +270,12 @@ Route::delete('admin/orchestra/delete-orchestra-size-chart', 'Admin\Settings\Orc
 
 
 /**tesco Settings Page**/
-Route::post('admin/tesco/settings', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
+Route::post('admin/tesco/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
+Route::post('admin/tesco/add-tesco-brands', 'Admin\Settings\Tesco\TescoSettings@addTescoBrands');
+Route::get('admin/tesco/get-tesco-brands-details', 'Admin\Settings\Tesco\TescoSettings@getTescoBrandsById');
+Route::put('admin/tesco/update-tesco-brands', 'Admin\Settings\Tesco\TescoSettings@updateTescoBrandsById');
+Route::delete('admin/tesco/delete-tesco-brand', 'Admin\Settings\Tesco\TescoSettings@deleteTescoBrandsById');
+Route::put('admin/tesco/make-brand-enabled', 'Admin\Settings\Tesco\TescoSettings@makeBrandEnabled');
+Route::put('admin/tesco/make-brand-disabled', 'Admin\Settings\Tesco\TescoSettings@makeBrandDisabled');
+Route::post('admin/tesco/settings/departments', 'Admin\Settings\Tesco\TescoSettings@tescoDepartments');
+Route::post('admin/tesco/add-tesco-departments', 'Admin\Settings\Tesco\TescoSettings@addTescoDepartment');

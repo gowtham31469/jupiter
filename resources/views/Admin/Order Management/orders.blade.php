@@ -167,13 +167,14 @@
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
 </script>
-@endif @section('jqueryIncludes')      
+@endif @section('jqueryIncludes')   
+{{-- loading javascript files --}}
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        /** Clear localstorage data */
+        /** Clear local storage data **/
         localStorage.removeItem("hang_tag");
         localStorage.removeItem("special_tag");
         localStorage.removeItem("main_label");
@@ -190,25 +191,25 @@
          $('.logo').html('Orders')
         $('.buyer-nav-select').html($('.buyer-div').html())
 
-            /** [ Show create order page based on buyer selection ] */
-            if (localStorage.getItem("buyer") === null) {
-                    
-            }
-            else if(localStorage.getItem("buyer") === 'orchestra')
-            {
-                 orders();
-            }
-            else
-            {
-                tescoOrders();
-            }
+        /** [ Show create order page based on buyer selection ] */
+        if (localStorage.getItem("buyer") === null) {
+                
+        }
+        else if(localStorage.getItem("buyer") === 'orchestra')
+        {
+             orders();
+        }
+        else
+        {
+            tescoOrders();
+        }
 
         /** Buyer selectpicker style */
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
-          $('.buyer-nav-select .buyer-select').selectpicker({
-               style: 'btn-default',
-               size: 4
-            });
+        $('.buyer-nav-select .buyer-select').selectpicker({
+           style: 'btn-default',
+           size: 4
+        });
 
         /** [ Show dynamic sub modules in navbar ] */
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
@@ -229,7 +230,7 @@
 
                     },
                     success: function(data) {
-                       /**  [ Show orders page based on buyer selection ] */
+                       /**  [ Show orders page based on buyer selection ] **/
                        if(buyer === 'orchestra')
                         {
                              orders();
