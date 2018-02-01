@@ -170,7 +170,7 @@ Route::get('/erp/dashboard', function(){
 
 });
 
-//Order Management
+//Orchestra Order Management
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
@@ -202,6 +202,7 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
+Route::get('admin/tesco/get-tesco-metadata', 'Admin\Tesco\OrderManagementCntrl@getTescoMeatadata');
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');

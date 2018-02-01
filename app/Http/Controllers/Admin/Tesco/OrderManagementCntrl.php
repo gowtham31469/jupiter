@@ -54,6 +54,22 @@ class OrderManagementCntrl extends Controller
          }
     }
     /**
+     * Function to get tesco metadata for order page
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoMeatadata()
+    {
+       try {
+           $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
+           $tesco_department = DB::table('tesco_department')->select('department','id')->get();
+           $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id','supplier_code')->get();
+           return response()->json(['tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
+    /**
      * Function to get tesco order page
      * @author <Praveen>
      * @return \Illuminate\Http\Response
