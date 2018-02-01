@@ -277,3 +277,6 @@ Route::put('admin/tesco/make-brand-enabled', 'Admin\Settings\Tesco\TescoSettings
 Route::put('admin/tesco/make-brand-disabled', 'Admin\Settings\Tesco\TescoSettings@makeBrandDisabled');
 Route::post('admin/tesco/settings/departments', 'Admin\Settings\Tesco\TescoSettings@tescoDepartments');
 Route::post('admin/tesco/add-tesco-departments', 'Admin\Settings\Tesco\TescoSettings@addTescoDepartment');
+Route::get('admin/tesco/get-tesco-departments-details', 'Admin\Settings\Tesco\TescoSettings@getTescoDepartmentsById');
+Route::put('admin/tesco/update-tesco-departments', 'Admin\Settings\Tesco\TescoSettings@updateTescoDepartmentsById');
+Route::delete('admin/tesco/delete-tesco-department', 'Admin\Settings\Tesco\TescoSettings@deleteTescoDepartmentsById');

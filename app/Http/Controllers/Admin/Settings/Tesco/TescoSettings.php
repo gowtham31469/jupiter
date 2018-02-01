@@ -232,4 +232,81 @@ class TescoSettings extends Controller
         }
         return $result;
     }
+
+/**
+     * Get Tesco Departments details by ID for editing.
+     * @param Tesco Department id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoDepartmentsById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg')->where('tesco_department.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_departments' => $tesco_department]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update departments by id.
+    * @param department id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoDepartmentsById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $department      = $request['department'];
+          $pantone = $request['pantone'];
+          $rbg = $request['rbg'];
+
+          
+          TescoDepartment::where('id',$id)
+           ->update([
+             'department' => $department,
+             'pantone' => $pantone,
+             'rbg' => $rbg
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+    /**
+     * function to delete department by id.
+     * @param department id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteTescoDepartmentsById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = TescoDepartment::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+    
 }
+
