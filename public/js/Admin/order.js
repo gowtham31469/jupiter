@@ -322,13 +322,21 @@ function table(data,path) {
             { 
                 if (key == "PONumber")
                 { 
-                    tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.UVC+'","'+value.BuyerPONo+'","'+value.template_id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
+                   if (value[key]==null)
+                   {
+                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
+                   }
+                   else
+                   {
+                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
+                   }
+                   
                 }
                 if (key == "pi_required")
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.UVC+'","'+value.BuyerPONo+'","'+value.template_id+'","'+value.tableName+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }
                     else
                     {
@@ -351,7 +359,7 @@ function table(data,path) {
  * @param {[type]} template_id [description]
  * @param {[type]} table_name  [description]
  */
-function setPO(obj,uvc,po,template_id,table_name)
+function setPO(obj,id,table_name)
 {
    var po_number  = $(obj).closest('tr').find('.po').val();
    var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -361,22 +369,33 @@ function setPO(obj,uvc,po,template_id,table_name)
         dataType: "json",
         data: {
             _token: csrf_token,
-            po: po,
+            table_name: table_name,
             po_number:po_number,
-            template_id:template_id,
-            uvc: uvc
+            id:id
         },
         beforeSend: function () {
             $(".loader").show();
             $(".loader").css('margin-top', '12%');
         },
-        success: function (data) {
-           $('.snackbar_span').html('Purchase Order Number added Successfully');
-           $('#snackbar').css('background-color','#1abb9c');
-           showSnackbar();
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function()
+            {
+               $('.snackbar_span').html('Purchase Order Number added Successfully');
+               $('#snackbar').css('background-color','#1abb9c');
+               showSnackbar();
+               orderStatus();
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
         },
         error: function (data){
-
+            console.log(data);
         },
         complete: function () {
             $(".loader").hide();
@@ -408,8 +427,9 @@ function setPO(obj,uvc,po,template_id,table_name)
  * @param  {[type]} table_name  [description]
  * @return profoma invoice
  */
-function showProfomaInvoice(uvc,po,template_id,table_name)
+function showProfomaInvoice(id,table_name,uvc)
 {
+    alert(uvc)
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -418,16 +438,27 @@ function showProfomaInvoice(uvc,po,template_id,table_name)
         dataType: "json",
         data: {
             _token: csrf_token,
-            po: po,
-            template_id:template_id,
-            uvc: uvc
+            table_name: table_name,
+            id:id,
+            uvc:uvc
         },
         beforeSend: function () {
             $(".loader").show();
             $(".loader").css('margin-top', '12%');
         },
-        success: function (data) {
-            $('#profoma-invoice').modal('show')
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function()
+            {
+               $('#profoma-invoice').modal('show')
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
         },
         error: function (data) {
 
