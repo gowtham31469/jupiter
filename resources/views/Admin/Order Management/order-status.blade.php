@@ -70,28 +70,33 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img style="height:50px;" src="../../images/logo.png" class="img-responsive">
+                                        <img style="height:50px;" src="/images/logo.png" class="img-responsive">
                                         <p><strong>Date:</strong>30/12/2017</p>
                                         <p><strong>PI:</strong>493</p>
                                         <p><strong>REV:</strong>2</p>
                                     </div>
-                                    <h3><strong>Jupiter Garments Accessories</strong></h3>
-                                    <br /> 1-J-24, Jupiter Avenue, Ammapalayam,
-                                    <br/> Tirupur – 641 652. India. <br/> Phone : 0421 2238321 <br/> 9786149997<br/>
-                                    <strong>GSTN : 33AAEFJ5964C1ZJ</strong>
+                                    <div id="company_details">
+                                        
+                                    </div>
                                 </div>
                             </div>
                             <hr />
                             <div class="row">
-                                <div class="col-lg-7 col-md-7 col-sm-7">
-                                    <h3>Customer Details : </h3>
-                                    <p class="text-uppercase">Shakti infra tex private limited<br/> 360/27, psg mill permises,<br/>kovai main road, perundurai,<br/>erode dist - 638052</p>
-                                    Phone: 04294-220372, 225373-225378<br/>
-                                    <strong>GSTN : 33AAVCS3628N1ZN</strong>
+                                <h3  style="margin-left: 15px;">Customer Details : </h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
+                                  
                                 </div>
-                                <div class="col-lg-5 col-md-5 col-sm-5">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to">
+                                  
+                                </div>
+                                <!-- <div class="col-lg-5 col-md-5 col-sm-5">
+
+                                </div> -->
                             </div>
                             <hr />
                             <div class="row">
@@ -103,113 +108,12 @@
                                 </div>
                                 <hr/>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th>S. No.</th>
-                                                    <th>Material</th>
-                                                    <th>Size</th>
-                                                    <th>Style</th>
-                                                    <th>Qunty.</th>
-                                                    <th>Unit Cost</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>A&R Barcode Sticker</td>
-                                                    <td>4</td>
-                                                    <td>AESS771</td>
-                                                    <td>85</td>
-                                                    <td>1.75</td>
-                                                    <td>148.75</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>A&R Barcode Sticker</td>
-                                                    <td>4</td>
-                                                    <td>AESS771</td>
-                                                    <td>85</td>
-                                                    <td>1.75</td>
-                                                    <td>148.75</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>A&R Barcode Sticker</td>
-                                                    <td>4</td>
-                                                    <td>AESS771</td>
-                                                    <td>85</td>
-                                                    <td>1.75</td>
-                                                    <td>148.75</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>A&R Barcode Sticker</td>
-                                                    <td>4</td>
-                                                    <td>AESS771</td>
-                                                    <td>85</td>
-                                                    <td>1.75</td>
-                                                    <td>148.75</td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <hr>
-                                    <div>
-                                        <h4 class="text-right"> Total Quantity : 840 </h4>
-
-                                    </div>
-                                    <hr>
-                                    <div>
-                                        <h4 class="text-right"> Sub-Total : 1470 </h4>
-                                    </div>
-                                    <hr/>
-                                    <div class="text-right">
-                                        <h4> Taxes : 18% (<span>132.30</span>)</h4>
-                                    </div>
-                                    <hr>
-                                    <div class="text-right">
-                                        <h3> Bill Amount : 1735 </h3>
-                                        <p class="text-uppercase">one thousand seven hundred and thirty five repees only</p>
-                                    </div>
-                                    <hr />
-                                </div>
+                            <div class="row" id="item_details">
+                                
                             </div>
                             <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <strong> Bank Details: </strong>
-                                    <table class="table table-condensed" style="width:50%;">
-                                        <tr>
-                                            <td>Bank</td>
-                                            <td>STATE BANK OF INDIA</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A/C TYPE</td>
-                                            <td>OD</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A/C NUMBER</td>
-                                            <td>32716918589</td>
-                                        </tr>
-                                        <tr>
-                                            <td>ACCOUNT NAME</td>
-                                            <td>JUPITER GARMENTS ACCESSORIES</td>
-                                        </tr>
-                                        <tr>
-                                            <td>ADDRESS</td>
-                                            <td>OVERSEAS BRANCH<br/>6, 7 MUNSIF SRINIVASAPURAM, UTHUKULI ROAD, TIRUPUR<br/> TAMILNADU 641601</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RTGS & IFSC</td>
-                                            <td>SBIN0007023</td>
-                                        </tr>
-                                    </table>
+                                <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
+                                   
                                 </div>
                             </div>
                         </div>

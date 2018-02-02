@@ -105,7 +105,18 @@
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
-}   
+}  
+
+/** Style for bottom-bar buttons */
+span > i {
+color: white;
+}
+span > input {
+background: none;
+color: white;
+padding: 0;
+border: 0;
+}
 /** Style tesco create order forms**/
 /*
 .input-fields {

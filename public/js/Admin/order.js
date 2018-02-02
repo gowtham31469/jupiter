@@ -272,7 +272,7 @@ function table(data,path) {
         if (key != "id") {
             if (key == "SupplierName" || key == "Style_Name") {
                 th += "<th>" + key + "</th>";
-            } else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")) {
+            } else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key !="qntytable")) {
                 th += "<th style='text-align: center;'>" + key + "</th>";
             }
 
@@ -313,7 +313,7 @@ function table(data,path) {
                     if (key == "SupplierName" || key == "Style_Name") {
                         tr += '<td>' + value[key] + '</td>';
                     }
-                    else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key != "PONumber")){
+                    else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key != "PONumber")&&(key !="qntytable")){
                         tr += '<td align="center">' + value[key] + '</td>';
                     }
                 }
@@ -336,7 +336,7 @@ function table(data,path) {
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }
                     else
                     {
@@ -427,9 +427,8 @@ function setPO(obj,id,table_name)
  * @param  {[type]} table_name  [description]
  * @return profoma invoice
  */
-function showProfomaInvoice(id,table_name,uvc)
+function showProfomaInvoice(id,table_name,uvc,qntytable)
 {
-    alert(uvc)
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -439,6 +438,8 @@ function showProfomaInvoice(id,table_name,uvc)
         data: {
             _token: csrf_token,
             table_name: table_name,
+            qntytable:qntytable,
+            uvc:uvc,
             id:id,
             uvc:uvc
         },
@@ -449,11 +450,17 @@ function showProfomaInvoice(id,table_name,uvc)
         statusCode:
         {
             /** [Show response status based on HTTP status code] */
-            200: function()
+            200: function(data)
             {
+               $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
+                $('#bill_to').html('<h4>Billing Address:</h4><p>'+data.data.bill_to.address+'</p>')
+                 $('#ship_to').html('<h4>Shipping Address:</h4><p>'+data.data.ship_to.address+'</p>')
+                $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.bank_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.bank_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.bank_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.bank_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.bank_details.ifsc_code+'</td></tr></table>')
+                $('#item_details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Qunty.</th><th>Unit Cost</th><th>Total</th></tr></thead><tbody><tr><td>1</td><td>A&R Barcode Sticker</td><td>4</td><td>AESS771</td<td>85</td><td>1.75</td><td>148.75</td></tr></tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : 840 </h4></div><hr><div><h4 class="text-right"> Sub-Total : 1470 </h4></div><hr/><div class="text-right"><h4> Taxes : 18% (<span>132.30</span>)</h4></div><hr><div class="text-right"><h3> Bill Amount : 1735 </h3><p class="text-uppercase">one thousand seven hundred and thirty five repees only</p></div><hr /></div>')
                $('#profoma-invoice').modal('show')
+
             },
-            400: function()
+            400: function(data)
             {
                $('.snackbar_span').html('Something went wrong');
                $('#snackbar').css('background-color','#F44336');
