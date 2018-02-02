@@ -56,7 +56,7 @@ class OrderManagementCntrl extends Controller
     /**
      * Function to get tesco metadata for order page
      * @author <Praveen>
-     * @return \Illuminate\Http\Response
+     * @return tesco brands,departments,suppliers.
      */
     public function getTescoMeatadata()
     {
