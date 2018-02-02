@@ -456,9 +456,37 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                 $('#bill_to').html('<h4>Billing Address:</h4><p>'+data.data.bill_to.address+'</p>')
                  $('#ship_to').html('<h4>Shipping Address:</h4><p>'+data.data.ship_to.address+'</p>')
                 $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.bank_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.bank_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.bank_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.bank_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.bank_details.ifsc_code+'</td></tr></table>')
-                $('#item_details').html('<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Qunty.</th><th>Unit Cost</th><th>Total</th></tr></thead><tbody><tr><td>1</td><td>A&R Barcode Sticker</td><td>4</td><td>AESS771</td<td>85</td><td>1.75</td><td>148.75</td></tr></tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : 840 </h4></div><hr><div><h4 class="text-right"> Sub-Total : 1470 </h4></div><hr/><div class="text-right"><h4> Taxes : 18% (<span>132.30</span>)</h4></div><hr><div class="text-right"><h3> Bill Amount : 1735 </h3><p class="text-uppercase">one thousand seven hundred and thirty five repees only</p></div><hr /></div>')
-               $('#profoma-invoice').modal('show')
+                var i = 0;
+                var totalqnty = 0;
+                var subtotal = 0;
+                var tax = data.data.item_details[0].tax;
+                
+                var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Qunty.</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                $.each(data.data.item_details, function (index, value)
+                {
+                    tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                    totalqnty+=value.quantity;
+                    subtotal+=value.quantity*value.unit_price;
 
+                });
+                var taxamnt= subtotal*(tax/100);
+                var billamnt = subtotal+taxamnt;
+                tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
+                if (data.data.bank_details.place_of_supply==1)
+                {
+                   tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                }
+                else if (data.data.bank_details.place_of_supply==2)
+                {
+                    tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                }
+                else
+                {
+                    tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                }
+                $('#item_details').html(tr)
+                
+               $('#profoma-invoice').modal('show')
             },
             400: function(data)
             {
@@ -467,7 +495,8 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                showSnackbar();
             }
         },
-        error: function (data) {
+        error: function (data)
+        {
 
         },
         complete: function () {
@@ -478,6 +507,104 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
     
 }
 
+function numToString(billamnt)
+{
+    var r=0;
+    var txter=billamnt.toFixed();
+    var sizer=txter.length;
+    var numStr="";
+    if(isNaN(txter))
+    {
+    alert(" Invalid number");
+    exit();
+    }
+    var n=parseInt(billamnt);
+    var places=0;
+    var str="";
+    var entry=0;
+    while(n>=1)
+    {
+    r=parseInt(n%10);
+
+    if(places<3 && entry==0)
+    {
+    numStr=txter.substring(txter.length-0,txter.length-3) // Checks for 1 to 999.
+    str=onlyDigit(numStr); //Calls function for last 3 digits of the value.
+    entry=1;
+    }
+
+    if(places==3)
+    {
+     numStr=txter.substring(txter.length-5,txter.length-3) 
+     if(numStr!="")
+     {
+      str=onlyDigit(numStr)+ " Thousand "+str;
+     }
+    }
+
+    if(places==5)
+    {
+     numStr=txter.substring(txter.length-7,txter.length-5) //Substring for 5 place to 7 place of the string
+     if(numStr!="")
+     {
+      str=onlyDigit(numStr)+ " Lakhs "+str; //Appends the word lakhs to it
+     }
+    }
+
+    if(places==6)
+    {
+     numStr=txter.substring(txter.length-9,txter.length-7)  //Substring for 7 place to 8 place of the string
+     if(numStr!="")
+     {
+      str=onlyDigit(numStr)+ " Crores "+str;        //Appends the word Crores
+     }
+    }
+
+    n=parseInt(n/10);
+    places++;
+    }
+   return(str);
+}
+function onlyDigit(n)
+{
+    //Arrays to store the string equivalent of the number to convert in words
+    var units=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
+    var randomer=['','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+    var tens=['','Ten','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+    var r=0;
+    var num=parseInt(n);
+    var str="";
+    var pl="";
+    var tenser="";
+    while(num>=1)
+    {
+    r=parseInt(num%10);
+    tenser=r+tenser;
+     if(tenser<=19 && tenser>10) //Logic for 10 to 19 numbers
+     {
+     str=randomer[tenser-10];
+     }
+     else
+     {
+      if(pl==0)        //If units place then call units array.
+      {
+      str=units[r];
+      }
+      else if(pl==1)    //If tens place then call tens array.
+      {
+      str=tens[r]+" "+str;
+      }
+     }
+     if(pl==2)        //If hundreds place then call units array.
+     {
+     str=units[r]+" Hundred "+str;
+     }
+     
+    num=parseInt(num/10);
+    pl++;
+    }
+    return str;
+}
 /**
  * This Function is used to select the order is label order or sticker order.
  * Depends upon the decision it will show label order details page or sticker details page.	

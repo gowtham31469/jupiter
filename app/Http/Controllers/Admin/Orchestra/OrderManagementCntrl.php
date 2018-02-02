@@ -1171,8 +1171,11 @@ class OrderManagementCntrl extends Controller
                    
                    $data['item_details']    = DB::table('orchestra_hang_tag_orders')
                                                 ->join('orchestra_hang_tag_orders_qty','orchestra_hang_tag_orders_qty.oht_id','=','orchestra_hang_tag_orders.id')
+                                                ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_hang_tag_orders.template_front_id')
+                                                ->where('price_taxation.customer_id',$customer_details->id)
+                                                ->where('price_taxation.buyer_id',1)
                                                 ->where('orchestra_hang_tag_orders_qty.oht_id',$id)
-                                                ->select('size','quantity','orchestra_hang_tag_orders.uvc as style')
+                                                ->select('size','quantity','orchestra_hang_tag_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                                 ->get();
                    
                     break;
