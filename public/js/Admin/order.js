@@ -453,15 +453,15 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
             200: function(data)
             {
                $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
-                $('#bill_to').html('<h4>Billing Address:</h4><p>'+data.data.bill_to.address+'</p>')
-                 $('#ship_to').html('<h4>Shipping Address:</h4><p>'+data.data.ship_to.address+'</p>')
+                $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</p>')
+                 $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
                 $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.bank_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.bank_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.bank_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.bank_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.bank_details.ifsc_code+'</td></tr></table>')
                 var i = 0;
                 var totalqnty = 0;
                 var subtotal = 0;
                 var tax = data.data.item_details[0].tax;
                 
-                var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Qunty.</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
                 $.each(data.data.item_details, function (index, value)
                 {
                     tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
@@ -478,11 +478,11 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                 }
                 else if (data.data.bank_details.place_of_supply==2)
                 {
-                    tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
                 }
                 else
                 {
-                    tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
                 }
                 $('#item_details').html(tr)
                 
