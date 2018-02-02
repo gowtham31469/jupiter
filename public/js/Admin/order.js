@@ -515,7 +515,7 @@ function numToString(billamnt)
     var numStr="";
     if(isNaN(txter))
     {
-    alert(" Invalid number");
+    // alert(" Invalid number");
     exit();
     }
     var n=parseInt(billamnt);
