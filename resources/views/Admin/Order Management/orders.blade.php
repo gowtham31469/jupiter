@@ -182,7 +182,22 @@
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
         localStorage.removeItem("deletewash");
+		//localStorage.removeItem("wash_composition_final");
 		localStorage.removeItem("search_string");
+		
+		var arr = []; // Array to hold the keys
+// Iterate over localStorage and insert the keys that meet the condition into arr
+for (var i = 0; i < localStorage.length; i++){
+    if (localStorage.key(i).substring(0,22) == 'wash_composition_final') {
+        arr.push(localStorage.key(i));
+    }
+}
+
+// Iterate over arr and remove the items by key
+for (var i = 0; i < arr.length; i++) {
+    localStorage.removeItem(arr[i]);
+}
+		
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })

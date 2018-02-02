@@ -1029,7 +1029,7 @@ class OrderManagementCntrl extends Controller
                     $composition_id=$orchestra_compositions{0}->id;
                     $percent=$exp_val[2];
                     WashCareComposition::create([
-                                        'owcl_id' => $inserted->id,
+                                        'owcl_id' => $id,
                                         'parts_id'      => $parts_id,
                                         'composition_id'      => $composition_id,
                                         'percentage'    => $percent,
