@@ -1,0 +1,479 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Settings\Tesco;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Classes\Modules;
+use Response;
+use View;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use DB;
+use App\TescoBrand;
+use App\TescoDepartment;
+use App\TescoSupplier;
+
+class TescoSettings extends Controller
+{
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+       $this->middleware('auth');
+    }
+    
+    /**
+     * Tesco metadata Brands list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoBrands()
+    {
+      try {
+            $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+    /**
+     * Add Tesco Brands.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoBrands(Request $request)
+    {
+        try {
+            $inserted = TescoBrand::create([
+                        'brand' => $request['name']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Get Tesco Brands details by ID for editing.
+     * @param Tesco brand id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoBrandsById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->where('tesco_brand.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update Brands by id.
+    * @param brand id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoBrandsById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $name      = $request['name'];
+          
+          TescoBrand::where('id',$id)
+           ->update([
+             'brand' => $name
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+/**
+     * function to delete brand by id.
+     * @param brand id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteTescoBrandsById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = TescoBrand::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+
+    /**
+       * Make Brand enabled
+       * @param brand id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeBrandEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoBrand::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Brand diabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeBrandDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoBrand::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+
+            
+    /**
+     * Tesco metadata Department list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoDepartments()
+    {
+      try {
+            $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_department' => $tesco_department]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+    /**
+     * Add Tesco Department.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoDepartment(Request $request)
+    {
+        try {
+            $inserted = TescoDepartment::create([
+                        'department' => $request['department'],
+                        'pantone' => $request['pantone'],
+                        'rbg' => $request['rbg']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+/**
+     * Get Tesco Departments details by ID for editing.
+     * @param Tesco Department id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoDepartmentsById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg')->where('tesco_department.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_departments' => $tesco_department]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update departments by id.
+    * @param department id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoDepartmentsById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $department      = $request['department'];
+          $pantone = $request['pantone'];
+          $rbg = $request['rbg'];
+
+          
+          TescoDepartment::where('id',$id)
+           ->update([
+             'department' => $department,
+             'pantone' => $pantone,
+             'rbg' => $rbg
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+    /**
+     * function to delete department by id.
+     * @param department id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteTescoDepartmentsById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = TescoDepartment::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+
+    /**
+     * Tesco metadata supplier list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoSuppliers()
+    {
+      try {
+            $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code','is_enabled')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+        /**
+     * Add Tesco Suppliers.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoSuppliers(Request $request)
+    {
+        try {
+            $inserted = TescoSupplier::create([
+                        'supplier_name' => $request['supplier_name'],
+                        'supplier_code' => $request['supplier_code']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Get Tesco Suppliers details by ID for editing.
+     * @param Tesco Suppliers id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoSuppliersById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code')->where('tesco_suppliers.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update suppliers by id.
+    * @param supplier id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoSuppliersById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $supplier_name      = $request['supplier_name'];
+          $supplier_code = $request['supplier_code'];
+        
+          
+          TescoSupplier::where('id',$id)
+           ->update([
+             'supplier_name' => $supplier_name,
+             'supplier_code' => $supplier_code
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+    /**
+     * function to delete supplier by id.
+     * @param supplier id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteTescoSuppliersById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = TescoSupplier::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+      /**
+       * Make supplier enabled
+       * @param supplier id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSupplierEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoSupplier::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Supplier diabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSupplierDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoSupplier::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+
+      
+}
+

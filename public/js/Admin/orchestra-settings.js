@@ -1,4 +1,4 @@
-/* Settings script 
+/* Orchestra Settings script 
  * @author <praveen>
  */
 
@@ -41,20 +41,17 @@ var isSubmitting = false;
    }
   }
 /**
-  * Function to Settings home page
+  * Function to Orchestra Settings home page
   * @author <praveen>
   */
-function settings() {
+function orchestraSettings() {
   try{
     $('.main-content').html('<div class="loader"></div>');
     /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-    /** Tesco metadata sidebar */
-    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-    var buyer = localStorage.getItem("buyer");
+    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/settings",
+        url: base_url + "/admin/orchestra/settings",
         type: "POST",
         dataType: "json",
         data: {
@@ -65,8 +62,6 @@ function settings() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            if (buyer == "orchestra") 
-            {
                 var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
@@ -82,11 +77,6 @@ function settings() {
 	              $("#orchestra-garments-list-table_filter input").addClass('form-control input-sm');
 	              $("#orchestra-garments-list-table_filter input").attr('placeholder', 'Data Search');
 	              $('#orchestra-garments-list-table_length select').addClass('form-control input-sm');
-            } 
-            else 
-            {
-                $('.main-content').html(tesco_metadata)
-            }
 
         },
         error: function (data) {
@@ -139,7 +129,7 @@ function showSnackbar() {
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraGarmentsModal').modal('hide');
-                       settings()
+                       orchestraSettings()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
@@ -229,7 +219,7 @@ function showSnackbar() {
                        $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraGarmentsModal').modal('hide');
-                       settings()
+                       orchestraSettings()
                   }
            },
            error: function (data) {
@@ -269,7 +259,7 @@ function showSnackbar() {
                      $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraGarmentsModal').modal('hide');
-                     settings();
+                     orchestraSettings();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
@@ -290,7 +280,7 @@ function showSnackbar() {
   }
   }
   /**
-  * To delete orchestra garment
+  * To Show Orchestra age group.
   * @param id
   * @author <praveen>
   *
@@ -299,13 +289,10 @@ function showSnackbar() {
     try{
       $('.main-content').html('<div class="loader"></div>');
       /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-      /** Tesco metadata sidebar */
-      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-      var buyer = localStorage.getItem("buyer");
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
-          url: base_url + "/admin/" + buyer + "/settings/age-group",
+          url: base_url + "/admin/orchestra/settings/age-group",
           type: "POST",
           dataType: "json",
           data: {
@@ -316,8 +303,6 @@ function showSnackbar() {
               $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-              if (buyer == "orchestra") 
-              {
                   var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_agegroups, function(i, item){
                   var index = i+1;
@@ -333,11 +318,6 @@ function showSnackbar() {
                   $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
-              } 
-              else 
-              {
-                  $('.main-content').html(tesco_metadata)
-              }
               
               /** make side bar active  */
                $('.meta-data-list li').on('click', function () {
@@ -536,20 +516,17 @@ function showSnackbar() {
   }
   }
 /**
-* Function to countries home page
+* Function to Orchestra countries home page
 * @author <praveen>
 */
 function countries() {
   try{
     $('.main-content').html('<div class="loader"></div>');
     /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-    /** Tesco metadata sidebar */
-    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-    var buyer = localStorage.getItem("buyer");
+    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/" + buyer + "/settings/countries",
+        url: base_url + "/admin/orchestra/settings/countries",
         type: "POST",
         dataType: "json",
         data: {
@@ -560,8 +537,6 @@ function countries() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            if (buyer == "orchestra") 
-            {
                 var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.orchestra_countries, function(i, item){
                 var index = i+1;
@@ -580,11 +555,6 @@ function countries() {
                 $("#orchestra-countries-list-table_filter input").addClass('form-control input-sm');
                 $("#orchestra-countries-list-table_filter input").attr('placeholder', 'Data Search');
                 $('#orchestra-countries-list-table_length select').addClass('form-control input-sm');
-            } 
-            else 
-            {
-                $('.main-content').html(tesco_metadata)
-            }
 
         },
         error: function (data) {
@@ -807,20 +777,17 @@ function countries() {
   }
   }
   /**
-  * Function to show product family home page
+  * Function to show Orchestra product family home page
   * @author <praveen>
   */
   function productFamily() {
     try{
       $('.main-content').html('<div class="loader"></div>');
       /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-      /** Tesco metadata sidebar */
-      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a >Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-      var buyer = localStorage.getItem("buyer");
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
-          url: base_url + "/admin/" + buyer + "/settings/productfamily",
+          url: base_url + "/admin/orchestra/settings/productfamily",
           type: "POST",
           dataType: "json",
           data: {
@@ -831,8 +798,6 @@ function countries() {
               $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-              if (buyer == "orchestra") 
-              {
                   var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_product_family, function(i, item){
                   var index = i+1;
@@ -851,11 +816,6 @@ function countries() {
                   $("#orchestra-productfamily-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-productfamily-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-productfamily-list-table_length select').addClass('form-control input-sm');
-              } 
-              else 
-              {
-                  $('.main-content').html(tesco_metadata)
-              }
 
           },
           error: function (data) {
@@ -1057,20 +1017,17 @@ function countries() {
   }
   }
   /**
-    * Function to special instructions home page
+    * Function to Orchestra special instructions home page
     * @author <praveen>
     */
     function specialInstruction() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        /** Tesco metadata sidebar */
-        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        var buyer = localStorage.getItem("buyer");
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/admin/" + buyer + "/settings/special-instructions",
+            url: base_url + "/admin/orchestra/settings/special-instructions",
             type: "POST",
             dataType: "json",
             data: {
@@ -1081,8 +1038,6 @@ function countries() {
                 $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                if (buyer == "orchestra") 
-                {
                     var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_specialinstructions, function(i, item){
                     var index = i+1;
@@ -1101,11 +1056,6 @@ function countries() {
                     $("#orchestra-special-instruction-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-special-instruction-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
-                } 
-                else 
-                {
-                    $('.main-content').html(tesco_metadata)
-                }
 
             },
             error: function (data) {
@@ -1328,20 +1278,17 @@ function countries() {
   }
   }
   /**
-    * Function to compositions home page
+    * Function to Orchestra compositions home page
     * @author <praveen>
     */
     function compositions() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        /** Tesco metadata sidebar */
-        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        var buyer = localStorage.getItem("buyer");
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/admin/" + buyer + "/settings/compositions",
+            url: base_url + "/admin/orchestra/settings/compositions",
             type: "POST",
             dataType: "json",
             data: {
@@ -1352,8 +1299,6 @@ function countries() {
                 $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                if (buyer == "orchestra") 
-                {
                     var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_compositions, function(i, item){
                     var index = i+1;
@@ -1372,11 +1317,6 @@ function countries() {
                     $("#orchestra-composition-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-composition-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-composition-list-table_length select').addClass('form-control input-sm');
-                } 
-                else 
-                {
-                    $('.main-content').html(tesco_metadata)
-                }
 
             },
             error: function (data) {
@@ -1599,20 +1539,17 @@ function countries() {
   }
   }
   /**
-    * Function to parts home page
+    * Function to Orchestra parts home page
     * @author <praveen>
     */
     function parts() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        /** Tesco metadata sidebar */
-        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
-        var buyer = localStorage.getItem("buyer");
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/admin/" + buyer + "/settings/parts",
+            url: base_url + "/admin/orchestra/settings/parts",
             type: "POST",
             dataType: "json",
             data: {
@@ -1623,8 +1560,6 @@ function countries() {
                 $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                if (buyer == "orchestra") 
-                {
                     var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_parts, function(i, item){
                     var index = i+1;
@@ -1643,11 +1578,6 @@ function countries() {
                     $("#orchestra-part-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-part-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-part-list-table_length select').addClass('form-control input-sm');
-                } 
-                else 
-                {
-                    $('.main-content').html(tesco_metadata)
-                }
 
             },
             error: function (data) {
@@ -1870,20 +1800,17 @@ function countries() {
   }
   }
   /**
-    * Function to size chart  home page
+    * Function to Orchestra size chart  home page
     * @author <praveen>
     */
     function sizeChart() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li></ul></div>';
-        /** Tesco metadata sidebar */
-        var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="settings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li></ul></div>';
-        var buyer = localStorage.getItem("buyer");
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: base_url + "/admin/" + buyer + "/settings/size-chart",
+            url: base_url + "/admin/orchestra/settings/size-chart",
             type: "POST",
             dataType: "json",
             data: {
@@ -1894,8 +1821,6 @@ function countries() {
                 $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                if (buyer == "orchestra") 
-                {
                     var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_size_charts, function(i, item){
                     var index = i+1;
@@ -1914,12 +1839,6 @@ function countries() {
                     $("#orchestra-size-chart-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-size-chart-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
-                } 
-                else 
-                {
-                    $('.main-content').html(tesco_metadata)
-                }
-
             },
             error: function (data) {
 

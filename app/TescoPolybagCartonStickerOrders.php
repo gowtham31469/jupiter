@@ -18,5 +18,5 @@ class TescoPolybagCartonStickerOrders extends Model
       *
       * @var array
       */
-      protected $fillable = ['po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id','rfid_compliant','tag_at_source'];
+      protected $fillable = ['order_id','po_number','uk_style_ref','ce_style_ref','season_code','short_description','eqos_site_code','manufacture_date','tesco_department_id','tesco_brand_id','tesco_supplier_id','rfid_compliant','tag_at_source'];
 }

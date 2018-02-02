@@ -105,7 +105,18 @@
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
-}   
+}  
+
+/** Style for bottom-bar buttons */
+span > i {
+color: white;
+}
+span > input {
+background: none;
+color: white;
+padding: 0;
+border: 0;
+}
 /** Style tesco create order forms**/
 /*
 .input-fields {
@@ -167,13 +178,14 @@
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
 </script>
-@endif @section('jqueryIncludes')      
+@endif @section('jqueryIncludes')   
+{{-- loading javascript files --}}
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        /** Clear localstorage data */
+        /** Clear local storage data **/
         localStorage.removeItem("hang_tag");
         localStorage.removeItem("special_tag");
         localStorage.removeItem("main_label");
@@ -181,6 +193,22 @@
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
         localStorage.removeItem("deletewash");
+		//localStorage.removeItem("wash_composition_final");
+		localStorage.removeItem("search_string");
+		
+		var arr = []; // Array to hold the keys
+// Iterate over localStorage and insert the keys that meet the condition into arr
+for (var i = 0; i < localStorage.length; i++){
+    if (localStorage.key(i).substring(0,22) == 'wash_composition_final') {
+        arr.push(localStorage.key(i));
+    }
+}
+
+// Iterate over arr and remove the items by key
+for (var i = 0; i < arr.length; i++) {
+    localStorage.removeItem(arr[i]);
+}
+		
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })
@@ -189,25 +217,25 @@
          $('.logo').html('Orders')
         $('.buyer-nav-select').html($('.buyer-div').html())
 
-            /** [ Show create order page based on buyer selection ] */
-            if (localStorage.getItem("buyer") === null) {
-                    
-            }
-            else if(localStorage.getItem("buyer") === 'orchestra')
-            {
-                 orders();
-            }
-            else
-            {
-                tescoOrders();
-            }
+        /** [ Show create order page based on buyer selection ] */
+        if (localStorage.getItem("buyer") === null) {
+                
+        }
+        else if(localStorage.getItem("buyer") === 'orchestra')
+        {
+             orders();
+        }
+        else
+        {
+            tescoOrders();
+        }
 
         /** Buyer selectpicker style */
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
-          $('.buyer-nav-select .buyer-select').selectpicker({
-               style: 'btn-default',
-               size: 4
-            });
+        $('.buyer-nav-select .buyer-select').selectpicker({
+           style: 'btn-default',
+           size: 4
+        });
 
         /** [ Show dynamic sub modules in navbar ] */
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
@@ -228,7 +256,7 @@
 
                     },
                     success: function(data) {
-                       /**  [ Show orders page based on buyer selection ] */
+                       /**  [ Show orders page based on buyer selection ] **/
                        if(buyer === 'orchestra')
                         {
                              orders();

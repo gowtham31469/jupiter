@@ -1091,3 +1091,8 @@ button.btn.btn-info.pull-right.input-sm.add_to_list {
 .bootstrap-select li a img{
 height:15px;
 }
+.nav>li>a {
+
+    color: #000;
+    font-weight: bold;
+}

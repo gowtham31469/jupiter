@@ -338,8 +338,7 @@ class OrderController extends Controller
         catch (Exception $e)
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-       
+        } 
         return $result;
     }
 }
