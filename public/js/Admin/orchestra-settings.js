@@ -51,7 +51,7 @@ function orchestraSettings() {
     var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
-        url: base_url + "/admin/orchestra/settings",
+        url: base_url + "/admin/orchestra/settings/garments",
         type: "POST",
         dataType: "json",
         data: {

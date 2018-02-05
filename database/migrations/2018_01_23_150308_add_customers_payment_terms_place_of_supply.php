@@ -27,8 +27,8 @@ class AddCustomersPaymentTermsPlaceOfSupply extends Migration
     public function down()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('payment_terms');
-            $table->string('place_of_supply');
+            $table->dropColumn('payment_terms');
+            $table->dropColumn('place_of_supply');
         });
     }
 }
