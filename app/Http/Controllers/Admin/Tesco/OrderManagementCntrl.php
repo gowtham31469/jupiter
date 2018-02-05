@@ -61,10 +61,35 @@ class OrderManagementCntrl extends Controller
     public function getTescoMeatadata()
     {
        try {
+           
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
+    /**
+     * Function to get tesco templates details by id's
+     * @author <Praveen>
+     * @return tesco template details
+     */
+    public function getTescoTemplateDetails(Request $request)
+    {
+       try {
+           $templates = explode(',',$request['template_id']);
+
+           /* Fetch all template details by id */
+           foreach ($templates as $value) 
+           {
+               $template_details[] = DB::table('tesco_template')
+                           ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file')
+                           ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
+                           ->where('tesco_item_master.id','=',$value)
+                           ->first();
+           }
            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
            $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id','supplier_code')->get();
-           return response()->json(['tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+           
+           return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
        } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
