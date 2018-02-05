@@ -1675,8 +1675,8 @@
         $('.buyer-nav-select').html($('.buyer-div').html())
          
         // Check if buyer selected or not
-        /* call settings function from settings.js*/
-        /**  [ Show settings page based on buyer selection ] */
+        /* call orchestraSettings function from orchestra-settings.js*/
+        /**  [ Show orchestraSettings page based on buyer selection ] */
         if (localStorage.getItem("buyer") === null) {
 
         }else if(localStorage.getItem("buyer") === 'orchestra')
@@ -1700,8 +1700,8 @@
                 localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 var buyer = $(this).find("option:selected").text().toLowerCase();
-                /* call settings function from settings.js*/
-                /**  [ Show settings page based on buyer selection ] */
+                /* call orchestraSettings function from orchestra-settings.js*/
+                /**  [ Show orchestraSettings page based on buyer selection ] */
                if(buyer === 'orchestra')
                 {
                      orchestraSettings();
@@ -1743,7 +1743,7 @@
         else
         {
            e.preventDefault();
-           /* call addOrchestraGarments function from settings.js*/
+           /* call addOrchestraGarments function from orchestra-settings.js*/
            addOrchestraGarments();
         }
       })
@@ -1752,7 +1752,7 @@
        $(document).on('click','.edit-orchestra-garments',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraGarmentById function from settings.js*/
+           /* call getOrchestraGarmentById function from orchestra-settings.js*/
            getOrchestraGarmentById(id);
        });
 
@@ -1765,7 +1765,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraGarments function from settings.js*/
+            /* call editOrchestraGarments function from orchestra-settings.js*/
             editOrchestraGarments();
          }
        })
@@ -1786,7 +1786,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_garment_id').val();
-            /* call deleteOrchestraGarment function from settings.js*/
+            /* call deleteOrchestraGarment function from orchestra-settings.js*/
             deleteOrchestraGarment(id);
          }
        })
@@ -1800,7 +1800,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraAgegroup function from settings.js*/
+             /* call addOrchestraAgegroup function from orchestra-settings.js*/
              addOrchestraAgegroup();
           }
         })
@@ -1809,7 +1809,7 @@
        $(document).on('click','.edit-orchestra-age-group',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-            /* call getOrchestraAgeGroupById function from settings.js*/
+            /* call getOrchestraAgeGroupById function from orchestra-settings.js*/
            getOrchestraAgeGroupById(id);
        });
 
@@ -1822,7 +1822,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraAgeGroup function from settings.js*/
+            /* call editOrchestraAgeGroup function from orchestra-settings.js*/
             editOrchestraAgeGroup();
          }
        })
@@ -1843,7 +1843,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_agegroup_id').val();
-            /* call deleteOrchestraAgeGroup function from settings.js*/
+            /* call deleteOrchestraAgeGroup function from orchestra-settings.js*/
             deleteOrchestraAgeGroup(id);
          }
        })
@@ -1857,7 +1857,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraCountries function from settings.js*/
+             /* call addOrchestraCountries function from orchestra-settings.js*/
              addOrchestraCountries();
           }
         })
@@ -1866,7 +1866,7 @@
        $(document).on('click','.edit-orchestra-country',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraCountryById function from settings.js*/
+           /* call getOrchestraCountryById function from orchestra-settings.js*/
            getOrchestraCountryById(id);
        });
 
@@ -1879,7 +1879,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraCountry function from settings.js*/
+            /* call editOrchestraCountry function from orchestra-settings.js*/
             editOrchestraCountry();
          }
        })
@@ -1900,7 +1900,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_country_id').val();
-            /* call deleteOrchestraCountry function from settings.js*/
+            /* call deleteOrchestraCountry function from orchestra-settings.js*/
             deleteOrchestraCountry(id);
          }
        })
@@ -1914,7 +1914,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraProductFamily function from settings.js*/
+             /* call addOrchestraProductFamily function from orchestra-settings.js*/
              addOrchestraProductFamily();
           }
         })
@@ -1923,7 +1923,7 @@
        $(document).on('click','.edit-orchestra-productfamily',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraProductFamilyById function from settings.js*/
+           /* call getOrchestraProductFamilyById function from orchestra-settings.js*/
            getOrchestraProductFamilyById(id);
        });
 
@@ -1936,7 +1936,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraProductFamily function from settings.js*/
+            /* call editOrchestraProductFamily function from orchestra-settings.js*/
             editOrchestraProductFamily();
          }
        })
@@ -1957,7 +1957,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_productfamily_id').val();
-            /* call deleteOrchestraProductFamily function from settings.js*/
+            /* call deleteOrchestraProductFamily function from orchestra-settings.js*/
             deleteOrchestraProductFamily(id);
          }
        })
@@ -1971,7 +1971,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraSpecialInstruction function from settings.js*/
+             /* call addOrchestraSpecialInstruction function from orchestra-settings.js*/
              addOrchestraSpecialInstruction();
           }
         })
@@ -1980,7 +1980,7 @@
        $(document).on('click','.edit-orchestra-special-instruction',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraSpecialInstructionById function from settings.js*/
+           /* call getOrchestraSpecialInstructionById function from orchestra-settings.js*/
            getOrchestraSpecialInstructionById(id);
        });
 
@@ -1993,7 +1993,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraSpecialInstruction function from settings.js*/
+            /* call editOrchestraSpecialInstruction function from orchestra-settings.js*/
             editOrchestraSpecialInstruction();
          }
        })
@@ -2014,7 +2014,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_special_instruction_id').val();
-            /* call deleteOrchestraSpecialInstruction function from settings.js*/
+            /* call deleteOrchestraSpecialInstruction function from orchestra-settings.js*/
             deleteOrchestraSpecialInstruction(id);
          }
        })
@@ -2028,7 +2028,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraComposition function from settings.js*/
+             /* call addOrchestraComposition function from orchestra-settings.js*/
              addOrchestraComposition();
           }
         })
@@ -2037,7 +2037,7 @@
        $(document).on('click','.edit-orchestra-composition',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraCompositionById function from settings.js*/
+           /* call getOrchestraCompositionById function from orchestra-settings.js*/
            getOrchestraCompositionById(id);
        });
 
@@ -2050,7 +2050,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraComposition function from settings.js*/
+            /* call editOrchestraComposition function from orchestra-settings.js*/
             editOrchestraComposition();
          }
        })
@@ -2071,7 +2071,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_composition_id').val();
-            /* call deleteOrchestraComposition function from settings.js*/
+            /* call deleteOrchestraComposition function from orchestra-settings.js*/
             deleteOrchestraComposition(id);
          }
        })
@@ -2085,7 +2085,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraPart function from settings.js*/
+             /* call addOrchestraPart function from orchestra-settings.js*/
              addOrchestraPart();
           }
         })
@@ -2094,7 +2094,7 @@
        $(document).on('click','.edit-orchestra-part',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraPartById function from settings.js*/
+           /* call getOrchestraPartById function from orchestra-settings.js*/
            getOrchestraPartById(id);
        });
 
@@ -2107,7 +2107,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraPart function from settings.js*/
+            /* call editOrchestraPart function from orchestra-settings.js*/
             editOrchestraPart();
          }
        })
@@ -2128,7 +2128,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_part_id').val();
-            /* call deleteOrchestraPart function from settings.js*/
+            /* call deleteOrchestraPart function from orchestra-settings.js*/
             deleteOrchestraPart(id);
          }
        })
@@ -2142,7 +2142,7 @@
           else
           {
              e.preventDefault();
-             /* call addOrchestraSizeChart function from settings.js*/
+             /* call addOrchestraSizeChart function from orchestra-settings.js*/
              addOrchestraSizeChart();
           }
         })
@@ -2151,7 +2151,7 @@
        $(document).on('click','.edit-orchestra-size-chart',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getOrchestraSizeChartById function from settings.js*/
+           /* call getOrchestraSizeChartById function from orchestra-settings.js*/
            getOrchestraSizeChartById(id);
        });
 
@@ -2164,7 +2164,7 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraSizeChart function from settings.js*/
+            /* call editOrchestraSizeChart function from orchestra-settings.js*/
             editOrchestraSizeChart();
          }
        })
@@ -2185,7 +2185,7 @@
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_size_chart_id').val();
-            /* call deleteOrchestraSizeChart function from settings.js*/
+            /* call deleteOrchestraSizeChart function from orchestra-settings.js*/
             deleteOrchestraSizeChart(id);
          }
        })
@@ -2199,7 +2199,7 @@
           else
           {
              e.preventDefault();
-             /* call addTescoBrands function from settings.js*/
+             /* call addTescoBrands function from tesco-settings.js*/
              addTescoBrands();
           }
         })
@@ -2208,7 +2208,7 @@
        $(document).on('click','.edit-tesco-brands',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getTescoBrandById function from settings.js*/
+           /* call getTescoBrandById function from tesco-settings.js*/
            getTescoBrandById(id);
        });
 
@@ -2337,7 +2337,7 @@ $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
        $(document).on('click','.edit-tesco-suppliers',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getTescoBrandById function from settings.js*/
+           /* call getTescoBrandById function from tesco-settings.js*/
            getTescoSuppliersById(id);
        });
 

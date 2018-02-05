@@ -73,8 +73,12 @@ function tescoOrders() {
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 3
                                         }, {
-                                        "id": "10,11",
-                                        "text": "THL 1 & THL 3",
+                                        "id": "10",
+                                        "text": "THL 1",
+                                        "parent_id": 3
+                                        }, {
+                                        "id": "11",
+                                        "text": "THL 3",
                                         "parent_id": 3
                                         }]
                                     }, {
@@ -90,8 +94,12 @@ function tescoOrders() {
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 4
                                         }, {
-                                        "id": "17,18",
-                                        "text": "THL 1 & THL 3",
+                                        "id": "17",
+                                        "text": "THL 1",
+                                        "parent_id": 4
+                                        }, {
+                                        "id": "18",
+                                        "text": "THL 3",
                                         "parent_id": 4
                                         }]
                                     }]
