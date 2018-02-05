@@ -2320,7 +2320,7 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
        })
 
        /** Add Tesco Supplier form validation **/
-$('#add_tesco_suppliers_form').validator().on('submit', function (e) {
+       $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
 
@@ -2376,21 +2376,21 @@ $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
          }
        })
      
-               /** To Enable  Supplier  on click **/
-    $(document).on('click', '#make_supplier_enabled', function(e) {
-        var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        /* call makeSupplierEnabled function from tesco-settings.js*/
-        makeSupplierEnabled(id,csrf_token)
-    });
+      /** To Enable  Supplier  on click **/
+      $(document).on('click', '#make_supplier_enabled', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          /* call makeSupplierEnabled function from tesco-settings.js*/
+          makeSupplierEnabled(id,csrf_token)
+      });
 
-    /** To disable Supplier  on click **/
-    $(document).on('click', '#make_supplier_disabled', function(e) {
-        var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        /* call makeSupplierDisabled function from tesco-settings.js*/
-        makeSupplierDisabled(id,csrf_token)
-    });
+      /** To disable Supplier  on click **/
+      $(document).on('click', '#make_supplier_disabled', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          /* call makeSupplierDisabled function from tesco-settings.js*/
+          makeSupplierDisabled(id,csrf_token)
+      });
     });
     </script>
 

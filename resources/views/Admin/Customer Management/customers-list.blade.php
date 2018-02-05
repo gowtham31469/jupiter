@@ -702,7 +702,7 @@
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
     });
-
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
     /** restrict special characters (except @, ., _ **/
     $('input').on('input', function() {
       var c = this.selectionStart,
@@ -732,24 +732,18 @@
 
     /** Generate random password for customer **/
     $("#generate_pwd").validator().click(function(){
-      function randomString(length, chars)
-      {
-        var mask = '';
-        if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-        if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        if (chars.indexOf('#') > -1) mask += '0123456789';
-        if (chars.indexOf('!') > -1) mask += '!@#$%&*()+=?';
-        var result = '';
-        for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
-        return result;
-      }
       $("#password").val( randomString(10, 'aA#!'));
       $('#add_customer_form').validator('validate');
     })
 
     /** generate random password while editing customer **/
     $("#generate_edit_pwd").validator().click(function(){
-      function randomString(length, chars)
+      $("#edit_password").val( randomString(10, 'aA#!'));
+      $('#edit_customer_form').validator('validate');
+    })
+
+    /** function to generate random strings */
+    function randomString(length, chars)
       {
         var mask = '';
         if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
@@ -760,10 +754,6 @@
         for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
         return result;
       }
-      $("#edit_password").val( randomString(10, 'aA#!'));
-      $('#edit_customer_form').validator('validate');
-    })
-
     /** Copy password to clipboard **/
     $( document ).ready(function() {
       var clipboard = new Clipboard('.clipboard');
@@ -793,7 +783,6 @@
     /** To activate customers on click **/
     $(document).on('click', '#make_active', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         /* call makeCustomerActive function from customer.js*/
         makeCustomerActive(id,csrf_token)
     });
@@ -801,7 +790,6 @@
     /** To deactivate customers on click **/
     $(document).on('click', '#make_inactive', function(e) {
         var id = $(this).closest('tr').attr('id');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
         /* call makeCustomerInactive function from customer.js*/
         makeCustomerInactive(id,csrf_token)
     });
