@@ -305,7 +305,7 @@ function table(data,path) {
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
 
-                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+                    tr += '<td align="center"><input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" /><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
                    
@@ -328,7 +328,9 @@ function table(data,path) {
                    }
                    else
                    {
-                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
+                        // tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
+                        
+                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Update</button> </span> </div></td>';
                    }
                    
                 }
@@ -385,7 +387,9 @@ function setPO(obj,id,table_name)
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $('#snackbar').css('background-color','#1abb9c');
                showSnackbar();
-               orderStatus();
+               $(obj).closest('tr').find('.po').val(po_number);
+               $(obj).closest('tr').find('.po-submit').text("Update");
+               
             },
             400: function()
             {
