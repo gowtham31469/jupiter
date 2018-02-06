@@ -46,10 +46,8 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div style="float:right">
-                        <button class="btn btn-success btn-xs">Approve</button>
-                        <button class="btn btn-danger btn-xs">Reject</button>
-                        <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>
+                    <div style="margin-left: 5px" class="pi_actions pull-right">
+                        
                     </div>
                     <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
 
@@ -116,10 +114,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <div style="float:right">
-                        <button class="btn btn-success btn-xs">Approve</button>
-                        <button class="btn btn-danger btn-xs">Reject</button>
-                        <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>
+                    <div style="float:right" class="pi_actions">
                     </div>
                 </div>
             </div>
@@ -139,6 +134,7 @@
     <script>
 
 		localStorage.removeItem("page_navigation");
+
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
             $('.po').attr("disabled", "disabled");

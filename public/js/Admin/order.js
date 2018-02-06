@@ -350,7 +350,7 @@ function table(data,path) {
                     tr += '<td align="center">'+$status_text+'</td>';
                    
                 } else {
-                    if (key == "SupplierName" || key == "Style_Name") {
+                    if (key == "SupplierName" || key == "Style_Name"){
                         tr += '<td>' + value[key] + '</td>';
                     }
                     else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key != "PONumber")&&(key !="qntytable")){
@@ -487,6 +487,7 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
 {
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var tr = ""
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
         type: "Post",
@@ -507,6 +508,7 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
+               console.log(data)
                $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
                 $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</p>')
                  $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
@@ -514,32 +516,42 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                 var i = 0;
                 var totalqnty = 0;
                 var subtotal = 0;
-                var tax = data.data.item_details[0].tax;
-                
+                var tax = 0 ;
+                               
                 var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
-                $.each(data.data.item_details, function (index, value)
+                
+                if (data.data.item_details.length!=0)
                 {
-                    tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
-                    totalqnty+=value.quantity;
-                    subtotal+=value.quantity*value.unit_price;
+                    tax = data.data.item_details[0].tax;
+                    $.each(data.data.item_details, function (index, value)
+                    {
+                        tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                        totalqnty+=value.quantity;
+                        subtotal+=value.quantity*value.unit_price;
 
-                });
-                var taxamnt= subtotal*(tax/100);
-                var billamnt = subtotal+taxamnt;
-                tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
-                if (data.data.bank_details.place_of_supply==1)
-                {
-                   tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    });
+                    var taxamnt= subtotal*(tax/100);
+                    var billamnt = subtotal+taxamnt;
+                    tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
+                    if (data.data.bank_details.place_of_supply==1)
+                    {
+                       tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    }
+                    else if (data.data.bank_details.place_of_supply==2)
+                    {
+                        tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    }
+                    else
+                    {
+                        tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                    }
                 }
-                else if (data.data.bank_details.place_of_supply==2)
-                {
-                    tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                else{
+                    tr += '<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>'
                 }
-                else
-                {
-                    tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
-                }
+                
                 $('#item_details').html(tr)
+                $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'","'+data.data+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                 
                $('#profoma-invoice').modal("show")
             },
@@ -561,6 +573,106 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
     })
     
 }
+/**
+ * method to call the PI approval functionality
+ * @param  {[type]} id         [description]
+ * @param  {[type]} table_name [description]
+ * @return {[type]}            [description]
+ */
+function approvePI(id,table_name)
+{
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/orchestra/approve-profoma-invoice",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            table_name: table_name,
+            id:id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function(data)
+            {
+               $('.snackbar_span').html('PI Approved Successfully');
+               $('#snackbar').css('background-color','#1abb9c');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();             
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+
+}
+/**
+ * method to call the PI rejection functionality
+ * @param  {[type]} id         [description]
+ * @param  {[type]} table_name [description]
+ * @return {[type]}            [description]
+ */
+function rejectPI(id,table_name,pi_details)
+{
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/orchestra/reject-profoma-invoice",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            table_name: table_name,
+            id:id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function(data)
+            {
+               $('.snackbar_span').html('PI Rejected!');
+               $('#snackbar').css('background-color','#1abb9c');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();             
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong!');
+               $('#snackbar').css('background-color','#F44336');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+}
+
 
 function numToString(billamnt)
 {

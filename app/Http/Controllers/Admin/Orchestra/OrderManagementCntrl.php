@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
+use App\Classes\ProfomaInvoice;
 use Response;
 use Excel;
 use App\HangTagOrders;
@@ -1411,7 +1412,68 @@ class OrderManagementCntrl extends Controller
         }
         return $result;
     }
+
+    /**
+     * method to approve the profoma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function approveProfomaInvice(Request $request)
+    {
+        try
+        {
+            $row_id     =   $request->id;
+            $table_name =   $request->table_name;
+            $data   = DB::table($table_name)->where('id',$row_id)
+                        ->update([
+                          'pi_status' => "PI Approved"
+                        ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 	
+    /**
+     * method to reject the profoma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function rejectProfomaInvice(Request $request)
+    {
+        try
+        {
+            $row_id         =   $request->id;
+            $table_name =   $request->table_name;
+            $data   = DB::table($table_name)->where('id',$row_id)
+                        ->update([
+                          'pi_status' => "PI Rejected"
+                          ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 	/**
      * This Function is used to delete the Extra Main and size Label Details.
      *
