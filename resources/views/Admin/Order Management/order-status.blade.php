@@ -142,6 +142,7 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script>
+		localStorage.removeItem("page_navigation");
         $(document).ready(function(){
             $('#po-submit').prop('disabled',true);
             $('#po').keyup(function(){
