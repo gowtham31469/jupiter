@@ -16,5 +16,5 @@ class SolidCartonStickerOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_solid_carton_sticker_orders';
-    protected $fillable =['uvc','template_id','po','height','delivery_date','svg_path','status'];
+    protected $fillable =['uvc','template_id','po','height','delivery_date','svg_path','status','pi_status','po_status'];
 }
