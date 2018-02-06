@@ -45,7 +45,8 @@ Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
-Route::post('admin/orchestra/set-po', 'Admin\OrderManagement\OrderController@setCustomerPO');
+
+Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -186,6 +187,8 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
 Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
+Route::post('admin/orchestra/set-po', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPO');
+
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');

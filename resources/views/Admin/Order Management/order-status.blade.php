@@ -19,31 +19,26 @@
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
     </div>
-    <div class="modal fade po-details" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
-                {!! Form::open(['id' => 'add_po_form','data-toggle' => 'validator','role' => 'form']) !!}
                 <div class="modal-body">
-                    <div class="form-group">
-                       <!--  <label>Purchase Order Number</label>
-                        <input type="text" class="form-control po" placeholder="Purchase Order Number"> -->
-                        {!! Form::label('po', 'Purchase Order Number', ['class' => 'form_label']) !!}
-                          {!! Form::text('po',$value = '', array('class' => 'form-control input-sm po ','placeholder' => 'Purchase Order Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                    </div>
-                    <div class="form-group ">
-                        <label>Upload Purchase Order</label>
-                    <div class="dropzone dropzone-previews" id="po-pdf"></div>
-                    </div>
+                   <a href="#" hidden><i class="fa fa-file-pdf-o" style="font-size:36px"></i> Open the pdf!</a>
+                    <label>Upload Purchase Order</label>
+                    <form method="post" class="dropzone" id="po-upload">
+                        <input type="hidden" name="tableName" id="tableName" value="" >
+                        <input type="hidden" name="rowID" id="rowID" value="" >
+                        {{ csrf_field() }}
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                     {!! Form::submit('Save changes', ['class' => 'btn btn-primary upload-po'] ) !!}
+                    <button type="button" class="btn btn-primary upload-po" data-dismiss="modal">Upload</button>
                 </div>
-                {!! Form::close() !!}
             </div>
         </div>
     </div>
@@ -56,7 +51,7 @@
                         <button class="btn btn-danger btn-xs">Reject</button>
                         <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>
                     </div>
-                    <h5><strong>Proforma Invoice for <span id="uvc_number">UVC0F0001</span></strong></h5>
+                    <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
 
                 </div>
                 <div class="modal-body">
@@ -71,7 +66,7 @@
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
                                         <img style="height:50px;" src="/images/logo.png" class="img-responsive">
-                                        <p><strong>Date:</strong>30/12/2017</p>
+                                        <p><strong>Date:</strong> {{ date('d-m-Y ') }}</p>
                                         <p><strong>PI:</strong>493</p>
                                         <p><strong>REV:</strong>2</p>
                                     </div>
@@ -94,9 +89,9 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to">
                                   
                                 </div>
-                                <!-- <div class="col-lg-5 col-md-5 col-sm-5">
+                                <div class="col-lg-5 col-md-5 col-sm-5">
 
-                                </div> -->
+                                </div>
                             </div>
                             <hr />
                             <div class="row">
@@ -142,14 +137,11 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script>
-        $(document).ready(function(){
-            $('#po-submit').prop('disabled',true);
-            $('#po').keyup(function(){
-                $('#po-submit').prop('disabled', this.value == "" ? true : false);     
-            })
-        }); 
+
+		localStorage.removeItem("page_navigation");
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
+            $('.po').attr("disabled", "disabled");
         })
         $(document).ready(function() {
             $('.logo').html('Order Status');
@@ -202,53 +194,62 @@
                 }
             });
         });
-     $('#add_po_form').validator().on('submit', function (e) {
-          if (e.isDefaultPrevented())
-          {
 
-          }
-          else
-          {
-             e.preventDefault();
-             savePO();
-          }
-        })    
-    Dropzone.autoDiscover = false;
-    jQuery(document).ready(function() {
-      var buyer = localStorage.getItem("status_buyer");
-      $("div#po-pdf").dropzone({
-        url: base_url + "/admin/" + buyer + "/set-po",
-        // autoProcessQueue: false,
+   Dropzone.options.poUpload = {
+
+      // Prevents Dropzone from uploading dropped files immediately
+        url:base_url + "/admin/orchestra/set-po",
+        autoProcessQueue: false,
+        maxFilesize: 500,
+        maxFiles:1,
         acceptedFiles: ".pdf",
         addRemoveLinks: true,
-        maxFiles:1,
-        });
-    });
-    function savePO()
-    {
-        var buyer = localStorage.getItem("status_buyer");
-        var po_number = $('.po').val();
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-        url: base_url + "/admin/" + buyer + "/set-po",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            po_number:po_number
-        },
-        success: function (data) {
-            $('.po-details').modal('hide');
-        },
-        error: function (data) {
-            alert("error")
-        },
-        complete: function () {
-            $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
+
+        init: function() {
+
+            var submitButton = document.querySelector(".upload-po")
+            myDropzone = this; // closure
+
+
+            submitButton.addEventListener("click", function() {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+         
+
+            });
+
+            // You might want to show the submit button only when 
+            // files are dropped here:
+
+            this.on("addedfile", function(file)
+            {
+                var filename = file.name;   
+               
+              // Show submit button here and/or inform user to click it.
+            });
+            this.on("complete", function(file){        
+                 this.removeFile(file);
+
+            });
+            this.on("queuecomplete", function (file)
+            {
+                
+            });
+            this.on("success", function(file, response){ 
+                 console.log(response);
+                $('.dz-remove').hide();
+                this.removeFile(file);
+                $(".upload-po").addClass("hidden");
+                
+            });
+            this.on("error", function(file, response) {
+                 alert('error');
+                 this.removeFile(file);
+                 $(".upload-po").addClass("hidden");
+            });
+
+
         }
-    })
-    }
+    };
 
     </script>
 
