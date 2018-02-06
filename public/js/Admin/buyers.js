@@ -82,14 +82,12 @@
                   /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html("Buyer Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addBuyerModal').modal('hide');
                        buyers();
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   },
                   409: function() {
@@ -187,7 +185,6 @@
                 /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer Updated Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#editBuyerModal').modal('hide');
                      buyers();
@@ -232,14 +229,12 @@
                 /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteBuyerModal').modal('hide');
                      buyers();
                 },
                 400: function() {
                      $('.snackbar_span').html("Something went wrong!!");
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -336,14 +331,12 @@
                    /** [Show response status based on HTTP status code] */
                    200: function() {
                         $('.snackbar_span').html('Merchandiser Added Successfully');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#addMerchandiserModal').modal('hide');
                         merchandiser();
                    },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                    },
                    409: function() {
@@ -440,7 +433,6 @@
                   /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Merchandiser Updated Successfully');
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editMerchandiserModal').modal('hide');
                        merchandiser();
@@ -486,14 +478,12 @@
                     /** [Show response status based on HTTP status code] */
                     200: function() {
                          $('.snackbar_span').html('Merchandiser deleted Successfully');
-                         $('#snackbar').css('background-color','#1abb9c');
                          showSnackbar();
                          $('#deleteMerchandiserModal').modal('hide');
                          merchandiser();
                     },
                     400: function() {
                          $('.snackbar_span').html('Something went wrong');
-                         $('#snackbar').css('background-color','#F44336');
                          showSnackbar();
                     }
                },

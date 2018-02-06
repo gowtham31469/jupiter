@@ -126,14 +126,12 @@ function showSnackbar() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Garment Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -216,7 +214,6 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Garment Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
@@ -256,14 +253,12 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Garment Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraGarmentsModal').modal('hide');
                      orchestraSettings();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -360,14 +355,12 @@ function showSnackbar() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Age Group Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -452,7 +445,6 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Age Group Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
@@ -492,14 +484,12 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Age Group Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraAgeGroupModal').modal('hide');
                      ageGroup();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -601,14 +591,12 @@ function countries() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Country Name Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraCountryModal').modal('hide');
                        countries()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -713,7 +701,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Country Name Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraCountryModal').modal('hide');
                        countries()
@@ -753,14 +740,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Country Name Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraCountryModal').modal('hide');
                      countries();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -855,14 +840,12 @@ function countries() {
                statusCode: {
                     200: function() {
                          $('.snackbar_span').html("Product Family Added Successfully");
-                         $('#snackbar').css('background-color','#1abb9c');
                          showSnackbar();
                          $('#addOrchestraProductFamilyModal').modal('hide');
                          productFamily()()
                     },
                     400: function() {
                          $('.snackbar_span').html("Something went wrong!!");
-                         $('#snackbar').css('background-color','#F44336');
                          showSnackbar();
                     }
                },
@@ -953,7 +936,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Product Family Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraProductFamilyModal').modal('hide');
                        productFamily()()
@@ -993,14 +975,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Product Family Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraProductFamilyModal').modal('hide');
                      productFamily();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1102,14 +1082,12 @@ function countries() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Special Instruction Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction() 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1214,7 +1192,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Special Instruction Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction()
@@ -1254,14 +1231,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Special Instruction Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraSpecialInstructionModal').modal('hide');
                      specialInstruction();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1363,14 +1338,12 @@ function countries() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Composition Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraCompositionModal').modal('hide');
                        compositions() 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1475,7 +1448,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Composition Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraCompositionModal').modal('hide');
                        compositions()
@@ -1515,14 +1487,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Composition Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraCompositionModal').modal('hide');
                      compositions();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1624,14 +1594,12 @@ function countries() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Part Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraPartModal').modal('hide');
                        parts(); 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1736,7 +1704,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Part Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraPartModal').modal('hide');
                        parts();
@@ -1776,14 +1743,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Part Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraPartModal').modal('hide');
                      parts();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1875,14 +1840,12 @@ function countries() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Size Chart Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraSizeChartModal').modal('hide');
                        sizeChart(); 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1969,7 +1932,6 @@ function countries() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Size Chart Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraSizeChartModal').modal('hide');
                        sizeChart();
@@ -2009,14 +1971,12 @@ function countries() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Size Chart Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraSizeChartModal').modal('hide');
                      sizeChart();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },

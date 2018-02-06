@@ -267,14 +267,12 @@ function addCustomer()
                  /** [Show response status based on HTTP status code] */
                  200: function() {
                       $('.snackbar_span').html('Customer Added Successfully');
-                      $('#snackbar').css('background-color','#1abb9c');
                       showSnackbar();
                       $('#addCustomerModal').modal('hide');
                       customersListView();
                  },
                  400: function() {
                       $('.snackbar_span').html('Something went wrong');
-                      $('#snackbar').css('background-color','#F44336');
                       showSnackbar();
                  },
                  409: function() {
@@ -577,7 +575,6 @@ function addCustomer()
                     200: function() {
                         isSubmitting = false; 
                         $('.snackbar_span').html('Customer is active now ');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                     }
                },
@@ -621,7 +618,6 @@ function addCustomer()
                     200: function() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Customer is inactive now ');
-                         $('#snackbar').css('background-color','#1abb9c');
                          showSnackbar();
                     }
                },
@@ -1193,7 +1189,6 @@ function addCustomer()
                    /** [Show response status based on HTTP status code] */
                    200: function() {
                         $('.snackbar_span').html('Customer Updated Successfully');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
@@ -1238,14 +1233,12 @@ function addCustomer()
                   /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Customer deleted Successfully');
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#deleteCustomerModal').modal('hide');
                        customersListView();
                   },
                   400: function() {
                        $('.snackbar_span').html('Something went wrong');
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
