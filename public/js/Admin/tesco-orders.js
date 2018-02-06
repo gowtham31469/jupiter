@@ -7,13 +7,14 @@
 function tescoOrders() {
     $('.main-content').html('<div class="loader"></div>');
     $('.template-error').html('');
-    // Remove local storage values
+    /** [ Remove local storage values ] */
     localStorage.removeItem("templates");
     localStorage.removeItem("zone");
     localStorage.removeItem("template type");
+    localStorage.removeItem("data");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     try {
-        /** ajax call to load tesco order page **/
+        /** [ ajax call to load tesco order page ] **/
         $.ajax({
         url: base_url + "/admin/tesco/order-management/orders",
         type: "Post",
@@ -52,7 +53,7 @@ function tescoOrders() {
 
                 });
 
-                /** Show tesco templates hierarchy */
+                /** [ Show tesco templates hierarchy ] */
                 $('.descriptionDiv').addClass('hidden')
                 $('#jstree').jstree({
                     'core': {
@@ -136,19 +137,19 @@ function tescoOrders() {
                         return this.is_leaf(node);
                     }
                 }).on('loaded.jstree', function () {
-                    /** Show expanded jstree  */
+                    /** [ Show expanded jstree ]  */
                     $('#jstree').jstree('open_all');
                 }).bind("refresh.jstree", function (e, data) {
-                    /** Show expanded jstree  */
+                    /** [ Show expanded jstree ]  */
                     $(this).jstree("open_all");
                 }).bind('before.jstree', function(event, data){ 
-                    /** [Make only leaf-nodes selectable ] */
+                    /** [ Make only leaf-nodes selectable ] */
                     if(data.instance.is_leaf(data.args[0])){ 
                        return false; 
                     } 
                 })
 
-                /** Get tempalte preview based on template selection  */
+                /** [ Get tempalte preview based on template selection ]  */
                 $('#jstree').on('activate_node.jstree', function (e, data) {
                     $('.template-error').html('')
                     if (data.instance.is_leaf(data.node)) {
@@ -199,7 +200,7 @@ function tescoOrders() {
                     }
                 });
 
-                /** [To get selected leaf node] */
+                /** [ To get selected leaf node ] */
                 var template_id = 0;
                 var type;
                 var zone;
@@ -207,14 +208,15 @@ function tescoOrders() {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
                         template_id = data.node.id;
-                        // add values into local storage
+
+                        /** [ add values into local storage ] */
                         localStorage.setItem("templates", data.node.id);
                         localStorage.setItem("zone", data.node.original.zone);
                         localStorage.setItem("template type", data.node.original.type);
                     }
                 });
 
-                /** [bootstrap validator for create tesco order form] **/
+                /** [ bootstrap validator for create tesco order form ] **/
                 $('#create_order_form').validator().on('submit', function (e) {
 
                     if (e.isDefaultPrevented()) {
@@ -224,7 +226,7 @@ function tescoOrders() {
                     {
                         e.preventDefault();
                         
-                        /** [Check if leaf node( template ) selected or not] **/
+                        /** [ Check if leaf node( template ) selected or not ] **/
                         if (template_id != 0) 
                         {
                             $('.template-error').html('')
@@ -232,7 +234,7 @@ function tescoOrders() {
                         }
                         else
                         {
-                            /**  [Show validation error message] **/
+                            /**  [ Show validation error message ] **/
                             $('.template-error').html('<span style="color:#a94442">Please select a template in the list.</span>');
                         }
                     }
@@ -249,7 +251,7 @@ function tescoOrders() {
         }
      })
     } catch(e) {
-        // error statements
+        /** [ error statements ] */
         console.log("Error:"+e)
     }
 }
@@ -261,7 +263,7 @@ function tescoOrders() {
 
 function createOrders() {
     try {
-        // Get values from local storage
+        /* [ Get values from local storage ] */
         var template_id = localStorage.getItem("templates");
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
@@ -278,30 +280,32 @@ function createOrders() {
                      $(".loader").css('margin-top','12%');
                  },
                  success: function (data) {
+                     localStorage.setItem("data", JSON.stringify(data.templates));
                      var html = '<ul class="nav nav-tabs"><li class="active"><a data-toggle="tab" href="#stickers">Stickers</a></li><li><a data-toggle="tab" href="#labels">Labels</a></li></ul><div class="tab-content"><div id="stickers" class="tab-pane fade in active"><br><form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><div class="col-md-3"><div class="form-group has-feedback"><label for="po_number">PO Number</label> <input type="text" class="form-control" name="po_number" id="po_number" required=""  placeholder="Enter PO. Number"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group"> <label for="uk_style">UK Style Ref.</label> <input type="text" class="form-control" name="uk_style" id="uk_style"  placeholder="Enter UK Style Ref."></div></div><div class="col-md-3"><div class="form-group"> <label for="ce_style">CE Style Ref.</label> <input type="text" class="form-control" name="ce_style" id="ce_style" placeholder="Enter CE Style Ref."></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="season_code">Season Code</label> <input type="text" class="form-control" name="season_code" id="season_code" required=""  placeholder="Enter Season Code"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="description">Short Description</label> <input type="text" class="form-control" name="description" id="description" required=""  placeholder="Enter Description"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="eqos">EQOS Site Code</label> <input type="text" class="form-control" name="eqos" id="eqos" required=""  placeholder="Enter EQOS Site Code"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="manufacture_date">Manufactured Date</label><div class="input-group manufacture_date date" data-provide="datepicker" id="datePicker1"> <input value="" id="manufacture_date" name="manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date"> <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div ><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="department">Department</label><select class="selectpicker" data-live-search="true" id="department" name="department" required="" ><option value="">Select Department</option>';
 
-                      /** [Show dynamic department selectbox] */
+                      /** [ Show dynamic department selectbox ] */
                       $.each(data.tesco_department, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.department + '</option>';
                       });
 
                      html +='</select></div></div><div class="clearfix"></div><div class="col-md-3"> <div class="form-group has-feedback"><label for="brand">Brand</label> <select class="selectpicker" data-live-search="true" id="brand" name="brand" required="" ><option value="">Select Brand</option>';
 
-                       /** [Show dynamic brand selectbox] */
+                       /** [ Show dynamic brand selectbox ] */
                        $.each(data.tesco_brand, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.brand + '</option>';
                        });  
 
                      html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="supplier">Supplier</label> <select class="selectpicker" data-live-search="true" id="supplier" name="supplier" required="" ><option value="">Select Supplier</option>';
 
-                       /** [Show dynamic supplier selectbox] */
+                       /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
                         html += '<option value="'+ item.id +'">'+ item.supplier_code +' : '+ item.supplier_name + '</option>';
                         });  
 
-                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="rfid">RFID Compliant</label> <select class="selectpicker" id="rfid" name="rfid" required="" ><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tag_at_source">Tag At Source</label> <select class="selectpicker" id="tag_at_source" name="tag_at_source" required="" ><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
+                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="rfid">RFID Compliant</label> <select class="selectpicker" id="rfid" name="rfid" required=""><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tag_at_source">Tag At Source</label> <select class="selectpicker" id="tag_at_source" name="tag_at_source" required="" ><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
                      if(zone === "UK")
                      {
+                        /**  [ Dynamic quantity table for UK ratio templates ] */
                         if(type === 'ratio')
                         {
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Units per carton</th>';
@@ -312,16 +316,17 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Select</th><th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox"> </label></div></td><td><div class="form-group"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_ratio_count" name="uk_ratio_count"></div></td>';
+                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                         else
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="alert()" data-id="0" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
+                            /**  [ Dynamic quantity table for UK single templates ] */
+                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="2">'+item.template_name+'</th>';
                              });
@@ -329,16 +334,17 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Select</th><th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd" name="uk_single_tpnd" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_single_ean" name="uk_single_ean" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_single_case_size" name="uk_single_case_size" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required=""><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" required="" placeholder="Enter TPND"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_1" name="uk_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox"> </label></div></td><td><div class="form-group"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count" name="uk_single_count"></div></td>';
+                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                      }
                      else
-                     {
+                     {  
+                        /**  [ Dynamic quantity table for CE ratio templates ] */
                         if(type === 'ratio')
                         {
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Cases per carton</th>';
@@ -349,16 +355,17 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Select</th><th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_orms_tpn" name="ce_ratio_orms_tpn" onkeypress="return isNumber(event)"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_itf" name="ce_ratio_itf" onkeypress="return isNumber(event)"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_cpc" name="ce_ratio_cpc" onkeypress="return isNumber(event)"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody><tr id="table_row"><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_orms_tpn" name="ce_ratio_orms_tpn" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_itf" name="ce_ratio_itf" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_cpc" name="ce_ratio_cpc" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox"> </label></div></td><td><div class="form-group"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_ratio_count" name="ce_ratio_count"></div></td>';
+                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                         else
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="alert()" data-id="0" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
+                            /**  [ Dynamic quantity table for CE single templates ] */
+                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="alert()" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="2">'+item.template_name+'</th>';
                              });
@@ -366,11 +373,11 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Select</th><th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_single_orms_tpn" name="ce_single_orms_tpn" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_single_ean" name="ce_single_ean" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_single_case_size" name="ce_single_case_size" required=""><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" id="ce_single_size" name="ce_single_size" required=""><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody><tr id="table_row"><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox"> </label></div></td><td><div class="form-group"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_single_count" name="ce_single_count"></div></td>';
+                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                      }
@@ -383,7 +390,26 @@ function createOrders() {
 
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left">Please save or submit changes before closing page.</span><span class="btn btn-xs btn-warning"><i class="fa fa-floppy-o" aria-hidden="true"></i><input type="submit" value="Submit"/></span><span class="btn btn-xs btn-danger"><i class="fa fa-times" aria-hidden="true"></i><input type="button" value="Cancel" onclick=" location.reload()"/></span></div></div></div><div id="labels" class="tab-pane fade"> <hr>Coming soon </div></div></div></div>';
                       $('.main-content').html(html).selectpicker('refresh');
-                      /** [bootstrap validator for create tesco order form] **/
+
+                      /* [ Toggle required field validation in quantity table ] */
+                      $(':checkbox').on('change',function(){
+                       var th = $(this), id = th.prop('id');
+                       if(th.is(':checked'))
+                       {
+                           /* [ add required for input field ] */
+                           $('input[id="'  + id + '"]').prop('required',true) 
+                        }
+                        else
+                        {
+                            /* [ remove required from input field ] */
+                            $('input[id="'  + id + '"]').prop('required',false) 
+                            /* [ remove validation error from input field ] */
+                            $('input[id="'  + id + '"]').siblings('').html('')
+                            $('input[id="'  + id + '"]').parent().removeClass('has-error has-danger');
+                        }
+                      });
+
+                      /** [ bootstrap validator for create tesco order form ] **/
                         $('#create_tesco_order_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) {
 
@@ -401,7 +427,7 @@ function createOrders() {
                     console.log(data);
                  },
                  complete: function () {
-                      /** [To make top menu active] */
+                      /** [ To make top menu active ] */
                       $(function () {
                           var url = window.location;
                           $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
@@ -415,10 +441,80 @@ function createOrders() {
              })
         
     } catch(e) {
-        // error statements
+        /** [ error statements ] */
         console.log("Error:"+e)
     }
 }
 
+/**
+ * [addUKSingle function for adding dynamic table row for UK single templates]
+ * @author <praveen>
+ * 
+ */
+function addUKSingle(rem,e,templates) {
+try{
+         e.preventDefault(); 
+         /** [ Get template details from localstorage ] */
+         var data = JSON.parse(localStorage.getItem("data"));
+         var a = [] 
+         /** [ Get data-id of add button ] */
+         var id = $(rem).attr("data-id"); 
+         var val = parseInt(id) + 1; 
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
+             $.each(data, function(i, item){
+               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+             });
+          html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button" title="Delete" data-placement="left" onclick="removeUKSingle(this)"></i></a></td></tr>';
+         $('#table_row').append(html);
 
+         /** [ Refresh boostrap form-validator ]  */
+         $('#create_tesco_order_form').validator('update'); 
 
+          /** [ Update data-id of add button ] */
+         $(rem).attr("data-id", val); 
+
+         /** [ Call setSerialNumber function ] */
+         setSerialNumber()
+         
+   } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }
+}
+
+/**
+  * Removes row from order quantity table
+  *
+  * @author <praveen>
+  */
+   function removeUKSingle(rem) {
+    try{
+         /** [ Remove Row from table ] */
+         $(rem).parent().parent().parent().remove();
+
+         /** [ Refresh boostrap form-validator ]  */
+         $('#create_tesco_order_form').validator('update');
+
+         /** [ Call setSerialNumber function ] */
+         setSerialNumber()
+
+      } catch (e) {
+        /** [ error statements ] */
+       console.log("Error:"+e)
+     }
+   }
+/**
+  * Generate dynamic serial number for quantity table
+  *
+  * @author <praveen>
+  */
+   function setSerialNumber()
+    {
+        var j = 1; 
+        
+        /** [ Dynamically generate slno ] */
+        $('#table_row tr').each(function(key, val) { 
+           $(this).find(".slno").text(j)
+           j++; 
+        })
+    }
