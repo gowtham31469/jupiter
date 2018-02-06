@@ -323,22 +323,5 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     }
-    /**
-     * method to set the po number and pdf file for an order
-     * @param po_number and pdf (pdf is optional)
-     * @return \Illuminate\Http\Response
-     */
-    public function setCustomerPO(Request $request)
-    {
-        try 
-        {
-            $po_number = $request->po_number;
-            $result = response()->json(['error'=> false,'message' =>'success'],200);    
-        }
-        catch (Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        } 
-        return $result;
-    }
+   
 }

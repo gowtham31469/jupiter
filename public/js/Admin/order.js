@@ -93,8 +93,6 @@ function orders() {
  *
  * @return View
  */
-
-
 function orderStatus() {
     $('.main-content').html('<div class="loader"></div>');
     var buyer = localStorage.getItem("status_buyer");
@@ -322,15 +320,13 @@ function table(data,path) {
             { 
                 if (key == "PONumber")
                 { 
-                   if (value[key]==null)
+                   if (value[key]==null || value[key]=="")
                    {
-                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><input type="submit" value="Save" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span></form></div></div></td>';
                    }
                    else
                    {
-                        // tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
-                        
-                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Update</button> </span> </div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <input type="submit" class="btn btn-sm btn-default po-submit" value="Update" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span> </form></div></div></td>';
                    }
                    
                 }
@@ -338,11 +334,11 @@ function table(data,path) {
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
-                        tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="#" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }   
                 }
             }
@@ -352,13 +348,21 @@ function table(data,path) {
     })
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 
+        $('#po_form_submit').validator('validate')
 }
+
+
+function showPOUpload(id,table_name,uvc,qntytable)
+{
+    $('#rowID').val(id);
+    $('#tableName').val(table_name);
+    $('#po-file-upload').modal('show')
+}
+
 /**
- * method pass the po number for
+ * method pass the po number for an order
  * @param {[type]} obj         [description]
- * @param {[type]} uvc         [description]
- * @param {[type]} po          [description]
- * @param {[type]} template_id [description]
+ * @param {[type]} id [description]
  * @param {[type]} table_name  [description]
  */
 function setPO(obj,id,table_name)
@@ -382,14 +386,21 @@ function setPO(obj,id,table_name)
         statusCode:
         {
             /** [Show response status based on HTTP status code] */
-            200: function()
+            200: function(data)
             {
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $('#snackbar').css('background-color','#1abb9c');
-               showSnackbar();
                $(obj).closest('tr').find('.po').val(po_number);
-               $(obj).closest('tr').find('.po-submit').text("Update");
-               
+               showSnackbar();
+               if (po_number==""){
+                 $(obj).closest('tr').find('.po-submit').text("Save");
+                 $(obj).closest('tr').find('.po').attr('disabled');
+                 $(obj).closest('tr').find('.po').attr('placeholder', "Enter PO");
+                  
+               }
+               else{
+                $(obj).closest('tr').find('.po-submit').text("Update");
+               }              
             },
             400: function()
             {
@@ -412,8 +423,7 @@ function setPO(obj,id,table_name)
   function showSnackbar() {
     try{
       // Get the snackbar DIV
-      var x = document.getElementById("snackbar")
-
+       var x = document.getElementById("snackbar")
       // Add the "show" class to DIV
       x.className = "show";
 
@@ -443,7 +453,6 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
             _token: csrf_token,
             table_name: table_name,
             qntytable:qntytable,
-            uvc:uvc,
             id:id,
             uvc:uvc
         },
@@ -490,7 +499,7 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                 }
                 $('#item_details').html(tr)
                 
-               $('#profoma-invoice').modal('show')
+               $('#profoma-invoice').modal("show")
             },
             400: function(data)
             {
