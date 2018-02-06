@@ -28,10 +28,14 @@
              });
              table += '</tbody></table></div>';
               $('.main-content').html(table);
+
+              /** [ Toggle bootstrap tooltip ] */
               $('.edit-buyer').tooltip('show')
               $('.edit-buyer').tooltip('toggle')
               $('.delete-buyer').tooltip('show')
               $('.delete-buyer').tooltip('toggle')
+
+              /** [ Data Tabeles scripts ] */
               $('#buyers-list-table').DataTable();
               $("#buyers-list-table_filter input").addClass('form-control input-sm');
               $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -57,6 +61,7 @@
      console.log("Error:"+e)
    }
  }
+ 
  /**
   * Adds a buyer.
   * @author <praveen>
@@ -100,6 +105,14 @@
                 console.log(data);
              },
              complete: function () {
+                      /** [ To make top menu active ] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
                        $(".loader").hide();
                        $(".loader").css('margin-top','0%');
              }
@@ -108,13 +121,13 @@
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get buyers details for editing
    * @param id
    * @author <praveen>
    *
    */
-  
   function getBuyer(id)
   {
     try{
@@ -132,6 +145,7 @@
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
+
                  /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#buyer_edit_id').val(id);
@@ -139,11 +153,14 @@
                  $('#edit_buyer_email').val(data.buyer[0].buyer_email);
                  $('#edit_buyer_phone').val(data.buyer[0].buyer_phone);
                  $('#edit_buyer_address').val(data.buyer[0].buyer_address);
+
                  /** [ Backdrop for bootstrap modal ] */
                  $('#editBuyerModal').modal({
                       backdrop: 'static',
                       keyboard: false
                  })
+
+                 /** [ Validate edit_buyer_form form using bootstrap validator ] */
                  $('#edit_buyer_form').validator('validate');
                  $('#editBuyerModal').modal('show');
              },
@@ -151,6 +168,14 @@
                   console.log(data);
              },
              complete: function () {
+                 /** [ To make top menu active ] */
+                  $(function () {
+                      var url = window.location;
+                      $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                      $('.dynamic-menu a').filter(function () {
+                          return this.href == url;
+                      }).parent('li').addClass('current-page').find('a').addClass('active');
+                  });
                  $(".loader").hide();
                  $(".loader").css('margin-top','0%');
              }
@@ -159,6 +184,7 @@
      console.log("Error:"+e)
    }
   }
+
  /**
   * Function for edit buyer
   * @author <praveen>
@@ -182,6 +208,7 @@
            method:"put",
            data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
            statusCode: {
+
                 /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer Updated Successfully');
@@ -199,6 +226,14 @@
                 console.log(data);
            },
            complete: function () {
+                     /** [ To make top menu active ] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
                      $(".loader").hide();
                      $(".loader").css('margin-top','0%');
            }
@@ -207,6 +242,7 @@
      console.log("Error:"+e)
    }
  }
+
  /**
   * Function for delete buyer
   * @param id
@@ -226,6 +262,7 @@
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
                 /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Buyer deleted Successfully');
@@ -242,6 +279,14 @@
                 console.log(data);
            },
            complete: function () {
+                   /** [ To make top menu active ] */
+                    $(function () {
+                        var url = window.location;
+                        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                        $('.dynamic-menu a').filter(function () {
+                            return this.href == url;
+                        }).parent('li').addClass('current-page').find('a').addClass('active');
+                    });
                     $(".loader").hide();
                     $(".loader").css('margin-top','0%');
            }
@@ -276,10 +321,14 @@
                    });
                    table += '</tbody></table></div>';
                     $('.main-content').html(table);
+
+                    /** [ Toggle bootstrap tooltip ] */
                     $('.edit-merchandiser').tooltip('show')
                     $('.edit-merchandiser').tooltip('toggle')
                     $('.delete-merchandiser').tooltip('show')
                     $('.delete-merchandiser').tooltip('toggle')
+
+                    /** [ data tables scripts ] */
                     $('#merchandisers-list-table').DataTable();
                     $("#merchandisers-list-table_filter input").addClass('form-control input-sm');
                     $("#merchandisers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -305,6 +354,7 @@
      console.log("Error:"+e)
    }
   }
+
   /**
    * Adds a merchandiser.
    * @author <praveen>
@@ -328,6 +378,7 @@
                 $(".loader").css('margin-top','12%');
               },
               statusCode: {
+
                    /** [Show response status based on HTTP status code] */
                    200: function() {
                         $('.snackbar_span').html('Merchandiser Added Successfully');
@@ -349,6 +400,14 @@
                 console.log(data);
               },
               complete: function () {
+                        /** [ To make top menu active ] */
+                        $(function () {
+                            var url = window.location;
+                            $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                            $('.dynamic-menu a').filter(function () {
+                                return this.href == url;
+                            }).parent('li').addClass('current-page').find('a').addClass('active');
+                        });
                         $(".loader").hide();
                         $(".loader").css('margin-top','0%');
               }
@@ -357,6 +416,7 @@
      console.log("Error:"+e)
    }
    }
+
    /**
     * To get merchandiser details for editing
     * @param id
@@ -379,6 +439,7 @@
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
+
                  /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#merchandiser_edit_id').val(id);
@@ -386,11 +447,14 @@
                  $('#edit_merchandiser_email').val(data.merchandiser[0].email);
                  $('#edit_merchandiser_phone').val(data.merchandiser[0].merchandiser_phone);
                  $('#edit_merchandiser_address').val(data.merchandiser[0].merchandiser_address);
+
                  /** [ Backdrop for bootstrap modal ] */
                  $('#editMerchandiserModal').modal({
                       backdrop: 'static',
                       keyboard: false
                  })
+
+                 /** [ Validate edit_merchandiser_form form using bootstrap validator ] */
                  $('#edit_merchandiser_form').validator('validate');
                  $('#editMerchandiserModal').modal('show');
              },
@@ -398,6 +462,14 @@
                 console.log(data);
              },
              complete: function () {
+                  /** [ To make top menu active ] */
+                  $(function () {
+                      var url = window.location;
+                      $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                      $('.dynamic-menu a').filter(function () {
+                          return this.href == url;
+                      }).parent('li').addClass('current-page').find('a').addClass('active');
+                  });
                  $(".loader").hide();
                     $(".loader").css('margin-top','0%');
              }
@@ -406,6 +478,7 @@
      console.log("Error:"+e)
    }
    }
+
    /**
     * Function to update merchandiser details
     * @author <praveen>
@@ -430,6 +503,7 @@
              method:"put",
              data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
              statusCode: {
+
                   /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Merchandiser Updated Successfully');
@@ -447,6 +521,14 @@
                 console.log(data);
              },
              complete: function () {
+                     /** [ To make top menu active ] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
                        $(".loader").hide();
                        $(".loader").css('margin-top','0%');
              }
@@ -455,6 +537,7 @@
      console.log("Error:"+e)
    }
    }
+
    /**
     * To delete merchandiser
     * @param id
@@ -475,6 +558,7 @@
                method:"delete",
                data:{_token:csrf_token,id:id},
                statusCode: {
+
                     /** [Show response status based on HTTP status code] */
                     200: function() {
                          $('.snackbar_span').html('Merchandiser deleted Successfully');
@@ -491,15 +575,29 @@
                   console.log(data);
                },
                complete: function () {
-                         $(".loader").hide();
-                         $(".loader").css('margin-top','0%');
+                     /** [ To make top menu active ] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
                }
            })
      } catch (e) {
      console.log("Error:"+e)
    }
    }
- /**  Validation for numeric values **/
+
+ /**
+  * Validation for numeric values
+  * @param  evt  
+  * @return {Boolean} 
+  * @author <praveen>
+  */
  function isNumber(evt) {
   try{
       evt = (evt) ? evt : window.event;
@@ -513,16 +611,20 @@
      console.log("Error:"+e)
    }
   }
-  /** [showSnackbar function] */
+
+  /**
+    * showSnackbar function
+    * @author    <praveen>
+    */
   function showSnackbar() {
     try{
-      // Get the snackbar DIV
+      /** [ Get the snackbar DIV ] */
       var x = document.getElementById("snackbar")
 
-      // Add the "show" class to DIV
+      /** [ Add the "show" class to DIV ] */
       x.className = "show";
 
-      // After 3 seconds, remove the show class from DIV
+      /** [  After 3 seconds, remove the show class from DIV ] */
       setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
       } catch (e) {
        console.log("Error:"+e)
