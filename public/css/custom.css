@@ -870,7 +870,7 @@ span.filter-option img {
     /* Set a default minimum width */
     margin-left: -125px;
     /* Divide value of min-width by 2 */
-    background-color: #333;
+    background-color: #00b6ff;
     /* Black background color */
     color: #fff;
     /* White text color */
@@ -1107,4 +1107,8 @@ button.btn.btn-info.pull-right.input-sm.add_to_list {
 
     color: #000;
     font-weight: bold;
+}
+
+.has-feedback .form-control {
+    padding-right: 0px; 
 }
