@@ -360,11 +360,11 @@ function table(data,path) {
                 { 
                    if (value[key]==null || value[key]=="")
                    {
-                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><input type="submit" value="Save" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span></form></div></div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></form></div></div></td>';
                    }
                    else
                    {
-                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <input type="submit" class="btn btn-sm btn-default po-submit" value="Update" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span> </form></div></div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span> </form></div></div></td>';
                    }
                    
                 }
@@ -426,7 +426,6 @@ function setPO(obj,id,table_name)
             200: function(data)
             {
                $('.snackbar_span').html('Purchase Order Number added Successfully');
-               $('#snackbar').css('background-color','#1abb9c');
                $(obj).closest('tr').find('.po').val(po_number);
                showSnackbar();
                if (po_number==""){
@@ -442,7 +441,6 @@ function setPO(obj,id,table_name)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },
@@ -539,7 +537,6 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
             400: function(data)
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },
