@@ -703,6 +703,7 @@
       $('div.freight_charge_div').hide()
     });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
     /** restrict special characters (except @, ., _ **/
     $('input').on('input', function() {
       var c = this.selectionStart,
@@ -754,6 +755,7 @@
         for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
         return result;
       }
+
     /** Copy password to clipboard **/
     $( document ).ready(function() {
       var clipboard = new Clipboard('.clipboard');
@@ -836,6 +838,7 @@
         deleteCustomer(id);
      }
     })
+
     /**
      * To hide and show freight charge textbox based on radio button click(for adding customer form)
      */
@@ -856,7 +859,8 @@
           /** Remove required from textbox **/
           $('#freight_charge').prop('required',false)
       });
-     });  
+     }); 
+
     /**
      * To hide and show freight charge textbox based on radio button click(for editing customer form)
      */
@@ -879,39 +883,40 @@
       });
      }); 
 
-     /** [ To hide/show PO required checkbox based on PI required checkbox] */
-     $(document).ready(function($) {
-      // While adding customer
-      $('#pi_required').click(function() {
-         if($('#pi_required').is(':checked'))
-         {
-          $('div.po-required-div').show();
-          /** [ uncheck po required checkbox on page load ] */
-          $('input:checkbox[name=po_required]').prop('checked',false);
-         }
-         else
-         {
-          $('div.po-required-div').hide();
-          /** [ uncheck po required checkbox while hidden ] */
-          $('input:checkbox[name=po_required]').prop('checked',false);
-         }
-      });
+     /** [ To hide/show PO required checkbox based on PI required checkbox begins] */
+       $(document).ready(function($) {
+        // While adding customer
+        $('#pi_required').click(function() {
+           if($('#pi_required').is(':checked'))
+           {
+            $('div.po-required-div').show();
+            /** [ uncheck po required checkbox on page load ] */
+            $('input:checkbox[name=po_required]').prop('checked',false);
+           }
+           else
+           {
+            $('div.po-required-div').hide();
+            /** [ uncheck po required checkbox while hidden ] */
+            $('input:checkbox[name=po_required]').prop('checked',false);
+           }
+        });
 
-      // While editing customer
-      $('#edit_pi_required').click(function() {
-         if($('#edit_pi_required').is(':checked'))
-         {
-          $('div.edit-po-required-div').show();
-          /** [ uncheck po required checkbox on page load ] */
-          $('input:checkbox[name=edit_po_required]').prop('checked',false);
-         }
-         else
-         {
-          $('div.edit-po-required-div').hide();
-          /** [ uncheck po required checkbox while hidden ] */
-          $('input:checkbox[name=edit_po_required]').prop('checked',false);
-         }
-      });
+        // While editing customer
+        $('#edit_pi_required').click(function() {
+           if($('#edit_pi_required').is(':checked'))
+           {
+            $('div.edit-po-required-div').show();
+            /** [ uncheck po required checkbox on page load ] */
+            $('input:checkbox[name=edit_po_required]').prop('checked',false);
+           }
+           else
+           {
+            $('div.edit-po-required-div').hide();
+            /** [ uncheck po required checkbox while hidden ] */
+            $('input:checkbox[name=edit_po_required]').prop('checked',false);
+           }
+        });
+        /** [ To hide/show PO required checkbox based on PI required checkbox ends] */
      }); 
     </script>
     @endsection
