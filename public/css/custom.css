@@ -6,9 +6,11 @@ body {
     font-size: 12px !important;
     background-color: #f5f5f5;
 }
-table{
-    background:#fff;
+
+table {
+    background: #fff;
 }
+
 hr {
     border-top: 1px solid #cacaca;
 }
@@ -339,10 +341,12 @@ h4 {
 .bottom-bar .modal-footer {
     padding: 9px;
 }
-.bottom-bar .btn{
+
+.bottom-bar .btn {
     margin-right: 5px;
     margin-left: 5px;
 }
+
 /*
  * Global add-ons
  */
@@ -457,28 +461,28 @@ p.terms {
 }
 
 .loader {
-    display: none;
-    margin: 0 auto;
-    border: 3px solid #eeeeee;
-    /* Light grey */
-    border-top: 3px solid #2c3e50;
-    /* Blue */
-    border-radius: 50%;
-    left: 50%;
-    top: 30%;
-    height: 40px;
-    width: 40px;
-    animation: spin 0.9s linear infinite;
-    position: absolute;
+    width: 100%;
+    height: 100vh;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+
+.loader .fa-3x {
+    margin: 0 auto;
+    width: 75px;
+    height: 75px;
+    padding: 10px 18px;
+    -webkit-box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+}
+
+table#datatable-example-2 td:first-child > a {
+    margin-left: 10px;
+    color: #002c3e;
+    font-weight: 600;
+}
+
+table#datatable-example-2 td:first-child > a:hover {
+    text-decoration: underline;
 }
 
 .buyer-nav-select .btn-group.bootstrap-select.js-example-responsive.buyer-select {
@@ -638,8 +642,9 @@ span.navbar-brand.logo:hover {
     background: #fff;
     padding: 15px;
 }
+
 @media only screen and (max-width: 500px) {
-    .div-max{
+    .div-max {
         display: none;
     }
 }
@@ -865,7 +870,7 @@ span.filter-option img {
     /* Set a default minimum width */
     margin-left: -125px;
     /* Divide value of min-width by 2 */
-    background-color: #333;
+    background-color: #00b6ff;
     /* Black background color */
     color: #fff;
     /* White text color */
@@ -951,7 +956,8 @@ span.sticker-details {
     margin-right: 25px;
     max-width: 250px;
 }
-.label-status{
+
+.label-status {
     position: absolute;
     top: 0;
     left: 0;
@@ -977,6 +983,7 @@ span.sticker-details {
 .label-PIApprovalPending {
     background: #9b59b6;
 }
+
 .label-BuyerApprovalPending {
     background: #9b59b6;
 }
@@ -1056,10 +1063,12 @@ span.sticker-details {
     padding: 3px 10px 3px 10px;
 }
 
-.table td, .table th {
+.table td,
+.table th {
     vertical-align: middle !important;
     text-align: center;
 }
+
 .table .form-group {
     margin-bottom: 0px;
     padding: 0px;
@@ -1068,6 +1077,7 @@ span.sticker-details {
 #solidform .form-control {
     margin-bottom: -15px;
 }
+
 .tot_qty_table {
     height: 20px;
     margin-bottom: -13px;
@@ -1079,20 +1089,26 @@ span.sticker-details {
     line-height: 3;
     font-weight: 100;
 }
+
 button.btn.btn-info.pull-right.input-sm.add_to_list {
     margin-top: 10px;
 }
 
-.bootstrap-select li a{
-        font-size: 12px;
+.bootstrap-select li a {
+    font-size: 12px;
     font-weight: 200;
 }
 
-.bootstrap-select li a img{
-height:15px;
+.bootstrap-select li a img {
+    height: 15px;
 }
-.nav>li>a {
+
+.nav > li > a {
 
     color: #000;
     font-weight: bold;
+}
+
+.has-feedback .form-control {
+    padding-right: 0px; 
 }
