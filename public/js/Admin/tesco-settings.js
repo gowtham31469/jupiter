@@ -1,9 +1,15 @@
 /* Settings script 
- * @author <praveen>
+ * @author <Sumanth>
  */
 
 var isSubmitting = false;
-/**  Validation for numeric values **/
+
+/**  
+ * Validation for numeric values *
+ * @param    evt 
+ * @return {Boolean}
+ * @author <Sumanth>
+ */
  function isNumber(evt) {
   try{
         evt = (evt) ? evt : window.event;
@@ -17,7 +23,13 @@ var isSubmitting = false;
      console.log("Error:"+e)
    }
   }
-/**  Validation for numeric values with dot**/
+
+/** 
+ * Validation for numeric values with dot*
+ * @param  evt
+ * @return {Boolean}
+ * @author <Sumanth>
+ */
  function isNumberKey(evt){
   try{
        var charCode = (evt.which) ? evt.which : event.keyCode
@@ -40,9 +52,10 @@ var isSubmitting = false;
      console.log("Error:"+e)
    }
   }
+
 /**
   * Function to Tesco Settings home page
-  * @author <praveen>
+  * @author <Sumanth>
   */
 function tescoBrands() {
   try{
@@ -110,23 +123,29 @@ function tescoBrands() {
      console.log("Error:"+e)
    }
 }
+
 /**
-  * Function to show snackbar
-  * @author <praveen>
+  * [showSnackbar function]
+  * @author    <Sumanth>
   */
 function showSnackbar() {
-    // Get the snackbar DIV
+  try{
+    /** [ Get the snackbar DIV ] */
     var x = document.getElementById("snackbar")
 
-    // Add the "show" class to DIV
+    /** [ Add the "show" class to DIV ] */
     x.className = "show";
 
-    // After 3 seconds, remove the show class from DIV
+    /** [  After 3 seconds, remove the show class from DIV ] */
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    } catch (e) {
+     console.log("Error:"+e)
+   }
 }
+
 /**
   * Adds a tesco brands.
-  * @author <praveen>
+  * @author <Sumanth>
   */
  function addTescoBrands()
  {
@@ -145,14 +164,12 @@ function showSnackbar() {
              statusCode: {
                   200: function() {
                        $('.snackbar_span').html("Brand Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addTescoBrandsModal').modal('hide');
                        tescoBrands()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -168,10 +185,11 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get tesco brands details for editing
    * @param id
-   * @author <praveen>
+   * @author <Sumanth>
    *
    */
   function getTescoBrandById(id)
@@ -213,9 +231,10 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit tesco brands details
-  * @author <praveen>
+  * @author <Sumanth>
   */
  function editTescoBrands()
  {
@@ -235,7 +254,6 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Brand Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editTescoBrandsModal').modal('hide');
                        tescoBrands()
@@ -253,10 +271,11 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
  }
+
  /**
   * To delete tesco brands
   * @param id
-  * @author <praveen>
+  * @author <Sumanth>
   *
   */
   function deleteTescoBrand(id)
@@ -275,14 +294,12 @@ function showSnackbar() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Brand Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteTescoBrandsModal').modal('hide');
                      tescoBrands();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -302,7 +319,7 @@ function showSnackbar() {
   /**
   * Makes a Brand Enabled.
   * @param id,csrf_token
-  * @author <praveen>
+  * @author <Sumanth>
   */
   function makeBrandEnabled(id,csrf_token)
   {
@@ -326,7 +343,6 @@ function showSnackbar() {
                    200: function() {
                        isSubmitting = false; 
                        $('.snackbar_span').html('Brand is enabled ');
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                    }
               },
@@ -343,10 +359,11 @@ function showSnackbar() {
     console.log("Error:"+e)
    }
   }
+
 /**
  * Makes a Brand Diabled
  * @param id,csrf_token
- * @author <praveen>
+ * @author <Sumanth>
  */
  function makeBrandDisabled(id,csrf_token)
   {
@@ -370,7 +387,6 @@ function showSnackbar() {
                    200: function() {
                         isSubmitting = false;
                         $('.snackbar_span').html('Brand is disabled ');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                    }
               },
@@ -390,7 +406,7 @@ function showSnackbar() {
 
   /**
   * Function to Tesco Department home page
-  * @author <praveen>
+  * @author <Sumanth>
   */
 function tescoDepartment() {
     try{
@@ -442,7 +458,7 @@ function tescoDepartment() {
 
 /**
   * Adds a tesco Department.
-  * @author <praveen>
+  * @author <Sumanth>
   */
   function addTescoDepartments()
   {
@@ -463,14 +479,12 @@ function tescoDepartment() {
               statusCode: {
                    200: function() {
                         $('.snackbar_span').html("Department Added Successfully");
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#addTescoDepartmentsModal').modal('hide');
                         tescoDepartment()
                    },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                    }
               },
@@ -486,10 +500,11 @@ function tescoDepartment() {
       console.log("Error:"+e)
     }
    }
+
 /**
    * Function for get tesco department details for editing
    * @param id
-   * @author <praveen>
+   * @author <Sumanth>
    *
    */
   function getTescoDepartmentsById(id)
@@ -534,9 +549,10 @@ function tescoDepartment() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit tesco department details
-  * @author <praveen>
+  * @author <Sumanth>
   */
  function editTescoDepartments()
  {
@@ -558,7 +574,6 @@ function tescoDepartment() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Department Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editTescoDepartmentsModal').modal('hide');
                        tescoDepartment()
@@ -576,10 +591,11 @@ function tescoDepartment() {
      console.log("Error:"+e)
    }
  }
+
  /**
   * To delete tesco department
   * @param id
-  * @author <praveen>
+  * @author <Sumanth>
   *
   */
   function deleteTescoDepartment(id)
@@ -598,14 +614,12 @@ function tescoDepartment() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Department Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteTescoDepartmentsModal').modal('hide');
                      tescoDepartment();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -624,7 +638,7 @@ function tescoDepartment() {
 
   /**
   * Function to Tesco Settings home page
-  * @author <praveen>
+  * @author <Sumanth>
   */
 function tescoSuppliers() {
     try{
@@ -695,7 +709,7 @@ function tescoSuppliers() {
 
   /**
   * Adds a tesco suppliers.
-  * @author <praveen>
+  * @author <Sumanth>
   */
   function addTescoSuppliers()
   {
@@ -715,14 +729,12 @@ function tescoSuppliers() {
               statusCode: {
                    200: function() {
                         $('.snackbar_span').html("Supplier Added Successfully");
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#addTescoSuppliersModal').modal('hide');
                         tescoSuppliers()
                    },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                    }
               },
@@ -742,7 +754,7 @@ function tescoSuppliers() {
    /**
    * Function for get tesco suppliers details for editing
    * @param id
-   * @author <praveen>
+   * @author <Sumanth>
    *
    */
   function getTescoSuppliersById(id)
@@ -786,9 +798,10 @@ function tescoSuppliers() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit tesco department details
-  * @author <praveen>
+  * @author <Sumanth>
   */
  function editTescoSuppliers()
  {
@@ -810,7 +823,6 @@ function tescoSuppliers() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Supplier Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editTescoSuppliersModal').modal('hide');
                        tescoSuppliers()
@@ -832,7 +844,7 @@ function tescoSuppliers() {
  /**
   * To delete tesco supplier
   * @param id
-  * @author <praveen>
+  * @author <Sumanth>
   *
   */
   function deleteTescoSupplier(id)
@@ -851,14 +863,12 @@ function tescoSuppliers() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Supplier Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteTescoSuppliersModal').modal('hide');
                      tescoSuppliers();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -878,7 +888,7 @@ function tescoSuppliers() {
    /**
   * Makes a Supplier Enabled.
   * @param id,csrf_token
-  * @author <praveen>
+  * @author <Sumanth>
   */
   function makeSupplierEnabled(id,csrf_token)
   {
@@ -902,7 +912,6 @@ function tescoSuppliers() {
                    200: function() {
                        isSubmitting = false; 
                        $('.snackbar_span').html('Supplier is enabled ');
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                    }
               },
@@ -919,10 +928,11 @@ function tescoSuppliers() {
     console.log("Error:"+e)
    }
   }
+
 /**
  * Makes a Supplier Diabled
  * @param id,csrf_token
- * @author <praveen>
+ * @author <Sumanth>
  */
  function makeSupplierDisabled(id,csrf_token)
   {
@@ -946,7 +956,6 @@ function tescoSuppliers() {
                    200: function() {
                         isSubmitting = false;
                         $('.snackbar_span').html('Supplier is disabled ');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                    }
               },

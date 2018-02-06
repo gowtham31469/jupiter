@@ -13,6 +13,7 @@
           $( ".sub_modules a" ).removeClass( "active" )
           $('.sticker_orders a').addClass("active")
           $('.main-content').html('<div class="loader"></div>');
+
           /** Refresh bootstrap selectpicker **/
           $('#payment_terms').selectpicker('refresh');
           $('#edit_payment_terms').selectpicker('refresh');
@@ -56,6 +57,8 @@
                 });
                 table += '</tbody></table></div>';
                 $('.main-content').html(table);
+
+                /** [ Toggle bootstrap tooltip ] */
                 $('.edit-customer').tooltip('show')
                 $('.edit-customer').tooltip('toggle')
                 $('.delete-customer').tooltip('show')
@@ -64,17 +67,21 @@
                 $('#make_inactive').tooltip('toggle')
                 $('#make_active').tooltip('show')
                 $('#make_active').tooltip('toggle')
+
+                /** [ Data Tabeles scripts ] */
                 $('#customers-list-table').DataTable();
                 $("#customers-list-table_filter input").addClass('form-control');
                 $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
                 $('.dataTables_length select').addClass('form-control');
+
+                /** [ Call autopopulateCountry function for auto-populating country in textbox  ] */
                 autopopulateCountry(0)
               },
               error: function (data) {
                 console.log(data);
               },
               complete: function () {
-                  /** [To make top menu active] */
+                  /** [ To make top menu active ] */
                   $(function () {
                       var url = window.location;
                       $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
@@ -90,6 +97,7 @@
      console.log("Error:"+e)
    }
   }
+
 /**
  * Adds a customer.
  * @author <praveen>
@@ -119,7 +127,7 @@ function addCustomer()
         var freight_cost        =  $('#freight_charge').val();
         var po_required         =  $('#po_required').is(':checked')?1:0;
 
-        /** @type {Array} [initializing empty arrays] */
+        /** @type {Array} [ initializing empty arrays ] */
         var contact_person  = [];
         var contact_phone   = [];
         var contact_email   = [];
@@ -134,28 +142,28 @@ function addCustomer()
 
         var buyers = [];
         
-        /** [Create array of contact person for multiple contact details] */
+        /** [ Create array of contact person for multiple contact details ] */
         $('.contact_person').each(function(i, item)
         {
             contact_person[i]    = $(item).val();
             
         });
 
-        /** [Create array of contact phone for multiple contact details] */
+        /** [ Create array of contact phone for multiple contact details ] */
         $('.contact_phone').each(function(i, item)
         {
             contact_phone[i]    = $(item).val();
             
         });
 
-        /** [Create array of contact email for multiple contact details] */
+        /** [ Create array of contact email for multiple contact details ] */
         $('.contact_email').each(function(i, item)
         {
             contact_email[i]    = $(item).val();
             
         });
 
-        /** [Create array of default contact  or not (checkbox values)] */
+        /** [ Create array of default contact  or not (checkbox values) ] */
         $('.default_contact').each(function(i, item)
         {
             if ($(this).is(':checked'))
@@ -176,21 +184,21 @@ function addCustomer()
             
         });
 
-        /** [Create array of multiple country for address ] */
+        /** [ Create array of multiple country for address ] */
         $('.country').each(function(i, item)
         {
             country[i]    = $(item).val();
             
         });
 
-        /** [Create array of multiple telephone for address ] */
+        /** [ Create array of multiple telephone for address ] */
         $('.telephone').each(function(i, item)
         {
             telephone[i]    = $(item).val();
             
         });
 
-        /** [Create array of multiple fax for address ] */
+        /** [ Create array of multiple fax for address ] */
         $('.fax').each(function(i, item)
         {
             fax[i]    = $(item).val();
@@ -202,7 +210,7 @@ function addCustomer()
             
         });
 
-        /** [Create array of billing address or not (checkbox values)] */
+        /** [ Create array of billing address or not (checkbox values) ] */
         $('.default_address').each(function(i, item)
         {
           if ($(this).is(':checked'))
@@ -216,7 +224,7 @@ function addCustomer()
             
         });
 
-        /** [Create array of shipping address or not (checkbox values)] */
+        /** [ Create array of shipping address or not (checkbox values) ] */
         $('.shipping_address').each(function(i, item)
         {
           if ($(this).is(':checked'))
@@ -230,18 +238,18 @@ function addCustomer()
             
         });
 
-        /** [Set freight cost id null, set freight cost as 0] **/
+        /** [ Set freight cost id null, set freight cost as 0 ] **/
         if(freight_cost == '')
         {
           freight_cost = 0;
         }
 
-        /** [Create array of multi selected buyers] */
+        /** [ Create array of multi selected buyers ] */
         $.each($("#buyer option:selected"), function(){
           buyers.push($(this).val());
         });
 
-        /** [Joining array values using some delimiters] */
+        /** [ Joining array values using some delimiters ] */
         contact_person   = contact_person.join(',');
         contact_phone    = contact_phone.join(',');
         contact_email    = contact_email.join(',');
@@ -264,17 +272,16 @@ function addCustomer()
               $(".loader").css('margin-top','12%');
             },
             statusCode: {
-                 /** [Show response status based on HTTP status code] */
+ 
+                 /** [ Show response status based on HTTP status code ] */
                  200: function() {
                       $('.snackbar_span').html('Customer Added Successfully');
-                      $('#snackbar').css('background-color','#1abb9c');
                       showSnackbar();
                       $('#addCustomerModal').modal('hide');
                       customersListView();
                  },
                  400: function() {
                       $('.snackbar_span').html('Something went wrong');
-                      $('#snackbar').css('background-color','#F44336');
                       showSnackbar();
                  },
                  409: function() {
@@ -287,6 +294,14 @@ function addCustomer()
                 console.log(data);
              },
             complete: function () {
+              /** [ To make top menu active ] */
+              $(function () {
+                  var url = window.location;
+                  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                  $('.dynamic-menu a').filter(function () {
+                      return this.href == url;
+                  }).parent('li').addClass('current-page').find('a').addClass('active');
+              });
               $(".loader").hide();
               $(".loader").css('margin-top','0%');
             }
@@ -295,12 +310,19 @@ function addCustomer()
      console.log("Error:"+e)
    }
  }
- /**  Validation for numeric values **/
+
+ /**  
+  * Validation for numeric values
+  * @param   evt 
+  * @return {Boolean}
+  * @author <praveen>
+  */
  function isNumber(evt) {
   try{
         evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        //Checking key stroke values for numeric values
+        var charCode = (evt.which) ? evt.which : evt.keyCode; 
+
+        /** [ Checking key stroke values for numeric values ] */
         if (charCode > 31 && (charCode < 48 || charCode > 57))
         {
             return false;
@@ -310,7 +332,13 @@ function addCustomer()
      console.log("Error:"+e)
    }
   }
- /**  Validation for numeric values with dot**/
+
+ /**  
+  * Validation for numeric values with dot
+  * @param   evt 
+  * @return {Boolean} 
+  * @author <praveen>    
+  */
  function isNumberKey(evt){
   try{
        var charCode = (evt.which) ? evt.which : event.keyCode
@@ -324,7 +352,7 @@ function addCustomer()
            }
            return false;
        }
-       //Checking key stroke values for numeric values
+       /** [ Checking key stroke values for numeric values ] */
        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
        {
            return false;
@@ -334,10 +362,12 @@ function addCustomer()
      console.log("Error:"+e)
    }
   }   
+
 /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins**/
  /**
   * Adds a contact person forms dynamically on button click.
   * @author <praveen>
+  * @param   rem,e (this pointer , event)
   */
    function addContact(rem,e) {
     try{
@@ -371,16 +401,20 @@ function addCustomer()
        console.log("Error:"+e)
      }
    }
+
  /**
   * Removes a  contact person form dynamically on button click.
   *
   * @author <praveen>
+  * @param   rem (this pointer)
   */
    function removeContact(rem) {
     try{
          var a = []
          var al = $(rem).parent().attr('id');
          $(rem).parent().remove();
+
+         /** [ To generate dynamic contact person title ] */
          var i = 1;
          $('#addcontact .addcontact').each(function(key, val) {
              $(this).find(".button-bottom").html("<h4>Contact Person " + i +"</h4>");
@@ -389,14 +423,18 @@ function addCustomer()
          })
          var b = a.join(',');
          $('#hidden').val(b);
+
+         /** [ updating add customer form valiadtion] */
          $('#add_customer_form').validator('update');
       } catch (e) {
        console.log("Error:"+e)
      }
    }
+
  /**
   * Adds an contact address form dynamically on button click.
   * @author <praveen>
+  * @param   rem,e (this pointer , event)
   */
    function addAddress(rem,e) {
     try{
@@ -431,16 +469,20 @@ function addCustomer()
      console.log("Error:"+e)
    }
    }
+
  /**
   * Removes an contact address form dynamically on button click.
   *
   * @author <praveen>
+  * @param   rem (this pointer)
   */
    function removeAddress(rem) {
     try{
          var a = []
          var al = $(rem).parent().attr('id');
          $(rem).parent().remove();
+
+         /** [ To generate dynamic contact person title ] */
          var i = 1;
          $('#addbilladdress .addbilladdress').each(function(key, val) {
              $(this).find(".button-bottom").html("<h4>Address " + i +"</h4>");
@@ -449,11 +491,14 @@ function addCustomer()
          })
          var b = a.join(',');
          $('#hidden').val(b);
+
+         /** [ updating add customer form valiadtion ] */
          $('#add_customer_form').validator('update');
        } catch (e) {
       console.log("Error:"+e)
     }
    }
+
  /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends**/
  /**
   * To auto populate country from stored json file
@@ -502,6 +547,7 @@ function addCustomer()
      console.log("Error:"+e)
     }
    }
+
  /**
   * Edit auto-autopopulate country(In customer form)  from stored json file
   * @param id
@@ -550,6 +596,7 @@ function addCustomer()
      console.log("Error:"+e)
    }
  }
+
  /**
   * Makes a customer active.
   * @param id,csrf_token
@@ -573,11 +620,11 @@ function addCustomer()
                method:"put",
                data:{_token:csrf_token,id:id},
                statusCode: {
-                    /** [Show response status based on HTTP status code] */
+
+                    /** [ Show response status based on HTTP status code ] */
                     200: function() {
                         isSubmitting = false; 
                         $('.snackbar_span').html('Customer is active now ');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                     }
                },
@@ -586,6 +633,14 @@ function addCustomer()
                },
                complete: function () {
                  customersListView();
+                 /** [ To make top menu active ] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
                  $(".loader").hide();
                  $(".loader").css('margin-top','0%');
                }
@@ -594,6 +649,7 @@ function addCustomer()
      console.log("Error:"+e)
     }
    }
+
  /**
   * Makes a customer inactive.
   * @param id,csrf_token
@@ -617,11 +673,11 @@ function addCustomer()
                method:"put",
                data:{_token:csrf_token,id:id},
                statusCode: {
-                    /** [Show response status based on HTTP status code] */
+
+                    /** [ Show response status based on HTTP status code ] */
                     200: function() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Customer is inactive now ');
-                         $('#snackbar').css('background-color','#1abb9c');
                          showSnackbar();
                     }
                },
@@ -630,6 +686,14 @@ function addCustomer()
                },
                complete: function () {
                  customersListView();
+                 /** [ To make top menu active ] */
+                  $(function () {
+                      var url = window.location;
+                      $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                      $('.dynamic-menu a').filter(function () {
+                          return this.href == url;
+                      }).parent('li').addClass('current-page').find('a').addClass('active');
+                  });
                  $(".loader").hide();
                  $(".loader").css('margin-top','0%');
                }
@@ -666,7 +730,8 @@ function addCustomer()
                $(".loader").css('margin-top','12%');
              },
              success: function(data){
-                 /** [Populate values in form inputs] */
+
+                 /** [ Populate values in form inputs ] */
                  isSubmitting = false;
                  $('#customer_edit_id').val(id);
                  
@@ -685,17 +750,19 @@ function addCustomer()
                   $('#edit_place_of_supply').val(data.customers[0].place_of_supply);
                   $('#edit_payment_terms').val(data.customers[0].payment_terms);
                   
+                  /** [ Refresh  bootstrap selectpicker ] */
                   $('#edit_place_of_supply').selectpicker('refresh');
                   $('#edit_payment_terms').selectpicker('refresh');
 
-                  /** [PI required field checked or not checkbox ] */
+                  /** [ PI required field checked or not checkbox ] */
                   if(data.customers[0].pi_required === 1)
                   {
                     $('#edit_pi_required').prop('checked', true);
 
-                    //Show PO required checkbox
+                    /** [ Show PO required checkbox ] */
                     $('div.edit-po-required-div').show();
-                    /** [PO required field checked or not checkbox ] */
+
+                    /** [ PO required field checked or not checkbox ] */
                     if(data.customers[0].po_required === 1)
                     {
 
@@ -708,12 +775,12 @@ function addCustomer()
                   }
                   else
                   {
-                    //Hide PO required checkbox
+                    /** [ Hide PO required checkbox ] */
                     $('div.edit-po-required-div').hide();
                     $('#edit_pi_required').prop('checked', false);
                   }
 
-                  /** [if already password entered,Hide password input field. Othewise show] */
+                  /** [ if already password entered,Hide password input field. Othewise show ] */
                   if(data.customers[0].password === 1)
                    {
                     $('.edit_pwd').addClass('hidden');
@@ -726,7 +793,7 @@ function addCustomer()
                     $('#edit_password').attr('minlength',6)
                    }
 
-                   /** [Advance payment method checked or not checkbox ] */
+                   /** [ Advance payment method checked or not checkbox ] */
                    if(data.customers[0].is_advance_payment === 1)
                     {
                       $('#edit_advance_payment').prop('checked', true);
@@ -751,7 +818,7 @@ function addCustomer()
                       $('#edit_freight_charge').val(data.customers[0].freight_cost);
                     }
 
-                 /** [Create dyanmic address form ] */
+                 /** [ Create dyanmic address form ] */
                  $.each(data.address,function(key,value){
                    key += 1;
                     var address_html = '<div edit="editbilladdress_' + key + '" class="editbilladdress">';
@@ -765,7 +832,7 @@ function addCustomer()
 
                       editAutopopulateCountry(key);
 
-                      /** [ billing address or not (checkbox)] */
+                      /** [ billing address or not (checkbox) ] */
                       if(value.is_billing_address === 1)
                       {
                         $('#edit_default_address'+ key).prop('checked', true);
@@ -775,7 +842,7 @@ function addCustomer()
                         $('#edit_default_address'+ key).prop('checked', false);
                       }
 
-                      /** [ Shipping address or not (checkbox)] */
+                      /** [ Shipping address or not (checkbox) ] */
                       if(value.is_shipping_address === 1)
                       {
                         $('#edit_shipping_address'+ key).prop('checked', true);
@@ -823,7 +890,7 @@ function addCustomer()
                  });
                });
                 
-                /** [Create dyanmic contact person form ] */
+                /** [ Create dyanmic contact person form ] */
                  $.each(data.contacts,function(key,value){
                    key += 1;
                     var contact_html = '<div id="edit_contact_' + key + '" class="editcontact">';
@@ -881,6 +948,14 @@ function addCustomer()
              },
              complete: function () {
               $('#edit_customer_form').validator('validate');
+              /** [ To make top menu active ] */
+              $(function () {
+                  var url = window.location;
+                  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                  $('.dynamic-menu a').filter(function () {
+                      return this.href == url;
+                  }).parent('li').addClass('current-page').find('a').addClass('active');
+              });
                $(".loader").hide();
                $(".loader").css('margin-top','0%');
              }
@@ -889,6 +964,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
  /** Dynamically add/remove contact person & Billing Address in Customer Management jquery begins(for editing)**/
   /**
    * To edit contact person
@@ -927,6 +1003,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
  /**
   * To remove contact person while editing
   *
@@ -950,6 +1027,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
  /**
   * To add contact address while editing
   *
@@ -988,6 +1066,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
  /**
   * To remove contact address while editing
   *
@@ -1011,6 +1090,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
 /** Dynamically add/remove contact person & Billing Address in Customer Management jquery ends(for editing)**/
 /**
   * To update customer details
@@ -1058,28 +1138,28 @@ function addCustomer()
 
           var buyers          = [];
 
-          /** [Create array of contact person for multiple contact details] */
+          /** [ Create array of contact person for multiple contact details ] */
           $('.edit_contact_person').each(function(i, item)
           {
               contact_person[i]    = $(item).val();
               
           });
 
-          /** [Create array of contact phone for multiple contact details] */
+          /** [ Create array of contact phone for multiple contact details ] */
           $('.edit_contact_phone').each(function(i, item)
           {
               contact_phone[i]    = $(item).val();
               
           });
 
-          /** [Create array of contact email for multiple contact details] */
+          /** [ Create array of contact email for multiple contact details ] */
           $('.edit_contact_email').each(function(i, item)
           {
               contact_email[i]    = $(item).val();
               
           });
 
-          /** [Create array of default contact  or not (checkbox values)] */
+          /** [ Create array of default contact  or not (checkbox values) ] */
           $('.edit_default_contact').each(function(i, item)
           {
               if ($(this).is(':checked'))
@@ -1093,42 +1173,42 @@ function addCustomer()
               
           });
 
-          /** [Create array of multiple address for address ] */
+          /** [ Create array of multiple address for address ] */
           $('.edit_address').each(function(i, item)
           {
               address[i]    = $(item).val();
               
           });
 
-          /** [Create array of multiple country for address ] */
+          /** [ Create array of multiple country for address ] */
           $('.edit_country').each(function(i, item)
           {
               country[i]    = $(item).val();
               
           });
 
-          /** [Create array of multiple telephone for address ] */  
+          /** [ Create array of multiple telephone for address ] */  
           $('.edit_telephone').each(function(i, item)
           {
               telephone[i]    = $(item).val();
               
           });
 
-          /** [Create array of multiple fax for address ] */
+          /** [ Create array of multiple fax for address ] */
           $('.edit_fax').each(function(i, item)
           {
               fax[i]    = $(item).val();
               
           });
 
-          /** [Create array of multiple email for address ] */
+          /** [ Create array of multiple email for address ] */
           $('.edit_address_email').each(function(i, item)
           {
               address_email[i]    = $(item).val();
               
           });
 
-          /** [Create array of billing address or not (checkbox values)] */
+          /** [ Create array of billing address or not (checkbox values) ] */
           $('.edit_default_address').each(function(i, item)
           {
             if ($(this).is(':checked'))
@@ -1142,7 +1222,7 @@ function addCustomer()
               
           });
 
-          /** [Create array of shipping address or not (checkbox values)] */
+          /** [ Create array of shipping address or not (checkbox values) ] */
           $('.edit_shipping_address').each(function(i, item)
           {
             if ($(this).is(':checked'))
@@ -1156,18 +1236,18 @@ function addCustomer()
               
           });
 
-          /** [Set freight cost id null, set freight cost as 0] **/
+          /** [ Set freight cost id null, set freight cost as 0 ] **/
           if(freight_cost == '')
           {
             freight_cost = 0;
           }
 
-          /** [Create array of multi selected buyers] */
+          /** [ Create array of multi selected buyers ] */
           $.each($("#edit_buyer option:selected"), function(){
             buyers.push($(this).val());
           });
 
-          /** [Joining array values using some delimiters] */          
+          /** [ Joining array values using some delimiters ] */          
           contact_person   = contact_person.join(',');
           contact_phone    = contact_phone.join(',');
           contact_email    = contact_email.join(',');
@@ -1190,10 +1270,10 @@ function addCustomer()
                 $(".loader").css('margin-top','12%');
               },
               statusCode: {
-                   /** [Show response status based on HTTP status code] */
+
+                   /** [ Show response status based on HTTP status code ] */
                    200: function() {
                         $('.snackbar_span').html('Customer Updated Successfully');
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
@@ -1208,6 +1288,14 @@ function addCustomer()
                 console.log(data);
               },
               complete: function () {
+                       /** [ To make top menu active ] */
+                        $(function () {
+                            var url = window.location;
+                            $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                            $('.dynamic-menu a').filter(function () {
+                                return this.href == url;
+                            }).parent('li').addClass('current-page').find('a').addClass('active');
+                        });
                         $(".loader").hide();
                         $(".loader").css('margin-top','0%');
               }
@@ -1216,6 +1304,7 @@ function addCustomer()
            console.log("Error:"+e)
       }
    }
+
   /**
    * To delete customer
    * @param id
@@ -1235,17 +1324,16 @@ function addCustomer()
              method:"delete",
              data:{_token:csrf_token,id:id},
              statusCode: {
+
                   /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html('Customer deleted Successfully');
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#deleteCustomerModal').modal('hide');
                        customersListView();
                   },
                   400: function() {
                        $('.snackbar_span').html('Something went wrong');
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1253,24 +1341,36 @@ function addCustomer()
                 console.log(data);
              },
              complete: function () {
-                       $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
+                /** [ To make top menu active ] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+                $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
            console.log("Error:"+e)
       }
    }
-   /** [showSnackbar function] */
+
+   /**
+    * showSnackbar function
+    * @author    <praveen>
+    */
   function showSnackbar() {
     try{
-      // Get the snackbar DIV
+      /** [ Get the snackbar DIV ] */
       var x = document.getElementById("snackbar")
 
-      // Add the "show" class to DIV
+      /** [ Add the "show" class to DIV ] */
       x.className = "show";
 
-      // After 3 seconds, remove the show class from DIV
+      /** [  After 3 seconds, remove the show class from DIV ] */
       setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
       } catch (e) {
        console.log("Error:"+e)
