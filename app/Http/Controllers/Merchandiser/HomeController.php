@@ -40,7 +40,7 @@ class HomeController extends Controller
                           ->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_wash_care_label_orders.uvc')
                           ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
                           ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw('"WashCareLabel" as Artwork'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_item_details.Collection as Season','merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id')
-                          ->where('orchestra_wash_care_label_orders.status','=','Pending')
+                          ->where('orchestra_wash_care_label_orders.status','=','Buyer Approval Pending')
                           ->groupBy('orchestra_item_details.UVC')
                           ->groupBy('orchestra_wash_care_label_orders.id')
                           ->get();
@@ -54,7 +54,6 @@ class HomeController extends Controller
     /**
        * Get orchestra wcl by ID.
        * @param wcl id
-       * @author <Praveen>
        * @return \Illuminate\Http\Response
        */
       public function getWCLById(Request $request)
@@ -174,7 +173,7 @@ class HomeController extends Controller
 	                          ->join('orchestra_item_details','orchestra_item_details.UVC','=','orchestra_wash_care_label_orders.uvc')
 	                          ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
 	                          ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw('"WashCareLabel" as Artwork'),'orchestra_item_details.SupplierName as SupplierName','orchestra_item_details.Collection as Season','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status','orchestra_item_details.Collection as Season','merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id','orchestra_wash_care_label_orders.approved_date as ApprovedDate','orchestra_wash_care_label_orders.rejected_date as RejectedDate')
-	                          ->where('orchestra_wash_care_label_orders.status','<>','Pending')
+	                          ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
 	                          ->groupBy('orchestra_item_details.UVC')
 	                          ->groupBy('orchestra_wash_care_label_orders.id')
 	                          ->get();

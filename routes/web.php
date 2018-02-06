@@ -46,6 +46,8 @@ Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
 
+Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
+
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
@@ -203,7 +205,7 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
-Route::get('admin/tesco/get-tesco-metadata', 'Admin\Tesco\OrderManagementCntrl@getTescoMeatadata');
+Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');

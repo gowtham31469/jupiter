@@ -137,7 +137,8 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script>
-       
+
+		localStorage.removeItem("page_navigation");
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
             $('.po').attr("disabled", "disabled");

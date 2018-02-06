@@ -116,6 +116,7 @@ function orderStatus() {
                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
                 $('.main-content').html(table(newObj,path));
+				$('.top-content').html("");
                 var $tableSel = $('#datatable-example-2');
                 $tableSel.DataTable({
                     "pageLength": 25,
@@ -302,10 +303,51 @@ function table(data,path) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-
-                    tr += '<td align="center"><input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" /><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+					if($('.logo').text() == "Orders")
+					{
+						var check="";
+					}
+					else
+					{
+						var check='<input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" />';
+					}
+                    tr += '<td align="center">'+check+'<a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
-                    tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
+					var str=value[key] ;
+					$status=str.replace(/ /g, "");
+					
+                    tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                   
+                }else if (key == "PI Status") {
+					var str=value[key] ;
+					if(str != null && str != "")
+					{
+						$status=str.replace(/ /g, "");
+						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+					}
+					else
+					{
+						//$status="status";
+						$status_text=" - ";
+					}
+					
+					
+                    tr += '<td align="center">'+$status_text+'</td>';
+                   
+                }else if (key == "PO Status") {
+					var str=value[key] ;
+					if(str != null && str != "")
+					{
+						$status=str.replace(/ /g, "");
+						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+					}
+					else
+					{
+						//$status="status";
+						$status_text=" - ";
+					}
+					
+                    tr += '<td align="center">'+$status_text+'</td>';
                    
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
@@ -625,6 +667,16 @@ function onlyDigit(n)
  */
 
 function order_details(uvc, po) {
+	//alert($('.logo').text());
+	if($('.logo').text() == "Orders")
+	{
+		localStorage.setItem("page_navigation", "orders");
+	}
+	else
+	{
+		localStorage.setItem("page_navigation", "order-status");
+	}
+	//localStorage.setItem("page_navigation", search_string);
     if (po != "-") {
         sticker_order_details(uvc, po)
     } else {
@@ -791,7 +843,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 //    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return checkNumbersOnly(event)"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
 //    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+	if(localStorage.getItem("page_navigation") == "orders")
+	{
+		//alert()
+		var onclick = "orders()";
+	}
+	else
+	{
+		var onclick = "orderStatus()";
+	}
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -921,6 +982,20 @@ function printHangDiv(data) {
 }
 
 /**
+ * This Function is used Print Wash Care Labels.
+ * 	
+ * @return Pdf
+ */
+
+function printWashDiv(data,dataid) {
+    var a1 = document.getElementById(data);
+    var svgDoc1 = a1.contentDocument;
+    var svgRoot1 = svgDoc1.documentElement;
+
+    PopupWash(svgRoot1,dataid);
+}
+
+/**
  * This Function is used Print Special Tag .
  * 	
  * @return Pdf
@@ -956,6 +1031,65 @@ function PopupSpecial(data) {
         data: {
             _token: csrf_token,
             svg: svg
+        },
+        async: false,
+        success: function (data) {
+            success = true;
+            url = data;
+        },
+        error: function (data) {
+
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
+    }
+}
+
+/**
+ * This Function is Sub Function of #printWashDiv.
+ * 	
+ * @return Pdf
+ */
+
+function PopupWash(data,dataid) {
+	//alert(dataid)
+	if (dataid != undefined) {
+		dataid=dataid;
+	}
+	else
+	{
+		dataid="";
+	}
+    var s = new XMLSerializer();
+    var d = data;
+    var str = s.serializeToString(d);
+    var svg = encodeURI(str)
+    var success = false;
+    var url = "";
+	var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
+	//alert(dataid)
+	//alert(made_in_select)
+    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	
+	var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
+		var care_instruction_select = [];
+		$(care_instruction).each(function (index, brand) {
+			care_instruction_select.push([$(this).val()]);
+		});
+		var care_instruction_select_fin = care_instruction_select.join(',');
+	var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/order-management/print-wash-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+			made_in_select:made_in_select,
+			care_instruction_select_fin:care_instruction_select_fin,
+			composition:wash_finals,
+            svg: svg,
+			
         },
         async: false,
         success: function (data) {
@@ -1332,7 +1466,176 @@ function label_order_details(uvc) {
 						{
 							$wash_status="";
 						}
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="clone_washcare_label_card'+index+'" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div>')
+						
+						
+						
+						
+						
+						
+											
+	$('#clone_washcare_label_card'+index).on('click', function (e) {
+
+        if ($('.washcarename').val() != "") {
+          
+			
+            if (washcare <= 5) {
+				  washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+				
+				$('.delete-wash' + washcare).on('click', function (e) {
+
+					if (localStorage.getItem('wash_label') != null) {
+						var opop = JSON.parse(localStorage.getItem('wash_label'));
+						if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+						} else {
+							delete opop['washcarelabelform' + $(this).attr('id')];
+						}
+
+
+						localStorage.setItem('wash_label', JSON.stringify(opop))
+					}
+
+					$('#washcarelabelform' + $(this).attr('id')).remove()
+					washcare -= 1;
+					$(this).parent().parent().parent().remove();
+
+
+            	});
+            }
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare);
+			$('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
+			$('#washcarelabelform'+washcare).find('#wash_delivery_date'+washcare).val($('#washcarelabelform'+index).find('#wash_delivery_date'+index).val())
+			
+			$('.washing_select'+washcare).selectpicker('val',$('.washing_select'+index).selectpicker('val'));
+			$('.whitening_select'+washcare).selectpicker('val',$('.whitening_select'+index).selectpicker('val'));
+			$('.dryer_select'+washcare).selectpicker('val',$('.dryer_select'+index).selectpicker('val'));
+			$('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+index).selectpicker('val'));
+			$('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
+			$('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
+			
+			$('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
+			
+			$('#composition_remove_qty'+index+' tr').each(function (ind,val) {
+				var values= $(this).find('select').find(':selected').val()
+				var v= $(this).attr('id');
+				$('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
+					if($(this).attr('id') == v)
+					{
+						$(this).find('select').val(values)
+						$(this).find('a').removeAttr('onclick')
+						$(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
+					}
+				});
+			});	
+			
+			$('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
+				var values= $(this).find('.tot_qty_table').val()
+				//var values1= $(this).find('.tot_qty_table_fin').text()
+				var v= $(this).find('.uvc_tco').text();
+				//alert(values)
+				$('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
+					if($(this).find('.uvc_tco').text() == v)
+					{
+						$(this).find('.tot_qty_table').val(values)
+						
+					}
+				});
+			});
+			
+			$('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
+			var mySVG = document.getElementById("washcare_svg"+washcare);
+			var svgDoc;
+			mySVG.addEventListener("load", function () {
+				svgDoc=mySVG.contentDocument;
+				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
+				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
+				svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
+				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
+				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('astm'));
+				
+				var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
+					$('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
+					$('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
+					$('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
+					$('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
+					$('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+				svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+				
+				svgDoc.getElementById("text_care_instruction").innerHTML = "";
+				$('.care_instruction_select' + washcare + ' option:selected').each(function () {
+					var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
+						$(this).data('russian') + "-" +
+						$(this).data('chinese') + "-" +
+						$(this).data('arabic') + "-" +
+						$(this).data('greek') + "-" +
+						$(this).data('turkish') + '</p>';
+					svgDoc.getElementById("text_care_instruction").innerHTML += value;
+				});
+				
+				 svgDoc.getElementById("parts_composition").innerHTML ="";
+			  $('#composition_remove_qty' + washcare + ' tr').each(function () {
+				  //alert($(this).find('select').find(':selected').text());
+				  if($(this).find('select').find(':selected').val() != "Select Option")
+				  {
+					   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+				  }
+				 
+				  var id=$(this).attr('id')
+				  var compo =$(this).find('.compositions_hidden').val();
+				  var compss = compo.split(',');
+				  $(compss).each(function (index1,value1) {
+					  var english = value1.split('_');
+
+					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+				});
+			  })
+			$('.composition_error_hidden').addClass('hidden')
+			var washcomp=[];
+			$('#composition_remove_qty' + washcare + ' tr').each(function () {
+				  var washcomp1=[];
+				  var id=$(this).attr('id')
+				  var value=$(this).find('select').find(':selected').val();
+				  var compo =$(this).find('.compositions_hidden').val();
+				  var compss = compo.split(',');
+					$(compss).each(function (index1,value1){ 
+						var english = value1.split('_');
+						washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+					});
+				washcomp.push(washcomp1)
+			})
+			var wash_finals = JSON.stringify(washcomp);
+			localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+				
+			});
+        } else {
+            if (washcare < 5) {
+                $('.washnameerror').removeClass('hidden')
+            }
+        }
+		window.scrollTo(0,document.body.scrollHeight);
+		toastr.success("Wash care label cloned successfully");
+    });
+						
+						
+						
+						
+						
+						
+						
                         $('.delete-wash' + index).on('click', function (e) {
                             deletewash.push(value.id)
                             localStorage.setItem("deletewash", JSON.stringify(deletewash));
@@ -1430,11 +1733,11 @@ function washcarelabels(data, dataid) {
 			$exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
 			if(data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment != "")
 			{
-				$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p>";
+				$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p><hr>";
 			}
 			else
 			{
-				$comment = "<h4>Comments :</h4><p>No data Found</p>";
+				$comment = "";
 			}
 			
 			var str=data.orchestra_wash_care_label_orders[dataid1].status;
@@ -1444,7 +1747,7 @@ function washcarelabels(data, dataid) {
 		} else {
 			$delivery_date = "";
 			$exist_id = "";
-			$comment = "<h4>Comments :</h4><p>No data Found</p>";
+			$comment = "";
 			$status="";
 			$status_text="";
 			$wcl_name="";
@@ -1453,7 +1756,7 @@ function washcarelabels(data, dataid) {
 	} else {
 		$delivery_date = "";
 		$exist_id = "";
-		$comment = "<h4>Comments</h4><p>No data Found</p>";
+		$comment = "";
 		$status="";
 		$status_text="";
 		$wcl_name="";
@@ -1490,7 +1793,7 @@ function washcarelabels(data, dataid) {
 		{
 			ttots=ttots;
 		}
-	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4> <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" class="center-block" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn btn-info pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn btn-info pull-right input-sm add_to_page' + dataid + '"  type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button><hr>'+ $comment +'<hr> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> </div> </div>  <div class="backdrop"></div></form>');
+	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4> <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" class="center-block" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
 
    
 	$('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
@@ -1614,7 +1917,7 @@ function washcarelabels(data, dataid) {
 			}
 
 			if (data.orchestra_wash_care_label_orders.length > dataid1) {
-				$('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
+				$('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].made_in_id);
 				var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + " - " + $('select.made_in_select' + dataid).find(':selected').data('english') + " - " + $('select.made_in_select' + dataid).find(':selected').data('spanish') + " - " + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + dataid).find(':selected').data('italian') + " - " + $('select.made_in_select' + dataid).find(':selected').data('dutch') + " - " + $('select.made_in_select' + dataid).find(':selected').data('german') + " - " +
 					$('select.made_in_select' + dataid).find(':selected').data('russian') + " - " +
 					$('select.made_in_select' + dataid).find(':selected').data('chinese') + " - " +
@@ -2766,10 +3069,19 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		var main_enable="display:none";
 		var main_name="";
 	}
+	
+	if(localStorage.getItem("page_navigation") == "orders")
+	{
+		var onclick = "orders()";
+	}
+	else
+	{
+		var onclick ="orderStatus()";
+	}
 
     $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
         base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">'+wash_name+'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="clone_washcare_label_card" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">'+main_name+'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
+        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
 
 	//card for wcl and main and size labels
 	//<button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button>
@@ -2803,7 +3115,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 			
             if (washcare <= 5) {
 				  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
 				
 				$('.delete-wash' + washcare).on('click', function (e) {
 
@@ -2852,7 +3164,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 //            }
 //
 //        })
-
+window.scrollTo(0,document.body.scrollHeight);
+		toastr.success("Wash care label added successfully");
     });
 	
 	/**
@@ -2865,7 +3178,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 			
             if (washcare <= 5) {
 				  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
 				
 				$('.delete-wash' + washcare).on('click', function (e) {
 
@@ -2913,10 +3226,27 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					if($(this).attr('id') == v)
 					{
 						$(this).find('select').val(values)
+						$(this).find('a').removeAttr('onclick')
+						$(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
+					}
+				});
+			});	
+			
+			$('#washcarelabelform table tbody tr').each(function (ind,val) {
+				var values= $(this).find('.tot_qty_table').val()
+				//var values1= $(this).find('.tot_qty_table_fin').text()
+				var v= $(this).find('.uvc_tco').text();
+				//alert(values)
+				$('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
+					if($(this).find('.uvc_tco').text() == v)
+					{
+						$(this).find('.tot_qty_table').val(values)
+						
 					}
 				});
 			});
 			
+			$('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform table tbody').find('.tot_qty_table_fin').text())
 			var mySVG = document.getElementById("washcare_svg"+washcare);
 			var svgDoc;
 			mySVG.addEventListener("load", function () {
@@ -3000,13 +3330,15 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                 $('.washnameerror').removeClass('hidden')
             }
         }
+		window.scrollTo(0,document.body.scrollHeight);
+		toastr.success("Wash care label cloned successfully");
     });
     $('#main_label_card').on('click', function (e) {
         if ($('.mainname').val() != "") {
             
             if (mainlabel <= 5) {
 				mainlabel += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
                 var data = localStorage.getItem("label_order_data");
                 mainlabels(JSON.parse(data), mainlabel);
 				$('.delete-main' + mainlabel).on('click', function (e) {
@@ -3055,7 +3387,8 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 //            }
 //
 //        })
-
+		window.scrollTo(0,document.body.scrollHeight);
+		toastr.success("Main and Size label added successfully");
     });
 
 
