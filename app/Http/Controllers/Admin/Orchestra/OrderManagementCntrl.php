@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;   
 use App\Classes\Modules;
 use Response;
+use Excel;
 use App\HangTagOrders;
 use App\HangTagOrdersQty;
 use App\SpecialTagOrders;
@@ -1262,6 +1263,45 @@ class OrderManagementCntrl extends Controller
         {
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
+        return $result;
+    }
+     /**
+     * method to set the po number and pdf file for an order
+     * @param po_number and pdf (pdf is optional)
+     * @return \Illuminate\Http\Response
+     */
+    public function setCustomerPO(Request $request)
+    {
+        try 
+        {
+            $table_name = $request->tableName;
+            $row_id     = $request->rowID;
+            $po_file = $request->file('file');
+            $path = $request->file('file')->getRealPath();
+            $filename = $request->file('file')->getClientOriginalName();
+            $destination_path='/storage/app/public/po-files/';
+            $path='storage/app/public/po-files/';
+            $Orname = $po_file->getClientOriginalName();
+            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $po_file->move($path,$filename);
+            $destination_path_insert=$destination_path.$filename;
+            $data   = DB::table($table_name)->where('id',$row_id)
+                        ->update([
+                          'po_file' => $destination_path_insert
+                        ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }    
+        }
+        catch (Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        } 
         return $result;
     }
     /**

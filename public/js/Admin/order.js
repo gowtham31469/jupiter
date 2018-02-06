@@ -91,8 +91,6 @@ function orders() {
  *
  * @return View
  */
-
-
 function orderStatus() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     var buyer = localStorage.getItem("status_buyer");
@@ -115,6 +113,7 @@ function orderStatus() {
                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
                 $('.main-content').html(table(newObj,path));
+				$('.top-content').html("");
                 var $tableSel = $('#datatable-example-2');
                 $tableSel.DataTable({
                     "pageLength": 25,
@@ -300,10 +299,51 @@ function table(data,path) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-
-                    tr += '<td align="center"><input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" /><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+					if($('.logo').text() == "Orders")
+					{
+						var check="";
+					}
+					else
+					{
+						var check='<input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" />';
+					}
+                    tr += '<td align="center">'+check+'<a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
-                    tr += '<td align="center"><span class="label label-' + value[key] + '">' + value[key] + '</span></td>';
+					var str=value[key] ;
+					$status=str.replace(/ /g, "");
+					
+                    tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                   
+                }else if (key == "PI Status") {
+					var str=value[key] ;
+					if(str != null && str != "")
+					{
+						$status=str.replace(/ /g, "");
+						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+					}
+					else
+					{
+						//$status="status";
+						$status_text=" - ";
+					}
+					
+					
+                    tr += '<td align="center">'+$status_text+'</td>';
+                   
+                }else if (key == "PO Status") {
+					var str=value[key] ;
+					if(str != null && str != "")
+					{
+						$status=str.replace(/ /g, "");
+						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+					}
+					else
+					{
+						//$status="status";
+						$status_text=" - ";
+					}
+					
+                    tr += '<td align="center">'+$status_text+'</td>';
                    
                 } else {
                     if (key == "SupplierName" || key == "Style_Name") {
@@ -318,15 +358,13 @@ function table(data,path) {
             { 
                 if (key == "PONumber")
                 { 
-                   if (value[key]==null)
+                   if (value[key]==null || value[key]=="")
                    {
-                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Save</button> </span> </div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><input type="submit" value="Save" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span></form></div></div></td>';
                    }
                    else
                    {
-                        // tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" readonly value="'+value[key]+'"><span class="input-group-btn"></span> </div></td>';
-                        
-                        tr += '<td class="text-center"> <div class="input-group"><input type="text" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <button type="button" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")>Update</button> </span> </div></td>';
+                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <input type="submit" class="btn btn-sm btn-default po-submit" value="Update" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")></span> </form></div></div></td>';
                    }
                    
                 }
@@ -334,11 +372,11 @@ function table(data,path) {
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
-                        tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="#" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }   
                 }
             }
@@ -348,13 +386,21 @@ function table(data,path) {
     })
     return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 
+        $('#po_form_submit').validator('validate')
 }
+
+
+function showPOUpload(id,table_name,uvc,qntytable)
+{
+    $('#rowID').val(id);
+    $('#tableName').val(table_name);
+    $('#po-file-upload').modal('show')
+}
+
 /**
- * method pass the po number for
+ * method pass the po number for an order
  * @param {[type]} obj         [description]
- * @param {[type]} uvc         [description]
- * @param {[type]} po          [description]
- * @param {[type]} template_id [description]
+ * @param {[type]} id [description]
  * @param {[type]} table_name  [description]
  */
 function setPO(obj,id,table_name)
@@ -377,14 +423,21 @@ function setPO(obj,id,table_name)
         statusCode:
         {
             /** [Show response status based on HTTP status code] */
-            200: function()
+            200: function(data)
             {
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $('#snackbar').css('background-color','#1abb9c');
-               showSnackbar();
                $(obj).closest('tr').find('.po').val(po_number);
-               $(obj).closest('tr').find('.po-submit').text("Update");
-               
+               showSnackbar();
+               if (po_number==""){
+                 $(obj).closest('tr').find('.po-submit').text("Save");
+                 $(obj).closest('tr').find('.po').attr('disabled');
+                 $(obj).closest('tr').find('.po').attr('placeholder', "Enter PO");
+                  
+               }
+               else{
+                $(obj).closest('tr').find('.po-submit').text("Update");
+               }              
             },
             400: function()
             {
@@ -406,8 +459,7 @@ function setPO(obj,id,table_name)
   function showSnackbar() {
     try{
       // Get the snackbar DIV
-      var x = document.getElementById("snackbar")
-
+       var x = document.getElementById("snackbar")
       // Add the "show" class to DIV
       x.className = "show";
 
@@ -437,7 +489,6 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
             _token: csrf_token,
             table_name: table_name,
             qntytable:qntytable,
-            uvc:uvc,
             id:id,
             uvc:uvc
         },
@@ -483,7 +534,7 @@ function showProfomaInvoice(id,table_name,uvc,qntytable)
                 }
                 $('#item_details').html(tr)
                 
-               $('#profoma-invoice').modal('show')
+               $('#profoma-invoice').modal("show")
             },
             400: function(data)
             {
@@ -608,6 +659,16 @@ function onlyDigit(n)
  */
 
 function order_details(uvc, po) {
+	//alert($('.logo').text());
+	if($('.logo').text() == "Orders")
+	{
+		localStorage.setItem("page_navigation", "orders");
+	}
+	else
+	{
+		localStorage.setItem("page_navigation", "order-status");
+	}
+	//localStorage.setItem("page_navigation", search_string);
     if (po != "-") {
         sticker_order_details(uvc, po)
     } else {
@@ -772,7 +833,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 //    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return checkNumbersOnly(event)"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
 //    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+	if(localStorage.getItem("page_navigation") == "orders")
+	{
+		//alert()
+		var onclick = "orders()";
+	}
+	else
+	{
+		var onclick = "orderStatus()";
+	}
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -2983,10 +3053,19 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		var main_enable="display:none";
 		var main_name="";
 	}
+	
+	if(localStorage.getItem("page_navigation") == "orders")
+	{
+		var onclick = "orders()";
+	}
+	else
+	{
+		var onclick ="orderStatus()";
+	}
 
     $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
         base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">'+wash_name+'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="clone_washcare_label_card" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">'+main_name+'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="orders()" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
+        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
 
 	//card for wcl and main and size labels
 	//<button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button>
