@@ -37,7 +37,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary upload-po" data-dismiss="modal">Upload</button>
+                    <button type="button" class="btn btn-primary upload-po">Upload</button>
                 </div>
             </div>
         </div>
@@ -231,16 +231,18 @@
                 
             });
             this.on("success", function(file, response){ 
-                 console.log(response);
                 $('.dz-remove').hide();
                 this.removeFile(file);
-                $(".upload-po").addClass("hidden");
+                $('#po-file-upload').modal('hide')
+                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
+                showSnackbar();
                 
             });
             this.on("error", function(file, response) {
-                 alert('error');
-                 this.removeFile(file);
-                 $(".upload-po").addClass("hidden");
+                this.removeFile(file);
+                $('.snackbar_span').html('Something went wrong');
+                $('#snackbar').css('background-color','#F44336');
+                showSnackbar();
             });
 
 

@@ -984,7 +984,6 @@ span.sticker-details {
     background: #9b59b6;
 }
 
-<<<<<<< HEAD
 .label-PIApproved {
     background: #2ecc71;
 }
@@ -992,8 +991,13 @@ span.sticker-details {
     background: #f90530;
 }
 
-=======
->>>>>>> 93468dafaf428e11fd809eb2924636b0f3243e37
+.label-POApproved {
+    background: #2ecc71;
+}
+.label-PORejected {
+    background: #f90530;
+}
+
 .label-BuyerApprovalPending {
     background: #9b59b6;
 }
