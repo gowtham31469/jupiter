@@ -45,7 +45,8 @@ Route::post('admin/order-management/print-pdf-small', 'Admin\OrderManagement\Ord
 Route::post('admin/order-management/print-pdf-table', 'Admin\OrderManagement\OrderController@printPdfTable');
 Route::post('admin/order-management/print-hang-pdf', 'Admin\OrderManagement\OrderController@printHangPdf');
 Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\OrderController@printSpecialPdf');
-Route::post('admin/orchestra/set-po', 'Admin\OrderManagement\OrderController@setCustomerPO');
+
+Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
@@ -186,6 +187,9 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
 Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
+Route::post('admin/orchestra/set-po', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPO');
+Route::post('admin/orchestra/approve-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProfomaInvice');
+Route::post('admin/orchestra/reject-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProfomaInvice');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
@@ -202,7 +206,7 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
-Route::get('admin/tesco/get-tesco-metadata', 'Admin\Tesco\OrderManagementCntrl@getTescoMeatadata');
+Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
@@ -228,7 +232,7 @@ Route::get('admin/csv-updates', 'Admin\UploadCSV\UploadCsvController@index');
 
 /**orchestra Settings Page**/
 Route::get('admin/settings', 'Admin\Settings\Orchestra\OrchestraSettings@index');
-Route::post('admin/orchestra/settings', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
+Route::post('admin/orchestra/settings/garments', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
 Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
 Route::get('admin/orchestra/get-orchestra-garments-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraGarmentsById');
 Route::put('admin/orchestra/update-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraGarmentsById');

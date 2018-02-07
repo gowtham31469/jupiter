@@ -29,9 +29,9 @@ class DropCustomerBuyerIdsFromMerchandisers extends Migration
     public function down()
     {
         Schema::table('merchandisers', function (Blueprint $table) {
-            $table->dropColumn('buyer_id');
+            $table->addColumn('buyer_id');
             $table->foreign('buyer_id')->references('id')->on('buyers');
-            $table->dropColumn('customer_id');
+            $table->addColumn('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers');
         });
     }

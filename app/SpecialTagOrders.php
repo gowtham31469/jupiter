@@ -16,5 +16,5 @@ class SpecialTagOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_special_tag_orders';
-    protected $fillable =['uvc','template_id','delivery_date','svg_path','final_qty','status'];
+    protected $fillable =['uvc','template_id','delivery_date','svg_path','final_qty','status','pi_status','po_status'];
 }

@@ -16,5 +16,5 @@ class HangTagOrders extends Authenticatable
      */
 
     protected $table = 'orchestra_hang_tag_orders';
-    protected $fillable =['uvc','template_front_id','template_back_id','delivery_date','svg_path','status'];
+    protected $fillable =['uvc','template_front_id','template_back_id','delivery_date','svg_path','status','pi_status','po_status'];
 }
