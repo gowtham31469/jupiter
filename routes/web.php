@@ -199,6 +199,11 @@ Route::post('admin/orchestra/order-management/set_wash_label', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orchestra\OrderManagementCntrl@setSolidStickers');
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
+Route::get('admin/orchestra/order-management/get_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
+
+Route::Post('admin/orchestra/order-management/put_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPo');
+Route::Post('admin/orchestra/order-management/put_existing_label_orders_po_new', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPoNew');
+
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
 /** Tesco order-management**/

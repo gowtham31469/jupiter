@@ -14,22 +14,17 @@ var deletewash = [];
  * @param  input data
  * @return {Boolean}
  */
-function isNumber(evt)
-{
-    try
-    {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-        {
-            return false;
-        }
-          return true;
-    }
-    catch (e)
-    {
-     console.log("Error:"+e)
-    }
+function isNumber(evt) {
+	try {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
 }
 /**
  * This Function is used to Show all the list of orders like label orders and sticker orders.
@@ -38,52 +33,51 @@ function isNumber(evt)
  */
 
 function orders() {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/orchestra/order-management/orders",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-                var path = base_url + "/admin/orchestra/order-management/orders"
-                var newObj = data.sticker_orders.concat(data.label_orders);
-                console.log(newObj);
-			    var search_string= localStorage.getItem("search_string");
+	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/orchestra/order-management/orders",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			var path = base_url + "/admin/orchestra/order-management/orders"
+			var newObj = data.sticker_orders.concat(data.label_orders);
+			console.log(newObj);
+			var search_string = localStorage.getItem("search_string");
 			//alert(search_string)
-                $('.main-content').html(table(newObj,path)); 
-				$('.top-content').html("");
-				if(search_string != null)
-				{
-					  $('#datatable-example-2').DataTable({
-                    	  "pageLength": 25,
-						  "oSearch": { "sSearch": search_string }
-                	  });
-				}
-				else
-				{
-					$('#datatable-example-2').DataTable({
-                    	"pageLength": 25
-                	});
-				}
-              
-                $("#datatable-example-2_filter input").addClass('form-control input-sm');
-                $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-example-2_length select').addClass('form-control input-sm');
+			$('.main-content').html(table(newObj, path));
+			$('.top-content').html("");
+			if (search_string != null) {
+				$('#datatable-example-2').DataTable({
+					"pageLength": 25,
+					"oSearch": {
+						"sSearch": search_string
+					}
+				});
+			} else {
+				$('#datatable-example-2').DataTable({
+					"pageLength": 25
+				});
+			}
 
-        },
-        error: function (data) {
+			$("#datatable-example-2_filter input").addClass('form-control input-sm');
+			$("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+			$('#datatable-example-2_length select').addClass('form-control input-sm');
 
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
 }
 
 /**
@@ -94,163 +88,164 @@ function orders() {
 
 
 function orderStatus() {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    var buyer = localStorage.getItem("status_buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/order-status",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            if (buyer == "orchestra") {
-                //aswathy
-                var path = base_url + "/admin/" + buyer + "/order-management/order-status";
+	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+	var buyer = localStorage.getItem("status_buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/order-status",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			if (buyer == "orchestra") {
+				//aswathy
+				var path = base_url + "/admin/" + buyer + "/order-management/order-status";
 
-                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
-                //based on path extra column will append in the datatable
-                $('.main-content').html(table(newObj,path));
+				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+				//based on path extra column will append in the datatable
+				$('.main-content').html(table(newObj, path));
 				$('.top-content').html("");
-                var $tableSel = $('#datatable-example-2');
-                $tableSel.DataTable({
-                    "pageLength": 25,
-                    initComplete: function () {
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+				var $tableSel = $('#datatable-example-2');
+				$tableSel.DataTable({
+					"pageLength": 25,
+					initComplete: function () {
+						$('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
+						$('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
+						$('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
-                        //For Custom Filters
-                        this.api().columns().every(function (i) {
-                            var column = this;
-                            if (i === 0 || i === 2 || i === 6) {
-                                var select;
-                                switch (i) {
-                                    case 0:
-                                        select = $('#uvcNumber')
-                                        break;
-                                    case 2:
-                                        select = $('#supplierName')
-                                        break;
-                                    case 6:
-                                        select = $('#selectStatus')
-                                        break;
-                                }
-                                select.on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
+						//For Custom Filters
+						this.api().columns().every(function (i) {
+							var column = this;
+							if (i === 0 || i === 2 || i === 6) {
+								var select;
+								switch (i) {
+									case 0:
+										select = $('#uvcNumber')
+										break;
+									case 2:
+										select = $('#supplierName')
+										break;
+									case 6:
+										select = $('#selectStatus')
+										break;
+								}
+								select.on('change', function () {
+									var val = $.fn.dataTable.util.escapeRegex(
+										$(this).val()
+									);
 
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-                                select.append('<option value=""> </option>');
-                                column.data().unique().sort().each(function (d, j) {
-                                    cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-                                    select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
-                                });
-                            }
+									column
+										.search(val ? '^' + val + '$' : '', true, false)
+										.draw();
+								});
+								select.append('<option value=""> </option>');
+								column.data().unique().sort().each(function (d, j) {
+									cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
+									select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
+								});
+							}
 
-                        });
-
-
-                    }
-                });
-
-                $("#reset").on("click", function () {
-                    $('#uvcNumber').val('').change();
-                    $('#supplierName').val('').change();
-                    $('#selectStatus').val('').change();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                    $('input[name="daterange"]').val('Filter by Order Date');
-                    $('input[name="daterange"]').datepicker("refresh");
-                    $('.selectpicker').selectpicker('val', 1);
-                    $('.selectpicker').selectpicker('refresh');
-
-                });
-
-                $('.selectpicker').selectpicker();
+						});
 
 
-                $('input[name="daterange"]').daterangepicker({
+					}
+				});
 
-                    },
-                    function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-                        filterByDate(4, start, end); // We call our filter function
-                        $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
-                    });
+				$("#reset").on("click", function () {
+					$('#uvcNumber').val('').change();
+					$('#supplierName').val('').change();
+					$('#selectStatus').val('').change();
+					$.fn.dataTableExt.afnFiltering.length = 0;
+					$tableSel.dataTable().fnDraw();
+					$('input[name="daterange"]').val('Filter by Order Date');
+					$('input[name="daterange"]').datepicker("refresh");
+					$('.selectpicker').selectpicker('val', 1);
+					$('.selectpicker').selectpicker('refresh');
 
-                $('input[name="daterange"]').val('Filter by Order Date');
+				});
+
+				$('.selectpicker').selectpicker();
 
 
-                // Clear the filter. Unlike normal filters in Datatables,
-                // custom filters need to be removed from the afnFiltering array.
-                $('.cancelBtn').on('click', function (e) {
-                    e.preventDefault();
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                });
-                $('.pi-view').tooltip('show')
-                $('.pi-view').tooltip('toggle')
-                $('.po-view').tooltip('show')
-                $('.po-view').tooltip('toggle')
-                $("#datatable-example-2_filter input").addClass('form-control input-sm');
-                $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
-                $('#datatable-example-2_length select').addClass('form-control input-sm');
-            } else {
+				$('input[name="daterange"]').daterangepicker({
 
-            }
-        },
-        error: function (data) {
+					},
+					function (start, end, label) {
+						// alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+						filterByDate(4, start, end); // We call our filter function
+						$tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
+					});
 
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
+				$('input[name="daterange"]').val('Filter by Order Date');
+
+
+				// Clear the filter. Unlike normal filters in Datatables,
+				// custom filters need to be removed from the afnFiltering array.
+				$('.cancelBtn').on('click', function (e) {
+					e.preventDefault();
+					$.fn.dataTableExt.afnFiltering.length = 0;
+					$tableSel.dataTable().fnDraw();
+				});
+				$('.pi-view').tooltip('show')
+				$('.pi-view').tooltip('toggle')
+				$('.po-view').tooltip('show')
+				$('.po-view').tooltip('toggle')
+				$("#datatable-example-2_filter input").addClass('form-control input-sm');
+				$("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
+				$('#datatable-example-2_length select').addClass('form-control input-sm');
+			} else {
+
+			}
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
 }
 
 function showFilter() {
-    $('.filter-window').toggle();
+	$('.filter-window').toggle();
 }
 
 /* Our main filter function
  * We pass the column location, the start date, and the end date
  */
 var filterByDate = function (column, startDate, endDate) {
-    // Custom filter syntax requires pushing the new filter to the global filter array
-    $.fn.dataTableExt.afnFiltering.push(
-        function (oSettings, aData, iDataIndex) {
-            var rowDate = normalizeDate(aData[column]),
-                start = normalizeDate(startDate),
-                end = normalizeDate(endDate);
+	// Custom filter syntax requires pushing the new filter to the global filter array
+	$.fn.dataTableExt.afnFiltering.push(
+		function (oSettings, aData, iDataIndex) {
+			var rowDate = normalizeDate(aData[column]),
+				start = normalizeDate(startDate),
+				end = normalizeDate(endDate);
 
-            // If our date from the row is between the start and end
-            if (start <= rowDate && rowDate <= end) {
-                return true;
-            } else if (rowDate >= start && end === '' && start !== '') {
-                return true;
-            } else if (rowDate <= end && start === '' && end !== '') {
-                return true;
-            } else {
-                return false;
-            }f
-        }
-    );
+			// If our date from the row is between the start and end
+			if (start <= rowDate && rowDate <= end) {
+				return true;
+			} else if (rowDate >= start && end === '' && start !== '') {
+				return true;
+			} else if (rowDate <= end && start === '' && end !== '') {
+				return true;
+			} else {
+				return false;
+			}
+			f
+		}
+	);
 };
 
 // converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220
 var normalizeDate = function (dateString) {
-    var date = new Date(dateString);
-    var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
-    return normalized;
+	var date = new Date(dateString);
+	var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
+	return normalized;
 }
 
 /**
@@ -260,133 +255,113 @@ var normalizeDate = function (dateString) {
  */
 
 
-function table(data,path) {
-    var th = "";
-    var tr = "";
-    var columnsIn = data[0];
+function table(data, path) {
+	var th = "";
+	var tr = "";
+	var columnsIn = data[0];
 
-    for (var key in columnsIn) {
-        if (key != "id") {
-            if (key == "SupplierName" || key == "Style_Name") {
-                th += "<th>" + key + "</th>";
-            } else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key !="qntytable")) {
-                th += "<th style='text-align: center;'>" + key + "</th>";
-            }
+	for (var key in columnsIn) {
+		if (key != "id") {
+			if (key == "SupplierName" || key == "Style_Name") {
+				th += "<th>" + key + "</th>";
+			} else if ((key != "pi_required") && (key != "tableName") && (key != "template_id") && (key != "qntytable")) {
+				th += "<th style='text-align: center;'>" + key + "</th>";
+			}
 
-        }
-    }
-    if (path==base_url + "/admin/orchestra/order-management/order-status")
-    {
-       th += "<th style='text-align: center;'>Actions</th>";
-    }
-    $.each(data, function (index, value) {
+		}
+	}
+	if (path == base_url + "/admin/orchestra/order-management/order-status") {
+		th += "<th style='text-align: center;'>Actions</th>";
+	}
+	$.each(data, function (index, value) {
 
-        tr += '<tr class="trClass" id="' + value.id + '">';
-        for (var key in columnsIn) {
-            if (key != "id") {
-                if (key == "Type") {
-                    if (value[key] == "Null") {
-                        var Isstd = "-";
-                    } else {
-                        var Isstd = value[key] == "0" ? "Solid" : "Standard";
-                    }
-                    tr += '<td align="center">' + Isstd + '</td>';
-
-                } else if (key == "Disney") {
-                    if (value[key] == "Null") {
-                        var Disney = "-";
-                    } else {
-                        var Disney = value[key] == "0" ? "No" : "Yes";
-                    }
-
-                    tr += '<td align="center">' + Disney + '</td>';
-                } else if (key == "UVC") {
-					if($('.logo').text() == "Orders")
-					{
-						var check="";
+		tr += '<tr class="trClass" id="' + value.id + '">';
+		for (var key in columnsIn) {
+			if (key != "id") {
+				if (key == "Type") {
+					if (value[key] == "Null") {
+						var Isstd = "-";
+					} else {
+						var Isstd = value[key] == "0" ? "Solid" : "Standard";
 					}
-					else
-					{
-						var check='<input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" />';
+					tr += '<td align="center">' + Isstd + '</td>';
+
+				} else if (key == "Disney") {
+					if (value[key] == "Null") {
+						var Disney = "-";
+					} else {
+						var Disney = value[key] == "0" ? "No" : "Yes";
 					}
-                    tr += '<td align="center">'+check+'<a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
-                } else if (key == "Status") {
-					var str=value[key] ;
-					$status=str.replace(/ /g, "");
-					
-                    tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
-                   
-                }else if (key == "PI Status") {
-					var str=value[key] ;
-					if(str != null && str != "")
-					{
-						$status=str.replace(/ /g, "");
-						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+
+					tr += '<td align="center">' + Disney + '</td>';
+				} else if (key == "UVC") {
+					if ($('.logo').text() == "Orders") {
+						var check = "";
+					} else {
+						var check = '<input type="checkbox" class="uvcCheck" name="' + value[key] + '" value="checked" />';
 					}
-					else
-					{
+					tr += '<td align="center">' + check + '<a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+				} else if (key == "Status") {
+					var str = value[key];
+					$status = str.replace(/ /g, "");
+
+					tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+
+				} else if (key == "PI Status") {
+					var str = value[key];
+					if (str != null && str != "") {
+						$status = str.replace(/ /g, "");
+						$status_text = '<span class="label label-' + $status + '">' + value[key] + '</span>';
+					} else {
 						//$status="status";
-						$status_text=" - ";
+						$status_text = " - ";
 					}
-					
-					
-                    tr += '<td align="center">'+$status_text+'</td>';
-                   
-                }else if (key == "PO Status") {
-					var str=value[key] ;
-					if(str != null && str != "")
-					{
-						$status=str.replace(/ /g, "");
-						$status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
-					}
-					else
-					{
+
+
+					tr += '<td align="center">' + $status_text + '</td>';
+
+				} else if (key == "PO Status") {
+					var str = value[key];
+					if (str != null && str != "") {
+						$status = str.replace(/ /g, "");
+						$status_text = '<span class="label label-' + $status + '">' + value[key] + '</span>';
+					} else {
 						//$status="status";
-						$status_text=" - ";
+						$status_text = " - ";
 					}
-					
-                    tr += '<td align="center">'+$status_text+'</td>';
-                   
-                } else {
-                    if (key == "SupplierName" || key == "Style_Name") {
-                        tr += '<td>' + value[key] + '</td>';
-                    }
-                    else if ((key != "pi_required")&&(key != "tableName")&&(key != "template_id")&&(key != "PONumber")&&(key !="qntytable")){
-                        tr += '<td align="center">' + value[key] + '</td>';
-                    }
-                }
-            }
-            if (path==base_url + "/admin/orchestra/order-management/order-status")
-            { 
-                if (key == "PONumber")
-                { 
-                   if (value[key]==null)
-                   {
-                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></form></div></div></td>';
-                   }
-                   else
-                   {
-                        tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="'+value[key]+'"><span class="input-group-btn"> <button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span> </form></div></div></td>';
-                   }
-                   
-                }
-                if (key == "pi_required")
-                {    
-                    if (value[key]==1)
-                    {    
-                      tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
-                    }
-                    else
-                    {
-                        tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
-                    }   
-                }
-            }
-        }
-              
-        tr += '</tr>';
-    })
-    return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+
+					tr += '<td align="center">' + $status_text + '</td>';
+
+				} else {
+					if (key == "SupplierName" || key == "Style_Name") {
+						tr += '<td>' + value[key] + '</td>';
+					} else if ((key != "pi_required") && (key != "tableName") && (key != "template_id") && (key != "PONumber") && (key != "qntytable")) {
+						tr += '<td align="center">' + value[key] + '</td>';
+					}
+				}
+			}
+			if (path == base_url + "/admin/orchestra/order-management/order-status") {
+				if (key == "PONumber") {
+					if (value[key] == null) {
+						tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" class="form-control input-sm po" id="po" name="po" placeholder="Enter PO" required=""><div class="help-block with-errors"></div><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" id="po-submit" onclick=setPO(this,"' + value.id + '","' + value.tableName + '")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></form></div></div></td>';
+					} else {
+						tr += '<td class="text-center"><form id="po_form_submit" data-toggle="validator" role="form"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" value="' + value[key] + '"><span class="input-group-btn"> <button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"' + value.id + '","' + value.tableName + '")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span> </form></div></div></td>';
+					}
+
+				}
+				if (key == "pi_required") {
+					if (value[key] == 1) {
+						tr += '<td align="center"><a href="#" onclick=showProfomaInvoice("' + value.id + '","' + value.tableName + '","' + value.UVC + '","' + value.qntytable + '")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+					} else {
+						tr += '<td align="center"><a href="#" style="margin-left:36px" data-toggle="modal" data-target="#myModal"><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+					}
+				}
+			}
+		}
+
+		tr += '</tr>';
+	})
+	return '<table id="datatable-example-2" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 
 }
 /**
@@ -397,65 +372,63 @@ function table(data,path) {
  * @param {[type]} template_id [description]
  * @param {[type]} table_name  [description]
  */
-function setPO(obj,id,table_name)
-{
-   var po_number  = $(obj).closest('tr').find('.po').val();
-   var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/orchestra/order-management/set-po-number",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_name: table_name,
-            po_number:po_number,
-            id:id
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function()
-            {
-               $('.snackbar_span').html('Purchase Order Number added Successfully');
+function setPO(obj, id, table_name) {
+	var po_number = $(obj).closest('tr').find('.po').val();
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/orchestra/order-management/set-po-number",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			table_name: table_name,
+			po_number: po_number,
+			id: id
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		statusCode: {
+			/** [Show response status based on HTTP status code] */
+			200: function () {
+				$('.snackbar_span').html('Purchase Order Number added Successfully');
 
-               showSnackbar();
-               $(obj).closest('tr').find('.po').val(po_number);
-               $(obj).closest('tr').find('.po-submit').text("Update");
-               
-            },
-            400: function()
-            {
-               $('.snackbar_span').html('Something went wrong');
-               showSnackbar();
-            }
-        },
-        error: function (data){
-            console.log(data);
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
+				showSnackbar();
+				$(obj).closest('tr').find('.po').val(po_number);
+				$(obj).closest('tr').find('.po-submit').text("Update");
+
+			},
+			400: function () {
+				$('.snackbar_span').html('Something went wrong');
+				showSnackbar();
+			}
+		},
+		error: function (data) {
+			console.log(data);
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
 
 }
- /** [showSnackbar function] */
-  function showSnackbar() {
-    try{
-      // Get the snackbar DIV
-      var x = document.getElementById("snackbar")
+/** [showSnackbar function] */
+function showSnackbar() {
+	try {
+		// Get the snackbar DIV
+		var x = document.getElementById("snackbar")
 
-      // Add the "show" class to DIV
-      x.className = "show";
+		// Add the "show" class to DIV
+		x.className = "show";
 
-      // After 3 seconds, remove the show class from DIV
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      } catch (e) {
-       console.log("Error:"+e)
-     }
-  }
+		// After 3 seconds, remove the show class from DIV
+		setTimeout(function () {
+			x.className = x.className.replace("show", "");
+		}, 3000);
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
 /**
  * call the method for getting all the details for profoma invoice generation
  * @param  {[type]} uvc         [description]
@@ -464,180 +437,155 @@ function setPO(obj,id,table_name)
  * @param  {[type]} table_name  [description]
  * @return profoma invoice
  */
-function showProfomaInvoice(id,table_name,uvc,qntytable)
-{
-    $('#uvc_number').text(uvc)
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_name: table_name,
-            qntytable:qntytable,
-            uvc:uvc,
-            id:id,
-            uvc:uvc
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-               $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
-                $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</p>')
-                 $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.bank_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.bank_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.bank_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.bank_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.bank_details.ifsc_code+'</td></tr></table>')
-                var i = 0;
-                var totalqnty = 0;
-                var subtotal = 0;
-                var tax = data.data.item_details[0].tax;
-                
-                var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
-                $.each(data.data.item_details, function (index, value)
-                {
-                    tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
-                    totalqnty+=value.quantity;
-                    subtotal+=value.quantity*value.unit_price;
+function showProfomaInvoice(id, table_name, uvc, qntytable) {
+	$('#uvc_number').text(uvc)
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			table_name: table_name,
+			qntytable: qntytable,
+			uvc: uvc,
+			id: id,
+			uvc: uvc
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		statusCode: {
+			/** [Show response status based on HTTP status code] */
+			200: function (data) {
+				$('#company_details').html('<h3><strong>' + data.data.company_details.name + '</strong></h3>' + data.data.company_details.address + '<br/>' + data.data.company_details.phone + '<br/><strong>GSTN :' + data.data.company_details.phone + '</strong>')
+				$('#bill_to').html('<h4>Billing Address:</h4>' + data.data.bank_details.company_name + '<p>' + data.data.bill_to.address + '</p>')
+				$('#ship_to').html('<h4>Shipping Address:</h4>' + data.data.bank_details.company_name + '<p>' + data.data.ship_to.address + '</p>')
+				$('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>' + data.data.bank_details.bank + '</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>' + data.data.bank_details.account_no + '</td></tr><tr><td>ACCOUNT NAME</td><td>' + data.data.bank_details.account_holder + '</td></tr><tr><td>ADDRESS</td><td>' + data.data.bank_details.branch + '</td></tr><tr><td>RTGS & IFSC</td><td>' + data.data.bank_details.ifsc_code + '</td></tr></table>')
+				var i = 0;
+				var totalqnty = 0;
+				var subtotal = 0;
+				var tax = data.data.item_details[0].tax;
 
-                });
-                var taxamnt= subtotal*(tax/100);
-                var billamnt = subtotal+taxamnt;
-                tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
-                if (data.data.bank_details.place_of_supply==1)
-                {
-                   tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed()+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
-                }
-                else if (data.data.bank_details.place_of_supply==2)
-                {
-                    tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
-                }
-                else
-                {
-                    tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
-                }
-                $('#item_details').html(tr)
-                
-               $('#profoma-invoice').modal('show')
-            },
-            400: function(data)
-            {
-               $('.snackbar_span').html('Something went wrong');
-               showSnackbar();
-            }
-        },
-        error: function (data)
-        {
+				var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+				$.each(data.data.item_details, function (index, value) {
+					tr += '<tr><td>' + ++i + '</td><td>' + value.material_name + '</td><td>' + value.size + '</td><td>' + value.style + '</td><td>' + value.quantity + '</td><td>' + value.unit_price + '</td><td>' + value.quantity * value.unit_price + '</td></tr>'
+					totalqnty += value.quantity;
+					subtotal += value.quantity * value.unit_price;
 
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
-    
+				});
+				var taxamnt = subtotal * (tax / 100);
+				var billamnt = subtotal + taxamnt;
+				tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : ' + totalqnty + ' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ' + subtotal.toFixed(2) + ' </h4></div><hr/><div class="text-right">'
+				if (data.data.bank_details.place_of_supply == 1) {
+					tr += '<h4> CGST : ' + tax / 2 + '% (<span>' + (taxamnt / 2).toFixed(2) + '</span>)</h4><h4> SGST : ' + tax / 2 + '% (<span>' + (taxamnt / 2).toFixed(2) + '</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ' + billamnt.toFixed() + ' </h4><p class="text-uppercase">' + numToString(billamnt) + ' only</p></div><hr /></div>'
+				} else if (data.data.bank_details.place_of_supply == 2) {
+					tr += '<h4> IGST : ' + tax + '% (<span>' + taxamnt.toFixed(2) + '</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ' + billamnt.toFixed(2) + ' </h4><p class="text-uppercase">' + numToString(billamnt) + ' only</p></div><hr /></div>'
+				} else {
+					tr += '<h4> Taxes : ' + tax + '% (<span>' + taxamnt.toFixed(2) + '</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ' + billamnt.toFixed(2) + ' </h4><p class="text-uppercase">' + numToString(billamnt) + ' only</p></div><hr /></div>'
+				}
+				$('#item_details').html(tr)
+
+				$('#profoma-invoice').modal('show')
+			},
+			400: function (data) {
+				$('.snackbar_span').html('Something went wrong');
+				showSnackbar();
+			}
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
+
 }
 
-function numToString(billamnt)
-{
-    var r=0;
-    var txter=billamnt.toFixed();
-    var sizer=txter.length;
-    var numStr="";
-    if(isNaN(txter))
-    {
-    // alert(" Invalid number");
-    exit();
-    }
-    var n=parseInt(billamnt);
-    var places=0;
-    var str="";
-    var entry=0;
-    while(n>=1)
-    {
-    r=parseInt(n%10);
+function numToString(billamnt) {
+	var r = 0;
+	var txter = billamnt.toFixed();
+	var sizer = txter.length;
+	var numStr = "";
+	if (isNaN(txter)) {
+		// alert(" Invalid number");
+		exit();
+	}
+	var n = parseInt(billamnt);
+	var places = 0;
+	var str = "";
+	var entry = 0;
+	while (n >= 1) {
+		r = parseInt(n % 10);
 
-    if(places<3 && entry==0)
-    {
-    numStr=txter.substring(txter.length-0,txter.length-3) // Checks for 1 to 999.
-    str=onlyDigit(numStr); //Calls function for last 3 digits of the value.
-    entry=1;
-    }
+		if (places < 3 && entry == 0) {
+			numStr = txter.substring(txter.length - 0, txter.length - 3) // Checks for 1 to 999.
+			str = onlyDigit(numStr); //Calls function for last 3 digits of the value.
+			entry = 1;
+		}
 
-    if(places==3)
-    {
-     numStr=txter.substring(txter.length-5,txter.length-3) 
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Thousand "+str;
-     }
-    }
+		if (places == 3) {
+			numStr = txter.substring(txter.length - 5, txter.length - 3)
+			if (numStr != "") {
+				str = onlyDigit(numStr) + " Thousand " + str;
+			}
+		}
 
-    if(places==5)
-    {
-     numStr=txter.substring(txter.length-7,txter.length-5) //Substring for 5 place to 7 place of the string
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Lakhs "+str; //Appends the word lakhs to it
-     }
-    }
+		if (places == 5) {
+			numStr = txter.substring(txter.length - 7, txter.length - 5) //Substring for 5 place to 7 place of the string
+			if (numStr != "") {
+				str = onlyDigit(numStr) + " Lakhs " + str; //Appends the word lakhs to it
+			}
+		}
 
-    if(places==6)
-    {
-     numStr=txter.substring(txter.length-9,txter.length-7)  //Substring for 7 place to 8 place of the string
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Crores "+str;        //Appends the word Crores
-     }
-    }
+		if (places == 6) {
+			numStr = txter.substring(txter.length - 9, txter.length - 7) //Substring for 7 place to 8 place of the string
+			if (numStr != "") {
+				str = onlyDigit(numStr) + " Crores " + str; //Appends the word Crores
+			}
+		}
 
-    n=parseInt(n/10);
-    places++;
-    }
-   return(str);
+		n = parseInt(n / 10);
+		places++;
+	}
+	return (str);
 }
-function onlyDigit(n)
-{
-    //Arrays to store the string equivalent of the number to convert in words
-    var units=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
-    var randomer=['','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
-    var tens=['','Ten','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
-    var r=0;
-    var num=parseInt(n);
-    var str="";
-    var pl="";
-    var tenser="";
-    while(num>=1)
-    {
-    r=parseInt(num%10);
-    tenser=r+tenser;
-     if(tenser<=19 && tenser>10) //Logic for 10 to 19 numbers
-     {
-     str=randomer[tenser-10];
-     }
-     else
-     {
-      if(pl==0)        //If units place then call units array.
-      {
-      str=units[r];
-      }
-      else if(pl==1)    //If tens place then call tens array.
-      {
-      str=tens[r]+" "+str;
-      }
-     }
-     if(pl==2)        //If hundreds place then call units array.
-     {
-     str=units[r]+" Hundred "+str;
-     }
-     
-    num=parseInt(num/10);
-    pl++;
-    }
-    return str;
+
+function onlyDigit(n) {
+	//Arrays to store the string equivalent of the number to convert in words
+	var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+	var randomer = ['', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+	var tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+	var r = 0;
+	var num = parseInt(n);
+	var str = "";
+	var pl = "";
+	var tenser = "";
+	while (num >= 1) {
+		r = parseInt(num % 10);
+		tenser = r + tenser;
+		if (tenser <= 19 && tenser > 10) //Logic for 10 to 19 numbers
+		{
+			str = randomer[tenser - 10];
+		} else {
+			if (pl == 0) //If units place then call units array.
+			{
+				str = units[r];
+			} else if (pl == 1) //If tens place then call tens array.
+			{
+				str = tens[r] + " " + str;
+			}
+		}
+		if (pl == 2) //If hundreds place then call units array.
+		{
+			str = units[r] + " Hundred " + str;
+		}
+
+		num = parseInt(num / 10);
+		pl++;
+	}
+	return str;
 }
 /**
  * This Function is used to select the order is label order or sticker order.
@@ -647,20 +595,17 @@ function onlyDigit(n)
 
 function order_details(uvc, po) {
 	//alert($('.logo').text());
-	if($('.logo').text() == "Orders")
-	{
+	if ($('.logo').text() == "Orders") {
 		localStorage.setItem("page_navigation", "orders");
-	}
-	else
-	{
+	} else {
 		localStorage.setItem("page_navigation", "order-status");
 	}
 	//localStorage.setItem("page_navigation", search_string);
-    if (po != "-") {
-        sticker_order_details(uvc, po)
-    } else {
-        label_order_details(uvc)
-    }
+	if (po != "-") {
+		sticker_order_details(uvc, po)
+	} else {
+		label_order_details(uvc)
+	}
 }
 
 /**
@@ -672,32 +617,32 @@ function order_details(uvc, po) {
 function sticker_order_details(uvc, po) {
 	var search_string = $('.dataTables_filter input').val();
 	localStorage.setItem("search_string", search_string);
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    var buyer = localStorage.getItem("buyer");
-    var buyer_id = localStorage.getItem("buyer_id");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/sticker-order-details",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            po: po,
-            uvc: uvc
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po)
-        },
-        error: function (data) {
+	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+	var buyer = localStorage.getItem("buyer");
+	var buyer_id = localStorage.getItem("buyer_id");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/sticker-order-details",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			po: po,
+			uvc: uvc
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po)
+		},
+		error: function (data) {
 
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
 }
 
 /**
@@ -707,209 +652,206 @@ function sticker_order_details(uvc, po) {
  */
 
 function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
-    var tr = "";
-    if (data.template_name == "Standard") {
-        var disabled = '';
-        var ttotal = '';
-        var thead = '<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th></tr></thead>';
-        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
-            tr += '<tr><td class="size">' + value.Size + '</td><td class="qty">' + value.Quantity + '</td><td>' + data.orchestra_parcel_details[0].ParcelBarCode + '</td></tr>';
+	var tr = "";
+	if (data.template_name == "Standard") {
+		var disabled = '';
+		var ttotal = '';
+		var thead = '<thead><tr><th>Size</th><th>Ratio</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th></tr></thead>';
+		$.each(data.orchestra_parcel_quantity_details, function (index, value) {
+			tr += '<tr><td class="size">' + value.Size + '</td><td class="qty">' + value.Quantity + '</td><td>' + data.orchestra_parcel_details[0].ParcelBarCode + '</td></tr>';
 
-        });
-
-
-
-        if (data.orchestra_standard_polybag_sticker_orders != "") {
-            $de_date = data.orchestra_standard_polybag_sticker_orders[0].delivery_date;
-
-            $de_date1 = $de_date.split('-');
-            $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
-
-            $delivery_date = $de_date_fin;
-            if (data.orchestra_standard_polybag_sticker_orders[0].height == null) {
-                $height = "";
-            } else {
-                $height = data.orchestra_standard_polybag_sticker_orders[0].height;
-            }
-            $age = data.orchestra_standard_polybag_sticker_orders[0].group_id;
-
-            $no_of_carton = data.orchestra_standard_polybag_sticker_orders[0].no_of_carton;
-            $total_polybag = data.orchestra_standard_polybag_sticker_orders[0].total_polybag;
-            $final_order_qty_sets = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty_sets;
-            $order_qty = data.orchestra_standard_polybag_sticker_orders[0].order_qty;
-            $final_order_qty = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty;
-
-        } else {
-            $delivery_date = "";
-            $height = "";
-            $age = 0;
-            $no_of_carton = "";
-            $total_polybag = "";
-            $final_order_qty_sets = "";
-            $order_qty = "";
-            $final_order_qty = "";
-        }
+		});
 
 
-        var head_qty = "Quantity for Standard Stickers";
-        var head_qty1 = "Standard Parcel/Carton Sticker";
-        var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="text" onkeypress="return checkNumbersOnly(event)" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div>';
-    } else {
-        $no_of_carton = "";
-        var disabled = 'disabled="disabled"';
-        var tpolytot = 0;
-        var tcarttot = 0;
-        var thead = '<thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead>';
-        $qu = 0;
-        $.each(data.orchestra_parcel_quantity_details, function (index, value) {
 
-            if (data.orchestra_solid_carton_sticker_orders != "") {
-                $carton_count = data.orchestra_solid_carton_sticker_orders[0].qty[$qu].quantity;
-            } else {
-                $carton_count = 0;
-            }
+		if (data.orchestra_standard_polybag_sticker_orders != "") {
+			$de_date = data.orchestra_standard_polybag_sticker_orders[0].delivery_date;
 
-            if (data.orchestra_solid_poly_bag_sticker_orders != "") {
-                $poly_count = data.orchestra_solid_poly_bag_sticker_orders[0].qty[$qu].quantity;
-            } else {
-                $poly_count = 0;
-            }
+			$de_date1 = $de_date.split('-');
+			$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
 
-            tr += '<tr><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><div class="form-group has-feedback has-success"><input type="number" required min=1 value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input  min=1 required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
-            tpolytot += parseInt($poly_count);
-            tcarttot += parseInt($carton_count);
-            $qu++;
-        });
+			$delivery_date = $de_date_fin;
+			if (data.orchestra_standard_polybag_sticker_orders[0].height == null) {
+				$height = "";
+			} else {
+				$height = data.orchestra_standard_polybag_sticker_orders[0].height;
+			}
+			$age = data.orchestra_standard_polybag_sticker_orders[0].group_id;
 
-        var ttotal = '<td class="text-center final_solid_poly_qty">' + tpolytot + '</td><td class="text-center final_solid_carton_qty">' + tcarttot + '</td>';
+			$no_of_carton = data.orchestra_standard_polybag_sticker_orders[0].no_of_carton;
+			$total_polybag = data.orchestra_standard_polybag_sticker_orders[0].total_polybag;
+			$final_order_qty_sets = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty_sets;
+			$order_qty = data.orchestra_standard_polybag_sticker_orders[0].order_qty;
+			$final_order_qty = data.orchestra_standard_polybag_sticker_orders[0].final_order_qty;
 
-        if (data.orchestra_solid_carton_sticker_orders != "") {
-            $de_date = data.orchestra_solid_carton_sticker_orders[0].delivery_date;
+		} else {
+			$delivery_date = "";
+			$height = "";
+			$age = 0;
+			$no_of_carton = "";
+			$total_polybag = "";
+			$final_order_qty_sets = "";
+			$order_qty = "";
+			$final_order_qty = "";
+		}
 
-            $de_date1 = $de_date.split('-');
-            $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
 
-            $delivery_date = $de_date_fin;
-            if (data.orchestra_solid_carton_sticker_orders[0].height == null) {
-                $height = "";
-            } else {
-                $height = data.orchestra_solid_carton_sticker_orders[0].height;
-            }
-            $age = data.orchestra_solid_poly_bag_sticker_orders[0].group_id;
+		var head_qty = "Quantity for Standard Stickers";
+		var head_qty1 = "Standard Parcel/Carton Sticker";
+		var standard_div = '<input type="hidden" id="carton_hidden" value="standard"><div class="form-group"><label>Total Polybags per carton: </label><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Polybag count" class="form-control input-sm"></div> <div class="form-group"><label>Final Order Qty including Wastage: </label><div class="input-group"><input id="final_order_qty_sets" value="' + $final_order_qty_sets + '" type="text" onkeypress="return checkNumbersOnly(event)" placeholder="Set of 2 Pcs." class="form-control input-sm"><span class="input-group-addon">sets</span></div></div><hr><h4>Standard Polybag Sticker</h4><div class="form-group"><label>Order Quantity</label><input id="order_qty" value="' + $order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div><div class="form-group"><label>Final Order Qty including Wastage</label><input id="final_order_qty" value="' + $final_order_qty + '" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm"></div>';
+	} else {
+		$no_of_carton = "";
+		var disabled = 'disabled="disabled"';
+		var tpolytot = 0;
+		var tcarttot = 0;
+		var thead = '<thead><tr><th>Size</th><th>Barcode<br/>(for parcel/carton & polybag)</th><th>Item Qty</th><th>Polybag Sticker Qty<br/>incl. wastage</th><th>Parcel Sticker Qty<br/>(in sets)</th></tr></thead>';
+		$qu = 0;
+		$.each(data.orchestra_parcel_quantity_details, function (index, value) {
+
+			if (data.orchestra_solid_carton_sticker_orders != "") {
+				$carton_count = data.orchestra_solid_carton_sticker_orders[0].qty[$qu].quantity;
+			} else {
+				$carton_count = 0;
+			}
+
+			if (data.orchestra_solid_poly_bag_sticker_orders != "") {
+				$poly_count = data.orchestra_solid_poly_bag_sticker_orders[0].qty[$qu].quantity;
+			} else {
+				$poly_count = 0;
+			}
+
+			tr += '<tr><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td><div class="form-group has-feedback has-success"><input type="number" required min=1 value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback has-success"><input  min=1 required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
+			tpolytot += parseInt($poly_count);
+			tcarttot += parseInt($carton_count);
+			$qu++;
+		});
+
+		var ttotal = '<td class="text-center final_solid_poly_qty">' + tpolytot + '</td><td class="text-center final_solid_carton_qty">' + tcarttot + '</td>';
+
+		if (data.orchestra_solid_carton_sticker_orders != "") {
+			$de_date = data.orchestra_solid_carton_sticker_orders[0].delivery_date;
+
+			$de_date1 = $de_date.split('-');
+			$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
+
+			$delivery_date = $de_date_fin;
+			if (data.orchestra_solid_carton_sticker_orders[0].height == null) {
+				$height = "";
+			} else {
+				$height = data.orchestra_solid_carton_sticker_orders[0].height;
+			}
+			$age = data.orchestra_solid_poly_bag_sticker_orders[0].group_id;
 			var num = 600 * 395 * $height
 			var val = num / (1000 * 1000 * 1000)
 			$parcelVolume = val;
 
-        } else {
-            $delivery_date = "";
-            $height = "";
+		} else {
+			$delivery_date = "";
+			$height = "";
 			$parcelVolume = "";
-            $age = 0;
-        }
+			$age = 0;
+		}
 
-        var head_qty = "Quantity for Solid Size Stickers";
-        var head_qty1 = "Solid Size Parcel/Carton Sticker";
-        var standard_div = '<input type="hidden" id="carton_hidden" value="solid">';
-    }
+		var head_qty = "Quantity for Solid Size Stickers";
+		var head_qty1 = "Solid Size Parcel/Carton Sticker";
+		var standard_div = '<input type="hidden" id="carton_hidden" value="solid">';
+	}
 
-    var option = "<option>Age Group</option>";
-    $.each(data.orchestra_age_group, function (index, value) {
-        option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
-    });
-    // $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('" + buyer + "','" + buyer_id + "')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC " + uvc + " and PO " + po + "</li></ol></div>")
+	var option = "<option>Age Group</option>";
+	$.each(data.orchestra_age_group, function (index, value) {
+		option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
+	});
+	// $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='#'>Order Management</a></li><li><a href='#' onclick=back_sticker_orders('" + buyer + "','" + buyer_id + "')>Sticker Orders</a></li><li class='active'>Sticker Order Details for UVC " + uvc + " and PO " + po + "</li></ol></div>")
 
-//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return checkNumbersOnly(event)"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
-//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
-	if(localStorage.getItem("page_navigation") == "orders")
-	{
+	//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return checkNumbersOnly(event)"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+	//    $('.top-content').append('<form id="solid_carton_form"><button class="btn btn-primary pull-right btn-sm"><i class="fa fa-times" aria-hidden="true"></i>Close</button><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume"></span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+	if (localStorage.getItem("page_navigation") == "orders") {
 		//alert()
 		var onclick = "orders()";
-	}
-	else
-	{
+	} else {
 		var onclick = "orderStatus()";
 	}
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
-    $('#solid_carton_form');
+	$('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i>Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Edition: <strong><span id="edition">' + data.orchestra_parcel_details[0].EditionNumber + '</span></strong> </span><span class="sticker-details">Version: <strong><span id="version">' + data.orchestra_parcel_details[0].VersionNumber + '</span></strong></span><span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_quantity_details[0].Color + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span class="sticker-details" style="display: inline-flex;white-space: nowrap;margin-bottom: -25px;"> Delivery Date : <div class="form-group has-feedback has-success" > <div class="input-group solid_delivery_date date" data-provide="datepicker" id="datePicker1" style="margin-top: -9px;margin-left: 10px;"> <input style="width: 140px;" value="' + $delivery_date + '" id="solid_delivery_date" type="text" class="form-control" required="" > <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div > <div class="help-block with-errors" > </div > </div ></span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="2">Total</td><td>' + data.orchestra_parcel_details[0].Quantity + '</td>' + ttotal + '</tr></tbody></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="' + onclick + '" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" class="btn btn-xs btn-success"><i class="ion-ios-download"></i>Save</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" disabled value="395" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left: -5px;">/</span> <div class="col-md-6" style="margin-top: -34px;"><input ' + disabled + ' data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div>' + standard_div + ' </div></div>');
+	$('#solid_carton_form');
 
-    $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
+	$('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer"> <button type="button" class="btn btn-primary" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ')>Print</button></div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
 
-    $('#solid_carton_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+	$('#solid_carton_form').validator().on('submit', function (e) {
+		if (e.isDefaultPrevented()) {
 
-        } else {
-            e.preventDefault();
-            setSolidStickers()
-        }
-    })
-
-
-    $('.tot_qty_table_poly').keyup(function () {
-        var tot_qty_table_poly_final = 0;
-        $('#solidform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-                tot_qty_table_poly_final += parseInt($(this).find('.tot_qty_table_poly').val());
-            }
-
-        })
-        $('.final_solid_poly_qty').text(tot_qty_table_poly_final);
-    });
-
-    $('.tot_qty_table_carton').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#solidform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_carton').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table_carton').val());
-            }
-        })
-        $('.final_solid_carton_qty').text(tot_qty_table_carton_final);
-    });
-
-    barcode_carton('svg2', data)
-    barcode_carton('svg3', data)
-    barcode_polybag('svg1', data)
-    barcode_polybag('svg4', data)
-    $("#modal_height").keyup(function () {
-        var num = $('#length').val() * $('#width').val() * this.value
-        var val = num / (1000 * 1000 * 1000)
-        $('#parcelVolume').text(val)
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("volume").innerHTML = val;
-        svgDoc1.getElementById("height").innerHTML = this.value;
-    });
-    $("#modal_close").click(function () {
-        $('#modal_height').removeAttr('data-target')
-    });
-    $(".modal_close1").click(function () {
-        $('#needed_modal').removeAttr('data-target')
-    });
-    if ($age != 0) {
-        $('#age').val($age);
-        var mySVG1 = document.getElementById("svg1");
-        var svgDoc1;
-        mySVG1.addEventListener("load", function () {
-            svgDoc1 = mySVG1.contentDocument;
-            svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
-        }, false);
-
-        var mySVG = document.getElementById("svg4");
-        var svgDoc;
-        mySVG.addEventListener("load", function () {
-            svgDoc = mySVG.contentDocument;
-            svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
-        }, false);
-
-    }
+		} else {
+			e.preventDefault();
+			setSolidStickers()
+		}
+	})
 
 
-    $('#age').change(function () {
-        $('#age_modal').modal("show");
-        var mySVG1 = document.getElementById("svg1");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
-    });
+	$('.tot_qty_table_poly').keyup(function () {
+		var tot_qty_table_poly_final = 0;
+		$('#solidform tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
+				tot_qty_table_poly_final += parseInt($(this).find('.tot_qty_table_poly').val());
+			}
+
+		})
+		$('.final_solid_poly_qty').text(tot_qty_table_poly_final);
+	});
+
+	$('.tot_qty_table_carton').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		$('#solidform tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table_carton').val() != undefined) {
+				tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table_carton').val());
+			}
+		})
+		$('.final_solid_carton_qty').text(tot_qty_table_carton_final);
+	});
+
+	barcode_carton('svg2', data)
+	barcode_carton('svg3', data)
+	barcode_polybag('svg1', data)
+	barcode_polybag('svg4', data)
+	$("#modal_height").keyup(function () {
+		var num = $('#length').val() * $('#width').val() * this.value
+		var val = num / (1000 * 1000 * 1000)
+		$('#parcelVolume').text(val)
+		var svgDoc1;
+		var mySVG1 = document.getElementById("svg2");
+		svgDoc1 = mySVG1.contentDocument;
+		svgDoc1.getElementById("volume").innerHTML = val;
+		svgDoc1.getElementById("height").innerHTML = this.value;
+	});
+	$("#modal_close").click(function () {
+		$('#modal_height').removeAttr('data-target')
+	});
+	$(".modal_close1").click(function () {
+		$('#needed_modal').removeAttr('data-target')
+	});
+	if ($age != 0) {
+		$('#age').val($age);
+		var mySVG1 = document.getElementById("svg1");
+		var svgDoc1;
+		mySVG1.addEventListener("load", function () {
+			svgDoc1 = mySVG1.contentDocument;
+			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+		}, false);
+
+		var mySVG = document.getElementById("svg4");
+		var svgDoc;
+		mySVG.addEventListener("load", function () {
+			svgDoc = mySVG.contentDocument;
+			svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+		}, false);
+
+	}
+
+
+	$('#age').change(function () {
+		$('#age_modal').modal("show");
+		var mySVG1 = document.getElementById("svg1");
+		svgDoc1 = mySVG1.contentDocument;
+		svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+	});
 
 
 }
@@ -920,22 +862,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
  */
 
 function printDiv(data, isstd) {
-    if (data == "svg4" && isstd == "0") {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        Popupsmall(svgRoot);
-    } else if (data == "svg4" && isstd == "1") {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        PopupTable(svgRoot);
-    } else {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        Popup(svgRoot);
-    }
+	if (data == "svg4" && isstd == "0") {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		Popupsmall(svgRoot);
+	} else if (data == "svg4" && isstd == "1") {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		PopupTable(svgRoot);
+	} else {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		Popup(svgRoot);
+	}
 
 }
 
@@ -947,15 +889,15 @@ function printDiv(data, isstd) {
 
 function printHangDiv(data) {
 
-    var a = document.getElementById('svg_hang_front');
-    var svgDoc = a.contentDocument;
-    var svgRoot = svgDoc.documentElement;
+	var a = document.getElementById('svg_hang_front');
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
 
-    var a1 = document.getElementById(data);
-    var svgDoc1 = a1.contentDocument;
-    var svgRoot1 = svgDoc1.documentElement;
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
 
-    PopupHang(svgRoot, svgRoot1);
+	PopupHang(svgRoot, svgRoot1);
 }
 
 /**
@@ -964,12 +906,12 @@ function printHangDiv(data) {
  * @return Pdf
  */
 
-function printWashDiv(data,dataid) {
-    var a1 = document.getElementById(data);
-    var svgDoc1 = a1.contentDocument;
-    var svgRoot1 = svgDoc1.documentElement;
+function printWashDiv(data, dataid) {
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
 
-    PopupWash(svgRoot1,dataid);
+	PopupWash(svgRoot1, dataid);
 }
 
 /**
@@ -980,11 +922,11 @@ function printWashDiv(data,dataid) {
 
 function printSpecialDiv(data) {
 
-    var a = document.getElementById(data);
-    var svgDoc = a.contentDocument;
-    var svgRoot = svgDoc.documentElement;
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
 
-    PopupSpecial(svgRoot);
+	PopupSpecial(svgRoot);
 }
 
 /**
@@ -994,33 +936,33 @@ function printSpecialDiv(data) {
  */
 
 function PopupSpecial(data) {
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-special-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-special-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1029,57 +971,55 @@ function PopupSpecial(data) {
  * @return Pdf
  */
 
-function PopupWash(data,dataid) {
+function PopupWash(data, dataid) {
 	//alert(dataid)
 	if (dataid != undefined) {
-		dataid=dataid;
+		dataid = dataid;
+	} else {
+		dataid = "";
 	}
-	else
-	{
-		dataid="";
-	}
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
 	var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
 	//alert(dataid)
 	//alert(made_in_select)
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-	
-	var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
-		var care_instruction_select = [];
-		$(care_instruction).each(function (index, brand) {
-			care_instruction_select.push([$(this).val()]);
-		});
-		var care_instruction_select_fin = care_instruction_select.join(',');
-	var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-wash-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-			made_in_select:made_in_select,
-			care_instruction_select_fin:care_instruction_select_fin,
-			composition:wash_finals,
-            svg: svg,
-			
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+	var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
+	var care_instruction_select = [];
+	$(care_instruction).each(function (index, brand) {
+		care_instruction_select.push([$(this).val()]);
+	});
+	var care_instruction_select_fin = care_instruction_select.join(',');
+	var wash_finals = localStorage.getItem('wash_composition_final' + dataid);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-wash-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			made_in_select: made_in_select,
+			care_instruction_select_fin: care_instruction_select_fin,
+			composition: wash_finals,
+			svg: svg,
+
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
+
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1089,39 +1029,39 @@ function PopupWash(data,dataid) {
  */
 
 function PopupHang(svgRoot, svgRoot1) {
-    var s = new XMLSerializer();
-    var d = svgRoot;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
+	var s = new XMLSerializer();
+	var d = svgRoot;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
 
-    var s1 = new XMLSerializer();
-    var d1 = svgRoot1;
-    var str1 = s1.serializeToString(d1);
-    var svg1 = encodeURI(str1)
+	var s1 = new XMLSerializer();
+	var d1 = svgRoot1;
+	var str1 = s1.serializeToString(d1);
+	var svg1 = encodeURI(str1)
 
-    var success = false;
-    var url = "";
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-hang-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg,
-            svg1: svg1
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-hang-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			svg1: svg1
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1131,53 +1071,53 @@ function PopupHang(svgRoot, svgRoot1) {
  */
 
 function Popup(data) {
-    //    var s = new XMLSerializer();
-    //    var d = data;
-    //    var str = s.serializeToString(d);
-    //    var mywindow = window.open('', 'new div', 'class=printmedia');
-    //    mywindow.document.write('<html><head><title></title>');
-    //    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    //    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
-    //    mywindow.document.write(str);
-    //    mywindow.document.write('</div>');
-    //    mywindow.print();
-    //    mywindow.close();
-    //    return true;
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            //window.location.href=data;
-            success = true;
-            url = data;
-            //         window.open('http://google.com')
-            //            var a = document.createElement('a');
-            //            a.href = data;
-            //            a.download = "stickers.pdf";
-            //            document.body.appendChild(a);
-            //            a.click();
-            //            document.body.removeChild(a);
-        },
-        error: function (data) {
+	//    var s = new XMLSerializer();
+	//    var d = data;
+	//    var str = s.serializeToString(d);
+	//    var mywindow = window.open('', 'new div', 'class=printmedia');
+	//    mywindow.document.write('<html><head><title></title>');
+	//    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+	//    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
+	//    mywindow.document.write(str);
+	//    mywindow.document.write('</div>');
+	//    mywindow.print();
+	//    mywindow.close();
+	//    return true;
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data;
+			//         window.open('http://google.com')
+			//            var a = document.createElement('a');
+			//            a.href = data;
+			//            a.download = "stickers.pdf";
+			//            document.body.appendChild(a);
+			//            a.click();
+			//            document.body.removeChild(a);
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1187,44 +1127,44 @@ function Popup(data) {
  */
 
 function PopupTable(data) {
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    var size = [];
-    var qty = [];
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	var size = [];
+	var qty = [];
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 
-    $('#solidform tbody tr').each(function () {
-        size.push($(this).find('.size').text());
-        qty.push($(this).find('.qty').text());
-    })
-    var sizefin = size.join(',')
-    var qtyfin = qty.join(',')
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf-table",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg,
-            size: sizefin,
-            qty: qtyfin
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	$('#solidform tbody tr').each(function () {
+		size.push($(this).find('.size').text());
+		qty.push($(this).find('.qty').text());
+	})
+	var sizefin = size.join(',')
+	var qtyfin = qty.join(',')
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf-table",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			size: sizefin,
+			qty: qtyfin
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1234,46 +1174,46 @@ function PopupTable(data) {
  */
 
 function Popupsmall(data) {
-    //    var s = new XMLSerializer();
-    //    var d = data;
-    //    var str = s.serializeToString(d);
-    //    var mywindow = window.open('', 'new div', 'class=printmedia');
-    //    mywindow.document.write('<html><head><title></title>');
-    //    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    //    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #000;width:100mm;height:70mm">');
-    //    mywindow.document.write(str);
-    //    mywindow.document.write('</div>');
-    //    mywindow.print();
-    //    mywindow.close();
-    //    return true;
+	//    var s = new XMLSerializer();
+	//    var d = data;
+	//    var str = s.serializeToString(d);
+	//    var mywindow = window.open('', 'new div', 'class=printmedia');
+	//    mywindow.document.write('<html><head><title></title>');
+	//    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+	//    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #000;width:100mm;height:70mm">');
+	//    mywindow.document.write(str);
+	//    mywindow.document.write('</div>');
+	//    mywindow.print();
+	//    mywindow.close();
+	//    return true;
 
 
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf-small",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1283,42 +1223,42 @@ function Popupsmall(data) {
  */
 
 function barcode_polybag(id, data) {
-    var mySVG = document.getElementById(id);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-        var svgItem = svgDoc.getElementById("uvc_tco");
+	var mySVG = document.getElementById(id);
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		svgDoc = mySVG.contentDocument;
+		var svgItem = svgDoc.getElementById("uvc_tco");
 
-        svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
-        //svgDoc.getElementById("round").style.fill = $('#age').val();
+		svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+		//svgDoc.getElementById("round").style.fill = $('#age').val();
 
-        if (data.template_name == "Standard") {
+		if (data.template_name == "Standard") {
 
-            $td_col = "";
-            $td_size = "";
-            $total = 0;
-            $('#solidform tbody tr').each(function () {
-                if ($(this).find('.size').text() != "") {
-                    $td_size += "<td>" + $(this).find('.size').text() + "</td>";
-                    $td_col += "<td>" + $(this).find('.qty').text() + "</td>";
-                    $total += parseInt($(this).find('.qty').text());
-                }
+			$td_col = "";
+			$td_size = "";
+			$total = 0;
+			$('#solidform tbody tr').each(function () {
+				if ($(this).find('.size').text() != "") {
+					$td_size += "<td>" + $(this).find('.size').text() + "</td>";
+					$td_col += "<td>" + $(this).find('.qty').text() + "</td>";
+					$total += parseInt($(this).find('.qty').text());
+				}
 
 
-            })
-            $tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
+			})
+			$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
 
-            var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
-            svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
-            svgDoc.getElementById("cartontable").innerHTML = $tbl;
-        } else {
-            var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-            svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
-            svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
+			svgDoc.getElementById("cartontable").innerHTML = $tbl;
+		} else {
+			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
-        }
-        jsbarcode(code, 'barcode', svgDoc)
-    }, false);
+		}
+		jsbarcode(code, 'barcode', svgDoc)
+	}, false);
 
 }
 
@@ -1329,33 +1269,33 @@ function barcode_polybag(id, data) {
  */
 
 function barcode_carton(id, data) {
-    console.log(data);
-    var mySVG = document.getElementById(id);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-        var svgItem = svgDoc.getElementById("uvc_tco");
-        svgDoc.getElementById("po").innerHTML = data.orchestra_parcel_details[0].BuyerPONo;
-        svgDoc.getElementById("length").innerHTML = $('#length').val();
-        svgDoc.getElementById("width").innerHTML = $('#width').val();
-        svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
-        svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
-        svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
-        svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
-        svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+	console.log(data);
+	var mySVG = document.getElementById(id);
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		svgDoc = mySVG.contentDocument;
+		var svgItem = svgDoc.getElementById("uvc_tco");
+		svgDoc.getElementById("po").innerHTML = data.orchestra_parcel_details[0].BuyerPONo;
+		svgDoc.getElementById("length").innerHTML = $('#length').val();
+		svgDoc.getElementById("width").innerHTML = $('#width').val();
+		svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
+		svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
+		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
+		svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
-        if (data.template_name == "Standard") {
-            var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
-        } else {
-            var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-            svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
-        }
+		if (data.template_name == "Standard") {
+			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+		} else {
+			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+		}
 
-        jsbarcode(code, 'barcode1', svgDoc)
-        jsbarcode(code, 'barcode2', svgDoc)
+		jsbarcode(code, 'barcode1', svgDoc)
+		jsbarcode(code, 'barcode2', svgDoc)
 
 
-    }, false);
+	}, false);
 
 }
 
@@ -1366,286 +1306,278 @@ function barcode_carton(id, data) {
  */
 
 function label_order_details(uvc) {
-	
+
 	var search_string = $('.dataTables_filter input').val();
 	localStorage.setItem("search_string", search_string);
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-    // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
-    // var buyer_id=$('.buyer-select').val()
-    var buyer = localStorage.getItem("buyer");
-    var buyer_id = localStorage.getItem("buyer_id");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/label-order-details",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            uvc: uvc
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            localStorage.setItem("label_order_data", JSON.stringify(data));
-            orchestra_label_order_details(buyer, buyer_id, uvc, data)
-            hangtagmodal(data);
-            specialtags(data);
-            if (data.orchestra_main_label_orders.length > 0) {
-                $.each(data.orchestra_main_label_orders, function (index, value) {
-                    mainlabel += 1;
-                    if (index == 0) {
-                        mainlabels(data, "");
-                    } else {
-						if(data.orchestra_main_label_orders != "")
-						{
-							var str=data.orchestra_main_label_orders[index].status;
-							$main_status=str.replace(/ /g, "");
-							$main_status_text=str;
-						}
-						else
-						{
-							$main_status="";
-						}
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + index + '" data-backdrop="static" data-keyboard="false"> <span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span>   <div class="card-title"><p class="pull-right delete-main' + index + '"  style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + index + '">' + value.template_name + " - Main & Size Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
-                        $('.delete-main' + index).on('click', function (e) {
-                            deletemain.push(value.id)
-                            localStorage.setItem("deletemain", JSON.stringify(deletemain));
-							removeMainLabel(value.id)
-                            $('#mainlabelsform' + index).remove()
-                            mainlabel -= 1;
-                            $(this).parent().parent().parent().remove();
-
-
-                        });
-                        mainlabels(data, index);
-                    }
-                });
-                mainlabel -= 1;
-            } else {
-                mainlabels(data, "");
-            }
-            if (data.orchestra_wash_care_label_orders.length > 0) {
-                $.each(data.orchestra_wash_care_label_orders, function (index, value) {
-
-                    washcare += 1;
-                    if (index == 0) {
-                        washcarelabels(data, "");
-                    } else {
-						if(data.orchestra_wash_care_label_orders != "")
-						{
-							var str=data.orchestra_wash_care_label_orders[index].status;
-							$wash_status=str.replace(/ /g, "");
-							$wash_status_text=str;
-						}
-						else
-						{
-							$wash_status="";
-						}
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="clone_washcare_label_card'+index+'" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div>')
-						
-						
-						
-						
-						
-						
-											
-	$('#clone_washcare_label_card'+index).on('click', function (e) {
-
-        if ($('.washcarename').val() != "") {
-          
-			
-            if (washcare <= 5) {
-				  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
-				
-				$('.delete-wash' + washcare).on('click', function (e) {
-
-					if (localStorage.getItem('wash_label') != null) {
-						var opop = JSON.parse(localStorage.getItem('wash_label'));
-						if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
-
+	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+	// var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
+	// var buyer_id=$('.buyer-select').val()
+	var buyer = localStorage.getItem("buyer");
+	var buyer_id = localStorage.getItem("buyer_id");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/label-order-details",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			uvc: uvc
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			localStorage.setItem("label_order_data", JSON.stringify(data));
+			orchestra_label_order_details(buyer, buyer_id, uvc, data)
+			hangtagmodal(data);
+			specialtags(data);
+			if (data.orchestra_main_label_orders.length > 0) {
+				$.each(data.orchestra_main_label_orders, function (index, value) {
+					mainlabel += 1;
+					if (index == 0) {
+						mainlabels(data, "");
+					} else {
+						if (data.orchestra_main_label_orders != "") {
+							var str = data.orchestra_main_label_orders[index].status;
+							$main_status = str.replace(/ /g, "");
+							$main_status_text = str;
 						} else {
-							delete opop['washcarelabelform' + $(this).attr('id')];
+							$main_status = "";
 						}
+						$('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".main_label_' + index + '" data-backdrop="static" data-keyboard="false"> <span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span>   <div class="card-title"><p class="pull-right delete-main' + index + '"  style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + index + '">' + value.template_name + " - Main & Size Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+						$('.delete-main' + index).on('click', function (e) {
+							deletemain.push(value.id)
+							localStorage.setItem("deletemain", JSON.stringify(deletemain));
+							removeMainLabel(value.id)
+							$('#mainlabelsform' + index).remove()
+							mainlabel -= 1;
+							$(this).parent().parent().parent().remove();
 
 
-						localStorage.setItem('wash_label', JSON.stringify(opop))
+						});
+						mainlabels(data, index);
 					}
-
-					$('#washcarelabelform' + $(this).attr('id')).remove()
-					washcare -= 1;
-					$(this).parent().parent().parent().remove();
-
-
-            	});
-				window.scrollTo(0,document.body.scrollHeight);
-				toastr.success("Wash care label cloned successfully");
-            }
-			else
-			{
-				toastr.error("Limit exceeded");
+				});
+				mainlabel -= 1;
+			} else {
+				mainlabels(data, "");
 			}
-         
-            $('.washcarename').val("")
-            $('.washnameerror').addClass('hidden')
-            var data = localStorage.getItem("label_order_data");
-            washcarelabels(JSON.parse(data), washcare);
-			$('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
-			$('#washcarelabelform'+washcare).find('#wash_delivery_date'+washcare).val($('#washcarelabelform'+index).find('#wash_delivery_date'+index).val())
-			
-			$('.washing_select'+washcare).selectpicker('val',$('.washing_select'+index).selectpicker('val'));
-			$('.whitening_select'+washcare).selectpicker('val',$('.whitening_select'+index).selectpicker('val'));
-			$('.dryer_select'+washcare).selectpicker('val',$('.dryer_select'+index).selectpicker('val'));
-			$('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+index).selectpicker('val'));
-			$('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
-			$('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
-			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
-			
-			$('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
-			
-			$('#composition_remove_qty'+index+' tr').each(function (ind,val) {
-				var values= $(this).find('select').find(':selected').val()
-				var v= $(this).attr('id');
-				$('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
-					if($(this).attr('id') == v)
-					{
-						$(this).find('select').val(values)
-						$(this).find('a').removeAttr('onclick')
-						$(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
-					}
-				});
-			});	
-			
-			$('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
-				var values= $(this).find('.tot_qty_table').val()
-				//var values1= $(this).find('.tot_qty_table_fin').text()
-				var v= $(this).find('.uvc_tco').text();
-				//alert(values)
-				$('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
-					if($(this).find('.uvc_tco').text() == v)
-					{
-						$(this).find('.tot_qty_table').val(values)
-						
-					}
-				});
-			});
-			
-			$('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
-			var mySVG = document.getElementById("washcare_svg"+washcare);
-			var svgDoc;
-			mySVG.addEventListener("load", function () {
-				svgDoc=mySVG.contentDocument;
-				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
-				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
-				svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
-				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
-				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
- + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
- + ' option:selected').data('astm'));
-				
-				var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
-					$('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
-					$('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
-					$('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
-					$('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
-					$('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
-				svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-				
-				svgDoc.getElementById("text_care_instruction").innerHTML = "";
-				$('.care_instruction_select' + washcare + ' option:selected').each(function () {
-					var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-						$(this).data('russian') + "-" +
-						$(this).data('chinese') + "-" +
-						$(this).data('arabic') + "-" +
-						$(this).data('greek') + "-" +
-						$(this).data('turkish') + '</p>';
-					svgDoc.getElementById("text_care_instruction").innerHTML += value;
-				});
-				
-				 svgDoc.getElementById("parts_composition").innerHTML ="";
-			  $('#composition_remove_qty' + washcare + ' tr').each(function () {
-				  //alert($(this).find('select').find(':selected').text());
-				  if($(this).find('select').find(':selected').val() != "Select Option")
-				  {
-					   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
-				  }
-				 
-				  var id=$(this).attr('id')
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-				  $(compss).each(function (index1,value1) {
-					  var english = value1.split('_');
+			if (data.orchestra_wash_care_label_orders.length > 0) {
+				$.each(data.orchestra_wash_care_label_orders, function (index, value) {
 
-					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
-				});
-			  })
-			$('.composition_error_hidden').addClass('hidden')
-			var washcomp=[];
-			$('#composition_remove_qty' + washcare + ' tr').each(function () {
-				  var washcomp1=[];
-				  var id=$(this).attr('id')
-				  var value=$(this).find('select').find(':selected').val();
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-					$(compss).each(function (index1,value1){ 
-						var english = value1.split('_');
-						washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
-					});
-				washcomp.push(washcomp1)
-			})
-			var wash_finals = JSON.stringify(washcomp);
-			localStorage.setItem('wash_composition_final'+washcare, wash_finals);
-				
-			});
-        } else {
-            if (washcare < 5) {
-                $('.washnameerror').removeClass('hidden')
-            }
-        }
-		
-    });
-						
-						
-						
-						
-						
-						
-						
-                        $('.delete-wash' + index).on('click', function (e) {
-                            deletewash.push(value.id)
-                            localStorage.setItem("deletewash", JSON.stringify(deletewash));
+					washcare += 1;
+					if (index == 0) {
+						washcarelabels(data, "");
+					} else {
+						if (data.orchestra_wash_care_label_orders != "") {
+							var str = data.orchestra_wash_care_label_orders[index].status;
+							$wash_status = str.replace(/ /g, "");
+							$wash_status_text = str;
+						} else {
+							$wash_status = "";
+						}
+						$('#add_modal').append('<div class="col-md-4" ><div class="card add-card" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="clone_washcare_label_card' + index + '" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div>')
+
+
+
+
+
+
+
+						$('#clone_washcare_label_card' + index).on('click', function (e) {
+
+							if ($('.washcarename').val() != "") {
+
+
+								if (washcare <= 5) {
+									washcare += 1;
+									$('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+
+									$('.delete-wash' + washcare).on('click', function (e) {
+
+										if (localStorage.getItem('wash_label') != null) {
+											var opop = JSON.parse(localStorage.getItem('wash_label'));
+											if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+											} else {
+												delete opop['washcarelabelform' + $(this).attr('id')];
+											}
+
+
+											localStorage.setItem('wash_label', JSON.stringify(opop))
+										}
+
+										$('#washcarelabelform' + $(this).attr('id')).remove()
+										washcare -= 1;
+										$(this).parent().parent().parent().remove();
+
+
+									});
+									window.scrollTo(0, document.body.scrollHeight);
+									//toastr.success("Wash care label cloned successfully");
+									$('.snackbar_span').html('Wash care label cloned successfully');
+									showSnackbar();
+								} else {
+									$('.snackbar_span').html('Limit exceeded');
+									showSnackbar();
+								}
+
+								$('.washcarename').val("")
+								$('.washnameerror').addClass('hidden')
+								var data = localStorage.getItem("label_order_data");
+								washcarelabels(JSON.parse(data), washcare);
+								$('#washcarelabelform' + washcare).find('#wcl_name' + washcare).val($('#washcarelabelform' + index).find('#wcl_name' + index).val())
+								$('#washcarelabelform' + washcare).find('#wash_delivery_date' + washcare).val($('#washcarelabelform' + index).find('#wash_delivery_date' + index).val())
+
+								$('.washing_select' + washcare).selectpicker('val', $('.washing_select' + index).selectpicker('val'));
+								$('.whitening_select' + washcare).selectpicker('val', $('.whitening_select' + index).selectpicker('val'));
+								$('.dryer_select' + washcare).selectpicker('val', $('.dryer_select' + index).selectpicker('val'));
+								$('.ironing_select' + washcare).selectpicker('val', $('.ironing_select' + index).selectpicker('val'));
+								$('.cleaning_select' + washcare).selectpicker('val', $('.cleaning_select' + index).selectpicker('val'));
+								$('.made_in_select' + washcare).selectpicker('val', $('.made_in_select' + index).selectpicker('val'));
+								$('.care_instruction_select' + washcare).selectpicker('val', $('.care_instruction_select' + index).selectpicker('val'));
+
+								$('#composition_remove_qty' + washcare).html($('#composition_remove_qty' + index).html())
+
+								$('#composition_remove_qty' + index + ' tr').each(function (ind, val) {
+									var values = $(this).find('select').find(':selected').val()
+									var v = $(this).attr('id');
+									$('#composition_remove_qty' + washcare + ' tr').each(function (inds, vals) {
+										if ($(this).attr('id') == v) {
+											$(this).find('select').val(values)
+											$(this).find('a').removeAttr('onclick')
+											$(this).find('a').attr('onclick', 'deleteComposition(this,' + washcare + ')')
+										}
+									});
+								});
+
+								$('#washcarelabelform' + index + ' table tbody tr').each(function (ind, val) {
+									var values = $(this).find('.tot_qty_table').val()
+									//var values1= $(this).find('.tot_qty_table_fin').text()
+									var v = $(this).find('.uvc_tco').text();
+									//alert(values)
+									$('#washcarelabelform' + washcare + ' table tbody tr').each(function (inds, vals) {
+										if ($(this).find('.uvc_tco').text() == v) {
+											$(this).find('.tot_qty_table').val(values)
+
+										}
+									});
+								});
+
+								$('#washcarelabelform' + washcare + ' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform' + index + ' table tbody').find('.tot_qty_table_fin').text())
+								var mySVG = document.getElementById("washcare_svg" + washcare);
+								var svgDoc;
+								mySVG.addEventListener("load", function () {
+									svgDoc = mySVG.contentDocument;
+									svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
+									svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
+									svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
+									svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
+									svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
+									svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
+									svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
+									svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
+									svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare +
+										' option:selected').data('cofreet'));
+									svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare +
+										' option:selected').data('astm'));
+
+									var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
+										$('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
+										$('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
+										$('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
+										$('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
+										$('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+									svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+
+									svgDoc.getElementById("text_care_instruction").innerHTML = "";
+									$('.care_instruction_select' + washcare + ' option:selected').each(function () {
+										var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
+											$(this).data('russian') + "-" +
+											$(this).data('chinese') + "-" +
+											$(this).data('arabic') + "-" +
+											$(this).data('greek') + "-" +
+											$(this).data('turkish') + '</p>';
+										svgDoc.getElementById("text_care_instruction").innerHTML += value;
+									});
+
+									svgDoc.getElementById("parts_composition").innerHTML = "";
+									$('#composition_remove_qty' + washcare + ' tr').each(function () {
+										//alert($(this).find('select').find(':selected').text());
+										if ($(this).find('select').find(':selected').val() != "Select Option") {
+											svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' + $(this).find('select').find(':selected').data('french') + "-" + $(this).find('select').find(':selected').data('english') + "-" + $(this).find('select').find(':selected').data('spanish') + "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian') + "-" + $(this).find('select').find(':selected').data('dutch') + "-" + $(this).find('select').find(':selected').data('german') + "-" + $(this).find('select').find(':selected').data('russian') + "-" + $(this).find('select').find(':selected').data('chinese') + "-" + $(this).find('select').find(':selected').data('arabic') + "-" + $(this).find('select').find(':selected').data('greek') + "-" + $(this).find('select').find(':selected').data('turkish') + '</p>';
+										}
+
+										var id = $(this).attr('id')
+										var compo = $(this).find('.compositions_hidden').val();
+										var compss = compo.split(',');
+										$(compss).each(function (index1, value1) {
+											var english = value1.split('_');
+
+											svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0] + "-" + english[1] + "-" + english[2] + "-" + english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7] + "-" + english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11] + '</p>';
+										});
+									})
+									$('.composition_error_hidden').addClass('hidden')
+									var washcomp = [];
+									$('#composition_remove_qty' + washcare + ' tr').each(function () {
+										var washcomp1 = [];
+										var id = $(this).attr('id')
+										var value = $(this).find('select').find(':selected').val();
+										var compo = $(this).find('.compositions_hidden').val();
+										var compss = compo.split(',');
+										$(compss).each(function (index1, value1) {
+											var english = value1.split('_');
+											washcomp1.push(value + "_" + english[0] + "_" + english[12])
+										});
+										washcomp.push(washcomp1)
+									})
+									var wash_finals = JSON.stringify(washcomp);
+									localStorage.setItem('wash_composition_final' + washcare, wash_finals);
+
+								});
+							} else {
+								if (washcare < 5) {
+									$('.washnameerror').removeClass('hidden')
+								}
+							}
+
+						});
+
+
+
+
+
+
+
+						$('.delete-wash' + index).on('click', function (e) {
+							deletewash.push(value.id)
+							localStorage.setItem("deletewash", JSON.stringify(deletewash));
 							removeWashLabel(value.id)
-                            $('#washcarelabelform' + index).remove()
-                            washcare -= 1;
-                            $(this).parent().parent().parent().remove();
+							$('#washcarelabelform' + index).remove()
+							washcare -= 1;
+							$(this).parent().parent().parent().remove();
 
 
-                        });
-                        washcarelabels(data, index);
-                    }
-                });
-                washcare -= 1;
-            } else {
-                washcarelabels(data, "");
-            }
+						});
+						washcarelabels(data, index);
+					}
+				});
+				washcare -= 1;
+			} else {
+				washcarelabels(data, "");
+			}
 
 
-            //  washcarelabels(data,"");
+			//  washcarelabels(data,"");
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
+		},
+		complete: function () {
+			$(".loader").hide();
+		}
+	})
 }
 
 /**
@@ -1711,35 +1643,32 @@ function washcarelabels(data, dataid) {
 
 			$delivery_date = $de_date_fin;
 			$exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
-			if(data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment != "")
-			{
-				$comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p><hr>";
-			}
-			else
-			{
+			if (data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment != "") {
+				$comment = "<h4>Comments :</h4><p>" + data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment + "</p><hr>";
+			} else {
 				$comment = "";
 			}
-			
-			var str=data.orchestra_wash_care_label_orders[dataid1].status;
-			$status=str.replace(/ /g, "");
-			$status_text=str;
-			$wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
+
+			var str = data.orchestra_wash_care_label_orders[dataid1].status;
+			$status = str.replace(/ /g, "");
+			$status_text = str;
+			$wcl_name = data.orchestra_wash_care_label_orders[dataid1].template_name;
 		} else {
 			$delivery_date = "";
 			$exist_id = "";
 			$comment = "";
-			$status="";
-			$status_text="";
-			$wcl_name="";
+			$status = "";
+			$status_text = "";
+			$wcl_name = "";
 		}
 
 	} else {
 		$delivery_date = "";
 		$exist_id = "";
 		$comment = "";
-		$status="";
-		$status_text="";
-		$wcl_name="";
+		$status = "";
+		$status_text = "";
+		$wcl_name = "";
 	}
 	$.each(data.order_details, function (index, value) {
 		if (data.orchestra_wash_care_label_orders != "") {
@@ -1765,17 +1694,14 @@ function washcarelabels(data, dataid) {
 		ttots += parseInt($wash_label_count);
 
 	});
-	if(isNaN(ttots))
-		{
-			ttots=0;
-		}
-	else
-		{
-			ttots=ttots;
-		}
-	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4> <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" class="center-block" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div><hr>'+ $comment +' <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg",'+dataid+')>Print</button></div> </div>  <div class="backdrop"></div></form>');
+	if (isNaN(ttots)) {
+		ttots = 0;
+	} else {
+		ttots = ttots;
+	}
+	$('.top-content').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"> <div class="div-max"> <div class="col-md-3 "> <h4>Options</h4> <hr><div class=""><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Delivery Date</label> <div class="input-group wash_delivery_date date" data-provide="datepicker" id="datePicker1"> <input type="text" class="form-control" value="' + $delivery_date + '" id="wash_delivery_date' + dataid + '" required><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span> </div></div> <div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>  </div></div> <div class="col-md-6"> <h4>Art Work</h4><span class="label label-' + $status + '" style="position: absolute;top: 30px;left: 15px;">' + $status_text + '</span> <hr> <div class="section-1 sections scroll"> <object id="washcare_svg' + dataid + '" class="center-block" data="' + data.orchestra_wash_template + '" type="image/svg+xml"></object> <input type="hidden" value="' + data.orchestra_wash_template_id + '" id="wash_label_id"></div> </div> <div class="col-md-3 "> <h4>Options</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '">  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button><div class="parts_none' + dataid + '" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table><hr><h4>Compositions :</h4><label id="wash_composition_error' + dataid + '" class="hidden" style="color:red">Please Select composition</label><label id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red">Please Add Composition to Page</label><label class="hidden composition_error_hidden" style="color:red">Please select parts</label><div class="row"><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;right:12px" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div><hr>' + $comment + ' <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary" onclick=printWashDiv("washcare_svg",' + dataid + ')>Print</button></div> </div>  <div class="backdrop"></div></form>');
 
-   
+
 	$('#washcarelabelform' + dataid + ' .tot_qty_table').keyup(function () {
 		var tot_qty_table_carton_final = 0;
 		$('#washcarelabelform' + dataid + ' tbody tr').each(function (keys, vals) {
@@ -1794,10 +1720,10 @@ function washcarelabels(data, dataid) {
 			setWashCareLabelStatus(dataid)
 		}
 	})
-	$('.care_instruction_select'+dataid).parent().removeClass('has-error')
+	$('.care_instruction_select' + dataid).parent().removeClass('has-error')
 	$('.help-block').html('')
 	$('.extra_percentage').keyup(function () {
-		
+
 		var tot_qty_table_carton_final = 0;
 		if ($(this).val() != "") {
 			var per = $(this).val();
@@ -1812,7 +1738,7 @@ function washcarelabels(data, dataid) {
 			})
 			$(this).parent().parent().parent().parent().parent().find('.tot_qty_table_fin').text(tot_qty_table_carton_final);
 		} else {
-			
+
 			$(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
 				$(this).find('.tot_qty_table').val("");
 			})
@@ -1846,9 +1772,8 @@ function washcarelabels(data, dataid) {
 		autoclose: true,
 	});
 	$("#clickme" + dataid).click(function () {
-		
-	   if( $('.merchandisers option:selected').val() != "")
-	   {
+
+		if ($('.merchandisers option:selected').val() != "") {
 			composition_percentage_global = 0;
 			$('.composition_select' + dataid).prop('disabled', false)
 			$('.parts_select' + dataid).prop('disabled', false)
@@ -1866,13 +1791,11 @@ function washcarelabels(data, dataid) {
 			$("#washcarelabelform" + dataid + " .right-panel").toggleClass('active');
 			$('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
 			$("#washcarelabelform" + dataid + " .left-panel").toggleClass('active');
-		    $('.merchandiser_error').addClass('hidden')
-	   }
-	   else
-	   {
-				$('.merchandiser_error').removeClass('hidden')
-	   }
-		
+			$('.merchandiser_error').addClass('hidden')
+		} else {
+			$('.merchandiser_error').removeClass('hidden')
+		}
+
 	})
 
 	$(".backdrop, #close").click(function () {
@@ -1940,57 +1863,52 @@ function washcarelabels(data, dataid) {
 				//var comps="";
 				$.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
 					if (value.page_id != page_id) {
-						var comps="";
+						var comps = "";
 						$.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index1, value1) {
-							if(value.page_id == value1.page_id)
-							{
-								if(comps != "")
-								{
-									comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.russian+"_"+value1.chinese+"_"+value1.arabic+"_"+value1.greek+"_"+value1.turkish+"_"+value1.percentage;
+							if (value.page_id == value1.page_id) {
+								if (comps != "") {
+									comps += "," + value1.french + "_" + value1.english + "_" + value1.spanish + "_" + value1.portuguese + "_" + value1.italian + "_" + value1.dutch + "_" + value1.german + "_" + value1.russian + "_" + value1.chinese + "_" + value1.arabic + "_" + value1.greek + "_" + value1.turkish + "_" + value1.percentage;
+								} else {
+									comps += value1.french + "_" + value1.english + "_" + value1.spanish + "_" + value1.portuguese + "_" + value1.italian + "_" + value1.dutch + "_" + value1.german + "_" + value1.russian + "_" + value1.chinese + "_" + value1.arabic + "_" + value1.greek + "_" + value1.turkish + "_" + value1.percentage;
 								}
-								else
-								{
-									comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.russian+"_"+value1.chinese+"_"+value1.arabic+"_"+value1.greek+"_"+value1.turkish+"_"+value1.percentage;
-								}
-								
+
 							}
-							
+
 						});
-						
+
 						add_page_composition += 1;
-						$('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
-						
-						if(value.parts_id != "")
-						{
-							$('.select_parts'+add_page_composition).val(value.parts_id)
+						$('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="' + comps + '" class="compositions_hidden"><select class="select_parts' + add_page_composition + '">' + parts_option + '</select></td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+
+						if (value.parts_id != "") {
+							$('.select_parts' + add_page_composition).val(value.parts_id)
 						}
-						
-						
-						var washcomp=[];
+
+
+						var washcomp = [];
 						$('#composition_remove_qty' + dataid + ' tr').each(function () {
-							  var washcomp1=[];
-							  var id=$(this).attr('id')
-							  var value=$(this).find('select').find(':selected').val();
-							  var compo =$(this).find('.compositions_hidden').val();
-							  var compss = compo.split(',');
-								$(compss).each(function (index1,value1){ 
-									var english = value1.split('_');
-									washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
-								});
+							var washcomp1 = [];
+							var id = $(this).attr('id')
+							var value = $(this).find('select').find(':selected').val();
+							var compo = $(this).find('.compositions_hidden').val();
+							var compss = compo.split(',');
+							$(compss).each(function (index1, value1) {
+								var english = value1.split('_');
+								washcomp1.push(value + "_" + english[0] + "_" + english[12])
+							});
 							washcomp.push(washcomp1)
 						})
-						
-						
+
+
 						var wash_finals = JSON.stringify(washcomp);
-						localStorage.setItem('wash_composition_final'+dataid, wash_finals);
-						
+						localStorage.setItem('wash_composition_final' + dataid, wash_finals);
+
 						if (value.parts_english != null) {
 							svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_russian + "-" + value.parts_chinese + "-" + value.parts_arabic + "-" + value.parts_greek + "-" + value.parts_turkish + '</p>';
 						}
-						
+
 					}
 					//comps+=","+value.percentage+"_"+value.english;
-					
+
 					//alert(comps)
 					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german + "-" + value.russian + "-" + value.chinese + "-" + value.arabic + "-" + value.greek + "-" + value.turkish + '</p>';
 
@@ -2122,32 +2040,32 @@ function washcarelabels(data, dataid) {
  */
 
 function add_to_list(dataid) {
-    if (dataid === undefined) {
-        dataid = "";
-    } else {
-        dataid = dataid;
-    }
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
 
-    if ($('.composition_select' + dataid + ' option:selected').val() != "Select Option" && $('.composition_percent' + dataid).val() != "") {
+	if ($('.composition_select' + dataid + ' option:selected').val() != "Select Option" && $('.composition_percent' + dataid).val() != "") {
 
-        composition_percentage_global += parseInt($('.composition_percent' + dataid).val());
+		composition_percentage_global += parseInt($('.composition_percent' + dataid).val());
 
-        if (composition_percentage_global <= "100") {
+		if (composition_percentage_global <= "100") {
 
-            composition_percentage_global = composition_percentage_global;
-            $('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='"+$('.composition_select' + dataid + ' option:selected').attr('data-french')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-english')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-spanish')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-portuguese')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-italian')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-dutch')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-german')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-russian')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-chinese')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-arabic')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-greek')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-turkish')+"_" +parseInt($('.composition_percent' + dataid).val())+"'>" + $('.composition_select' + dataid + ' option:selected').text()+ "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
-        } else {
-            composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
-        }
+			composition_percentage_global = composition_percentage_global;
+			$('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='" + $('.composition_select' + dataid + ' option:selected').attr('data-french') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-english') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-spanish') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-portuguese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-italian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-dutch') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-german') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-russian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-chinese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-arabic') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-greek') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-turkish') + "_" + parseInt($('.composition_percent' + dataid).val()) + "'>" + $('.composition_select' + dataid + ' option:selected').text() + "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
+		} else {
+			composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
+		}
 
-        $('.parts_select' + dataid).prop('disabled', 'true')
-    }
-    if (composition_percentage_global == "100") {
-        $('.composition_select' + dataid).prop('disabled', 'true')
-        $('.composition_percent' + dataid).prop('disabled', 'true')
-        $('.add_to_list' + dataid).prop('disabled', 'true')
-        $('.add_to_composition' + dataid).removeAttr('disabled')
-    }
+		$('.parts_select' + dataid).prop('disabled', 'true')
+	}
+	if (composition_percentage_global == "100") {
+		$('.composition_select' + dataid).prop('disabled', 'true')
+		$('.composition_percent' + dataid).prop('disabled', 'true')
+		$('.add_to_list' + dataid).prop('disabled', 'true')
+		$('.add_to_composition' + dataid).removeAttr('disabled')
+	}
 
 }
 
@@ -2158,58 +2076,58 @@ function add_to_list(dataid) {
  */
 
 function add_to_composition(dataid) {
-    add_page_composition += 1;
-    $('#wash_composition_error' + dataid).addClass('hidden')
-    if (dataid === undefined) {
-        dataid = "";
-    } else {
-        dataid = dataid;
-    }
-    composition_percentage_global = 0;
-    var mySVG = document.getElementById("washcare_svg" + dataid);
-    var svgDoc = mySVG.contentDocument;
-    var a = [];
-    var com = [];
-	 //var com_ajax = [];
-    $('#composition_table_qty' + dataid + ' tr').each(function () {
-        var comp = $(this).find('.list_comp').val();
+	add_page_composition += 1;
+	$('#wash_composition_error' + dataid).addClass('hidden')
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
+	composition_percentage_global = 0;
+	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var svgDoc = mySVG.contentDocument;
+	var a = [];
+	var com = [];
+	//var com_ajax = [];
+	$('#composition_table_qty' + dataid + ' tr').each(function () {
+		var comp = $(this).find('.list_comp').val();
 		var comp1 = comp.split('_');
-        var percent = $(this).find('.percent').text();
-        var parts = $('.parts_select' + dataid + ' option:selected').val()
-        a.push(comp1[0]+"_"+comp1[1]+"_"+comp1[2]+"_"+comp1[3]+"_"+comp1[4]+"_"+comp1[5]+"_"+comp1[6]+"_"+comp1[7]+"_"+comp1[8]+"_"+comp1[9]+"_"+comp1[10]+"_"+comp1[11]+"_"+comp1[12])
-       
-    })
+		var percent = $(this).find('.percent').text();
+		var parts = $('.parts_select' + dataid + ' option:selected').val()
+		a.push(comp1[0] + "_" + comp1[1] + "_" + comp1[2] + "_" + comp1[3] + "_" + comp1[4] + "_" + comp1[5] + "_" + comp1[6] + "_" + comp1[7] + "_" + comp1[8] + "_" + comp1[9] + "_" + comp1[10] + "_" + comp1[11] + "_" + comp1[12])
+
+	})
 	comps = a.join(',');
-    if (localStorage.getItem('wash_composition') != null) {
-        var str = localStorage.getItem('wash_composition');
-        var n = str.includes('wash_composition' + dataid);
-        if (n == false) {
-            wash_composition['wash_composition' + dataid] = {};
-        }
-    } else {
-        wash_composition['wash_composition' + dataid] = {};
-    }
+	if (localStorage.getItem('wash_composition') != null) {
+		var str = localStorage.getItem('wash_composition');
+		var n = str.includes('wash_composition' + dataid);
+		if (n == false) {
+			wash_composition['wash_composition' + dataid] = {};
+		}
+	} else {
+		wash_composition['wash_composition' + dataid] = {};
+	}
 
-    wash_composition['wash_composition' + dataid][add_page_composition] = com;
-    var wash_comp = JSON.stringify(wash_composition);
-    localStorage.setItem('wash_composition', wash_comp);
+	wash_composition['wash_composition' + dataid][add_page_composition] = com;
+	var wash_comp = JSON.stringify(wash_composition);
+	localStorage.setItem('wash_composition', wash_comp);
 
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	var buyer = localStorage.getItem("buyer");
 
-            $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden">'+$('.parts_none'+ dataid).html()+'</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+	$('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="' + comps + '" class="compositions_hidden">' + $('.parts_none' + dataid).html() + '</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
 
-            $(".add_to_list" + dataid).prop("disabled", false);
-            $('.composition_select' + dataid).prop('disabled', false)
-            $('.composition_percent' + dataid).prop('disabled', false)
-            $('#composition_table_qty' + dataid).html("")
-            $('.parts_select' + dataid).prop('disabled', false)
-            $('.add_to_composition' + dataid).attr('disabled', 'disabled')
-            $('.composition_percent' + dataid).val("");
-            $(".composition_select" + dataid).val('');
-            $('.composition_select' + dataid).selectpicker('refresh');
-            $(".parts_select" + dataid).val('');
-            $('.parts_select' + dataid).selectpicker('refresh');
+	$(".add_to_list" + dataid).prop("disabled", false);
+	$('.composition_select' + dataid).prop('disabled', false)
+	$('.composition_percent' + dataid).prop('disabled', false)
+	$('#composition_table_qty' + dataid).html("")
+	$('.parts_select' + dataid).prop('disabled', false)
+	$('.add_to_composition' + dataid).attr('disabled', 'disabled')
+	$('.composition_percent' + dataid).val("");
+	$(".composition_select" + dataid).val('');
+	$('.composition_select' + dataid).selectpicker('refresh');
+	$(".parts_select" + dataid).val('');
+	$('.parts_select' + dataid).selectpicker('refresh');
 
 }
 
@@ -2220,70 +2138,64 @@ function add_to_composition(dataid) {
  */
 
 function add_to_page(dataid) {
-  if (dataid === undefined) {
-	dataid = "";
-  } else {
-	dataid = dataid;
-  }	
-	var mySVG = document.getElementById("washcare_svg" + dataid);
-    var svgDoc = mySVG.contentDocument;
-	
-	var check=0;
-	var check1=0;
-	 $('#composition_remove_qty' + dataid + ' tr').each(function () {
-		 
-		 if($(this).find('select').find(':selected').text() == "Select Option")
-			 {
-				 check++;
-			 }
-		 check1++;
-	 });
-	
-	if(check1 <2 )
-	{
-		check=0;
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
 	}
-	
-	if(check == 0 )
-		{
-			  svgDoc.getElementById("parts_composition").innerHTML ="";
-			  $('#composition_remove_qty' + dataid + ' tr').each(function () {
-				  //alert($(this).find('select').find(':selected').text());
-				  if($(this).find('select').find(':selected').val() != "Select Option")
-				  {
-					   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
-				  }
-				 
-				  var id=$(this).attr('id')
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-				  $(compss).each(function (index1,value1) {
-					  var english = value1.split('_');
+	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var svgDoc = mySVG.contentDocument;
 
-					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
-				});
-			  })
-			$('.composition_error_hidden').addClass('hidden')
-			var washcomp=[];
-			$('#composition_remove_qty' + dataid + ' tr').each(function () {
-				  var washcomp1=[];
-				  var id=$(this).attr('id')
-				  var value=$(this).find('select').find(':selected').val();
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-					$(compss).each(function (index1,value1){ 
-						var english = value1.split('_');
-						washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
-					});
-				washcomp.push(washcomp1)
-			})
-			var wash_finals = JSON.stringify(washcomp);
-			localStorage.setItem('wash_composition_final'+dataid, wash_finals);
+	var check = 0;
+	var check1 = 0;
+	$('#composition_remove_qty' + dataid + ' tr').each(function () {
+
+		if ($(this).find('select').find(':selected').text() == "Select Option") {
+			check++;
 		}
-	else
-		{
-			$('.composition_error_hidden').removeClass('hidden')
-		}
+		check1++;
+	});
+
+	if (check1 < 2) {
+		check = 0;
+	}
+
+	if (check == 0) {
+		svgDoc.getElementById("parts_composition").innerHTML = "";
+		$('#composition_remove_qty' + dataid + ' tr').each(function () {
+			//alert($(this).find('select').find(':selected').text());
+			if ($(this).find('select').find(':selected').val() != "Select Option") {
+				svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' + $(this).find('select').find(':selected').data('french') + "-" + $(this).find('select').find(':selected').data('english') + "-" + $(this).find('select').find(':selected').data('spanish') + "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian') + "-" + $(this).find('select').find(':selected').data('dutch') + "-" + $(this).find('select').find(':selected').data('german') + "-" + $(this).find('select').find(':selected').data('russian') + "-" + $(this).find('select').find(':selected').data('chinese') + "-" + $(this).find('select').find(':selected').data('arabic') + "-" + $(this).find('select').find(':selected').data('greek') + "-" + $(this).find('select').find(':selected').data('turkish') + '</p>';
+			}
+
+			var id = $(this).attr('id')
+			var compo = $(this).find('.compositions_hidden').val();
+			var compss = compo.split(',');
+			$(compss).each(function (index1, value1) {
+				var english = value1.split('_');
+
+				svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0] + "-" + english[1] + "-" + english[2] + "-" + english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7] + "-" + english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11] + '</p>';
+			});
+		})
+		$('.composition_error_hidden').addClass('hidden')
+		var washcomp = [];
+		$('#composition_remove_qty' + dataid + ' tr').each(function () {
+			var washcomp1 = [];
+			var id = $(this).attr('id')
+			var value = $(this).find('select').find(':selected').val();
+			var compo = $(this).find('.compositions_hidden').val();
+			var compss = compo.split(',');
+			$(compss).each(function (index1, value1) {
+				var english = value1.split('_');
+				washcomp1.push(value + "_" + english[0] + "_" + english[12])
+			});
+			washcomp.push(washcomp1)
+		})
+		var wash_finals = JSON.stringify(washcomp);
+		localStorage.setItem('wash_composition_final' + dataid, wash_finals);
+	} else {
+		$('.composition_error_hidden').removeClass('hidden')
+	}
 
 
 }
@@ -2297,27 +2209,27 @@ function add_to_page(dataid) {
 
 function deleteComposition(obj, dataid) {
 
-    // add_page_composition-=1;
-    if (dataid === undefined) {
-        dataid = "";
-    } else {
-        dataid = dataid;
-    }
-    $(obj).parent().parent().remove();
-    var classname = $(obj).parent().parent().attr('id');
-    var mySVG = document.getElementById("washcare_svg" + dataid);
-    var svgDoc = mySVG.contentDocument;
-    var list = svgDoc.getElementsByClassName("composition_" + classname);
-    for (var i = list.length - 1; 0 <= i; i--) {
-        list[i].remove();
-    }
-    var wash = localStorage.getItem('wash_composition');
-    var wash_fin = JSON.parse(wash);
-    alert(add_page_composition)
-    delete wash_fin['wash_composition' + dataid][classname];
-    delete wash_composition['wash_composition' + dataid][classname];
-    var wash_final = JSON.stringify(wash_fin);
-    localStorage.setItem('wash_composition', wash_final);
+	// add_page_composition-=1;
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
+	$(obj).parent().parent().remove();
+	var classname = $(obj).parent().parent().attr('id');
+	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var svgDoc = mySVG.contentDocument;
+	var list = svgDoc.getElementsByClassName("composition_" + classname);
+	for (var i = list.length - 1; 0 <= i; i--) {
+		list[i].remove();
+	}
+	var wash = localStorage.getItem('wash_composition');
+	var wash_fin = JSON.parse(wash);
+	alert(add_page_composition)
+	delete wash_fin['wash_composition' + dataid][classname];
+	delete wash_composition['wash_composition' + dataid][classname];
+	var wash_final = JSON.stringify(wash_fin);
+	localStorage.setItem('wash_composition', wash_final);
 }
 
 
@@ -2329,127 +2241,124 @@ function deleteComposition(obj, dataid) {
 
 function mainlabels(data, dataid) {
 
-    var tr = "";
-    $qu = 0;
-    var ttots = 0;
-    if (data.orchestra_main_label_orders != "") {
-        if (dataid != "") {
-            dataid1 = dataid;
-        } else {
-            dataid1 = 0;
-        }
-        if (data.orchestra_main_label_orders.length > dataid1) {
-            $de_date = data.orchestra_main_label_orders[dataid1].delivery_date
-
-            $de_date1 = $de_date.split('-');
-            $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
-
-            $delivery_date = $de_date_fin;
-            $template_id = data.orchestra_main_label_orders[dataid1].template_id;
-            $exist_id = data.orchestra_main_label_orders[dataid1].id;
-			$main_count=data.orchestra_main_label_orders[dataid1].final_qty;
-			$main_name=data.orchestra_main_label_orders[dataid1].template_name;
-			
-			var str=data.orchestra_main_label_orders[dataid1].status;
-			$main_status=str.replace(/ /g, "");
-			$main_status_text=data.orchestra_main_label_orders[dataid1].status;
-			
-        } else {
-            $delivery_date = "";
-            $template_id = "";
-            $exist_id = "";
-			$main_count="";
-			$main_status="";
-			$main_status_text="";
-			$main_name="";
-        }
-
-    } else {
-        $delivery_date = "";
-        $template_id = "";
-        $exist_id = "";
-		$main_count="";
-		$main_status="";
-		$main_status_text="";
-		$main_name="";
-    }
-    $.each(data.order_details, function (index, value) {
-        if (data.orchestra_main_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-            if (data.orchestra_main_label_orders.length > dataid1) {
-                $main_label_count = data.orchestra_main_label_orders[dataid1]['qty'][$qu].quantity;
-            } else {
-                $main_label_count = "";
-            }
-
-        } else {
-            $main_label_count = "";
-        }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)"  type="text" class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Main & Size Count"><div class="help-block with-errors"></div></div></td></tr>';
-        ttots += parseInt($main_label_count);
-        $qu++;
-    });
-	if(isNaN(ttots))
-		{
-			ttots=0;
+	var tr = "";
+	$qu = 0;
+	var ttots = 0;
+	if (data.orchestra_main_label_orders != "") {
+		if (dataid != "") {
+			dataid1 = dataid;
+		} else {
+			dataid1 = 0;
 		}
-	else
-		{
-			ttots=ttots;
+		if (data.orchestra_main_label_orders.length > dataid1) {
+			$de_date = data.orchestra_main_label_orders[dataid1].delivery_date
+
+			$de_date1 = $de_date.split('-');
+			$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
+
+			$delivery_date = $de_date_fin;
+			$template_id = data.orchestra_main_label_orders[dataid1].template_id;
+			$exist_id = data.orchestra_main_label_orders[dataid1].id;
+			$main_count = data.orchestra_main_label_orders[dataid1].final_qty;
+			$main_name = data.orchestra_main_label_orders[dataid1].template_name;
+
+			var str = data.orchestra_main_label_orders[dataid1].status;
+			$main_status = str.replace(/ /g, "");
+			$main_status_text = data.orchestra_main_label_orders[dataid1].status;
+
+		} else {
+			$delivery_date = "";
+			$template_id = "";
+			$exist_id = "";
+			$main_count = "";
+			$main_status = "";
+			$main_status_text = "";
+			$main_name = "";
 		}
-    var option = "<option value=''>Select Option</option>";
-    $.each(data.orchestra_template_front, function (index, value) {
-        option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
-    });
-    $('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Main & Size Label Name</label><input type="text" class="form-control input-sm" required="" placeholder="Main & Size Label Name" value="' + $main_name + '" id="main_size_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$main_status+'" style="position: absolute;top: 30px;left: 15px;">'+$main_status_text+'</span><hr> <div class="section-1 sections scroll"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main Labels</span></h4> <hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty' + dataid + '" value="'+$main_count+'" onkeypress="return checkNumbersOnly(event)" placeholder="Main Label Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
-    $('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#mainlabelsform' + dataid + ' tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
-            }
-        })
-        $('#mainlabelsform' + dataid + ' .tot_qty_table_fin').text(tot_qty_table_carton_final);
-    });
+	} else {
+		$delivery_date = "";
+		$template_id = "";
+		$exist_id = "";
+		$main_count = "";
+		$main_status = "";
+		$main_status_text = "";
+		$main_name = "";
+	}
+	$.each(data.order_details, function (index, value) {
+		if (data.orchestra_main_label_orders != "") {
+			if (dataid != "") {
+				dataid1 = dataid;
+			} else {
+				dataid1 = 0;
+			}
+			if (data.orchestra_main_label_orders.length > dataid1) {
+				$main_label_count = data.orchestra_main_label_orders[dataid1]['qty'][$qu].quantity;
+			} else {
+				$main_label_count = "";
+			}
 
-    var date = new Date();
-    date.setDate(date.getDate() + 7);
+		} else {
+			$main_label_count = "";
+		}
+		tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)"  type="text" class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Main & Size Count"><div class="help-block with-errors"></div></div></td></tr>';
+		ttots += parseInt($main_label_count);
+		$qu++;
+	});
+	if (isNaN(ttots)) {
+		ttots = 0;
+	} else {
+		ttots = ttots;
+	}
+	var option = "<option value=''>Select Option</option>";
+	$.each(data.orchestra_template_front, function (index, value) {
+		option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
+	});
+	$('.top-content').append('<form id="mainlabelsform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Main & Size Label Name</label><input type="text" class="form-control input-sm" required="" placeholder="Main & Size Label Name" value="' + $main_name + '" id="main_size_name' + dataid + '"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group main_delivery_date date"data-provide="datepicker"id="datePicker1"><input type="text" value="' + $delivery_date + '" id="main_delivery_date' + dataid + '" class="form-control" required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_template_error' + dataid + '" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree3' + dataid + '_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree3' + dataid + '" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-' + $main_status + '" style="position: absolute;top: 30px;left: 15px;">' + $main_status_text + '</span><hr> <div class="section-1 sections scroll"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Size Labels</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table> <h4>Quantity Info for <span class="mainlabelnameqty' + dataid + '">Main Labels</span></h4> <hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty' + dataid + '" value="' + $main_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Main Label Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="close">Close</button> </div> </div>  <div class="backdrop"></div></form>');
 
-    var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    $('.main_delivery_date').datepicker({
-        startDate: dateMsg
-    });
-    $("#clickmemain" + dataid).click(function () {
-        // $('.sample-artwork').html("")
-        //alert($('.mainlabelname'+dataid).text())
-        //$('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
-        $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
-        $("#mainlabelsform" + dataid + " .left-panel").toggleClass('active');
-    })
+	$('#mainlabelsform' + dataid + ' .tot_qty_table').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		$('#mainlabelsform' + dataid + ' tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table').val() != undefined) {
+				tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+			}
+		})
+		$('#mainlabelsform' + dataid + ' .tot_qty_table_fin').text(tot_qty_table_carton_final);
+	});
 
-    $(".backdrop, #close").click(function () {
-        $("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
-    })
-    selectpicker()
-    treestructure(data.treeviewmain, "tree3" + dataid, $template_id);
-    $('#mainlabelsform' + dataid).validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+	var date = new Date();
+	date.setDate(date.getDate() + 7);
 
-        } else {
-            e.preventDefault();
-            setMainLabelStatus(dataid)
-        }
-    })
+	var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+	$('.main_delivery_date').datepicker({
+		startDate: dateMsg
+	});
+	$("#clickmemain" + dataid).click(function () {
+		// $('.sample-artwork').html("")
+		//alert($('.mainlabelname'+dataid).text())
+		//$('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
+		$("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
+		$("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
+		$('#mainlabelsform' + dataid + ' .scalable').toggleClass('active');
+		$("#mainlabelsform" + dataid + " .left-panel").toggleClass('active');
+	})
+
+	$(".backdrop, #close").click(function () {
+		$("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
+		$("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
+		$("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
+		$('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
+	})
+	selectpicker()
+	treestructure(data.treeviewmain, "tree3" + dataid, $template_id);
+	$('#mainlabelsform' + dataid).validator().on('submit', function (e) {
+		if (e.isDefaultPrevented()) {
+
+		} else {
+			e.preventDefault();
+			setMainLabelStatus(dataid)
+		}
+	})
 }
 
 /**
@@ -2459,75 +2368,75 @@ function mainlabels(data, dataid) {
  */
 
 function specialtags(data) {
-    var tr = "";
-    $qu = 0;
-    if (data.orchestra_special_tag_orders != "") {
+	var tr = "";
+	$qu = 0;
+	if (data.orchestra_special_tag_orders != "") {
 
-        $de_date = data.orchestra_special_tag_orders[0].delivery_date;
+		$de_date = data.orchestra_special_tag_orders[0].delivery_date;
 
-        $de_date1 = $de_date.split('-');
-        $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
+		$de_date1 = $de_date.split('-');
+		$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
 
-        $delivery_date = $de_date_fin;
-        $template_id = data.orchestra_special_tag_orders[0].template_id;
-        $exist_id = data.orchestra_special_tag_orders[0].id;
-		$special_tag_count=data.orchestra_special_tag_orders[0].final_qty;
-		
-		var str=data.orchestra_special_tag_orders[0].status;
-		$status=str.replace(/ /g, "");
-		$status_text=str;
-    } else {
-        $delivery_date = "";
-        $template_id = "";
-        $exist_id = "";
-		$special_tag_count="";
-		$status="";
-		$status_text="";
-    }
- 	
-    var option = "<option value=''>Select Option</option>";
-    $.each(data.orchestra_template_front, function (index, value) {
-        option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
-    });
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+		$delivery_date = $de_date_fin;
+		$template_id = data.orchestra_special_tag_orders[0].template_id;
+		$exist_id = data.orchestra_special_tag_orders[0].id;
+		$special_tag_count = data.orchestra_special_tag_orders[0].final_qty;
 
-    $('#specialtagform .tot_qty_table').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#specialtagform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
-            }
-        })
-        $('#specialtagform .tot_qty_table_fin').text(tot_qty_table_carton_final);
-    });
+		var str = data.orchestra_special_tag_orders[0].status;
+		$status = str.replace(/ /g, "");
+		$status_text = str;
+	} else {
+		$delivery_date = "";
+		$template_id = "";
+		$exist_id = "";
+		$special_tag_count = "";
+		$status = "";
+		$status_text = "";
+	}
 
-    $("#clickmespecial").click(function () {
-        // $('.sample-artwork').html("")
-        $("#specialtagform .backdrop").toggleClass('active');
-        $("#specialtagform .right-panel").toggleClass('active');
-        $('#specialtagform .scalable').toggleClass('active');
-        $("#specialtagform .left-panel").toggleClass('active');
-    })
+	var option = "<option value=''>Select Option</option>";
+	$.each(data.orchestra_template_front, function (index, value) {
+		option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
+	});
+	$('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panel col-md-9"id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group special_delivery_date date"data-provide="datepicker" ><input id="special_delivery_date"  type="text" value="' + $delivery_date + '" class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-' + $status + '" style="position: absolute;top: 30px;left: 15px;">' + $status_text + '</span><hr> <div class="section-1 sections scroll"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkNumbersOnly(event)" placeholder="Special Tag Count" type="text" required><div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 
-    $(".backdrop, #specialclose").click(function () {
-        $("#specialtagform .left-panel").removeClass('active');
-        $("#specialtagform .right-panel").removeClass('active');
-        $("#specialtagform .backdrop").removeClass('active');
-        $('#specialtagform .scalable').removeClass('active');
-    })
+	$('#specialtagform .tot_qty_table').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		$('#specialtagform tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table').val() != undefined) {
+				tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+			}
+		})
+		$('#specialtagform .tot_qty_table_fin').text(tot_qty_table_carton_final);
+	});
+
+	$("#clickmespecial").click(function () {
+		// $('.sample-artwork').html("")
+		$("#specialtagform .backdrop").toggleClass('active');
+		$("#specialtagform .right-panel").toggleClass('active');
+		$('#specialtagform .scalable').toggleClass('active');
+		$("#specialtagform .left-panel").toggleClass('active');
+	})
+
+	$(".backdrop, #specialclose").click(function () {
+		$("#specialtagform .left-panel").removeClass('active');
+		$("#specialtagform .right-panel").removeClass('active');
+		$("#specialtagform .backdrop").removeClass('active');
+		$('#specialtagform .scalable').removeClass('active');
+	})
 
 
 
-    treestructure(data.treeviewspecial, "tree2", $template_id);
+	treestructure(data.treeviewspecial, "tree2", $template_id);
 
-    $('#specialtagform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+	$('#specialtagform').validator().on('submit', function (e) {
+		if (e.isDefaultPrevented()) {
 
-        } else {
-            e.preventDefault();
-            setSpecialTagStatus()
-        }
-    })
+		} else {
+			e.preventDefault();
+			setSpecialTagStatus()
+		}
+	})
 }
 
 /**
@@ -2536,11 +2445,11 @@ function specialtags(data) {
  * @return boolean
  */
 
- function checkNumbersOnly(e){
-	
-    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-               return false;
-    }
+function checkNumbersOnly(e) {
+
+	if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+		return false;
+	}
 }
 
 /**
@@ -2550,424 +2459,421 @@ function specialtags(data) {
  */
 
 function hangtagmodal(data) {
-    var order_details = data.order_details;
-    var tr = "";
-    $qu = 0;
-    if (data.orchestra_hang_tag_orders != "") {
-        $de_date = data.orchestra_hang_tag_orders[0].delivery_date;
+	var order_details = data.order_details;
+	var tr = "";
+	$qu = 0;
+	if (data.orchestra_hang_tag_orders != "") {
+		$de_date = data.orchestra_hang_tag_orders[0].delivery_date;
 
-        $de_date1 = $de_date.split('-');
-        $de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
+		$de_date1 = $de_date.split('-');
+		$de_date_fin = $de_date1[1] + "/" + $de_date1[2] + "/" + $de_date1[0];
 
-        $delivery_date = $de_date_fin;
+		$delivery_date = $de_date_fin;
 
-        $template_front_id = data.orchestra_hang_tag_orders[0].template_front_id;
-        $exist_id = data.orchestra_hang_tag_orders[0].id;
-		
-		var str=data.orchestra_hang_tag_orders[0].status;
-		$status=str.replace(/ /g, "");
-		$status_text=str;
-    } else {
-        $delivery_date = "";
-        $template_front_id = "";
-        $exist_id = "";
-		$status="";
-		$status_text="";
-    }
-    var ttots = 0;
-    $.each(data.order_details, function (index, value) {
-        if (data.orchestra_hang_tag_orders != "") {
+		$template_front_id = data.orchestra_hang_tag_orders[0].template_front_id;
+		$exist_id = data.orchestra_hang_tag_orders[0].id;
 
-            $hang_tag_count = data.orchestra_hang_tag_orders_qty[$qu].quantity;
-        } else {
-            $hang_tag_count = "";
-        }
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
-        ttots += parseInt($hang_tag_count);
-        $qu++;
-    });
-	
-	if(isNaN(ttots))
-		{
-			ttots=0;
+		var str = data.orchestra_hang_tag_orders[0].status;
+		$status = str.replace(/ /g, "");
+		$status_text = str;
+	} else {
+		$delivery_date = "";
+		$template_front_id = "";
+		$exist_id = "";
+		$status = "";
+		$status_text = "";
+	}
+	var ttots = 0;
+	$.each(data.order_details, function (index, value) {
+		if (data.orchestra_hang_tag_orders != "") {
+
+			$hang_tag_count = data.orchestra_hang_tag_orders_qty[$qu].quantity;
+		} else {
+			$hang_tag_count = "";
 		}
-	else
-		{
-			ttots=ttots;
+		tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+		ttots += parseInt($hang_tag_count);
+		$qu++;
+	});
+
+	if (isNaN(ttots)) {
+		ttots = 0;
+	} else {
+		ttots = ttots;
+	}
+	var option = "<option value=''>Select Option</option>";
+	$.each(data.orchestra_template_front, function (index, value) {
+		option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
+	});
+	$('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><span class="label label-' + $status + '" style="position: absolute;top: 30px;left: 15px;">' + $status_text + '</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary" onclick=printHangDiv("svg2")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+
+
+	$('#hangtagform .tot_qty_table').keyup(function () {
+		var tot_qty_table_carton_final = 0;
+		$('#hangtagform tbody tr').each(function (keys, vals) {
+			if ($(this).find('.tot_qty_table').val() != undefined) {
+				tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
+			}
+		})
+		$('#hangtagform .tot_qty_table_fin').text(tot_qty_table_carton_final);
+	});
+
+	$("#clickmehang").click(function () {
+		// $('.sample-artwork').html("")
+		$("#hangtagform .backdrop").toggleClass('active');
+		$("#hangtagform .right-panel").toggleClass('active');
+		$('#hangtagform .scalable').toggleClass('active');
+		$("#hangtagform .left-panel").toggleClass('active');
+	})
+
+	$(".backdrop, #hangclose").click(function () {
+		$("#hangtagform .left-panel").removeClass('active');
+		$("#hangtagform .right-panel").removeClass('active');
+		$("#hangtagform .backdrop").removeClass('active');
+		$('#hangtagform .scalable').removeClass('active');
+	})
+
+	$('#tree1').jstree({
+		'core': {
+			'data': data.treefinalData
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search"]
+	});
+	$('#expand').bind("click", function () {
+		$('#tree1').jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#tree1').jstree("close_all");
+	});
+	var to = false;
+	$('#tree1_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
 		}
-    var option = "<option value=''>Select Option</option>";
-    $.each(data.orchestra_template_front, function (index, value) {
-        option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
-    });
-    $('.top-content').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panel col-md-9"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Delivery Date</label><div class="input-group date hang_delivery_date"data-provide="datepicker"id="datePicker1"><input value="' + $delivery_date + '" id="hang_delivery_date" type="text"class="form-control"required><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div></div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panel col-md-3"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty.</th><th>Qty<br/> <label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentage" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + data.total_qty + '</td><td class="text-center tot_qty_table_fin">' + ttots + '</td></tr></tbody></table></div> <button class="btn btn-primary pull-right input-sm" type="submit" id="left" style="margin-left:10px">Save</button> <button class="btn btn-danger pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary" onclick=printHangDiv("svg2")>Print</button> </div> </div>  <div class="backdrop"></div></form>');
+		to = setTimeout(function () {
+			var v = $('#tree1_q').val();
+			$('#tree1').jstree(true).search(v);
+		}, 250);
+	});
+	//Show Template when tree loads 
+	$("#tree1").on("loaded.jstree", function (e, data) {
+		$('#tree1').jstree(true).select_node($template_front_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		//alert()
+		if ($template_front_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = $template_front_id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
+						if (data[0].disney == 0) {
+							var mySVG = document.getElementById("svg_hang_front");
+							var svgDoc;
+							mySVG.addEventListener("load", function () {
+								svgDoc = mySVG.contentDocument;
+								var pri = order_details[0].PrixEurope.split(".")
+
+								if (pri.length == 1) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = order_details[0].PrixEurope;
+									svgDoc.getElementById("price2").innerHTML = "";
+								} else if (pri.length == 2) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = pri[0];
+									svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+								}
+								var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+								if (pri1.length == 1) {
+									svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+									svgDoc.getElementById("club_price2").innerHTML = "";
+								} else if (pri1.length == 2) {
+									svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+									svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+								}
+
+							}, false);
+						} else {
+							var mySVG = document.getElementById("svg2");
+							var svgDoc;
+							mySVG.addEventListener("load", function () {
+								svgDoc = mySVG.contentDocument;
+								var pri = order_details[0].PrixEurope.split(".")
+
+								if (pri.length == 1) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = order_details[0].PrixEurope;
+									svgDoc.getElementById("price2").innerHTML = "";
+								} else if (pri.length == 2) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = pri[0];
+									svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+								}
+								var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+								if (pri1.length == 1) {
+									svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+									svgDoc.getElementById("club_price2").innerHTML = "";
+								} else if (pri1.length == 2) {
+									svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+									svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+								}
+
+							}, false);
+						}
+
+						var mySVG = document.getElementById("svg2");
+						var svgDoc;
+						mySVG.addEventListener("load", function () {
+							svgDoc = mySVG.contentDocument;
+							var svgItem = svgDoc.getElementById("uvc_tco");
+							svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
+							svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
+							svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
+							svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
+							svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
+							svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+							svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
+							svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
+							svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
+							svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
+							svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
+							svgItem.innerHTML = order_details[0].UVC_TCO;
+							var size = order_details[0].Size.split(" ")
+							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
+							svgDoc.getElementById("size").innerHTML = size[0];
+							svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+							svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+							svgDoc.getElementById("in").innerHTML = order_details[0].in;
+							if (size[1] == "ANS") {
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = "years";
+
+							} else {
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = "months";
+							}
+							var code = order_details[0].BarcodeForPricesTags.toString();
+							jsbarcode_hang(code, "barcode1", svgDoc)
 
 
-    $('#hangtagform .tot_qty_table').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#hangtagform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table').val());
-            }
-        })
-        $('#hangtagform .tot_qty_table_fin').text(tot_qty_table_carton_final);
-    });
+						}, false);
 
-    $("#clickmehang").click(function () {
-        // $('.sample-artwork').html("")
-        $("#hangtagform .backdrop").toggleClass('active');
-        $("#hangtagform .right-panel").toggleClass('active');
-        $('#hangtagform .scalable').toggleClass('active');
-        $("#hangtagform .left-panel").toggleClass('active');
-    })
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
+				},
+				error: function (data) {
 
-    $(".backdrop, #hangclose").click(function () {
-        $("#hangtagform .left-panel").removeClass('active');
-        $("#hangtagform .right-panel").removeClass('active');
-        $("#hangtagform .backdrop").removeClass('active');
-        $('#hangtagform .scalable').removeClass('active');
-    })
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+	//Show Template when Click tree node 
+	$('#tree1').on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		//alert()
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
 
-    $('#tree1').jstree({
-        'core': {
-            'data': data.treefinalData
-        },
-        "types": {
-            "default": {
-                "icon": "fa fa-folder"
-            }
-        },
-        "plugins": ["types", "search"]
-    });
-    $('#expand').bind("click", function () {
-        $('#tree1').jstree("open_all");
-    });
-    $('#collapse').bind("click", function () {
-        $('#tree1').jstree("close_all");
-    });
-    var to = false;
-    $('#tree1_q').keyup(function () {
-        if (to) {
-            clearTimeout(to);
-        }
-        to = setTimeout(function () {
-            var v = $('#tree1_q').val();
-            $('#tree1').jstree(true).search(v);
-        }, 250);
-    });
-    //Show Template when tree loads 
-    $("#tree1").on("loaded.jstree", function (e, data) {
-        $('#tree1').jstree(true).select_node($template_front_id);
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
-        if ($template_front_id != "") {
-            var buyer = localStorage.getItem("buyer");
-            var template_id = $template_front_id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-                        if (data[0].disney == 0) {
-                            var mySVG = document.getElementById("svg_hang_front");
-                            var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+						if (data[0].disney == 0) {
+							var mySVG = document.getElementById("svg_hang_front");
+							var svgDoc;
+							mySVG.addEventListener("load", function () {
+								svgDoc = mySVG.contentDocument;
+								var pri = order_details[0].PrixEurope.split(".")
 
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
+								if (pri.length == 1) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = innerHTML = order_details[0].PrixEurope;
+									svgDoc.getElementById("price2").innerHTML = "";
+								} else if (pri.length == 2) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = innerHTML = pri[0];
+									svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+								}
+								var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+								if (pri1.length == 1) {
+									svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+									svgDoc.getElementById("club_price2").innerHTML = "";
+								} else if (pri1.length == 2) {
+									svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+									svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+								}
 
-                            }, false);
-                        } else {
-                            var mySVG = document.getElementById("svg2");
-                            var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
+							}, false);
+						} else {
+							var mySVG = document.getElementById("svg2");
+							var svgDoc;
+							mySVG.addEventListener("load", function () {
+								svgDoc = mySVG.contentDocument;
+								var pri = order_details[0].PrixEurope.split(".")
 
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
+								if (pri.length == 1) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = order_details[0].PrixEurope;
+									svgDoc.getElementById("price2").innerHTML = "";
+								} else if (pri.length == 2) {
+									var svgItem = svgDoc.getElementById("price1");
+									svgItem.innerHTML = pri[0];
+									svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+								}
+								var pri1 = order_details[0].PrixClubEurope.toString().split(".")
+								if (pri1.length == 1) {
+									svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
+									svgDoc.getElementById("club_price2").innerHTML = "";
+								} else if (pri1.length == 2) {
+									svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+									svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+								}
 
-                            }, false);
-                        }
+							}, false);
+						}
 
-                        var mySVG = document.getElementById("svg2");
-                        var svgDoc;
-                        mySVG.addEventListener("load", function () {
-                            svgDoc = mySVG.contentDocument;
-                            var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
-                            svgItem.innerHTML = order_details[0].UVC_TCO;
-                            var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
-                            svgDoc.getElementById("size").innerHTML = size[0];
-                            svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
-                            svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
-                            svgDoc.getElementById("in").innerHTML = order_details[0].in;
-                            if (size[1] == "ANS") {
-                                svgDoc.getElementById("size_french").innerHTML = size[1];
-                                svgDoc.getElementById("size_english").innerHTML = "years";
+						var mySVG = document.getElementById("svg2");
+						var svgDoc;
+						mySVG.addEventListener("load", function () {
+							svgDoc = mySVG.contentDocument;
+							var svgItem = svgDoc.getElementById("uvc_tco");
+							svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
+							svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
+							svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
+							svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
+							svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
+							svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
+							svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
+							svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
+							svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
+							svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
+							svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
+							svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
+							svgItem.innerHTML = order_details[0].UVC_TCO;
+							var size = order_details[0].Size.split(" ")
+							svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
+							svgDoc.getElementById("size").innerHTML = size[0];
+							svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
+							svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
+							svgDoc.getElementById("in").innerHTML = order_details[0].in;
+							if (size[1] == "ANS") {
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = "years";
 
-                            } else {
-                                svgDoc.getElementById("size_french").innerHTML = size[1];
-                                svgDoc.getElementById("size_english").innerHTML = "months";
-                            }
-                            var code = order_details[0].BarcodeForPricesTags.toString();
-                            jsbarcode_hang(code, "barcode1", svgDoc)
+							} else {
+								svgDoc.getElementById("size_french").innerHTML = size[1];
+								svgDoc.getElementById("size_english").innerHTML = "months";
+							}
+							var code = order_details[0].BarcodeForPricesTags.toString();
+							jsbarcode_hang(code, "barcode1", svgDoc)
 
 
-                        }, false);
-
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
-                },
-                error: function (data) {
-
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
-    //Show Template when Click tree node 
-    $('#tree1').on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
-        if (data.instance.is_leaf(data.node)) {
-            var buyer = localStorage.getItem("buyer");
-            var template_id = data.node.id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data[1].template_file + '" type="image/svg+xml"></object>')
-
-                        if (data[0].disney == 0) {
-                            var mySVG = document.getElementById("svg_hang_front");
-                            var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
-
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        } else {
-                            var mySVG = document.getElementById("svg2");
-                            var svgDoc;
-                            mySVG.addEventListener("load", function () {
-                                svgDoc = mySVG.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(".")
-
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(".")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        }
-
-                        var mySVG = document.getElementById("svg2");
-                        var svgDoc;
-                        mySVG.addEventListener("load", function () {
-                            svgDoc = mySVG.contentDocument;
-                            var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("saudi_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
-                            svgItem.innerHTML = order_details[0].UVC_TCO;
-                            var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
-                            svgDoc.getElementById("size").innerHTML = size[0];
-                            svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-");
-                            svgDoc.getElementById("cm").innerHTML = order_details[0].cm;
-                            svgDoc.getElementById("in").innerHTML = order_details[0].in;
-                            if (size[1] == "ANS") {
-                                svgDoc.getElementById("size_french").innerHTML = size[1];
-                                svgDoc.getElementById("size_english").innerHTML = "years";
-
-                            } else {
-                                svgDoc.getElementById("size_french").innerHTML = size[1];
-                                svgDoc.getElementById("size_english").innerHTML = "months";
-                            }
-                            var code = order_details[0].BarcodeForPricesTags.toString();
-                            jsbarcode_hang(code, "barcode1", svgDoc)
-
-
-                        }, false);
+						}, false);
 
 
 
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
 
-                },
-                error: function (data) {
+				},
+				error: function (data) {
 
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
 
-    $('#hangtagform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
+	$('#hangtagform').validator().on('submit', function (e) {
+		if (e.isDefaultPrevented()) {
 
-        } else {
-            e.preventDefault();
-            setHangTagStatus()
-        }
-    })
+		} else {
+			e.preventDefault();
+			setHangTagStatus()
+		}
+	})
 
 
-    selectpicker()
-    $('.template-select.bootstrap-select').on('changed.bs.select', function () {
-        if ($('.template-select option:selected').val() != "") {
-            $('.sample-artwork').html('<object id="svg1" data="' + $('.template-select option:selected').val() + '" style="width:233px;height:500px" type="image/svg+xml"></object>')
-            var mySVG = document.getElementById("svg1");
-            var svgDoc;
-            mySVG.addEventListener("load", function () {
-                svgDoc = mySVG.contentDocument;
-                var pri = data.order_details[0].PrixEurope.split(".")
+	selectpicker()
+	$('.template-select.bootstrap-select').on('changed.bs.select', function () {
+		if ($('.template-select option:selected').val() != "") {
+			$('.sample-artwork').html('<object id="svg1" data="' + $('.template-select option:selected').val() + '" style="width:233px;height:500px" type="image/svg+xml"></object>')
+			var mySVG = document.getElementById("svg1");
+			var svgDoc;
+			mySVG.addEventListener("load", function () {
+				svgDoc = mySVG.contentDocument;
+				var pri = data.order_details[0].PrixEurope.split(".")
 
-                if (pri.length == 1) {
-                    var svgItem = svgDoc.getElementById("price1");
-                    svgItem.innerHTML = innerHTML = data.order_details[0].PrixEurope;
-                    svgDoc.getElementById("price2").innerHTML = "";
-                } else if (pri.length == 2) {
-                    var svgItem = svgDoc.getElementById("price1");
-                    svgItem.innerHTML = innerHTML = pri[0];
-                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                }
-                var pri1 = data.order_details[0].PrixClubEurope.toString().split(".")
-                if (pri1.length == 1) {
-                    svgDoc.getElementById("club_price1").innerHTML = data.order_details[0].PrixClubEurope;
-                    svgDoc.getElementById("club_price2").innerHTML = "";
-                } else if (pri1.length == 2) {
-                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                }
+				if (pri.length == 1) {
+					var svgItem = svgDoc.getElementById("price1");
+					svgItem.innerHTML = innerHTML = data.order_details[0].PrixEurope;
+					svgDoc.getElementById("price2").innerHTML = "";
+				} else if (pri.length == 2) {
+					var svgItem = svgDoc.getElementById("price1");
+					svgItem.innerHTML = innerHTML = pri[0];
+					svgDoc.getElementById("price2").innerHTML = "," + pri[1];
+				}
+				var pri1 = data.order_details[0].PrixClubEurope.toString().split(".")
+				if (pri1.length == 1) {
+					svgDoc.getElementById("club_price1").innerHTML = data.order_details[0].PrixClubEurope;
+					svgDoc.getElementById("club_price2").innerHTML = "";
+				} else if (pri1.length == 2) {
+					svgDoc.getElementById("club_price1").innerHTML = pri1[0];
+					svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
+				}
 
-            }, false);
-            $('.sample-artwork').css('background', '#fff');
-        } else {
-            $('.sample-artwork').html('');
-            $('.sample-artwork').css('background', '#eee');
-        }
+			}, false);
+			$('.sample-artwork').css('background', '#fff');
+		} else {
+			$('.sample-artwork').html('');
+			$('.sample-artwork').css('background', '#eee');
+		}
 
-    });
+	});
 }
 
 /**
@@ -2978,122 +2884,373 @@ function hangtagmodal(data) {
 
 function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	console.log(data.merchandisers);
-    var tr = "";
-    var barcode = "";
-    $.each(data.order_details, function (index, value) {
-        tr += '<tr><td>' + value.UVC_TCO + '</td><td>' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td>' + value.Sum + '</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
-    });
-    $.each(data.barcode, function (index, value) {
-        barcode += value.BuyerPONo + " | ";
-    });
-    //    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
-    $('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
+	var tr = "";
+	var barcode = "";
+	$.each(data.order_details, function (index, value) {
+		tr += '<tr><td>' + value.UVC_TCO + '</td><td>' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td>' + value.Sum + '</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
+	});
+	$.each(data.barcode, function (index, value) {
+		barcode += value.BuyerPONo + " | ";
+	});
+	//    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
+	$('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
 
-    var merchandisersoption = "<option value=''>Select Option</option>";
+	var merchandisersoption = "<option value=''>Select Option</option>";
 
-    $.each(data.merchandisers, function (index, value) {
-        merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
-    });
-	if(data.orchestra_hang_tag_orders != "")
-	{
-		var str=data.orchestra_hang_tag_orders[0].status;
-		$hang_status=str.replace(/ /g, "");
-		$hang_status_text=data.orchestra_hang_tag_orders[0].status;
+	$.each(data.merchandisers, function (index, value) {
+		merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
+	});
+	if (data.orchestra_hang_tag_orders != "") {
+		var str = data.orchestra_hang_tag_orders[0].status;
+		$hang_status = str.replace(/ /g, "");
+		$hang_status_text = data.orchestra_hang_tag_orders[0].status;
+	} else {
+		$hang_status = "";
+		$hang_status_text = "";
 	}
-	else
-	{
-		$hang_status="";
-		$hang_status_text="";
+	if (data.orchestra_special_tag_orders != "") {
+		var str = data.orchestra_special_tag_orders[0].status;
+		$special_status = str.replace(/ /g, "");
+		$special_status_text = data.orchestra_special_tag_orders[0].status;
+	} else {
+		$special_status = "";
+		$special_status_text = "";
 	}
-	if(data.orchestra_special_tag_orders != "")
-	{
-		var str=data.orchestra_special_tag_orders[0].status;
-		$special_status=str.replace(/ /g, "");
-		$special_status_text=data.orchestra_special_tag_orders[0].status;
+	if (data.orchestra_wash_care_label_orders != "") {
+		var str = data.orchestra_wash_care_label_orders[0].status;
+		$wash_status = str.replace(/ /g, "");
+		$wash_status_text = data.orchestra_wash_care_label_orders[0].status;
+		var wash_enable = "";
+		var wash_name = data.orchestra_wash_care_label_orders[0].template_name + " - ";
+	} else {
+		$wash_status = "";
+		$wash_status_text = "";
+		var wash_enable = "display:none";
+		var wash_name = "";
 	}
-	else
-	{
-		$special_status="";
-		$special_status_text="";
+	if (data.orchestra_main_label_orders != "") {
+		var str = data.orchestra_main_label_orders[0].status;
+		$main_status = str.replace(/ /g, "");
+		$main_status_text = data.orchestra_main_label_orders[0].status;
+		var main_enable = "";
+		var main_name = data.orchestra_main_label_orders[0].template_name + " - ";
+	} else {
+		$main_status = "";
+		$main_status_text = "";
+		var main_enable = "display:none";
+		var main_name = "";
 	}
-	if(data.orchestra_wash_care_label_orders != "")
-	{
-		var str=data.orchestra_wash_care_label_orders[0].status;
-		$wash_status=str.replace(/ /g, "");
-		$wash_status_text=data.orchestra_wash_care_label_orders[0].status;
-		var wash_enable="";
-		var wash_name=data.orchestra_wash_care_label_orders[0].template_name +" - ";
-	}
-	else
-	{
-		$wash_status="";
-		$wash_status_text="";
-		var wash_enable="display:none";
-		var wash_name="";
-	}
-	if(data.orchestra_main_label_orders != "")
-	{
-		var str=data.orchestra_main_label_orders[0].status;
-		$main_status=str.replace(/ /g, "");
-		$main_status_text=data.orchestra_main_label_orders[0].status;
-		var main_enable="";
-		var main_name=data.orchestra_main_label_orders[0].template_name +" - ";
-	}
-	else
-	{
-		$main_status="";
-		$main_status_text="";
-		var main_enable="display:none";
-		var main_name="";
-	}
-	
-	if(localStorage.getItem("page_navigation") == "orders")
-	{
+
+	if (localStorage.getItem("page_navigation") == "orders") {
 		var onclick = "orders()";
-	}
-	else
-	{
-		var onclick ="orderStatus()";
+	} else {
+		var onclick = "orderStatus()";
 	}
 
-    $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-        base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">'+wash_name+'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;'+wash_enable+'"  id="clone_washcare_label_card" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">'+main_name+'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
+	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;' + wash_enable + '"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;' + wash_enable + '"  id="clone_washcare_label_card" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
+		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;' + main_enable + '">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button">Update PO</button></div></div>');
+
+	$('#po-file-upload-button').click(function () {
+
+		$('#new_po_div').addClass('hidden')
+		$('#map_po_div').addClass('hidden')
+		$('#exist_artwork_div').removeClass('hidden')
+
+		//alert()
+
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_po",
+			type: "get",
+			dataType: "json",
+			data: {
+				uvc: $('#uvc_id').val()
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+
+
+
+				$('#po-file-upload').modal('show')
+				$('#po-file-upload').find('#exist_artwork_div ul').html("");
+				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders)));
+				var coun = 0;
+				var options = "<option>Select PO</option>";
+				$(newObj).each(function (index1, value1) {
+					if (value1.po_number != "" && value1.po_number != null) {
+						options += "<option>" + value1.po_number + "</option>";
+
+						coun++;
+					}
+					$('#po-file-upload').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+				});
+				
+				//Start bootstrap checkbox 
+				
+				$('.list-group.checked-list-box .list-group-item').each(function () {
+
+					// Settings
+					var $widget = $(this),
+						$checkbox = $('<input type="checkbox" class="hidden" />'),
+						color = ($widget.data('color') ? $widget.data('color') : "primary"),
+						style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+						settings = {
+							on: {
+								icon: 'glyphicon glyphicon-check'
+							},
+							off: {
+								icon: 'glyphicon glyphicon-unchecked'
+							}
+						};
+
+					$widget.css('cursor', 'pointer')
+					$widget.append($checkbox);
+
+					// Event Handlers
+					$widget.on('click', function () {
+						$checkbox.prop('checked', !$checkbox.is(':checked'));
+						$checkbox.triggerHandler('change');
+						updateDisplay();
+					});
+					$checkbox.on('change', function () {
+						updateDisplay();
+					});
+
+
+					// Actions
+					function updateDisplay() {
+						var isChecked = $checkbox.is(':checked');
+
+						// Set the button's state
+						$widget.data('state', (isChecked) ? "on" : "off");
+
+						// Set the button's icon
+						$widget.find('.state-icon')
+							.removeClass()
+							.addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+						// Update the button's color
+						if (isChecked) {
+							$widget.addClass(style + color + ' active');
+						} else {
+							$widget.removeClass(style + color + ' active');
+						}
+					}
+
+					// Initialization
+					function init() {
+
+						if ($widget.data('checked') == true) {
+							$checkbox.prop('checked', !$checkbox.is(':checked'));
+						}
+
+						updateDisplay();
+
+						// Inject the icon if applicable
+						if ($widget.find('.state-icon').length == 0) {
+							$widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+						}
+					}
+					init();
+				});
+
+				$('#get-checked-data').on('click', function (event) {
+					event.preventDefault();
+					var checkedItems = {},
+						counter = 0;
+					$("#check-list-box li.active").each(function (idx, li) {
+						checkedItems[counter] = $(li).text();
+						counter++;
+					});
+					$('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+				});
+				
+				//End bootstrap checkbox 
+				
+		$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
+				if (coun == 0) {
+					$('#map_po').addClass('hidden');
+				}
+				
+				$('#update_new_po').click(function () {
+
+					if ($('#new_po_no').val() != "") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+								//alert($(this).parent().attr('data-id'))
+							}
+						});
+						var aa = a.join(',');
+						var new_po_file = $('#new_po_file').prop('files')[0];
+						var new_po_no = $('#new_po_no').val();
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						var form_data = new FormData();
+						form_data.append('id', aa);
+						form_data.append('po_file', new_po_file);
+						form_data.append('po', new_po_no);
+						form_data.append('_token', csrf_token);
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							dataType: 'text',
+							cache: false,
+							contentType: false,
+							processData: false,
+							data: form_data,
+							type: 'post',
+							success: function (data) {
+								//location.reload()
+								$('#po-file-upload').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function () {
+								console.log('somethig is wrong, please try later');
+							}
+
+						});
+					} else {
+						$('#new_po_error').removeClass('hidden')
+					}
+
+
+				});
+
+				$('#update_po').click(function () {
+					if ($('#select_po').val() != "Select PO") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+							}
+						});
+						var aa = a.join(',');
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							type: "Post",
+							dataType: "json",
+							data: {
+								_token: csrf_token,
+								id: aa,
+								po: $('#select_po').val()
+							},
+							beforeSend: function () {
+
+							},
+							success: function (data) {
+								//alert()
+								$('#po-file-upload').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function (data) {
+
+							},
+							complete: function () {
+								$(".loader").hide();
+								$(".loader").css('margin-top', '0%');
+							}
+						})
+					} else {
+						$('#select_error').removeClass('hidden')
+					}
+
+				});
+				$('#new_po1').click(function () {
+					
+
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_new_po').removeClass('hidden')
+					$('#update_po').addClass('hidden')
+						$('#new_po_div').removeClass('hidden')
+						$('#map_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+				});
+				$('#map_po').click(function () {
+					
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_po').removeClass('hidden')
+					$('#update_new_po').addClass('hidden')
+						$('#map_po_div').removeClass('hidden')
+						$('#new_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+						$('#check_error').addClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+
+
+				});
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+				$(".loader").hide();
+				$(".loader").css('margin-top', '0%');
+			}
+		})
+	});
+
+
 
 	//card for wcl and main and size labels
 	//<button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button>
 	//<div class="col-md-4"><div style="height: 280px;" class="card add-card"><h5><b>Washcare label</b></h5><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm washcarename"><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div><div class="col-md-4" ><div class="card add-card" style="height: 280px; margin-bottom:80px;"><h5><b>Main and Size Label</b></h5><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" placeholder="Enter Name" class="form-control input-sm mainname"><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div>
-	
 
-    //    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View & Edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="' +
-    //        base_url + '/images/ht_default.png" class="img-responsive center-block"><p class="text-center">No Image preview</p></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit</p><h5>Washcare Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit</p><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" class="form-control input-sm washcarename"><p class="text-center add-label" style="padding: 53px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label</p></div></div><div class="col-md-4" ><div class="card add-card"><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" class="form-control input-sm mainname"><p class="text-center add-label" id="main_label_card" style="padding: 53px 0px;cursor: pointer;">Add Main & Size Label</p></div></div>');
 
-    $.fn.capitalize = function () {
-        $.each(this, function () {
-            this.value = this.value.replace(/\b[a-z]/gi, function ($0) {
-                return $0.toUpperCase();
-            });
-            this.value = this.value.replace(/@([a-z])([^.]*\.[a-z])/gi, function ($0, $1) {
-                console.info(arguments);
-                return '@' + $0.toUpperCase() + $1.toLowerCase();
-            });
+	//    $('.main-content').html('<hr/><h4>Quantity And Artworks</h4><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View & Edit</p> <h5>Hangtag</h5></div><div class="img_artwork"><img src="' +
+	//        base_url + '/images/ht_default.png" class="img-responsive center-block"><p class="text-center">No Image preview</p></div></div></div><div class="col-md-4"><div class="card"><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit</p><h5>Specialtag</h5></div></div></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit</p><h5>Washcare Label</h5></div></div></div><div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit</p><h5>Main & Size Label</h5></div></div></div><div id="add_modal"></div><div class="col-md-4"><div class="card add-card"><label style="color:red" class="washnameerror hidden">Please fill this field</label><input type="text" class="form-control input-sm washcarename"><p class="text-center add-label" style="padding: 53px 0px;cursor: pointer;"  id="washcare_label_card" >Add Washcare Label</p></div></div><div class="col-md-4" ><div class="card add-card"><label class="mainnameerror hidden" style="color:red" >Please fill this field</label><input type="text" class="form-control input-sm mainname"><p class="text-center add-label" id="main_label_card" style="padding: 53px 0px;cursor: pointer;">Add Main & Size Label</p></div></div>');
 
-        });
-    }
+	$.fn.capitalize = function () {
+		$.each(this, function () {
+			this.value = this.value.replace(/\b[a-z]/gi, function ($0) {
+				return $0.toUpperCase();
+			});
+			this.value = this.value.replace(/@([a-z])([^.]*\.[a-z])/gi, function ($0, $1) {
+				console.info(arguments);
+				return '@' + $0.toUpperCase() + $1.toLowerCase();
+			});
 
-    $("input").keyup(function () {
-        $(this).capitalize();
-    }).capitalize();
+		});
+	}
 
-    $('#washcare_label_card').on('click', function (e) {
+	$("input").keyup(function () {
+		$(this).capitalize();
+	}).capitalize();
 
-        if ($('.washcarename').val() != "") {
-          
-			
-            if (washcare <= 5) {
-				  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
-				
+	$('#washcare_label_card').on('click', function (e) {
+
+		if ($('.washcarename').val() != "") {
+
+
+			if (washcare <= 5) {
+				washcare += 1;
+				$('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+
 				$('.delete-wash' + washcare).on('click', function (e) {
 
 					if (localStorage.getItem('wash_label') != null) {
@@ -3113,56 +3270,57 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					$(this).parent().parent().parent().remove();
 
 
-            	});
-				window.scrollTo(0,document.body.scrollHeight);
-				toastr.success("Wash care label added successfully");
-            }
-			else
-			{
-				toastr.error("Limit exceeded");
+				});
+				window.scrollTo(0, document.body.scrollHeight);
+				//toastr.success("Wash care label added successfully");
+				$('.snackbar_span').html('Wash care label added successfully');
+				showSnackbar();
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
 			}
-			
-         
-            $('.washcarename').val("")
-            $('.washnameerror').addClass('hidden')
-            var data = localStorage.getItem("label_order_data");
-            washcarelabels(JSON.parse(data), washcare);
-        } else {
-            if (washcare < 5) {
-                $('.washnameerror').removeClass('hidden')
-            }
-        }
-//        $('.extra_percentage').keyup(function () {
-//            if ($(this).val() != "") {
-//                var per = $(this).val();
-//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-//                    var sum = $(this).find('.sum').text();
-//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-//                    $(this).find('.tot_qty_table').val(tot_qty);
-//                })
-//            } else {
-//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-//                    $(this).find('.tot_qty_table').val("");
-//                })
-//            }
-//
-//        })
 
-    });
-	
+
+			$('.washcarename').val("")
+			$('.washnameerror').addClass('hidden')
+			var data = localStorage.getItem("label_order_data");
+			washcarelabels(JSON.parse(data), washcare);
+		} else {
+			if (washcare < 5) {
+				$('.washnameerror').removeClass('hidden')
+			}
+		}
+		//        $('.extra_percentage').keyup(function () {
+		//            if ($(this).val() != "") {
+		//                var per = $(this).val();
+		//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+		//                    var sum = $(this).find('.sum').text();
+		//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
+		//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
+		//                    $(this).find('.tot_qty_table').val(tot_qty);
+		//                })
+		//            } else {
+		//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+		//                    $(this).find('.tot_qty_table').val("");
+		//                })
+		//            }
+		//
+		//        })
+
+	});
+
 	/**
 		Washcare Label Cloning
 	*/
 	$('#clone_washcare_label_card').on('click', function (e) {
 
-        if ($('.washcarename').val() != "") {
-          
-			
-            if (washcare <= 5) {
-				  washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
-				
+		if ($('.washcarename').val() != "") {
+
+
+			if (washcare <= 5) {
+				washcare += 1;
+				$('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+
 				$('.delete-wash' + washcare).on('click', function (e) {
 
 					if (localStorage.getItem('wash_label') != null) {
@@ -3182,68 +3340,62 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					$(this).parent().parent().parent().remove();
 
 
-            	});
-				window.scrollTo(0,document.body.scrollHeight);
+				});
+				window.scrollTo(0, document.body.scrollHeight);
 				$('.snackbar_span').html('Wash care label cloned successfully');
-               $('#snackbar').css('background-color','#2ecc71');
-               showSnackbar();
-            }
-			else
-			{
+				showSnackbar();
+			} else {
 				$('.snackbar_span').html('Limit exceeded');
-               $('#snackbar').css('background-color','#d35400');
-               showSnackbar();
+				showSnackbar();
 			}
-         
-            $('.washcarename').val("")
-            $('.washnameerror').addClass('hidden')
-            var data = localStorage.getItem("label_order_data");
-            washcarelabels(JSON.parse(data), washcare);
-			$('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform').find('#wcl_name').val())
-			$('#washcarelabelform'+washcare).find('#wash_delivery_date'+washcare).val($('#washcarelabelform').find('#wash_delivery_date').val())
-			
-			$('.washing_select'+washcare).selectpicker('val',$('.washing_select').selectpicker('val'));
-			$('.whitening_select'+washcare).selectpicker('val',$('.whitening_select').selectpicker('val'));
-			$('.dryer_select'+washcare).selectpicker('val',$('.dryer_select').selectpicker('val'));
-			$('.ironing_select'+washcare).selectpicker('val',$('.ironing_select').selectpicker('val'));
-			$('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select').selectpicker('val'));
-			$('.made_in_select'+washcare).selectpicker('val',$('.made_in_select').selectpicker('val'));
-			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select').selectpicker('val'));
-			
-			$('#composition_remove_qty'+washcare).html($('#composition_remove_qty').html())
-			
-			$('#composition_remove_qty tr').each(function (ind,val) {
-				var values= $(this).find('select').find(':selected').val()
-				var v= $(this).attr('id');
-				$('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
-					if($(this).attr('id') == v)
-					{
+
+			$('.washcarename').val("")
+			$('.washnameerror').addClass('hidden')
+			var data = localStorage.getItem("label_order_data");
+			washcarelabels(JSON.parse(data), washcare);
+			$('#washcarelabelform' + washcare).find('#wcl_name' + washcare).val($('#washcarelabelform').find('#wcl_name').val())
+			$('#washcarelabelform' + washcare).find('#wash_delivery_date' + washcare).val($('#washcarelabelform').find('#wash_delivery_date').val())
+
+			$('.washing_select' + washcare).selectpicker('val', $('.washing_select').selectpicker('val'));
+			$('.whitening_select' + washcare).selectpicker('val', $('.whitening_select').selectpicker('val'));
+			$('.dryer_select' + washcare).selectpicker('val', $('.dryer_select').selectpicker('val'));
+			$('.ironing_select' + washcare).selectpicker('val', $('.ironing_select').selectpicker('val'));
+			$('.cleaning_select' + washcare).selectpicker('val', $('.cleaning_select').selectpicker('val'));
+			$('.made_in_select' + washcare).selectpicker('val', $('.made_in_select').selectpicker('val'));
+			$('.care_instruction_select' + washcare).selectpicker('val', $('.care_instruction_select').selectpicker('val'));
+
+			$('#composition_remove_qty' + washcare).html($('#composition_remove_qty').html())
+
+			$('#composition_remove_qty tr').each(function (ind, val) {
+				var values = $(this).find('select').find(':selected').val()
+				var v = $(this).attr('id');
+				$('#composition_remove_qty' + washcare + ' tr').each(function (inds, vals) {
+					if ($(this).attr('id') == v) {
 						$(this).find('select').val(values)
 						$(this).find('a').removeAttr('onclick')
-						$(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
-					}
-				});
-			});	
-			
-			$('#washcarelabelform table tbody tr').each(function (ind,val) {
-				var values= $(this).find('.tot_qty_table').val()
-				//var values1= $(this).find('.tot_qty_table_fin').text()
-				var v= $(this).find('.uvc_tco').text();
-				//alert(values)
-				$('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
-					if($(this).find('.uvc_tco').text() == v)
-					{
-						$(this).find('.tot_qty_table').val(values)
-						
+						$(this).find('a').attr('onclick', 'deleteComposition(this,' + washcare + ')')
 					}
 				});
 			});
-			
-			$('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform table tbody').find('.tot_qty_table_fin').text())
-			var mySVG = document.getElementById("washcare_svg"+washcare);
+
+			$('#washcarelabelform table tbody tr').each(function (ind, val) {
+				var values = $(this).find('.tot_qty_table').val()
+				//var values1= $(this).find('.tot_qty_table_fin').text()
+				var v = $(this).find('.uvc_tco').text();
+				//alert(values)
+				$('#washcarelabelform' + washcare + ' table tbody tr').each(function (inds, vals) {
+					if ($(this).find('.uvc_tco').text() == v) {
+						$(this).find('.tot_qty_table').val(values)
+
+					}
+				});
+			});
+
+			$('#washcarelabelform' + washcare + ' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform table tbody').find('.tot_qty_table_fin').text())
+			var mySVG = document.getElementById("washcare_svg" + washcare);
 			var svgDoc;
 			mySVG.addEventListener("load", function () {
-				svgDoc=mySVG.contentDocument;
+				svgDoc = mySVG.contentDocument;
 				svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
 				svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
 				svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
@@ -3252,11 +3404,11 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 				svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
 				svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
 				svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
-				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
- + ' option:selected').data('cofreet'));
-				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
- + ' option:selected').data('astm'));
-				
+				svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare +
+					' option:selected').data('cofreet'));
+				svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare +
+					' option:selected').data('astm'));
+
 				var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
 					$('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
 					$('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
@@ -3264,7 +3416,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					$('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
 					$('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
 				svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-				
+
 				svgDoc.getElementById("text_care_instruction").innerHTML = "";
 				$('.care_instruction_select' + washcare + ' option:selected').each(function () {
 					var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
@@ -3275,118 +3427,118 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						$(this).data('turkish') + '</p>';
 					svgDoc.getElementById("text_care_instruction").innerHTML += value;
 				});
-				
-				 svgDoc.getElementById("parts_composition").innerHTML ="";
-			  $('#composition_remove_qty' + washcare + ' tr').each(function () {
-				  //alert($(this).find('select').find(':selected').text());
-				  if($(this).find('select').find(':selected').val() != "Select Option")
-				  {
-					   svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
-				  }
-				 
-				  var id=$(this).attr('id')
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-				  $(compss).each(function (index1,value1) {
-					  var english = value1.split('_');
 
-					svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
-				});
-			  })
-			$('.composition_error_hidden').addClass('hidden')
-			var washcomp=[];
-			$('#composition_remove_qty' + washcare + ' tr').each(function () {
-				  var washcomp1=[];
-				  var id=$(this).attr('id')
-				  var value=$(this).find('select').find(':selected').val();
-				  var compo =$(this).find('.compositions_hidden').val();
-				  var compss = compo.split(',');
-					$(compss).each(function (index1,value1){ 
+				svgDoc.getElementById("parts_composition").innerHTML = "";
+				$('#composition_remove_qty' + washcare + ' tr').each(function () {
+					//alert($(this).find('select').find(':selected').text());
+					if ($(this).find('select').find(':selected').val() != "Select Option") {
+						svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' + $(this).find('select').find(':selected').data('french') + "-" + $(this).find('select').find(':selected').data('english') + "-" + $(this).find('select').find(':selected').data('spanish') + "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian') + "-" + $(this).find('select').find(':selected').data('dutch') + "-" + $(this).find('select').find(':selected').data('german') + "-" + $(this).find('select').find(':selected').data('russian') + "-" + $(this).find('select').find(':selected').data('chinese') + "-" + $(this).find('select').find(':selected').data('arabic') + "-" + $(this).find('select').find(':selected').data('greek') + "-" + $(this).find('select').find(':selected').data('turkish') + '</p>';
+					}
+
+					var id = $(this).attr('id')
+					var compo = $(this).find('.compositions_hidden').val();
+					var compss = compo.split(',');
+					$(compss).each(function (index1, value1) {
 						var english = value1.split('_');
-						washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+
+						svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0] + "-" + english[1] + "-" + english[2] + "-" + english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7] + "-" + english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11] + '</p>';
 					});
-				washcomp.push(washcomp1)
-			})
-			var wash_finals = JSON.stringify(washcomp);
-			localStorage.setItem('wash_composition_final'+washcare, wash_finals);
-				
+				})
+				$('.composition_error_hidden').addClass('hidden')
+				var washcomp = [];
+				$('#composition_remove_qty' + washcare + ' tr').each(function () {
+					var washcomp1 = [];
+					var id = $(this).attr('id')
+					var value = $(this).find('select').find(':selected').val();
+					var compo = $(this).find('.compositions_hidden').val();
+					var compss = compo.split(',');
+					$(compss).each(function (index1, value1) {
+						var english = value1.split('_');
+						washcomp1.push(value + "_" + english[0] + "_" + english[12])
+					});
+					washcomp.push(washcomp1)
+				})
+				var wash_finals = JSON.stringify(washcomp);
+				localStorage.setItem('wash_composition_final' + washcare, wash_finals);
+
 			});
-			
-			
-			
-			
-			
+
+
+
+
+
 			//$('#washcarelabelform'+washcare).find('.washing_select'+washcare).selectpicker('val','1')
-			
-        } else {
-            if (washcare < 5) {
-                $('.washnameerror').removeClass('hidden')
-            }
-        }
-		
-    });
-    $('#main_label_card').on('click', function (e) {
-        if ($('.mainname').val() != "") {
-            
-            if (mainlabel <= 5) {
-				mainlabel += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
-                var data = localStorage.getItem("label_order_data");
-                mainlabels(JSON.parse(data), mainlabel);
-				$('.delete-main' + mainlabel).on('click', function (e) {
-                if (localStorage.getItem('main_label') != null) {
-                    var opop = JSON.parse(localStorage.getItem('main_label'));
-                    if (opop['mainlabelsform' + $(this).attr('id')] === undefined) {
 
-                    } else {
-                        delete opop['mainlabelsform' + $(this).attr('id')];
-                    }
-
-
-                    localStorage.setItem('main_label', JSON.stringify(opop))
-                }
-
-
-                $('#mainlabelsform' + $(this).attr('id')).remove()
-                mainlabel -= 1;
-                $(this).parent().parent().parent().remove();
-
-
-				 });
-				window.scrollTo(0,document.body.scrollHeight);
-				toastr.success("Main and Size label added successfully");
-            }
-			else
-			{
-				toastr.error("Limit exceeded");
+		} else {
+			if (washcare < 5) {
+				$('.washnameerror').removeClass('hidden')
 			}
-           
-            $('.mainname').val("")
-            $('.mainnameerror').addClass('hidden')
-        } else {
-            if (mainlabel < 5) {
-                $('.mainname').val("")
-                $('.mainnameerror').removeClass('hidden')
-            }
-        }
-//        $('.extra_percentage').keyup(function () {
-//            if ($(this).val() != "") {
-//                var per = $(this).val();
-//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-//                    var sum = $(this).find('.sum').text();
-//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
-//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
-//                    $(this).find('.tot_qty_table').val(tot_qty);
-//                })
-//            } else {
-//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-//                    $(this).find('.tot_qty_table').val("");
-//                })
-//            }
-//
-//        })
-		
-    });
+		}
+
+	});
+	$('#main_label_card').on('click', function (e) {
+		if ($('.mainname').val() != "") {
+
+			if (mainlabel <= 5) {
+				mainlabel += 1;
+				$('#add_modal').append('<div class="col-md-4" ><div style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+				var data = localStorage.getItem("label_order_data");
+				mainlabels(JSON.parse(data), mainlabel);
+				$('.delete-main' + mainlabel).on('click', function (e) {
+					if (localStorage.getItem('main_label') != null) {
+						var opop = JSON.parse(localStorage.getItem('main_label'));
+						if (opop['mainlabelsform' + $(this).attr('id')] === undefined) {
+
+						} else {
+							delete opop['mainlabelsform' + $(this).attr('id')];
+						}
+
+
+						localStorage.setItem('main_label', JSON.stringify(opop))
+					}
+
+
+					$('#mainlabelsform' + $(this).attr('id')).remove()
+					mainlabel -= 1;
+					$(this).parent().parent().parent().remove();
+
+
+				});
+				window.scrollTo(0, document.body.scrollHeight);
+				$('.snackbar_span').html('Main and Size label added successfully');
+				showSnackbar();
+			} else {
+				//toastr.error("Limit exceeded");
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
+
+			$('.mainname').val("")
+			$('.mainnameerror').addClass('hidden')
+		} else {
+			if (mainlabel < 5) {
+				$('.mainname').val("")
+				$('.mainnameerror').removeClass('hidden')
+			}
+		}
+		//        $('.extra_percentage').keyup(function () {
+		//            if ($(this).val() != "") {
+		//                var per = $(this).val();
+		//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+		//                    var sum = $(this).find('.sum').text();
+		//                    var per_qty = (parseInt(sum) / 100) * parseInt(per);
+		//                    var tot_qty = parseInt(sum) + parseInt(per_qty);
+		//                    $(this).find('.tot_qty_table').val(tot_qty);
+		//                })
+		//            } else {
+		//                $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+		//                    $(this).find('.tot_qty_table').val("");
+		//                })
+		//            }
+		//
+		//        })
+
+	});
 
 
 }
@@ -3398,10 +3550,10 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
  */
 
 function selectpicker() {
-    $('.selectpicker').selectpicker({
-        style: 'btn-default',
-        size: 4
-    });
+	$('.selectpicker').selectpicker({
+		style: 'btn-default',
+		size: 4
+	});
 
 }
 
@@ -3413,109 +3565,109 @@ function selectpicker() {
 
 function treestructure(data, tree, template_id) {
 
-    $('#' + tree).jstree({
-        'core': {
-            'data': data
-        },
-        "types": {
-            "default": {
-                "icon": "fa fa-folder"
-            }
-        },
-        "plugins": ["types", "search"]
-    });
-    $('#expand').bind("click", function () {
-        $('#' + tree).jstree("open_all");
-    });
-    $('#collapse').bind("click", function () {
-        $('#' + tree).jstree("close_all");
-    });
-    var to = false;
-    $('#' + tree + '_q').keyup(function () {
-        if (to) {
-            clearTimeout(to);
-        }
-        to = setTimeout(function () {
-            var v = $('#' + tree + '_q').val();
-            $('#' + tree).jstree(true).search(v);
-        }, 250);
-    });
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search"]
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
 
-    $("#" + tree).on("loaded.jstree", function (e, data) {
+	$("#" + tree).on("loaded.jstree", function (e, data) {
 
-        $('#' + tree).jstree(true).select_node(template_id);
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert(ids)
-        //alert()
-        if (template_id != "") {
-            var buyer = localStorage.getItem("buyer");
-            // var template_id = template_id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
-
-
-                },
-                error: function (data) {
-
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
-
-    $('#' + tree).on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        if (data.instance.is_leaf(data.node)) {
-            var buyer = localStorage.getItem("buyer");
-            var template_id = data.node.id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		//alert(ids)
+		//alert()
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			// var template_id = template_id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
 
 
-                },
-                error: function (data) {
+				},
+				error: function (data) {
 
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
 }
 
 /**
@@ -3525,76 +3677,76 @@ function treestructure(data, tree, template_id) {
  */
 
 function jsbarcode(code, id, svgDoc) {
-    JsBarcode("#ean-13", code, {
-        format: "ean13",
-        width: 5.99,
-        height: 343,
-        fontSize: 50
-    });
-    var svg = document.getElementById('svgdiv').querySelector('svg'),
-        canvas = document.createElement('canvas'),
-        body = document.getElementsByTagName('body')[0],
-        canvasTmp,
-        svg_xml,
-        ctx,
-        img;
-    // if our "svg" doesn't have 'xmlns' attribute we must add it
-    //    svg.setAttribute('width', '188.931023622px');
-    svg.setAttribute('font-size', '50px');
-    svg.setAttribute('font-family', 'calibrib');
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
 
-    canvas.id = 'canvas';
-    canvas.width = svg.getBoundingClientRect().width;
-    canvas.height = svg.getBoundingClientRect().height;
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
 
-    body.appendChild(canvas);
-    canvasTmp = document.getElementById('canvas');
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
 
-    /* Time to play ;) */
+	/* Time to play ;) */
 
-    // https://developer.mozilla.org/en/XMLSerializer
-    svg_xml = (new XMLSerializer()).serializeToString(svg);
-    ctx = canvasTmp.getContext('2d');
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
 
-    // JavaScript (HTML) image
-    img = new Image();
+	// JavaScript (HTML) image
+	img = new Image();
 
-    img.onload = function () {
-        ctx.drawImage(img, 0, 0);
-    };
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
 
-    // https://developer.mozilla.org/en/DOM/window.btoa
-    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-    // img.src - contains base64 URI from svg
-    console.log(img.src);
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
 
-    //remove temporary canvas
-    canvasTmp.remove();
+	//remove temporary canvas
+	canvasTmp.remove();
 
-    //Check in browsers
-    //
-    //                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //                        $.ajax({
-    //                            url: base_url + "/admin/template-management/base64_to_jpeg",
-    //                            type: "Post",
-    //                            data: {
-    //                                src: img.src,
-    //                                _token: csrf_token
-    //                            },
-    //                            beforeSend: function () {
-    //                                $(".loader").show();
-    //                                $(".loader").css('margin-top', '12%');
-    //                            },
-    //                            success: function (data) {
-    //                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
-    //                                
-    //                            },
-    //                            error: function (data) {
-    //                               
-    //                            }
-    //                        })
-    svgDoc.getElementById(id).innerHTML = svg_xml;
+	//Check in browsers
+	//
+	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//                        $.ajax({
+	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+	//                            type: "Post",
+	//                            data: {
+	//                                src: img.src,
+	//                                _token: csrf_token
+	//                            },
+	//                            beforeSend: function () {
+	//                                $(".loader").show();
+	//                                $(".loader").css('margin-top', '12%');
+	//                            },
+	//                            success: function (data) {
+	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+	//                                
+	//                            },
+	//                            error: function (data) {
+	//                               
+	//                            }
+	//                        })
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
 /**
@@ -3684,76 +3836,76 @@ function jsbarcodewash(code, id, svgDoc) {
  */
 
 function jsbarcode_hang(code, id, svgDoc) {
-    JsBarcode("#ean-13", code, {
-        format: "ean13",
-        width: 4.25,
-        height: 230,
-        fontSize: 50
-    });
-    var svg = document.getElementById('svgdiv').querySelector('svg'),
-        canvas = document.createElement('canvas'),
-        body = document.getElementsByTagName('body')[0],
-        canvasTmp,
-        svg_xml,
-        ctx,
-        img;
-    // if our "svg" doesn't have 'xmlns' attribute we must add it
-    //    svg.setAttribute('width', '188.931023622px');
-    svg.setAttribute('font-size', '50px');
-    svg.setAttribute('font-family', 'calibrib');
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 4.25,
+		height: 230,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
 
-    canvas.id = 'canvas';
-    canvas.width = svg.getBoundingClientRect().width;
-    canvas.height = svg.getBoundingClientRect().height;
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
 
-    body.appendChild(canvas);
-    canvasTmp = document.getElementById('canvas');
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
 
-    /* Time to play ;) */
+	/* Time to play ;) */
 
-    // https://developer.mozilla.org/en/XMLSerializer
-    svg_xml = (new XMLSerializer()).serializeToString(svg);
-    ctx = canvasTmp.getContext('2d');
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
 
-    // JavaScript (HTML) image
-    img = new Image();
+	// JavaScript (HTML) image
+	img = new Image();
 
-    img.onload = function () {
-        ctx.drawImage(img, 0, 0);
-    };
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
 
-    // https://developer.mozilla.org/en/DOM/window.btoa
-    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-    // img.src - contains base64 URI from svg
-    console.log(img.src);
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
 
-    //remove temporary canvas
-    canvasTmp.remove();
+	//remove temporary canvas
+	canvasTmp.remove();
 
-    //Check in browsers
-    //
-    //                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //                        $.ajax({
-    //                            url: base_url + "/admin/template-management/base64_to_jpeg",
-    //                            type: "Post",
-    //                            data: {
-    //                                src: img.src,
-    //                                _token: csrf_token
-    //                            },
-    //                            beforeSend: function () {
-    //                                $(".loader").show();
-    //                                $(".loader").css('margin-top', '12%');
-    //                            },
-    //                            success: function (data) {
-    //                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
-    //                                
-    //                            },
-    //                            error: function (data) {
-    //                               
-    //                            }
-    //                        })
-    svgDoc.getElementById(id).innerHTML = svg_xml;
+	//Check in browsers
+	//
+	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//                        $.ajax({
+	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+	//                            type: "Post",
+	//                            data: {
+	//                                src: img.src,
+	//                                _token: csrf_token
+	//                            },
+	//                            beforeSend: function () {
+	//                                $(".loader").show();
+	//                                $(".loader").css('margin-top', '12%');
+	//                            },
+	//                            success: function (data) {
+	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+	//                                
+	//                            },
+	//                            error: function (data) {
+	//                               
+	//                            }
+	//                        })
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
 /**
@@ -3763,24 +3915,24 @@ function jsbarcode_hang(code, id, svgDoc) {
  */
 
 function setHangTagStatus() {
-    if ($('#hangtagform').find('#exist_id').val() != "") {
-        var exist_id = $('#hangtagform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
+	if ($('#hangtagform').find('#exist_id').val() != "") {
+		var exist_id = $('#hangtagform').find('#exist_id').val();
+	} else {
+		var exist_id = "null";
+	}
 
-    var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("hang_tag", exist_id);
+	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
+	if (template_id != "") {
+		localStorage.setItem("hang_tag", exist_id);
 		setHangTag(localStorage.getItem("hang_tag"))
-        $('#hang_template_error').addClass('hidden')
-        $("#hangtagform .left-panel").removeClass('active');
-        $("#hangtagform .right-panel").removeClass('active');
-        $("#hangtagform .backdrop").removeClass('active');
-        $('#hangtagform .scalable').removeClass('active');
-    } else {
-        $('#hang_template_error').removeClass('hidden')
-    }
+		$('#hang_template_error').addClass('hidden')
+		$("#hangtagform .left-panel").removeClass('active');
+		$("#hangtagform .right-panel").removeClass('active');
+		$("#hangtagform .backdrop").removeClass('active');
+		$('#hangtagform .scalable').removeClass('active');
+	} else {
+		$('#hang_template_error').removeClass('hidden')
+	}
 
 }
 
@@ -3792,23 +3944,23 @@ function setHangTagStatus() {
 
 function setSpecialTagStatus() {
 
-    if ($('#specialtagform').find('#exist_id').val() != "") {
-        var exist_id = $('#specialtagform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("special_tag", exist_id);
+	if ($('#specialtagform').find('#exist_id').val() != "") {
+		var exist_id = $('#specialtagform').find('#exist_id').val();
+	} else {
+		var exist_id = "null";
+	}
+	var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
+	if (template_id != "") {
+		localStorage.setItem("special_tag", exist_id);
 		setSpecialTag(localStorage.getItem("special_tag"))
-        $('#special_template_error').addClass('hidden')
-        $("#specialtagform .left-panel").removeClass('active');
-        $("#specialtagform .right-panel").removeClass('active');
-        $("#specialtagform .backdrop").removeClass('active');
-        $('#specialtagform .scalable').removeClass('active');
-    } else {
-        $('#special_template_error').removeClass('hidden')
-    }
+		$('#special_template_error').addClass('hidden')
+		$("#specialtagform .left-panel").removeClass('active');
+		$("#specialtagform .right-panel").removeClass('active');
+		$("#specialtagform .backdrop").removeClass('active');
+		$('#specialtagform .scalable').removeClass('active');
+	} else {
+		$('#special_template_error').removeClass('hidden')
+	}
 
 }
 
@@ -3819,25 +3971,25 @@ function setSpecialTagStatus() {
  */
 
 function setMainLabelStatus(dataid) {
-    if ($('#mainlabelsform' + dataid).find('#exist_id' + dataid).val() != "") {
-       var value = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
-    } else {
-       var value = "null";
-    }
+	if ($('#mainlabelsform' + dataid).find('#exist_id' + dataid).val() != "") {
+		var value = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
+	} else {
+		var value = "null";
+	}
 
-    var main_lab = JSON.stringify(main_label);
-    var template_id = $('#mainlabelsform' + dataid).find('#tree3' + dataid).jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("main_label", main_lab);
+	var main_lab = JSON.stringify(main_label);
+	var template_id = $('#mainlabelsform' + dataid).find('#tree3' + dataid).jstree('get_selected', true);
+	if (template_id != "") {
+		localStorage.setItem("main_label", main_lab);
 		setMainLabel('mainlabelsform' + dataid, dataid, value)
-        $('#main_template_error' + dataid).addClass('hidden')
-        $("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
-        $("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
-        $('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
-    } else {
-        $('#main_template_error' + dataid).removeClass('hidden')
-    }
+		$('#main_template_error' + dataid).addClass('hidden')
+		$("#mainlabelsform" + dataid + " .left-panel").removeClass('active');
+		$("#mainlabelsform" + dataid + " .right-panel").removeClass('active');
+		$("#mainlabelsform" + dataid + " .backdrop").removeClass('active');
+		$('#mainlabelsform' + dataid + ' .scalable').removeClass('active');
+	} else {
+		$('#main_template_error' + dataid).removeClass('hidden')
+	}
 
 }
 
@@ -3848,21 +4000,20 @@ function setMainLabelStatus(dataid) {
  */
 
 function setWashCareLabelStatus(dataid) {
-    if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
-       var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
-    } else {
-        var value = "null";
-    }
+	if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
+		var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
+	} else {
+		var value = "null";
+	}
 
-    var wash_lab = JSON.stringify(wash_label);
-    var i = 0
-    $('#composition_remove_qty' + dataid + ' tr').each(function (key, val) {
-        i++;
-    })
-    if (i != 0) {
+	var wash_lab = JSON.stringify(wash_label);
+	var i = 0
+	$('#composition_remove_qty' + dataid + ' tr').each(function (key, val) {
+		i++;
+	})
+	if (i != 0) {
 		//alert(localStorage.getItem("wash_composition_final"+ dataid));
-		if( localStorage.getItem("wash_composition_final"+ dataid) != null)
-		{
+		if (localStorage.getItem("wash_composition_final" + dataid) != null) {
 			$('#wash_composition_error' + dataid).addClass('hidden')
 			$('#wash_composition_page_error' + dataid).addClass('hidden')
 			localStorage.setItem("wash_label", wash_lab);
@@ -3871,16 +4022,15 @@ function setWashCareLabelStatus(dataid) {
 			$("#washcarelabelform" + dataid + " .right-panel").removeClass('active');
 			$("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
 			$('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
-		}
-		else {
+		} else {
 			$('#wash_composition_page_error' + dataid).removeClass('hidden')
 			//alert("fail")
 		}
-        
-    } else {
-        $('#wash_composition_error' + dataid).removeClass('hidden')
-        //alert("fail")
-    }
+
+	} else {
+		$('#wash_composition_error' + dataid).removeClass('hidden')
+		//alert("fail")
+	}
 
 
 
@@ -3893,53 +4043,53 @@ function setWashCareLabelStatus(dataid) {
  */
 
 function setHangTag(id) {
-    var delivery_date = $('#hang_delivery_date').val();
-    delivery_date = delivery_date.split('/');
-    delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-    var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-    template_front_id = template_id[0].id;
-    var template_back_id = $('#hang_tag_id').val();
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#hangtagform tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
+	var delivery_date = $('#hang_delivery_date').val();
+	delivery_date = delivery_date.split('/');
+	delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
+	template_front_id = template_id[0].id;
+	var template_back_id = $('#hang_tag_id').val();
+	var tot_qty_table = [];
+	var uvc_tco = [];
+	var size = [];
+	$('#hangtagform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_table').val() != undefined) {
+			tot_qty_table.push($(this).find('.tot_qty_table').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+		}
 
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
-        type: "Post",
-        data: {
-            delivery_date: delivery_date_fin,
-            template_front_id: template_front_id,
-            template_back_id: template_back_id,
-            tot_qty_table: tot_qty_table_fin,
-            id: id,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	})
+	tot_qty_table_fin = tot_qty_table.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
+		type: "Post",
+		data: {
+			delivery_date: delivery_date_fin,
+			template_front_id: template_front_id,
+			template_back_id: template_back_id,
+			tot_qty_table: tot_qty_table_fin,
+			id: id,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -3951,52 +4101,52 @@ function setHangTag(id) {
 
 
 function setSpecialTag(id) {
-    var delivery_date = $('#special_delivery_date').val(); 
+	var delivery_date = $('#special_delivery_date').val();
 	var special_qty = $('.special_qty').val();
-    delivery_date = delivery_date.split('/');
-    delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
-    template_front_id = template_id[0].id;
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#specialtagform tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
+	delivery_date = delivery_date.split('/');
+	delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
+	template_front_id = template_id[0].id;
+	var tot_qty_table = [];
+	var uvc_tco = [];
+	var size = [];
+	$('#specialtagform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_table').val() != undefined) {
+			tot_qty_table.push($(this).find('.tot_qty_table').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+		}
 
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/set_special_tag",
-        type: "Post",
-        data: {
-            delivery_date: delivery_date_fin,
-            template_front_id: template_front_id,
-            id: id,
-            tot_qty_table: special_qty,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	})
+	tot_qty_table_fin = tot_qty_table.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/set_special_tag",
+		type: "Post",
+		data: {
+			delivery_date: delivery_date_fin,
+			template_front_id: template_front_id,
+			id: id,
+			tot_qty_table: special_qty,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4008,57 +4158,57 @@ function setSpecialTag(id) {
 
 
 function setMainLabel(index, dataid, id) {
-    var delivery_date = $('#main_delivery_date' + dataid).val();
+	var delivery_date = $('#main_delivery_date' + dataid).val();
 	var main_label_qty = $('.main_label_qty' + dataid).val();
-    // alert(delivery_date)
-    delivery_date = delivery_date.split('/');
-    delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-    var template_id = $('#' + index).find('#tree3' + dataid).jstree('get_selected', true);
-    var template_name = $('#main_size_name' + dataid).val();
-    template_front_id = template_id[0].id;
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#' + index + ' tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
+	// alert(delivery_date)
+	delivery_date = delivery_date.split('/');
+	delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	var template_id = $('#' + index).find('#tree3' + dataid).jstree('get_selected', true);
+	var template_name = $('#main_size_name' + dataid).val();
+	template_front_id = template_id[0].id;
+	var tot_qty_table = [];
+	var uvc_tco = [];
+	var size = [];
+	$('#' + index + ' tbody tr').each(function () {
+		if ($(this).find('.tot_qty_table').val() != undefined) {
+			tot_qty_table.push($(this).find('.tot_qty_table').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+		}
 
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/set_main_label",
-        type: "Post",
-        data: {
-            delivery_date: delivery_date_fin,
-            template_front_id: template_front_id,
-            id: id,
-            template_name: template_name,
-            tot_qty_table: tot_qty_table_fin,
+	})
+	tot_qty_table_fin = tot_qty_table.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/set_main_label",
+		type: "Post",
+		data: {
+			delivery_date: delivery_date_fin,
+			template_front_id: template_front_id,
+			id: id,
+			template_name: template_name,
+			tot_qty_table: tot_qty_table_fin,
 			main_label_qty: main_label_qty,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
-	$('#main_label_card').css('display','block')
+		}
+	})
+	$('#main_label_card').css('display', 'block')
 }
 
 /**
@@ -4070,26 +4220,26 @@ function setMainLabel(index, dataid, id) {
 
 function removeMainLabel(id) {
 
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
-        type: "Post",
-        data: {
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4101,26 +4251,26 @@ function removeMainLabel(id) {
 
 function removeWashLabel(id) {
 
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
-        type: "Post",
-        data: {
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4131,26 +4281,23 @@ function removeWashLabel(id) {
  */
 
 function setWashLabel(index, dataid, id) {
-	var check=0;
-	var check1=0;
+	var check = 0;
+	var check1 = 0;
 	$('#composition_remove_qty' + dataid + ' tr').each(function () {
-		 
-		 if($(this).find('select' + dataid).find(':selected').text() == "Select Option")
-			 {
-				 check++;
-			 }
-		 check1++;
+
+		if ($(this).find('select' + dataid).find(':selected').text() == "Select Option") {
+			check++;
+		}
+		check1++;
 	});
-	if(check1 <2 )
-	{
-		check=0;
+	if (check1 < 2) {
+		check = 0;
 	}
-	if(check == 0 )
-	{
+	if (check == 0) {
 		var composition = localStorage.getItem('wash_composition');
 
 		var wash_fins = JSON.parse(composition);
-		var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
+		var wash_finals = localStorage.getItem('wash_composition_final' + dataid);
 
 		var delivery_date = $('#wash_delivery_date' + dataid).val();
 		var merchandisers = $('.merchandisers option:selected').val();
@@ -4226,18 +4373,16 @@ function setWashLabel(index, dataid, id) {
 			}
 		})
 		$('.composition_error_hidden').addClass('hidden')
-		$('#washcare_label_card').css('display','block')
-	}
-	else
-	{
+		$('#washcare_label_card').css('display', 'block')
+	} else {
 		$('.composition_error_hidden').removeClass('hidden')
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 }
 
@@ -4248,79 +4393,79 @@ function setWashLabel(index, dataid, id) {
  */
 
 function save_label_orders() {
-    var finish = 0;
-    if (localStorage.getItem("wash_label") != null) {
+	var finish = 0;
+	if (localStorage.getItem("wash_label") != null) {
 
 		alert("ins")
-        if ($('.merchandisers').find("option:selected").val() != "") {
-            //alert("suc")
-            var wash_json = JSON.parse(localStorage.getItem("wash_label"));
+		if ($('.merchandisers').find("option:selected").val() != "") {
+			//alert("suc")
+			var wash_json = JSON.parse(localStorage.getItem("wash_label"));
 
-            $.each(wash_json, function (index, value) {
-                var data_array = index.split('washcarelabelform');
-                setWashLabel(index, data_array[1], value)
-            });
+			$.each(wash_json, function (index, value) {
+				var data_array = index.split('washcarelabelform');
+				setWashLabel(index, data_array[1], value)
+			});
 
-        } else {
-            //alert("fail")
-            return false;
+		} else {
+			//alert("fail")
+			return false;
 
 
-        }
-        finish++;
-        //setMainLabel()
-    } else {
-        finish++;
-    }
-    if (localStorage.getItem("hang_tag") != null) {
-        setHangTag(localStorage.getItem("hang_tag"))
-        finish++;
-    } else {
-        finish++;
-    }
-    if (localStorage.getItem("special_tag") != null) {
-        setSpecialTag(localStorage.getItem("special_tag"))
-        finish++;
-    } else {
-        finish++;
-    }
-    if (localStorage.getItem("main_label") != null) {
-        var main_json = JSON.parse(localStorage.getItem("main_label"));
+		}
+		finish++;
+		//setMainLabel()
+	} else {
+		finish++;
+	}
+	if (localStorage.getItem("hang_tag") != null) {
+		setHangTag(localStorage.getItem("hang_tag"))
+		finish++;
+	} else {
+		finish++;
+	}
+	if (localStorage.getItem("special_tag") != null) {
+		setSpecialTag(localStorage.getItem("special_tag"))
+		finish++;
+	} else {
+		finish++;
+	}
+	if (localStorage.getItem("main_label") != null) {
+		var main_json = JSON.parse(localStorage.getItem("main_label"));
 
-        $.each(main_json, function (index, value) {
-            var data_array = index.split('mainlabelsform');
-            setMainLabel(index, data_array[1], value)
-        });
-        finish++;
-        //setMainLabel()
-    } else {
-        finish++;
-    }
-    if (localStorage.getItem("deletemain") != null) {
-        var del_main_json = JSON.parse(localStorage.getItem("deletemain"));
+		$.each(main_json, function (index, value) {
+			var data_array = index.split('mainlabelsform');
+			setMainLabel(index, data_array[1], value)
+		});
+		finish++;
+		//setMainLabel()
+	} else {
+		finish++;
+	}
+	if (localStorage.getItem("deletemain") != null) {
+		var del_main_json = JSON.parse(localStorage.getItem("deletemain"));
 
-        $.each(del_main_json, function (index, value) {
-            removeMainLabel(value)
-        });
-        finish++;
-    } else {
-        finish++;
-    }
-    if (localStorage.getItem("deletewash") != null) {
-        var del_wash_json = JSON.parse(localStorage.getItem("deletewash"));
+		$.each(del_main_json, function (index, value) {
+			removeMainLabel(value)
+		});
+		finish++;
+	} else {
+		finish++;
+	}
+	if (localStorage.getItem("deletewash") != null) {
+		var del_wash_json = JSON.parse(localStorage.getItem("deletewash"));
 
-        $.each(del_wash_json, function (index, value) {
-            removeWashLabel(value)
-        });
-        finish++;
+		$.each(del_wash_json, function (index, value) {
+			removeWashLabel(value)
+		});
+		finish++;
 
-    } else {
-        finish++;
-    }
-    if (finish == 6) {
-        location.reload();
-    }
-    //location.reload();
+	} else {
+		finish++;
+	}
+	if (finish == 6) {
+		location.reload();
+	}
+	//location.reload();
 
 }
 
@@ -4331,102 +4476,102 @@ function save_label_orders() {
  */
 
 function setSolidStickers() {
-    if ($('#carton_hidden').val() == "standard") {
-        var delivery_date = $('#solid_delivery_date').val();
-        delivery_date = delivery_date.split('/');
-        delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	if ($('#carton_hidden').val() == "standard") {
+		var delivery_date = $('#solid_delivery_date').val();
+		delivery_date = delivery_date.split('/');
+		delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
 
 
-        var buyer = localStorage.getItem("buyer");
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        //alert($('#uvc_id').val())
-        $.ajax({
-            url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
-            type: "Post",
-            data: {
-                delivery_date: delivery_date_fin,
-                uvc: $('#uvc_id').val(),
-                carton_template_id: $('#carton_template_id').val(),
-                polybag_template_id: $('#polybag_template_id').val(),
-                height: $('#modal_height').val(),
-                no_of_carton: $('#no_of_carton').val(),
-                total_polybag: $('#total_polybag').val(),
-                final_order_qty_sets: $('#final_order_qty_sets').val(),
-                order_qty: $('#order_qty').val(),
-                final_order_qty: $('#final_order_qty').val(),
-                age: $('#age').val(),
-                carton_id: $('#std_carton_id').val(),
-                poly_id: $('#std_poly_id').val(),
-                no_of_carton: $('#needed_modal').val(),
-                po: $('#po').val(),
-                //size: size_fin,
-                _token: csrf_token
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
+		var buyer = localStorage.getItem("buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		//alert($('#uvc_id').val())
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
+			type: "Post",
+			data: {
+				delivery_date: delivery_date_fin,
+				uvc: $('#uvc_id').val(),
+				carton_template_id: $('#carton_template_id').val(),
+				polybag_template_id: $('#polybag_template_id').val(),
+				height: $('#modal_height').val(),
+				no_of_carton: $('#no_of_carton').val(),
+				total_polybag: $('#total_polybag').val(),
+				final_order_qty_sets: $('#final_order_qty_sets').val(),
+				order_qty: $('#order_qty').val(),
+				final_order_qty: $('#final_order_qty').val(),
+				age: $('#age').val(),
+				carton_id: $('#std_carton_id').val(),
+				poly_id: $('#std_poly_id').val(),
+				no_of_carton: $('#needed_modal').val(),
+				po: $('#po').val(),
+				//size: size_fin,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
 
-            },
-            error: function (data) {
+			},
+			error: function (data) {
 
-            }
-        })
-    } else {
-        var tot_qty_table_poly = [];
-        var tot_qty_carton = [];
-        var size = [];
+			}
+		})
+	} else {
+		var tot_qty_table_poly = [];
+		var tot_qty_carton = [];
+		var size = [];
 
-        var delivery_date = $('#solid_delivery_date').val();
-        delivery_date = delivery_date.split('/');
-        delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-        $('#solidform tbody tr').each(function () {
-            if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-                tot_qty_table_poly.push($(this).find('.tot_qty_table_poly').val());
-            }
-            if ($(this).find('.tot_qty_table_carton').val() != undefined) {
-                tot_qty_carton.push($(this).find('.tot_qty_table_carton').val());
-            }
-            size.push($(this).find('.size').text());
+		var delivery_date = $('#solid_delivery_date').val();
+		delivery_date = delivery_date.split('/');
+		delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+		$('#solidform tbody tr').each(function () {
+			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
+				tot_qty_table_poly.push($(this).find('.tot_qty_table_poly').val());
+			}
+			if ($(this).find('.tot_qty_table_carton').val() != undefined) {
+				tot_qty_carton.push($(this).find('.tot_qty_table_carton').val());
+			}
+			size.push($(this).find('.size').text());
 
-        })
-        tot_qty_table_poly_fin = tot_qty_table_poly.join(',');
-        tot_qty_carton_fin = tot_qty_carton.join(',');
-        size_fin = size.join(',');
+		})
+		tot_qty_table_poly_fin = tot_qty_table_poly.join(',');
+		tot_qty_carton_fin = tot_qty_carton.join(',');
+		size_fin = size.join(',');
 
-        var buyer = localStorage.getItem("buyer");
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        //alert($('#uvc_id').val())
-        $.ajax({
-            url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
-            type: "Post",
-            data: {
-                delivery_date: delivery_date_fin,
-                // template_front_id: template_front_id,
-                tot_qty_poly: tot_qty_table_poly_fin,
-                tot_qty_carton: tot_qty_carton_fin,
-                size: size_fin,
-                uvc: $('#uvc_id').val(),
-                carton_template_id: $('#carton_template_id').val(),
-                polybag_template_id: $('#polybag_template_id').val(),
-                height: $('#modal_height').val(),
-                age: $('#age').val(),
-                carton_id: $('#carton_id').val(),
-                poly_id: $('#poly_id').val(),
-                po: $('#po').val(),
-                //size: size_fin,
-                _token: csrf_token
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
+		var buyer = localStorage.getItem("buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		//alert($('#uvc_id').val())
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
+			type: "Post",
+			data: {
+				delivery_date: delivery_date_fin,
+				// template_front_id: template_front_id,
+				tot_qty_poly: tot_qty_table_poly_fin,
+				tot_qty_carton: tot_qty_carton_fin,
+				size: size_fin,
+				uvc: $('#uvc_id').val(),
+				carton_template_id: $('#carton_template_id').val(),
+				polybag_template_id: $('#polybag_template_id').val(),
+				height: $('#modal_height').val(),
+				age: $('#age').val(),
+				carton_id: $('#carton_id').val(),
+				poly_id: $('#poly_id').val(),
+				po: $('#po').val(),
+				//size: size_fin,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
 
-            },
-            error: function (data) {
+			},
+			error: function (data) {
 
-            }
-        })
-    }
+			}
+		})
+	}
 
 }
