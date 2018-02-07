@@ -3,7 +3,13 @@
  */
 
 var isSubmitting = false;
-/**  Validation for numeric values **/
+
+/**  
+ * Validation for numeric values *
+ * @param    evt 
+ * @return {Boolean}
+ * @author <praveen>
+ */
  function isNumber(evt) {
   try{
         evt = (evt) ? evt : window.event;
@@ -17,7 +23,13 @@ var isSubmitting = false;
      console.log("Error:"+e)
    }
   }
-/**  Validation for numeric values with dot**/
+
+/** 
+ * Validation for numeric values with dot*
+ * @param  evt
+ * @return {Boolean}
+ * @author <praveen>
+ */
  function isNumberKey(evt){
   try{
        var charCode = (evt.which) ? evt.which : event.keyCode
@@ -40,6 +52,7 @@ var isSubmitting = false;
      console.log("Error:"+e)
    }
   }
+
 /**
   * Function to Orchestra Settings home page
   * @author <praveen>
@@ -47,6 +60,7 @@ var isSubmitting = false;
 function orchestraSettings() {
   try{
     $('.main-content').html('<div class="loader"></div>');
+
     /** Orchestra metadata sidebar */
     var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -91,20 +105,26 @@ function orchestraSettings() {
      console.log("Error:"+e)
    }
 }
+
 /**
-  * Function to show snackbar
-  * @author <praveen>
+  * [showSnackbar function]
+  * @author    <praveen>
   */
 function showSnackbar() {
-    // Get the snackbar DIV
+  try{
+    /** [ Get the snackbar DIV ] */
     var x = document.getElementById("snackbar")
 
-    // Add the "show" class to DIV
+    /** [ Add the "show" class to DIV ] */
     x.className = "show";
 
-    // After 3 seconds, remove the show class from DIV
+    /** [  After 3 seconds, remove the show class from DIV ] */
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    } catch (e) {
+     console.log("Error:"+e)
+   }
 }
+
 /**
   * Adds a orchestra garments.
   * @author <praveen>
@@ -124,16 +144,16 @@ function showSnackbar() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html("Garment Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -149,6 +169,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra garments details for editing
    * @param id
@@ -194,6 +215,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit orchestra garments details
   * @author <praveen>
@@ -214,9 +236,10 @@ function showSnackbar() {
            method:"put",
            data:{_token:csrf_token,id:id,name:name},
            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                        $('.snackbar_span').html("Garment Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraGarmentsModal').modal('hide');
                        orchestraSettings()
@@ -234,6 +257,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
  }
+
  /**
   * To delete orchestra garment
   * @param id
@@ -254,16 +278,16 @@ function showSnackbar() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Garment Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraGarmentsModal').modal('hide');
                      orchestraSettings();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -279,6 +303,7 @@ function showSnackbar() {
 	 console.log("Error:"+e)
   }
   }
+
   /**
   * To Show Orchestra age group.
   * @param id
@@ -338,6 +363,7 @@ function showSnackbar() {
        console.log("Error:"+e)
      }
   }
+
   /**
   * Adds a orchestra age group.
   * @author <praveen>
@@ -358,16 +384,16 @@ function showSnackbar() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+ 
+                  /** [Show response status based on HTTP status code] */
                   200: function() {
                        $('.snackbar_span').html("Age Group Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -383,6 +409,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra age group details for editing
    * @param id
@@ -429,6 +456,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit orchestra age-group details
   * @author <praveen>
@@ -450,9 +478,10 @@ function showSnackbar() {
            method:"put",
            data:{_token:csrf_token,id:id,name:name,color:color},
            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                        $('.snackbar_span').html("Age Group Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraAgeGroupModal').modal('hide');
                        ageGroup()
@@ -470,6 +499,7 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
  } 
+
  /**
   * To delete orchestra age-group
   * @param id
@@ -490,16 +520,16 @@ function showSnackbar() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
                 200: function() {
                      $('.snackbar_span').html('Age Group Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraAgeGroupModal').modal('hide');
                      ageGroup();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -515,6 +545,7 @@ function showSnackbar() {
    console.log("Error:"+e)
   }
   }
+
 /**
 * Function to Orchestra countries home page
 * @author <praveen>
@@ -544,7 +575,8 @@ function countries() {
                });
                orchestra_metadata += '</tbody></table></div>';
                $('.main-content').html(orchestra_metadata)
-               
+                
+                /** [ Enable horizontal scroll for table ] */
                 $('#orchestra-countries-list-table').DataTable({
                   'scrollX':true
                 });
@@ -569,6 +601,7 @@ function countries() {
      console.log("Error:"+e)
    }
 }
+
 /**
   * Adds orchestra countries.
   * @author <praveen>
@@ -599,16 +632,16 @@ function countries() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [ Show response status based on HTTP status code ] */
                   200: function() {
                        $('.snackbar_span').html("Country Name Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraCountryModal').modal('hide');
                        countries()
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -624,6 +657,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra country details for editing
    * @param id
@@ -680,6 +714,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit orchestra country name
   * @author <praveen>
@@ -711,9 +746,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Country Name Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraCountryModal').modal('hide');
                        countries()
@@ -751,16 +787,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Country Name Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraCountryModal').modal('hide');
                      countries();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -776,6 +812,7 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+
   /**
   * Function to show Orchestra product family home page
   * @author <praveen>
@@ -830,6 +867,7 @@ function countries() {
        console.log("Error:"+e)
      }
   }
+
   /**
   * Adds orchestra Product Family.
   * @author <praveen>
@@ -853,16 +891,16 @@ function countries() {
                  $(".loader").css('margin-top','12%');
                },
                statusCode: {
+
+                    /** [ Show response status based on HTTP status code ] */
                     200: function() {
                          $('.snackbar_span').html("Product Family Added Successfully");
-                         $('#snackbar').css('background-color','#1abb9c');
                          showSnackbar();
                          $('#addOrchestraProductFamilyModal').modal('hide');
                          productFamily()()
                     },
                     400: function() {
                          $('.snackbar_span').html("Something went wrong!!");
-                         $('#snackbar').css('background-color','#F44336');
                          showSnackbar();
                     }
                },
@@ -878,7 +916,8 @@ function countries() {
        console.log("Error:"+e)
      }
     }
-    /**
+
+ /**
    * Function for get orchestra product family details for editing
    * @param id
    * @author <praveen>
@@ -927,6 +966,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit orchestra country name
   * @author <praveen>
@@ -951,9 +991,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,arabic:arabic,code:code},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Product Family Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraProductFamilyModal').modal('hide');
                        productFamily()()
@@ -971,6 +1012,7 @@ function countries() {
      console.log("Error:"+e)
    }
  }
+
  /**
   * To delete orchestra product family
   * @param id
@@ -991,16 +1033,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Product Family Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraProductFamilyModal').modal('hide');
                      productFamily();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1016,6 +1058,7 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+
   /**
     * Function to Orchestra special instructions home page
     * @author <praveen>
@@ -1070,6 +1113,7 @@ function countries() {
          console.log("Error:"+e)
        }
     }
+
 /**
   * Adds orchestra special-instruction.
   * @author <praveen>
@@ -1100,16 +1144,16 @@ function countries() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [ Show response status based on HTTP status code ] */
                   200: function() {
                        $('.snackbar_span').html("Special Instruction Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction() 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1125,6 +1169,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra Special instruction details for editing
    * @param id
@@ -1181,6 +1226,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit orchestra special instruction
   * @author <praveen>
@@ -1212,9 +1258,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Special Instruction Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraSpecialInstructionModal').modal('hide');
                        specialInstruction()
@@ -1232,6 +1279,7 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+
  /**
   * To delete orchestra special instruction
   * @param id
@@ -1252,16 +1300,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Special Instruction Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraSpecialInstructionModal').modal('hide');
                      specialInstruction();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1277,6 +1325,7 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+
   /**
     * Function to Orchestra compositions home page
     * @author <praveen>
@@ -1331,6 +1380,7 @@ function countries() {
          console.log("Error:"+e)
        }
     }
+
  /**
   * Adds orchestra composition.
   * @author <praveen>
@@ -1361,16 +1411,16 @@ function countries() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [ Show response status based on HTTP status code ] */
                   200: function() {
                        $('.snackbar_span').html("Composition Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraCompositionModal').modal('hide');
                        compositions() 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1386,6 +1436,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra Composition details for editing
    * @param id
@@ -1442,6 +1493,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit Composition instruction
   * @author <praveen>
@@ -1473,9 +1525,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Composition Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraCompositionModal').modal('hide');
                        compositions()
@@ -1493,6 +1546,7 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+
  /**
   * To delete orchestra Composition
   * @param id
@@ -1513,16 +1567,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Composition Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraCompositionModal').modal('hide');
                      compositions();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1538,6 +1592,7 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+
   /**
     * Function to Orchestra parts home page
     * @author <praveen>
@@ -1592,6 +1647,7 @@ function countries() {
          console.log("Error:"+e)
        }
     }
+
  /**
   * Adds orchestra part.
   * @author <praveen>
@@ -1622,16 +1678,16 @@ function countries() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [ Show response status based on HTTP status code ] */
                   200: function() {
                        $('.snackbar_span').html("Part Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraPartModal').modal('hide');
                        parts(); 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1647,6 +1703,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra Part details for editing
    * @param id
@@ -1703,6 +1760,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit Part instruction
   * @author <praveen>
@@ -1734,9 +1792,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Part Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraPartModal').modal('hide');
                        parts();
@@ -1754,6 +1813,7 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+
  /**
   * To delete orchestra Part
   * @param id
@@ -1774,16 +1834,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Part Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraPartModal').modal('hide');
                      parts();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },
@@ -1799,6 +1859,7 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+
   /**
     * Function to Orchestra size chart  home page
     * @author <praveen>
@@ -1852,6 +1913,7 @@ function countries() {
          console.log("Error:"+e)
        }
     }
+
  /**
   * Adds orchestra size chart.
   * @author <praveen>
@@ -1873,16 +1935,16 @@ function countries() {
                $(".loader").css('margin-top','12%');
              },
              statusCode: {
+
+                  /** [ Show response status based on HTTP status code ] */
                   200: function() {
                        $('.snackbar_span').html("Size Chart Added Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#addOrchestraSizeChartModal').modal('hide');
                        sizeChart(); 
                   },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
-                       $('#snackbar').css('background-color','#F44336');
                        showSnackbar();
                   }
              },
@@ -1898,6 +1960,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
    * Function for get orchestra Size Chart details for editing
    * @param id
@@ -1945,6 +2008,7 @@ function countries() {
      console.log("Error:"+e)
    }
   }
+
   /**
   * Function for edit Size Chart instruction
   * @author <praveen>
@@ -1967,9 +2031,10 @@ function countries() {
            method:"put",
            data: {_token:csrf_token,id:id,age:age,cm:cm,in:inch},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                        $('.snackbar_span').html("Size Chart Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editOrchestraSizeChartModal').modal('hide');
                        sizeChart();
@@ -1987,6 +2052,7 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+
  /**
   * To delete orchestra Part
   * @param id
@@ -2007,16 +2073,16 @@ function countries() {
            method:"delete",
            data:{_token:csrf_token,id:id},
            statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
                 200: function() {
                      $('.snackbar_span').html('Size Chart Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteOrchestraSizeChartModal').modal('hide');
                      sizeChart();
                 },
                 400: function() {
                      $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
                      showSnackbar();
                 }
            },

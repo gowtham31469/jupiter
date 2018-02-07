@@ -193,6 +193,7 @@ border: 0;
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
         localStorage.removeItem("deletewash");
+		localStorage.removeItem("page_navigation");
 		//localStorage.removeItem("wash_composition_final");
 		localStorage.removeItem("search_string");
 		

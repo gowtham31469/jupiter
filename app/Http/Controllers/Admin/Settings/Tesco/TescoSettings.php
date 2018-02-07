@@ -13,6 +13,7 @@ use DB;
 use App\TescoBrand;
 use App\TescoDepartment;
 use App\TescoSupplier;
+use App\TescoSizeChart;
 
 class TescoSettings extends Controller
 {
@@ -474,6 +475,124 @@ class TescoSettings extends Controller
             return $result;
         }
 
-      
+         /**
+     * Tesco metadata Size Chart list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function tescoSizeChart()
+    {
+      try {
+            $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce')->get();
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+       /**
+     * Add Tesco Size chart.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addTescoSizeCharts(Request $request)
+    {
+        try {
+            $inserted = TescoSizeChart::create([
+                        'po_size' => $request['po_size'],
+                        'uk' => $request['uk'],
+                        'ce' => $request['ce']
+                      ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+ /**
+     * Get Tesco size chart details by ID for editing.
+     * @param Tesco size chart id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoSizeChartsById(Request $request)
+    {
+    try {
+          $id = $request['id'];
+          $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce')->where('tesco_size_chart.id',$id)->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+    * Update size chart by id.
+    * @param sizechart id
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function updateTescoSizechartsById(Request $request)
+    {
+    try {
+          $id        = $request['id'];
+          $po_size      = $request['po_size'];
+          $uk = $request['uk'];
+          $ce = $request['ce'];
+        
+          
+          TescoSizeChart::where('id',$id)
+           ->update([
+             'po_size' => $po_size,
+             'uk' => $uk,
+             'ce' => $ce
+          ]);
+
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        
+        } catch (\Exception $e)
+        {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+      /**
+     * function to delete Size chart by id.
+     * @param sizechart id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteTescosizechartsById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $deleted = TescoSizeChart::where('id', '=', $id)
+                        ->delete();
+            if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
 }
 
