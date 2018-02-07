@@ -103,4 +103,33 @@ class OrderManagementCntrl extends Controller
     {
             echo json_encode("tesco");
     }
+
+    /**
+     * Method to create tesco order from purchase order
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrderByPurchaseOrder(Request $request) {
+      try {
+        if ($request->hasFile('purchase_order')) {
+                $file = $request->file('purchase_order');
+                $name = $file->getClientOriginalName();
+                $path =  $file->move('storage/app/TESCO/purchaseOrder', $name);
+                $ch   = curl_init();
+                $post = file_get_contents($path);
+                curl_setopt($ch, CURLOPT_URL, "http://pdfx.cs.man.ac.uk" );
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
+                curl_setopt($ch, CURLOPT_POST,           1 );
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/pdf'));
+                $result = curl_exec($ch);
+                print_r($result);
+
+        } else {
+          return "File not found!!";
+        }
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      
+    }
 }

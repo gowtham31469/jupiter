@@ -1650,6 +1650,103 @@
        </div>
    </div>
 
+   {{-- Add Tesco Size Chart Modal --}}
+   <div class="modal fade" id="addTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoSizeChartLabel">Add Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
+                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('uk', 'UK', ['class' => 'form_label']) !!}
+                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('ce', 'CE', ['class' => 'form_label']) !!}
+                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Tesco Size Chart Modal --}}
+    <div class="modal fade" id="editTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body"> 
+                     {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_uk', 'UK', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_ce', 'CE', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
+   {{-- Delete Tesco Size Charts Modal --}}
+   <div class="modal fade" id="deleteTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco size chart. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_size_charts_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+
 
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
@@ -1732,6 +1829,7 @@
         $('#add_tesco_brands_form').trigger("reset");
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
+        $('#add_tesco_size_charts_form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -2376,21 +2474,77 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
          }
        })
      
-      /** To Enable  Supplier  on click **/
-      $(document).on('click', '#make_supplier_enabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeSupplierEnabled function from tesco-settings.js*/
-          makeSupplierEnabled(id,csrf_token)
-      });
+ /** To Enable  Supplier  on click **/
+    $(document).on('click', '#make_supplier_enabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeSupplierEnabled function from tesco-settings.js*/
+        makeSupplierEnabled(id,csrf_token)
+    });
 
-      /** To disable Supplier  on click **/
-      $(document).on('click', '#make_supplier_disabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeSupplierDisabled function from tesco-settings.js*/
-          makeSupplierDisabled(id,csrf_token)
-      });
+    /** To disable Supplier  on click **/
+    $(document).on('click', '#make_supplier_disabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeSupplierDisabled function from tesco-settings.js*/
+        makeSupplierDisabled(id,csrf_token)
+    });
+     /** Add Tesco Size chart form validation **/
+$('#add_tesco_size_charts_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addTescoSize charts function from  tesco-settings.js*/
+             addTescoSizeCharts();
+          }
+        })
+       
+         /** get edit Tesco Size chart details **/
+       $(document).on('click','.edit-tesco-sizecharts',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoSizechartById function from settings.js*/
+           getTescoSizeChartsById(id);
+       });
+
+       /** submit edit Tesco Size chart form **/
+       $('#edit_tesco_size_charts_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoSizecharts function from tesco-settings.js*/
+            editTescoSizeChart();
+         }
+       })
+
+          /** assign id for delete tesco sizechart modal **/
+          $('#deleteTescoSizeChartsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_size_charts_id').attr('value', config);
+       });
+
+       /** submit delete Tesco sizechart  form **/
+       $('#delete_tesco_size_charts_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_size_charts_id').val();
+            /* call deleteTescoSizechart function from tesco-settings.js*/
+            deleteTescoSizeChart(id);
+         }
+       })
     });
     </script>
 
