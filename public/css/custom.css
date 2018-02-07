@@ -1126,3 +1126,9 @@ button.btn.btn-info.pull-right.input-sm.add_to_list {
 .has-feedback .form-control {
     padding-right: 0px; 
 }
+    .state-icon {
+    left: -5px;
+}
+p.dropdown-toggle i {
+    cursor: pointer;
+}
