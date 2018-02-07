@@ -240,7 +240,9 @@ class OrderController extends Controller
 		$composition = json_decode($request->composition);
 		foreach($composition as $key => $value)
 		{
-			if($value[0] != "Select Option")
+			
+			$express_value = explode('_',$value[0]);
+			if($express_value[0] != "Select Option")
 			{
 					$exp_value = explode('_',$value[0]);
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();

@@ -14,22 +14,17 @@ var deletewash = [];
  * @param  input data
  * @return {Boolean}
  */
-function isNumber(evt)
-{
-    try
-    {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-        {
-            return false;
-        }
-          return true;
-    }
-    catch (e)
-    {
-     console.log("Error:"+e)
-    }
+function isNumber(evt) {
+	try {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
 }
 /**
  * This Function is used to Show all the list of orders like label orders and sticker orders.
@@ -91,6 +86,8 @@ function orders() {
  *
  * @return View
  */
+
+
 function orderStatus() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     var buyer = localStorage.getItem("status_buyer");
@@ -216,39 +213,40 @@ function orderStatus() {
 }
 
 function showFilter() {
-    $('.filter-window').toggle();
+	$('.filter-window').toggle();
 }
 
 /* Our main filter function
  * We pass the column location, the start date, and the end date
  */
 var filterByDate = function (column, startDate, endDate) {
-    // Custom filter syntax requires pushing the new filter to the global filter array
-    $.fn.dataTableExt.afnFiltering.push(
-        function (oSettings, aData, iDataIndex) {
-            var rowDate = normalizeDate(aData[column]),
-                start = normalizeDate(startDate),
-                end = normalizeDate(endDate);
+	// Custom filter syntax requires pushing the new filter to the global filter array
+	$.fn.dataTableExt.afnFiltering.push(
+		function (oSettings, aData, iDataIndex) {
+			var rowDate = normalizeDate(aData[column]),
+				start = normalizeDate(startDate),
+				end = normalizeDate(endDate);
 
-            // If our date from the row is between the start and end
-            if (start <= rowDate && rowDate <= end) {
-                return true;
-            } else if (rowDate >= start && end === '' && start !== '') {
-                return true;
-            } else if (rowDate <= end && start === '' && end !== '') {
-                return true;
-            } else {
-                return false;
-            }f
-        }
-    );
+			// If our date from the row is between the start and end
+			if (start <= rowDate && rowDate <= end) {
+				return true;
+			} else if (rowDate >= start && end === '' && start !== '') {
+				return true;
+			} else if (rowDate <= end && start === '' && end !== '') {
+				return true;
+			} else {
+				return false;
+			}
+			f
+		}
+	);
 };
 
 // converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220
 var normalizeDate = function (dateString) {
-    var date = new Date(dateString);
-    var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
-    return normalized;
+	var date = new Date(dateString);
+	var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
+	return normalized;
 }
 
 /**
@@ -256,7 +254,6 @@ var normalizeDate = function (dateString) {
  * Generic Table View For all Lists
  * @return View
  */
-
 
 function table(data,path) {
     var th = "";
@@ -402,11 +399,12 @@ function showPOUpload(id,table_name,uvc,qntytable)
     $('#tableName').val(table_name);
     $('#po-file-upload').modal('show')
 }
-
 /**
- * method pass the po number for an order
+ * method pass the po number for
  * @param {[type]} obj         [description]
- * @param {[type]} id [description]
+ * @param {[type]} uvc         [description]
+ * @param {[type]} po          [description]
+ * @param {[type]} template_id [description]
  * @param {[type]} table_name  [description]
  */
 function setPO(obj,id,table_name)
@@ -454,22 +452,24 @@ function setPO(obj,id,table_name)
             $(".loader").hide();
         }
     })
-
 }
- /** [showSnackbar function] */
-  function showSnackbar() {
-    try{
-      // Get the snackbar DIV
-       var x = document.getElementById("snackbar")
-      // Add the "show" class to DIV
-      x.className = "show";
+/** [showSnackbar function] */
+function showSnackbar() {
+	try {
+		// Get the snackbar DIV
+		var x = document.getElementById("snackbar")
 
-      // After 3 seconds, remove the show class from DIV
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      } catch (e) {
-       console.log("Error:"+e)
-     }
-  }
+		// Add the "show" class to DIV
+		x.className = "show";
+
+		// After 3 seconds, remove the show class from DIV
+		setTimeout(function () {
+			x.className = x.className.replace("show", "");
+		}, 3000);
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
 /**
  * call the method for getting all the details for profoma invoice generation
  * @param  {[type]} uvc         [description]
@@ -478,6 +478,7 @@ function setPO(obj,id,table_name)
  * @param  {[type]} table_name  [description]
  * @return profoma invoice
  */
+
 function showProfomaInvoice(id,table_name,uvc,qntytable)
 {
     $('#uvc_number').text(uvc)
@@ -738,45 +739,41 @@ function numToString(billamnt)
     }
    return(str);
 }
-function onlyDigit(n)
-{
-    //Arrays to store the string equivalent of the number to convert in words
-    var units=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
-    var randomer=['','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
-    var tens=['','Ten','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
-    var r=0;
-    var num=parseInt(n);
-    var str="";
-    var pl="";
-    var tenser="";
-    while(num>=1)
-    {
-    r=parseInt(num%10);
-    tenser=r+tenser;
-     if(tenser<=19 && tenser>10) //Logic for 10 to 19 numbers
-     {
-     str=randomer[tenser-10];
-     }
-     else
-     {
-      if(pl==0)        //If units place then call units array.
-      {
-      str=units[r];
-      }
-      else if(pl==1)    //If tens place then call tens array.
-      {
-      str=tens[r]+" "+str;
-      }
-     }
-     if(pl==2)        //If hundreds place then call units array.
-     {
-     str=units[r]+" Hundred "+str;
-     }
-     
-    num=parseInt(num/10);
-    pl++;
-    }
-    return str;
+
+function onlyDigit(n) {
+	//Arrays to store the string equivalent of the number to convert in words
+	var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+	var randomer = ['', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+	var tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+	var r = 0;
+	var num = parseInt(n);
+	var str = "";
+	var pl = "";
+	var tenser = "";
+	while (num >= 1) {
+		r = parseInt(num % 10);
+		tenser = r + tenser;
+		if (tenser <= 19 && tenser > 10) //Logic for 10 to 19 numbers
+		{
+			str = randomer[tenser - 10];
+		} else {
+			if (pl == 0) //If units place then call units array.
+			{
+				str = units[r];
+			} else if (pl == 1) //If tens place then call tens array.
+			{
+				str = tens[r] + " " + str;
+			}
+		}
+		if (pl == 2) //If hundreds place then call units array.
+		{
+			str = units[r] + " Hundred " + str;
+		}
+
+		num = parseInt(num / 10);
+		pl++;
+	}
+	return str;
 }
 /**
  * This Function is used to select the order is label order or sticker order.
@@ -785,6 +782,7 @@ function onlyDigit(n)
  */
 
 function order_details(uvc, po) {
+
     //alert($('.logo').text());
     if($('.logo').text() == "Orders")
     {
@@ -809,6 +807,7 @@ function order_details(uvc, po) {
  */
 
 function sticker_order_details(uvc, po) {
+
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
@@ -846,6 +845,7 @@ function sticker_order_details(uvc, po) {
  */
 
 function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
+
     var tr = "";
     if (data.template_name == "Standard") {
         var disabled = '';
@@ -1050,7 +1050,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
         svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
     });
 
-
 }
 /**
  * This Function is used Print Stickers.
@@ -1059,22 +1058,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
  */
 
 function printDiv(data, isstd) {
-    if (data == "svg4" && isstd == "0") {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        Popupsmall(svgRoot);
-    } else if (data == "svg4" && isstd == "1") {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        PopupTable(svgRoot);
-    } else {
-        var a = document.getElementById(data);
-        var svgDoc = a.contentDocument;
-        var svgRoot = svgDoc.documentElement;
-        Popup(svgRoot);
-    }
+	if (data == "svg4" && isstd == "0") {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		Popupsmall(svgRoot);
+	} else if (data == "svg4" && isstd == "1") {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		PopupTable(svgRoot);
+	} else {
+		var a = document.getElementById(data);
+		var svgDoc = a.contentDocument;
+		var svgRoot = svgDoc.documentElement;
+		Popup(svgRoot);
+	}
 
 }
 
@@ -1086,15 +1085,15 @@ function printDiv(data, isstd) {
 
 function printHangDiv(data) {
 
-    var a = document.getElementById('svg_hang_front');
-    var svgDoc = a.contentDocument;
-    var svgRoot = svgDoc.documentElement;
+	var a = document.getElementById('svg_hang_front');
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
 
-    var a1 = document.getElementById(data);
-    var svgDoc1 = a1.contentDocument;
-    var svgRoot1 = svgDoc1.documentElement;
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
 
-    PopupHang(svgRoot, svgRoot1);
+	PopupHang(svgRoot, svgRoot1);
 }
 
 /**
@@ -1103,12 +1102,12 @@ function printHangDiv(data) {
  * @return Pdf
  */
 
-function printWashDiv(data,dataid) {
-    var a1 = document.getElementById(data);
-    var svgDoc1 = a1.contentDocument;
-    var svgRoot1 = svgDoc1.documentElement;
+function printWashDiv(data, dataid) {
+	var a1 = document.getElementById(data);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
 
-    PopupWash(svgRoot1,dataid);
+	PopupWash(svgRoot1, dataid);
 }
 
 /**
@@ -1119,11 +1118,11 @@ function printWashDiv(data,dataid) {
 
 function printSpecialDiv(data) {
 
-    var a = document.getElementById(data);
-    var svgDoc = a.contentDocument;
-    var svgRoot = svgDoc.documentElement;
+	var a = document.getElementById(data);
+	var svgDoc = a.contentDocument;
+	var svgRoot = svgDoc.documentElement;
 
-    PopupSpecial(svgRoot);
+	PopupSpecial(svgRoot);
 }
 
 /**
@@ -1133,33 +1132,33 @@ function printSpecialDiv(data) {
  */
 
 function PopupSpecial(data) {
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-special-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-special-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1228,39 +1227,39 @@ function PopupWash(data,dataid) {
  */
 
 function PopupHang(svgRoot, svgRoot1) {
-    var s = new XMLSerializer();
-    var d = svgRoot;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
+	var s = new XMLSerializer();
+	var d = svgRoot;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
 
-    var s1 = new XMLSerializer();
-    var d1 = svgRoot1;
-    var str1 = s1.serializeToString(d1);
-    var svg1 = encodeURI(str1)
+	var s1 = new XMLSerializer();
+	var d1 = svgRoot1;
+	var str1 = s1.serializeToString(d1);
+	var svg1 = encodeURI(str1)
 
-    var success = false;
-    var url = "";
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-hang-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg,
-            svg1: svg1
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-hang-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			svg1: svg1
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1270,53 +1269,53 @@ function PopupHang(svgRoot, svgRoot1) {
  */
 
 function Popup(data) {
-    //    var s = new XMLSerializer();
-    //    var d = data;
-    //    var str = s.serializeToString(d);
-    //    var mywindow = window.open('', 'new div', 'class=printmedia');
-    //    mywindow.document.write('<html><head><title></title>');
-    //    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    //    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
-    //    mywindow.document.write(str);
-    //    mywindow.document.write('</div>');
-    //    mywindow.print();
-    //    mywindow.close();
-    //    return true;
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            //window.location.href=data;
-            success = true;
-            url = data;
-            //         window.open('http://google.com')
-            //            var a = document.createElement('a');
-            //            a.href = data;
-            //            a.download = "stickers.pdf";
-            //            document.body.appendChild(a);
-            //            a.click();
-            //            document.body.removeChild(a);
-        },
-        error: function (data) {
+	//    var s = new XMLSerializer();
+	//    var d = data;
+	//    var str = s.serializeToString(d);
+	//    var mywindow = window.open('', 'new div', 'class=printmedia');
+	//    mywindow.document.write('<html><head><title></title>');
+	//    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+	//    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
+	//    mywindow.document.write(str);
+	//    mywindow.document.write('</div>');
+	//    mywindow.print();
+	//    mywindow.close();
+	//    return true;
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			//window.location.href=data;
+			success = true;
+			url = data;
+			//         window.open('http://google.com')
+			//            var a = document.createElement('a');
+			//            a.href = data;
+			//            a.download = "stickers.pdf";
+			//            document.body.appendChild(a);
+			//            a.click();
+			//            document.body.removeChild(a);
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1326,44 +1325,44 @@ function Popup(data) {
  */
 
 function PopupTable(data) {
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    var size = [];
-    var qty = [];
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	var size = [];
+	var qty = [];
+	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 
-    $('#solidform tbody tr').each(function () {
-        size.push($(this).find('.size').text());
-        qty.push($(this).find('.qty').text());
-    })
-    var sizefin = size.join(',')
-    var qtyfin = qty.join(',')
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf-table",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg,
-            size: sizefin,
-            qty: qtyfin
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	$('#solidform tbody tr').each(function () {
+		size.push($(this).find('.size').text());
+		qty.push($(this).find('.qty').text());
+	})
+	var sizefin = size.join(',')
+	var qtyfin = qty.join(',')
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf-table",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg,
+			size: sizefin,
+			qty: qtyfin
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1373,46 +1372,46 @@ function PopupTable(data) {
  */
 
 function Popupsmall(data) {
-    //    var s = new XMLSerializer();
-    //    var d = data;
-    //    var str = s.serializeToString(d);
-    //    var mywindow = window.open('', 'new div', 'class=printmedia');
-    //    mywindow.document.write('<html><head><title></title>');
-    //    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    //    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #000;width:100mm;height:70mm">');
-    //    mywindow.document.write(str);
-    //    mywindow.document.write('</div>');
-    //    mywindow.print();
-    //    mywindow.close();
-    //    return true;
+	//    var s = new XMLSerializer();
+	//    var d = data;
+	//    var str = s.serializeToString(d);
+	//    var mywindow = window.open('', 'new div', 'class=printmedia');
+	//    mywindow.document.write('<html><head><title></title>');
+	//    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+	//    mywindow.document.write('</head><body><div id="printmedia" style="border:1px solid #000;width:100mm;height:70mm">');
+	//    mywindow.document.write(str);
+	//    mywindow.document.write('</div>');
+	//    mywindow.print();
+	//    mywindow.close();
+	//    return true;
 
 
-    var s = new XMLSerializer();
-    var d = data;
-    var str = s.serializeToString(d);
-    var svg = encodeURI(str)
-    var success = false;
-    var url = "";
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/admin/order-management/print-pdf-small",
-        type: "post",
-        data: {
-            _token: csrf_token,
-            svg: svg
-        },
-        async: false,
-        success: function (data) {
-            success = true;
-            url = data;
-        },
-        error: function (data) {
+	var s = new XMLSerializer();
+	var d = data;
+	var str = s.serializeToString(d);
+	var svg = encodeURI(str)
+	var success = false;
+	var url = "";
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/order-management/print-pdf-small",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			svg: svg
+		},
+		async: false,
+		success: function (data) {
+			success = true;
+			url = data;
+		},
+		error: function (data) {
 
-        },
-    })
-    if (success) { //AND THIS CHANGED
-        window.open(url)
-    }
+		},
+	})
+	if (success) { //AND THIS CHANGED
+		window.open(url)
+	}
 }
 
 /**
@@ -1422,42 +1421,42 @@ function Popupsmall(data) {
  */
 
 function barcode_polybag(id, data) {
-    var mySVG = document.getElementById(id);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-        var svgItem = svgDoc.getElementById("uvc_tco");
+	var mySVG = document.getElementById(id);
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		svgDoc = mySVG.contentDocument;
+		var svgItem = svgDoc.getElementById("uvc_tco");
 
-        svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
-        //svgDoc.getElementById("round").style.fill = $('#age').val();
+		svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+		//svgDoc.getElementById("round").style.fill = $('#age').val();
 
-        if (data.template_name == "Standard") {
+		if (data.template_name == "Standard") {
 
-            $td_col = "";
-            $td_size = "";
-            $total = 0;
-            $('#solidform tbody tr').each(function () {
-                if ($(this).find('.size').text() != "") {
-                    $td_size += "<td>" + $(this).find('.size').text() + "</td>";
-                    $td_col += "<td>" + $(this).find('.qty').text() + "</td>";
-                    $total += parseInt($(this).find('.qty').text());
-                }
+			$td_col = "";
+			$td_size = "";
+			$total = 0;
+			$('#solidform tbody tr').each(function () {
+				if ($(this).find('.size').text() != "") {
+					$td_size += "<td>" + $(this).find('.size').text() + "</td>";
+					$td_col += "<td>" + $(this).find('.qty').text() + "</td>";
+					$total += parseInt($(this).find('.qty').text());
+				}
 
 
-            })
-            $tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
+			})
+			$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>ERCU</td>' + $td_col + '<td>' + $total + '</td></tr>';
 
-            var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
-            svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
-            svgDoc.getElementById("cartontable").innerHTML = $tbl;
-        } else {
-            var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-            svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
-            svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+			svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
+			svgDoc.getElementById("cartontable").innerHTML = $tbl;
+		} else {
+			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
-        }
-        jsbarcode(code, 'barcode', svgDoc)
-    }, false);
+		}
+		jsbarcode(code, 'barcode', svgDoc)
+	}, false);
 
 }
 
@@ -1468,33 +1467,33 @@ function barcode_polybag(id, data) {
  */
 
 function barcode_carton(id, data) {
-    console.log(data);
-    var mySVG = document.getElementById(id);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-        var svgItem = svgDoc.getElementById("uvc_tco");
-        svgDoc.getElementById("po").innerHTML = data.orchestra_parcel_details[0].BuyerPONo;
-        svgDoc.getElementById("length").innerHTML = $('#length').val();
-        svgDoc.getElementById("width").innerHTML = $('#width').val();
-        svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
-        svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
-        svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
-        svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
-        svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
+	console.log(data);
+	var mySVG = document.getElementById(id);
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		svgDoc = mySVG.contentDocument;
+		var svgItem = svgDoc.getElementById("uvc_tco");
+		svgDoc.getElementById("po").innerHTML = data.orchestra_parcel_details[0].BuyerPONo;
+		svgDoc.getElementById("length").innerHTML = $('#length').val();
+		svgDoc.getElementById("width").innerHTML = $('#width').val();
+		svgDoc.getElementById("height").innerHTML = $('#modal_height').val();
+		svgDoc.getElementById("volume").innerHTML = $('#parcelVolume').text();
+		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
+		svgDoc.getElementById("parcelcode").innerHTML = data.orchestra_parcel_details[0].ParcelCode;
+		svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_quantity_details[0].Color;
 
-        if (data.template_name == "Standard") {
-            var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
-        } else {
-            var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
-            svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
-        }
+		if (data.template_name == "Standard") {
+			var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
+		} else {
+			var code = data.orchestra_parcel_quantity_details[0].BarcodeForPricesTags.toString();
+			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_quantity_details[0].Size;
+		}
 
-        jsbarcode(code, 'barcode1', svgDoc)
-        jsbarcode(code, 'barcode2', svgDoc)
+		jsbarcode(code, 'barcode1', svgDoc)
+		jsbarcode(code, 'barcode2', svgDoc)
 
 
-    }, false);
+	}, false);
 
 }
 
@@ -1505,7 +1504,6 @@ function barcode_carton(id, data) {
  */
 
 function label_order_details(uvc) {
-    
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
@@ -1596,7 +1594,7 @@ function label_order_details(uvc) {
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -1618,7 +1616,15 @@ function label_order_details(uvc) {
 
 
                 });
-            }
+           		
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label cloned successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
@@ -1741,8 +1747,7 @@ function label_order_details(uvc) {
                 $('.washnameerror').removeClass('hidden')
             }
         }
-        window.scrollTo(0,document.body.scrollHeight);
-        toastr.success("Wash care label cloned successfully");
+        
     });
                         
                         
@@ -2256,32 +2261,32 @@ function washcarelabels(data, dataid) {
  */
 
 function add_to_list(dataid) {
-    if (dataid === undefined) {
-        dataid = "";
-    } else {
-        dataid = dataid;
-    }
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
 
-    if ($('.composition_select' + dataid + ' option:selected').val() != "Select Option" && $('.composition_percent' + dataid).val() != "") {
+	if ($('.composition_select' + dataid + ' option:selected').val() != "Select Option" && $('.composition_percent' + dataid).val() != "") {
 
-        composition_percentage_global += parseInt($('.composition_percent' + dataid).val());
+		composition_percentage_global += parseInt($('.composition_percent' + dataid).val());
 
-        if (composition_percentage_global <= "100") {
+		if (composition_percentage_global <= "100") {
 
-            composition_percentage_global = composition_percentage_global;
-            $('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='"+$('.composition_select' + dataid + ' option:selected').attr('data-french')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-english')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-spanish')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-portuguese')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-italian')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-dutch')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-german')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-russian')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-chinese')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-arabic')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-greek')+"_"+$('.composition_select' + dataid + ' option:selected').attr('data-turkish')+"_" +parseInt($('.composition_percent' + dataid).val())+"'>" + $('.composition_select' + dataid + ' option:selected').text()+ "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
-        } else {
-            composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
-        }
+			composition_percentage_global = composition_percentage_global;
+			$('#composition_table_qty' + dataid).append("<tr><td class='comp'><input type='hidden' class='list_comp' value='" + $('.composition_select' + dataid + ' option:selected').attr('data-french') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-english') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-spanish') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-portuguese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-italian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-dutch') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-german') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-russian') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-chinese') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-arabic') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-greek') + "_" + $('.composition_select' + dataid + ' option:selected').attr('data-turkish') + "_" + parseInt($('.composition_percent' + dataid).val()) + "'>" + $('.composition_select' + dataid + ' option:selected').text() + "</td><td class='percent'>" + parseInt($('.composition_percent' + dataid).val()) + "</td></tr>")
+		} else {
+			composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
+		}
 
-        $('.parts_select' + dataid).prop('disabled', 'true')
-    }
-    if (composition_percentage_global == "100") {
-        $('.composition_select' + dataid).prop('disabled', 'true')
-        $('.composition_percent' + dataid).prop('disabled', 'true')
-        $('.add_to_list' + dataid).prop('disabled', 'true')
-        $('.add_to_composition' + dataid).removeAttr('disabled')
-    }
+		$('.parts_select' + dataid).prop('disabled', 'true')
+	}
+	if (composition_percentage_global == "100") {
+		$('.composition_select' + dataid).prop('disabled', 'true')
+		$('.composition_percent' + dataid).prop('disabled', 'true')
+		$('.add_to_list' + dataid).prop('disabled', 'true')
+		$('.add_to_composition' + dataid).removeAttr('disabled')
+	}
 
 }
 
@@ -2418,8 +2423,6 @@ function add_to_page(dataid) {
         {
             $('.composition_error_hidden').removeClass('hidden')
         }
-
-
 }
 
 
@@ -2431,27 +2434,27 @@ function add_to_page(dataid) {
 
 function deleteComposition(obj, dataid) {
 
-    // add_page_composition-=1;
-    if (dataid === undefined) {
-        dataid = "";
-    } else {
-        dataid = dataid;
-    }
-    $(obj).parent().parent().remove();
-    var classname = $(obj).parent().parent().attr('id');
-    var mySVG = document.getElementById("washcare_svg" + dataid);
-    var svgDoc = mySVG.contentDocument;
-    var list = svgDoc.getElementsByClassName("composition_" + classname);
-    for (var i = list.length - 1; 0 <= i; i--) {
-        list[i].remove();
-    }
-    var wash = localStorage.getItem('wash_composition');
-    var wash_fin = JSON.parse(wash);
-    alert(add_page_composition)
-    delete wash_fin['wash_composition' + dataid][classname];
-    delete wash_composition['wash_composition' + dataid][classname];
-    var wash_final = JSON.stringify(wash_fin);
-    localStorage.setItem('wash_composition', wash_final);
+	// add_page_composition-=1;
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
+	$(obj).parent().parent().remove();
+	var classname = $(obj).parent().parent().attr('id');
+	var mySVG = document.getElementById("washcare_svg" + dataid);
+	var svgDoc = mySVG.contentDocument;
+	var list = svgDoc.getElementsByClassName("composition_" + classname);
+	for (var i = list.length - 1; 0 <= i; i--) {
+		list[i].remove();
+	}
+	var wash = localStorage.getItem('wash_composition');
+	var wash_fin = JSON.parse(wash);
+	alert(add_page_composition)
+	delete wash_fin['wash_composition' + dataid][classname];
+	delete wash_composition['wash_composition' + dataid][classname];
+	var wash_final = JSON.stringify(wash_fin);
+	localStorage.setItem('wash_composition', wash_final);
 }
 
 
@@ -2593,6 +2596,7 @@ function mainlabels(data, dataid) {
  */
 
 function specialtags(data) {
+
     var tr = "";
     $qu = 0;
     if (data.orchestra_special_tag_orders != "") {
@@ -2670,11 +2674,11 @@ function specialtags(data) {
  * @return boolean
  */
 
- function checkNumbersOnly(e){
-    
-    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-               return false;
-    }
+function checkNumbersOnly(e) {
+
+	if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+		return false;
+	}
 }
 
 /**
@@ -3111,87 +3115,339 @@ function hangtagmodal(data) {
  */
 
 function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
-    var tr = "";
-    var barcode = "";
-    $.each(data.order_details, function (index, value) {
-        tr += '<tr><td>' + value.UVC_TCO + '</td><td>' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td>' + value.Sum + '</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
-    });
-    $.each(data.barcode, function (index, value) {
-        barcode += value.BuyerPONo + " | ";
-    });
-    //    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
-    $('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
 
-    var merchandisersoption = "<option value=''>Select Option</option>";
+	console.log(data.merchandisers);
+	var tr = "";
+	var barcode = "";
+	$.each(data.order_details, function (index, value) {
+		tr += '<tr><td>' + value.UVC_TCO + '</td><td>' + value.Size + '</td><td>' + value.BarcodeForPricesTags + '</td><td>' + value.Sum + '</td><td><input type="text" class="form-control input-sm" placeholder="Hangtag Count"><td><input type="text" class="form-control input-sm" placeholder="Specialtag Count"><td><input type="text" class="form-control input-sm" placeholder="Main & Size label Count"></td><td><input type="text" class="form-control input-sm" placeholder="WCL Count"></td></tr>';
+	});
+	$.each(data.barcode, function (index, value) {
+		barcode += value.BuyerPONo + " | ";
+	});
+	//    $('.top-content').html("<ol class='breadcrumb'><li><a href='#'>Dashboard</a></li><li><a href='/admin/order-management/'>Orders</a></li><li><a href='#'>Order List</a></li><li class='active'>Order Detail for UVC " + uvc + "</li></ol></div>")
+	$('.top-content').append('<h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + barcode + '  </span></h5>');
 
-    $.each(data.merchandisers, function (index, value) {
-        merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
-    });
-    if(data.orchestra_hang_tag_orders != "")
-    {
-        var str=data.orchestra_hang_tag_orders[0].status;
-        $hang_status=str.replace(/ /g, "");
-        $hang_status_text=data.orchestra_hang_tag_orders[0].status;
-    }
-    else
-    {
-        $hang_status="";
-        $hang_status_text="";
-    }
-    if(data.orchestra_special_tag_orders != "")
-    {
-        var str=data.orchestra_special_tag_orders[0].status;
-        $special_status=str.replace(/ /g, "");
-        $special_status_text=data.orchestra_special_tag_orders[0].status;
-    }
-    else
-    {
-        $special_status="";
-        $special_status_text="";
-    }
-    if(data.orchestra_wash_care_label_orders != "")
-    {
-        var str=data.orchestra_wash_care_label_orders[0].status;
-        $wash_status=str.replace(/ /g, "");
-        $wash_status_text=data.orchestra_wash_care_label_orders[0].status;
-        var wash_enable="";
-        var wash_name=data.orchestra_wash_care_label_orders[0].template_name +" - ";
-    }
-    else
-    {
-        $wash_status="";
-        $wash_status_text="";
-        var wash_enable="display:none";
-        var wash_name="";
-    }
-    if(data.orchestra_main_label_orders != "")
-    {
-        var str=data.orchestra_main_label_orders[0].status;
-        $main_status=str.replace(/ /g, "");
-        $main_status_text=data.orchestra_main_label_orders[0].status;
-        var main_enable="";
-        var main_name=data.orchestra_main_label_orders[0].template_name +" - ";
-    }
-    else
-    {
-        $main_status="";
-        $main_status_text="";
-        var main_enable="display:none";
-        var main_name="";
-    }
-    
-    if(localStorage.getItem("page_navigation") == "orders")
-    {
-        var onclick = "orders()";
-    }
-    else
-    {
-        var onclick ="orderStatus()";
-    }
+	var merchandisersoption = "<option value=''>Select Option</option>";
 
-    $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-        base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4">  <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">'+wash_name+'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+wash_enable+'"><a id="washcare_label_card" href="#">Add washcare label</a></li><li style="'+wash_enable+'"><a id="clone_washcare_label_card" href="#">Clone washcare label</a></li></ul> </div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">'+main_name+'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-        base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
+	$.each(data.merchandisers, function (index, value) {
+		merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
+	});
+	if (data.orchestra_hang_tag_orders != "") {
+		var str = data.orchestra_hang_tag_orders[0].status;
+		$hang_status = str.replace(/ /g, "");
+		$hang_status_text = data.orchestra_hang_tag_orders[0].status;
+	} else {
+		$hang_status = "";
+		$hang_status_text = "";
+	}
+	if (data.orchestra_special_tag_orders != "") {
+		var str = data.orchestra_special_tag_orders[0].status;
+		$special_status = str.replace(/ /g, "");
+		$special_status_text = data.orchestra_special_tag_orders[0].status;
+	} else {
+		$special_status = "";
+		$special_status_text = "";
+	}
+	if (data.orchestra_wash_care_label_orders != "") {
+		var str = data.orchestra_wash_care_label_orders[0].status;
+		$wash_status = str.replace(/ /g, "");
+		$wash_status_text = data.orchestra_wash_care_label_orders[0].status;
+		var wash_enable = "";
+		var wash_name = data.orchestra_wash_care_label_orders[0].template_name + " - ";
+	} else {
+		$wash_status = "";
+		$wash_status_text = "";
+		var wash_enable = "display:none";
+		var wash_name = "";
+	}
+	if (data.orchestra_main_label_orders != "") {
+		var str = data.orchestra_main_label_orders[0].status;
+		$main_status = str.replace(/ /g, "");
+		$main_status_text = data.orchestra_main_label_orders[0].status;
+		var main_enable = "";
+		var main_name = data.orchestra_main_label_orders[0].template_name + " - ";
+	} else {
+		$main_status = "";
+		$main_status_text = "";
+		var main_enable = "display:none";
+		var main_name = "";
+	}
+
+	if (localStorage.getItem("page_navigation") == "orders") {
+		var onclick = "orders()";
+	} else {
+		var onclick = "orderStatus()";
+	}
+
+	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;' + wash_enable + '"  id="washcare_label_card" >Add Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5><h5 class="text-right add-label" style="padding: 10px 0px;cursor: pointer;' + wash_enable + '"  id="clone_washcare_label_card" >Clone Washcare Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
+		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;' + main_enable + '">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button">Update PO</button></div></div>');
+
+	$('#po-file-upload-button').click(function () {
+
+		$('#new_po_div').addClass('hidden')
+		$('#map_po_div').addClass('hidden')
+		$('#exist_artwork_div').removeClass('hidden')
+
+		//alert()
+
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_po",
+			type: "get",
+			dataType: "json",
+			data: {
+				uvc: $('#uvc_id').val()
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+
+
+
+				$('#po-file-upload').modal('show')
+				$('#po-file-upload').find('#exist_artwork_div ul').html("");
+				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders)));
+				var coun = 0;
+				var options = "<option>Select PO</option>";
+				$(newObj).each(function (index1, value1) {
+					if (value1.po_number != "" && value1.po_number != null) {
+						options += "<option>" + value1.po_number + "</option>";
+
+						coun++;
+					}
+					$('#po-file-upload').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+				});
+				
+				//Start bootstrap checkbox 
+				
+				$('.list-group.checked-list-box .list-group-item').each(function () {
+
+					// Settings
+					var $widget = $(this),
+						$checkbox = $('<input type="checkbox" class="hidden" />'),
+						color = ($widget.data('color') ? $widget.data('color') : "primary"),
+						style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+						settings = {
+							on: {
+								icon: 'glyphicon glyphicon-check'
+							},
+							off: {
+								icon: 'glyphicon glyphicon-unchecked'
+							}
+						};
+
+					$widget.css('cursor', 'pointer')
+					$widget.append($checkbox);
+
+					// Event Handlers
+					$widget.on('click', function () {
+						$checkbox.prop('checked', !$checkbox.is(':checked'));
+						$checkbox.triggerHandler('change');
+						updateDisplay();
+					});
+					$checkbox.on('change', function () {
+						updateDisplay();
+					});
+
+
+					// Actions
+					function updateDisplay() {
+						var isChecked = $checkbox.is(':checked');
+
+						// Set the button's state
+						$widget.data('state', (isChecked) ? "on" : "off");
+
+						// Set the button's icon
+						$widget.find('.state-icon')
+							.removeClass()
+							.addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+						// Update the button's color
+						if (isChecked) {
+							$widget.addClass(style + color + ' active');
+						} else {
+							$widget.removeClass(style + color + ' active');
+						}
+					}
+
+					// Initialization
+					function init() {
+
+						if ($widget.data('checked') == true) {
+							$checkbox.prop('checked', !$checkbox.is(':checked'));
+						}
+
+						updateDisplay();
+
+						// Inject the icon if applicable
+						if ($widget.find('.state-icon').length == 0) {
+							$widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+						}
+					}
+					init();
+				});
+
+				$('#get-checked-data').on('click', function (event) {
+					event.preventDefault();
+					var checkedItems = {},
+						counter = 0;
+					$("#check-list-box li.active").each(function (idx, li) {
+						checkedItems[counter] = $(li).text();
+						counter++;
+					});
+					$('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+				});
+				
+				//End bootstrap checkbox 
+				
+		$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
+				if (coun == 0) {
+					$('#map_po').addClass('hidden');
+				}
+				
+				$('#update_new_po').click(function () {
+
+					if ($('#new_po_no').val() != "") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+								//alert($(this).parent().attr('data-id'))
+							}
+						});
+						var aa = a.join(',');
+						var new_po_file = $('#new_po_file').prop('files')[0];
+						var new_po_no = $('#new_po_no').val();
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						var form_data = new FormData();
+						form_data.append('id', aa);
+						form_data.append('po_file', new_po_file);
+						form_data.append('po', new_po_no);
+						form_data.append('_token', csrf_token);
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							dataType: 'text',
+							cache: false,
+							contentType: false,
+							processData: false,
+							data: form_data,
+							type: 'post',
+							success: function (data) {
+								//location.reload()
+								$('#po-file-upload').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function () {
+								console.log('somethig is wrong, please try later');
+							}
+
+						});
+					} else {
+						$('#new_po_error').removeClass('hidden')
+					}
+
+
+				});
+
+				$('#update_po').click(function () {
+					if ($('#select_po').val() != "Select PO") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+							}
+						});
+						var aa = a.join(',');
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							type: "Post",
+							dataType: "json",
+							data: {
+								_token: csrf_token,
+								id: aa,
+								po: $('#select_po').val()
+							},
+							beforeSend: function () {
+
+							},
+							success: function (data) {
+								//alert()
+								$('#po-file-upload').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function (data) {
+
+							},
+							complete: function () {
+								$(".loader").hide();
+								$(".loader").css('margin-top', '0%');
+							}
+						})
+					} else {
+						$('#select_error').removeClass('hidden')
+					}
+
+				});
+				$('#new_po1').click(function () {
+					
+
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_new_po').removeClass('hidden')
+					$('#update_po').addClass('hidden')
+						$('#new_po_div').removeClass('hidden')
+						$('#map_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+				});
+				$('#map_po').click(function () {
+					
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_po').removeClass('hidden')
+					$('#update_new_po').addClass('hidden')
+						$('#map_po_div').removeClass('hidden')
+						$('#new_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+						$('#check_error').addClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+
+
+				});
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+				$(".loader").hide();
+				$(".loader").css('margin-top', '0%');
+			}
+		})
+	});
+    $('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-'+$hang_status+' label-status">'+$hang_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-'+$special_status+' label-status">'+$special_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' + base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4">  <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">'+wash_name+'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+wash_enable+'"><a id="washcare_label_card" href="#">Add washcare label</a></li><li style="'+wash_enable+'"><a id="clone_washcare_label_card" href="#">Clone washcare label</a></li></ul> </div></div></div><div class="col-md-4"><div class="card add-card"><span class="label label-'+$main_status+' label-status">'+$main_status_text+'</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">'+main_name+'Main & Size Label</b></h5> <div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div><h5 class="text-right add-label" id="main_label_card" style="padding: 10px 0px;cursor: pointer;'+main_enable+'">Add Main & Size Label <i class="fa fa-plus" aria-hidden="true"></i></h5></div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> </div></div>');
 
     //card for wcl and main and size labels
     //<button type="button" class="btn btn-xs btn-success" onclick="save_label_orders()"><i class="ion-ios-download"></i>Submit</button>
@@ -3225,7 +3481,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -3247,7 +3503,15 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
 
                 });
-            }
+				
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label added successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
@@ -3274,8 +3538,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 //            }
 //
 //        })
-window.scrollTo(0,document.body.scrollHeight);
-        toastr.success("Wash care label added successfully");
+		
     });
     
     /**
@@ -3288,7 +3551,7 @@ window.scrollTo(0,document.body.scrollHeight);
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -3307,10 +3570,18 @@ window.scrollTo(0,document.body.scrollHeight);
                     $('#washcarelabelform' + $(this).attr('id')).remove()
                     washcare -= 1;
                     $(this).parent().parent().parent().remove();
-
-
                 });
-            }
+          
+				
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label cloned successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+				
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
          
             $('.washcarename').val("")
             $('.washnameerror').addClass('hidden')
@@ -3440,15 +3711,14 @@ window.scrollTo(0,document.body.scrollHeight);
                 $('.washnameerror').removeClass('hidden')
             }
         }
-        window.scrollTo(0,document.body.scrollHeight);
-        toastr.success("Wash care label cloned successfully");
+       
     });
     $('#main_label_card').on('click', function (e) {
         if ($('.mainname').val() != "") {
             
             if (mainlabel <= 5) {
                 mainlabel += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div style="border:1px solid #333" class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div style="border:1px dashed #333" class="card add-card" data-toggle="modal" data-target=".main_label_' + mainlabel + '" data-backdrop="static" data-keyboard="false">    <div class="card-title"><p class="pull-right delete-main' + mainlabel + '" id="' + mainlabel + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickmemain' + mainlabel + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="mainlabelname' + mainlabel + '">Main & Size Label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div>       </div></div>')
                 var data = localStorage.getItem("label_order_data");
                 mainlabels(JSON.parse(data), mainlabel);
                 $('.delete-main' + mainlabel).on('click', function (e) {
@@ -3471,7 +3741,15 @@ window.scrollTo(0,document.body.scrollHeight);
 
 
                  });
-            }
+          
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Main and Size Label added successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
            
             $('.mainname').val("")
             $('.mainnameerror').addClass('hidden')
@@ -3497,8 +3775,7 @@ window.scrollTo(0,document.body.scrollHeight);
 //            }
 //
 //        })
-        window.scrollTo(0,document.body.scrollHeight);
-        toastr.success("Main and Size label added successfully");
+       
     });
 
 
@@ -3511,10 +3788,10 @@ window.scrollTo(0,document.body.scrollHeight);
  */
 
 function selectpicker() {
-    $('.selectpicker').selectpicker({
-        style: 'btn-default',
-        size: 4
-    });
+	$('.selectpicker').selectpicker({
+		style: 'btn-default',
+		size: 4
+	});
 
 }
 
@@ -3526,109 +3803,109 @@ function selectpicker() {
 
 function treestructure(data, tree, template_id) {
 
-    $('#' + tree).jstree({
-        'core': {
-            'data': data
-        },
-        "types": {
-            "default": {
-                "icon": "fa fa-folder"
-            }
-        },
-        "plugins": ["types", "search"]
-    });
-    $('#expand').bind("click", function () {
-        $('#' + tree).jstree("open_all");
-    });
-    $('#collapse').bind("click", function () {
-        $('#' + tree).jstree("close_all");
-    });
-    var to = false;
-    $('#' + tree + '_q').keyup(function () {
-        if (to) {
-            clearTimeout(to);
-        }
-        to = setTimeout(function () {
-            var v = $('#' + tree + '_q').val();
-            $('#' + tree).jstree(true).search(v);
-        }, 250);
-    });
+	$('#' + tree).jstree({
+		'core': {
+			'data': data
+		},
+		"types": {
+			"default": {
+				"icon": "fa fa-folder"
+			}
+		},
+		"plugins": ["types", "search"]
+	});
+	$('#expand').bind("click", function () {
+		$('#' + tree).jstree("open_all");
+	});
+	$('#collapse').bind("click", function () {
+		$('#' + tree).jstree("close_all");
+	});
+	var to = false;
+	$('#' + tree + '_q').keyup(function () {
+		if (to) {
+			clearTimeout(to);
+		}
+		to = setTimeout(function () {
+			var v = $('#' + tree + '_q').val();
+			$('#' + tree).jstree(true).search(v);
+		}, 250);
+	});
 
-    $("#" + tree).on("loaded.jstree", function (e, data) {
+	$("#" + tree).on("loaded.jstree", function (e, data) {
 
-        $('#' + tree).jstree(true).select_node(template_id);
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert(ids)
-        //alert()
-        if (template_id != "") {
-            var buyer = localStorage.getItem("buyer");
-            // var template_id = template_id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
-
-
-                },
-                error: function (data) {
-
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
-
-    $('#' + tree).on('activate_node.jstree', function (e, data) {
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        if (data.instance.is_leaf(data.node)) {
-            var buyer = localStorage.getItem("buyer");
-            var template_id = data.node.id;
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
-                type: "Post",
-                dataType: "json",
-                data: {
-                    template_id: template_id,
-                    _token: csrf_token
-                },
-                beforeSend: function () {
-                    $(".loader").show();
-                },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
-                    }
+		$('#' + tree).jstree(true).select_node(template_id);
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		//alert(ids)
+		//alert()
+		if (template_id != "") {
+			var buyer = localStorage.getItem("buyer");
+			// var template_id = template_id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
 
 
-                },
-                error: function (data) {
+				},
+				error: function (data) {
 
-                },
-                complete: function () {
-                    $(".loader").hide();
-                }
-            })
-        }
-    });
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
+
+	$('#' + tree).on('activate_node.jstree', function (e, data) {
+		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
+		if (data.instance.is_leaf(data.node)) {
+			var buyer = localStorage.getItem("buyer");
+			var template_id = data.node.id;
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				type: "Post",
+				dataType: "json",
+				data: {
+					template_id: template_id,
+					_token: csrf_token
+				},
+				beforeSend: function () {
+					$(".loader").show();
+				},
+				success: function (data) {
+					if (data.length > 0) {
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+					} else {
+						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+					}
+
+
+				},
+				error: function (data) {
+
+				},
+				complete: function () {
+					$(".loader").hide();
+				}
+			})
+		}
+	});
 }
 
 /**
@@ -3638,76 +3915,76 @@ function treestructure(data, tree, template_id) {
  */
 
 function jsbarcode(code, id, svgDoc) {
-    JsBarcode("#ean-13", code, {
-        format: "ean13",
-        width: 5.99,
-        height: 343,
-        fontSize: 50
-    });
-    var svg = document.getElementById('svgdiv').querySelector('svg'),
-        canvas = document.createElement('canvas'),
-        body = document.getElementsByTagName('body')[0],
-        canvasTmp,
-        svg_xml,
-        ctx,
-        img;
-    // if our "svg" doesn't have 'xmlns' attribute we must add it
-    //    svg.setAttribute('width', '188.931023622px');
-    svg.setAttribute('font-size', '50px');
-    svg.setAttribute('font-family', 'calibrib');
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
 
-    canvas.id = 'canvas';
-    canvas.width = svg.getBoundingClientRect().width;
-    canvas.height = svg.getBoundingClientRect().height;
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
 
-    body.appendChild(canvas);
-    canvasTmp = document.getElementById('canvas');
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
 
-    /* Time to play ;) */
+	/* Time to play ;) */
 
-    // https://developer.mozilla.org/en/XMLSerializer
-    svg_xml = (new XMLSerializer()).serializeToString(svg);
-    ctx = canvasTmp.getContext('2d');
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
 
-    // JavaScript (HTML) image
-    img = new Image();
+	// JavaScript (HTML) image
+	img = new Image();
 
-    img.onload = function () {
-        ctx.drawImage(img, 0, 0);
-    };
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
 
-    // https://developer.mozilla.org/en/DOM/window.btoa
-    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-    // img.src - contains base64 URI from svg
-    console.log(img.src);
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
 
-    //remove temporary canvas
-    canvasTmp.remove();
+	//remove temporary canvas
+	canvasTmp.remove();
 
-    //Check in browsers
-    //
-    //                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //                        $.ajax({
-    //                            url: base_url + "/admin/template-management/base64_to_jpeg",
-    //                            type: "Post",
-    //                            data: {
-    //                                src: img.src,
-    //                                _token: csrf_token
-    //                            },
-    //                            beforeSend: function () {
-    //                                $(".loader").show();
-    //                                $(".loader").css('margin-top', '12%');
-    //                            },
-    //                            success: function (data) {
-    //                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
-    //                                
-    //                            },
-    //                            error: function (data) {
-    //                               
-    //                            }
-    //                        })
-    svgDoc.getElementById(id).innerHTML = svg_xml;
+	//Check in browsers
+	//
+	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//                        $.ajax({
+	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+	//                            type: "Post",
+	//                            data: {
+	//                                src: img.src,
+	//                                _token: csrf_token
+	//                            },
+	//                            beforeSend: function () {
+	//                                $(".loader").show();
+	//                                $(".loader").css('margin-top', '12%');
+	//                            },
+	//                            success: function (data) {
+	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+	//                                
+	//                            },
+	//                            error: function (data) {
+	//                               
+	//                            }
+	//                        })
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
 /**
@@ -3797,76 +4074,76 @@ function jsbarcodewash(code, id, svgDoc) {
  */
 
 function jsbarcode_hang(code, id, svgDoc) {
-    JsBarcode("#ean-13", code, {
-        format: "ean13",
-        width: 4.25,
-        height: 230,
-        fontSize: 50
-    });
-    var svg = document.getElementById('svgdiv').querySelector('svg'),
-        canvas = document.createElement('canvas'),
-        body = document.getElementsByTagName('body')[0],
-        canvasTmp,
-        svg_xml,
-        ctx,
-        img;
-    // if our "svg" doesn't have 'xmlns' attribute we must add it
-    //    svg.setAttribute('width', '188.931023622px');
-    svg.setAttribute('font-size', '50px');
-    svg.setAttribute('font-family', 'calibrib');
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 4.25,
+		height: 230,
+		fontSize: 50
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
 
-    canvas.id = 'canvas';
-    canvas.width = svg.getBoundingClientRect().width;
-    canvas.height = svg.getBoundingClientRect().height;
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
 
-    body.appendChild(canvas);
-    canvasTmp = document.getElementById('canvas');
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
 
-    /* Time to play ;) */
+	/* Time to play ;) */
 
-    // https://developer.mozilla.org/en/XMLSerializer
-    svg_xml = (new XMLSerializer()).serializeToString(svg);
-    ctx = canvasTmp.getContext('2d');
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
 
-    // JavaScript (HTML) image
-    img = new Image();
+	// JavaScript (HTML) image
+	img = new Image();
 
-    img.onload = function () {
-        ctx.drawImage(img, 0, 0);
-    };
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
 
-    // https://developer.mozilla.org/en/DOM/window.btoa
-    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-    // img.src - contains base64 URI from svg
-    console.log(img.src);
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
 
-    //remove temporary canvas
-    canvasTmp.remove();
+	//remove temporary canvas
+	canvasTmp.remove();
 
-    //Check in browsers
-    //
-    //                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //                        $.ajax({
-    //                            url: base_url + "/admin/template-management/base64_to_jpeg",
-    //                            type: "Post",
-    //                            data: {
-    //                                src: img.src,
-    //                                _token: csrf_token
-    //                            },
-    //                            beforeSend: function () {
-    //                                $(".loader").show();
-    //                                $(".loader").css('margin-top', '12%');
-    //                            },
-    //                            success: function (data) {
-    //                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
-    //                                
-    //                            },
-    //                            error: function (data) {
-    //                               
-    //                            }
-    //                        })
-    svgDoc.getElementById(id).innerHTML = svg_xml;
+	//Check in browsers
+	//
+	//                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//                        $.ajax({
+	//                            url: base_url + "/admin/template-management/base64_to_jpeg",
+	//                            type: "Post",
+	//                            data: {
+	//                                src: img.src,
+	//                                _token: csrf_token
+	//                            },
+	//                            beforeSend: function () {
+	//                                $(".loader").show();
+	//                                $(".loader").css('margin-top', '12%');
+	//                            },
+	//                            success: function (data) {
+	//                               svgDoc.getElementById(id).setAttribute('xlink:href',data);
+	//                                
+	//                            },
+	//                            error: function (data) {
+	//                               
+	//                            }
+	//                        })
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
 /**
@@ -3894,7 +4171,6 @@ function setHangTagStatus() {
     } else {
         $('#hang_template_error').removeClass('hidden')
     }
-
 }
 
 /**
@@ -3922,7 +4198,6 @@ function setSpecialTagStatus() {
     } else {
         $('#special_template_error').removeClass('hidden')
     }
-
 }
 
 /**
@@ -3932,6 +4207,7 @@ function setSpecialTagStatus() {
  */
 
 function setMainLabelStatus(dataid) {
+
     if ($('#mainlabelsform' + dataid).find('#exist_id' + dataid).val() != "") {
        var value = $('#mainlabelsform' + dataid).find('#exist_id' + dataid).val();
     } else {
@@ -3961,6 +4237,7 @@ function setMainLabelStatus(dataid) {
  */
 
 function setWashCareLabelStatus(dataid) {
+
     if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
        var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
     } else {
@@ -3996,7 +4273,6 @@ function setWashCareLabelStatus(dataid) {
     }
 
 
-
 }
 
 /**
@@ -4006,53 +4282,53 @@ function setWashCareLabelStatus(dataid) {
  */
 
 function setHangTag(id) {
-    var delivery_date = $('#hang_delivery_date').val();
-    delivery_date = delivery_date.split('/');
-    delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-    var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-    template_front_id = template_id[0].id;
-    var template_back_id = $('#hang_tag_id').val();
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#hangtagform tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
+	var delivery_date = $('#hang_delivery_date').val();
+	delivery_date = delivery_date.split('/');
+	delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
+	template_front_id = template_id[0].id;
+	var template_back_id = $('#hang_tag_id').val();
+	var tot_qty_table = [];
+	var uvc_tco = [];
+	var size = [];
+	$('#hangtagform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_table').val() != undefined) {
+			tot_qty_table.push($(this).find('.tot_qty_table').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+		}
 
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
-        type: "Post",
-        data: {
-            delivery_date: delivery_date_fin,
-            template_front_id: template_front_id,
-            template_back_id: template_back_id,
-            tot_qty_table: tot_qty_table_fin,
-            id: id,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	})
+	tot_qty_table_fin = tot_qty_table.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
+		type: "Post",
+		data: {
+			delivery_date: delivery_date_fin,
+			template_front_id: template_front_id,
+			template_back_id: template_back_id,
+			tot_qty_table: tot_qty_table_fin,
+			id: id,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4110,7 +4386,6 @@ function setSpecialTag(id) {
 
         }
     })
-
 }
 
 /**
@@ -4183,26 +4458,26 @@ function setMainLabel(index, dataid, id) {
 
 function removeMainLabel(id) {
 
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
-        type: "Post",
-        data: {
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4214,26 +4489,26 @@ function removeMainLabel(id) {
 
 function removeWashLabel(id) {
 
-    var buyer = localStorage.getItem("buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
-    $.ajax({
-        url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
-        type: "Post",
-        data: {
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
+	var buyer = localStorage.getItem("buyer");
+	var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	//alert($('#uvc_id').val())
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
 
-        },
-        error: function (data) {
+		},
+		error: function (data) {
 
-        }
-    })
+		}
+	})
 
 }
 
@@ -4346,11 +4621,6 @@ function setWashLabel(index, dataid, id) {
         $('.composition_error_hidden').removeClass('hidden')
     }
     
-    
-    
-    
-    
-    
 
 }
 
@@ -4361,8 +4631,8 @@ function setWashLabel(index, dataid, id) {
  */
 
 function save_label_orders() {
-    var finish = 0;
-    if (localStorage.getItem("wash_label") != null) {
+	var finish = 0;
+	if (localStorage.getItem("wash_label") != null) {
 
         alert("ins")
         if ($('.merchandisers').find("option:selected").val() != "") {
@@ -4444,102 +4714,102 @@ function save_label_orders() {
  */
 
 function setSolidStickers() {
-    if ($('#carton_hidden').val() == "standard") {
-        var delivery_date = $('#solid_delivery_date').val();
-        delivery_date = delivery_date.split('/');
-        delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+	if ($('#carton_hidden').val() == "standard") {
+		var delivery_date = $('#solid_delivery_date').val();
+		delivery_date = delivery_date.split('/');
+		delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
 
 
-        var buyer = localStorage.getItem("buyer");
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        //alert($('#uvc_id').val())
-        $.ajax({
-            url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
-            type: "Post",
-            data: {
-                delivery_date: delivery_date_fin,
-                uvc: $('#uvc_id').val(),
-                carton_template_id: $('#carton_template_id').val(),
-                polybag_template_id: $('#polybag_template_id').val(),
-                height: $('#modal_height').val(),
-                no_of_carton: $('#no_of_carton').val(),
-                total_polybag: $('#total_polybag').val(),
-                final_order_qty_sets: $('#final_order_qty_sets').val(),
-                order_qty: $('#order_qty').val(),
-                final_order_qty: $('#final_order_qty').val(),
-                age: $('#age').val(),
-                carton_id: $('#std_carton_id').val(),
-                poly_id: $('#std_poly_id').val(),
-                no_of_carton: $('#needed_modal').val(),
-                po: $('#po').val(),
-                //size: size_fin,
-                _token: csrf_token
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
+		var buyer = localStorage.getItem("buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		//alert($('#uvc_id').val())
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
+			type: "Post",
+			data: {
+				delivery_date: delivery_date_fin,
+				uvc: $('#uvc_id').val(),
+				carton_template_id: $('#carton_template_id').val(),
+				polybag_template_id: $('#polybag_template_id').val(),
+				height: $('#modal_height').val(),
+				no_of_carton: $('#no_of_carton').val(),
+				total_polybag: $('#total_polybag').val(),
+				final_order_qty_sets: $('#final_order_qty_sets').val(),
+				order_qty: $('#order_qty').val(),
+				final_order_qty: $('#final_order_qty').val(),
+				age: $('#age').val(),
+				carton_id: $('#std_carton_id').val(),
+				poly_id: $('#std_poly_id').val(),
+				no_of_carton: $('#needed_modal').val(),
+				po: $('#po').val(),
+				//size: size_fin,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
 
-            },
-            error: function (data) {
+			},
+			error: function (data) {
 
-            }
-        })
-    } else {
-        var tot_qty_table_poly = [];
-        var tot_qty_carton = [];
-        var size = [];
+			}
+		})
+	} else {
+		var tot_qty_table_poly = [];
+		var tot_qty_carton = [];
+		var size = [];
 
-        var delivery_date = $('#solid_delivery_date').val();
-        delivery_date = delivery_date.split('/');
-        delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
-        $('#solidform tbody tr').each(function () {
-            if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-                tot_qty_table_poly.push($(this).find('.tot_qty_table_poly').val());
-            }
-            if ($(this).find('.tot_qty_table_carton').val() != undefined) {
-                tot_qty_carton.push($(this).find('.tot_qty_table_carton').val());
-            }
-            size.push($(this).find('.size').text());
+		var delivery_date = $('#solid_delivery_date').val();
+		delivery_date = delivery_date.split('/');
+		delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
+		$('#solidform tbody tr').each(function () {
+			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
+				tot_qty_table_poly.push($(this).find('.tot_qty_table_poly').val());
+			}
+			if ($(this).find('.tot_qty_table_carton').val() != undefined) {
+				tot_qty_carton.push($(this).find('.tot_qty_table_carton').val());
+			}
+			size.push($(this).find('.size').text());
 
-        })
-        tot_qty_table_poly_fin = tot_qty_table_poly.join(',');
-        tot_qty_carton_fin = tot_qty_carton.join(',');
-        size_fin = size.join(',');
+		})
+		tot_qty_table_poly_fin = tot_qty_table_poly.join(',');
+		tot_qty_carton_fin = tot_qty_carton.join(',');
+		size_fin = size.join(',');
 
-        var buyer = localStorage.getItem("buyer");
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        //alert($('#uvc_id').val())
-        $.ajax({
-            url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
-            type: "Post",
-            data: {
-                delivery_date: delivery_date_fin,
-                // template_front_id: template_front_id,
-                tot_qty_poly: tot_qty_table_poly_fin,
-                tot_qty_carton: tot_qty_carton_fin,
-                size: size_fin,
-                uvc: $('#uvc_id').val(),
-                carton_template_id: $('#carton_template_id').val(),
-                polybag_template_id: $('#polybag_template_id').val(),
-                height: $('#modal_height').val(),
-                age: $('#age').val(),
-                carton_id: $('#carton_id').val(),
-                poly_id: $('#poly_id').val(),
-                po: $('#po').val(),
-                //size: size_fin,
-                _token: csrf_token
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
+		var buyer = localStorage.getItem("buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		//alert($('#uvc_id').val())
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
+			type: "Post",
+			data: {
+				delivery_date: delivery_date_fin,
+				// template_front_id: template_front_id,
+				tot_qty_poly: tot_qty_table_poly_fin,
+				tot_qty_carton: tot_qty_carton_fin,
+				size: size_fin,
+				uvc: $('#uvc_id').val(),
+				carton_template_id: $('#carton_template_id').val(),
+				polybag_template_id: $('#polybag_template_id').val(),
+				height: $('#modal_height').val(),
+				age: $('#age').val(),
+				carton_id: $('#carton_id').val(),
+				poly_id: $('#poly_id').val(),
+				po: $('#po').val(),
+				//size: size_fin,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
 
-            },
-            error: function (data) {
+			},
+			error: function (data) {
 
-            }
-        })
-    }
+			}
+		})
+	}
 
 }

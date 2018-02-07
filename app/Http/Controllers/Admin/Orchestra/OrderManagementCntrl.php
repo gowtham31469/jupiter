@@ -257,7 +257,7 @@ class OrderManagementCntrl extends Controller
                }
         
                 $code=substr($uvc, -4, 2);
-                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*')->where('uvc',$uvc)->get();
+                $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'))->where('uvc',$uvc)->get();
         if(count($data['orchestra_hang_tag_orders']) > 0)
         {
             $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->where('oht_id',$data['orchestra_hang_tag_orders']{0}->id)->get();
@@ -266,7 +266,7 @@ class OrderManagementCntrl extends Controller
         {
             $data['orchestra_hang_tag_orders_qty']="";
         }
-         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*')->where('uvc',$uvc)->get();
+         $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'))->where('uvc',$uvc)->get();
         if(count($data['orchestra_special_tag_orders']) > 0)
         {
             $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->where('ost_id',$data['orchestra_special_tag_orders']{0}->id)->get();
@@ -276,14 +276,14 @@ class OrderManagementCntrl extends Controller
             $data['orchestra_special_tag_orders_qty']="";
         }
         
-        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*')->where('uvc',$uvc)->get();
+        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
         foreach($data['orchestra_main_label_orders'] as $value)
         {
             $orchestra_main_label_orders_qty=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$value->id)->get();
             $value->qty=$orchestra_main_label_orders_qty;
         }
         
-        $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*')->where('uvc',$uvc)->get();
+        $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->get();
         foreach($data['orchestra_wash_care_label_orders'] as $value1)
         {
             $orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->get();
@@ -1408,6 +1408,93 @@ class OrderManagementCntrl extends Controller
     public function removeWashLabel(Request $request)
     {
          $deleted = WashLabelOrders::where('id', '=', $request->id)->delete();
+    }	
+	
+	/**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingLabelOrdersPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+		 echo json_encode($data);
+    } 
+	/**
+     * This Function is used to map the existing PO to new artworks.
+     *
+     * @return Void
+     */
+	public function putExistingLabelOrdersPo(Request $request)
+    {
+		 $id        =   explode(',',$request->id);
+		 $po        =   $request->po;
+		
+		foreach($id as $val)
+		{
+				$value    =  explode('-',$val);
+			
+				DB::table($value[0])->where('id',$value[1])
+                   ->update([
+                        'po_number' => $po
+                  ]);
+		}
+		echo true;
+    }
+	/**
+     * This Function is used to update the po number and po file to the new artworks.
+     *
+     * @return Void
+     */
+	public function putExistingLabelOrdersPoNew(Request $request)
+    {
+		 $id        =   explode(',',$request->id);
+		 $po        =   $request->po;
+		 $po_file   =   $request->po_file;
+		
+		
+		$destination_path_insert="";
+		$destination_path_db="";
+		if( $request->hasFile('po_file')){
+			$file= $request->file('po_file');
+			$destination_path='storage/app/public/po-files/';
+			 $destination_path_db='/storage/app/public/po-files/';
+			$Orname = $file->getClientOriginalName();
+			$filename= str_random(6).'_'.$Orname;
+			$file->move($destination_path,$filename);
+			$destination_path_insert=$destination_path_db.$filename;
+			
+			foreach($id as $val)
+			{
+					$value    =  explode('-',$val);
+
+					DB::table($value[0])->where('id',$value[1])
+					   ->update([
+							'po_number' => $po,
+							'po_file' => $destination_path_insert,
+					  ]);
+			}
+		}
+		else
+		{
+			foreach($id as $val)
+			{
+					$value    =  explode('-',$val);
+
+					DB::table($value[0])->where('id',$value[1])
+					   ->update([
+							'po_number' => $po
+					  ]);
+			}
+		}
+		
+	
+		echo true;
     }
 }
 
