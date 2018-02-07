@@ -113,7 +113,7 @@ class OrderManagementCntrl extends Controller
         if ($request->hasFile('purchase_order')) {
                 $file = $request->file('purchase_order');
                 $name = $file->getClientOriginalName();
-                $path =  $file->move('storage/app/purchaseOrder', $name);
+                $path =  $file->move('storage/app/TESCO/purchaseOrder', $name);
                 $ch   = curl_init();
                 $post = file_get_contents($path);
                 curl_setopt($ch, CURLOPT_URL, "http://pdfx.cs.man.ac.uk" );

@@ -182,6 +182,7 @@ border: 0;
 {{-- loading javascript files --}}
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
+<script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script>
     $(document).ready(function() {
 

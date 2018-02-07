@@ -229,6 +229,10 @@ function tescoOrders() {
                         if (template_id != 0) 
                         {
                             $('.template-error').html('');
+                            //Check for the order type is PO Upload
+                            //If so, create a formdata for uploading the file.
+                            //invoke uploadPurchaseOrder method with the form data.
+                            //If not, go with manual upload by invoking createOrders() method.
                             if($('#order_type').val() == 1) {
                                 var formData = new FormData($(this)[0]);
                                 formData.append('type', localStorage.getItem("template type"));
@@ -539,6 +543,7 @@ function  uploadPurchaseOrder(formData) {
                      $(".loader").css('margin-top','12%');
                  },
                  success: function (data) {
+                    //Call the parse method which resides on parser.js
                      parseXML(data);
                  },
                  error: function (data) {
@@ -564,27 +569,6 @@ function  uploadPurchaseOrder(formData) {
     }
 }
 
-
-/**
- * Method to parse the xml string object.
- * Invoked inside uploadPurchaseOrder() method.
- * @param  {string} xml Data obtained from uploadPurchaseOrder() method
- */
-function parseXML(xml) {
-    try {
-        console.log(xml);
-        // var parser = new DOMParser();
-        // var doc = parser.parseFromString(xml, "text/xml"); 
-        // var resultNode = doc.querySelector("[id='1']");
-        // console.log(resultNode.text);
-        var pic = $(xml).find('#1').text();
-        console.log(pic);
-
-    } catch(e) {
-        // error statements
-        console.log("Error:"+e)
-    }
-}
 
 /**
   * Removes row from order quantity table
