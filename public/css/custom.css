@@ -1132,3 +1132,6 @@ button.btn.btn-info.pull-right.input-sm.add_to_list {
 p.dropdown-toggle i {
     cursor: pointer;
 }
+#add_modal > .col-md-4:last-child .card.add-card {
+    margin-bottom: 100px;
+}
