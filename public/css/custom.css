@@ -984,6 +984,20 @@ span.sticker-details {
     background: #9b59b6;
 }
 
+.label-PIApproved {
+    background: #2ecc71;
+}
+.label-PIRejected {
+    background: #f90530;
+}
+
+.label-POApproved {
+    background: #2ecc71;
+}
+.label-PORejected {
+    background: #f90530;
+}
+
 .label-BuyerApprovalPending {
     background: #9b59b6;
 }

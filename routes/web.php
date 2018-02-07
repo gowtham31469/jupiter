@@ -188,7 +188,8 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
 Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
 Route::post('admin/orchestra/set-po', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPO');
-
+Route::post('admin/orchestra/approve-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProfomaInvice');
+Route::post('admin/orchestra/reject-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProfomaInvice');
 
 Route::post('admin/orchestra/order-management/set_hang_tag', 'Admin\Orchestra\OrderManagementCntrl@setHangTag');
 Route::post('admin/orchestra/order-management/set_special_tag', 'Admin\Orchestra\OrderManagementCntrl@setSpecialTag');
@@ -211,6 +212,7 @@ Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@ind
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
+Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByPurchaseOrder');
 //Template Management
 
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
@@ -298,3 +300,8 @@ Route::put('/admin/tesco/update-tesco-suppliers', 'Admin\Settings\Tesco\TescoSet
 Route::delete('admin/tesco/delete-tesco-supplier', 'Admin\Settings\Tesco\TescoSettings@deleteTescoSuppliersById');
 Route::put('/admin/tesco/make-supplier-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierEnabled');
 Route::put('/admin/tesco/make-supplier-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierDisabled');
+Route::post('admin/tesco/settings/sizechart', 'Admin\Settings\Tesco\TescoSettings@tescoSizeChart');
+Route::post('admin/tesco/add-tesco-size-charts', 'Admin\Settings\Tesco\TescoSettings@addTescoSizeCharts');
+Route::get('admin/tesco/get-tesco-Sizecharts-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSizeChartsById');
+Route::put('admin/tesco/update-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@updateTescoSizechartsById');
+Route::delete('admin/tesco/delete-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@deleteTescosizechartsById');
