@@ -198,6 +198,79 @@ class OrderController extends Controller
     } 
 	
 	/**
+	 * Print Preview For Wash Care Lables.
+	 *
+	 * @return pdf
+	 */
+	
+	public function printWashPdf(Request $request)
+    {
+		$made_in_select=$request->made_in_select;
+		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$made_in_select)->get();
+		
+		
+		$care_instruction_select = explode(',',$request->care_instruction_select_fin); 
+		
+		$orchestra_care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_select)->get();
+		
+		//print_r($orchestra_countries);
+		
+		//print_r($orchestra_countries);
+		
+        $svg=urldecode($request->svg); 
+        define ('PDF_FONT_NAME_MAIN', 'calibrib');
+        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('dejavusans', '',  1.5, '', true);
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::SetFillColor(255, 255, 255);
+        //PDF::SetTextColor(0, 0, 0);
+		$tbl='<span>Fabriqué en - Made in - Fabricado en - Vervaardigd in - Hergestellt in - Сделанов  - صنع في - παράγεται στην - üretim yeri</span>';
+		
+		$tbl1='<span>'.$orchestra_countries{0}->french.'-'.$orchestra_countries{0}->english.'-'.$orchestra_countries{0}->spanish.'-'.$orchestra_countries{0}->portuguese.'-'.$orchestra_countries{0}->italian.'-'.$orchestra_countries{0}->dutch.'-'.$orchestra_countries{0}->german.'-'.$orchestra_countries{0}->russian.'-'.$orchestra_countries{0}->arabic.'-'.$orchestra_countries{0}->greek.'-'.$orchestra_countries{0}->turkish.'</span>';
+		$tbl2="";
+		foreach($orchestra_care_instruction as $value)
+		{
+			$tbl2.='<span>'.$value->french.'-'.$value->english.'-'.$value->spanish.'-'.$value->portuguese.'-'.$value->italian.'-'.$value->dutch.'-'.$value->german.'-'.$value->russian.'-'.$value->arabic.'-'.$value->greek.'-'.$value->turkish.'</span><br><br>';
+		}
+		$tbl3="";
+		$composition = json_decode($request->composition);
+		foreach($composition as $key => $value)
+		{
+			
+			$express_value = explode('_',$value[0]);
+			if($express_value[0] != "Select Option")
+			{
+					$exp_value = explode('_',$value[0]);
+					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
+				
+					$tbl3.='<span>'.$orchestra_parts{0}->french.'-'.$orchestra_parts{0}->english.'-'.$orchestra_parts{0}->spanish.'-'.$orchestra_parts{0}->portuguese.'-'.$orchestra_parts{0}->italian.'-'.$orchestra_parts{0}->dutch.'-'.$orchestra_parts{0}->german.'-'.$orchestra_parts{0}->russian.'-'.$orchestra_parts{0}->arabic.'-'.$orchestra_parts{0}->greek.'-'.$orchestra_parts{0}->turkish.'</span><br><br>';
+			}
+			foreach($value as $key1 => $value1)
+            {
+				$exp_val = explode('_',$value1);
+				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+				
+				$tbl3.='<span>'.$exp_val[2].'% '.$orchestra_compositions{0}->french.'-'.$orchestra_compositions{0}->english.'-'.$orchestra_compositions{0}->spanish.'-'.$orchestra_compositions{0}->portuguese.'-'.$orchestra_compositions{0}->italian.'-'.$orchestra_compositions{0}->dutch.'-'.$orchestra_compositions{0}->german.'-'.$orchestra_compositions{0}->russian.'-'.$orchestra_compositions{0}->arabic.'-'.$orchestra_compositions{0}->greek.'-'.$orchestra_compositions{0}->turkish.'</span><br><br>';
+			}
+		}
+		
+		
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '35', '65', $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		PDF::SetFillColor(255, 255, 255);
+        PDF::SetTextColor(0, 0, 0);
+		PDF::writeHTMLCell('8', '10', '16.2', '61', $tbl, '', 1, 1, true, 'C', true);
+		PDF::writeHTMLCell('8', '10', '16.2', '66.5', $tbl1, '', 1, 1, true, 'C', true);
+		PDF::writeHTMLCell('8', '10', '26.8', '18', $tbl2, '', 1, 1, true, 'C', true);
+		PDF::writeHTMLCell('8', '10', '26.8', '52', $tbl3, '', 1, 1, true, 'C', true);
+        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        print_r(url('/storage/app/template/solid1.pdf'));
+    } 
+	
+	/**
 	 * Print Preview For Standard Poly Bag Stickers
 	 * It Contains Dynamic Table
 	 * This Function is used to create dynamic table
@@ -323,22 +396,5 @@ class OrderController extends Controller
         PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     }
-    /**
-     * method to set the po number and pdf file for an order
-     * @param po_number and pdf (pdf is optional)
-     * @return \Illuminate\Http\Response
-     */
-    public function setCustomerPO(Request $request)
-    {
-        try 
-        {
-            $po_number = $request->po_number;
-            $result = response()->json(['error'=> false,'message' =>'success'],200);    
-        }
-        catch (Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        } 
-        return $result;
-    }
+   
 }
