@@ -235,8 +235,8 @@ function tescoOrders() {
                             //If not, go with manual upload by invoking createOrders() method.
                             if($('#order_type').val() == 1) {
                                 var formData = new FormData($(this)[0]);
-                                formData.append('type', localStorage.getItem("template type"));
-                                formData.append('zone', localStorage.getItem("zone"));
+                                // formData.append('type', localStorage.getItem("template type"));
+                                // formData.append('zone', localStorage.getItem("zone"));
                                 uploadPurchaseOrder(formData);
                             } else {
                                 createOrders();
