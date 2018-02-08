@@ -3853,7 +3853,7 @@ function treestructure(data, tree, template_id) {
 				},
 				success: function (data) {
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
 					}
@@ -3889,7 +3889,7 @@ function treestructure(data, tree, template_id) {
 				},
 				success: function (data) {
 					if (data.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="height: auto;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<img style="width:160px;height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
 					}
