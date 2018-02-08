@@ -576,8 +576,8 @@ border: 0;
 
 						},
 						complete: function() {
-							$(".loader").hide();
-							$(".loader").css('margin-top', '0%');
+//							$(".loader").hide();
+//							$(".loader").css('margin-top', '0%');
 						}
 					})
 				} else {
