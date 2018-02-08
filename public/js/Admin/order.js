@@ -2447,7 +2447,7 @@ function deleteComposition(obj, dataid) {
 	}
 	var wash = localStorage.getItem('wash_composition');
 	var wash_fin = JSON.parse(wash);
-	alert(add_page_composition)
+	//alert(add_page_composition)
 	delete wash_fin['wash_composition' + dataid][classname];
 	delete wash_composition['wash_composition' + dataid][classname];
 	var wash_final = JSON.stringify(wash_fin);
@@ -3130,6 +3130,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	$.each(data.merchandisers, function (index, value) {
 		merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
 	});
+	var update_count=0;
 	if (data.orchestra_hang_tag_orders != "") {
 		var str = data.orchestra_hang_tag_orders[0].status;
 		$hang_status = str.replace(/ /g, "");
@@ -3137,6 +3138,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	} else {
 		$hang_status = "";
 		$hang_status_text = "";
+		update_count+=1;
 	}
 	if (data.orchestra_special_tag_orders != "") {
 		var str = data.orchestra_special_tag_orders[0].status;
@@ -3145,6 +3147,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	} else {
 		$special_status = "";
 		$special_status_text = "";
+		update_count+=1;
 	}
 	if (data.orchestra_wash_care_label_orders != "") {
 		var str = data.orchestra_wash_care_label_orders[0].status;
@@ -3157,6 +3160,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$wash_status_text = "";
 		var wash_enable = "display:none";
 		var wash_name = "";
+		update_count+=1;
 	}
 	if (data.orchestra_main_label_orders != "") {
 		var str = data.orchestra_main_label_orders[0].status;
@@ -3169,6 +3173,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 		$main_status_text = "";
 		var main_enable = "display:none";
 		var main_name = "";
+		update_count+=1;
 	}
 
 	if (localStorage.getItem("page_navigation") == "orders") {
@@ -3176,13 +3181,19 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	} else {
 		var onclick = "orderStatus()";
 	}
+	
+	
 
 	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
 		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" style="cursor:pointer"  data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+wash_enable+'"><a id="washcare_label_card" style="cursor:pointer">Add washcare label</a></li><li style="'+wash_enable+'"><a id="clone_washcare_label_card" style="cursor:pointer">Clone washcare label</a></li></ul> </div></div></div><div class="col-md-4"><div class="card add-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
 		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" style="cursor:pointer"  data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+main_enable+'"><a id="main_label_card" style="cursor:pointer">Add Main & Size Label</a></li></ul> </div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button">Update PO</button></div></div>');
 
+		if(update_count > 0)
+		{
+			$('#po-file-upload-button').addClass('hidden')
+		}
 	
-	$('#po-file-upload-button').click(function () {
+		$('#po-file-upload-button').click(function () {
 
 		$('#new_po_div').addClass('hidden')
 		$('#map_po_div').addClass('hidden')
@@ -4158,6 +4169,7 @@ function setHangTagStatus() {
 
     var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
     if (template_id != "") {
+		$('#po-file-upload-button').removeClass('hidden')
         localStorage.setItem("hang_tag", exist_id);
         setHangTag(localStorage.getItem("hang_tag"))
         $('#hang_template_error').addClass('hidden')
@@ -4185,6 +4197,7 @@ function setSpecialTagStatus() {
     }
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
     if (template_id != "") {
+		$('#po-file-upload-button').removeClass('hidden')
         localStorage.setItem("special_tag", exist_id);
         setSpecialTag(localStorage.getItem("special_tag"))
         $('#special_template_error').addClass('hidden')
@@ -4214,6 +4227,7 @@ function setMainLabelStatus(dataid) {
     var main_lab = JSON.stringify(main_label);
     var template_id = $('#mainlabelsform' + dataid).find('#tree3' + dataid).jstree('get_selected', true);
     if (template_id != "") {
+		$('#po-file-upload-button').removeClass('hidden')
         localStorage.setItem("main_label", main_lab);
         setMainLabel('mainlabelsform' + dataid, dataid, value)
         $('#main_template_error' + dataid).addClass('hidden')
@@ -4250,6 +4264,7 @@ function setWashCareLabelStatus(dataid) {
         //alert(localStorage.getItem("wash_composition_final"+ dataid));
         if( localStorage.getItem("wash_composition_final"+ dataid) != null)
         {
+			$('#po-file-upload-button').removeClass('hidden')
             $('#wash_composition_error' + dataid).addClass('hidden')
             $('#wash_composition_page_error' + dataid).addClass('hidden')
             localStorage.setItem("wash_label", wash_lab);
@@ -4633,7 +4648,7 @@ function save_label_orders() {
 	var finish = 0;
 	if (localStorage.getItem("wash_label") != null) {
 
-        alert("ins")
+       // alert("ins")
         if ($('.merchandisers').find("option:selected").val() != "") {
             //alert("suc")
             var wash_json = JSON.parse(localStorage.getItem("wash_label"));

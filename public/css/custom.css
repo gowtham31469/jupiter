@@ -733,8 +733,9 @@ a:hover {
 }
 
 .viewDiv object {
-    max-height: 400px;
-    max-width: 500px
+    height: calc(100vh - 330px);
+	max-width: 500px;
+	padding: 10px;
 }
 
 .text_artwork,
