@@ -53,19 +53,7 @@ class OrderManagementCntrl extends Controller
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
     }
-    /**
-     * Function to get tesco metadata for order page
-     * @author <Praveen>
-     * @return tesco brands,departments,suppliers.
-     */
-    public function getTescoMeatadata()
-    {
-       try {
-           
-       } catch (\Exception $e) {
-           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-    }
+
     /**
      * Function to get tesco templates details by id's
      * @author <Praveen>
