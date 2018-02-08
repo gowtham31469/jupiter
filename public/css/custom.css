@@ -1002,11 +1002,11 @@ span.sticker-details {
     background: #9b59b6;
 }
 
-.label-papproved {
+.label-PIApproved {
     background: #1abc9c;
 }
 
-.label-prejected {
+.label-PIRejected {
     background: #d35400;
 }
 
@@ -1125,4 +1125,13 @@ button.btn.btn-info.pull-right.input-sm.add_to_list {
 
 .has-feedback .form-control {
     padding-right: 0px; 
+}
+    .state-icon {
+    left: -5px;
+}
+p.dropdown-toggle i {
+    cursor: pointer;
+}
+#add_modal > .col-md-4:last-child .card.add-card {
+    margin-bottom: 100px;
 }
