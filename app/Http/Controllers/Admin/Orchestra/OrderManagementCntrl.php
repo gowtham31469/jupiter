@@ -437,7 +437,7 @@ class OrderManagementCntrl extends Controller
 	
     public function setHangTag(Request $request)
     {
-        $delivery_date = $request->delivery_date;
+        //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
         $template_back_id = $request->template_back_id;
         $tot_qty_table = explode(',',$request->tot_qty_table);
@@ -484,7 +484,6 @@ class OrderManagementCntrl extends Controller
                         'uvc' => $uvc,
                         'template_front_id'      => $template_front_id,
                         'template_back_id'      => $template_back_id,
-                        'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
@@ -510,7 +509,6 @@ class OrderManagementCntrl extends Controller
                                     'uvc' => $uvc,
                                     'template_front_id'      => $template_front_id,
                                     'template_back_id'      => $template_back_id,
-                                    'delivery_date'    => $delivery_date, 
                                     'svg_path'    => "", 
                                     'status'    => $status,
 				 					'pi_status'           => $pi_status,
@@ -540,7 +538,7 @@ class OrderManagementCntrl extends Controller
 	
     public function setSpecialTag(Request $request)
     {
-        $delivery_date = $request->delivery_date;
+        //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
         //$tot_qty_table = explode(',',$request->tot_qty_table);
 		$tot_qty_table =$request->tot_qty_table;
@@ -584,8 +582,7 @@ class OrderManagementCntrl extends Controller
             SpecialTagOrders::where('id',$id)
                    ->update([
                         'uvc' => $uvc,
-                        'template_id'      => $template_front_id,
-                        'delivery_date'    => $delivery_date, 
+                        'template_id'      => $template_front_id, 
                         'svg_path'    => "",
 					    'final_qty'    => $tot_qty_table, 
                         'status'    => $status,
@@ -610,8 +607,7 @@ class OrderManagementCntrl extends Controller
         {
              $inserted = SpecialTagOrders::create([
                                     'uvc' => $uvc,
-                                    'template_id'      => $template_front_id,
-                                    'delivery_date'    => $delivery_date, 
+                                    'template_id'      => $template_front_id, 
                                     'svg_path'    => "", 
 				 					'final_qty'    => $tot_qty_table,
                                     'status'    => $status,
@@ -641,7 +637,7 @@ class OrderManagementCntrl extends Controller
 	
     public function setMainLabel(Request $request)
     {
-        $delivery_date = $request->delivery_date;
+        //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
@@ -688,7 +684,6 @@ class OrderManagementCntrl extends Controller
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
                         'template_name'      => $template_name,
-                        'delivery_date'    => $delivery_date, 
                         'svg_path'    => "", 
 					    'final_qty'    => $main_label_qty, 
                         'status'    => $status,
@@ -715,7 +710,6 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
                                 'template_name'      => $template_name,
-                                'delivery_date'    => $delivery_date,
 				   				'final_qty'    => $main_label_qty, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
@@ -746,7 +740,7 @@ class OrderManagementCntrl extends Controller
 	
     public function setSolidStickers(Request $request)
     {
-        $delivery_date = $request->delivery_date;
+       // $delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
@@ -797,8 +791,7 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
-                        'height'           => $height, 
-                        'delivery_date'    => $delivery_date, 
+                        'height'           => $height,  
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
@@ -828,7 +821,6 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
-                                'delivery_date'    => $delivery_date, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				  				'pi_status'           => $pi_status,
@@ -855,7 +847,6 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'height'           => $height, 
-                        'delivery_date'    => $delivery_date, 
                         'svg_path'         => "", 
                         'status'           => $status,
 					    'pi_status'           => $pi_status,
@@ -884,7 +875,6 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
-                                'delivery_date'    => $delivery_date, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
@@ -914,7 +904,7 @@ class OrderManagementCntrl extends Controller
 	
     public function setStandardStickers(Request $request)
     {
-        $delivery_date = $request->delivery_date;
+        //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
         $uvc =$request->uvc;
@@ -971,7 +961,6 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
                         'height'           => $height, 
-                        'delivery_date'    => $delivery_date, 
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -991,7 +980,6 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
-                                'delivery_date'    => $delivery_date, 
                                 'no_of_carton'    => $no_of_carton, 
                                 'total_polybag'    => $total_polybag, 
                                 'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1013,7 +1001,6 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'height'           => $height, 
-                        'delivery_date'    => $delivery_date, 
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1032,7 +1019,6 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'height'           => $height, 
-                                'delivery_date'    => $delivery_date, 
                                 'no_of_carton'    => $no_of_carton, 
                                 'total_polybag'    => $total_polybag, 
                                 'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -1057,7 +1043,7 @@ class OrderManagementCntrl extends Controller
     public function setWashLabel(Request $request)
     {
         
-        $delivery_date = $request->delivery_date;
+        //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
@@ -1115,7 +1101,6 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $template_front_id,
                         'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
-                        'delivery_date'    => $delivery_date, 
                         'washing_id'      => $washing_select,
                         'whitening_id'      => $whitening_select,
                         'dryer_id'      => $dryer_select,
@@ -1179,7 +1164,6 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
-                                'delivery_date'    => $delivery_date, 
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -1246,7 +1230,7 @@ class OrderManagementCntrl extends Controller
             $po_number  =   $request->po_number;
             $id         =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$id)
+            $data       = DB::table($table_name)->where('id',$id)
                         ->update([
                           'po_number' => $po_number,
                           'po_status' => "PO Approved"
@@ -1272,7 +1256,7 @@ class OrderManagementCntrl extends Controller
      * @param po_number and pdf (pdf is optional)
      * @return \Illuminate\Http\Response
      */
-    public function setCustomerPO(Request $request)
+    public function setCustomerPOFile(Request $request)
     {
         try 
         {
@@ -1337,10 +1321,14 @@ class OrderManagementCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$row_id)
-                        ->update([
-                          'pi_status' => "PI Approved"
-                        ]);
+            $pi_obj     =   new ProfomaInvoice();
+            $data       =   $pi_obj->getPIDetails($request);
+            
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Approved"
+                            ]);
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -1366,12 +1354,13 @@ class OrderManagementCntrl extends Controller
     {
         try
         {
-            $row_id         =   $request->id;
+            $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$row_id)
-                        ->update([
-                          'pi_status' => "PI Rejected"
-                          ]);
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Rejected"
+                            ]);
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -1423,6 +1412,28 @@ class OrderManagementCntrl extends Controller
 		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
 		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
 		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+		 echo json_encode($data);
+    } 
+	/**
+     * This Function is used to get the existing artworks for populating in the modal.
+     *
+     * @return Void
+     */
+	
+    public function getExistingLabelOrderStatusPo(Request $request)
+    {
+		 $uvc        =   $request->uvc;
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*',DB::raw('"Solid Carton Stickers" as TemplateName'),DB::raw('"Solid Carton Stickers" as TemplateType'),DB::raw('"orchestra_solid_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*',DB::raw('"Solid Poly Bag Stickers" as TemplateName'),DB::raw('"Solid Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_solid_poly_bag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*',DB::raw('"Standard Carton Stickers" as TemplateName'),DB::raw('"Standard Carton Stickers" as TemplateType'),DB::raw('"orchestra_standard_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->select('*',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_polybag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		
 		 echo json_encode($data);
     } 
 	/**

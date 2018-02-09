@@ -10,6 +10,9 @@ use App\Classes\Modules;
 use Response;
 use View;
 use DB;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Config;
 
 class OrderManagementCntrl extends Controller
 {
@@ -96,7 +99,7 @@ class OrderManagementCntrl extends Controller
      * Method to create tesco order from purchase order
      * @return \Illuminate\Http\Response
      */
-    public function createOrderByPurchaseOrder(Request $request) {
+    public function createOrderByPDFx(Request $request) {
       try {
         if ($request->hasFile('purchase_order')) {
                 $file = $request->file('purchase_order');
@@ -112,6 +115,40 @@ class OrderManagementCntrl extends Controller
                 $result = curl_exec($ch);
                 print_r($result);
 
+        } else {
+          return "File not found!!";
+        }
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      
+    }
+
+    /**
+     * Method to create tesco order from purchase order
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrderByPDFMiner(Request $request) {
+      try {
+
+        //Read the path variables from pdfminer config.
+        $python  = Config::get('pdfminer.python');
+        $script  = Config::get('pdfminer.script');
+        $command = Config::get('pdfminer.command');
+
+        //Check the file has been uploaded or not
+        if($request->hasFile('purchase_order')) {
+          $file = $request->file('purchase_order');
+          $name = $file->getClientOriginalName();
+          $path =  $file->move('storage/app/TESCO/purchaseOrder', $name);
+          $process = new Process($python.' '.$script.' '.$command.' '.$path);
+          $process->run();
+
+          // executes after the command finishes
+          if (!$process->isSuccessful()) {
+              throw new ProcessFailedException($process);
+          }
+          echo $process->getOutput();
         } else {
           return "File not found!!";
         }

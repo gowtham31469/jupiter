@@ -120,6 +120,72 @@
             </div>
         </div>
     </div>
+	
+	
+	<div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
+                    </div>
+                    <div class="modal-body">
+						<div id="uvc_select_div">
+						</div>
+						<div id="exist_artwork_div" class="hidden">
+							<h4>Artworks : </h4>
+							<label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
+							<ul class="list-group checked-list-box">
+							</ul>
+							<button type="button" id="new_po1" class="btn btn-primary hidden">New PO</button>
+							<button type="button" id="map_po" class="btn btn-primary hidden">Map PO</button>
+							<hr/>
+						</div>
+						
+						<div id="map_po_div" class="hidden">
+							<h4>Mapping to Exist PO : </h4>
+							<label style="color:red" id="select_error" class="hidden">Please Select PO</label>
+							<div class="form-group" id="selectpo">
+								<label>Select PO</label>
+								<select class="form-control">
+								  <option>1</option>
+								  <option>2</option>
+								  <option>3</option>
+								  <option>4</option>
+								  <option>5</option>
+								</select>
+                        	</div>
+							
+						</div>
+						
+						<div id="new_po_div" class="hidden">
+							<h4>New PO : </h4>
+							<label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+							 <div class="form-group">
+                            <label>PO Number</label>
+                            <input id="new_po_no" type="text" class="form-control">
+                        	</div>
+							<div class="form-group">
+								<label for="exampleInputFile">PO File</label>
+								<input type="file" id="new_po_file">
+								<p class="help-block">Example block-level help text here.</p>
+							</div>
+							
+						</div>
+                       
+                        
+                     
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
+						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
+						
+						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {{-- Show snackbar html code --}}
      <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
@@ -194,7 +260,7 @@
    Dropzone.options.poUpload = {
 
       // Prevents Dropzone from uploading dropped files immediately
-        url:base_url + "/admin/orchestra/set-po",
+        url:base_url + "/admin/orchestra/set-po-file",
         autoProcessQueue: false,
         maxFilesize: 500,
         maxFiles:1,
