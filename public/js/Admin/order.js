@@ -110,7 +110,417 @@ function orderStatus() {
                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
                 $('.main-content').html(table(newObj,path));
-                $('.top-content').html("");
+                $('.top-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-primary pull-right' type='button'>Update PO</button>");
+				console.log(newObj)
+				
+				var uniqueNames = [];
+				for(i = 0; i< newObj.length; i++){    
+					if(uniqueNames.indexOf(newObj[i].UVC) === -1){
+						uniqueNames.push(newObj[i].UVC);        
+					}        
+				}
+				var options="<option>Select UVC</option>";
+				for(i = 0; i< uniqueNames.length; i++){    
+					 options+="<option>"+uniqueNames[i]+"</option>";
+				}
+				
+				//starts
+				
+					$('#po-file-upload-button').click(function () {
+						$('#po-file-upload-group').modal("show")
+						$('#uvc_select_div').html('<label>Select UVC</label><select id="uvc_select" class="form-control">'+options+'</select>')
+						$('#new_po_div').addClass('hidden');
+								$('#new_po1').addClass('hidden');
+								$('#map_po').addClass('hidden');
+								$('#update_new_po').addClass('hidden');
+								$('#update_po').addClass('hidden');
+								$('#new_pos').addClass('hidden');
+								$('#map_po_div').addClass('hidden');
+								$('#new_po_no').val()
+								$('#exist_artwork_div').addClass('hidden')
+						
+						
+						$('#uvc_select').change(function(){
+							if($(this).val() != "Select UVC")
+							{
+								$('#new_po_div').addClass('hidden');
+								$('#new_po1').addClass('hidden');
+								$('#map_po').addClass('hidden');
+								$('#update_new_po').addClass('hidden');
+								$('#update_po').addClass('hidden');
+								$('#new_pos').addClass('hidden');
+								$('#map_po_div').addClass('hidden');
+								$('#exist_artwork_div').removeClass('hidden')
+								
+								$.ajax({
+									url: base_url + "/admin/" + buyer + "/order-management/get_existing_label_orders_status_po",
+									type: "get",
+									dataType: "json",
+									data: {
+										uvc: $('#uvc_select').val()
+									},
+									beforeSend: function () {
+
+									},
+									success: function (data) {
+										//$('#po-file-upload-group').modal('show')
+										$('#po-file-upload-group').find('#exist_artwork_div ul').html("");
+										 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+										
+										var coun = 0;
+										var options = "<option>Select PO</option>";
+										$(newObj).each(function (index1, value1) {
+											if (value1.po_number != "" && value1.po_number != null) {
+												options += "<option>" + value1.po_number + "</option>";
+
+												coun++;
+											}
+											$('#po-file-upload-group').find('#exist_artwork_div ul').append('<li data-id="'+value1.type+'-'+value1.id+'" class="list-group-item">'+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+										});
+
+										//Start bootstrap checkbox 
+
+										$('.list-group.checked-list-box .list-group-item').each(function () {
+
+											// Settings
+											var $widget = $(this),
+												$checkbox = $('<input type="checkbox" class="hidden" />'),
+												color = ($widget.data('color') ? $widget.data('color') : "primary"),
+												style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+												settings = {
+													on: {
+														icon: 'glyphicon glyphicon-check'
+													},
+													off: {
+														icon: 'glyphicon glyphicon-unchecked'
+													}
+												};
+
+											$widget.css('cursor', 'pointer')
+											$widget.append($checkbox);
+
+											// Event Handlers
+											$widget.on('click', function () {
+												$checkbox.prop('checked', !$checkbox.is(':checked'));
+												$checkbox.triggerHandler('change');
+												updateDisplay();
+											});
+											$checkbox.on('change', function () {
+												updateDisplay();
+											});
+
+
+											// Actions
+											function updateDisplay() {
+												var isChecked = $checkbox.is(':checked');
+
+												// Set the button's state
+												$widget.data('state', (isChecked) ? "on" : "off");
+
+												// Set the button's icon
+												$widget.find('.state-icon')
+													.removeClass()
+													.addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+												// Update the button's color
+												if (isChecked) {
+													$widget.addClass(style + color + ' active');
+												} else {
+													$widget.removeClass(style + color + ' active');
+												}
+											}
+
+											// Initialization
+											function init() {
+
+												if ($widget.data('checked') == true) {
+													$checkbox.prop('checked', !$checkbox.is(':checked'));
+												}
+
+												updateDisplay();
+
+												// Inject the icon if applicable
+												if ($widget.find('.state-icon').length == 0) {
+													$widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+												}
+											}
+											init();
+										});
+
+										$('#get-checked-data').on('click', function (event) {
+											event.preventDefault();
+											var checkedItems = {},
+												counter = 0;
+											$("#check-list-box li.active").each(function (idx, li) {
+												checkedItems[counter] = $(li).text();
+												counter++;
+											});
+											$('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+										});
+
+										//End bootstrap checkbox 
+
+								$('#selectpo').html('<label>Select PO</label><select id="select_po" class="form-control">' + options + '</select>')
+										if (coun == 0) {
+											$('#map_po').addClass('hidden');
+											$('#new_po1').addClass('hidden');
+											$('#new_po_div').removeClass('hidden');
+											$('#new_pos').removeClass('hidden');
+										}
+										else
+										{
+											$('#map_po').removeClass('hidden');
+											$('#new_po1').removeClass('hidden');
+											$('#new_pos').addClass('hidden');
+										}
+										
+										$('#new_po1').click(function () {
+					
+
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_new_po').removeClass('hidden')
+					$('#update_po').addClass('hidden')
+						$('#new_pos').addClass('hidden')
+						$('#new_po_div').removeClass('hidden')
+						$('#map_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+				});
+				$('#map_po').click(function () {
+					
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#update_po').removeClass('hidden')
+					$('#update_new_po').addClass('hidden')
+						$('#new_pos').addClass('hidden')
+						$('#map_po_div').removeClass('hidden')
+						$('#new_po_div').addClass('hidden')
+						$('#exist_artwork_div').removeClass('hidden')
+						$('#check_error').addClass('hidden')
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+
+
+				});
+										
+										
+				$('#update_new_po').click(function () {
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#check_error').addClass('hidden')
+					if ($('#new_po_no').val() != "") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+								//alert($(this).parent().attr('data-id'))
+							}
+						});
+						var aa = a.join(',');
+						var new_po_file = $('#new_po_file').prop('files')[0];
+						var new_po_no = $('#new_po_no').val();
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						var form_data = new FormData();
+						form_data.append('id', aa);
+						form_data.append('po_file', new_po_file);
+						form_data.append('po', new_po_no);
+						form_data.append('_token', csrf_token);
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+							dataType: 'text',
+							cache: false,
+							contentType: false,
+							processData: false,
+							data: form_data,
+							type: 'post',
+							success: function (data) {
+								//location.reload()
+								$('#po-file-upload-group').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function () {
+								console.log('somethig is wrong, please try later');
+							}
+
+						});
+					} else {
+						$('#new_po_error').removeClass('hidden')
+					}
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+
+
+				});
+				
+				
+				$('#new_pos').click(function () {
+					
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#check_error').addClass('hidden')
+						if ($('#new_po_no').val() != "") {
+							var a = [];
+							$('#exist_artwork_div input[type=checkbox]').each(function () {
+								if (this.checked) {
+									a.push($(this).parent().attr('data-id'));
+									//alert($(this).parent().attr('data-id'))
+								}
+							});
+							var aa = a.join(',');
+							var new_po_file = $('#new_po_file').prop('files')[0];
+							var new_po_no = $('#new_po_no').val();
+							var csrf_token = $('meta[name="csrf-token"]').attr('content');
+							var form_data = new FormData();
+							form_data.append('id', aa);
+							form_data.append('po_file', new_po_file);
+							form_data.append('po', new_po_no);
+							form_data.append('_token', csrf_token);
+							$.ajax({
+								url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po_new",
+								dataType: 'text',
+								cache: false,
+								contentType: false,
+								processData: false,
+								data: form_data,
+								type: 'post',
+								success: function (data) {
+									//location.reload()
+									$('#po-file-upload-group').modal('hide')
+									$('.snackbar_span').html('PO Updated Successfully');
+									showSnackbar();
+								},
+								error: function () {
+									console.log('somethig is wrong, please try later');
+								}
+
+							});
+						} else {
+							$('#new_po_error').removeClass('hidden')
+						}
+					
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
+				});
+
+				$('#update_po').click(function () {
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#check_error').addClass('hidden')
+					if ($('#new_po_no').val() != "") {
+					if ($('#select_po').val() != "Select PO") {
+						var a = [];
+						$('#exist_artwork_div input[type=checkbox]').each(function () {
+							if (this.checked) {
+								a.push($(this).parent().attr('data-id'));
+							}
+						});
+						var aa = a.join(',');
+						var csrf_token = $('meta[name="csrf-token"]').attr('content');
+						$.ajax({
+							url: base_url + "/admin/" + buyer + "/order-management/put_existing_label_orders_po",
+							type: "Post",
+							dataType: "json",
+							data: {
+								_token: csrf_token,
+								id: aa,
+								po: $('#select_po').val()
+							},
+							beforeSend: function () {
+
+							},
+							success: function (data) {
+								//alert()
+								$('#po-file-upload-group').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+							},
+							error: function (data) {
+
+							},
+							complete: function () {
+								$(".loader").hide();
+								$(".loader").css('margin-top', '0%');
+							}
+						})
+					} else {
+						$('#select_error').removeClass('hidden')
+					}
+					}
+					}
+						else
+						{
+							$('#check_error').removeClass('hidden')
+						}
+
+				});
+
+
+									},
+									error: function (data) {
+
+									},
+									complete: function () {
+										$(".loader").hide();
+										$(".loader").css('margin-top', '0%');
+									}
+								})
+							}
+							else
+							{
+								$('#exist_artwork_div').addClass('hidden')
+							}
+							
+						})
+					});
+				
+				
+				
+				//ends
+				
+				
+				
+				
+					
+			
                 var $tableSel = $('#datatable-example-2');
                 $tableSel.DataTable({
                     "pageLength": 25,
@@ -296,15 +706,8 @@ function table(data,path) {
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-                    if($('.logo').text() == "Orders")
-                    {
-                        var check="";
-                    }
-                    else
-                    {
-                        var check='<input type="checkbox" class="uvcCheck" name="'+value[key]+'" value="checked" />';
-                    }
-                    tr += '<td align="center">'+check+'<a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+                   
+                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     var str=value[key] ;
                     $status=str.replace(/ /g, "");
@@ -3305,7 +3708,15 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 				}
 				
 				$('#update_new_po').click(function () {
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
 
+					if (sList > 0) {
+						$('#check_error').addClass('hidden')
 					if ($('#new_po_no').val() != "") {
 						var a = [];
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
@@ -3345,11 +3756,23 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 					} else {
 						$('#new_po_error').removeClass('hidden')
 					}
+					} else {
+						$('#check_error').removeClass('hidden')
+					}
 
 
 				});
 
 				$('#update_po').click(function () {
+					var sList = 0;
+					$('#exist_artwork_div input[type=checkbox]').each(function () {
+						if (this.checked) {
+							sList++;
+						}
+					});
+
+					if (sList > 0) {
+						$('#check_error').addClass('hidden')
 					if ($('#select_po').val() != "Select PO") {
 						var a = [];
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
@@ -3387,6 +3810,9 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 						})
 					} else {
 						$('#select_error').removeClass('hidden')
+					}
+					} else {
+						$('#check_error').removeClass('hidden')
 					}
 
 				});
