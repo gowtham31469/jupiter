@@ -52,8 +52,11 @@ class OrchestraSettings extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
+            // For getting care category 
+            $category = DB::table('orchestra_care_category')->pluck('category_name','id')->all();
+
             $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/Settings/home')->with(['buyers' => $buyers]);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category]);
         }
         else
         {
@@ -1032,5 +1035,90 @@ class OrchestraSettings extends Controller
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
           return $result;
+    }
+     /**
+     * Orchestra metadata Symbols list show using ajax.
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function orchestraSymbols()
+    {
+      try {
+            $orchestra_care_symbols = DB::table('orchestra_care_symbols')->select('*')->get();
+       
+            return response()->json(['error'=>'false','message' =>'success', 'orchestra_care_symbols' => $orchestra_care_symbols]);
+          } catch (\Exception $e)
+          {
+                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+     /**
+     * Add orchestra Symbols.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrchestraSymbols(Request $request)
+    {
+        try {
+          $destination_path='images/WashCareSymbols/';
+          $destination_path_db='/images/WashCareSymbols/';
+          $cofreet_symbols= $request->file('cofreet_symbols');
+          $astms_symbol= $request->file('astms_symbol');
+          
+          $cofreet_symbols_orname = $cofreet_symbols->getClientOriginalName();
+          $astms_symbol_orname = $astms_symbol->getClientOriginalName();
+
+          $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
+          $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
+
+            switch($request->category_id){
+              case 1:
+                $upload_path = 'Washing/';
+                break;
+              case 2:
+                $upload_path = 'Whitening/';
+                break;
+              case 3:
+                $upload_path = 'Dryer/';
+                break;
+              case 4:
+                $upload_path = 'Ironing/';
+                break;
+              case 5:
+                $upload_path = 'Cleaning/';
+                break;
+              default:
+                $upload_path = 'Washing/';
+                break;
+            }
+
+            $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
+            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+  
+            $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
+            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+
+            $inserted = DB::table('orchestra_care_symbols')->insert([
+                'category_id'     =>  $request->category_id,
+                'cofreet_symbols' =>  $cofreet_path_insert,
+                'astms_symbol'    =>  $astms_path_insert,
+                'care_instruction'=>  $request->care_instruction
+            ]);
+
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
     }
 }

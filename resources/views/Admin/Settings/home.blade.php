@@ -1383,6 +1383,55 @@
        </div>
    </div>
 
+<!-- care_symbols -->
+
+{{-- Add Orchestra Symbols Modal --}}
+<div class="modal fade" id="addOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSymbolsLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="orchestraSymbolsLabel">Add Symbols</h4>
+            </div>
+            {!! Form::open(['id' => 'add_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <div class="modal-body">
+     
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
+                         {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         {{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                         {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                </div>
+           {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+
 
 <!-- Tesco Modals -->
 
@@ -2545,7 +2594,40 @@ $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
             deleteTescoSizeChart(id);
          }
        })
+
+       /** Add orchestra symbols form validation **/
+      $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           var cofreet_file = $('#cofreet_symbol')[0].files[0];
+           var astms_file = $('#astms_symbol')[0].files[0];
+           var symbol_category = $('#symbol_category option:selected').val();
+           var care_instruction = $('#care_instruction').val();
+           
+           /* call addOrchestraSymbols function from orchestra-settings.js*/
+           addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
+        }
+      })
     });
+
+//     $(document).on('change', '#cofreet_symbol', function(e){
+//       var _URL = window.URL || window.webkitURL;
+//     var file, img;
+
+//     if ((file = this.files[0])) {
+//         img = new Image();
+//         img.onload = function() {
+//         };
+//         img.src = _URL.createObjectURL(file);
+//     }
+// });
+
+    
     </script>
 
     @endsection
