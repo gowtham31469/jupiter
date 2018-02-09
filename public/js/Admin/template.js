@@ -176,10 +176,21 @@ function template_list() {
                                 $(".loader").css('margin-top', '12%');
                             },
                             success: function (data) {
-
+								console.log(data);
+								console.log("DAsdsadsadasdsa");
                                 if (data.length > 0) {
                                     if (data[0].template_file != "") {
-                                        $('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+										if (data.length > 1) {
+											$('.viewDiv').html("");
+											$.each(data, function (index, value) {
+												$('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+											});
+                                        	
+										}
+										else
+										{
+											$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+										}
                                         $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
                                         $('.descriptionDiv').css('margin-top', '20px')
                                         $('.viewDiv').css('margin-top', '0px')
