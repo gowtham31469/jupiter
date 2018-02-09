@@ -212,9 +212,8 @@ Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@ind
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
-Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByPurchaseOrder');
+Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
 //Template Management
-
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
@@ -305,3 +304,5 @@ Route::post('admin/tesco/add-tesco-size-charts', 'Admin\Settings\Tesco\TescoSett
 Route::get('admin/tesco/get-tesco-Sizecharts-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSizeChartsById');
 Route::put('admin/tesco/update-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@updateTescoSizechartsById');
 Route::delete('admin/tesco/delete-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@deleteTescosizechartsById');
+
+//Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
