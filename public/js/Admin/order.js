@@ -435,7 +435,6 @@ function setPO(obj,id,table_name)
                if (po_number==""){
                  $(obj).closest('tr').find('.po').attr('disabled');
                  $(obj).closest('tr').find('.po').attr('placeholder', "Enter PO");
-                  
                }              
             },
             400: function()
