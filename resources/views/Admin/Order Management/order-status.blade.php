@@ -194,7 +194,7 @@
    Dropzone.options.poUpload = {
 
       // Prevents Dropzone from uploading dropped files immediately
-        url:base_url + "/admin/orchestra/set-po",
+        url:base_url + "/admin/orchestra/set-po-file",
         autoProcessQueue: false,
         maxFilesize: 500,
         maxFiles:1,
