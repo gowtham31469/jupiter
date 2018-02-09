@@ -187,7 +187,7 @@ Route::post('admin/orchestra/order-management/order-status', 'Admin\Orchestra\Or
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
 Route::post('admin/orchestra/order-management/show-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@getProfomaInvoice');
-Route::post('admin/orchestra/set-po', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPO');
+Route::post('admin/orchestra/set-po-file', 'Admin\Orchestra\OrderManagementCntrl@setCustomerPOFile');
 Route::post('admin/orchestra/approve-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@approveProfomaInvice');
 Route::post('admin/orchestra/reject-profoma-invoice', 'Admin\Orchestra\OrderManagementCntrl@rejectProfomaInvice');
 

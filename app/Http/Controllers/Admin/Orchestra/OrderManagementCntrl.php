@@ -1246,7 +1246,7 @@ class OrderManagementCntrl extends Controller
             $po_number  =   $request->po_number;
             $id         =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$id)
+            $data       = DB::table($table_name)->where('id',$id)
                         ->update([
                           'po_number' => $po_number,
                           'po_status' => "PO Approved"
@@ -1272,7 +1272,7 @@ class OrderManagementCntrl extends Controller
      * @param po_number and pdf (pdf is optional)
      * @return \Illuminate\Http\Response
      */
-    public function setCustomerPO(Request $request)
+    public function setCustomerPOFile(Request $request)
     {
         try 
         {
@@ -1337,10 +1337,14 @@ class OrderManagementCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$row_id)
-                        ->update([
-                          'pi_status' => "PI Approved"
-                        ]);
+            $pi_obj     =   new ProfomaInvoice();
+            $data       =   $pi_obj->getPIDetails($request);
+            
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Approved"
+                            ]);
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -1366,12 +1370,13 @@ class OrderManagementCntrl extends Controller
     {
         try
         {
-            $row_id         =   $request->id;
+            $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data   = DB::table($table_name)->where('id',$row_id)
-                        ->update([
-                          'pi_status' => "PI Rejected"
-                          ]);
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Rejected"
+                            ]);
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
