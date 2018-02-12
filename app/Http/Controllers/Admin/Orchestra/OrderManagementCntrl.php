@@ -11,6 +11,8 @@ use App\Classes\ProfomaInvoice;
 use Response;
 use Excel;
 use App\HangTagOrders;
+use App\ProfomaInvoice as PI;
+use App\ProfomaInvoiceItemDetails;
 use App\HangTagOrdersQty;
 use App\SpecialTagOrders;
 use App\SpecialTagOrdersQty;
@@ -1321,8 +1323,42 @@ class OrderManagementCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
+            $total_qnty =   0 ; 
+            $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getPIDetails($request);
+            if (count($data)>0)
+            {
+                
+                $pi_details = PI::create([
+                    'company_id' => $data['company_details']->id,
+                    'customer_id'      => $data['bank_details']->id,
+                    'shipping_address' => $data['ship_to']->address,
+                    'billing_address'  => $data['bill_to']->address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply
+                    
+                ]);
+                foreach ($data['item_details'] as $key => $value)
+                {
+                    $total_qnty+= $value->quantity;
+                    $sub_total += $value->quantity *$value->unit_price;
+                    ProfomaInvoiceItemDetails::create([
+                        'pi_id'     => $pi_details->id,
+                        'material'  => $value->material_name,
+                        'size'      => $value->size,
+                        'style'     => $value->style,
+                        'quantity'  => $value->quantity,
+                        'unit_cost' => $value->unit_price
+                    ]);
+                }
+                PI::where('id',$pi_details->id)
+                            ->update([
+                              'total_quantity'   => $total_qnty,
+                              'sub_total'        => $sub_total,
+                              'tax'              => $data['item_details'][0]->tax,
+                              'bill_amount'      => $sub_total*$data['item_details'][0]->tax
+                            ]);
+            }
             
             $data       =   DB::table($table_name)
                             ->where('id',$row_id)

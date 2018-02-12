@@ -1,6 +1,12 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-
+<style type="text/css">
+    .bank_details tr {
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+    }
+</style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
         <div class="buyer-div hidden">
