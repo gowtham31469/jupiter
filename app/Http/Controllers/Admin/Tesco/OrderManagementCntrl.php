@@ -76,6 +76,8 @@ class OrderManagementCntrl extends Controller
                            ->where('tesco_item_master.id','=',$value)
                            ->first();
            }
+
+           /* Fetch tesco brands,departments and suppliers details */
            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
            $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id','supplier_code')->get();

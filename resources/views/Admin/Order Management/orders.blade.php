@@ -261,6 +261,9 @@ border: 0;
  .order-details-notes {
  font-weight: 300;
  }
+.templateDiv {
+    text-align: center;
+}
 
 </style>
 <div class="col-sm-12 col-md-12 main">
