@@ -45,10 +45,12 @@
 <text transform="matrix(1 0 0 1 102.5716 154.8441)" class="st1 st3" id="supplier">AB Clothing</text>
 <text transform="matrix(1 0 0 1 15.2107 65.2292)" class="st1 st5">TPND: </text>
 <text transform="matrix(1 0 0 1 24.9816 33.2704)"><tspan x="0" y="0" class="st1 st2">B/D (R</tspan><tspan x="72.6" y="0" class="st1 st2 st11">A</tspan><tspan x="86.3" y="0" class="st1 st2">TIO)</tspan></text>
-<text transform="matrix(1 0 0 1 204.5719 169.6064)" class="st1 st3" id="pieces_in_ratio">No of pieces in one ratio:</text>
+<text transform="matrix(1 0 0 1 204.5719 169.6064)" class="st1 st3">No of pieces in one ratio:</text>
+<text id="pieces_in_ratio" class="st1 st3" transform="matrix(1 0 0 1 338.59 169.6064)">3</text>
 <text transform="matrix(1 0 0 1 204.5719 154.5131)" class="st1 st3">No of ratios in one carton:</text>
-<text transform="matrix(1 0 0 1 204.5719 184.6064)" class="st1 st3">Box __ of __</text>
+<text transform="matrix(1 0 0 1 204.5719 184.6064)" class="st1 st3">Box ____ of ____</text>
 <g>
-	<text transform="matrix(1 0 0 1 15.1311 219.1768)" class="st1 st3">MANUFACTURED DATE: MONTH,YEAR</text>
+	<text transform="matrix(1 0 0 1 15.1311 219.1768)" class="st1 st3">MANUFACTURED DATE: </text>
+	<text transform="matrix(1 0 0 1 145.131 219.1768)" class="st1 st4" id="manufactured_date"> MONTH YEAR</text>
 </g>
 </svg>

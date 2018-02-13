@@ -328,7 +328,7 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
                                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
@@ -346,7 +346,7 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" required="" placeholder="Enter TPND"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_1" name="uk_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
                                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
@@ -385,7 +385,7 @@ function createOrders() {
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr class="slno"><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr class="slno"><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
                                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
@@ -420,6 +420,12 @@ function createOrders() {
                             $('input[id="'  + id + '"]').parent().removeClass('has-error has-danger');
                         }
                       });
+
+                       $('#datePicker1').datepicker({
+                            autoclose: true,
+                            minViewMode: 1,
+                            format: 'MM yyyy'
+                        })
                       /** Get po number from input field and append value into svg template */
                       // $('#tesco_po_number').keyup(function() {
                       //   var po_number = this.value;
@@ -677,35 +683,103 @@ try{
  }
 }
 
+/**
+ * [ dynamicSVGTemplates functio for creating dynamic svg file ]
+ * @author <praveen@wizroots.com>
+ */
 function dynamicSVGTemplates()
 {
     var data = JSON.parse(localStorage.getItem("data"));
-    /** Get po number from input field and append value into svg template */
-    var po_number = $('#tesco_po_number').val();
-    var uk_style = $('#tesco_uk_style').val();
-    var ce_style = $('#tesco_ce_style').val();
-    var description = $('#tesco_description').val();
-    var tesco_eqos = $('#tesco_eqos').val();
-    var supplier = $('#tesco_supplier option:selected').text();
-    var department = $('#tesco_department option:selected').text();
-    var brand = $('#tesco_brand option:selected').text();
-    var rfid = $('#tesco_rfid option:selected').text();
-    var tag_at_source = $('#tesco_tag_at_source option:selected').text();
-    var season_code = $('#tesco_season_code').val();
-    var pieces_in_ratio = $('#ce_ratio_cpc').val();
-    var tpnd = $('#ce_ratio_orms_tpn').val();
-    var manufacture_date = $('#tesco_manufacture_date').val();
+    var zone = localStorage.getItem("zone");
+    var type = localStorage.getItem("template type");
 
-      $.each(data, function(i, item){
-
-        if (item.template_name != "TSL 1") 
+    /** [ separate conditions for TSL1,TSL3 and other stickers ] */
+    $.each(data, function(i, item){
+        if(item.template_name === "TSL 1" || item.template_name === "TSL 3")
         {
+           var description  = $('#tesco_description').val();
+           /** [ Dynamically change svg short description ] */
+           if(description != '')
+           {
+              var mySVG = document.getElementById("tesco_svg"+i);
+              var svgDoc = mySVG.contentDocument;
+              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+           }
+           if(zone === "CE")
+           {
+              /**  [ if CE ratio template ] */
+              if(type === "ratio")
+              {
+                 var tpnd = $('#ce_ratio_orms_tpn').val();
+                 /** [ Dynamically change svg CE ratio tpnd number ] */
+                  if(tpnd != '')
+                  {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                  }
+              }
+              else
+              {
+                 /**  [ if CE single template ] */
+                 var orms_tpn = $('#ce_single_orms_tpn_1').val();
+                 /** [ Dynamically change svg CE single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+              }
+           }
+           else
+           {
+              /**  [ if UK ratio template ] */
+              if(type === "ratio")
+              {
+                 var tpnd = $('#uk_ratio_tpnd').val();
+                 /** [ Dynamically change svg UK ratio tpnd number ] */
+                  if(tpnd != '')
+                  {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                  }
+              }
+              else
+              {
+                 /**  [ if UK single template ] */
+                 var orms_tpn = $('#uk_single_tpnd_1').val();
+                 /** [ Dynamically change svg UK single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+              }  
+           }
+        }
+        else 
+        {
+            var po_number        = $('#tesco_po_number').val();
+            var uk_style         = $('#tesco_uk_style').val();
+            var ce_style         = $('#tesco_ce_style').val();
+            var description      = $('#tesco_description').val();
+            var tesco_eqos       = $('#tesco_eqos').val();
+            var supplier         = $('#tesco_supplier option:selected').text();
+            var department       = $('#tesco_department option:selected').text();
+            var brand            = $('#tesco_brand option:selected').text();
+            var rfid             = $('#tesco_rfid option:selected').text();
+            var tag_at_source    = $('#tesco_tag_at_source option:selected').text();
+            var season_code      = $('#tesco_season_code').val();
+            var manufacture_date = $('#tesco_manufacture_date').val();
            /** [ Dynamically change svg PO order number ] */
            if(po_number != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("po_number").innerHTML = po_number;
+              svgDoc.getElementById("po_number").innerHTML = po_number.toUpperCase();
            }
 
            /** [ Dynamically change svg CE style reference number ] */
@@ -713,102 +787,166 @@ function dynamicSVGTemplates()
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("ce_style").innerHTML = ce_style;
+              svgDoc.getElementById("ce_style").innerHTML = ce_style.toUpperCase();
            }
            /** [ Dynamically change svg UK style reference number ] */
            if(uk_style != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("uk_style").innerHTML = uk_style;
+              svgDoc.getElementById("uk_style").innerHTML = uk_style.toUpperCase();
            }
            /** [ Dynamically change svg short description ] */
            if(description != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("description").innerHTML = description;
+              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
            }
            /** [ Dynamically change svg EQOS code ] */
            if(tesco_eqos != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("eqos").innerHTML = tesco_eqos;
+              svgDoc.getElementById("eqos").innerHTML = tesco_eqos.toUpperCase();
            }
            /** [ Dynamically change  svg supplier name ] */
            if($('#tesco_supplier option:selected').val() != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("supplier").innerHTML = supplier.replace('&', '&amp;');
+              svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
            }
            /** [ Dynamically change  svg department ] */
            if($('#tesco_department option:selected').val() != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("department").innerHTML = department.replace('&', '&amp;');
+              svgDoc.getElementById("department").innerHTML = department.toUpperCase().replace('&', '&amp;');
            }  
            /** [ Dynamically change svg brand ] */
            if($('#tesco_brand option:selected').val() != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("brand").innerHTML = brand.replace('&', '&amp;');
+              svgDoc.getElementById("brand").innerHTML = brand.toUpperCase().replace('&', '&amp;');
            } 
            /** [ Dynamically svg RFID ] */
            if($('#tesco_rfid option:selected').val() != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("rfid").innerHTML = rfid;
+              svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
             }
            /** [ Dynamically change svg tag at source ] */
            if($('#tesco_tag_at_source option:selected').val() != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source;
+              svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
            }
            /** [ Dynamically change svg tag at source ] */
            if(season_code != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("season_code").innerHTML = season_code;
+              svgDoc.getElementById("season_code").innerHTML = season_code.toUpperCase();
            }
-           /** [ Dynamically change svg pieces in ratio ] */
-           if(pieces_in_ratio != '')
-           {
-              var mySVG = document.getElementById("tesco_svg"+i);
-              var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
-           }
-
-           /** [ Dynamically change svg tpnd number ] */
-           if(tpnd != '')
-           {
-              var mySVG = document.getElementById("tesco_svg"+i);
-              var svgDoc = mySVG.contentDocument;
-              svgDoc.getElementById("tpnd").innerHTML = tpnd;
-           }
-
            /** [ Dynamically change svg manufacture date ] */
            if(manufacture_date != '')
            {
               var mySVG = document.getElementById("tesco_svg"+i);
               var svgDoc = mySVG.contentDocument;
-              var date = new Date(manufacture_date);
-              var month = date.getMonth();
-              var year = date.getYear();
-              
-              svgDoc.getElementById("manufactured_month").innerHTML = month;
-              svgDoc.getElementById("manufactured_year").innerHTML = year;
+              svgDoc.getElementById("manufactured_date").innerHTML = manufacture_date.toUpperCase();
            }
-        }
-       
-      });
-                        
+           if(zone === "CE")
+           {
+              /**  [ if CE ratio template ] */
+              if(type === "ratio")
+              {
+                  var pieces_in_ratio = $('#ce_ratio_cpc').val();
+                  var tpnd = $('#ce_ratio_orms_tpn').val();
+                  /** [ Dynamically change svg CE pieces in ratio ] */
+                   if(pieces_in_ratio != '')
+                   {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+                   }
+                   /** [ Dynamically change svg CE ratio tpnd number ] */
+                   if(tpnd != '')
+                   {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                   } 
+              }
+              else
+              {
+                 /**  [ if CE single template ] */
+                 var orms_tpn = $('#ce_single_orms_tpn_1').val();
+                 var case_size = $('#ce_single_case_size_1').val();
+                 /** [ Dynamically change svg CE single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 /** [ Dynamically change svg CE single case size ] */
+                 if(case_size != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("unit_per_case").innerHTML = case_size;
+                 }
+                 
+              }
+           }
+           else
+           {
+              /**  [ if UK ratio template ] */
+              if(type === "ratio")
+              {
+                   var pieces_in_ratio = $('#uk_ratio_upc').val();
+                   var tpnd = $('#uk_ratio_tpnd').val();
+                   /** [ Dynamically change svg UK pieces in ratio ] */
+                   if(pieces_in_ratio != '')
+                   {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+                   }
+                   /** [ Dynamically change svg UK ratio tpnd number ] */
+                   if(tpnd != '')
+                   {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                   }
+              }
+              else
+              {
+                 /**  [ if UK single template ] */
+                 var orms_tpn = $('#uk_single_tpnd_1').val();
+                 var case_size = $('#uk_single_case_size_1').val();
+                 /** [ Dynamically change svg Uk single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 /** [ Dynamically change svg Uk single case size ] */
+                 if(case_size != '')
+                 {
+                      var mySVG = document.getElementById("tesco_svg"+i);
+                      var svgDoc = mySVG.contentDocument;
+                      svgDoc.getElementById("unit_per_case").innerHTML = case_size;
+                 }
+              }  
+           }
+        } 
+    });                    
 
 }

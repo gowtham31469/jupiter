@@ -47,8 +47,7 @@
 <text transform="matrix(1 0 0 1 14.2108 62.2292)" class="st1 st7">ORMS TPND: </text>
 <g>
 	<text transform="matrix(1 0 0 1 15.1311 216.1768)" class="st1 st4">MANUFACTURED DATE: </text>
-	<text transform="matrix(1 0 0 1 145.131 216.1768)" class="st1 st4" id="manufactured_month"> MONTH,</text>
-	<text transform="matrix(1 0 0 1 190.700 216.1768)" class="st1 st4" id="manufactured_year"> YEAR</text>
+	<text transform="matrix(1 0 0 1 145.131 216.1768)" class="st1 st4" id="manufactured_date"> MONTH YEAR</text>
 </g>
 <text transform="matrix(1 0 0 1 204.5719 166.6063)" class="st1 st4">No of pieces in Ratio:</text>
 <text id="pieces_in_ratio" class="st1 st4" transform="matrix(1 0 0 1 319.59 166.6063)">3</text>
