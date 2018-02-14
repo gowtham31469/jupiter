@@ -761,7 +761,7 @@ function table(data,path) {
                 { 
                    if (value[key]==null || value[key]=="")
                    {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
+                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span><span class="error" hidden>A valid url is required</span></div></div></td>';
                    }
                    else
                    {
@@ -813,8 +813,11 @@ function showPOUpload(id,table_name,uvc,qntytable)
  */
 function setPO(obj,id,table_name)
 {
+   $('.po').css('border-color', '');
    var po_number  = $(obj).closest('tr').find('.po').val();
    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+   if (po_number!="")
+   {
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/set-po-number",
         type: "Post",
@@ -855,6 +858,12 @@ function setPO(obj,id,table_name)
             $(".loader").hide();
         }
     })
+   }
+   else{
+    $(obj).closest('tr').find('.po').focus();
+    $(obj).closest('tr').find('.po').css('border-color', 'red');
+   }
+   
 }
 /** [showSnackbar function] */
 function showSnackbar() {
