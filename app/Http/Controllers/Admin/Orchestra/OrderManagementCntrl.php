@@ -1096,6 +1096,8 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
+		$cm =$request->cm;
+		$in =$request->in;
         $washing_select = $request->washing_select; 
         $whitening_select = $request->whitening_select; 
         $dryer_select = $request->dryer_select; 
@@ -1154,6 +1156,8 @@ class OrderManagementCntrl extends Controller
                         'made_in_id'      => $made_in_select,
                         'care_instruction_id'      => $care_instruction_select,
                         'svg_path'    => "", 
+					    'cm'    => $cm, 
+					    'in'    => $in, 
                         'status'    => "Buyer Approval Pending",
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
@@ -1217,6 +1221,8 @@ class OrderManagementCntrl extends Controller
                                 'made_in_id'      => $made_in_select,
                                 'care_instruction_id'      => $care_instruction_select,
                                 'svg_path'    => "", 
+				   				'cm'    => $cm, 
+				   				'in'    => $in, 
                                 'status'    => "Buyer Approval Pending",
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
