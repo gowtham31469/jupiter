@@ -413,20 +413,20 @@ class OrderManagementCntrl extends Controller
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','74')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=$orchestra_template{0}->id;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','3')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','75')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Standard";
             $data['polybag_template_id']=$orchestra_template{0}->id;
         }
         else
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','6')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','72')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=$orchestra_template{0}->id;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','73')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Solid";
             $data['polybag_template_id']=$orchestra_template{0}->id;
