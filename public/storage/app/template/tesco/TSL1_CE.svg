@@ -16,6 +16,7 @@
 </image>
 <text transform="matrix(1 0 0 1 14.5 65.5)" class="st2 st3" id="description">CHK SS V NECK STRP T20 </text>
 <g>
-	<text transform="matrix(1 0 0 1 7.9961 74)" class="st2 st3" id="orms_tpn">ORMS TPN: 9999999999999</text>
+	<text transform="matrix(1 0 0 1 7.9961 74)" class="st2 st3">ORMS TPN:</text>
+	<text transform="matrix(1 0 0 1 56.9961 74)" class="st2 st3" id="tpnd">9999999999999</text>
 </g>
 </svg>
