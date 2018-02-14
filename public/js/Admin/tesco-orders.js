@@ -6,6 +6,7 @@
 
 function tescoOrders() {
     $('.main-content').html('<div class="loader"></div>');
+    $('.top-content').html('');
     $('.template-error').html('');
     /** [ Remove local storage values ] */
     localStorage.removeItem("templates");
@@ -667,7 +668,7 @@ try{
 }
 
 /**
- * [ dynamicSVGTemplates functio for creating dynamic svg file ]
+ * [ dynamicSVGTemplates function for creating dynamic svg file ]
  * @author <praveen@wizroots.com>
  */
 function dynamicSVGTemplates()
@@ -676,7 +677,7 @@ function dynamicSVGTemplates()
     var data = JSON.parse(localStorage.getItem("data"));
     var zone = localStorage.getItem("zone");
     var type = localStorage.getItem("template type");
-
+ try{
     $.each(data, function(i, item){
         /**  [ Dynamically change all svg templates ] */
         var mySVG = document.getElementById("tesco_svg"+i);
@@ -1105,5 +1106,9 @@ function dynamicSVGTemplates()
               }  
            }
         } 
-    });                    
+    });   
+    } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }                 
 }
