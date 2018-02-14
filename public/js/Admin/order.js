@@ -940,10 +940,10 @@ function genaratePI(id,table_name,uvc,qntytable)
                         });
                         var taxamnt= subtotal*(tax/100);
                         var billamnt = subtotal+taxamnt;
-                        tr += '</tbody></table></div><hr><div><h4 class="text-right">Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
+                        tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
                         if (data.data.bank_details.place_of_supply==1)
                         {
-                           tr += '<h4> CGST : '+tax/2+'% (<span> ₹ '+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span> ₹ '+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
                         }
                         else if (data.data.bank_details.place_of_supply==2)
                         {
@@ -1972,7 +1972,7 @@ function label_order_details(uvc) {
                         {
                             $wash_status="";
                         }
-                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" style="cursor:pointer"  data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"><li><a id="clone_washcare_label_card'+index+'" style="cursor:pointer">Clone washcare label</a></li></ul> </div></div></div>')
+                        $('#add_modal').append('<div class="col-md-4" ><div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".washcare_label_' + index + '" data-backdrop="static" data-keyboard="false">  <span class="label label-'+$wash_status+' label-status">'+$wash_status_text+'</span>   <div class="card-title"><p class="pull-right delete-wash' + index + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + index + '>Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p> <h5><b class="washlabelname' + index + '">' + value.template_name + " - Washcare Label" + '</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card'+index+'" style="cursor:pointer"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
                         
                         
                         
@@ -2928,10 +2928,12 @@ function mainlabels(data, dataid) {
 				
             } else {
                 $main_label_count = "";
+				$main_label_counts = "";
             }
 
         } else {
             $main_label_count = "";
+			$main_label_counts = "";
         }
         tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)"  type="text"  class="form-control input-sm tot_qty_table" value="' + $main_label_count + '" required placeholder="Size Count"><div class="help-block with-errors"></div></div></td><td class="mainLbl input"><div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" style="height: 20px;margin-bottom: -13px;" type="text" class="form-control main_label_count input-sm" value="'+$main_label_counts+'" disabled placeholder="Main Count"><div class="help-block with-errors"></div></div></tr>';
         ttots += parseInt($main_label_count);
@@ -3643,7 +3645,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	} else {
 		$wash_status = "";
 		$wash_status_text = "";
-		var wash_enable = "display:none";
+		var wash_enable = "display:none !important";
 		var wash_name = "";
 	}
 	if (data.orchestra_main_label_orders != "") {
@@ -3655,7 +3657,7 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	} else {
 		$main_status = "";
 		$main_status_text = "";
-		var main_enable = "display:none";
+		var main_enable = "display:none !important";
 		var main_name = "";
 	}
 
@@ -3666,9 +3668,10 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 	}
 
 	$('.main-content').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><hr/><div class="col-md-3"><h4>Quantity And Artworks</h4></div><div class="form-group col-md-offset-9 has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>' + merchandisersoption + '</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><span class="label label-' + $hang_status + ' label-status">' + $hang_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p> <h5><b>Hangtag</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/ht_default.png" class="img-responsive center-block"></div></div><div class="col-md-6"><div class="text_artwork"></div></div></div></div></div><div class="col-md-4"><div class="card" style="min-height:279px"><span class="label label-' + $special_status + ' label-status">' + $special_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmespecial" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b>Specialtag</b></h5></div><div class="row"><div class="col-md-10 col-md-offset-1"><div class="img_artwork"><img src="' +
-		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" style="cursor:pointer"  data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+wash_enable+'"><a id="washcare_label_card" style="cursor:pointer">Add washcare label</a></li><li style="'+wash_enable+'"><a id="clone_washcare_label_card" style="cursor:pointer">Clone washcare label</a></li></ul> </div></div></div><div class="col-md-4"><div class="card add-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
-		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><div class="dropup"> <p class="dropdown-toggle" style="cursor:pointer"  data-toggle="dropdown"><i data-toggle="tooltip" class="fa fa-plus" aria-hidden="true"></i> Manage <p><ul class="dropdown-menu"> <li style="'+main_enable+'"><a id="main_label_card" style="cursor:pointer">Add Main & Size Label</a></li></ul> </div></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button">Update PO</button></div></div>');
+		base_url + '/images/st_default.png" class="img-responsive center-block"></div></div></div></div></div> <div class="col-md-4"> <div class="card add-card" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div><div class="col-md-4"><div class="card add-card" style="height: 280px;"><span class="label label-' + $main_status + ' label-status">' + $main_status_text + '</span><div class="card-title"><p class="pull-right" id="clickmemain" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="mainlabelname">' + main_name + 'Main & Size Label</b></h5> </div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' +
+		base_url + '/images/ml_default.png" class="img-responsive center-block"></div></div></div><p id="main_label_card" style="'+main_enable+';cursor:pointer"><i class="fa fa-plus" aria-hidden="true"></i> Add Main & Size Label</p></div></div></div><div id="add_modal"></div><div class="bottom-bar"><div class="modal-footer"><button onclick="' + onclick + '" class="btn btn-danger  pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button>  <button class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="po-file-upload-button">Update PO</button></div></div>');
 
+	
 	
 	$('#po-file-upload-button').click(function () {
 
