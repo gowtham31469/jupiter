@@ -159,4 +159,30 @@ class OrderManagementCntrl extends Controller
       }
       
     }
+    /**
+     * Function to get tesco tsl template UK , CE size chart based on size entered.
+     * @author <Praveen>
+     * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
+     * @return equivalent uk,ce size for size entered
+     */
+    public function getTescoTSLSizechart(Request $request)
+    {
+       try {
+             $zone = $request['zone'];
+             $size = $request['size'];
+
+           if($zone == 'UK')
+           {
+               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size','=',$size)->get();
+           }
+           else
+           {
+               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size','=',$size)->get();
+           }
+           
+           return response()->json(['size_chart' => $size]);
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
 }
