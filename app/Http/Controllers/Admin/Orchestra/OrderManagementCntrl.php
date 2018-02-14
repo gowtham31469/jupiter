@@ -468,6 +468,8 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
+		$cm =$request->cm;
+		$in =$request->in;
         $id =$request->id;
 		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
 		if(count($factory) > 0)
@@ -510,6 +512,8 @@ class OrderManagementCntrl extends Controller
                         'template_back_id'      => $template_back_id,
                         'svg_path'    => "", 
                         'status'    => $status,
+					    'cm'    => $cm,
+					    'in'    => $in,
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                   ]);
@@ -535,6 +539,8 @@ class OrderManagementCntrl extends Controller
                                     'template_back_id'      => $template_back_id,
                                     'svg_path'    => "", 
                                     'status'    => $status,
+				 					'cm'    => $cm,
+				 					'in'    => $in,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
                          ]);
