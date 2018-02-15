@@ -36,6 +36,7 @@
 
 </head>
 <body>
+    
     <div class="container-fluid">
         <div class="row">
         @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
@@ -168,7 +169,10 @@
 //            placeholder: "Buyer Listing",
 //            allowClear: true
 //        });
+        
+        
     </script>
     @yield('jqueryIncludes')
+
 </body>
 </html>

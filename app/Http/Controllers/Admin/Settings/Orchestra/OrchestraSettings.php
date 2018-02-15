@@ -1055,7 +1055,7 @@ class OrchestraSettings extends Controller
      /**
      * Add orchestra Symbols.
      * @param \Illuminate\Http\Request
-     * @author <Praveen>
+     * @author <Sumanth>
      * @return \Illuminate\Http\Response
      */
     public function addOrchestraSymbols(Request $request)
@@ -1120,5 +1120,133 @@ class OrchestraSettings extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
+    }
+
+    /**
+     * Edit orchestra Symbols.
+     * @param \Illuminate\Http\Request
+     * @author <Sumanth>
+     * @return \Illuminate\Http\Response
+     */
+    public function editOrchestraSymbols(Request $request)
+    {
+        try {
+
+          $destination_path='images/WashCareSymbols/';
+          $destination_path_db='/images/WashCareSymbols/';
+
+          switch($request->category_id){
+            case 1:
+              $upload_path = 'Washing/';
+              break;
+            case 2:
+              $upload_path = 'Whitening/';
+              break;
+            case 3:
+              $upload_path = 'Dryer/';
+              break;
+            case 4:
+              $upload_path = 'Ironing/';
+              break;
+            case 5:
+              $upload_path = 'Cleaning/';
+              break;
+            default:
+              $upload_path = 'Washing/';
+              break;
+          }
+
+
+          if($request->file('cofreet_symbols') == ""){
+            
+          }else {
+            $cofreet_symbols= $request->file('cofreet_symbols');
+            $cofreet_symbols_orname = $cofreet_symbols->getClientOriginalName();
+            $cofreet_symbols_filename= str_random(6).'_'.$cofreet_symbols_orname;
+            $cofreet_symbols->move($destination_path.$upload_path,$cofreet_symbols_filename);
+            $cofreet_path_insert=$destination_path_db.$upload_path.$cofreet_symbols_filename;
+          }
+
+          if($request->file('astms_symbol') == ""){
+           
+          }else {
+            $astms_symbol= $request->file('astms_symbol');
+            $astms_symbol_orname = $astms_symbol->getClientOriginalName();
+            $astms_symbol_filename= str_random(6).'_'.$astms_symbol_orname;
+            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+          }
+
+            if($request->file('astms_symbol') == ""){
+              
+             } else {
+
+              $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('astms_symbol');
+              unlink(ltrim($old_cof, '/'));
+              DB::table('orchestra_care_symbols')->where("id",$request->id)->update([
+                'astms_symbol'     =>  $astms_path_insert
+              ]);
+             }
+
+             if($request->file('cofreet_symbols') == ""){
+              
+             } else {
+              $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('cofreet_symbols');
+              unlink(ltrim($old_cof, '/'));
+
+              DB::table('orchestra_care_symbols')->where("id",$request->id)->update([
+                'cofreet_symbols'     =>  $cofreet_path_insert
+              ]);
+             }
+
+             $inserted = DB::table('orchestra_care_symbols')->where("id",$request->id )->update([
+              'category_id'     =>  $request->category_id,
+              'care_instruction'=>  $request->care_instruction
+          ]);
+
+            // if($inserted != '')
+            // {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            // }
+            // else
+            // {
+            //   $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            // }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+     /**
+     * function to delete Orchestra Symbol by id.
+     * @param symbol id
+     * @author <Sumanth>
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteOrchestraSymbolById(Request $request)
+    {
+      try {
+            $id        = $request['id'];
+            $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('astms_symbol');
+            unlink(ltrim($old_cof, '/'));
+            $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('cofreet_symbols');
+            unlink(ltrim($old_cof, '/'));
+            $deleted = DB::table('orchestra_care_symbols')->where('id', '=', $id)->delete();
+           if($deleted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+          } catch (\Exception $e)
+          {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
     }
 }

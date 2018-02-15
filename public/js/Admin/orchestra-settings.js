@@ -2124,7 +2124,7 @@ function orchestraSymbols() {
                   var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_care_symbols, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td><img width="30px" src="'+item.cofreet_symbols+'"></td><td><img width="30px" src="'+item.astms_symbol+'"></td><td>'+item.care_instruction+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-symbols filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-symbols" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSymbolsModal" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr data-category="'+item.category_id+'" id="'+item.id+'"><td>'+index+'</td><td class="td_cofreet_symbols"><img width="30px" src="'+item.cofreet_symbols+'"></td><td class="td_astms_symbol"><img width="30px" src="'+item.astms_symbol+'"></td><td class="td_care_instruction">'+item.care_instruction+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-symbols filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-symbols" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSymbolModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.main-content').html(orchestra_metadata)
@@ -2152,19 +2152,23 @@ function orchestraSymbols() {
   }
 
    /**
-  * Function to Orchestra Settings home page
+  * Function to Orchestra Settings Symbols
   * @author <praveen>
   */
 function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_instruction) {
     try{
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var form_data = new FormData();
+        
+      
+        
 
         form_data.append('cofreet_symbols', cofreet_symbols);
         form_data.append('astms_symbol', astms_symbol);
         form_data.append('category_id', category_id);
         form_data.append('care_instruction', care_instruction);
         form_data.append('_token', csrf_token);
+       
 
         $.ajax({
             url: base_url + "/admin/orchestra/settings/addOrchestraSymbols",
@@ -2177,8 +2181,22 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                 $(".loader").show();
                 $(".loader").css('margin-top', '12%');
             },
-            success: function (data) {
+            statusCode: {
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                        $('.snackbar_span').html('Symbols Added Successfully');
+                        showSnackbar();
+                        $('#addOrchestraSymbolsModal').modal('hide');
+                        orchestraSymbols();
+                },
+                400: function() {
+                        $('.snackbar_span').html('Something went wrong');
+                        showSnackbar();
+                }
             },
+            error: function (data) {
+                // console.log(data);
+             },
             complete: function () {
                 $(".loader").hide();
                 $(".loader").css('margin-top', '0%');
@@ -2188,3 +2206,149 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
     console.log("Error:"+e)
   }
 }
+
+/**
+  * Function to edit Orchestra Settings Symbols
+  * @author <Sumanth>
+  */
+  function editOrchestraSymbols(id, cofreet_symbols, astms_symbol, category_id, care_instruction) {
+    try{
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var form_data = new FormData();
+        form_data.append('id', id);
+        form_data.append('cofreet_symbols', cofreet_symbols);
+        form_data.append('astms_symbol', astms_symbol);
+        form_data.append('category_id', category_id);
+        form_data.append('care_instruction', care_instruction);
+        form_data.append('_token', csrf_token);
+        $.ajax({
+            url: base_url + "/admin/orchestra/settings/editOrchestraSymbols",
+            type: "POST",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            statusCode: {
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                        $('.snackbar_span').html('Symbols Updated Successfully');
+                        showSnackbar();
+                        $('#editOrchestraSymbolsModal').modal('hide');
+                        orchestraSymbols();
+                },
+                400: function() {
+                        $('.snackbar_span').html('Something went wrong');
+                        showSnackbar();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+             },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
+            }
+        });
+    } catch (e) {
+    console.log("Error:"+e)
+  }
+}
+
+// 
+
+// edit-orchestra-symbols
+/**
+  * Function to edit Orchestra Settings Symbols
+  * @author <sumanth>
+  */
+  $(document).on("click", ".edit-orchestra-symbols", function(){
+    
+    var trid = $(this).closest('tr').attr('id');
+    var cat_id = $(this).closest('tr').attr('data-category');
+    var cat_text = $(this).closest('tr').find('.td_care_instruction').text();
+    var cofreet_img = $(this).closest('tr').find('.td_cofreet_symbols').find('img').attr('src');
+    var astms_img = $(this).closest('tr').find('.td_astms_symbol').find('img').attr('src');
+
+
+    // $('#myModal').modal('toggle');
+    $('#editOrchestraSymbolsModal').modal('show');
+    // $('#myModal').modal('hide');
+    $('#edit_orchestra_symbols_id').val(trid);
+    $('#edit_symbol_category').val(cat_id);
+    $('#edit_care_instruction').val(cat_text);
+    $('#astms_image').attr('src', astms_img);
+    $('#cofreet_image').attr('src', cofreet_img);
+});
+
+function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+    
+        reader.onload = function(e) {
+          $('#add_'+input.id).attr('src', e.target.result);
+        }
+    
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    
+    $("#cofreet_symbol").add("#astms_symbol").add("#edit_cofreet_symbol").add("#edit_astms_symbol").change(function() {
+            readURL(this);
+            if(".hidden_"+this.id != "undefined"){
+                console.log("hai")
+                $(".hidden_"+this.id).removeClass('hidden')
+            }
+
+    });
+
+
+
+/**
+  * To delete orchestra symbol
+  * @param id
+  * @author <sumanth>
+  *
+  */
+  function deleteOrchestraSymbol(id)
+  {
+  try{
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/settings/deleteOrchestraSymbol",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+             $(".loader").css('margin-top','12%');
+           },
+           method:"delete",
+           data:{_token:csrf_token,id:id},
+           statusCode: {
+
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                     $('.snackbar_span').html('Symbol Deleted Successfully');
+                     showSnackbar();
+                     $('#deleteOrchestraSymbolModal').modal('hide');
+                     orchestraSymbols();
+                },
+                400: function() {
+                     $('.snackbar_span').html('Something went wrong');
+                     showSnackbar();
+                }
+           },
+           error: function (data) {
+              console.log(data);
+           },
+           complete: function () {
+                     $(".loader").hide();
+                     $(".loader").css('margin-top','0%');
+           }
+       })
+    } catch (e) {
+   console.log("Error:"+e)
+  }
+  }
