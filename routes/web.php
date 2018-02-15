@@ -215,6 +215,14 @@ Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCnt
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
+Route::post('admin/tesco/set-ce-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioTcl1Tcl2Tsl1Orders');
+Route::post('admin/tesco/set-ce-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioThl1Orders');
+Route::post('admin/tesco/set-ce-single-tcl4tsl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleTcl4Tsl3Orders');
+Route::post('admin/tesco/set-ce-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleThl3Orders');
+Route::post('admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTcl1Tcl2Tsl1Orders');
+Route::post('admin/tesco/set-uk-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioThl1Orders');
+Route::post('admin/tesco/set-uk-single-tcl4tsl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleTcl4Tsl3Orders');
+Route::post('admin/tesco/set-uk-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleThl3Orders');
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');

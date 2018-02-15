@@ -13,6 +13,8 @@ use DB;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
+use App\TescoStickerOrdersSizeDetails;
+use App\TescoPolybagCartonStickerOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -184,5 +186,457 @@ class OrderManagementCntrl extends Controller
        } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
+    }
+    /**
+     * Store CE ratio TCL1,TCL2 and TSL1 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setCERatioTcl1Tcl2Tsl1Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            $inserted = TescoStickerOrdersSizeDetails::create([
+                          'tesco_order_id'   => $tesco_order_id,
+                          'orms_tpn'         => $request['orms_tpn'],
+                          'itf_barcode'      => $request['itf_code'],
+                          'cases_per_carton' => $request['cases_per_carton'],
+                          'tcl1_count'       => $request['ratio_tcl1_count'],
+                          'tcl2_count'       => $request['ratio_tcl2_count'],
+                          'tsl1_count'       => $request['ratio_tsl1_count'],
+                          'order_status'     => "Submitted",
+                          'artwork_status'   => "Submitted",
+                          'print_status'     => "Submitted"
+                        ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store CE ratio THL1 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setCERatioThl1Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            $inserted = TescoStickerOrdersSizeDetails::create([
+                          'tesco_order_id'   => $tesco_order_id,
+                          'orms_tpn'         => $request['orms_tpn'],
+                          'itf_barcode'      => $request['itf_code'],
+                          'cases_per_carton' => $request['cases_per_carton'],
+                          'thl1_count'       => $request['ratio_thl1_count'],
+                          'order_status'     => "Submitted",
+                          'artwork_status'   => "Submitted",
+                          'print_status'     => "Submitted"
+                        ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store CE single TCL4, TSL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setCESingleTcl4Tsl3Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            
+            $orms_tpn            = explode(',',$request['orms_tpn']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_tcl4_count   = explode(',',$request['single_tcl4_count']);
+            $single_tsl3_count   = explode(',',$request['single_tsl3_count']);
+
+            $i = 0;
+            foreach($orms_tpn as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'orms_tpn'         => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'tcl4_count'       => $single_tcl4_count[$i],
+                    'tsl3_count'       => $single_tsl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store CE single THL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setCESingleThl3Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+
+            $orms_tpn            = explode(',',$request['orms_tpn']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_thl3_count   = explode(',',$request['single_thl3_count']);
+
+            $i = 0;
+            foreach($orms_tpn as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'orms_tpn'         => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'thl3_count'       => $single_thl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store UK ratio TCL1,TCL2 and TSL1 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKRatioTcl1Tcl2Tsl1Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            $inserted = TescoStickerOrdersSizeDetails::create([
+                          'tesco_order_id'   => $tesco_order_id,
+                          'tpnd'             => $request['tpnd'],
+                          'itf_barcode'      => $request['itf_code'],
+                          'units_per_carton' => $request['units_per_carton'],
+                          'tcl1_count'       => $request['ratio_tcl1_count'],
+                          'tcl2_count'       => $request['ratio_tcl2_count'],
+                          'tsl1_count'       => $request['ratio_tsl1_count'],
+                          'order_status'     => "Submitted",
+                          'artwork_status'   => "Submitted",
+                          'print_status'     => "Submitted"
+                        ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store UK ratio THL1 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKRatioThl1Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            $inserted = TescoStickerOrdersSizeDetails::create([
+                          'tesco_order_id'   => $tesco_order_id,
+                          'tpnd'             => $request['tpnd'],
+                          'itf_barcode'      => $request['itf_code'],
+                          'units_per_carton' => $request['units_per_carton'],
+                          'thl1_count'       => $request['ratio_thl1_count'],
+                          'order_status'     => "Submitted",
+                          'artwork_status'   => "Submitted",
+                          'print_status'     => "Submitted"
+                        ]);
+            if($inserted != '')
+            {
+              $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+              $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store UK single TCL4, TSL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKSingleTcl4Tsl3Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+            
+            $tpnd                = explode(',',$request['tpnd']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_tcl4_count   = explode(',',$request['single_tcl4_count']);
+            $single_tsl3_count   = explode(',',$request['single_tsl3_count']);
+
+            $i = 0;
+            foreach($tpnd as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'tcl4_count'       => $single_tcl4_count[$i],
+                    'tsl3_count'       => $single_tsl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    /**
+     * Store UK single THL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKSingleThl3Orders(Request $request)
+    {
+        try {
+            $tesco_order = TescoPolybagCartonStickerOrders::create([
+                          'order_id'             => $request['order_id'],
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source']
+                        ]);
+            $tesco_order_id = $tesco_order->id; 
+
+            $tpnd                = explode(',',$request['tpnd']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_thl3_count   = explode(',',$request['single_thl3_count']);
+
+            $i = 0;
+            foreach($tpnd as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'thl3_count'       => $single_thl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
     }
 }
