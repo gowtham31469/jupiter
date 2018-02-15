@@ -15,6 +15,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
 use App\TescoStickerOrdersSizeDetails;
 use App\TescoPolybagCartonStickerOrders;
+use App\Classes\TescoOrders;
 
 class OrderManagementCntrl extends Controller
 {
@@ -152,7 +153,9 @@ class OrderManagementCntrl extends Controller
           if (!$process->isSuccessful()) {
               throw new ProcessFailedException($process);
           }
-          echo $process->getOutput();
+          //Call the tabula method to extract the quantity table.
+          $table = $this->createOrderByTabula($path);
+          return response()->json(['xml' =>$process->getOutput(),'json' => $table]);
         } else {
           return "File not found!!";
         }
@@ -160,6 +163,30 @@ class OrderManagementCntrl extends Controller
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
       
+    }
+
+    /**
+     * Method to create tesco order from purchase order using Tabul-Java
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrderByTabula($path) {
+      try {
+
+        //Read the tabula configuration from config/tabula.php.
+        $command  = Config::get('tabula.command');
+        $java     = Config::get('tabula.java');
+        $output   = shell_exec('java -jar '.$command.$path);
+        return $output;
+        // $process = new Process(java -jar '.$command.$path);
+        // $process->run();
+        // // executes after the command finishes
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+        //return $process->getOutput();
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
     }
     /**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
@@ -196,24 +223,11 @@ class OrderManagementCntrl extends Controller
     public function setCERatioTcl1Tcl2Tsl1Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
             $tesco_order_id = $tesco_order->id; 
+
             $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
                           'orms_tpn'         => $request['orms_tpn'],
@@ -250,24 +264,11 @@ class OrderManagementCntrl extends Controller
     public function setCERatioThl1Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
-            $tesco_order_id = $tesco_order->id; 
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id;  
+
             $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
                           'orms_tpn'         => $request['orms_tpn'],
@@ -302,24 +303,10 @@ class OrderManagementCntrl extends Controller
     public function setCESingleTcl4Tsl3Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
-            $tesco_order_id = $tesco_order->id; 
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id;  
             
             $orms_tpn            = explode(',',$request['orms_tpn']);
             $ean_code            = explode(',',$request['ean_code']);
@@ -363,24 +350,10 @@ class OrderManagementCntrl extends Controller
     public function setCESingleThl3Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
-            $tesco_order_id = $tesco_order->id; 
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id;  
 
             $orms_tpn            = explode(',',$request['orms_tpn']);
             $ean_code            = explode(',',$request['ean_code']);
@@ -422,24 +395,10 @@ class OrderManagementCntrl extends Controller
     public function setUKRatioTcl1Tcl2Tsl1Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
-            $tesco_order_id = $tesco_order->id; 
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id;  
             $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
                           'tpnd'             => $request['tpnd'],
@@ -476,24 +435,10 @@ class OrderManagementCntrl extends Controller
     public function setUKRatioThl1Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
-            $tesco_order_id = $tesco_order->id; 
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id;  
             $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
                           'tpnd'             => $request['tpnd'],
@@ -528,23 +473,9 @@ class OrderManagementCntrl extends Controller
     public function setUKSingleTcl4Tsl3Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
             $tesco_order_id = $tesco_order->id; 
             
             $tpnd                = explode(',',$request['tpnd']);
@@ -589,23 +520,9 @@ class OrderManagementCntrl extends Controller
     public function setUKSingleThl3Orders(Request $request)
     {
         try {
-            $tesco_order = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
-                          'zone'                 => $request['zone'],
-                          'template_type'        => $request['type'],
-                          'po_number'            => $request['po_number'],
-                          'uk_style_ref'         => $request['uk_style'],
-                          'ce_style_ref'         => $request['ce_style'],
-                          'season_code'          => $request['season_code'],
-                          'short_description'    => $request['description'],
-                          'eqos_site_code'       => $request['eqos'],
-                          'manufacture_date'     => $request['manufacture_date'],
-                          'tesco_department_id'  => $request['department'],
-                          'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
-                          'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
-                        ]);
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
             $tesco_order_id = $tesco_order->id; 
 
             $tpnd                = explode(',',$request['tpnd']);

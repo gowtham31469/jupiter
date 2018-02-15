@@ -2099,7 +2099,7 @@ function countries() {
   }
   }
   /**
-  * Function to Orchestra Settings home page
+  * Function to Orchestra orchestra Symbols
   * @author <praveen>
   */
 function orchestraSymbols() {
@@ -2283,6 +2283,12 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
     $('#astms_image').attr('src', astms_img);
     $('#cofreet_image').attr('src', cofreet_img);
 });
+
+//  preview selected image
+/**
+  * Function to preview selected image in Orchestra Settings Symbols
+  * @author <sumanth>
+  */
 
 function readURL(input) {
       if (input.files && input.files[0]) {
