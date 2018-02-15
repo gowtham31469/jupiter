@@ -14,7 +14,10 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
+                background-image: url(../../images/tag.jpg);
+                background-size: cover;
+                background-position: center center;
+                color: #2a2a2a;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
                 height: 100vh;
@@ -46,11 +49,11 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 64px;
             }
 
             .links > a {
-                color: #636b6f;
+                color: #2a2a2a;
                 padding: 0 25px;
                 font-size: 12px;
                 font-weight: 600;
@@ -66,6 +69,7 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
+<!--
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -76,18 +80,19 @@
                     @endauth
                 </div>
             @endif
+-->
 
             <div class="content">
+                <img src="../../images/logo.png">
                 <div class="title m-b-md">
-                    Laravel 5.5
+                    
+                    Jupiter Garments Accessories
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="/admin">Admin</a>
+                    <a href="/customer">Customer</a>
+                    <a href="/merchandiser">Merchandiser</a>
                 </div>
             </div>
         </div>

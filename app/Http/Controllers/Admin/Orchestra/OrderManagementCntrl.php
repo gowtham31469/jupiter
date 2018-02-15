@@ -236,6 +236,28 @@ class OrderManagementCntrl extends Controller
                         $data['treeviewspecial']=$tree;
 
                }
+		
+		$treeviewwash= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('parent_id','120')->orWhere('id','77')->orWhere('id','4')->orWhere('id','120')->orderBy('item_name', 'asc')->get()->toArray();
+		//print_r($treeviewwash);
+            if($treeviewwash){
+                        $childs = array();
+                        foreach($treeviewwash as &$item) 
+                        {
+                        $childs[$item->parent_id][] = &$item;
+                        unset($item);
+                        }
+                        foreach($treeviewwash as &$item) 
+                        {
+                            if (isset($childs[$item->id]))
+                            {
+                                $item->children = $childs[$item->id];
+                                unset($item);
+                            }
+                        }
+                        $tree = $childs[0];
+                        $data['treeviewwash']=$tree;
+
+               }
         
         $treeviewmain= DB::table("orchestra_item_master")->select('id',DB::raw('IF(ref_no = "", item_name, CONCAT(item_name," -  ",ref_no)) as text'),'parent_id')->orWhere('id','4')->orWhere('id','76')->orWhere('tag_name','mainsize')->orderBy('item_name', 'asc')->get()->toArray();
             if($treeviewmain){
@@ -391,20 +413,20 @@ class OrderManagementCntrl extends Controller
         
         if($data['orchestra_parcel_details']{0}->IsSTD == 1)
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','74')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=$orchestra_template{0}->id;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','3')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','75')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Standard";
             $data['polybag_template_id']=$orchestra_template{0}->id;
         }
         else
         {
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','6')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','72')->get();
             $data['carton_template']=$orchestra_template{0}->template_file;
             $data['carton_template_id']=$orchestra_template{0}->id;
-            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
+            $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','73')->get();
             $data['polybag_template']=$orchestra_template{0}->template_file;
             $data['template_name']="Solid";
             $data['polybag_template_id']=$orchestra_template{0}->id;
@@ -446,6 +468,8 @@ class OrderManagementCntrl extends Controller
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
+		$cm =$request->cm;
+		$in =$request->in;
         $id =$request->id;
 		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
 		if(count($factory) > 0)
@@ -488,6 +512,8 @@ class OrderManagementCntrl extends Controller
                         'template_back_id'      => $template_back_id,
                         'svg_path'    => "", 
                         'status'    => $status,
+					    'cm'    => $cm,
+					    'in'    => $in,
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
                   ]);
@@ -513,6 +539,8 @@ class OrderManagementCntrl extends Controller
                                     'template_back_id'      => $template_back_id,
                                     'svg_path'    => "", 
                                     'status'    => $status,
+				 					'cm'    => $cm,
+				 					'in'    => $in,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
                          ]);
@@ -645,10 +673,21 @@ class OrderManagementCntrl extends Controller
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
+		$main_label_count = explode(',',$request->main_label_count);
         $uvc =$request->uvc;
 		$main_label_qty =$request->main_label_qty;
         $id =$request->id;
+		$main_flag =$request->main_flag;
 		$factory = DB::table("orchestra_item_details")->join('customers','customers.factory_code','=','orchestra_item_details.FactoryCode')->where('UVC',$uvc)->select('*')->get();
+		
+		if($main_flag == "size")
+		{
+			$tots="";
+		}
+		else
+		{
+			$tots=$main_label_qty;
+		}
 		if(count($factory) > 0)
 		{
 			
@@ -687,7 +726,8 @@ class OrderManagementCntrl extends Controller
                         'template_id'      => $template_front_id,
                         'template_name'      => $template_name,
                         'svg_path'    => "", 
-					    'final_qty'    => $main_label_qty, 
+					    'final_qty'    => $tots, 
+					    'total_flag'    => $main_flag, 
                         'status'    => $status,
 					    'pi_status'           => $pi_status,
 				 		'po_status'           => $po_status,
@@ -701,7 +741,8 @@ class OrderManagementCntrl extends Controller
                                         'oml_id' => $id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value
+                                        'quantity'    => $value,
+						 				'main_qty'=>$main_label_count[$i]
                              ]);
                     $i++;
                 }
@@ -712,7 +753,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
                                 'template_name'      => $template_name,
-				   				'final_qty'    => $main_label_qty, 
+				   				'final_qty'    => $tots, 
+				   				'total_flag'    => $main_flag, 
                                 'svg_path'    => "", 
                                 'status'    => $status,
 				   				'pi_status'           => $pi_status,
@@ -725,7 +767,8 @@ class OrderManagementCntrl extends Controller
                                         'oml_id' => $inserted->id,
                                         'size'      => $size[$i],
                                         'uvc_tco'      => $uvc_tco[$i],
-                                        'quantity'    => $value
+                                        'quantity'    => $value,
+						 				'main_qty'=>$main_label_count[$i]
                              ]);
                     $i++;
                 }
@@ -1053,6 +1096,8 @@ class OrderManagementCntrl extends Controller
         $size = explode(',',$request->size);
         $uvc =$request->uvc;
         $id =$request->id;
+		$cm =$request->cm;
+		$in =$request->in;
         $washing_select = $request->washing_select; 
         $whitening_select = $request->whitening_select; 
         $dryer_select = $request->dryer_select; 
@@ -1111,6 +1156,8 @@ class OrderManagementCntrl extends Controller
                         'made_in_id'      => $made_in_select,
                         'care_instruction_id'      => $care_instruction_select,
                         'svg_path'    => "", 
+					    'cm'    => $cm, 
+					    'in'    => $in, 
                         'status'    => "Buyer Approval Pending",
 					    'pi_status'           => $pi_status,
 					   	'po_status'           => $po_status,
@@ -1174,6 +1221,8 @@ class OrderManagementCntrl extends Controller
                                 'made_in_id'      => $made_in_select,
                                 'care_instruction_id'      => $care_instruction_select,
                                 'svg_path'    => "", 
+				   				'cm'    => $cm, 
+				   				'in'    => $in, 
                                 'status'    => "Buyer Approval Pending",
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
