@@ -408,7 +408,7 @@ border: 0;
 	@endif @section('jqueryIncludes') 
 	<script src="{{ asset('js/Admin/order.js') }}"></script>
 	<script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
-<script src="{{ asset('js/Admin/parser.js') }}"></script>
+    <script src="{{ asset('js/Admin/parser.js') }}"></script>
 	<script>
 		
 		$(function () {

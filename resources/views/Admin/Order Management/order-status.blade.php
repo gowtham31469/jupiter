@@ -203,6 +203,7 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
     <script>
 
 		localStorage.removeItem("page_navigation");
@@ -219,8 +220,12 @@
             $('.buyer-nav-select').html($('.buyer-div').html())
             if (localStorage.getItem("status_buyer") === null) {
 
-            } else {
+            } else if (localStorage.getItem("status_buyer") === 'orchestra'){
                 orderStatus();
+            }
+            else
+            {
+                tescoOrderStatus();
             }
             $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
             $('.buyer-nav-select .buyer-select').selectpicker({
@@ -231,6 +236,7 @@
                 if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
                     localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                     localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                    var buyer = $(this).find("option:selected").text().toLowerCase();
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         url: base_url + "/admin/order-management/order_sub_modules",
@@ -238,14 +244,17 @@
                         dataType: "json",
                         data: {
                             _token: csrf_token,
-                            buyer: $(this).find("option:selected").text().toLowerCase()
+                            buyer: buyer
                         },
                         beforeSend: function() {
 
                         },
                         success: function(data) {
-
-                            orderStatus();
+                            if (buyer === 'orchestra') {
+                               orderStatus();
+                            } else {
+                                tescoOrderStatus();
+                            }
                         },
                         error: function(data) {
 
