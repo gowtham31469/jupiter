@@ -1993,7 +1993,13 @@ function label_order_details(uvc) {
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare);
+				});
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -2038,6 +2044,9 @@ function label_order_details(uvc) {
             $('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+index).selectpicker('val'));
             $('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
+			
+			$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + index+' .washonesizein').val())
+			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
             $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
@@ -4146,7 +4155,13 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"> <span></span>   <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare);
+				});
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -4216,7 +4231,13 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             
             if (washcare <= 5) {
                   washcare += 1;
-                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">  <span></span>  <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div></div></div>')
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false">  <span></span>  <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+				
+				//var index=washcare;
+				
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare);
+				});
                 
                 $('.delete-wash' + washcare).on('click', function (e) {
 
@@ -4261,7 +4282,10 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
             $('.ironing_select'+washcare).selectpicker('val',$('.ironing_select').selectpicker('val'));
             $('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select').selectpicker('val'));
             $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select').selectpicker('val'));
-            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select').selectpicker('val'));
+           
+			$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform .washonesizein').val())
+			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform .washonesizecm').val())
+			$('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select').selectpicker('val'));
             
             $('#composition_remove_qty'+washcare).html($('#composition_remove_qty').html())
             
@@ -5805,9 +5829,9 @@ function setWashLabel(index, dataid, id) {
             }
         })
         $('.composition_error_hidden').addClass('hidden')
-        $('#washcare_label_card').css('display','block') 
+        $('#washcare_label_card').css('display','inline-block') 
 //		alert(dataid)
-//		$('#clone_washcare_label_card'+dataid).css('display','block')
+		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
 		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
 		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
     }
@@ -6002,4 +6026,178 @@ function setSolidStickers() {
 		})
 	}
 
+}
+/**
+ * This Function is used to clone wash care labels.
+ * 
+ * @return void
+ */
+function clonewashcarelabels(index) 
+{
+	
+	 if (washcare <= 5) {
+                  washcare += 1;
+                $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
+		 
+               // var index=washcare;
+				console.log(index);
+		 		console.log(washcare);
+				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
+					clonewashcarelabels(washcare);
+				});
+		 
+                $('.delete-wash' + washcare).on('click', function (e) {
+
+                    if (localStorage.getItem('wash_label') != null) {
+                        var opop = JSON.parse(localStorage.getItem('wash_label'));
+                        if (opop['washcarelabelform' + $(this).attr('id')] === undefined) {
+
+                        } else {
+                            delete opop['washcarelabelform' + $(this).attr('id')];
+                        }
+
+
+                        localStorage.setItem('wash_label', JSON.stringify(opop))
+                    }
+
+                    $('#washcarelabelform' + $(this).attr('id')).remove()
+                    washcare -= 1;
+                    $(this).parent().parent().parent().remove();
+
+
+                });
+           		
+				//toastr.success("Wash care label cloned successfully");
+				$('.snackbar_span').html('Wash care label cloned successfully');
+				showSnackbar();
+				window.scrollTo(0, document.body.scrollHeight);
+			} else {
+				$('.snackbar_span').html('Limit exceeded');
+				showSnackbar();
+			}
+         
+            $('.washcarename').val("")
+            $('.washnameerror').addClass('hidden')
+            var data = localStorage.getItem("label_order_data");
+            washcarelabels(JSON.parse(data), washcare);
+            $('#washcarelabelform'+washcare).find('#wcl_name'+washcare).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
+           
+            
+            $('.washing_select'+washcare).selectpicker('val',$('.washing_select'+index).selectpicker('val'));
+            $('.whitening_select'+washcare).selectpicker('val',$('.whitening_select'+index).selectpicker('val'));
+            $('.dryer_select'+washcare).selectpicker('val',$('.dryer_select'+index).selectpicker('val'));
+            $('.ironing_select'+washcare).selectpicker('val',$('.ironing_select'+index).selectpicker('val'));
+            $('.cleaning_select'+washcare).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
+            $('.made_in_select'+washcare).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
+	
+			$('#washcarelabelform' + washcare+' .washonesizein').val($('#washcarelabelform' + index+' .washonesizein').val())
+			$('#washcarelabelform' + washcare+' .washonesizecm').val($('#washcarelabelform' + index+' .washonesizecm').val())
+			
+			
+	
+	
+	
+            $('.care_instruction_select'+washcare).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
+            
+            $('#composition_remove_qty'+washcare).html($('#composition_remove_qty'+index).html())
+            
+            $('#composition_remove_qty'+index+' tr').each(function (ind,val) {
+                var values= $(this).find('select').find(':selected').val()
+                var v= $(this).attr('id');
+                $('#composition_remove_qty'+washcare+' tr').each(function (inds,vals) {
+                    if($(this).attr('id') == v)
+                    {
+                        $(this).find('select').val(values)
+                        $(this).find('a').removeAttr('onclick')
+                        $(this).find('a').attr('onclick','deleteComposition(this,'+washcare+')')
+                    }
+                });
+            }); 
+            
+            $('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
+                var values= $(this).find('.tot_qty_table').val()
+                //var values1= $(this).find('.tot_qty_table_fin').text()
+                var v= $(this).find('.uvc_tco').text();
+                //alert(values)
+                $('#washcarelabelform'+washcare+' table tbody tr').each(function (inds,vals) {
+                    if($(this).find('.uvc_tco').text() == v)
+                    {
+                        $(this).find('.tot_qty_table').val(values)
+                        
+                    }
+                });
+            });
+            
+            $('#washcarelabelform'+washcare+' table tbody').find('.tot_qty_table_fin').text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_table_fin').text())
+            var mySVG = document.getElementById("washcare_svg"+washcare);
+            var svgDoc;
+            mySVG.addEventListener("load", function () {
+                svgDoc=mySVG.contentDocument;
+                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + washcare + ' option:selected').data('astm'));
+                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('cofreet'));
+                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + washcare
+ + ' option:selected').data('astm'));
+                
+                var text_for_mad_in = '<p>' + $('select.made_in_select' + washcare).find(':selected').data('french') + " - " + $('select.made_in_select' + washcare).find(':selected').data('english') + " - " + $('select.made_in_select' + washcare).find(':selected').data('spanish') + " - " + $('select.made_in_select' + washcare).find(':selected').data('portuguese') + " - " + $('select.made_in_select' + washcare).find(':selected').data('italian') + " - " + $('select.made_in_select' + washcare).find(':selected').data('dutch') + " - " + $('select.made_in_select' + washcare).find(':selected').data('german') + " - " +
+                    $('select.made_in_select' + washcare).find(':selected').data('russian') + " - " +
+                    $('select.made_in_select' + washcare).find(':selected').data('chinese') + " - " +
+                    $('select.made_in_select' + washcare).find(':selected').data('arabic') + " - " +
+                    $('select.made_in_select' + washcare).find(':selected').data('greek') + " - " +
+                    $('select.made_in_select' + washcare).find(':selected').data('turkish') + '</p>';
+                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
+                
+                svgDoc.getElementById("text_care_instruction").innerHTML = "";
+                $('.care_instruction_select' + washcare + ' option:selected').each(function () {
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
+                        $(this).data('russian') + "-" +
+                        $(this).data('chinese') + "-" +
+                        $(this).data('arabic') + "-" +
+                        $(this).data('greek') + "-" +
+                        $(this).data('turkish') + '</p>';
+                    svgDoc.getElementById("text_care_instruction").innerHTML += value;
+                });
+                
+                 svgDoc.getElementById("parts_composition").innerHTML ="";
+              $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  //alert($(this).find('select').find(':selected').text());
+                  if($(this).find('select').find(':selected').val() != "Select Option")
+                  {
+                       svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" + $(this).find('select' ).find(':selected').data('russian') + "-" + $(this).find('select' ).find(':selected').data('chinese') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek')  + "-" + $(this).find('select' ).find(':selected').data('turkish')  + '</p>';
+                  }
+                 
+                  var id=$(this).attr('id')
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                  $(compss).each(function (index1,value1) {
+                      var english = value1.split('_');
+
+                    svgDoc.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[12] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" + english[6] + "-" + english[7]+ "-" +english[8] + "-" + english[9] + "-" + english[10] + "-" + english[11]+ '</p>';
+                });
+              })
+            $('.composition_error_hidden').addClass('hidden')
+            var washcomp=[];
+            $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                  var washcomp1=[];
+                  var id=$(this).attr('id')
+                  var value=$(this).find('select').find(':selected').val();
+                  var compo =$(this).find('.compositions_hidden').val();
+                  var compss = compo.split(',');
+                    $(compss).each(function (index1,value1){ 
+                        var english = value1.split('_');
+                        washcomp1.push(value+"_"+english[0]+"_"+english[12]) 
+                    });
+                washcomp.push(washcomp1)
+            })
+            var wash_finals = JSON.stringify(washcomp);
+            localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+                
+            });
 }
