@@ -551,6 +551,7 @@ function  uploadPurchaseOrder(formData) {
                  url: base_url + "/admin/tesco/po-upload",
                  type: 'POST',
                  data: formData,
+                 dataType:'JSON',
                  async: true,
                  cache: false,
                  contentType: false,

@@ -150,10 +150,37 @@ class OrderManagementCntrl extends Controller
           if (!$process->isSuccessful()) {
               throw new ProcessFailedException($process);
           }
-          echo $process->getOutput();
+          //Call the tabula method to extract the quantity table.
+          $table = $this->createOrderByTabula($path);
+          return response()->json(['xml' =>$process->getOutput(),'json' => $table]);
         } else {
           return "File not found!!";
         }
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      
+    }
+
+    /**
+     * Method to create tesco order from purchase order using Tabul-Java
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrderByTabula($path) {
+      try {
+
+        //Read the tabula configuration from config/tabula.php.
+        $command  = Config::get('tabula.command');
+        $java     = Config::get('tabula.java');
+        $output   = shell_exec('java -jar '.$command.$path);
+        return $output;
+        // $process = new Process(java -jar '.$command.$path);
+        // $process->run();
+        // // executes after the command finishes
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+        //return $process->getOutput();
       } catch (\Exception $e) {
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
