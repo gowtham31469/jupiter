@@ -3,7 +3,7 @@
  * Invoked inside uploadPurchaseOrder() method.
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
-function parseXML(data) {
+function parseXML(data, callback) {
     try {
         // Check for Purchase Order Type
         var po_type = '';
@@ -12,8 +12,9 @@ function parseXML(data) {
         });
         // po_type = $.trim(po_type);
         po_type = 'SINGLE';
+        var parsedObj;
         switch(po_type) {
-            case 'SINGLE': parseSingleXML(data);
+            case 'SINGLE': parsedObj = parseSingleXML(data);
                 break;
             case 'RATIO': parseRatioXML(data.xml);
                 break;
@@ -22,6 +23,7 @@ function parseXML(data) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..")
                 break;
         }
+        callback(parsedObj);
 
     } catch(e) {
         // error statements
@@ -153,7 +155,6 @@ function parseSingleXML(data) {
 
         */
        
-    console.log(singleObj);
     //*********************************************************************************************************
     //*********************************************************************************************************
     //********************************************* ORDER QUANTITY SECTION ************************************
@@ -161,6 +162,7 @@ function parseSingleXML(data) {
     //*********************************************************************************************************
     //*********************************************************************************************************
     //*********************************************************************************************************
+    singleObj.orderQuantity = {};
     var header = [];
     var values = [];
     var tabula = JSON.parse(data.json);
@@ -170,7 +172,7 @@ function parseSingleXML(data) {
         element.pop();//Remove the extra space element from the array
         $.each(element, function(i, val) {
             if(index === 0) {
-                header.push(val.text);
+                header.push(val.text.replace(/ /g,"_"));
             } else {
                 row[header[i]] = val.text;  
             }
@@ -179,8 +181,44 @@ function parseSingleXML(data) {
            values.push(row); 
         } 
     });
-    console.log(header);
-    console.log(values);
-    
+    singleObj.orderQuantity = values;
+    return singleObj;
+}
 
+/**
+ * Method to render the parsed objects to the input field
+ * @param  {[type]} parsedObj [description]
+ * @return {[type]}           [description]
+ */
+function renderParsedValues(parsedObj) {
+    console.log(parsedObj);
+    var zone        = localStorage.getItem("zone").toLowerCase();
+    var type        = localStorage.getItem("template type");
+    $('#tesco_po_number').val(parsedObj.purchaseOrder);
+    $('#tesco_uk_style').val(parsedObj.styleNumber);
+    $('#tesco_ce_style').val(parsedObj.styleNumber);
+    $('#tesco_season_code').val(parsedObj.seasonCode);
+    $('#tesco_description').val(parsedObj.shortDescription);
+    // $("select[name=tesco_brand] option").filter(function() {
+    //     return this.text == parsedObj.brand; 
+    // }).attr('selected', true);
+    // $("select[name=tesco_supplier] option").filter(function() {
+    //     return this.text == parsedObj.supplierName; 
+    // }).attr('selected', true);
+    // $('.selectpicker').selectpicker('refresh');
+    $.each(parsedObj.orderQuantity, function(i, j) {
+        console.log(j);
+        if(type === 'single') {
+            var index = i + 1;
+            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
+            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
+            $('#'+zone+'_single_size_'+index).val(j.Size);  
+        }
+        console.log(parsedObj.orderQuantity.length, i);
+        if(parsedObj.orderQuantity.length !== (i+1)) {
+            $('.add-row-btn').trigger('click');
+        }
+        
+    })
 }
