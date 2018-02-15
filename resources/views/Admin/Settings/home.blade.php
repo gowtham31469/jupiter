@@ -2751,7 +2751,7 @@ $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
            $('#delete_orchestra_symbol_id').attr('value', config);
        });
 
-       /** submit delete Tesco sizechart  form **/
+       /** submit delete Orchestra Symbol  form **/
        $('#delete_orchestra_symbol_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
