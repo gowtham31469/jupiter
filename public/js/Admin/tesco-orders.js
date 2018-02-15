@@ -1200,6 +1200,29 @@ function setTescoOrder(random_order_id)
 }
 
 /**
+ * [ tescoOrderCommonData  function for getting tesco order common values ( Independent of zone and template type ) .Creating global variables ]
+ * @return {[type]} [ Common data ]
+ * @author <praveen>
+ */
+function tescoOrderCommonData()
+{
+    po_number         =  $('#tesco_po_number').val();
+    uk_style          =  $('#tesco_uk_style').val();
+    ce_style          =  $('#tesco_ce_style').val();
+    season_code       =  $('#tesco_season_code').val();
+    description       =  $('#tesco_description').val();
+    eqos              =  $('#tesco_eqos').val();
+    manufacture_date  =  $('#tesco_manufacture_date').val();
+    csrf_token        =  $('meta[name="csrf-token"]').attr('content');
+    department        =  $("#tesco_department option:selected").val();
+    brand             =  $("#tesco_brand option:selected").val();
+    supplier          =  $("#tesco_supplier option:selected").val();
+    rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
+    tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+    zone              =  localStorage.getItem("zone");
+    type              =  localStorage.getItem("template type");
+}
+/**
  * [storeCERatioTcl1Tcl2Tsl1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @param {[type]} random_order_id [random genarated order id]
  * @author <praveen>
@@ -1208,28 +1231,15 @@ function setTescoOrder(random_order_id)
 function storeCERatioTcl1Tcl2Tsl1(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         var orms_tpn          =  $("#ce_ratio_orms_tpn").val();
         var itf_code          =  $("#ce_ratio_itf").val();
         var cases_per_carton  =  $("#ce_ratio_cpc").val();
         var ratio_tcl1_count  =  $("#ce_ratio_count_TCL1").val() === ''?0:$("#ce_ratio_count_TCL1").val();
         var ratio_tcl2_count  =  $("#ce_ratio_count_TCL2").val() === ''?0:$("#ce_ratio_count_TCL2").val();
         var ratio_tsl1_count  =  $("#ce_ratio_count_TSL1").val() === ''?0:$("#ce_ratio_count_TSL1").val();
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
-
+        
         $.ajax({
                      url: base_url + "/admin/tesco/set-ce-ratio-tcl1tcl2tsl1-template-orders",
                      type: 'POST',
@@ -1274,25 +1284,12 @@ function storeCERatioTcl1Tcl2Tsl1(random_order_id)
 function storeCERatioThl1(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         var orms_tpn          =  $("#ce_ratio_orms_tpn").val();
         var itf_code          =  $("#ce_ratio_itf").val();
         var cases_per_carton  =  $("#ce_ratio_cpc").val();
         var ratio_thl1_count  =  $("#ce_ratio_count_THL1").val() === ''?0:$("#ce_ratio_count_THL1").val();
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
 
         $.ajax({
                      url: base_url + "/admin/tesco/set-ce-ratio-thl1-template-orders",
@@ -1338,22 +1335,8 @@ function storeCERatioThl1(random_order_id)
 function storeCESingleTcl4Tsl3(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
-
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         /** @type {Array} [ initializing empty arrays ] */
         var orms_tpn          = [];
         var ean_code          = [];
@@ -1449,22 +1432,8 @@ function storeCESingleTcl4Tsl3(random_order_id)
 function storeCESingleThl3(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
-
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         /** @type {Array} [ initializing empty arrays ] */
         var orms_tpn          = [];
         var ean_code          = [];
@@ -1552,27 +1521,14 @@ function storeCESingleThl3(random_order_id)
 function storeUKRatioTcl1Tcl2Tsl1(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         var tpnd              =  $("#uk_ratio_tpnd").val();
         var itf_code          =  $("#uk_ratio_itf").val();
         var units_per_carton  =  $("#uk_ratio_upc").val();
         var ratio_tcl1_count  =  $("#uk_ratio_count_TCL1").val() === ''?0:$("#uk_ratio_count_TCL1").val();
         var ratio_tcl2_count  =  $("#uk_ratio_count_TCL2").val() === ''?0:$("#uk_ratio_count_TCL2").val();
         var ratio_tsl1_count  =  $("#uk_ratio_count_TSL1").val() === ''?0:$("#uk_ratio_count_TSL1").val();
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
 
         $.ajax({
                      url: base_url + "/admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders",
@@ -1618,25 +1574,12 @@ function storeUKRatioTcl1Tcl2Tsl1(random_order_id)
 function storeUKRatioThl1(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         var tpnd              =  $("#uk_ratio_tpnd").val();
         var itf_code          =  $("#uk_ratio_itf").val();
         var units_per_carton  =  $("#uk_ratio_upc").val();
         var ratio_thl1_count  =  $("#uk_ratio_count_THL1").val() === ''?0:$("#uk_ratio_count_THL1").val();
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
 
         $.ajax({
                      url: base_url + "/admin/tesco/set-uk-ratio-thl1-template-orders",
@@ -1682,22 +1625,8 @@ function storeUKRatioThl1(random_order_id)
 function storeUKSingleTcl4Tsl3(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
-
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         /** @type {Array} [ initializing empty arrays ] */
         var tpnd              = [];
         var ean_code          = [];
@@ -1793,22 +1722,8 @@ function storeUKSingleTcl4Tsl3(random_order_id)
 function storeUKSingleThl3(random_order_id)
 {
     try {
-        var po_number         =  $('#tesco_po_number').val();
-        var uk_style          =  $('#tesco_uk_style').val();
-        var ce_style          =  $('#tesco_ce_style').val();
-        var season_code       =  $('#tesco_season_code').val();
-        var description       =  $('#tesco_description').val();
-        var eqos              =  $('#tesco_eqos').val();
-        var manufacture_date  =  $('#tesco_manufacture_date').val();
-        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
-        var department        =  $("#tesco_department option:selected").val();
-        var brand             =  $("#tesco_brand option:selected").val();
-        var supplier          =  $("#tesco_supplier option:selected").val();
-        var rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-        var tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
-
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
         /** @type {Array} [ initializing empty arrays ] */
         var tpnd          = [];
         var ean_code          = [];

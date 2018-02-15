@@ -809,12 +809,15 @@ function addCustomer()
                       $('#edit_freight_charge_free').prop('checked', true);
                       $('#edit_freight_charge_req').prop('checked', false);
                       $('div.edit_freight_charge_div').hide();
+                      $('#edit_freight_charge').prop('required',false)
+                      $('div.edit_freight_charge_div').removeClass('has-error has-danger');
                     }
                     else
                     {
                       $('#edit_freight_charge_req').prop('checked', true);
                       $('#edit_freight_charge_free').prop('checked', false);
                       $('div.edit_freight_charge_div').show();
+                      $('#edit_freight_charge').prop('required',true)
                       $('#edit_freight_charge').val(data.customers[0].freight_cost);
                     }
 
