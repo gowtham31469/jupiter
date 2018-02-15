@@ -6,6 +6,7 @@
 
 function tescoOrders() {
     $('.main-content').html('<div class="loader"></div>');
+    $('.top-content').html('');
     $('.template-error').html('');
     /** [ Remove local storage values ] */
     localStorage.removeItem("templates");
@@ -27,7 +28,7 @@ function tescoOrders() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card" > <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form"  method="post" enctype="multipart/form-data"><div class="form-group has-feedback po-number-search" ><label for="order_type" class="form_label">Search / Select Purchase Order</label><select class="form-control selectpicker" title="Search / Select PO" data-live-search="true" name="search_po"><option value="1">PO12345</option><option value="2">PO098765</option></select> <div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select> <div class="help-block with-errors"></div></div> <div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "><label>Upload PO</label><input type="file" name="purchase_order" id="po_upload" required/><div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button></form></div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "></div><div class="viewDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
+                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card" > <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form"  method="post" enctype="multipart/form-data"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select> <div class="help-block with-errors"></div></div> <div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "><label>Upload PO</label><input type="file" name="purchase_order" id="po_upload" required/><div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button></form></div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
 
                 /** [ Search  functionality foe jstree nodes ] */
                 $(".search-input").keyup(function () {
@@ -169,24 +170,24 @@ function tescoOrders() {
                             },
                             success: function (data) {
                                 if (data.length > 0) {
-                                    $('.viewDiv').html('');
+                                    $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         } else {
-                                            $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         }
                                     });
                                 } else {
-                                    $('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+                                    $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
 
                                     $('.descriptionDiv').html('<b>Template Not Found</b>');
                                     $('.descriptionDiv').css('margin-top', '0px')
-                                    $('.viewDiv').css('margin-top', '140px')
+                                    $('.templateDiv').css('margin-top', '140px')
                                 }
-                                $('.viewDiv').css('width', '100%')
+                                $('.templateDiv').css('width', '100%')
 
                             },
                             error: function (data) {
@@ -235,8 +236,8 @@ function tescoOrders() {
                             //If not, go with manual upload by invoking createOrders() method.
                             if($('#order_type').val() == 1) {
                                 var formData = new FormData($(this)[0]);
-                                formData.append('type', localStorage.getItem("template type"));
-                                formData.append('zone', localStorage.getItem("zone"));
+                                // formData.append('type', localStorage.getItem("template type"));
+                                // formData.append('zone', localStorage.getItem("zone"));
                                 uploadPurchaseOrder(formData);
                             } else {
                                 createOrders();
@@ -293,28 +294,28 @@ function createOrders() {
                  },
                  success: function (data) {
                      localStorage.setItem("data", JSON.stringify(data.templates));
-                     var html = '<ul class="nav nav-tabs"><li class="active"><a data-toggle="tab" href="#stickers">Stickers</a></li><li><a data-toggle="tab" href="#labels">Labels</a></li></ul><div class="tab-content"><div id="stickers" class="tab-pane fade in active"><br><form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><div class="col-md-3"><div class="form-group has-feedback"><label for="po_number">PO Number</label> <input type="text" class="form-control" name="po_number" id="po_number" required=""  placeholder="Enter PO. Number"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group"> <label for="uk_style">UK Style Ref.</label> <input type="text" class="form-control" name="uk_style" id="uk_style"  placeholder="Enter UK Style Ref."></div></div><div class="col-md-3"><div class="form-group"> <label for="ce_style">CE Style Ref.</label> <input type="text" class="form-control" name="ce_style" id="ce_style" placeholder="Enter CE Style Ref."></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="season_code">Season Code</label> <input type="text" class="form-control" name="season_code" id="season_code" required=""  placeholder="Enter Season Code"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="description">Short Description</label> <input type="text" class="form-control" name="description" id="description" required=""  placeholder="Enter Description"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="eqos">EQOS Site Code</label> <input type="text" class="form-control" name="eqos" id="eqos" required=""  placeholder="Enter EQOS Site Code"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="manufacture_date">Manufactured Date</label><div class="input-group manufacture_date date" data-provide="datepicker" id="datePicker1"> <input value="" id="manufacture_date" name="manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date"> <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div ><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="department">Department</label><select class="selectpicker" data-live-search="true" id="department" name="department" required="" ><option value="">Select Department</option>';
+                     var html = '<ul class="nav nav-tabs"><li class="active"><a data-toggle="tab" href="#tesco_stickers">Stickers</a></li><li><a data-toggle="tab" href="#labels">Labels</a></li></ul><div class="tab-content"><div id="tesco_stickers" class="tab-pane fade in active"><br><form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_po_number">PO Number</label> <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required=""  placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_uk_style">UK Style Ref.</label> <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style"  placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_ce_style">CE Style Ref.</label> <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_season_code">Season Code</label> <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required=""  placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_description">Short Description</label> <input type="text" class="form-control" name="tesco_description" id="tesco_description" required=""  placeholder="Enter Description" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_eqos">EQOS Site Code</label> <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required=""  placeholder="Enter EQOS Site Code" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"> <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()"> <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div ><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_department">Department</label><select class="selectpicker" data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()"><option value="">Select Department</option>';
 
                       /** [ Show dynamic department selectbox ] */
                       $.each(data.tesco_department, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.department + '</option>';
                       });
 
-                     html +='</select></div></div><div class="clearfix"></div><div class="col-md-3"> <div class="form-group has-feedback"><label for="brand">Brand</label> <select class="selectpicker" data-live-search="true" id="brand" name="brand" required="" ><option value="">Select Brand</option>';
+                     html +='</select></div></div><div class="clearfix"></div><div class="col-md-3"> <div class="form-group has-feedback"><label for="tesco_brand">Brand</label> <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required=""><option value="">Select Brand</option>';
 
                        /** [ Show dynamic brand selectbox ] */
                        $.each(data.tesco_brand, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.brand + '</option>';
                        });  
 
-                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="supplier">Supplier</label> <select class="selectpicker" data-live-search="true" id="supplier" name="supplier" required="" ><option value="">Select Supplier</option>';
+                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_supplier">Supplier</label> <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()"><option value="">Select Supplier</option>';
 
                        /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
-                        html += '<option value="'+ item.id +'">'+ item.supplier_code +' : '+ item.supplier_name + '</option>';
+                        html += '<option value="'+ item.id +'">'+ item.supplier_name + '</option>';
                         });  
 
-                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="rfid">RFID Compliant</label> <select class="selectpicker" id="rfid" name="rfid" required=""><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tag_at_source">Tag At Source</label> <select class="selectpicker" id="tag_at_source" name="tag_at_source" required="" ><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
+                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_rfid">RFID Compliant</label> <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()"><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_tag_at_source">Tag At Source</label> <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()"><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
                      if(zone === "UK")
                      {
                         /**  [ Dynamic quantity table for UK ratio templates ] */
@@ -322,15 +323,15 @@ function createOrders() {
                         {
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Units per carton</th>';
                              $.each(data.templates, function(i, item){
-                               html += '<th colspan="2">'+item.template_name+'</th>';
+                               html += '<th colspan="1">'+item.template_name+'</th>';
                              });
                              html += '</tr><tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Select</th><th>Count</th>';
+                               html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '</tr></tbody></table></div><hr></div>';
 
@@ -340,15 +341,15 @@ function createOrders() {
                             /**  [ Dynamic quantity table for UK single templates ] */
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
-                               html += '<th colspan="2">'+item.template_name+'</th>';
+                               html += '<th colspan="1">'+item.template_name+'</th>';
                              });
                              html += '<th rowspan="2">Actions</th></tr><tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Select</th><th>Count</th>';
+                               html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" required="" placeholder="Enter TPND"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_1" name="uk_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1" onchange="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_'+item.template_name.replace(' ', '')+'_count" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '<td></td></tr></tbody></table></div><hr></div>';
 
@@ -361,15 +362,15 @@ function createOrders() {
                         {
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Cases per carton</th>';
                              $.each(data.templates, function(i, item){
-                               html += '<th colspan="2">'+item.template_name+'</th>';
+                               html += '<th colspan="1">'+item.template_name+'</th>';
                              });
                              html += '</tr><tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Select</th><th>Count</th>';
+                               html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_orms_tpn" name="ce_ratio_orms_tpn" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_itf" name="ce_ratio_itf" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_cpc" name="ce_ratio_cpc" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_orms_tpn" name="ce_ratio_orms_tpn" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_itf" name="ce_ratio_itf" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_cpc" name="ce_ratio_cpc" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '</tr></tbody></table></div><hr></div>';
 
@@ -379,15 +380,15 @@ function createOrders() {
                             /**  [ Dynamic quantity table for CE single templates ] */
                             html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
-                               html += '<th colspan="2">'+item.template_name+'</th>';
+                               html += '<th colspan="1">'+item.template_name+'</th>';
                              });
                              html += '<th rowspan="2">Actions</th></tr><tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Select</th><th>Count</th>';
+                               html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr class="slno"><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr class="slno"><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size" onchange="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_'+item.template_name.replace(' ', '')+'_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '<td></td></tr></tbody></table></div><hr></div>';
 
@@ -396,7 +397,7 @@ function createOrders() {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="img_artwork"> <img src="'+item.template_file+'" class="img-responsive center-block"></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="width:50%;border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div></div></div></div></div>';
                       });
                       
 
@@ -421,6 +422,11 @@ function createOrders() {
                         }
                       });
 
+                       $('#datePicker1').datepicker({
+                            autoclose: true,
+                            minViewMode: 1,
+                            format: 'MM yyyy'
+                        })
                       /** [ bootstrap validator for create tesco order form ] **/
                         $('#create_tesco_order_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) {
@@ -429,7 +435,7 @@ function createOrders() {
                             else 
                             {
                                 e.preventDefault();
-                                alert('valid')
+                                setTescoOrder();
                             }
                         })
                         $(".card").css("margin-bottom", "80px");
@@ -478,7 +484,7 @@ try{
          var val = parseInt(id) + 1; 
          var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
              $.each(data, function(i, item){
-               html += '<td><div class="checkbox"> <label> <input type="checkbox" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_'+item.template_name.replace(' ', '')+'_count" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
              });
           html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
          $('#table_row').append(html);
@@ -623,7 +629,7 @@ try{
      var val = parseInt(id) + 1; 
      var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
-           html += '<td><div class="checkbox"> <label> <input type="checkbox" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'"> </label></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_'+item.template_name.replace(' ', '')+'_count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
          });
       html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
      $('#table_row').append(html);
@@ -660,3 +666,584 @@ try{
    console.log("Error:"+e)
  }
 }
+
+/**
+ * [ dynamicSVGTemplates function for creating dynamic svg file ]
+ * @author <praveen@wizroots.com>
+ */
+function dynamicSVGTemplates()
+{
+    /** [ Get data from localstorage ] */
+    var data = JSON.parse(localStorage.getItem("data"));
+    var zone = localStorage.getItem("zone");
+    var type = localStorage.getItem("template type");
+ try{
+    $.each(data, function(i, item){
+        /**  [ Dynamically change all svg templates ] */
+        var mySVG = document.getElementById("tesco_svg"+i);
+        var svgDoc = mySVG.contentDocument;
+         /** [ separate conditions for TSL1,TSL3 and other stickers ] */
+        if(item.template_name === "TSL 1" || item.template_name === "TSL 3")
+        {
+           
+           if(zone === "CE")
+           {
+              /**  [ if CE ratio template ] */
+              if(type === "ratio")
+              {
+                 var tpnd = $('#ce_ratio_orms_tpn').val();
+                 var description  = $('#tesco_description').val();
+                 /** [ Dynamically change svg short description ] */
+                 if(description != '')
+                 {
+                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                 }
+                 else
+                 {
+                    svgDoc.getElementById("description").innerHTML = '';
+                 }
+                 /** [ Dynamically change svg CE ratio tpnd number ] */
+                 if(tpnd != '')
+                 {
+                     svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                 }
+                 else
+                 {
+                     svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+              }
+              else
+              {
+                 /**  [ if CE single template ] */
+                 var orms_tpn = $('#ce_single_orms_tpn_1').val();
+                 var description  = $('#tesco_description').val();
+                 /** [ Dynamically change svg CE single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 else
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+                 var size  = $('#ce_single_size_1').val();
+                 /** if size is not empty, Get equivalent ce size for entered size (for TSL 3) */
+                 if(size != '')
+                 {
+                    $.ajax({
+                     url: base_url + "/admin/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (data) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                           }
+                           else if(data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+                 }
+                 else
+                 {
+                     /** [ Dynamically change svg short description ] */
+                     if(description != '')
+                     {
+                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     }
+                     else
+                     {
+                        svgDoc.getElementById("description").innerHTML = '';
+                     }
+                 }
+              }
+           }
+           else
+           {
+              /**  [ if UK ratio template ] */
+              if(type === "ratio")
+              {
+                  var tpnd = $('#uk_ratio_tpnd').val();
+                  var description  = $('#tesco_description').val();
+                  /** [ Dynamically change svg UK ratio tpnd number ] */
+                  if(tpnd != '')
+                  {
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                  }
+                  else
+                  {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                  }
+                  /** [ Dynamically change svg short description ] */
+                  if(description != '')
+                  {
+                      svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                  }
+                  else
+                  {
+                      svgDoc.getElementById("description").innerHTML = ''; 
+                  }
+              }
+              else
+              {
+                 /**  [ if UK single template ] */
+                 var orms_tpn = $('#uk_single_tpnd_1').val();
+                 var description  = $('#tesco_description').val();
+                 /** [ Dynamically change svg UK single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 else
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+                 var size  = $('#uk_single_size_1').val();
+                 /** if size is not empty, Get equivalent uk size for entered size (for TSL 3)*/
+                 if(size != '')
+                 {
+                    $.ajax({
+                     url: base_url + "/admin/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (data) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                           }
+                           else if(data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+                 }
+                 else
+                 {
+                     /** [ Dynamically change svg short description ] */
+                     if(description != '')
+                     {
+                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     }
+                     else
+                     {
+                        svgDoc.getElementById("description").innerHTML = '';
+                     }
+                 }
+              }  
+           }
+        }
+        else 
+        {
+            var po_number        = $('#tesco_po_number').val();
+            var uk_style         = $('#tesco_uk_style').val();
+            var ce_style         = $('#tesco_ce_style').val();
+            var description      = $('#tesco_description').val();
+            var tesco_eqos       = $('#tesco_eqos').val();
+            var supplier         = $('#tesco_supplier option:selected').text();
+            var department       = $('#tesco_department option:selected').text();
+            var brand            = $('#tesco_brand option:selected').text();
+            var rfid             = $('#tesco_rfid option:selected').text();
+            var tag_at_source    = $('#tesco_tag_at_source option:selected').text();
+            var season_code      = $('#tesco_season_code').val();
+            var manufacture_date = $('#tesco_manufacture_date').val();
+           /** [ Dynamically change svg PO order number ] */
+           if(po_number != '')
+           {
+              svgDoc.getElementById("po_number").innerHTML = po_number.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("po_number").innerHTML = '';
+           }
+
+           /** [ Dynamically change svg CE style reference number ] */
+           if(ce_style != '')
+           {
+              svgDoc.getElementById("ce_style").innerHTML = ce_style.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("ce_style").innerHTML = '';
+           }
+           /** [ Dynamically change svg UK style reference number ] */
+           if(uk_style != '')
+           {
+              svgDoc.getElementById("uk_style").innerHTML = uk_style.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("uk_style").innerHTML = '';
+           }
+           /** [ Dynamically change svg short description ] */
+           if(description != '')
+           {
+              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("description").innerHTML = '';
+           }
+           /** [ Dynamically change svg EQOS code ] */
+           if(tesco_eqos != '')
+           {
+              svgDoc.getElementById("eqos").innerHTML = tesco_eqos.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("eqos").innerHTML = '';
+           }
+           /** [ Dynamically change  svg supplier name ] */
+           if($('#tesco_supplier option:selected').val() != '')
+           {
+              svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+           }
+           else
+           {
+              svgDoc.getElementById("supplier").innerHTML = '';
+           }
+           /** [ Dynamically change  svg department ] */
+           if($('#tesco_department option:selected').val() != '')
+           {
+              svgDoc.getElementById("department").innerHTML = department.toUpperCase().replace('&', '&amp;');
+           }  
+           else
+           { 
+              svgDoc.getElementById("department").innerHTML = '';
+           }
+           /** [ Dynamically change svg brand ] */
+           if($('#tesco_brand option:selected').val() != '')
+           {
+              svgDoc.getElementById("brand").innerHTML = brand.toUpperCase().replace('&', '&amp;');
+           } 
+           else
+           {
+              svgDoc.getElementById("brand").innerHTML = '';
+           }
+           /** [ Dynamically svg RFID ] */
+           if($('#tesco_rfid option:selected').val() != '')
+           {
+              svgDoc.getElementById("rfid").innerHTML = rfid.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("rfid").innerHTML = ''; 
+           } 
+           /** [ Dynamically change svg tag at source ] */
+           if($('#tesco_tag_at_source option:selected').val() != '')
+           {
+              svgDoc.getElementById("tag_at_source").innerHTML = tag_at_source.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("tag_at_source").innerHTML = '';
+           }
+           /** [ Dynamically change svg tag at source ] */
+           if(season_code != '')
+           {
+              svgDoc.getElementById("season_code").innerHTML = season_code.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("season_code").innerHTML = '';
+           }
+           /** [ Dynamically change svg manufacture date ] */
+           if(manufacture_date != '')
+           {
+              svgDoc.getElementById("manufactured_date").innerHTML = manufacture_date.toUpperCase();
+           }
+           else
+           {
+              svgDoc.getElementById("manufactured_date").innerHTML = '';
+           }
+           if(zone === "CE")
+           {
+              /**  [ if CE ratio template ] */
+              if(type === "ratio")
+              {
+                  var pieces_in_ratio = $('#ce_ratio_cpc').val();
+                  var tpnd = $('#ce_ratio_orms_tpn').val();
+                  /** [ Dynamically change svg CE pieces in ratio ] */
+                   if(pieces_in_ratio != '')
+                   {
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+                   }
+                   else
+                   {
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = '';
+                   }
+                   /** [ Dynamically change svg CE ratio tpnd number ] */
+                   if(tpnd != '')
+                   {
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                   } 
+                   else
+                   {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                   }
+              }
+              else
+              {
+                 /**  [ if CE single template ] */
+                 var orms_tpn = $('#ce_single_orms_tpn_1').val();
+                 var case_size = $('#ce_single_case_size_1').val();
+                 /** [ Dynamically change svg CE single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 else
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+                 /** [ Dynamically change svg CE single case size ] */
+                 if(case_size != '')
+                 {
+                      svgDoc.getElementById("unit_per_case").innerHTML = case_size;
+                 }
+                 else
+                 {
+                      svgDoc.getElementById("unit_per_case").innerHTML = '';
+                 }
+                 
+              }
+           }
+           else
+           {
+              /**  [ if UK ratio template ] */
+              if(type === "ratio")
+              {
+                   var pieces_in_ratio = $('#uk_ratio_upc').val();
+                   var tpnd = $('#uk_ratio_tpnd').val();
+                   /** [ Dynamically change svg UK pieces in ratio ] */
+                   if(pieces_in_ratio != '')
+                   {
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+                   }
+                   else
+                   {
+                      svgDoc.getElementById("pieces_in_ratio").innerHTML = '';
+                   }
+                   /** [ Dynamically change svg UK ratio tpnd number ] */
+                   if(tpnd != '')
+                   {
+                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                   }
+                   else
+                   {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                   }
+              }
+              else
+              {
+                 /**  [ if UK single template ] */
+                 var orms_tpn = $('#uk_single_tpnd_1').val();
+                 var case_size = $('#uk_single_case_size_1').val();
+                 /** [ Dynamically change svg Uk single tpnd number ] */
+                 if(orms_tpn != '')
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                 }
+                 else
+                 {
+                      svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+                 /** [ Dynamically change svg Uk single case size ] */
+                 if(case_size != '')
+                 {
+                      svgDoc.getElementById("unit_per_case").innerHTML = case_size;
+                 }
+                 else
+                 { 
+                      svgDoc.getElementById("unit_per_case").innerHTML = '';
+                 }
+              }  
+           }
+        } 
+    });   
+    } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }                 
+}
+
+
+// function setTescoOrder()
+// {
+//     var tpnd               = [];
+
+//     /** [ Create array of contact person for multiple contact details ] */
+//     $('.ce_single_orms_tpn').each(function(i, item)
+//     {
+//         tpnd[i]    = $(item).val();
+        
+//     });
+//     tpnd   = tpnd.join(',');
+//     console.log(tpnd)
+// }
+
+// function setTescoOrder()
+// {
+//     try {
+//         var po_number         =  $('#tesco_po_number').val();
+//         var uk_style          =  $('#tesco_uk_style').val();
+//         var ce_style          =  $('#tesco_ce_style').val();
+//         var season_code       =  $('#tesco_season_code').val();
+//         var description       =  $('#tesco_description').val();
+//         var eqos              =  $('#tesco_eqos').val();
+//         var manufacture_date  =  $('#tesco_manufacture_date').val();
+//         var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
+//         var department        =  $("#tesco_department option:selected").val();
+//         var brand             =  $("#tesco_brand option:selected").val();
+//         var supplier          =  $("#tesco_supplier option:selected").val();
+//         var rfid              =  $("#tesco_rfid option:selected").val();
+//         var tag_at_source     =  $("#tesco_tag_at_source option:selected").val();
+//         var zone              =  localStorage.getItem("zone");
+//         var type              =  localStorage.getItem("template type");
+
+//         /** @type {Array} [ initializing empty arrays ] */
+//         var tpnd               = [];
+//         var ean_code           = [];
+//         var case_size          = [];
+//         var size               = [];
+//         var single_tcl4_count  = [];
+//         var single_tsl3_count  = [];
+//         var single_thl3_count  = [];
+
+//         if(zone === "CE")
+//         {
+//             if(type === "ratio")
+//             {
+//                 var tpnd              = $("#ce_ratio_orms_tpn").val();
+//                 var itf_code          = $("#ce_ratio_itf").val();
+//                 var item_per_carton   = $("#ce_ratio_cpc").val();
+//                 var ratio_tcl1_count  = $("#ce_ratio_count_TCL1").val();
+//                 var ratio_tcl2_count  = $("#ce_ratio_count_TCL2").val();
+//                 var ratio_tsl1_count  = $("#ce_ratio_count_TSL1").val();
+//                 var ratio_thl1_count  = $("#ce_ratio_count_THL1").val(); 
+//             }
+//             else
+//             {
+//                 /** [ Create array of ce single orms tpn ] */
+//                 $('.ce_single_orms_tpn').each(function(i, item)
+//                 {
+//                     tpnd[i]    = $(item).val();
+                    
+//                 });
+//                 tpnd   = tpnd.join(',');
+//                 /** [ Create array of ce single ean barcode ] */
+//                 $('.ce_single_ean').each(function(i, item)
+//                 {
+//                     ean_code[i]    = $(item).val();
+                    
+//                 });
+//                 ean_code = ean_code.join(',');
+//                 /** [ Create array of ce single case size ] */
+//                 $('.ce_single_case_size').each(function(i, item)
+//                 {
+//                     case_size[i]    = $(item).val();
+                    
+//                 });
+//                 case_size = case_size.join(',');
+//                 /** [ Create array of ce single size ] */
+//                 $('.ce_single_size').each(function(i, item)
+//                 {
+//                     size[i]    = $(item).val();
+                    
+//                 });
+//                 size = size.join(',');
+//                 /** [ Create array of ce single tcl4 count ] */
+//                 $('.ce_single_tcl4_count').each(function(i, item)
+//                 {
+//                     single_tcl4_count[i]    = $(item).val();
+                    
+//                 });
+//                 single_tcl4_count = single_tcl4_count.join(',');
+//                 /** [ Create array of ce single tsl3 count ] */
+//                 $('.ce_single_tsl3_count').each(function(i, item)
+//                 {
+//                     single_tsl3_count[i]    = $(item).val();
+                    
+//                 });
+//                 single_tsl3_count = single_tsl3_count.join(',');
+//                 /** [ Create array of ce single thl3 count ] */
+//                 $('.ce_single_thl3_count').each(function(i, item)
+//                 {
+//                     single_thl3_count[i]    = $(item).val();
+                    
+//                 });
+//                 single_thl3_count = single_thl3_count.join(',');
+                
+//             }
+//         }
+//         else
+//         {
+//             if(type === "ratio")
+//             {
+//                 var tpnd              = $("#uk_ratio_tpnd").val();
+//                 var itf_code          = $("#uk_ratio_itf").val();
+//                 var item_per_carton   = $("#uk_ratio_upc").val();
+//                 var ratio_tcl1_carton = $("#uk_ratio_count_TCL1").val();
+//                 var ratio_tcl2_carton = $("#uk_ratio_count_TCL2").val();
+//                 var ratio_tsl1_carton = $("#uk_ratio_count_TSL1").val();
+//                 var ratio_thl1_carton = $("#uk_ratio_count_THL1").val(); 
+//             }
+//             else
+//             {
+
+//             }
+//         }
+
+        
+//     } catch(e) {
+//         /** [error statements] */
+//         console.log("Error:"+e)
+//     }
+//         }
+// }

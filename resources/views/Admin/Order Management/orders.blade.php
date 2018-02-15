@@ -261,6 +261,9 @@ border: 0;
  .order-details-notes {
  font-weight: 300;
  }
+.templateDiv {
+    text-align: center;
+}
 
 </style>
 <div class="col-sm-12 col-md-12 main">
@@ -389,6 +392,8 @@ border: 0;
                     <div class="modal-footer">
                         <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
 						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
+						
+						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
                     </div>
                 </div>
             </div>

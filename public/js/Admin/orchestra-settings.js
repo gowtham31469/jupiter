@@ -62,7 +62,7 @@ function orchestraSettings() {
     $('.main-content').html('<div class="loader"></div>');
 
     /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/settings/garments",
@@ -314,7 +314,7 @@ function showSnackbar() {
     try{
       $('.main-content').html('<div class="loader"></div>');
       /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/orchestra/settings/age-group",
@@ -554,7 +554,7 @@ function countries() {
   try{
     $('.main-content').html('<div class="loader"></div>');
     /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/settings/countries",
@@ -821,7 +821,7 @@ function countries() {
     try{
       $('.main-content').html('<div class="loader"></div>');
       /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/orchestra/settings/productfamily",
@@ -1067,7 +1067,7 @@ function countries() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/special-instructions",
@@ -1334,7 +1334,7 @@ function countries() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/compositions",
@@ -1601,7 +1601,7 @@ function countries() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li></ul></div>';
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/parts",
@@ -1868,7 +1868,7 @@ function countries() {
       try{
         $('.main-content').html('<div class="loader"></div>');
         /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li></ul></div>';
+        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/size-chart",
@@ -2098,3 +2098,93 @@ function countries() {
    console.log("Error:"+e)
   }
   }
+  /**
+  * Function to Orchestra Settings home page
+  * @author <praveen>
+  */
+function orchestraSymbols() {
+    try{
+      $('.main-content').html('<div class="loader"></div>');
+  
+      /** Orchestra metadata sidebar */
+      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a class="active">Symbols</a></li></ul></div>';
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/orchestra/settings/symbols",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          beforeSend: function () {
+              $(".loader").show();
+              $(".loader").css('margin-top', '12%');
+          },
+          success: function (data) {
+                  var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_care_symbols, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td><img width="30px" src="'+item.cofreet_symbols+'"></td><td><img width="30px" src="'+item.astms_symbol+'"></td><td>'+item.care_instruction+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-symbols filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-symbols" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSymbolsModal" data-placement="left"></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.main-content').html(orchestra_metadata)
+                  $('.edit-orchestra-symbols').tooltip('show')
+                  $('.edit-orchestra-symbols').tooltip('toggle')
+                  $('.delete-orchestra-symbols').tooltip('show')
+                  $('.delete-orchestra-symbols').tooltip('toggle')
+                    $('#orchestra-symbols-list-table').DataTable();
+                    $("#orchestra-symbols-list-table_filter input").addClass('form-control input-sm');
+                    $("#orchestra-symbols-list-table_filter input").attr('placeholder', 'Data Search');
+                    $('#orchestra-symbols-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function (data) {
+  
+          },
+          complete: function () {
+              $(".loader").hide();
+              $(".loader").css('margin-top', '0%');
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+
+   /**
+  * Function to Orchestra Settings home page
+  * @author <praveen>
+  */
+function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_instruction) {
+    try{
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var form_data = new FormData();
+
+        form_data.append('cofreet_symbols', cofreet_symbols);
+        form_data.append('astms_symbol', astms_symbol);
+        form_data.append('category_id', category_id);
+        form_data.append('care_instruction', care_instruction);
+        form_data.append('_token', csrf_token);
+
+        $.ajax({
+            url: base_url + "/admin/orchestra/settings/addOrchestraSymbols",
+            type: "POST",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".loader").show();
+                $(".loader").css('margin-top', '12%');
+            },
+            success: function (data) {
+            },
+            complete: function () {
+                $(".loader").hide();
+                $(".loader").css('margin-top', '0%');
+            }
+        });
+    } catch (e) {
+    console.log("Error:"+e)
+  }
+}
