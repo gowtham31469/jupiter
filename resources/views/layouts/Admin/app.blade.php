@@ -168,6 +168,8 @@
 //            placeholder: "Buyer Listing",
 //            allowClear: true
 //        });
+        
+        
     </script>
     @yield('jqueryIncludes')
 </body>
