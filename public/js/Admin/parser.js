@@ -5,22 +5,21 @@
  */
 function parseXML(data, callback) {
     try {
-        // Check for Purchase Order Type
+        //Check for Purchase Order Type
         var po_type = '';
-        $(data.xml).find('page[id="2"] textbox[id="0"] textline:first text').each(function() {
-            po_type += $(this).text();
-        });
-        // po_type = $.trim(po_type);
+
+        po_type = JSON.parse(data.info);
+        console.log(po_type[0].data);
         po_type = 'SINGLE';
         var parsedObj;
         switch(po_type) {
-            case 'SINGLE': parsedObj = parseSingleXML(data);
+            case 'SINGLE': parsedObj = parseSingleType(data);
                 break;
-            case 'RATIO': parseRatioXML(data.xml);
+            case 'RATIO': parseRatioType(data);
                 break;
-            case 'RATIO PACK': parseRatioPackXML(data.xml);
+            case 'RATIO PACK A': parseRatioPackType(data);
                 break;
-            default: console.log("Failed to identify Purchase Order Type!! Exiting..")
+            default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
         callback(parsedObj);
@@ -36,9 +35,113 @@ function parseXML(data, callback) {
  * @param  {xml} xml string to be parsed.
  * @return {object}     Object array with all the required fields.
  */
-function parseSingleXML(data) {
+function parseSingleType(data) {
     var singleObj = {};
-    var xml = data.xml;
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //********************************************* ORDER INFORMATION SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+
+    var info = JSON.parse(data.info);
+    console.log(info[0].data);
+    $.each(info[0].data, function(ind, ele) {
+        var row_length = ele.length;
+        switch(ind) {
+            case 0: 
+                singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                break;
+            case 1:
+                singleObj.type = ele[0].text;
+                break;
+            case 2:
+                var season = ele[2].text.split(" ");
+                singleObj.seasonCode = season[0];
+                break;
+            case 3:
+                var style = ele[0].text.split(":");
+                singleObj.styleNumber =  style[1].trim();
+                singleObj.shortDescription =  (row_length === 5) ? ele[2].text : ele[2].text;
+                break;
+        }
+    });
+
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //********************************************* ORDER QUANTITY SECTION ************************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    singleObj.orderQuantity = {};
+    var header = [];
+    var values = [];
+    var tabula = JSON.parse(data.table);
+    tabula[0].data.pop(); //Remove the total quantity row from the object
+    $.each(tabula[0].data, function(index,element) {
+        var row = {};
+        element.pop();//Remove the extra space element from the array
+        $.each(element, function(i, val) {
+            if(index === 0) {
+                header.push(val.text.replace(/ /g,"_"));
+            } else {
+                row[header[i]] = val.text;  
+            }
+        });
+        if(index !== 0) {
+           values.push(row); 
+        } 
+    });
+    singleObj.orderQuantity = values;
+    console.log(singleObj);
+    return singleObj;
+}
+/**
+ * Method to render the parsed objects to the input field
+ * @param  {[type]} parsedObj [description]
+ * @return {[type]}           [description]
+ */
+function renderParsedValues(parsedObj) {
+    console.log(parsedObj);
+    var zone        = localStorage.getItem("zone").toLowerCase();
+    var type        = localStorage.getItem("template type");
+    $('#tesco_po_number').val(parsedObj.purchaseOrder);
+    $('#tesco_uk_style').val(parsedObj.styleNumber);
+    $('#tesco_ce_style').val(parsedObj.styleNumber);
+    $('#tesco_season_code').val(parsedObj.seasonCode);
+    $('#tesco_description').val(parsedObj.shortDescription);
+    // $("select[name=tesco_brand] option").filter(function() {
+    //     return this.text == parsedObj.brand; 
+    // }).attr('selected', true);
+    // $("select[name=tesco_supplier] option").filter(function() {
+    //     return this.text == parsedObj.supplierName; 
+    // }).attr('selected', true);
+    // $('.selectpicker').selectpicker('refresh');
+    $.each(parsedObj.orderQuantity, function(i, j) {
+        if(type === 'single') {
+            var index = i + 1;
+            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
+            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
+            $('#'+zone+'_single_size_'+index).val(j.Size);  
+        }
+        if(parsedObj.orderQuantity.length !== (i+1)) {
+            $('.add-row-btn').trigger('click');
+        }
+        
+    });
+}
+
+/**
+ * Method to parse xml for SINGLE type.
+ * @param  {xml} xml string to be parsed.
+ * @return {object}     Object array with all the required fields.
+ */
+function parseSingleXml(data) {
+    var singleObj = {};
+    var xml = data.info;
     //*********************************************************************************************************
     //*********************************************************************************************************
     //*********************************************************************************************************
@@ -100,7 +203,7 @@ function parseSingleXML(data) {
             cargo_ready_date = ($(this).text() === '') ? cargo_ready_date += ' ' : cargo_ready_date += $(this).text();
         });
         singleObj.cargoReadyDate = $.trim(cargo_ready_date);
-/*
+
     //*********************************************************************************************************
     //*********************************************************************************************************
     //*********************************************************************************************************
@@ -153,72 +256,5 @@ function parseSingleXML(data) {
         });         
         singleObj.orderQuantity.caseSize = caseSize;
 
-        */
-       
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //********************************************* ORDER QUANTITY SECTION ************************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    singleObj.orderQuantity = {};
-    var header = [];
-    var values = [];
-    var tabula = JSON.parse(data.json);
-    tabula[0].data.pop(); //Remove the total quantity row from the object
-    $.each(tabula[0].data, function(index,element) {
-        var row = {};
-        element.pop();//Remove the extra space element from the array
-        $.each(element, function(i, val) {
-            if(index === 0) {
-                header.push(val.text.replace(/ /g,"_"));
-            } else {
-                row[header[i]] = val.text;  
-            }
-        });
-        if(index !== 0) {
-           values.push(row); 
-        } 
-    });
-    singleObj.orderQuantity = values;
-    return singleObj;
-}
-
-/**
- * Method to render the parsed objects to the input field
- * @param  {[type]} parsedObj [description]
- * @return {[type]}           [description]
- */
-function renderParsedValues(parsedObj) {
-    console.log(parsedObj);
-    var zone        = localStorage.getItem("zone").toLowerCase();
-    var type        = localStorage.getItem("template type");
-    $('#tesco_po_number').val(parsedObj.purchaseOrder);
-    $('#tesco_uk_style').val(parsedObj.styleNumber);
-    $('#tesco_ce_style').val(parsedObj.styleNumber);
-    $('#tesco_season_code').val(parsedObj.seasonCode);
-    $('#tesco_description').val(parsedObj.shortDescription);
-    // $("select[name=tesco_brand] option").filter(function() {
-    //     return this.text == parsedObj.brand; 
-    // }).attr('selected', true);
-    // $("select[name=tesco_supplier] option").filter(function() {
-    //     return this.text == parsedObj.supplierName; 
-    // }).attr('selected', true);
-    // $('.selectpicker').selectpicker('refresh');
-    $.each(parsedObj.orderQuantity, function(i, j) {
-        console.log(j);
-        if(type === 'single') {
-            var index = i + 1;
-            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
-            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
-            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
-            $('#'+zone+'_single_size_'+index).val(j.Size);  
-        }
-        console.log(parsedObj.orderQuantity.length, i);
-        if(parsedObj.orderQuantity.length !== (i+1)) {
-            $('.add-row-btn').trigger('click');
-        }
-        
-    })
+        return singleObj;
 }
