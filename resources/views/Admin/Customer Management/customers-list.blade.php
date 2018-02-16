@@ -880,6 +880,7 @@
           $('#edit_freight_charge').val('')
           /** Remove required from textbox **/
           $('#edit_freight_charge').prop('required',false)
+          $('div.edit_freight_charge_div').removeClass('has-error has-danger');
       });
      }); 
 

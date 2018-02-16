@@ -1364,7 +1364,7 @@
            <div class="modal-content">
                <div class="modal-header">
                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
+                   <h4 class="modal-title" id="myModalLabel">Delete Symbol</h4>
                </div>
                {!! Form::open(['id' => 'delete_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
@@ -1406,18 +1406,27 @@
                     <div class="form-group has-feedback">
                      
                          {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
-                         {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}
+                         <div class="row">
+                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="" alt="Null"></div>
+                         <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         </div>
+                      
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
                      
                          {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
-                         {{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}
+                         <div class="row">
+                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="" alt="Null"></div>
+                         <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         </div>
+                         
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
                      
                          {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                         
                          {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
                       <div class="help-block with-errors"></div>
                     </div>
@@ -1431,6 +1440,100 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Symbol
+
+<div class="modal fade" id="editOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Symbol</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_orchestra_symbols_id',$value = null, array('id'=>'edit_orchestra_symbols_id','class' => 'form-control input-sm')) !!}
+                     <div class="form-group has-feedback">
+                     
+                         {!! Form::label('edit_symbol_category', 'Category', ['class' => 'form_label']) !!}
+                         {{ Form::select('edit_symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                        
+                         <div class="row">
+                         <div class="col-md-2"> <img width="30px" id="cofreet_image" src="" alt="Null"></div>
+                         <div class="hidden hidden_edit_cofreet_symbol">
+                         <div class="col-md-1"><span class="glyphicon glyphicon-arrow-right"></span></div>
+                         <div class="col-md-1"><img width="30px" id="add_edit_cofreet_symbol" src="" alt="Null"></div>
+                         </div>
+                         <div class="col-md-8"> {{ Form::file('edit_cofreet_symbol', ['accept' => 'image/png']) }}</div>
+                         </div>
+                        
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('edit_astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         <div class="row">
+                         <div class="col-md-2"><img width="30px" id="astms_image" src="" alt="Null"></div>
+                         <div class="hidden hidden_edit_astms_symbol">
+                         <div class="col-md-1"><span class="glyphicon glyphicon-arrow-right"></span></div>
+                         <div class="col-md-1"><img width="30px" id="add_edit_astms_symbol" src="" alt="Null"></div>
+                         </div>
+                         <div class="col-md-8">{{ Form::file('edit_astms_symbol', ['accept' => 'image/png']) }}</div>
+                         </div>
+                         
+                         
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('edit_care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                         {{ Form::textarea('edit_care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           
+       </div>
+   </div>
+   </div>
+Delete Symbol Model
+   <div class="modal fade" id="deleteOrchestraSymbolModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrchestraSymbolLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="deleteOrchestraSymbolLabel">Delete Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_symbol_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra symbol. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_symbol_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
+    -->
+
+
+
 
 
 <!-- Tesco Modals -->
@@ -1796,7 +1899,6 @@
        </div>
    </div>
 
-
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
 
@@ -1879,6 +1981,8 @@
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
+        $('#edit_orchestra_symbols_form').trigger("reset");
+        $('#add_orchestra_symbols_form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/
@@ -2615,19 +2719,54 @@ $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
       })
     });
 
-//     $(document).on('change', '#cofreet_symbol', function(e){
-//       var _URL = window.URL || window.webkitURL;
-//     var file, img;
+    /** Edit orchestra symbols form validation **/
+    $('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
-//     if ((file = this.files[0])) {
-//         img = new Image();
-//         img.onload = function() {
-//         };
-//         img.src = _URL.createObjectURL(file);
-//     }
-// });
+        }
+        else
+        {
+           e.preventDefault();
+           var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
+           var astms_file = $('#edit_astms_symbol')[0].files[0];
+           if(astms_file === undefined){
+            astms_file = "";
+           }
+           if(cofreet_file === undefined){
+            cofreet_file = "";
+           }
+           var symbol_category = $('#edit_symbol_category option:selected').val();
+           var care_instruction = $('#edit_care_instruction').val();
+           var id = $('#edit_orchestra_symbols_id').val();
 
-    
+           /* call addOrchestraSymbols function from orchestra-settings.js*/
+           editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
+        }
+      });
+
+          /** assign id for delete Orchestra Symbol modal **/
+          $('#deleteOrchestraSymbolModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_symbol_id').attr('value', config);
+       });
+
+       /** submit delete Orchestra Symbol  form **/
+       $('#delete_orchestra_symbol_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_orchestra_symbol_id').val();
+            /* call OrchestraSymbol function from tesco-settings.js*/
+            deleteOrchestraSymbol(id);
+            // console.log(id);
+         }
+       })
+      
     </script>
-
+  
     @endsection
