@@ -59,9 +59,10 @@ var isSubmitting = false;
   */
 function tescoBrands() {
   try{
-    $('.main-content').html('<div class="loader"></div>');
-    /** tesco metadata sidebar */
-    var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li></ul></div>';
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').show();
+    $('.orchestra-sidebar').hide();
+    
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/tesco/settings/brands",
@@ -72,10 +73,9 @@ function tescoBrands() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoBrandsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Brand</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Brands</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Brand Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoBrandsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Brand</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Brands</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Brand Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.tesco_brands, function(i, item){
 	              var index = i+1;
 	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td>';
@@ -100,7 +100,7 @@ function tescoBrands() {
                 tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoBrandsModal" data-placement="left"></i></a></td></tr>';
 	             });
 	             tesco_metadata += '</tbody></table></div>';
-	             $('.main-content').html(tesco_metadata)
+	             $('.content').html(tesco_metadata)
                 $('.edit-tesco-brands').tooltip('show')
                 $('.edit-tesco-brands').tooltip('toggle')
                 $('.delete-tesco-brands').tooltip('show')
@@ -116,7 +116,6 @@ function tescoBrands() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
     } catch (e) {
@@ -159,7 +158,6 @@ function showSnackbar() {
              data: {_token:csrf_token,name:name},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
                   200: function() {
@@ -178,7 +176,6 @@ function showSnackbar() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -206,7 +203,6 @@ function showSnackbar() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -224,7 +220,6 @@ function showSnackbar() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -247,7 +242,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name},
@@ -264,7 +258,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -287,7 +280,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -308,7 +300,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -334,7 +325,6 @@ function showSnackbar() {
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               method:"put",
               data:{_token:csrf_token,id:id},
@@ -352,7 +342,6 @@ function showSnackbar() {
               complete: function () {
                 tescoBrands();
                 $(".loader").hide();
-                $(".loader").css('margin-top','0%');
               }
           })
    } catch (e) {
@@ -378,7 +367,6 @@ function showSnackbar() {
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               method:"put",
               data:{_token:csrf_token,id:id},
@@ -396,7 +384,6 @@ function showSnackbar() {
               complete: function () {
                 tescoBrands();
                 $(".loader").hide();
-                $(".loader").css('margin-top','0%');
               }
           })
    } catch (e) {
@@ -410,9 +397,9 @@ function showSnackbar() {
   */
 function tescoDepartment() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-      /** tesco metadata sidebar */
-      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a>Brands</a></li><li id="2" onclick="tescoDepartment()"><a class="active">Departments</a></li><li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/tesco/settings/departments",
@@ -423,16 +410,15 @@ function tescoDepartment() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_department, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-departments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoDepartmentsModal" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
-                   $('.main-content').html(tesco_metadata)
+                   $('.content').html(tesco_metadata)
                   $('.edit-tesco-departments').tooltip('show')
                   $('.edit-tesco-departments').tooltip('toggle')
                   $('.delete-tesco-departments').tooltip('show')
@@ -448,7 +434,6 @@ function tescoDepartment() {
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -474,7 +459,6 @@ function tescoDepartment() {
               data: {_token:csrf_token,department:department,pantone:pantone,rbg:rbg},
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               statusCode: {
                    200: function() {
@@ -493,7 +477,6 @@ function tescoDepartment() {
               },
               complete: function () {
                         $(".loader").hide();
-                        $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -521,7 +504,6 @@ function tescoDepartment() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -542,7 +524,6 @@ function tescoDepartment() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -567,7 +548,6 @@ function tescoDepartment() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,department:department,pantone:pantone,rbg:rbg},
@@ -584,7 +564,6 @@ function tescoDepartment() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -607,7 +586,6 @@ function tescoDepartment() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -628,7 +606,6 @@ function tescoDepartment() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -642,9 +619,9 @@ function tescoDepartment() {
   */
 function tescoSuppliers() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-      /** tesco metadata sidebar */
-      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a>Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="tescoSuppliers()"><a class="active">Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/tesco/settings/suppliers",
@@ -655,10 +632,9 @@ function tescoSuppliers() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSuppliersModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Supplier</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Suppliers</h3></div><table id="tesco-suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Supplier Name</th><th>Supplier Code</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSuppliersModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Supplier</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Suppliers</h3></div><table id="tesco-suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Supplier Name</th><th>Supplier Code</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_suppliers, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.supplier_name+'</td><td>'+item.supplier_code+'</td>';
@@ -683,15 +659,15 @@ function tescoSuppliers() {
                   tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-suppliers filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-suppliers" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoSuppliersModal" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
-                   $('.main-content').html(tesco_metadata)
-                  $('.edit-tesco-suppliers').tooltip('show')
-                  $('.edit-tesco-suppliers').tooltip('toggle')
-                  $('.delete-tesco-suppliers').tooltip('show')
-                  $('.delete-tesco-suppliers').tooltip('toggle')
-                    $('#tesco-suppliers-list-table').DataTable();
-                    $("#tesco-suppliers-list-table_filter input").addClass('form-control input-sm');
-                    $("#tesco-suppliers-list-table_filter input").attr('placeholder', 'Data Search');
-                    $('#tesco-suppliers-list-table_length select').addClass('form-control input-sm');
+                   $('.content').html(tesco_metadata)
+                   $('.edit-tesco-suppliers').tooltip('show')
+                   $('.edit-tesco-suppliers').tooltip('toggle')
+                   $('.delete-tesco-suppliers').tooltip('show')
+                   $('.delete-tesco-suppliers').tooltip('toggle')
+                   $('#tesco-suppliers-list-table').DataTable();
+                   $("#tesco-suppliers-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-suppliers-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-suppliers-list-table_length select').addClass('form-control input-sm');
   
           },
           error: function (data) {
@@ -699,7 +675,6 @@ function tescoSuppliers() {
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -724,7 +699,6 @@ function tescoSuppliers() {
               data: {_token:csrf_token,supplier_name:supplier_name,supplier_code:supplier_code},
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               statusCode: {
                    200: function() {
@@ -743,7 +717,6 @@ function tescoSuppliers() {
               },
               complete: function () {
                         $(".loader").hide();
-                        $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -771,7 +744,6 @@ function tescoSuppliers() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -791,7 +763,6 @@ function tescoSuppliers() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -816,7 +787,6 @@ function tescoSuppliers() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,supplier_name:supplier_name,supplier_code:supplier_code},
@@ -833,7 +803,6 @@ function tescoSuppliers() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -856,7 +825,6 @@ function tescoSuppliers() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -877,7 +845,6 @@ function tescoSuppliers() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -903,7 +870,6 @@ function tescoSuppliers() {
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               method:"put",
               data:{_token:csrf_token,id:id},
@@ -921,7 +887,6 @@ function tescoSuppliers() {
               complete: function () {
                 tescoSuppliers();
                 $(".loader").hide();
-                $(".loader").css('margin-top','0%');
               }
           })
    } catch (e) {
@@ -947,7 +912,6 @@ function tescoSuppliers() {
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               method:"put",
               data:{_token:csrf_token,id:id},
@@ -965,7 +929,6 @@ function tescoSuppliers() {
               complete: function () {
                 tescoSuppliers();
                 $(".loader").hide();
-                $(".loader").css('margin-top','0%');
               }
           })
    } catch (e) {
@@ -979,9 +942,9 @@ function tescoSuppliers() {
   */
 function tescoSizeChart() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-      /** tesco metadata sidebar */
-      var tesco_metadata_sidebar = '<div class="sidebar style-4"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a>Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="tescoSuppliers()"><a >Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a class="active">Size Chart</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/tesco/settings/sizechart",
@@ -992,10 +955,9 @@ function tescoSizeChart() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var tesco_metadata = tesco_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSizeChartsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add SizeChart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">SizeCharts</h3></div><table id="tesco-sizecharts-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>PO_Size</th><th>UK</th><th>CE</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSizeChartsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add SizeChart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">SizeCharts</h3></div><table id="tesco-sizecharts-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>PO_Size</th><th>UK</th><th>CE</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_sizecharts, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.po_size+'</td><td>'+item.uk+'<td>'+item.ce+'</td>';
@@ -1005,15 +967,15 @@ function tescoSizeChart() {
                   tesco_metadata += '<td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-sizecharts filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-sizecharts" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoSizeChartsModal" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
-                   $('.main-content').html(tesco_metadata)
-                  $('.edit-tesco-sizecharts').tooltip('show')
-                  $('.edit-tesco-sizecharts').tooltip('toggle')
-                  $('.delete-tesco-sizecharts').tooltip('show')
-                  $('.delete-tesco-sizecharts').tooltip('toggle')
-                    $('#tesco-sizecharts-list-table').DataTable();
-                    $("#tesco-sizecharts-list-table_filter input").addClass('form-control input-sm');
-                    $("#tesco-sizecharts-list-table_filter input").attr('placeholder', 'Data Search');
-                    $('#tesco-sizecharts-list-table_length select').addClass('form-control input-sm');
+                   $('.content').html(tesco_metadata)
+                   $('.edit-tesco-sizecharts').tooltip('show')
+                   $('.edit-tesco-sizecharts').tooltip('toggle')
+                   $('.delete-tesco-sizecharts').tooltip('show')
+                   $('.delete-tesco-sizecharts').tooltip('toggle')
+                   $('#tesco-sizecharts-list-table').DataTable();
+                   $("#tesco-sizecharts-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-sizecharts-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-sizecharts-list-table_length select').addClass('form-control input-sm');
   
           },
           error: function (data) {
@@ -1021,7 +983,6 @@ function tescoSizeChart() {
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -1047,7 +1008,6 @@ function tescoSizeChart() {
               data: {_token:csrf_token,po_size:po_size,uk:uk,ce:ce},
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               statusCode: {
                    200: function() {
@@ -1068,7 +1028,6 @@ function tescoSizeChart() {
               },
               complete: function () {
                         $(".loader").hide();
-                        $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -1096,7 +1055,6 @@ function tescoSizeChart() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -1117,7 +1075,6 @@ function tescoSizeChart() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -1142,7 +1099,6 @@ function tescoSizeChart() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,po_size:po_size,uk:uk,ce:ce},
@@ -1160,7 +1116,6 @@ function tescoSizeChart() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -1182,7 +1137,6 @@ function tescoSizeChart() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -1206,7 +1160,6 @@ function tescoSizeChart() {
            complete: function () {
                     
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
