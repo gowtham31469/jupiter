@@ -5,7 +5,7 @@
  */
 
 function tescoOrders() {
-    $('.main-content').html('<div class="loader"></div>');
+    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');
     /** [ Remove local storage values ] */
@@ -25,7 +25,6 @@ function tescoOrders() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
                 $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card" > <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form"  method="post" enctype="multipart/form-data"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select> <div class="help-block with-errors"></div></div> <div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "><label>Upload PO</label><input type="file" name="purchase_order" id="po_upload" required/><div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button></form></div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
@@ -166,14 +165,13 @@ function tescoOrders() {
                             },
                             beforeSend: function () {
                                 $(".loader").show();
-                                $(".loader").css('margin-top', '12%');
                             },
                             success: function (data) {
                                 if (data.length > 0) {
                                     $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         } else {
                                             $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
@@ -195,7 +193,6 @@ function tescoOrders() {
                             },
                             complete: function () {
                                 $(".loader").hide();
-                                $(".loader").css('margin-top', '0%');
                             }
                         })
                     }
@@ -259,7 +256,6 @@ function tescoOrders() {
         complete: function () {
             
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
      })
     } catch(e) {
@@ -397,7 +393,7 @@ function createOrders() {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="width:50%;border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div></div></div></div></div>';
                       });
                       
 
@@ -1222,6 +1218,11 @@ function tescoOrderCommonData()
     tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
     zone              =  localStorage.getItem("zone");
     type              =  localStorage.getItem("template type");
+    data              =  JSON.parse(localStorage.getItem("data"));
+    templates         =  [];
+    $.each(data, function(i, item){
+        templates[i] = item.template_name;
+    });
 }
 /**
  * [storeCERatioTcl1Tcl2Tsl1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
@@ -1245,12 +1246,11 @@ function storeCERatioTcl1Tcl2Tsl1(random_order_id)
                      url: base_url + "/admin/tesco/set-ce-ratio-tcl1tcl2tsl1-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,ratio_tcl1_count:ratio_tcl1_count,ratio_tcl2_count:ratio_tcl2_count,ratio_tsl1_count:ratio_tsl1_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,ratio_tcl1_count:ratio_tcl1_count,ratio_tcl2_count:ratio_tcl2_count,ratio_tsl1_count:ratio_tsl1_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1296,12 +1296,11 @@ function storeCERatioThl1(random_order_id)
                      url: base_url + "/admin/tesco/set-ce-ratio-thl1-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,ratio_thl1_count:ratio_thl1_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,ratio_thl1_count:ratio_thl1_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1393,12 +1392,11 @@ function storeCESingleTcl4Tsl3(random_order_id)
                      url: base_url + "/admin/tesco/set-ce-single-tcl4tsl3-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,single_tcl4_count:single_tcl4_count,single_tsl3_count:single_tsl3_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,single_tcl4_count:single_tcl4_count,single_tsl3_count:single_tsl3_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1482,12 +1480,11 @@ function storeCESingleThl3(random_order_id)
                      url: base_url + "/admin/tesco/set-ce-single-thl3-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,single_thl3_count:single_thl3_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,single_thl3_count:single_thl3_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1535,12 +1532,11 @@ function storeUKRatioTcl1Tcl2Tsl1(random_order_id)
                      url: base_url + "/admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,ratio_tcl1_count:ratio_tcl1_count,ratio_tcl2_count:ratio_tcl2_count,ratio_tsl1_count:ratio_tsl1_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,ratio_tcl1_count:ratio_tcl1_count,ratio_tcl2_count:ratio_tcl2_count,ratio_tsl1_count:ratio_tsl1_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1586,12 +1582,11 @@ function storeUKRatioThl1(random_order_id)
                      url: base_url + "/admin/tesco/set-uk-ratio-thl1-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,ratio_thl1_count:ratio_thl1_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,ratio_thl1_count:ratio_thl1_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1683,12 +1678,11 @@ function storeUKSingleTcl4Tsl3(random_order_id)
                      url: base_url + "/admin/tesco/set-uk-single-tcl4tsl3-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,single_tcl4_count:single_tcl4_count,single_tsl3_count:single_tsl3_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,single_tcl4_count:single_tcl4_count,single_tsl3_count:single_tsl3_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
@@ -1772,12 +1766,11 @@ function storeUKSingleThl3(random_order_id)
                      url: base_url + "/admin/tesco/set-uk-single-thl3-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,single_thl3_count:single_thl3_count,order_id:random_order_id,zone:zone,type:type
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,single_thl3_count:single_thl3_count,order_id:random_order_id,zone:zone,type:type,templates:templates
                      },
                      dataType:"json",
                      beforeSend: function () {
                          $(".loader").show();
-                         $(".loader").css('margin-top', '12%');
                      },
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');

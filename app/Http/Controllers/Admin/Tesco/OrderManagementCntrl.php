@@ -15,6 +15,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
 use App\TescoStickerOrdersSizeDetails;
 use App\TescoPolybagCartonStickerOrders;
+use App\TescoStickerOrdersCount;
 use App\Classes\TescoOrders;
 
 class OrderManagementCntrl extends Controller
@@ -220,13 +221,14 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioTcl1Tcl2Tsl1Orders(Request $request)
+    public function setCERatioTCL1TCL2TSL1Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj = new TescoOrders();
-            $tesco_order = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id = $tesco_order->id; 
+            $tesco_order     = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id  = $tesco_order->id; 
+            $templates       = explode(',',$request['templates']);
 
             $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
@@ -261,7 +263,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioThl1Orders(Request $request)
+    public function setCERatioTHL1Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -300,7 +302,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCESingleTcl4Tsl3Orders(Request $request)
+    public function setCESingleTCL4TSL3Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -347,7 +349,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCESingleThl3Orders(Request $request)
+    public function setCESingleTHL3Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -392,7 +394,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioTcl1Tcl2Tsl1Orders(Request $request)
+    public function setUKRatioTCL1TCL2TSL1Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -432,7 +434,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioThl1Orders(Request $request)
+    public function setUKRatioTHL1Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -470,7 +472,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKSingleTcl4Tsl3Orders(Request $request)
+    public function setUKSingleTCL4TSL3Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -517,7 +519,7 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKSingleThl3Orders(Request $request)
+    public function setUKSingleTHL3Orders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
