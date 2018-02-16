@@ -270,7 +270,7 @@ function tescoOrders() {
  * @return View
  */
 
-function createOrders() {
+function createOrders(parsedObj = false) {
     try {
         /* [ Get values from local storage ] */
         var template_id = localStorage.getItem("templates");
@@ -440,6 +440,9 @@ function createOrders() {
                         /** [ show tooltip ] */
                         $('.delete-row').tooltip('show')
                         $('.delete-row').tooltip('toggle')
+                        if(parsedObj) {
+                            renderParsedValues(parsedObj);
+                        }
                  },
                  error: function (data) {
                     console.log(data);
@@ -548,7 +551,7 @@ function  uploadPurchaseOrder(formData) {
                  },
                  success: function (data) {
                     //Call the parse method which resides on parser.js
-                     parseXML(data);
+                     parseXML(data, createOrders);
                  },
                  error: function (data) {
                     console.log(data);
