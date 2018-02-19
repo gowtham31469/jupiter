@@ -1222,6 +1222,7 @@ function tescoOrderCommonData()
     data              =  JSON.parse(localStorage.getItem("data"));
     templates         = [];
     counts            = [];
+    console.log(data)
     $('.count').each(function(i, item)
     {
         counts[i]    = $(item).val() === ''?0:$(item).val();
