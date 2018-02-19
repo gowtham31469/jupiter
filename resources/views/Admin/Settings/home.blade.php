@@ -16,6 +16,10 @@
         <div class="select-buyer">
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
+          <div class="sidebar style-4 orchestra-sidebar" style="display: none;"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>
+        <div class="tesco-sidebar sidebar style-4" style="display: none;"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li></ul></div>
+        <div class="content">
+        </div>
     </div>
 
     {{-- Add Orchestra Garments Modal --}}
@@ -1913,10 +1917,11 @@ Delete Symbol Model
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
     })
-
+       
     $(document).ready(function() {
         $('.select-buyer').click(function() {
             $('.select-buyer').addClass('hidden');
+            $('.meta-data-list li:first a').removeClass("active");
         })
         /* Show logo on left side */
         $('.logo').html('Settings')
@@ -1930,10 +1935,14 @@ Delete Symbol Model
         }else if(localStorage.getItem("buyer") === 'orchestra')
         {
             orchestraSettings();
+            /** Hide default image, if buyer already selected */
+            $('.select-buyer').addClass('hidden');
         }
         else
         {
           tescoBrands();
+          /** Hide default image, if buyer already selected */
+            $('.select-buyer').addClass('hidden');
         }
 
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
@@ -2643,18 +2652,18 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
         makeSupplierDisabled(id,csrf_token)
     });
      /** Add Tesco Size chart form validation **/
-$('#add_tesco_size_charts_form').validator().on('submit', function (e) {
-          if (e.isDefaultPrevented())
-          {
+     $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented())
+      {
 
-          }
-          else
-          {
-             e.preventDefault();
-             /* call addTescoSize charts function from  tesco-settings.js*/
-             addTescoSizeCharts();
-          }
-        })
+      }
+      else
+      {
+         e.preventDefault();
+         /* call addTescoSize charts function from  tesco-settings.js*/
+         addTescoSizeCharts();
+      }
+    })
        
          /** get edit Tesco Size chart details **/
        $(document).on('click','.edit-tesco-sizecharts',function(e){
@@ -2766,7 +2775,11 @@ $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
             // console.log(id);
          }
        })
-      
+      /** [ Make sidebar active ] */
+       $('.meta-data-list li a').click(function(){
+        $('.meta-data-list li a').removeClass("active");
+        $(this).addClass("active");
+      });
     </script>
   
     @endsection

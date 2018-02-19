@@ -12,7 +12,7 @@
           $('.main-sub-menu').removeClass('hidden');
           $( ".sub_modules a" ).removeClass( "active" )
           $('.sticker_orders a').addClass("active")
-          $('.main-content').html('<div class="loader"></div>');
+          $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 
           /** Refresh bootstrap selectpicker **/
           $('#payment_terms').selectpicker('refresh');
@@ -30,7 +30,6 @@
               data: {_token:csrf_token},
               beforeSend: function () {
                   $(".loader").show();
-                  $(".loader").css('margin-top','12%');
               },
               success: function (data) {
                 var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>Bank Details</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
@@ -90,7 +89,6 @@
                       }).parent('li').addClass('current-page').find('a').addClass('active');
                   });
                   $(".loader").hide();
-                  $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -269,7 +267,6 @@ function addCustomer()
             data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_cost:freight_cost,freight_charge_free:freight_charge_free,po_required:po_required},
             beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top','12%');
             },
             statusCode: {
  
@@ -303,7 +300,6 @@ function addCustomer()
                   }).parent('li').addClass('current-page').find('a').addClass('active');
               });
               $(".loader").hide();
-              $(".loader").css('margin-top','0%');
             }
         })
     } catch (e) {
@@ -615,7 +611,6 @@ function addCustomer()
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
-                 $(".loader").css('margin-top','12%');
                },
                method:"put",
                data:{_token:csrf_token,id:id},
@@ -642,7 +637,6 @@ function addCustomer()
                     }).parent('li').addClass('current-page').find('a').addClass('active');
                 });
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
                }
            })
     } catch (e) {
@@ -668,7 +662,6 @@ function addCustomer()
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
-                 $(".loader").css('margin-top','12%');
                },
                method:"put",
                data:{_token:csrf_token,id:id},
@@ -695,7 +688,6 @@ function addCustomer()
                       }).parent('li').addClass('current-page').find('a').addClass('active');
                   });
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
                }
            })
     } catch (e) {
@@ -727,7 +719,6 @@ function addCustomer()
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
 
@@ -960,7 +951,6 @@ function addCustomer()
                   }).parent('li').addClass('current-page').find('a').addClass('active');
               });
                $(".loader").hide();
-               $(".loader").css('margin-top','0%');
              }
          })
       } catch (e) {
@@ -1268,7 +1258,6 @@ function addCustomer()
               data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_charge_free:freight_charge_free,freight_cost:freight_cost,po_required:po_required},
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               statusCode: {
 
@@ -1298,7 +1287,6 @@ function addCustomer()
                             }).parent('li').addClass('current-page').find('a').addClass('active');
                         });
                         $(".loader").hide();
-                        $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -1320,7 +1308,6 @@ function addCustomer()
              dataType:"json",
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              method:"delete",
              data:{_token:csrf_token,id:id},
@@ -1351,7 +1338,6 @@ function addCustomer()
                     }).parent('li').addClass('current-page').find('a').addClass('active');
                 });
                 $(".loader").hide();
-                $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
