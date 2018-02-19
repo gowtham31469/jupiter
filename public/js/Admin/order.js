@@ -689,6 +689,7 @@ function table(data,path) {
     }
     $.each(data, function (index, value) {
 
+        var action_status = false;
         tr += '<tr class="trClass" id="' + value.id + '">';
         for (var key in columnsIn) {
             if (key != "id") {
@@ -721,8 +722,11 @@ function table(data,path) {
                     var str=value[key] ;
                     if(str != null && str != "")
                     {
-                        $status=str.replace(/ /g, "");
-                        $status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
+                       if (str=="PI Approved"){
+                        	action_status = true;
+                        }
+                       $status=str.replace(/ /g, "");
+                       $status_text='<span class="label label-' + $status + '">' + value[key] + '</span>';
                     }
                     else
                     {
@@ -776,7 +780,7 @@ function table(data,path) {
                 {    
                     if (value[key]==1)
                     {    
-                      tr += '<td align="center"><a href="#" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
+                       tr += '<td align="center"><a href="#" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
@@ -893,7 +897,7 @@ function showSnackbar() {
  * @return profoma invoice
  */
 
-function genaratePI(id,table_name,uvc,qntytable)
+function genaratePI(id,table_name,uvc,pi_status)
 {
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -905,7 +909,6 @@ function genaratePI(id,table_name,uvc,qntytable)
         data: {
             _token: csrf_token,
             table_name: table_name,
-            qntytable:qntytable,
             id:id,
             uvc:uvc
         },
@@ -965,7 +968,15 @@ function genaratePI(id,table_name,uvc,qntytable)
                             tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
                         }
                         $('#item_details').html(tr)
-                        $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'","'+uvc+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'","'+uvc+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                        if (pi_status=="true")
+                        {
+                        	$('.pi_actions').html('<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                        }
+                        else
+                        {
+                        	$('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'","'+uvc+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'","'+uvc+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                        }
+                       
                         
                        $('#profoma-invoice').modal("show")
                     }
