@@ -110,13 +110,8 @@ function parseSingleType(data) {
  */
 function parseRatioType(data) {
     var ratioObj = {};
-    //*********************************************************************************************************
-    //*********************************************************************************************************
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
 
     var info = JSON.parse(data.details.info);
     $.each(info[0].data, function(ind, ele) {
@@ -143,19 +138,14 @@ function parseRatioType(data) {
         }
     });
 
-    //*********************************************************************************************************
-    //*********************************************************************************************************
+
     //********************************************* ORDER QUANTITY SECTION ************************************
     //********************************************* PARSE THE JSON TABULA *************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
     ratioObj.orderQuantity = {};
     var tabula = JSON.parse(data.details.table);
     ratioObj.orderQuantity.TPND             = tabula[0].data[0][5].text;
     ratioObj.orderQuantity.barCode          = tabula[0].data[0][4].text;
     ratioObj.orderQuantity.unitsPerCarton   = tabula[0].data[0][2].text;
-    console.log(ratioObj);
     return ratioObj;
     
 }
@@ -169,26 +159,33 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
     $('#tesco_po_number').val(parsedObj.purchaseOrder);
-    if(zone === 'CE') {
+    if(zone === 'ce') {
         $('#tesco_ce_style').val(parsedObj.styleNumber);
      } else {
         $('#tesco_uk_style').val(parsedObj.styleNumber);
      }
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
-    $.each(parsedObj.orderQuantity, function(i, j) {
-        if(type === 'single') {
-            var index = i + 1;
-            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
-            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
-            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
-            $('#'+zone+'_single_size_'+index).val(j.Size);  
-        }
-        if(parsedObj.orderQuantity.length !== (i+1)) {
-            $('.add-row-btn').trigger('click');
-        }
-        
-    });
+
+    if(parsedObj.type === 'SINGLE') {
+        $.each(parsedObj.orderQuantity, function(i, j) {
+            if(type === 'single') {
+                var index = i + 1;
+                $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+                $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
+                $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
+                $('#'+zone+'_single_size_'+index).val(j.Size);  
+            }
+            if(parsedObj.orderQuantity.length !== (i+1)) {
+                $('.add-row-btn').trigger('click');
+            }
+        });  
+    } else if(parsedObj.type === 'RATIO PACK  A') {
+        $('#'+zone+'_ratio_tpnd').val(parsedObj.orderQuantity.TPND);
+        $('#'+zone+'_ratio_itf').val(parsedObj.orderQuantity.barCode);
+        $('#'+zone+'_ratio_upc').val(parsedObj.orderQuantity.unitsPerCarton);
+    }
+
     dynamicSVGTemplates();
 }
 
