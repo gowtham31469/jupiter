@@ -4,31 +4,64 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET the Python executable path
+    | SET the JAVA executable path
     |--------------------------------------------------------------------------
     |
     |
     */
-   
    'java' => 'C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe',
-    /*
+
+   /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Get Information
+    | SET the JAVA executable path
     |--------------------------------------------------------------------------
     |
     |
     */
+   'tabula_jar' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar',
 
-    'info' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 0,0,80,1000  -f JSON ',
-
-    /*
+   /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Quantity
+    | Dimension to find out the PDF purchase order type.
     |--------------------------------------------------------------------------
     |
     |
     */
+   'po_type' => ' -p 2  -a 0,10,40,200  -f JSON ',
 
-    'quantity' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 121,9,400,440  -f JSON ',
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Get Information of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'single_info' => ' -p 2 -a 0,0,80,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'single_quantity' => ' -p 2 -a 121,9,400,440  -f JSON ',
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Get Information of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'ratio_info' => ' -p 2 -a 0,10,90,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'ratio_quantity' => ' -p 2 -a 130,10,160,1000  -f JSON ',
 
 ];

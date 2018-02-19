@@ -4,7 +4,7 @@
 	 viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
-	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT; font-family:'Franklin', Fallback, sans-serif !important;}
+	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT;}
 	.st2{font-size:28px;}
 	.st3{letter-spacing:-1;}
 	.st4{font-size:10px;}
@@ -51,6 +51,6 @@
 <text transform="matrix(1 0 0 1 204.5719 166.6063)" class="st1 st4">No of pieces in Ratio:</text>
 <text id="pieces_in_ratio" class="st1 st4" transform="matrix(1 0 0 1 319.59 166.6063)">3</text>
 <text transform="matrix(1 0 0 1 204.5719 181.6064)" class="st1 st4">Box ____ of ____</text>
-<image style="overflow:visible;" width="391" height="178" xlink:href=""  transform="matrix(0.24 0 0 0.24 49 159.0808)">
-</image>
+<g id="barcode" width="391" height="178" transform="matrix(0.24 0 0 0.24 49 159.0808)">
+</g>
 </svg>
