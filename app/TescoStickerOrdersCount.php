@@ -18,5 +18,5 @@ class TescoStickerOrdersCount extends Model
       *
       * @var array
       */
-      protected $fillable = ['tesco_order_id','template_name','count','order_status','artwork_status','print_status'];
+      protected $fillable = ['tesco_order_id','template_name','count','order_status','artwork_status','print_status','pi_status','po_status','po_number','po_file'];
 }
