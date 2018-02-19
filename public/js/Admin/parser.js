@@ -4,13 +4,10 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-    try {
+    //try {
         //Check for Purchase Order Type
         var parsedObj;
-        var po_type = '';
-        po_type = JSON.parse(data.info);
-        console.log(po_type[0].data[1][0].text);
-        po_type = po_type[0].data[1][0].text;
+        var po_type = data.type;
         switch(po_type) {
             case 'SINGLE': parsedObj = parseSingleType(data);
                 break;
@@ -23,10 +20,10 @@ function parseXML(data, callback) {
         }
         callback(parsedObj);
 
-    } catch(e) {
-        // error statements
-        console.log("Error:"+e);
-    }
+    // } catch(e) {
+    //     // error statements
+    //     console.log("Error:"+e);
+    // }
 }
 
 /**
@@ -35,69 +32,75 @@ function parseXML(data, callback) {
  * @return {object}     Object array with all the required fields.
  */
 function parseSingleType(data) {
-    var singleObj = {};
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //********************************************* ORDER INFORMATION SECTION *********************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
+    try{
+        var singleObj = {};
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //********************************************* ORDER INFORMATION SECTION *********************************
+        //********************************************* PARSE THE JSON TABULA *************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
 
-    var info = JSON.parse(data.info);
-    $.each(info[0].data, function(ind, ele) {
-        var row_length = ele.length;
-        switch(ind) {
-            case 0: 
-                singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
-                break;
-            case 1:
-                singleObj.type = ele[0].text;
-                break;
-            case 2:
-                var season = ele[2].text.split(" ");
-                singleObj.seasonCode = season[0];
-                break;
-            case 3:
-                var style = ele[0].text.split(":");
-                var tab = JSON.parse(data.table);
-                var size = tab[0].data[1][3].text;
-                singleObj.styleNumber =  style[1].trim();
-                singleObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
-                break;
-        }
-    });
-
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //********************************************* ORDER QUANTITY SECTION ************************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    //*********************************************************************************************************
-    singleObj.orderQuantity = {};
-    var header = [];
-    var values = [];
-    var tabula = JSON.parse(data.table);
-    tabula[0].data.pop(); //Remove the total quantity row from the object
-    console.log(tabula[0].data);
-    $.each(tabula[0].data, function(index,element) {
-        var row = {};
-        element.pop();//Remove the extra space element from the array
-        $.each(element, function(i, val) {
-            if(index === 0) {
-                header.push(val.text.replace(/ /g,"_"));
-            } else {
-                row[header[i]] = val.text;  
+        var info = JSON.parse(data.details.info);
+        console.log(info[0].data);
+        $.each(info[0].data, function(ind, ele) {
+            var row_length = ele.length;
+            switch(ind) {
+                case 0: 
+                    singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                    break;
+                case 1:
+                    singleObj.type = ele[0].text;
+                    break;
+                case 2:
+                    var season = ele[2].text.split(" ");
+                    singleObj.seasonCode = season[0];
+                    break;
+                case 3:
+                    var style = ele[0].text.split(":");
+                    var tab = JSON.parse(data.details.table);
+                    var size = tab[0].data[1][3].text;
+                    singleObj.styleNumber =  style[1].trim();
+                    singleObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
+                    break;
             }
         });
-        if(index !== 0) {
-           values.push(row); 
-        } 
-    });
-    singleObj.orderQuantity = values;
-    console.log(singleObj);
-    return singleObj;
+
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //********************************************* ORDER QUANTITY SECTION ************************************
+        //********************************************* PARSE THE JSON TABULA *************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        singleObj.orderQuantity = {};
+        var header = [];
+        var values = [];
+        var tabula = JSON.parse(data.details.table);
+        tabula[0].data.pop(); //Remove the total quantity row from the object
+        console.log(tabula[0].data);
+        $.each(tabula[0].data, function(index,element) {
+            var row = {};
+            element.pop();//Remove the extra space element from the array
+            $.each(element, function(i, val) {
+                if(index === 0) {
+                    header.push(val.text.replace(/ /g,"_"));
+                } else {
+                    row[header[i]] = val.text;  
+                }
+            });
+            if(index !== 0) {
+               values.push(row); 
+            } 
+        });
+        singleObj.orderQuantity = values;
+        console.log(singleObj);
+        return singleObj;
+        
+    } catch(e) {
+        console.log("Error:"+e);
+    }
 }
 
 /**
@@ -115,31 +118,28 @@ function parseRatioType(data) {
     //*********************************************************************************************************
     //*********************************************************************************************************
 
-    var info = JSON.parse(data.info);
-    console.log(info);
-    var table = JSON.parse(data.table);
-    console.log(table);
-    /*
+    var info = JSON.parse(data.details.info);
     $.each(info[0].data, function(ind, ele) {
         var row_length = ele.length;
         switch(ind) {
-            case 0: 
-                ratioObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+            case 0:
+                var po = (row_length === 7) ? ele[6].text : ele[7].text;
+                po = po.split(":");
+                ratioObj.purchaseOrder = po[1].trim();
                 break;
             case 1:
                 ratioObj.type = ele[0].text;
                 break;
             case 2:
-                var season = ele[2].text.split(" ");
+                var product = ele[3].text.split(":");
+                var season = product[1].trim().split(" ");
                 ratioObj.seasonCode = season[0];
                 break;
             case 3:
-                var style = ele[0].text.split(":");
-                var tab = JSON.parse(data.table);
-                var size = tab[0].data[1][3].text;
-                ratioObj.styleNumber =  style[1].trim();
-                ratioObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
+                ratioObj.styleNumber =  ele[1].text.trim();
                 break;
+            case 4:
+                ratioObj.shortDescription =  ele[1].text.trim();
         }
     });
 
@@ -151,29 +151,13 @@ function parseRatioType(data) {
     //*********************************************************************************************************
     //*********************************************************************************************************
     ratioObj.orderQuantity = {};
-    var header = [];
-    var values = [];
-    var tabula = JSON.parse(data.table);
-    tabula[0].data.pop(); //Remove the total quantity row from the object
-    console.log(tabula[0].data);
-    $.each(tabula[0].data, function(index,element) {
-        var row = {};
-        element.pop();//Remove the extra space element from the array
-        $.each(element, function(i, val) {
-            if(index === 0) {
-                header.push(val.text.replace(/ /g,"_"));
-            } else {
-                row[header[i]] = val.text;  
-            }
-        });
-        if(index !== 0) {
-           values.push(row); 
-        } 
-    });
-    ratioObj.orderQuantity = values;
+    var tabula = JSON.parse(data.details.table);
+    ratioObj.orderQuantity.TPND             = tabula[0].data[0][5].text;
+    ratioObj.orderQuantity.barCode          = tabula[0].data[0][4].text;
+    ratioObj.orderQuantity.unitsPerCarton   = tabula[0].data[0][2].text;
     console.log(ratioObj);
     return ratioObj;
-    */
+    
 }
 /**
  * Method to render the parsed objects to the input field
@@ -192,13 +176,6 @@ function renderParsedValues(parsedObj) {
      }
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
-    // $("select[name=tesco_brand] option").filter(function() {
-    //     return this.text == parsedObj.brand; 
-    // }).attr('selected', true);
-    // $("select[name=tesco_supplier] option").filter(function() {
-    //     return this.text == parsedObj.supplierName; 
-    // }).attr('selected', true);
-    // $('.selectpicker').selectpicker('refresh');
     $.each(parsedObj.orderQuantity, function(i, j) {
         if(type === 'single') {
             var index = i + 1;
@@ -212,6 +189,7 @@ function renderParsedValues(parsedObj) {
         }
         
     });
+    dynamicSVGTemplates();
 }
 
 /**
