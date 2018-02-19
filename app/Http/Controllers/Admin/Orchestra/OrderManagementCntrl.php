@@ -1493,10 +1493,10 @@ class OrderManagementCntrl extends Controller
     public function getExistingLabelOrdersPo(Request $request)
     {
 		 $uvc        =   $request->uvc;
-          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
-		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
-		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
-		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
 		 echo json_encode($data);
     } 
 	/**
@@ -1508,15 +1508,21 @@ class OrderManagementCntrl extends Controller
     public function getExistingLabelOrderStatusPo(Request $request)
     {
 		 $uvc        =   $request->uvc;
-          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
-		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
-		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
-		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
 		
-		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->select('*',DB::raw('"Solid Carton Stickers" as TemplateName'),DB::raw('"Solid Carton Stickers" as TemplateType'),DB::raw('"orchestra_solid_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
-		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*',DB::raw('"Solid Poly Bag Stickers" as TemplateName'),DB::raw('"Solid Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_solid_poly_bag_sticker_orders" as type'))->where('uvc',$uvc)->get();
-		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->select('*',DB::raw('"Standard Carton Stickers" as TemplateName'),DB::raw('"Standard Carton Stickers" as TemplateType'),DB::raw('"orchestra_standard_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
-		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->select('*',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_polybag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
+		
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Solid Carton Stickers" as TemplateName'),DB::raw('"Solid Carton Stickers" as TemplateType'),DB::raw('"orchestra_solid_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Solid Poly Bag Stickers" as TemplateName'),DB::raw('"Solid Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_solid_poly_bag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Carton Stickers" as TemplateName'),DB::raw('"Standard Carton Stickers" as TemplateType'),DB::raw('"orchestra_standard_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_polybag_sticker_orders" as type'))->where('uvc',$uvc)->get();
 		
 		
 		 echo json_encode($data);
@@ -1537,7 +1543,8 @@ class OrderManagementCntrl extends Controller
 			
 				DB::table($value[0])->where('id',$value[1])
                    ->update([
-                        'po_number' => $po
+                        'po_number' => $po,
+						'po_status' => "PO Approved"
                   ]);
 		}
 		echo true;
@@ -1573,6 +1580,7 @@ class OrderManagementCntrl extends Controller
 					   ->update([
 							'po_number' => $po,
 							'po_file' => $destination_path_insert,
+						    'po_status' => "PO Approved"
 					  ]);
 			}
 		}
@@ -1584,7 +1592,8 @@ class OrderManagementCntrl extends Controller
 
 					DB::table($value[0])->where('id',$value[1])
 					   ->update([
-							'po_number' => $po
+							'po_number' => $po,
+						   'po_status' => "PO Approved"
 					  ]);
 			}
 		}

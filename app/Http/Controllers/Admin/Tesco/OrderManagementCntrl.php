@@ -174,19 +174,36 @@ class OrderManagementCntrl extends Controller
      */
     public function createOrderByTabula(Request $request) {
       try {
-
-        //Read the tabula configuration from config/tabula.php.
-        $command_quantity  = Config::get('tabula.quantity');
-        $command_info      = Config::get('tabula.info');
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
           $name = $file->getClientOriginalName();
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          //Check the type of PO
+          $po_type = $this->checkPOType($path);
+          $data = '';
+          switch ($po_type) {
+            case 'SINGLE':
+              $data = $this->cropPDF($path, 'single');
+              break;
+            case 'RATIO PACK  A':
+              $data = $this->cropPDF($path, 'ratio');
+              break; 
+            case 'RATIO PACK  A PACK  B':
+              $data = $this->cropPDF($path);
+              break; 
+            case 'SINGLES':
+              $data = $this->cropPDF($path);
+              break;
+            
+            default:
+              return response()->json(['error' => 'Unknown PO Type']);
+              break;
+          }
           //Execute tabula method to extract the quantity table.
           $info    = shell_exec('java -jar '.$command_info.$path);
           $table   = shell_exec('java -jar '.$command_quantity.$path);
-          return response()->json(['info' =>$info,'table' => $table]);
+          return response()->json(['info' =>$info,'table' => $table, 'type' => $po_type]);
         } else {
           return "File not found!!";
         }
@@ -194,6 +211,35 @@ class OrderManagementCntrl extends Controller
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
     }
+
+    /**
+     * Method to find the type of P.O uploaded.
+     * @param  [string] $file PDF file path.
+     * @return [string]       Type of the PDF
+     */
+    public function checkPOType($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula  = Config::get('tabula.tabula_jar');
+        $po_type = Config::get('tabula.po_type');
+        $type    = shell_exec('java -jar '.$tabula.$po_type.$file);
+        $type    = json_decode($type, true);
+        $type = $type[0]['data'][0][0]['text'];
+        return $type;
+    }
+
+    /**
+     * Method to get the appropriate dimensions from the PDF
+     * @param  [path] $file File to be cropped
+     * @param  [str] $type Purchase Order type
+     * @return [str]       JSON extracted string
+     */
+    public function cropPDF($file, $type) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula      = Config::get('tabula.tabula_jar');
+        $quantity    = Config::get('tabula.quantity');
+        $info        = Config::get('tabula.info');
+    }
+
     /**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
      * @author <Praveen>
