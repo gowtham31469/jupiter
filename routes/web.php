@@ -215,9 +215,8 @@ Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCnt
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByTabula');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
-Route::post('admin/tesco/set-ce-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioTCL1TCL2TSL1Orders');
-Route::post('admin/tesco/set-ce-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioTHL1Orders');
-Route::post('admin/tesco/set-ce-single-tcl4tsl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleTCL4TSL3Orders');
+Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
+Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
 Route::post('admin/tesco/set-ce-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleTHL3Orders');
 Route::post('admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTCL1TCL2TSL1Orders');
 Route::post('admin/tesco/set-uk-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTHL1Orders');
