@@ -27,7 +27,7 @@ return [
     |
     |
     */
-   'po_type' => '-p 2  -a 0,10,40,200  -f JSON',
+   'po_type' => ' -p 2  -a 0,10,40,200  -f JSON ',
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information
