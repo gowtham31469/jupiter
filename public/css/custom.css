@@ -1327,14 +1327,3 @@ a.notification:focus {
 .navbar-default .dropdown-menu.notify-drop .notify-drop-footer a:hover {
     color: #333;
 }
-
-@font-face {
-    font-family: 'Franklin';
-    src: url('Franklin.eot');
-    /* IE9 Compat Modes */
-    src: url('Franklin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('Franklin.woff2') format('woff2'), /* Super Modern Browsers */
-    url('Franklin.woff') format('woff'), /* Pretty Modern Browsers */
-    url('Franklin.ttf') format('truetype'), /* Safari, Android, iOS */
-    /* Legacy iOS */
-}
