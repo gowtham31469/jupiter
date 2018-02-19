@@ -33,17 +33,24 @@
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
                 <div class="modal-body">
-                   <a href="#" hidden><i class="fa fa-file-pdf-o" style="font-size:36px"></i> Open the pdf!</a>
-                    <label>Upload Purchase Order</label>
-                    <form method="post" class="dropzone" id="po-upload">
+                    <div class="po_file hidden">
+                        <a href="#"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
+                        <p> OR </p>
+                        <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
+                    </div>
+                    <div class="po_upload">
+                        <label>Upload Purchase Order</label>
+                        <form method="post" class="dropzone" id="po-upload">
                         <input type="hidden" name="tableName" id="tableName" value="" >
                         <input type="hidden" name="rowID" id="rowID" value="" >
                         {{ csrf_field() }}
                     </form>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary upload-po">Upload</button>
+                    <button type="button" class="btn btn-primary disabled upload-po">Upload</button>
                 </div>
             </div>
         </div>
@@ -176,17 +183,11 @@
 								<input type="file" id="new_po_file">
 								<p class="help-block">Example block-level help text here.</p>
 							</div>
-							
 						</div>
-                       
-                        
-                     
-                       
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
 						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
-						
 						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
                     </div>
                 </div>
@@ -290,8 +291,6 @@
 
             submitButton.addEventListener("click", function() {
                 myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-         
-
             });
 
             // You might want to show the submit button only when 
@@ -300,7 +299,7 @@
             this.on("addedfile", function(file)
             {
                 var filename = file.name;   
-               
+                $('.upload-po').removeClass('disabled')
               // Show submit button here and/or inform user to click it.
             });
             this.on("complete", function(file){        
@@ -325,8 +324,6 @@
                 $('#snackbar').css('background-color','#F44336');
                 showSnackbar();
             });
-
-
         }
     };
 
