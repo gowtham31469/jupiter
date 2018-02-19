@@ -36,6 +36,7 @@
 
 </head>
 <body>
+    
     <div class="container-fluid">
         <div class="row">
         @if (Auth::guard("web")->user()) @include('layouts.Admin.navbar')
@@ -172,5 +173,6 @@
         
     </script>
     @yield('jqueryIncludes')
+
 </body>
 </html>

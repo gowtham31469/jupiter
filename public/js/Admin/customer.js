@@ -586,12 +586,12 @@ function addCustomer()
             },
 
             onClickEvent: function() {
-              var value = $("#editcountry" + id).getSelectedItemData().code;
-              $("#editcountry" + id).val(value).trigger("change");
+              var value = $("#edit_country" + id).getSelectedItemData().code;
+              $("#edit_country" + id).val(value).trigger("change");
             }
        }
       };
-    $("#editcountry" + id).easyAutocomplete(options);
+    $("#edit_country" + id).easyAutocomplete(options);
    } catch (e) {
      console.log("Error:"+e)
    }
@@ -809,12 +809,15 @@ function addCustomer()
                       $('#edit_freight_charge_free').prop('checked', true);
                       $('#edit_freight_charge_req').prop('checked', false);
                       $('div.edit_freight_charge_div').hide();
+                      $('#edit_freight_charge').prop('required',false)
+                      $('div.edit_freight_charge_div').removeClass('has-error has-danger');
                     }
                     else
                     {
                       $('#edit_freight_charge_req').prop('checked', true);
                       $('#edit_freight_charge_free').prop('checked', false);
                       $('div.edit_freight_charge_div').show();
+                      $('#edit_freight_charge').prop('required',true)
                       $('#edit_freight_charge').val(data.customers[0].freight_cost);
                     }
 
@@ -1039,7 +1042,7 @@ function addCustomer()
          var a = []
          var id = $(rem).attr("data-id");
          var val = parseInt(id) + 1;
-         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="address' + val + '" class="form_label">Address</label><textarea class="form-control  address" required="" placeholder="Address" style="resize:none;" rows="3" name="editaddress' + val + '" cols="50" id="editaddress' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editcountry' + val + '" class="form_label">Country</label><input class="form-control input-sm country" placeholder="Country" required="" name="editcountry' + val + '" value="" id="editcountry' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edittelephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edittelephone' + val + '" value="" id="edittelephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="editfax' + val + '" class="form_label">Fax</label><input class="form-control input-sm fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="editfax' + val + '" value="" id="editfax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm address_email" placeholder="Email" required="" name="address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div><div class="form-check"><label class="form-check-label"><input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + val + '"> Make as default shipping address</label></div></div></div>')
+         $('#editbilladdress').append('<div id="editbilladdress_' + val + '" class="editbilladdress"><i class="ion-trash-a delete-user edit-delete" style="position: absolute;float: right;right: 16px;padding: 11px 15px;cursor:pointer" onclick="editRemoveAddress(this)" title="Delete"></i><div type="button" class="accordion button-bottom active"><h4>Address 1</h4></div><div id="editbilladdress' + val + '" class="panel" style="display: block;"><div class="form-group has-feedback"><label for="edit_address' + val + '" class="form_label">Address</label><textarea class="form-control edit_address" required="" placeholder="Address" style="resize:none;" rows="3" name="edit_address' + val + '" cols="50" id="edit_address' + val + '"></textarea><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_country' + val + '" class="form_label">Country</label><input class="form-control input-sm edit_country" placeholder="Country" required="" name="edit_country' + val + '" value="" id="edit_country' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_telephone' + val + '" class="form_label">Phone</label><div class="input-group"><span class="input-group-addon input-sm " id="basic-addon1">+91</span><input class="form-control input-sm edit_telephone" placeholder="Phone" required="" data-minlength="10" maxlength="10" onkeypress="return isNumber(event)" name="edit_telephone' + val + '" value="" id="edit_telephone' + val + '" type="text"></div><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_fax' + val + '" class="form_label">Fax</label><input class="form-control input-sm edit_fax" placeholder="Fax" required="" onkeypress="return isNumber(event)" name="edit_fax' + val + '" value="" id="edit_fax' + val + '" type="text"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label for="edit_address_email' + val + '" class="form_label">Email</label><div class="input-group"><span class="input-group-addon input-sm" id="editbasic-addon1">@</span><input class="form-control input-sm edit_address_email" placeholder="Email" required="" name="edit_address_email' + val + '" value="" id="edit_address_email' + val + '" type="email"></div><div class="help-block with-errors"></div></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_default_address" type="checkbox" value="" name="default1" id="edit_default_address' + val + '"> Make as default billing address</label></div><div class="form-check"><label class="form-check-label"><input class="form-check-input edit_shipping_address" type="checkbox" value="" name="defaultShip1" id="edit_shipping_address' + val + '"> Make as default shipping address</label></div></div></div>')
          $('#edit_customer_form').validator('update');
          editAutopopulateCountry(val);
          
@@ -1134,8 +1137,6 @@ function addCustomer()
           var address_email   = [];
           var billing_address = [];
           var shipping_address = [];
-
-
           var buyers          = [];
 
           /** [ Create array of contact person for multiple contact details ] */
@@ -1258,7 +1259,7 @@ function addCustomer()
           fax              = fax.join(',');
           address_email    = address_email.join(',');
           billing_address  = billing_address.join(',');
-          shipping_address  = shipping_address.join(',');
+          shipping_address = shipping_address.join(',');
           buyer            = buyers.join(',');
 
           $.ajax({
