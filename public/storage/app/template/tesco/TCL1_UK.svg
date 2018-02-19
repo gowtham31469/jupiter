@@ -4,7 +4,7 @@
 	 viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
-	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT;}
+	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT; font-family:'Franklin', Fallback, sans-serif !important;}
 	.st2{font-size:28px;}
 	.st3{letter-spacing:-1;}
 	.st4{font-size:10px;}
