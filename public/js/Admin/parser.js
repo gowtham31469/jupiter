@@ -6,12 +6,11 @@
 function parseXML(data, callback) {
     try {
         //Check for Purchase Order Type
-        var po_type = '';
-
-        po_type = JSON.parse(data.info);
-        console.log(po_type[0].data);
-        po_type = 'SINGLE';
         var parsedObj;
+        var po_type = '';
+        po_type = JSON.parse(data.info);
+        console.log(po_type[0].data[1][0].text);
+        po_type = po_type[0].data[1][0].text;
         switch(po_type) {
             case 'SINGLE': parsedObj = parseSingleType(data);
                 break;
