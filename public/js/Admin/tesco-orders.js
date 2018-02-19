@@ -324,7 +324,7 @@ function createOrders(parsedObj = false) {
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
                                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" onkeypress="return isNumber(event)" id="count_'+i+'" name="count_'+i+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
@@ -392,7 +392,7 @@ function createOrders(parsedObj = false) {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#'+item.template_name.replace(' ', '')+'">Open Modal</button> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Modal Header</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Print</button></div></div></div></div></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" data-toggle="modal" data-target="#'+item.template_name.replace(' ', '')+'" style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" >Print</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
                       });
                       
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left">Please save or submit changes before closing page.</span><button class="btn btn-xs btn-warning" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div></div>';
@@ -674,6 +674,7 @@ try{
  */
 function dynamicSVGTemplates()
 {
+	
     /** [ Get data from localstorage ] */
     var data = JSON.parse(localStorage.getItem("data"));
     var zone = localStorage.getItem("zone");
@@ -694,6 +695,7 @@ function dynamicSVGTemplates()
               {
                  var tpnd = $('#ce_ratio_orms_tpn').val();
                  var description  = $('#tesco_description').val();
+				 var uk_ratio_itf  = $('#uk_ratio_itf').val();
                  /** [ Dynamically change svg short description ] */
                  if(description != '')
                  {
@@ -711,6 +713,15 @@ function dynamicSVGTemplates()
                  else
                  {
                      svgDoc.getElementById("tpnd").innerHTML = '';
+                 }
+				  
+				 if(uk_ratio_itf != '')
+                 {
+                     jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
+                 }
+                 else
+                 {
+                     //svgDoc.getElementById("barcode").innerHTML = '';
                  }
               }
               else
@@ -787,9 +798,11 @@ function dynamicSVGTemplates()
            {
               /**  [ if UK ratio template ] */
               if(type === "ratio")
-              {
+              { 
                   var tpnd = $('#uk_ratio_tpnd').val();
                   var description  = $('#tesco_description').val();
+				  var uk_ratio_itf  = $('#uk_ratio_itf').val();
+				   
                   /** [ Dynamically change svg UK ratio tpnd number ] */
                   if(tpnd != '')
                   {
@@ -808,6 +821,19 @@ function dynamicSVGTemplates()
                   {
                       svgDoc.getElementById("description").innerHTML = ''; 
                   }
+				 
+				  /** [ Dynamically change svg barcode ] */
+				  if(uk_ratio_itf.length == 13)
+				  {
+					
+					jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
+
+				  }
+				  else
+				  {
+					 //svgDoc.getElementById("barcode").innerHTML = '';
+				  }
+				  
               }
               else
               {
@@ -894,7 +920,8 @@ function dynamicSVGTemplates()
             var tag_at_source    = $('#tesco_tag_at_source option:selected').text();
             var season_code      = $('#tesco_season_code').val();
             var manufacture_date = $('#tesco_manufacture_date').val();
-           /** [ Dynamically change svg PO order number ] */
+			
+			
            if(po_number != '')
            {
               svgDoc.getElementById("po_number").innerHTML = po_number.toUpperCase();
@@ -1062,6 +1089,7 @@ function dynamicSVGTemplates()
               {
                    var pieces_in_ratio = $('#uk_ratio_upc').val();
                    var tpnd = $('#uk_ratio_tpnd').val();
+				   var uk_ratio_itf  = $('#uk_ratio_itf').val();
                    /** [ Dynamically change svg UK pieces in ratio ] */
                    if(pieces_in_ratio != '')
                    {
@@ -1080,6 +1108,17 @@ function dynamicSVGTemplates()
                    {
                       svgDoc.getElementById("tpnd").innerHTML = '';
                    }
+				   /** [ Dynamically change svg barcode ] */
+					  if(uk_ratio_itf.length == 13)
+					  {
+
+						jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
+
+					  }
+					  else
+					  {
+						 //svgDoc.getElementById("barcode").innerHTML = '';
+					  }
               }
               else
               {
@@ -1691,4 +1730,63 @@ try{
   } catch (e) {
    console.log("Error:"+e)
  }
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode(code, id, svgDoc) {
+	
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 3.45,
+		height: 125,
+		fontSize: 35,
+		flat:true
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+	
+	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
