@@ -200,10 +200,8 @@ class OrderManagementCntrl extends Controller
               return response()->json(['error' => 'Unknown PO Type']);
               break;
           }
-          //Execute tabula method to extract the quantity table.
-          $info    = shell_exec('java -jar '.$command_info.$path);
-          $table   = shell_exec('java -jar '.$command_quantity.$path);
-          return response()->json(['info' =>$info,'table' => $table, 'type' => $po_type]);
+          
+          return response()->json(['details' =>$data, 'type' => $po_type]);
         } else {
           return "File not found!!";
         }
@@ -235,9 +233,13 @@ class OrderManagementCntrl extends Controller
      */
     public function cropPDF($file, $type) {
       //Read the tabula configuration from config/tabula.php.
-        $tabula      = Config::get('tabula.tabula_jar');
-        $quantity    = Config::get('tabula.quantity');
-        $info        = Config::get('tabula.info');
+      $tabula      = Config::get('tabula.tabula_jar');
+      $quantity    = Config::get('tabula.'.$type.'_quantity');
+      $information = Config::get('tabula.'.$type.'_info');
+      //Execute tabula method to extract the quantity table.
+      $info    = shell_exec('java -jar '.$tabula.$information.$file);
+      $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
+      return ['info' => $info, 'table' => $table];
     }
 
     /**
