@@ -181,6 +181,8 @@ class OrderManagementCntrl extends Controller
           $file = $request->file('purchase_order');
           $name = $file->getClientOriginalName();
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          //Check the type of PO
+          $po_type = $this->checkPOType($path);
           //Execute tabula method to extract the quantity table.
           $info    = shell_exec('java -jar '.$command_info.$path);
           $table   = shell_exec('java -jar '.$command_quantity.$path);
@@ -191,6 +193,21 @@ class OrderManagementCntrl extends Controller
       } catch (\Exception $e) {
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
+    }
+
+    /**
+     * Method to find the type of P.O uploaded.
+     * @param  [string] $file PDF file path.
+     * @return [string]       Type of the PDF
+     */
+    public function checkPOType($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula  = Config::get('tabula.tabula_jar');
+        $po_type = Config::get('tabula.po_type');
+        $type    = shell_exec('java -jar '.$tabula.$po_type.$file);
+        var_dump(json_decode($type, true));
+        print_r($type);
+        return $type;
     }
     /**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
