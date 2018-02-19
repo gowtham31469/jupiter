@@ -336,7 +336,7 @@ border: 0;
 	</div>
 -->
 	
-	<div class="modal fade" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal fade" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

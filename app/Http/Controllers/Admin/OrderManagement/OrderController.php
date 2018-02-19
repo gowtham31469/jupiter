@@ -120,16 +120,7 @@ class OrderController extends Controller
 	
     public function printPdf(Request $request)
     {
-      
-        
-//        $svg=$request->svg;
-//        $html_content="hai";
-//        PDF::SetTitle('sample pdf');
-//        PDF::SetFont('calibrib');
-//        PDF::AddPage(); public_path('/storage/app/template/std-carton-sticker-02.svg')
-//        PDF::ImageSVG($file = url('/storage/app/template/std-carton-sticker-02.svg'), $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-//        PDF::Output('solid.pdf', 'D');
-    
+		 $name=$request->name;
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
@@ -141,8 +132,8 @@ class OrderController extends Controller
         PDF::AddPage();
         PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
 	
 	/**
@@ -279,17 +270,7 @@ class OrderController extends Controller
 	
     public function printPdfTable(Request $request)
     {
-      
-        
-//        $svg=$request->svg;
-//        $html_content="hai";
-//        PDF::SetTitle('sample pdf');
-//        PDF::SetFont('calibrib');
-//        PDF::AddPage(); public_path('/storage/app/template/std-carton-sticker-02.svg')
-//        PDF::ImageSVG($file = url('/storage/app/template/std-carton-sticker-02.svg'), $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-//        PDF::Output('solid.pdf', 'D');
-    
-        
+         $name=$request->name;
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
@@ -355,22 +336,9 @@ class OrderController extends Controller
          ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
        
-        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
         
-//            $svg=urldecode($request->svg);
-//         define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//         define ('PDF_FONT_NAME_DATA', 'calibrib');
-////          print_r($svg);
-//        PDF::setImageScale(1);
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
-//        PDF::SetFont('calibrib');
-//        PDF::AddPage();
-//        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-//        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-//        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-//        print_r(url('/storage/app/template/solid1.pdf'));
     }
 	
 	/**
@@ -382,7 +350,7 @@ class OrderController extends Controller
      public function printPdfSmall(Request $request)
     {
       
-        
+        $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'calibrib');
         define ('PDF_FONT_NAME_DATA', 'calibrib');
@@ -393,8 +361,8 @@ class OrderController extends Controller
         PDF::AddPage();
         PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=95, $h=65, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
     }
    
 }
