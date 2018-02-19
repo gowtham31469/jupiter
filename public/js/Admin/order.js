@@ -562,10 +562,7 @@ function orderStatus() {
                                     select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
                                 });
                             }
-
                         });
-
-
                     }
                 });
 
@@ -668,7 +665,7 @@ var normalizeDate = function (dateString) {
  * @return View
  */
 
-function table(data,path) {
+function table(data,path){
     var th = "";
     var tr = "";
     var columnsIn = data[0];
