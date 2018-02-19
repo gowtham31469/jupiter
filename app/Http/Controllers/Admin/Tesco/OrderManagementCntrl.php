@@ -169,24 +169,27 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * Method to create tesco order from purchase order using Tabul-Java
+     * Method to create tesco order from purchase order using Tabula-Java
      * @return \Illuminate\Http\Response
      */
-    public function createOrderByTabula($path) {
+    public function createOrderByTabula(Request $request) {
       try {
 
         //Read the tabula configuration from config/tabula.php.
-        $command  = Config::get('tabula.command');
-        $java     = Config::get('tabula.java');
-        $output   = shell_exec('java -jar '.$command.$path);
-        return $output;
-        // $process = new Process(java -jar '.$command.$path);
-        // $process->run();
-        // // executes after the command finishes
-        // if (!$process->isSuccessful()) {
-        //     throw new ProcessFailedException($process);
-        // }
-        //return $process->getOutput();
+        $command_quantity  = Config::get('tabula.quantity');
+        $command_info      = Config::get('tabula.info');
+        //Check the file has been uploaded or not
+        if($request->hasFile('purchase_order')) {
+          $file = $request->file('purchase_order');
+          $name = $file->getClientOriginalName();
+          $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          //Execute tabula method to extract the quantity table.
+          $info    = shell_exec('java -jar '.$command_info.$path);
+          $table   = shell_exec('java -jar '.$command_quantity.$path);
+          return response()->json(['info' =>$info,'table' => $table]);
+        } else {
+          return "File not found!!";
+        }
       } catch (\Exception $e) {
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
