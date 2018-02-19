@@ -700,7 +700,7 @@ function dynamicSVGTemplates()
               {
                  var tpnd = $('#ce_ratio_orms_tpn').val();
                  var description  = $('#tesco_description').val();
-				 var uk_ratio_itf  = $('#uk_ratio_itf').val();
+				 
                  /** [ Dynamically change svg short description ] */
                  if(description != '')
                  {
@@ -718,15 +718,6 @@ function dynamicSVGTemplates()
                  else
                  {
                      svgDoc.getElementById("tpnd").innerHTML = '';
-                 }
-				  
-				 if(uk_ratio_itf != '')
-                 {
-                     jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
-                 }
-                 else
-                 {
-                     //svgDoc.getElementById("barcode").innerHTML = '';
                  }
               }
               else
@@ -807,7 +798,7 @@ function dynamicSVGTemplates()
                   var tpnd = $('#uk_ratio_tpnd').val();
                   var description  = $('#tesco_description').val();
 				  var uk_ratio_itf  = $('#uk_ratio_itf').val();
-				   
+				  
                   /** [ Dynamically change svg UK ratio tpnd number ] */
                   if(tpnd != '')
                   {
@@ -828,9 +819,10 @@ function dynamicSVGTemplates()
                   }
 				 
 				  /** [ Dynamically change svg barcode ] */
-				  if(uk_ratio_itf.length == 13)
+				  if(uk_ratio_itf.length === 13)
 				  {
 					
+                    alert()
 					jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
 
 				  }
@@ -1095,6 +1087,7 @@ function dynamicSVGTemplates()
                    var pieces_in_ratio = $('#uk_ratio_upc').val();
                    var tpnd = $('#uk_ratio_tpnd').val();
 				   var uk_ratio_itf  = $('#uk_ratio_itf').val();
+
                    /** [ Dynamically change svg UK pieces in ratio ] */
                    if(pieces_in_ratio != '')
                    {
@@ -1113,17 +1106,21 @@ function dynamicSVGTemplates()
                    {
                       svgDoc.getElementById("tpnd").innerHTML = '';
                    }
-				   /** [ Dynamically change svg barcode ] */
-					  if(uk_ratio_itf.length == 13)
-					  {
+                   if(item.template_name === "TCL 1")
+                   {
+                     /** [ Dynamically change svg barcode ] */
+                       if(uk_ratio_itf !='' && uk_ratio_itf.length === 13)
+                       {
+                        
+                        jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
 
-						jsbarcode(uk_ratio_itf, 'barcode', svgDoc)
-
-					  }
-					  else
-					  {
-						 //svgDoc.getElementById("barcode").innerHTML = '';
-					  }
+                       }
+                       else
+                       { 
+                         
+                       }
+                   }
+				  
               }
               else
               {
@@ -1223,6 +1220,14 @@ function tescoOrderCommonData()
     zone              =  localStorage.getItem("zone");
     type              =  localStorage.getItem("template type");
     data              =  JSON.parse(localStorage.getItem("data"));
+    templates         = [];
+    counts            = [];
+    $('.count').each(function(i, item)
+    {
+        counts[i]    = $(item).val() === ''?0:$(item).val();
+        templates[i]    = data[i].template_name;
+        
+    });
 }
 /**
  * [storeCERatio for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
@@ -1234,16 +1239,11 @@ function storeCERatio()
     try {
         /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
         tescoOrderCommonData();
-        var templates = [];
-        var counts    = [];
-
+        
+        console.log(templates)
+        console.log(counts)
         /** [ Create array of ce single case size ] */
-        $('.count').each(function(i, item)
-        {
-            counts[i]    = $(item).val() === ''?0:$(item).val();
-            templates[i]    = data[i].template_name;
-            
-        });
+        
         var orms_tpn =  $("#ce_ratio_orms_tpn").val();
         var itf_code =  $("#ce_ratio_itf").val();
         var cases_per_carton =  $("#ce_ratio_cpc").val();
@@ -1261,7 +1261,7 @@ function storeCERatio()
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                          // location.reload();
+                           location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -1292,15 +1292,8 @@ function storeCESingle()
     try {
         /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
         tescoOrderCommonData();
-        var templates = [];
-        var counts    = [];
         var quantity    = [];
-        /** [ Create array of ce single case size ] */
-        $('.count').each(function(i, item)
-        {
-            counts[i]    = $(item).val() === ''?0:$(item).val();
-            templates[i] = data.template_name[i];
-        });
+        
         console.log(templates)
         console.log(counts)
       $.each(($('#table_row tr')), function(i){
@@ -1711,7 +1704,7 @@ try{
  */
 
 function jsbarcode(code, id, svgDoc) {
-	
+
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
 		width: 3.45,
