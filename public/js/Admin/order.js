@@ -103,7 +103,8 @@ function orderStatus() {
             $(".loader").show();
         },
         success: function (data) {
-            if (buyer == "orchestra") {
+            if (buyer == "orchestra")
+            {
                 //aswathy
                 var path = base_url + "/admin/" + buyer + "/order-management/order-status";
 
@@ -319,12 +320,14 @@ function orderStatus() {
 					});
 
 					if (sList > 0) {
+
 						$('#update_new_po_status').removeClass('hidden')
 					$('#update_po_status').addClass('hidden')
 						$('#new_pos_status').addClass('hidden')
 						$('#new_po_div_status').removeClass('hidden')
 						$('#map_po_div_status').addClass('hidden')
 						$('#exist_artwork_div_status').removeClass('hidden')
+
 					} else {
 						$('#check_error_status').removeClass('hidden')
 					}
@@ -340,6 +343,7 @@ function orderStatus() {
 					});
 
 					if (sList > 0) {
+
 						$('#update_po_status').removeClass('hidden')
 					$('#update_new_po_status').addClass('hidden')
 						$('#new_pos_status').addClass('hidden')
@@ -347,6 +351,7 @@ function orderStatus() {
 						$('#new_po_div_status').addClass('hidden')
 						$('#exist_artwork_div_status').removeClass('hidden')
 						$('#check_error_status').addClass('hidden')
+
 					} else {
 						$('#check_error_status').removeClass('hidden')
 					}
@@ -645,7 +650,8 @@ function orderStatus() {
                 $("#datatable-example-2_filter input").addClass('form-control input-sm');
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
-            } else {
+            }
+            else {
 
             }
         },
@@ -812,7 +818,7 @@ function table(data,path) {
                 { 
                    if (value[key]==null || value[key]=="")
                    {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" placeholder="Enter PO"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span><span class="error" hidden>A valid url is required</span></div></div></td>';
+                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="po" id="po" class="form-control input-sm po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default po-submit" onclick=setPO(this,"'+value.id+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span><span class="error" hidden>A valid url is required</span></div></div></td>';
                    }
                    else
                    {
@@ -912,7 +918,7 @@ function setPO(obj,id,table_name)
    }
    else{
     $(obj).closest('tr').find('.po').focus();
-    $(obj).closest('tr').find('.po').css('border-color', 'red');
+    $(obj).closest('tr').find('.po').css('border-color', '#F44336');
    }
    
 }
@@ -5965,9 +5971,6 @@ function save_label_orders() {
 
 function setSolidStickers() {
 	if ($('#carton_hidden').val() == "standard") {
-	
-
-
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		//alert($('#uvc_id').val())
