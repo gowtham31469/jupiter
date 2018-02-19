@@ -226,36 +226,37 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioTCL1TCL2TSL1Orders(Request $request)
+    public function setCERatioOrders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj = new TescoOrders();
             $tesco_order     = $tesco_order_obj->createTescoOrder($request);
             $tesco_order_id  = $tesco_order->id; 
-            $quantity = $request['quantity'];
 
-            foreach ($quantity as $value) 
-            {
-              $inserted = TescoStickerOrdersSizeDetails::create([
+            $counts       = $request['counts'];
+            $templates    = $request['templates'];
+
+            $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
-                          'orms_tpn'         => $value['orms_tpn'],
-                          'itf_barcode'      => $value['itf_code'],
-                          'cases_per_carton' => $value['cases_per_carton']
+                          'orms_tpn'         => $request['orms_tpn'],
+                          'itf_barcode'      => $request['itf_code'],
+                          'cases_per_carton' => $request['cases_per_carton']
                         ]);
               $size_table_id = $inserted->id;
-              foreach ($value['templates'] as $template) 
+              $i = 0;
+              foreach ($counts as $count) 
               {
                 $count_insert = TescoStickerOrdersCount::create([
                             'tesco_order_id'   => $size_table_id,
-                            'template_name'    => $template['template'],
-                            'count'            => $template['count'],
+                            'template_name'    => $templates[$i],
+                            'count'            => $count,
                             'order_status'     => "Submitted",
                             'artwork_status'   => "Submitted",
                             'print_status'     => "Submitted"
                           ]);
+                $i++;
               }
-            }
             
             if($inserted != '')
             {
