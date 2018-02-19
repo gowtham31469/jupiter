@@ -14,9 +14,9 @@ function parseXML(data, callback) {
         switch(po_type) {
             case 'SINGLE': parsedObj = parseSingleType(data);
                 break;
-            case 'RATIO': parseRatioType(data);
+            case 'RATIO PACK  A': parsedObj = parseRatioType(data);
                 break;
-            case 'RATIO PACK A': parseRatioPackType(data);
+            case 'RATIO PACK  A RATIO PACK  B': //parseRatioPackType(data);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
@@ -30,8 +30,8 @@ function parseXML(data, callback) {
 }
 
 /**
- * Method to parse xml for SINGLE type.
- * @param  {xml} xml string to be parsed.
+ * Method to parse data for SINGLE type.
+ * @param  {json} data string to be parsed.
  * @return {object}     Object array with all the required fields.
  */
 function parseSingleType(data) {
@@ -45,7 +45,6 @@ function parseSingleType(data) {
     //*********************************************************************************************************
 
     var info = JSON.parse(data.info);
-    console.log(info[0].data);
     $.each(info[0].data, function(ind, ele) {
         var row_length = ele.length;
         switch(ind) {
@@ -61,8 +60,10 @@ function parseSingleType(data) {
                 break;
             case 3:
                 var style = ele[0].text.split(":");
+                var tab = JSON.parse(data.table);
+                var size = tab[0].data[1][3].text;
                 singleObj.styleNumber =  style[1].trim();
-                singleObj.shortDescription =  (row_length === 5) ? ele[2].text : ele[2].text;
+                singleObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
                 break;
         }
     });
@@ -79,6 +80,7 @@ function parseSingleType(data) {
     var values = [];
     var tabula = JSON.parse(data.table);
     tabula[0].data.pop(); //Remove the total quantity row from the object
+    console.log(tabula[0].data);
     $.each(tabula[0].data, function(index,element) {
         var row = {};
         element.pop();//Remove the extra space element from the array
@@ -97,6 +99,82 @@ function parseSingleType(data) {
     console.log(singleObj);
     return singleObj;
 }
+
+/**
+ * Method to parse data for RATIO PACK A type.
+ * @param  {json} json string to be parsed.
+ * @return {object}     Object array with all the required fields.
+ */
+function parseRatioType(data) {
+    var ratioObj = {};
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //********************************************* ORDER INFORMATION SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+
+    var info = JSON.parse(data.info);
+    console.log(info);
+    var table = JSON.parse(data.table);
+    console.log(table);
+    /*
+    $.each(info[0].data, function(ind, ele) {
+        var row_length = ele.length;
+        switch(ind) {
+            case 0: 
+                ratioObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                break;
+            case 1:
+                ratioObj.type = ele[0].text;
+                break;
+            case 2:
+                var season = ele[2].text.split(" ");
+                ratioObj.seasonCode = season[0];
+                break;
+            case 3:
+                var style = ele[0].text.split(":");
+                var tab = JSON.parse(data.table);
+                var size = tab[0].data[1][3].text;
+                ratioObj.styleNumber =  style[1].trim();
+                ratioObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
+                break;
+        }
+    });
+
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //********************************************* ORDER QUANTITY SECTION ************************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    //*********************************************************************************************************
+    ratioObj.orderQuantity = {};
+    var header = [];
+    var values = [];
+    var tabula = JSON.parse(data.table);
+    tabula[0].data.pop(); //Remove the total quantity row from the object
+    console.log(tabula[0].data);
+    $.each(tabula[0].data, function(index,element) {
+        var row = {};
+        element.pop();//Remove the extra space element from the array
+        $.each(element, function(i, val) {
+            if(index === 0) {
+                header.push(val.text.replace(/ /g,"_"));
+            } else {
+                row[header[i]] = val.text;  
+            }
+        });
+        if(index !== 0) {
+           values.push(row); 
+        } 
+    });
+    ratioObj.orderQuantity = values;
+    console.log(ratioObj);
+    return ratioObj;
+    */
+}
 /**
  * Method to render the parsed objects to the input field
  * @param  {[type]} parsedObj [description]
@@ -107,8 +185,11 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
     $('#tesco_po_number').val(parsedObj.purchaseOrder);
-    $('#tesco_uk_style').val(parsedObj.styleNumber);
-    $('#tesco_ce_style').val(parsedObj.styleNumber);
+    if(zone === 'CE') {
+        $('#tesco_ce_style').val(parsedObj.styleNumber);
+     } else {
+        $('#tesco_uk_style').val(parsedObj.styleNumber);
+     }
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
     // $("select[name=tesco_brand] option").filter(function() {

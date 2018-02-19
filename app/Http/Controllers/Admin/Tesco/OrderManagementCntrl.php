@@ -174,19 +174,36 @@ class OrderManagementCntrl extends Controller
      */
     public function createOrderByTabula(Request $request) {
       try {
-
-        //Read the tabula configuration from config/tabula.php.
-        $command_quantity  = Config::get('tabula.quantity');
-        $command_info      = Config::get('tabula.info');
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
           $name = $file->getClientOriginalName();
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          //Check the type of PO
+          $po_type = $this->checkPOType($path);
+          $data = '';
+          switch ($po_type) {
+            case 'SINGLE':
+              $data = $this->cropPDF($path, 'single');
+              break;
+            case 'RATIO PACK  A':
+              $data = $this->cropPDF($path, 'ratio');
+              break; 
+            case 'RATIO PACK  A PACK  B':
+              $data = $this->cropPDF($path);
+              break; 
+            case 'SINGLES':
+              $data = $this->cropPDF($path);
+              break;
+            
+            default:
+              return response()->json(['error' => 'Unknown PO Type']);
+              break;
+          }
           //Execute tabula method to extract the quantity table.
           $info    = shell_exec('java -jar '.$command_info.$path);
           $table   = shell_exec('java -jar '.$command_quantity.$path);
-          return response()->json(['info' =>$info,'table' => $table]);
+          return response()->json(['info' =>$info,'table' => $table, 'type' => $po_type]);
         } else {
           return "File not found!!";
         }
@@ -194,6 +211,35 @@ class OrderManagementCntrl extends Controller
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
     }
+
+    /**
+     * Method to find the type of P.O uploaded.
+     * @param  [string] $file PDF file path.
+     * @return [string]       Type of the PDF
+     */
+    public function checkPOType($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula  = Config::get('tabula.tabula_jar');
+        $po_type = Config::get('tabula.po_type');
+        $type    = shell_exec('java -jar '.$tabula.$po_type.$file);
+        $type    = json_decode($type, true);
+        $type = $type[0]['data'][0][0]['text'];
+        return $type;
+    }
+
+    /**
+     * Method to get the appropriate dimensions from the PDF
+     * @param  [path] $file File to be cropped
+     * @param  [str] $type Purchase Order type
+     * @return [str]       JSON extracted string
+     */
+    public function cropPDF($file, $type) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula      = Config::get('tabula.tabula_jar');
+        $quantity    = Config::get('tabula.quantity');
+        $info        = Config::get('tabula.info');
+    }
+
     /**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
      * @author <Praveen>
@@ -221,7 +267,7 @@ class OrderManagementCntrl extends Controller
        }
     }
     /**
-     * Store CE ratio TCL1,TCL2 and TSL1 template orders
+     * Store CE ratio template orders
      * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -274,51 +320,12 @@ class OrderManagementCntrl extends Controller
         return $result;
     }
     /**
-     * Store CE ratio THL1 template orders
+     * Store CE single template orders
      * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioTHL1Orders(Request $request)
-    {
-        try {
-            /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
-            $tesco_order = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id = $tesco_order->id;  
-
-            $inserted = TescoStickerOrdersSizeDetails::create([
-                          'tesco_order_id'   => $tesco_order_id,
-                          'orms_tpn'         => $request['orms_tpn'],
-                          'itf_barcode'      => $request['itf_code'],
-                          'cases_per_carton' => $request['cases_per_carton'],
-                          'thl1_count'       => $request['ratio_thl1_count'],
-                          'order_status'     => "Submitted",
-                          'artwork_status'   => "Submitted",
-                          'print_status'     => "Submitted"
-                        ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-
-        } catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-        return $result;
-    }
-    /**
-     * Store CE single TCL4, TSL3 template orders
-     * @param \Illuminate\Http\Request
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function setCESingleTCL4TSL3Orders(Request $request)
+    public function setCESingleOrders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -341,57 +348,7 @@ class OrderManagementCntrl extends Controller
                     'orms_tpn'         => $value,
                     'ean_barcode'      => $ean_code[$i],
                     'case_size'        => $case_size[$i],
-                    'size'             => $size[$i],
-                    'tcl4_count'       => $single_tcl4_count[$i],
-                    'tsl3_count'       => $single_tsl3_count[$i],
-                    'order_status'     => "Submitted",
-                    'artwork_status'   => "Submitted",
-                    'print_status'     => "Submitted"
-                ]);
-                $i++;
-            }
-            
-            $result = response()->json(['error'=> false,'message' =>'success'],200);
-
-        } catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-        return $result;
-    }
-    /**
-     * Store CE single THL3 template orders
-     * @param \Illuminate\Http\Request
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function setCESingleTHL3Orders(Request $request)
-    {
-        try {
-            /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
-            $tesco_order = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id = $tesco_order->id;  
-
-            $orms_tpn            = explode(',',$request['orms_tpn']);
-            $ean_code            = explode(',',$request['ean_code']);
-            $case_size           = explode(',',$request['case_size']);
-            $size                = explode(',',$request['size']);
-            $single_thl3_count   = explode(',',$request['single_thl3_count']);
-
-            $i = 0;
-            foreach($orms_tpn as $value)
-            {
-                TescoStickerOrdersSizeDetails::create([
-                    'tesco_order_id'   => $tesco_order_id,
-                    'orms_tpn'         => $value,
-                    'ean_barcode'      => $ean_code[$i],
-                    'case_size'        => $case_size[$i],
-                    'size'             => $size[$i],
-                    'thl3_count'       => $single_thl3_count[$i],
-                    'order_status'     => "Submitted",
-                    'artwork_status'   => "Submitted",
-                    'print_status'     => "Submitted"
+                    'size'             => $size[$i]
                 ]);
                 $i++;
             }
