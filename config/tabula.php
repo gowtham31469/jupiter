@@ -11,15 +11,24 @@ return [
     */
    
    'java' => 'C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe',
-
     /*
     |--------------------------------------------------------------------------
-    | SET PDFMiner path
+    | SET Tabula command for Get Information
     |--------------------------------------------------------------------------
     |
     |
     */
 
-    'command' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 121,9,400,440  -f JSON ',
+    'info' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 0,0,80,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    'quantity' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 121,9,400,440  -f JSON ',
 
 ];
