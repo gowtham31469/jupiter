@@ -19,8 +19,10 @@ class TescoOrders
 	public function createTescoOrder($request)
 	{
 		try {
+            $max_id = TescoPolybagCartonStickerOrders::max('id');
+            $order_id = "JGAM_".$max_id;
             $result = TescoPolybagCartonStickerOrders::create([
-                          'order_id'             => $request['order_id'],
+                          'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
                           'po_number'            => $request['po_number'],

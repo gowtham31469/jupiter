@@ -75,8 +75,9 @@ class OrderManagementCntrl extends Controller
            foreach ($templates as $value) 
            {
                $template_details[] = DB::table('tesco_template')
-                           ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file')
+                           ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','company.name as company')
                            ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
+                           ->join('company','company.id','=','tesco_item_master.company_id')
                            ->where('tesco_item_master.id','=',$value)
                            ->first();
            }
@@ -85,8 +86,9 @@ class OrderManagementCntrl extends Controller
            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
            $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id','supplier_code')->get();
+           $tesco_size = DB::table('tesco_size_chart')->select('po_size','id')->get();
            
-           return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+           return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'tesco_size' => $tesco_size]);
        } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
@@ -228,20 +230,30 @@ class OrderManagementCntrl extends Controller
             $tesco_order_obj = new TescoOrders();
             $tesco_order     = $tesco_order_obj->createTescoOrder($request);
             $tesco_order_id  = $tesco_order->id; 
-            $templates       = explode(',',$request['templates']);
+            $quantity = $request['quantity'];
 
-            $inserted = TescoStickerOrdersSizeDetails::create([
+            foreach ($quantity as $value) 
+            {
+              $inserted = TescoStickerOrdersSizeDetails::create([
                           'tesco_order_id'   => $tesco_order_id,
-                          'orms_tpn'         => $request['orms_tpn'],
-                          'itf_barcode'      => $request['itf_code'],
-                          'cases_per_carton' => $request['cases_per_carton'],
-                          'tcl1_count'       => $request['ratio_tcl1_count'],
-                          'tcl2_count'       => $request['ratio_tcl2_count'],
-                          'tsl1_count'       => $request['ratio_tsl1_count'],
-                          'order_status'     => "Submitted",
-                          'artwork_status'   => "Submitted",
-                          'print_status'     => "Submitted"
+                          'orms_tpn'         => $value['orms_tpn'],
+                          'itf_barcode'      => $value['itf_code'],
+                          'cases_per_carton' => $value['cases_per_carton']
                         ]);
+              $size_table_id = $inserted->id;
+              foreach ($value['templates'] as $template) 
+              {
+                $count_insert = TescoStickerOrdersCount::create([
+                            'tesco_order_id'   => $size_table_id,
+                            'template_name'    => $template['template'],
+                            'count'            => $template['count'],
+                            'order_status'     => "Submitted",
+                            'artwork_status'   => "Submitted",
+                            'print_status'     => "Submitted"
+                          ]);
+              }
+            }
+            
             if($inserted != '')
             {
               $result = response()->json(['error'=> false,'message' =>'success'],200);
