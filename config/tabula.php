@@ -28,24 +28,40 @@ return [
     |
     */
    'po_type' => ' -p 2  -a 0,10,40,200  -f JSON ',
+
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Get Information
+    | SET Tabula command for Get Information of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
     */
-
-    'info' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 0,0,80,1000  -f JSON ',
+    'single_info' => ' -p 2 -a 0,0,80,1000  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Quantity
+    | SET Tabula command for Quantity of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
     */
+    'single_quantity' => ' -p 2 -a 121,9,400,440  -f JSON ',
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Get Information of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'ratio_info' => ' -p 2 -a 0,10,90,1000  -f JSON ',
 
-    'quantity' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar -p 2 -a 121,9,400,440  -f JSON ',
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'ratio_quantity' => ' -p 2 -a 130,10,160,1000  -f JSON ',
 
 ];
