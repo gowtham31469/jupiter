@@ -13,8 +13,6 @@ function parseXML(data, callback) {
                 break;
             case 'RATIO PACK  A': parsedObj = parseRatioType(data);
                 break;
-            case 'RATIO PACK  A RATIO PACK  B': //parseRatioPackType(data);
-                break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }

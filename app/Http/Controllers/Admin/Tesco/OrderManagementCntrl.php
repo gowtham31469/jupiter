@@ -187,15 +187,13 @@ class OrderManagementCntrl extends Controller
               $data = $this->cropPDF($path, 'single');
               break;
             case 'RATIO PACK  A':
+              //Check for Ratio Pack B
+              $packB = $this->checkPackB($path);
               $data = $this->cropPDF($path, 'ratio');
-              break; 
-            case 'RATIO PACK  A PACK  B':
-              $data = $this->cropPDF($path);
-              break; 
-            case 'SINGLES':
-              $data = $this->cropPDF($path);
+              if($packB) {
+                $data['ratioPackB'] = $packB;
+              }
               break;
-            
             default:
               return response()->json(['error' => 'Unknown PO Type']);
               break;
@@ -240,6 +238,26 @@ class OrderManagementCntrl extends Controller
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
       return ['info' => $info, 'table' => $table];
+    }
+
+    /**
+     * Method to check Ratio Pack B exist or not
+     * @param  [path] $file File to be cropped
+     * @return [str]       JSON extracted string
+     */
+    public function checkPackB($file) {
+      //Read the tabula configuration from config/tabula.php.
+      $tabula      = Config::get('tabula.tabula_jar');
+      $check_packB = Config::get('tabula.check_packB');
+      //Execute tabula method to extract the quantity table.
+      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
+      $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
+      if(count($pack_b) > 2) {
+        //return the ratio pack B row
+        return json_encode($pack_b[1]['data'][5]);
+      } else {
+        return false;
+      }
     }
 
     /**
