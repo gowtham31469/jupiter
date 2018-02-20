@@ -200,7 +200,7 @@ class OrderManagementCntrl extends Controller
             case 'RATIO PACK  A':
               //Check for Ratio Pack B
               $packB = $this->checkPackB($path);
-              $data = $this->cropPDF($path, 'ratio');
+              $data  = $this->cropPDF($path, 'ratio');
               if($packB) {
                 $data['ratioPackB'] = $packB;
               }

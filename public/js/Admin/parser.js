@@ -77,7 +77,6 @@ function parseSingleType(data) {
         var values = [];
         var tabula = JSON.parse(data.details.table);
         tabula[0].data.pop(); //Remove the total quantity row from the object
-        console.log(tabula[0].data);
         $.each(tabula[0].data, function(index,element) {
             var row = {};
             element.pop();//Remove the extra space element from the array
@@ -140,10 +139,34 @@ function parseRatioType(data) {
     //********************************************* ORDER QUANTITY SECTION ************************************
     //********************************************* PARSE THE JSON TABULA *************************************
     ratioObj.orderQuantity = {};
-    var tabula = JSON.parse(data.details.table);
-    ratioObj.orderQuantity.TPND             = tabula[0].data[0][5].text;
-    ratioObj.orderQuantity.barCode          = tabula[0].data[0][4].text;
-    ratioObj.orderQuantity.unitsPerCarton   = tabula[0].data[0][2].text;
+    var tabula = [];
+    var packA = JSON.parse(data.details.table);
+    tabula.push(packA[0].data[0]);
+    if (data.details.hasOwnProperty("ratioPackB")) {
+        var packB = JSON.parse(data.details.ratioPackB);
+        tabula.push(packB);
+    }
+    console.log(tabula);
+    var values = [];
+    $.each(tabula, function(index,element) {
+        var row = {};
+        $.each(element, function(i, val) {
+            switch(i) {
+                case 2 : row.unitsPerCarton =  val.text;
+                break;
+
+                case 4 : row.barCode =  val.text;
+                break;
+
+                case 5 : row.tpnd = val.text;
+                break;
+            }
+        });
+        values.push(row);
+        
+    });
+    ratioObj.orderQuantity = values;
+    console.log(ratioObj);
     return ratioObj;
     
 }
@@ -165,6 +188,7 @@ function renderParsedValues(parsedObj) {
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 
+
     if(parsedObj.type === 'SINGLE') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             if(type === 'single') {
@@ -179,9 +203,18 @@ function renderParsedValues(parsedObj) {
             }
         });  
     } else if(parsedObj.type === 'RATIO PACK  A') {
-        $('#'+zone+'_ratio_tpnd').val(parsedObj.orderQuantity.TPND);
-        $('#'+zone+'_ratio_itf').val(parsedObj.orderQuantity.barCode);
-        $('#'+zone+'_ratio_upc').val(parsedObj.orderQuantity.unitsPerCarton);
+        $.each(parsedObj.orderQuantity, function(i, j) {
+            var index = i + 1;
+            $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
+            $('#'+zone+'_ratio_itf_'+index).val(j.barCode);
+            $('#'+zone+'_ratio_upc_'+index).val(j.unitsPerCarton);
+            if(parsedObj.orderQuantity.length !== (i+1)) {
+                $('.add-row-btn').trigger('click');
+            }
+        }); 
+        // $('#'+zone+'_ratio_tpnd').val(parsedObj.orderQuantity.TPND);
+        // $('#'+zone+'_ratio_itf').val(parsedObj.orderQuantity.barCode);
+        // $('#'+zone+'_ratio_upc').val(parsedObj.orderQuantity.unitsPerCarton);
     }
 
     dynamicSVGTemplates();
