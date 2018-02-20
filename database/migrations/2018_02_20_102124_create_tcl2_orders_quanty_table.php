@@ -16,14 +16,14 @@ class CreateTcl2OrdersQuantyTable extends Migration
         Schema::create('tesco_tcl2_orders_quanty', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('tcl2_order_id')->unsigned();
-            $table->bigInteger('tpnd');
-            $table->bigInteger('itf_barcode');
-            $table->integer('units_per_carton');
-            $table->bigInteger('ean_barcode');
+            $table->bigInteger('tpnd')->default('0');
+            $table->bigInteger('itf_barcode')->default('0');
+            $table->integer('units_per_carton')->default('0');
+            $table->bigInteger('ean_barcode')->default('0');
             $table->string('size');
-            $table->integer('case_size');
+            $table->integer('case_size')->default('0');
             $table->string('orms_tpn');
-            $table->integer('count');
+            $table->integer('count')->default('0');
             $table->timestamps();
             $table->foreign('tcl2_order_id')->references('id')->on('tesco_tcl2_orders')->onDelete('cascade');
         });

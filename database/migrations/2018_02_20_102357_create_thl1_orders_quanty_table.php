@@ -16,14 +16,14 @@ class CreateThl1OrdersQuantyTable extends Migration
         Schema::create('tesco_thl1_orders_quanty', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('thl1_order_id')->unsigned();
-            $table->bigInteger('tpnd');
-            $table->bigInteger('itf_barcode');
-            $table->integer('units_per_carton');
-            $table->bigInteger('ean_barcode');
+            $table->bigInteger('tpnd')->default('0');
+            $table->bigInteger('itf_barcode')->default('0');
+            $table->integer('units_per_carton')->default('0');
+            $table->bigInteger('ean_barcode')->default('0');
             $table->string('size');
-            $table->integer('case_size');
+            $table->integer('case_size')->default('0');
             $table->string('orms_tpn');
-            $table->integer('count');
+            $table->integer('count')->default('0');
             $table->timestamps();
             $table->foreign('thl1_order_id')->references('id')->on('tesco_thl1_orders')->onDelete('cascade');
         });

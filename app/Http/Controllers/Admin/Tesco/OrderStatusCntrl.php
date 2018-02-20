@@ -44,7 +44,7 @@ class OrderStatusCntrl extends Controller
 									->select('tesco_polybag_carton_sticker_orders.id','tesco_polybag_carton_sticker_orders.order_id as Order ID','tesco_sticker_orders_count.template_name as Template Name','tesco_polybag_carton_sticker_orders.zone as Zone','tesco_sticker_orders_count.count as Quantity','tesco_sticker_orders_count.artwork_status as Artwork Status','tesco_sticker_orders_count.po_number as PO Number','tesco_sticker_orders_count.po_status as PO Status','tesco_sticker_orders_count.pi_status as PI Status','tesco_sticker_orders_count.id as count_table_id',DB::raw('"-" as Actions'),'tesco_sticker_orders_count.po_file')
 									->get();
             $data['tcl1'] = DB::table('tesco_polybag_carton_sticker_orders')
-            
+                            
 	     	$result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
         }
         catch (\Exception $e)
