@@ -23,9 +23,10 @@ class ProfomaInvoice
 		$id         =   $request->id;
         $table_name =   $request->table_name;
         $uvc        =   $request->uvc;
-        $data['company_details'] = DB::table('orchestra_item_master')
+        $data['company_details'] =  DB::table('orchestra_item_master')
                                           ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
+                                          ->where('orchestra_hang_tag_orders.id',$id)
                                           ->select('company.id','company.name','company.address','company.logo','company.phone')
                                           ->first();
         $customer_details = DB::table('orchestra_item_details')

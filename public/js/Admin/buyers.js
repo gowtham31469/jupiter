@@ -18,10 +18,9 @@
          data: {_token:csrf_token},
          beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
          },
          success: function (data) {
-             var table = '<div class="loader"></div><div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
+             var table = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="col" id="buyers-table"><table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Phone</th><th>Buyer Address</th><th>Actions</th></tr></thead><tbody>';
              $.each(data.buyers, function(i, item){
               var index = i+1;
               table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.buyer_name+'</td><td>'+item.buyer_email+'</td><td>'+item.buyer_phone+'</td><td>'+item.buyer_address+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a></td></tr>';
@@ -54,7 +53,6 @@
                   }).parent('li').addClass('current-page').find('a').addClass('active');
               });
               $(".loader").hide();
-              $(".loader").css('margin-top','0%');
          }
      })
    } catch (e) {
@@ -81,7 +79,6 @@
              data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
                   /** [Show response status based on HTTP status code] */
@@ -114,7 +111,6 @@
                           }).parent('li').addClass('current-page').find('a').addClass('active');
                       });
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -142,7 +138,6 @@
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
 
@@ -177,7 +172,6 @@
                       }).parent('li').addClass('current-page').find('a').addClass('active');
                   });
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -203,7 +197,6 @@
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
@@ -235,7 +228,6 @@
                           }).parent('li').addClass('current-page').find('a').addClass('active');
                       });
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -257,7 +249,6 @@
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -288,7 +279,6 @@
                         }).parent('li').addClass('current-page').find('a').addClass('active');
                     });
                     $(".loader").hide();
-                    $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -311,10 +301,9 @@
                data: {_token:csrf_token},
                beforeSend: function () {
                    $(".loader").show();
-                   $(".loader").css('margin-top','12%');
                },
                success: function (data) {
-                   var table = '<div class="loader"></div><div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
+                   var table = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="col" id="merchandisers-table"><table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Merchandiser Name</th><th>Merchandiser Email</th><th>Merchandiser Phone</th><th>Merchandiser Address</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.merchandisers, function(i, item){
                     var index = i+1;
                     table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.merchandiser_name+'</td><td>'+item.email+'</td><td>'+item.merchandiser_phone+'</td><td>'+item.merchandiser_address+'</td><td><a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-merchandiser" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" data-placement="left"></i></a></td></tr>';
@@ -347,7 +336,6 @@
                         }).parent('li').addClass('current-page').find('a').addClass('active');
                     });
                     $(".loader").hide();
-                    $(".loader").css('margin-top','0%');
                }
            })
     } catch (e) {
@@ -375,7 +363,6 @@
               data: {_token:csrf_token,name:name,email:email,phone:phone,address:address,p:password},
               beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top','12%');
               },
               statusCode: {
 
@@ -409,7 +396,6 @@
                             }).parent('li').addClass('current-page').find('a').addClass('active');
                         });
                         $(".loader").hide();
-                        $(".loader").css('margin-top','0%');
               }
           })
       } catch (e) {
@@ -436,7 +422,6 @@
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
 
@@ -471,7 +456,6 @@
                       }).parent('li').addClass('current-page').find('a').addClass('active');
                   });
                  $(".loader").hide();
-                    $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -498,7 +482,6 @@
              dataType:"json",
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              method:"put",
              data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
@@ -530,7 +513,6 @@
                           }).parent('li').addClass('current-page').find('a').addClass('active');
                       });
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -553,7 +535,6 @@
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
-                 $(".loader").css('margin-top','12%');
                },
                method:"delete",
                data:{_token:csrf_token,id:id},
@@ -584,7 +565,6 @@
                           }).parent('li').addClass('current-page').find('a').addClass('active');
                       });
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
                }
            })
      } catch (e) {

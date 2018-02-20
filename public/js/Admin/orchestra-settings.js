@@ -3,7 +3,7 @@
  */
 
 var isSubmitting = false;
-
+var buyer = localStorage.getItem("status_buyer");
 /**  
  * Validation for numeric values *
  * @param    evt 
@@ -59,10 +59,10 @@ var isSubmitting = false;
   */
 function orchestraSettings() {
   try{
-    $('.main-content').html('<div class="loader"></div>');
-
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').hide();
+    $('.orchestra-sidebar').show();
     /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/settings/garments",
@@ -73,16 +73,15 @@ function orchestraSettings() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
 	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-garments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraGarmentsModal" data-placement="left"></i></a></td></tr>';
 	             });
 	             orchestra_metadata += '</tbody></table></div>';
-	             $('.main-content').html(orchestra_metadata)
+	              $('.content').html(orchestra_metadata)
                 $('.edit-orchestra-garments').tooltip('show')
                 $('.edit-orchestra-garments').tooltip('toggle')
                 $('.delete-orchestra-garments').tooltip('show')
@@ -98,7 +97,6 @@ function orchestraSettings() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
     } catch (e) {
@@ -141,7 +139,6 @@ function showSnackbar() {
              data: {_token:csrf_token,name:name},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -162,7 +159,6 @@ function showSnackbar() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -190,7 +186,6 @@ function showSnackbar() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -208,7 +203,6 @@ function showSnackbar() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -231,7 +225,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name},
@@ -250,7 +243,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -273,7 +265,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -296,7 +287,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -312,9 +302,10 @@ function showSnackbar() {
   */
   function ageGroup() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-      /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a>Garments</a></li><li id="2" onclick="ageGroup()"><a class="active">Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').hide();
+      $('.orchestra-sidebar').show();
+      
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/orchestra/settings/age-group",
@@ -325,16 +316,15 @@ function showSnackbar() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_agegroups, function(i, item){
                   var index = i+1;
                   orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-age-group" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraAgeGroupModal" data-placement="left" ></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
-                 $('.main-content').html(orchestra_metadata)
+                 $('.content').html(orchestra_metadata)
                  $('.edit-orchestra-age-group').tooltip('show')
                  $('.edit-orchestra-age-group').tooltip('toggle')
                  $('.delete-orchestra-age-group').tooltip('show')
@@ -343,20 +333,12 @@ function showSnackbar() {
                   $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
-              
-              /** make side bar active  */
-               $('.meta-data-list li').on('click', function () {
-                $(this).siblings().removeClass('active');
-                $(this).addClass('active');
-               });
-
           },
           error: function (data) {
 
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -381,7 +363,6 @@ function showSnackbar() {
              data: {_token:csrf_token,name:name,color:color},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
  
@@ -402,7 +383,6 @@ function showSnackbar() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -430,7 +410,6 @@ function showSnackbar() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -449,7 +428,6 @@ function showSnackbar() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -473,7 +451,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name,color:color},
@@ -492,7 +469,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -515,7 +491,6 @@ function showSnackbar() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -538,7 +513,6 @@ function showSnackbar() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -552,9 +526,10 @@ function showSnackbar() {
 */
 function countries() {
   try{
-    $('.main-content').html('<div class="loader"></div>');
-    /** Orchestra metadata sidebar */
-    var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a class="active">Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').hide();
+    $('.orchestra-sidebar').show();
+    
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/orchestra/settings/countries",
@@ -565,16 +540,15 @@ function countries() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-                var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.orchestra_countries, function(i, item){
                 var index = i+1;
                 orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-country filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-country" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraCountryModal" data-placement="left"></i></a></td></tr>';
                });
                orchestra_metadata += '</tbody></table></div>';
-               $('.main-content').html(orchestra_metadata)
+               $('.content').html(orchestra_metadata)
                 
                 /** [ Enable horizontal scroll for table ] */
                 $('#orchestra-countries-list-table').DataTable({
@@ -594,7 +568,6 @@ function countries() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
     } catch (e) {
@@ -629,7 +602,6 @@ function countries() {
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -650,7 +622,6 @@ function countries() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -678,7 +649,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -707,7 +677,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -741,7 +710,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
@@ -760,7 +728,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -782,7 +749,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -805,7 +771,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -819,9 +784,9 @@ function countries() {
   */
   function productFamily() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-      /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a class="active">Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').hide();
+      $('.orchestra-sidebar').show();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/orchestra/settings/productfamily",
@@ -832,16 +797,15 @@ function countries() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_product_family, function(i, item){
                   var index = i+1;
                   orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-productfamily filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-productfamily" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraProductFamilyModal" data-placement="left" ></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
-                 $('.main-content').html(orchestra_metadata)
+                 $('.content').html(orchestra_metadata)
                  
                   $('#orchestra-productfamily-list-table').DataTable({
                     'scrollX':true
@@ -860,7 +824,6 @@ function countries() {
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -888,7 +851,6 @@ function countries() {
                data: {_token:csrf_token,english:english,french:french,code:code,arabic:arabic},
                beforeSend: function () {
                  $(".loader").show();
-                 $(".loader").css('margin-top','12%');
                },
                statusCode: {
 
@@ -909,7 +871,6 @@ function countries() {
                },
                complete: function () {
                          $(".loader").hide();
-                         $(".loader").css('margin-top','0%');
                }
            })
        } catch (e) {
@@ -937,7 +898,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -959,7 +919,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -986,7 +945,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,arabic:arabic,code:code},
@@ -1005,7 +963,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -1028,7 +985,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -1051,7 +1007,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -1065,9 +1020,10 @@ function countries() {
     */
     function specialInstruction() {
       try{
-        $('.main-content').html('<div class="loader"></div>');
-        /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a class="active">Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+        $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+        $('.tesco-sidebar').hide();
+        $('.orchestra-sidebar').show();
+        
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/special-instructions",
@@ -1078,16 +1034,15 @@ function countries() {
             },
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_specialinstructions, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-special-instruction" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSpecialInstructionModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
-                   $('.main-content').html(orchestra_metadata)
+                   $('.content').html(orchestra_metadata)
                    
                     $('#orchestra-special-instruction-list-table').DataTable({
                       'scrollX':true
@@ -1106,7 +1061,6 @@ function countries() {
             },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         })
         } catch (e) {
@@ -1141,7 +1095,6 @@ function countries() {
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -1162,7 +1115,6 @@ function countries() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -1190,7 +1142,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -1219,7 +1170,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -1253,7 +1203,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
@@ -1272,7 +1221,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -1295,7 +1243,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -1318,7 +1265,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -1332,9 +1278,9 @@ function countries() {
     */
     function compositions() {
       try{
-        $('.main-content').html('<div class="loader"></div>');
-        /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a class="active">Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+        $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+        $('.tesco-sidebar').hide();
+        $('.orchestra-sidebar').show();
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/compositions",
@@ -1345,16 +1291,15 @@ function countries() {
             },
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_compositions, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-composition" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraCompositionModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
-                   $('.main-content').html(orchestra_metadata)
+                   $('.content').html(orchestra_metadata)
                    
                     $('#orchestra-composition-list-table').DataTable({
                       'scrollX':true
@@ -1373,7 +1318,6 @@ function countries() {
             },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         })
         } catch (e) {
@@ -1408,7 +1352,6 @@ function countries() {
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -1429,7 +1372,6 @@ function countries() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -1457,7 +1399,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -1486,7 +1427,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -1520,7 +1460,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
@@ -1539,7 +1478,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -1562,7 +1500,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -1585,7 +1522,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -1599,9 +1535,9 @@ function countries() {
     */
     function parts() {
       try{
-        $('.main-content').html('<div class="loader"></div>');
-        /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a class="active">Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+        $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+        $('.tesco-sidebar').hide();
+        $('.orchestra-sidebar').show(); 
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/parts",
@@ -1612,16 +1548,15 @@ function countries() {
             },
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_parts, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-part" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraPartModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
-                   $('.main-content').html(orchestra_metadata)
+                   $('.content').html(orchestra_metadata)
                    
                     $('#orchestra-part-list-table').DataTable({
                       'scrollX':true
@@ -1640,7 +1575,6 @@ function countries() {
             },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         })
         } catch (e) {
@@ -1675,7 +1609,6 @@ function countries() {
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -1696,7 +1629,6 @@ function countries() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -1724,7 +1656,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -1753,7 +1684,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -1787,7 +1717,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
@@ -1806,7 +1735,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -1829,7 +1757,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -1852,7 +1779,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -1866,9 +1792,9 @@ function countries() {
     */
     function sizeChart() {
       try{
-        $('.main-content').html('<div class="loader"></div>');
-        /** Orchestra metadata sidebar */
-        var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a class="active">Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>';
+        $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+        $('.tesco-sidebar').hide();
+        $('.orchestra-sidebar').show();
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: base_url + "/admin/orchestra/settings/size-chart",
@@ -1879,16 +1805,15 @@ function countries() {
             },
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             success: function (data) {
-                    var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_size_charts, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-size-chart" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSizeChartModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
-                   $('.main-content').html(orchestra_metadata)
+                   $('.content').html(orchestra_metadata)
                    
                     $('#orchestra-size-chart-list-table').DataTable({
                       'scrollX':true
@@ -1906,7 +1831,6 @@ function countries() {
             },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         })
         } catch (e) {
@@ -1932,7 +1856,6 @@ function countries() {
              data: {_token:csrf_token,age:age,in:inch,cm:cm},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              statusCode: {
 
@@ -1953,7 +1876,6 @@ function countries() {
              },
              complete: function () {
                        $(".loader").hide();
-                       $(".loader").css('margin-top','0%');
              }
          })
      } catch (e) {
@@ -1981,7 +1903,6 @@ function countries() {
              data:{id:id},
              beforeSend: function () {
                $(".loader").show();
-               $(".loader").css('margin-top','12%');
              },
              success: function(data){
                  isSubmitting = false;
@@ -2001,7 +1922,6 @@ function countries() {
              },
              complete: function () {
                  $(".loader").hide();
-                 $(".loader").css('margin-top','0%');
              }
          })
    } catch (e) {
@@ -2026,7 +1946,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"put",
            data: {_token:csrf_token,id:id,age:age,cm:cm,in:inch},
@@ -2045,7 +1964,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
    } catch (e) {
@@ -2068,7 +1986,6 @@ function countries() {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -2091,7 +2008,6 @@ function countries() {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {
@@ -2104,10 +2020,9 @@ function countries() {
   */
 function orchestraSymbols() {
     try{
-      $('.main-content').html('<div class="loader"></div>');
-  
-      /** Orchestra metadata sidebar */
-      var orchestra_metadata_sidebar = '<div class="sidebar style-4"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a >Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a class="active">Symbols</a></li></ul></div>';
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').hide();
+      $('.orchestra-sidebar').show();
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
       $.ajax({
           url: base_url + "/admin/orchestra/settings/symbols",
@@ -2118,24 +2033,23 @@ function orchestraSymbols() {
           },
           beforeSend: function () {
               $(".loader").show();
-              $(".loader").css('margin-top', '12%');
           },
           success: function (data) {
-                  var orchestra_metadata = orchestra_metadata_sidebar+'<div class="loader"></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_care_symbols, function(i, item){
                     var index = i+1;
                     orchestra_metadata += '<tr data-category="'+item.category_id+'" id="'+item.id+'"><td>'+index+'</td><td class="td_cofreet_symbols"><img width="30px" src="'+item.cofreet_symbols+'"></td><td class="td_astms_symbol"><img width="30px" src="'+item.astms_symbol+'"></td><td class="td_care_instruction">'+item.care_instruction+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-symbols filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-symbols" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSymbolModal" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
-                   $('.main-content').html(orchestra_metadata)
-                  $('.edit-orchestra-symbols').tooltip('show')
-                  $('.edit-orchestra-symbols').tooltip('toggle')
-                  $('.delete-orchestra-symbols').tooltip('show')
-                  $('.delete-orchestra-symbols').tooltip('toggle')
-                    $('#orchestra-symbols-list-table').DataTable();
-                    $("#orchestra-symbols-list-table_filter input").addClass('form-control input-sm');
-                    $("#orchestra-symbols-list-table_filter input").attr('placeholder', 'Data Search');
-                    $('#orchestra-symbols-list-table_length select').addClass('form-control input-sm');
+                   $('.content').html(orchestra_metadata)
+                   $('.edit-orchestra-symbols').tooltip('show')
+                   $('.edit-orchestra-symbols').tooltip('toggle')
+                   $('.delete-orchestra-symbols').tooltip('show')
+                   $('.delete-orchestra-symbols').tooltip('toggle')
+                   $('#orchestra-symbols-list-table').DataTable();
+                   $("#orchestra-symbols-list-table_filter input").addClass('form-control input-sm');
+                   $("#orchestra-symbols-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#orchestra-symbols-list-table_length select').addClass('form-control input-sm');
   
           },
           error: function (data) {
@@ -2143,7 +2057,6 @@ function orchestraSymbols() {
           },
           complete: function () {
               $(".loader").hide();
-              $(".loader").css('margin-top', '0%');
           }
       })
       } catch (e) {
@@ -2159,9 +2072,6 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
     try{
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         var form_data = new FormData();
-        
-      
-        
 
         form_data.append('cofreet_symbols', cofreet_symbols);
         form_data.append('astms_symbol', astms_symbol);
@@ -2179,7 +2089,6 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
             processData: false,
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             statusCode: {
                 /** [ Show response status based on HTTP status code ] */
@@ -2199,7 +2108,6 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
              },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         });
     } catch (e) {
@@ -2230,7 +2138,6 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
             processData: false,
             beforeSend: function () {
                 $(".loader").show();
-                $(".loader").css('margin-top', '12%');
             },
             statusCode: {
                 /** [ Show response status based on HTTP status code ] */
@@ -2250,7 +2157,6 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
              },
             complete: function () {
                 $(".loader").hide();
-                $(".loader").css('margin-top', '0%');
             }
         });
     } catch (e) {
@@ -2328,7 +2234,6 @@ function readURL(input) {
            dataType:"json",
            beforeSend: function () {
              $(".loader").show();
-             $(".loader").css('margin-top','12%');
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
@@ -2351,7 +2256,6 @@ function readURL(input) {
            },
            complete: function () {
                      $(".loader").hide();
-                     $(".loader").css('margin-top','0%');
            }
        })
     } catch (e) {

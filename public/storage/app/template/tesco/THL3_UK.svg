@@ -48,6 +48,6 @@
 	<text transform="matrix(1 0 0 1 13.8955 221.0394)" class="st1 st3">MANUFACTURED DATE: </text>
 	<text transform="matrix(1 0 0 1 143.8955 221.0394)" class="st1 st4" id="manufactured_date"> MONTH YEAR</text>
 </g>
-<image style="overflow:visible;" width="331" height="178" xlink:href=""  transform="matrix(0.2398 0 0 0.2389 46.9134 164.9764)">
-</image>
+<g width="331" height="178"  id="barcode" transform="matrix(0.2398 0 0 0.2389 46.9134 164.9764)">
+</g>
 </svg>

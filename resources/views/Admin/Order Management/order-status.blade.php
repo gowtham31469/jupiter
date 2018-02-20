@@ -33,21 +33,90 @@
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
                 <div class="modal-body">
-                   <a href="#" hidden><i class="fa fa-file-pdf-o" style="font-size:36px"></i> Open the pdf!</a>
-                    <label>Upload Purchase Order</label>
-                    <form method="post" class="dropzone" id="po-upload">
+                    <div class="po_file hidden">
+                        <a href="#"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
+                        <p> OR </p>
+                        <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
+                    </div>
+                    <div class="po_upload">
+                        <label>Upload Purchase Order</label>
+                        <form method="post" class="dropzone" id="po-upload">
                         <input type="hidden" name="tableName" id="tableName" value="" >
                         <input type="hidden" name="rowID" id="rowID" value="" >
                         {{ csrf_field() }}
                     </form>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary upload-po">Upload</button>
+                    <button type="button" class="btn btn-primary disabled upload-po">Upload</button>
                 </div>
             </div>
         </div>
     </div>
+	<div class="modal fade" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
+                    </div>
+                    <div class="modal-body">
+						<div id="exist_artwork_div">
+							<h4>Artworks : </h4>
+							<label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
+							<ul class="list-group checked-list-box">
+							</ul>
+							<button type="button" id="new_po1" class="btn btn-primary">New PO</button>
+							<button type="button" id="map_po" class="btn btn-primary">Map PO</button>
+							<hr/>
+						</div>
+						
+						<div id="map_po_div" class="hidden">
+							<h4>Mapping to Exist PO : </h4>
+							<label style="color:red" id="select_error" class="hidden">Please Select PO</label>
+							<div class="form-group" id="selectpo">
+								<label>Select PO</label>
+								<select class="form-control">
+								  <option>1</option>
+								  <option>2</option>
+								  <option>3</option>
+								  <option>4</option>
+								  <option>5</option>
+								</select>
+                        	</div>
+							
+						</div>
+						
+						<div id="new_po_div" class="hidden">
+							<h4>New PO : </h4>
+							<label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+							 <div class="form-group">
+                            <label>PO Number</label>
+                            <input id="new_po_no" type="text" class="form-control">
+                        	</div>
+							<div class="form-group">
+								<label for="exampleInputFile">PO File</label>
+								<input type="file" id="new_po_file">
+								<p class="help-block">Example block-level help text here.</p>
+							</div>
+							
+						</div>
+                       
+                        
+                     
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
+						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
+						
+						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     <div class="modal fade" id="profoma-invoice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -138,20 +207,20 @@
                     <div class="modal-body">
 						<div id="uvc_select_div">
 						</div>
-						<div id="exist_artwork_div" class="hidden">
+						<div id="exist_artwork_div_status" class="hidden">
 							<h4>Artworks : </h4>
-							<label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
+							<label style='color:red' id='check_error_status' class='hidden'>Please select atleast one artwork</label>
 							<ul class="list-group checked-list-box">
 							</ul>
-							<button type="button" id="new_po1" class="btn btn-primary hidden">New PO</button>
-							<button type="button" id="map_po" class="btn btn-primary hidden">Map PO</button>
+							<button type="button" id="new_po1_status" class="btn btn-primary hidden">New PO</button>
+							<button type="button" id="map_po_status" class="btn btn-primary hidden">Map PO</button>
 							<hr/>
 						</div>
 						
-						<div id="map_po_div" class="hidden">
+						<div id="map_po_div_status" class="hidden">
 							<h4>Mapping to Exist PO : </h4>
-							<label style="color:red" id="select_error" class="hidden">Please Select PO</label>
-							<div class="form-group" id="selectpo">
+							<label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
+							<div class="form-group" id="selectpo_status">
 								<label>Select PO</label>
 								<select class="form-control">
 								  <option>1</option>
@@ -164,30 +233,26 @@
 							
 						</div>
 						
-						<div id="new_po_div" class="hidden">
+						<div id="new_po_div_status" class="hidden">
 							<h4>New PO : </h4>
-							<label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+							<label style='color:red' id='new_po_error_status' class='hidden'>Please Enter PO Number</label>
 							 <div class="form-group">
                             <label>PO Number</label>
-                            <input id="new_po_no" type="text" class="form-control">
+                            <input id="new_po_no_status" type="text" class="form-control">
                         	</div>
 							<div class="form-group">
 								<label for="exampleInputFile">PO File</label>
-								<input type="file" id="new_po_file">
+								<input type="file" id="new_po_file_status">
 								<p class="help-block">Example block-level help text here.</p>
 							</div>
-							
 						</div>
-                       
-                        
-                     
-                       
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
-						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
+
+                        <button type="button" id="update_new_po_status" class="btn btn-primary hidden" >Update</button>
+						<button type="button" id="update_po_status" class="btn btn-primary hidden" >Update</button>
 						
-						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
+						<button type="button" id="new_pos_status" class="btn btn-primary hidden" >Update</button>
                     </div>
                 </div>
             </div>
@@ -203,6 +268,7 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
     <script>
 
 		localStorage.removeItem("page_navigation");
@@ -219,8 +285,12 @@
             $('.buyer-nav-select').html($('.buyer-div').html())
             if (localStorage.getItem("status_buyer") === null) {
 
-            } else {
+            } else if (localStorage.getItem("status_buyer") === 'orchestra'){
                 orderStatus();
+            }
+            else
+            {
+                tescoOrderStatus();
             }
             $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
             $('.buyer-nav-select .buyer-select').selectpicker({
@@ -231,6 +301,7 @@
                 if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
                     localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                     localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                    var buyer = $(this).find("option:selected").text().toLowerCase();
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         url: base_url + "/admin/order-management/order_sub_modules",
@@ -238,14 +309,17 @@
                         dataType: "json",
                         data: {
                             _token: csrf_token,
-                            buyer: $(this).find("option:selected").text().toLowerCase()
+                            buyer: buyer
                         },
                         beforeSend: function() {
 
                         },
                         success: function(data) {
-
-                            orderStatus();
+                            if (buyer === 'orchestra') {
+                               orderStatus();
+                            } else {
+                                tescoOrderStatus();
+                            }
                         },
                         error: function(data) {
 
@@ -281,8 +355,6 @@
 
             submitButton.addEventListener("click", function() {
                 myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-         
-
             });
 
             // You might want to show the submit button only when 
@@ -291,7 +363,7 @@
             this.on("addedfile", function(file)
             {
                 var filename = file.name;   
-               
+                $('.upload-po').removeClass('disabled')
               // Show submit button here and/or inform user to click it.
             });
             this.on("complete", function(file){        
@@ -316,8 +388,6 @@
                 $('#snackbar').css('background-color','#F44336');
                 showSnackbar();
             });
-
-
         }
     };
 
