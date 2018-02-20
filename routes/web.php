@@ -201,6 +201,8 @@ Route::post('admin/orchestra/order-management/set_solid_stickers', 'Admin\Orches
 Route::post('admin/orchestra/order-management/set_standard_stickers', 'Admin\Orchestra\OrderManagementCntrl@setStandardStickers');
 
 Route::get('admin/orchestra/order-management/get_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrdersPo');
+Route::get('admin/orchestra/order-management/get_existing_standard_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingStandardStickerOrdersPo');
+Route::get('admin/orchestra/order-management/get_existing_solid_sticker_orders_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingSolidStickerOrdersPo');
 Route::get('admin/orchestra/order-management/get_existing_label_orders_status_po', 'Admin\Orchestra\OrderManagementCntrl@getExistingLabelOrderStatusPo');
 
 Route::Post('admin/orchestra/order-management/put_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPo');
@@ -213,16 +215,14 @@ Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@ind
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
-Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
+Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByTabula');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
 
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
-Route::post('admin/tesco/set-ce-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleTHL3Orders');
-Route::post('admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTCL1TCL2TSL1Orders');
-Route::post('admin/tesco/set-uk-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTHL1Orders');
-Route::post('admin/tesco/set-uk-single-tcl4tsl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleTCL4TSL3Orders');
-Route::post('admin/tesco/set-uk-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleTHL3Orders');
+
+Route::post('admin/tesco/set-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioOrders');
+Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleOrders');
 
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
