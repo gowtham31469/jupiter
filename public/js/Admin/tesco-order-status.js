@@ -204,10 +204,12 @@ function tescoSetPO(obj,id)
  */
 function tescoPOUpload(obj,id,po_file)
 {
-    if (po_file !="")
+    console.log(po_file)
+    if (po_file!="" || po_file!= "null")
     {
-    	$('.po_file').removeClass('hidden')
-    	$('.po_upload').addClass('hidden')
+    	$('#po_upload').addClass('hidden')
+        $('#po_file').removeClass('hidden')
+    	
     }
     var table_name = "tesco_sticker_orders_count";
     $('#rowID').val(id);
@@ -216,5 +218,5 @@ function tescoPOUpload(obj,id,po_file)
 }
 
 $(".update-po-file").click(function () {
-    $('.po_upload').removeClass('hidden')
+    $('#po_upload').removeClass('hidden')
 });
