@@ -278,9 +278,9 @@ class OrderManagementCntrl extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
-            $tesco_order     = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id  = $tesco_order->id; 
+            // $tesco_order_obj = new TescoOrders();
+            // $tesco_order     = $tesco_order_obj->createTescoOrder($request);
+            // $tesco_order_id  = $tesco_order->id; 
 
             $counts       = $request['counts'];
             $templates    = $request['templates'];

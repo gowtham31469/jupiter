@@ -370,7 +370,7 @@ function createOrders(parsedObj = false) {
                              });
                              html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" id="ce_ratio_itf_1" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '<td></td></tr></tbody></table></div><hr></div>';
 
@@ -647,7 +647,7 @@ try{
      var val = parseInt(id) + 1; 
      var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
-           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
          });
       html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
      $('#table_row').append(html);
@@ -1221,12 +1221,20 @@ function setTescoOrder()
     try {
         var zone   =  localStorage.getItem("zone");
         var type   =  localStorage.getItem("template type");
+        var data   =  JSON.parse(localStorage.getItem("data"));
 
         if(zone === "CE")
         {
             if(type === "ratio")
             {
-                storeCERatio()
+                if(data[0].template_name === 'THL 1')
+                {
+                    storeCERatioTHL1();
+                }
+                else
+                {
+                    storeCERatioTCL1TCL2TSL1();
+                }
                 
             }
             else
@@ -1280,34 +1288,77 @@ function tescoOrderCommonData()
     
 }
 /**
- * [storeCERatio for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * [storeCERatioTCL1TCL2TSL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @author <praveen>
  */
 
-function storeCERatio()
+function storeCERatioTCL1TCL2TSL1()
 {
     try {
         /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
         tescoOrderCommonData();
-        var templates         = [];
-        var counts            = [];
-        
-        $('.count').each(function(i, item)
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_TCL1        = [];
+        var count_TCL2        = [];
+        var count_TSL1        = [];
+
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
         {
-            counts[i]    = $(item).val() === ''?0:$(item).val();
-            templates[i] = data[i].template_name;
+            orms_tpn[i]    = $(item).val();
+            
         });
-        /** [ Create array of ce single case size ] */
-        
-        var orms_tpn =  $("#ce_ratio_orms_tpn").val();
-        var itf_code =  $("#ce_ratio_itf").val();
-        var cases_per_carton =  $("#ce_ratio_cpc").val();
+        orms_tpn   = orms_tpn.join(',');
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+        /** [ Create array of ce ratio tcl1 count ] */
+        $('.count_TCL1').each(function(i, item)
+        {
+            count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TCL1 = count_TCL1.join(',');
+        /** [ Create array of ce ratio tcl2 count ] */
+        $('.count_TCL2').each(function(i, item)
+        {
+            count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TCL2 = count_TCL2.join(',');
+        /** [ Create array of ce ratio tsl1 count ] */
+        $('.count_TSL1').each(function(i, item)
+        {
+            count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TSL1 = count_TSL1.join(',');
+console.log(orms_tpn)
+console.log(itf_code)
+console.log(cases_per_carton)
+console.log(count_TCL1)
+console.log(count_TCL2)
+console.log(count_TSL1)
 
         $.ajax({
                      url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,templates:templates,counts:counts,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1
                      },
                      dataType:"json",
                      beforeSend: function () {
