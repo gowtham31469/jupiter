@@ -13,9 +13,20 @@ use DB;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
-use App\TescoStickerOrdersSizeDetails;
-use App\TescoPolybagCartonStickerOrders;
-use App\TescoStickerOrdersCount;
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 
 class OrderManagementCntrl extends Controller
@@ -282,44 +293,54 @@ class OrderManagementCntrl extends Controller
             // $tesco_order     = $tesco_order_obj->createTescoOrder($request);
             // $tesco_order_id  = $tesco_order->id; 
 
-            $counts       = $request['counts'];
-            $templates    = $request['templates'];
-
-            $inserted = TescoStickerOrdersSizeDetails::create([
-                          'tesco_order_id'   => $tesco_order_id,
-                          'orms_tpn'         => $request['orms_tpn'],
-                          'itf_barcode'      => $request['itf_code'],
-                          'cases_per_carton' => $request['cases_per_carton']
-                        ]);
-              $size_table_id = $inserted->id;
-              $i = 0;
-              foreach ($counts as $count) 
-              {
-                $count_insert = TescoStickerOrdersCount::create([
-                            'tesco_order_id'   => $size_table_id,
-                            'template_name'    => $templates[$i],
-                            'count'            => $count,
-                            'order_status'     => "Submitted",
-                            'artwork_status'   => "Submitted",
-                            'print_status'     => "Submitted"
-                          ]);
-                $i++;
-              }
             
-            if($inserted != '')
+            $orms_tpn         = explode(',',$request['orms_tpn']);
+            $itf_code         = explode(',',$request['itf_code']);
+            $cases_per_carton = explode(',',$request['cases_per_carton']);
+            $templates        = $request['templates'];
+            foreach ($templates as $template) 
             {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
+              if($template['template_name'] != "THL 1")
+              {
+                
+                $count_TCL1       = explode(',',$request['count_TCL1']);
+                $count_TCL2       = explode(',',$request['count_TCL2']);
+                $count_TSL1       = explode(',',$request['count_TSL1']);
+                if($template['template_name'] != "TCL 1")
+                {
+
+                }
+                else if($template['template_name'] != "TCL 2")
+                {
+
+                }
+                else
+                {
+
+                }
+              }
+              else
+              {
+                $count_THL1       = explode(',',$request['count_THL1']);
+                return $count_THL1;
+              }
             }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            
+            
+            // if($inserted != '')
+            // {
+            //   $result = response()->json(['error'=> false,'message' =>'success'],200);
+            // }
+            // else
+            // {
+            //   $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            // }
 
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
+        // return $result;
     }
     /**
      * Store CE single template orders

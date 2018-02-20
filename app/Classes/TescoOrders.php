@@ -7,7 +7,20 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
-use App\TescoPolybagCartonStickerOrders;
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
 
 class TescoOrders
 {

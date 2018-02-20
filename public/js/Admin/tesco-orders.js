@@ -1347,18 +1347,11 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         count_TSL1 = count_TSL1.join(',');
-console.log(orms_tpn)
-console.log(itf_code)
-console.log(cases_per_carton)
-console.log(count_TCL1)
-console.log(count_TCL2)
-console.log(count_TSL1)
-
         $.ajax({
                      url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                      },
                      dataType:"json",
                      beforeSend: function () {
@@ -1367,7 +1360,86 @@ console.log(count_TSL1)
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+/**
+ * [storeCERatioTHL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * @author <praveen>
+ */
+
+function storeCERatioTHL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_THL1        = [];
+
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+        /** [ Create array of ce ratio tcl1 count ] */
+        $('.count_THL1').each(function(i, item)
+        {
+            count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_THL1 = count_THL1.join(',');
+        
+        $.ajax({
+                     url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
+                     type: 'POST',
+                     data: {
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
+                     },
+                     dataType:"json",
+                     beforeSend: function () {
+                         $(".loader").show();
+                     },
+                     success: function (data) {
+                           $('.snackbar_span').html('Your order has been placed successfully');
+                           showSnackbar();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
