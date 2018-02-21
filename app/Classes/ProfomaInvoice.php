@@ -134,4 +134,9 @@ class ProfomaInvoice
         }
         return $data;
 	}
+
+    public function getTescoPIDetails($request)
+    {
+       
+    }   
 }

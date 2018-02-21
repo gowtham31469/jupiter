@@ -18,7 +18,7 @@
                     <table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <th>Sl. No</th>
                           <th>Customer Name</th>
                           <th>Factory Code</th>
                           <th>Default Contact</th>
@@ -222,21 +222,28 @@
                               <div class="form-check form-group has-feedback">
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" value="" name="pi_required" id="pi_required">
-                                  Proforma Invoice(PI) required ? 
+                                  Proforma Invoice(PI) Required ? 
                                 </label>
                                 <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-check form-group has-feedback po-required-div"  style="display: none;">
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" value="" name="po_required" id="po_required">
-                                  Purchase Order(PO) required ? 
+                                  Purchase Order(PO) Required ? 
+                                </label>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                              <div class="form-check form-group has-feedback">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="delivery_date_required" id="delivery_date_required">
+                                  Make Delivery Date Mandatory 
                                 </label>
                                 <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-check form-group has-feedback">
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" value="" name="advance_payment" id="advance_payment">
-                                  Advance Payment Method required ? 
+                                  Advance Payment Method Required ? 
                                 </label>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -520,21 +527,28 @@
                     <div class="form-check form-group has-feedback">
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" value="" name="edit_pi_required" id="edit_pi_required">
-                        Proforma Invoice(PI) required ? 
+                        Proforma Invoice(PI) Required ? 
                       </label>
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-check form-group has-feedback edit-po-required-div"  style="display: none;">
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" value="" name="edit_po_required" id="edit_po_required">
-                        Purchase Order(PO) required ? 
+                        Purchase Order(PO) Required ? 
+                      </label>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-check form-group has-feedback">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" name="edit_delivery_date_required" id="edit_delivery_date_required">
+                        Make Delivery Date Mandatory 
                       </label>
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-check form-group has-feedback">
                         <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" value="" name="edit_advance_payment" id="edit_advance_payment">
-                          Advance Payment Method required ? 
+                          Advance Payment Method Required ? 
                         </label>
                         <div class="help-block with-errors"></div>
                       </div>

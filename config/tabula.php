@@ -71,6 +71,6 @@ return [
     |
     |
     */
-    'check_packB' => ' -l -p 2 -a 5,5,1000,1000 -f JSON ',
+    'check_packB' => ' -l -p 2 -a 10,10,1000,1000 -f JSON ',
 
 ];

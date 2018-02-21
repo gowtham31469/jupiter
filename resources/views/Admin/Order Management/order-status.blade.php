@@ -34,7 +34,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="po_file hidden" id="po_file">
-                        <a href="#"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
+                        <a href="#" target="_blank" id="po_link"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
                         <p> OR </p>
                         <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
                     </div>

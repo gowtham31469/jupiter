@@ -23,19 +23,30 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 /**
    * Class to store the tesco template orders
-   * @param  [type] $request
    * @author [Praveen] <[praveen@wizroots.com]>
    */
 class TescoOrders
 {
 	/**
 	 * method to store the tesco TCL1 orders
-	 * @param  [type] $request
+	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1oOrder($request)
+	public function createTCL1Order($request,$template_id)
 	{
 		try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL1Orders::create([
@@ -56,7 +67,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -67,12 +80,23 @@ class TescoOrders
 	}
   /**
    * method to store the tesco TCL2 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2oOrder($request)
+  public function createTCL2Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL2Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL2Orders::create([
@@ -93,7 +117,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -104,12 +130,23 @@ class TescoOrders
   }
   /**
    * method to store the tesco TSL1 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1oOrder($request)
+  public function createTSL1Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTSL1Orders::create([
@@ -130,7 +167,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -141,12 +180,23 @@ class TescoOrders
   }
   /**
    * method to store the tesco THL1 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1oOrder($request)
+  public function createTHL1Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTHL1Orders::create([
@@ -167,7 +217,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -178,12 +230,23 @@ class TescoOrders
   }
   /**
    * method to store the tesco TCL4 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4oOrder($request)
+  public function createTCL4Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL4Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL4Orders::create([
@@ -204,7 +267,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -215,12 +280,23 @@ class TescoOrders
   }
   /**
    * method to store the tesco TSL3 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3oOrder($request)
+  public function createTSL3Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL3Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTSL3Orders::create([
@@ -241,7 +317,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -252,12 +330,23 @@ class TescoOrders
   }
   /**
    * method to store the tesco THL3 orders
-   * @param  [type] $request
+   * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3oOrder($request)
+  public function createTHL3Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL3Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTHL3Orders::create([
@@ -278,7 +367,9 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
