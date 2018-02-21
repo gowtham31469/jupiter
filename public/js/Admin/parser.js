@@ -4,8 +4,8 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-    //try {
-        //Check for Purchase Order Type
+    try {
+        Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
         switch(po_type) {
@@ -18,10 +18,10 @@ function parseXML(data, callback) {
         }
         callback(parsedObj);
 
-    // } catch(e) {
-    //     // error statements
-    //     console.log("Error:"+e);
-    // }
+    } catch(e) {
+        // error statements
+        console.log("Error:"+e);
+    }
 }
 
 /**
@@ -41,11 +41,10 @@ function parseSingleType(data) {
         //*********************************************************************************************************
 
         var info = JSON.parse(data.details.info);
-        console.log(info[0].data);
         $.each(info[0].data, function(ind, ele) {
             var row_length = ele.length;
             switch(ind) {
-                case 0: 
+                case 0:
                     singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
                     break;
                 case 1:
@@ -92,7 +91,6 @@ function parseSingleType(data) {
             } 
         });
         singleObj.orderQuantity = values;
-        console.log(singleObj);
         return singleObj;
         
     } catch(e) {
@@ -146,7 +144,6 @@ function parseRatioType(data) {
         var packB = JSON.parse(data.details.ratioPackB);
         tabula.push(packB);
     }
-    console.log(tabula);
     var values = [];
     $.each(tabula, function(index,element) {
         var row = {};
@@ -166,7 +163,6 @@ function parseRatioType(data) {
         
     });
     ratioObj.orderQuantity = values;
-    console.log(ratioObj);
     return ratioObj;
     
 }
