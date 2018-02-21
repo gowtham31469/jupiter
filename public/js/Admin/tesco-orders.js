@@ -397,7 +397,7 @@ function createOrders(parsedObj = false) {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" data-toggle="modal" data-target="#'+item.template_name.replace(' ', '')+'" style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick="openmodaltesco("'+item.template_name.replace(' ', '')+'")" style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
                       });
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span><button class="btn btn-xs btn-warning" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
 
@@ -765,7 +765,7 @@ function dynamicSVGTemplates()
 	 try{
 		$.each(data, function(i, item){
 			dynamicSVGTemplatescard("tesco_svg"+i,item);
-			dynamicSVGTemplatescard("tesco_svg_modal"+i,item);  
+			//dynamicSVGTemplatescard("tesco_svg_modal"+i,item);  
 		});   
 		} catch (e) {
 		/** [error statements] */
@@ -887,9 +887,9 @@ function dynamicSVGTemplatescard(id,item)
               /**  [ if UK ratio template ] */
               if(type === "ratio")
               { 
-                  var tpnd = $('#uk_ratio_tpnd').val();
+                  var tpnd = $('#uk_ratio_tpnd_1').val();
                   var description  = $('#tesco_description').val();
-				  var uk_ratio_itf  = $('#uk_ratio_itf').val();
+				  var uk_ratio_itf  = $('#uk_ratio_itf_1').val();
 				  
                   /** [ Dynamically change svg UK ratio tpnd number ] */
                   if(tpnd != '')
@@ -911,7 +911,7 @@ function dynamicSVGTemplatescard(id,item)
                   }
 				 
 				  /** [ Dynamically change svg barcode ] */
-				  if(uk_ratio_itf.length === 13)
+				  if(uk_ratio_itf.length === 14)
 				  {
 					jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
 				  }
@@ -937,7 +937,7 @@ function dynamicSVGTemplatescard(id,item)
                       svgDoc.getElementById("tpnd").innerHTML = '';
                  }
 				 /** [ Dynamically change svg barcode ] */
-				  if(uk_single_ean.length === 13)
+				  if(uk_single_ean.length === 14)
 				  {
 					jsbarcodetesco(uk_single_ean, 'barcode', svgDoc)
 				  }
@@ -1183,9 +1183,9 @@ function dynamicSVGTemplatescard(id,item)
               /**  [ if UK ratio template ] */
               if(type === "ratio")
               {
-                   var pieces_in_ratio = $('#uk_ratio_upc').val();
-                   var tpnd = $('#uk_ratio_tpnd').val();
-				   var uk_ratio_itf  = $('#uk_ratio_itf').val();
+                   var pieces_in_ratio = $('#uk_ratio_upc_1').val();
+                   var tpnd = $('#uk_ratio_tpnd_1').val();
+				   var uk_ratio_itf  = $('#uk_ratio_itf_1').val();
 
                    /** [ Dynamically change svg UK pieces in ratio ] */
                    if(pieces_in_ratio != '')
@@ -1208,7 +1208,7 @@ function dynamicSVGTemplatescard(id,item)
                    if(item.template_name === "TCL 1" || item.template_name === "THL 1")
                    {
                      /** [ Dynamically change svg barcode ] */
-                       if(uk_ratio_itf !='' && uk_ratio_itf.length === 13)
+                       if(uk_ratio_itf !='' && uk_ratio_itf.length === 14)
                        {
                         
                         jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
@@ -1249,7 +1249,7 @@ function dynamicSVGTemplatescard(id,item)
 			     if(item.template_name === "THL 3")
 			     {
 					   /** [ Dynamically change svg barcode ] */
-					   if(uk_single_ean !='' && uk_single_ean.length === 13)
+					   if(uk_single_ean !='' && uk_single_ean.length === 14)
 					   {
 
 						jsbarcodetesco(uk_single_ean, 'barcode', svgDoc)
@@ -1891,9 +1891,9 @@ try{
 function jsbarcodetesco(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
-		format: "ean13",
-		width: 3.45,
-		height: 125,
+		format: "ITF14",
+		width: 2.99,
+		height: 100,
 		fontSize: 35,
 		flat:true
 	});
@@ -1939,4 +1939,15 @@ function jsbarcodetesco(code, id, svgDoc) {
 	canvasTmp.remove();
 	
 	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function openmodaltesco(modal)
+{
+	alert()
 }
