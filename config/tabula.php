@@ -18,7 +18,7 @@ return [
     |
     |
     */
-   'tabula_jar' => '/var/www/html/tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar',
 
    /*
     |--------------------------------------------------------------------------
@@ -63,5 +63,14 @@ return [
     |
     */
     'ratio_quantity' => ' -p 2 -a 130,10,160,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'check_packB' => ' -l -p 2 -a 5,5,1000,1000 -f JSON ',
 
 ];
