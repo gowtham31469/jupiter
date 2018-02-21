@@ -36,6 +36,11 @@ class TescoOrders
 	public function createTCL1Order($request,$template_id)
 	{
 		try {
+            // $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            // if($customer_details->pi_required == 1)
+            // {
+              
+            // }
             $max_id = TescoTCL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL1Orders::create([
