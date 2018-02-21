@@ -36,11 +36,15 @@ class TescoOrders
 	public function createTCL1Order($request,$template_id)
 	{
 		try {
-            // $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
-            // if($customer_details->pi_required == 1)
-            // {
-              
-            // }
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTCL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL1Orders::create([
@@ -62,7 +66,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -79,6 +84,15 @@ class TescoOrders
   public function createTCL2Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTCL2Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL2Orders::create([
@@ -100,7 +114,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -117,6 +132,15 @@ class TescoOrders
   public function createTSL1Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTSL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTSL1Orders::create([
@@ -138,7 +162,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -155,6 +180,15 @@ class TescoOrders
   public function createTHL1Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTHL1Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTHL1Orders::create([
@@ -176,7 +210,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -193,6 +228,15 @@ class TescoOrders
   public function createTCL4Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTCL4Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTCL4Orders::create([
@@ -214,7 +258,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -231,6 +276,15 @@ class TescoOrders
   public function createTSL3Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTSL3Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTSL3Orders::create([
@@ -252,7 +306,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -269,6 +324,15 @@ class TescoOrders
   public function createTHL3Order($request,$template_id)
   {
     try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
             $max_id = TescoTHL3Orders::max('id');
             $order_id = "JGAM_00".($max_id+1);
             $result = TescoTHL3Orders::create([
@@ -290,7 +354,8 @@ class TescoOrders
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
                           'print_status'         => "Submitted",
-                          'template_id'          => $template_id
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
