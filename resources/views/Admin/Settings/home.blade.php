@@ -16,8 +16,29 @@
         <div class="select-buyer">
             <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
-          <div class="sidebar style-4 orchestra-sidebar" style="display: none;"><h4>Orchestra Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li><li id="2" onclick="ageGroup()"><a>Age Group</a></li><li id="3" onclick="countries()"><a>Countries</a></li><li id="4" onclick="productFamily()"><a>Product Family</a></li><li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li><li id="6" onclick="compositions()"><a>Compositions</a></li><li id="7" onclick="parts()"><a>Parts</a></li><li id="8"  onclick="sizeChart()"><a>Size Chart</a></li><li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li></ul></div>
-        <div class="tesco-sidebar sidebar style-4" style="display: none;"><h4>Tesco Metadata</h4><ul class="customer-select meta-data-list"><li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li><li id="2" onclick="tescoDepartment()"><a>Departments</a></li><li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li><li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li></ul></div>
+          <div class="sidebar style-4 orchestra-sidebar" style="display: none;">
+            <h4>Orchestra Metadata</h4>
+            <ul class="customer-select meta-data-list">
+              <li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li>
+              <li id="2" onclick="ageGroup()"><a>Age Group</a></li>
+              <li id="3" onclick="countries()"><a>Countries</a></li>
+              <li id="4" onclick="productFamily()"><a>Product Family</a></li>
+              <li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li>
+              <li id="6" onclick="compositions()"><a>Compositions</a></li>
+              <li id="7" onclick="parts()"><a>Parts</a></li>
+              <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
+              <li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+            </ul>
+          </div>
+        <div class="tesco-sidebar sidebar style-4" style="display: none;">
+          <h4>Tesco Metadata</h4>
+          <ul class="customer-select meta-data-list">
+            <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
+            <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
+            <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
+            <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
+          </ul>
+        </div>
         <div class="content">
         </div>
     </div>
@@ -1445,9 +1466,9 @@
     </div>
 </div>
 
-<!-- Edit Symbol
+{{-- Edit Symbol --}}
 
-<div class="modal fade" id="editOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+{{-- <div class="modal fade" id="editOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
                <div class="modal-header">
@@ -1509,9 +1530,9 @@
            
        </div>
    </div>
-   </div>
-Delete Symbol Model
-   <div class="modal fade" id="deleteOrchestraSymbolModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrchestraSymbolLabel">
+   </div> --}}
+{{-- Delete Symbol Model --}}
+   {{-- <div class="modal fade" id="deleteOrchestraSymbolModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrchestraSymbolLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
                <div class="modal-header">
@@ -1533,12 +1554,7 @@ Delete Symbol Model
               {!! Form::close() !!}
            </div>
        </div>
-   </div>
-    -->
-
-
-
-
+   </div> --}}
 
 <!-- Tesco Modals -->
 
@@ -1618,7 +1634,7 @@ Delete Symbol Model
        </div>
    </div>
 
-<!-- Department -->
+{{-- Department --}}
 
    {{-- Add Tesco Department Modal --}}
    <div class="modal fade" id="addTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoDepartmentLabel">
@@ -1717,7 +1733,7 @@ Delete Symbol Model
        </div>
    </div>
 
-<!-- Suppliers  -->
+{{-- Suppliers  --}}
 
    {{-- Add Tesco Supplier Modal --}}
    <div class="modal fade" id="addTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSupplierLabel">
@@ -2523,8 +2539,8 @@ Delete Symbol Model
         makeBrandDisabled(id,csrf_token)
     });
 
-/** Add Tesco Department form validation **/
-$('#add_tesco_departments_form').validator().on('submit', function (e) {
+    /** Add Tesco Department form validation **/
+    $('#add_tesco_departments_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
 
@@ -2749,7 +2765,7 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
            var care_instruction = $('#edit_care_instruction').val();
            var id = $('#edit_orchestra_symbols_id').val();
 
-           /* call addOrchestraSymbols function from orchestra-settings.js*/
+           /* call editOrchestraSymbols function from orchestra-settings.js*/
            editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
         }
       });
@@ -2770,9 +2786,8 @@ $('#add_tesco_departments_form').validator().on('submit', function (e) {
          {
             e.preventDefault();
             var id   = $('#delete_orchestra_symbol_id').val();
-            /* call OrchestraSymbol function from tesco-settings.js*/
+            /* call deleteOrchestraSymbol function from tesco-settings.js*/
             deleteOrchestraSymbol(id);
-            // console.log(id);
          }
        })
       /** [ Make sidebar active ] */

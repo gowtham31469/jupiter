@@ -18,7 +18,7 @@
                     <table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <th>Sl. No</th>
                           <th>Customer Name</th>
                           <th>Factory Code</th>
                           <th>Default Contact</th>
