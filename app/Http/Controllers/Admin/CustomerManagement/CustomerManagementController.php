@@ -217,6 +217,7 @@ class CustomerManagementController extends Controller
                 $freight_charge_free  = $request['freight_charge_free'];
                 $freight_cost         = $request['freight_cost'];
                 $po_required          = $request['po_required'];
+                $delivery_date_req    = $request['delivery_date_req'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -240,26 +241,27 @@ class CustomerManagementController extends Controller
                   $buyers           = explode(',',$buyer);
 
                   $customer = Customer::create([
-                                'factory_code'         => $factory_code,
-                                'company_name'         => $company_name,
-                                'courier_choice'       => $courier_choice,
-                                'account_no'           => $account_no,
-                                'password'             => $password,
-                                'tin_number'           => $tin_number,
-                                'gstin_number'         => $gstin_number,
-                                'pan_number'           => $pan_number,
-                                'email'                => $login_email,
-                                'pi_required'          => $pi_required,
-                                'account_holder'       => $account_holder,
-                                'ifsc_code'            => $ifsc_code,
-                                'bank'                 => $bank,
-                                'branch'               => $branch,
-                                'place_of_supply'      => $place_of_supply,
-                                'freight_cost'         => $freight_cost,
-                                'is_freight_cost_free' => $freight_charge_free,
-                                'payment_terms'        => $payment_term,
-                                'is_advance_payment'   => $advance_payment,
-                                'po_required'          => $po_required
+                                'factory_code'           => $factory_code,
+                                'company_name'           => $company_name,
+                                'courier_choice'         => $courier_choice,
+                                'account_no'             => $account_no,
+                                'password'               => $password,
+                                'tin_number'             => $tin_number,
+                                'gstin_number'           => $gstin_number,
+                                'pan_number'             => $pan_number,
+                                'email'                  => $login_email,
+                                'pi_required'            => $pi_required,
+                                'account_holder'         => $account_holder,
+                                'ifsc_code'              => $ifsc_code,
+                                'bank'                   => $bank,
+                                'branch'                 => $branch,
+                                'place_of_supply'        => $place_of_supply,
+                                'freight_cost'           => $freight_cost,
+                                'is_freight_cost_free'   => $freight_charge_free,
+                                'payment_terms'          => $payment_term,
+                                'is_advance_payment'     => $advance_payment,
+                                'po_required'            => $po_required,
+                                'delivery_date_required' => $delivery_date_req
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -370,7 +372,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.is_advance_payment','customers.is_freight_cost_free','customers.freight_cost','customers.po_required')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.is_advance_payment','customers.is_freight_cost_free','customers.freight_cost','customers.po_required','customers.delivery_date_required')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -409,28 +411,29 @@ class CustomerManagementController extends Controller
         public function updateCustomer(Request $request)
           {
             try {
-                    $id                           = $request['id'];
-                    $input['factory_code']        = Input::get('factory_code');
-                    $input['company_name']        = Input::get('company_name');
-                    $input['courier_choice']      = Input::get('courier_choice');
-                    $input['account_no']          = Input::get('account_no');
-                    $input['tin_number']          = Input::get('tin_number');
-                    $input['gstin_number']        = Input::get('gstin_number');
-                    $input['pan_number']          = Input::get('pan_number');
-                    $input['email']               = Input::get('login_email');
-                    $input['pi_required']         = Input::get('pi_required');
-                    $input['password']            = Hash::make(Input::get('p'));
-                    $input['account_holder']      = Input::get('account_holder');
-                    $input['ifsc_code']           = Input::get('ifsc_code');
-                    $input['bank']                = Input::get('bank');
-                    $input['branch']              = Input::get('branch');
-                    $input['place_of_supply']     = Input::get('place_of_supply');
-                    $input['payment_term']        = Input::get('payment_term');
-                    $input['advance_payment']     = Input::get('advance_payment');
-                    $input['freight_cost']        = Input::get('freight_cost');
-                    $input['freight_charge_free'] = Input::get('freight_charge_free');
-                    $input['po_required']         = Input::get('po_required');
-                    
+                    $id                              = $request['id'];
+                    $input['factory_code']           = Input::get('factory_code');
+                    $input['company_name']           = Input::get('company_name');
+                    $input['courier_choice']         = Input::get('courier_choice');
+                    $input['account_no']             = Input::get('account_no');
+                    $input['tin_number']             = Input::get('tin_number');
+                    $input['gstin_number']           = Input::get('gstin_number');
+                    $input['pan_number']             = Input::get('pan_number');
+                    $input['email']                  = Input::get('login_email');
+                    $input['pi_required']            = Input::get('pi_required');
+                    $input['password']               = Hash::make(Input::get('p'));
+                    $input['account_holder']         = Input::get('account_holder');
+                    $input['ifsc_code']              = Input::get('ifsc_code');
+                    $input['bank']                   = Input::get('bank');
+                    $input['branch']                 = Input::get('branch');
+                    $input['place_of_supply']        = Input::get('place_of_supply');
+                    $input['payment_term']           = Input::get('payment_term');
+                    $input['advance_payment']        = Input::get('advance_payment');
+                    $input['freight_cost']           = Input::get('freight_cost');
+                    $input['freight_charge_free']    = Input::get('freight_charge_free');
+                    $input['po_required']            = Input::get('po_required');
+                    $input['delivery_date_required'] = Input::get('delivery_date_req');
+
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
                     $contact_email    = Input::get('contact_email');
@@ -470,26 +473,27 @@ class CustomerManagementController extends Controller
 
                       Customer::where('id',$id)
                           ->update([
-                          'factory_code'       => $input['factory_code'],
-                          'company_name'       => $input['company_name'],
-                          'courier_choice'     => $input['courier_choice'],
-                          'account_no'         => $input['account_no'],
-                          'tin_number'         => $input['tin_number'],
-                          'gstin_number'       => $input['gstin_number'],
-                          'pan_number'         => $input['pan_number'],
-                          'email'              => $input['email'],
-                          'password'           => $input['password'],
-                          'pi_required'        => $input['pi_required'],
-                          'account_holder'     => $input['account_holder'],
-                          'ifsc_code'          => $input['ifsc_code'],
-                          'bank'               => $input['bank'],
-                          'branch'             => $input['branch'],
-                          'place_of_supply'    => $input['place_of_supply'],
-                          'payment_terms'      => $input['payment_term'],
-                          'is_advance_payment' => $input['advance_payment'],
-                          'freight_cost'       => $input['freight_cost'],
-                          'is_freight_cost_free'=> $input['freight_charge_free'],
-                          'po_required'        => $input['po_required']
+                          'factory_code'           => $input['factory_code'],
+                          'company_name'           => $input['company_name'],
+                          'courier_choice'         => $input['courier_choice'],
+                          'account_no'             => $input['account_no'],
+                          'tin_number'             => $input['tin_number'],
+                          'gstin_number'           => $input['gstin_number'],
+                          'pan_number'             => $input['pan_number'],
+                          'email'                  => $input['email'],
+                          'password'               => $input['password'],
+                          'pi_required'            => $input['pi_required'],
+                          'account_holder'         => $input['account_holder'],
+                          'ifsc_code'              => $input['ifsc_code'],
+                          'bank'                   => $input['bank'],
+                          'branch'                 => $input['branch'],
+                          'place_of_supply'        => $input['place_of_supply'],
+                          'payment_terms'          => $input['payment_term'],
+                          'is_advance_payment'     => $input['advance_payment'],
+                          'freight_cost'           => $input['freight_cost'],
+                          'is_freight_cost_free'   => $input['freight_charge_free'],
+                          'po_required'            => $input['po_required'],
+                          'delivery_date_required' => $input['delivery_date_required']
                         ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)

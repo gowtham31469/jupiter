@@ -33,7 +33,7 @@ class TescoOrders
 	 * @param  [type] $request
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1oOrder($request)
+	public function createTCL1Order($request,$template_id)
 	{
 		try {
             $max_id = TescoTCL1Orders::max('id');
@@ -56,7 +56,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -70,7 +71,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2oOrder($request)
+  public function createTCL2Order($request,$template_id)
   {
     try {
             $max_id = TescoTCL2Orders::max('id');
@@ -93,7 +94,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -107,7 +109,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1oOrder($request)
+  public function createTSL1Order($request,$template_id)
   {
     try {
             $max_id = TescoTSL1Orders::max('id');
@@ -130,7 +132,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -144,7 +147,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1oOrder($request)
+  public function createTHL1Order($request,$template_id)
   {
     try {
             $max_id = TescoTHL1Orders::max('id');
@@ -167,7 +170,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -181,7 +185,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4oOrder($request)
+  public function createTCL4Order($request,$template_id)
   {
     try {
             $max_id = TescoTCL4Orders::max('id');
@@ -204,7 +208,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -218,7 +223,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3oOrder($request)
+  public function createTSL3Order($request,$template_id)
   {
     try {
             $max_id = TescoTSL3Orders::max('id');
@@ -241,7 +246,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)
@@ -255,7 +261,7 @@ class TescoOrders
    * @param  [type] $request
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3oOrder($request)
+  public function createTHL3Order($request,$template_id)
   {
     try {
             $max_id = TescoTHL3Orders::max('id');
@@ -278,7 +284,8 @@ class TescoOrders
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Submitted",
                           'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted"
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id
                         ]);
             
         } catch (\Exception $e)

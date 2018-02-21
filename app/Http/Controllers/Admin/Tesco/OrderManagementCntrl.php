@@ -321,6 +321,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
                 
@@ -329,7 +330,7 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -346,7 +347,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL2oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -363,7 +364,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL1oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -382,7 +383,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
-                 $tesco_order     = $tesco_order_obj->createTHL1oOrder($request);
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($orms_tpn as $tpn) 
@@ -425,6 +426,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
                 
@@ -433,7 +435,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL4oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -451,7 +453,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL3oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -471,7 +473,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
-                 $tesco_order     = $tesco_order_obj->createTHL3oOrder($request);
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($orms_tpn as $tpn) 
@@ -514,6 +516,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
                 
@@ -522,7 +525,7 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -539,7 +542,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL2oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -556,7 +559,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL1oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -575,7 +578,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
-                 $tesco_order     = $tesco_order_obj->createTHL1oOrder($request);
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($tpnd as $value) 
@@ -618,6 +621,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
                 
@@ -626,7 +630,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL4oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -644,7 +648,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL3oOrder($request);
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -664,7 +668,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
-                 $tesco_order     = $tesco_order_obj->createTHL3oOrder($request);
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($tpnd as $value) 
