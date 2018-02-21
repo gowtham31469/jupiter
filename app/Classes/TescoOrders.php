@@ -25,16 +25,16 @@ use App\TescoTSL3OrdersQuantity;
 class TescoOrders
 {
 	/**
-	 * method to store the tesco orders
+	 * method to store the tesco TCL1 orders
 	 * @param  [type] $request
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTescoOrder($request)
+	public function createTCL1oOrder($request)
 	{
 		try {
-            $max_id = TescoPolybagCartonStickerOrders::max('id');
-            $order_id = "JGAM_".$max_id;
-            $result = TescoPolybagCartonStickerOrders::create([
+            $max_id = TescoTCL1Orders::max('id');
+            $order_id = "JGAM_00".$max_id+1;
+            $result = TescoTCL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -49,7 +49,10 @@ class TescoOrders
                           'tesco_brand_id'       => $request['brand'],
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted"
                         ]);
             
         } catch (\Exception $e)

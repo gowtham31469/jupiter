@@ -289,7 +289,7 @@ class OrderManagementCntrl extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            // $tesco_order_obj = new TescoOrders();
+            $tesco_order_obj = new TescoOrders();
             // $tesco_order     = $tesco_order_obj->createTescoOrder($request);
             // $tesco_order_id  = $tesco_order->id; 
 
@@ -308,7 +308,28 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] != "TCL 1")
                 {
-
+                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   $tesco_order_id  = $tesco_order->id;
+                   $result = TescoTCL1OrdersQuantity::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted"
+                        ]); 
                 }
                 else if($template['template_name'] != "TCL 2")
                 {
