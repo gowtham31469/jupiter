@@ -13,9 +13,20 @@ use DB;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
-use App\TescoStickerOrdersSizeDetails;
-use App\TescoPolybagCartonStickerOrders;
-use App\TescoStickerOrdersCount;
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use PDF;
 
@@ -86,7 +97,7 @@ class OrderManagementCntrl extends Controller
            /* Fetch tesco brands,departments and suppliers details */
            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
-           $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id','supplier_code')->get();
+           $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
            $tesco_size = DB::table('tesco_size_chart')->select('po_size','id')->get();
            
            return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'tesco_size' => $tesco_size]);
@@ -188,15 +199,13 @@ class OrderManagementCntrl extends Controller
               $data = $this->cropPDF($path, 'single');
               break;
             case 'RATIO PACK  A':
-              $data = $this->cropPDF($path, 'ratio');
-              break; 
-            case 'RATIO PACK  A PACK  B':
-              $data = $this->cropPDF($path);
-              break; 
-            case 'SINGLES':
-              $data = $this->cropPDF($path);
+              //Check for Ratio Pack B
+              $packB = $this->checkPackB($path);
+              $data  = $this->cropPDF($path, 'ratio');
+              if($packB) {
+                $data['ratioPackB'] = $packB;
+              }
               break;
-            
             default:
               return response()->json(['error' => 'Unknown PO Type']);
               break;
@@ -244,6 +253,26 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
+     * Method to check Ratio Pack B exist or not
+     * @param  [path] $file File to be cropped
+     * @return [str]       JSON extracted string
+     */
+    public function checkPackB($file) {
+      //Read the tabula configuration from config/tabula.php.
+      $tabula      = Config::get('tabula.tabula_jar');
+      $check_packB = Config::get('tabula.check_packB');
+      //Execute tabula method to extract the quantity table.
+      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
+      $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
+      if(count($pack_b) > 2) {
+        //return the ratio pack B row
+        return json_encode($pack_b[1]['data'][5]);
+      } else {
+        return false;
+      }
+    }
+
+    /**
      * Function to get tesco tsl template UK , CE size chart based on size entered.
      * @author <Praveen>
      * @param [string] $[size] [<Size entered>], [string] $[zone] [<zone selected>]
@@ -280,47 +309,78 @@ class OrderManagementCntrl extends Controller
         try {
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj = new TescoOrders();
-            $tesco_order     = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id  = $tesco_order->id; 
+            // $tesco_order     = $tesco_order_obj->createTescoOrder($request);
+            // $tesco_order_id  = $tesco_order->id; 
 
-            $counts       = $request['counts'];
-            $templates    = $request['templates'];
-
-            $inserted = TescoStickerOrdersSizeDetails::create([
-                          'tesco_order_id'   => $tesco_order_id,
-                          'orms_tpn'         => $request['orms_tpn'],
-                          'itf_barcode'      => $request['itf_code'],
-                          'cases_per_carton' => $request['cases_per_carton']
-                        ]);
-              $size_table_id = $inserted->id;
-              $i = 0;
-              foreach ($counts as $count) 
-              {
-                $count_insert = TescoStickerOrdersCount::create([
-                            'tesco_order_id'   => $size_table_id,
-                            'template_name'    => $templates[$i],
-                            'count'            => $count,
-                            'order_status'     => "Submitted",
-                            'artwork_status'   => "Submitted",
-                            'print_status'     => "Submitted"
-                          ]);
-                $i++;
-              }
             
-            if($inserted != '')
+            $orms_tpn         = explode(',',$request['orms_tpn']);
+            $itf_code         = explode(',',$request['itf_code']);
+            $cases_per_carton = explode(',',$request['cases_per_carton']);
+            $templates        = $request['templates'];
+            foreach ($templates as $template) 
             {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
+              if($template['template_name'] != "THL 1")
+              {
+                
+                $count_TCL1       = explode(',',$request['count_TCL1']);
+                $count_TCL2       = explode(',',$request['count_TCL2']);
+                $count_TSL1       = explode(',',$request['count_TSL1']);
+                if($template['template_name'] != "TCL 1")
+                {
+                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   $tesco_order_id  = $tesco_order->id;
+                   $result = TescoTCL1OrdersQuantity::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted"
+                        ]); 
+                }
+                else if($template['template_name'] != "TCL 2")
+                {
+
+                }
+                else
+                {
+
+                }
+              }
+              else
+              {
+                $count_THL1       = explode(',',$request['count_THL1']);
+                return $count_THL1;
+              }
             }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            
+            
+            // if($inserted != '')
+            // {
+            //   $result = response()->json(['error'=> false,'message' =>'success'],200);
+            // }
+            // else
+            // {
+            //   $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            // }
 
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
+        // return $result;
     }
     /**
      * Store CE single template orders
@@ -332,28 +392,41 @@ class OrderManagementCntrl extends Controller
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
-            $tesco_order = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id = $tesco_order->id;  
+            // $tesco_order_obj = new TescoOrders();
+            // $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            // $tesco_order_id = $tesco_order->id;  
             
-            $orms_tpn            = explode(',',$request['orms_tpn']);
-            $ean_code            = explode(',',$request['ean_code']);
-            $case_size           = explode(',',$request['case_size']);
-            $size                = explode(',',$request['size']);
-            $single_tcl4_count   = explode(',',$request['single_tcl4_count']);
-            $single_tsl3_count   = explode(',',$request['single_tsl3_count']);
+            $counts       = $request['counts'];
+            $templates    = $request['templates'];
+            $quantity     = $request['quantity'];
 
-            $i = 0;
-            foreach($orms_tpn as $value)
+            return $templates[0];
+            foreach($quantity as $value)
             {
-                TescoStickerOrdersSizeDetails::create([
-                    'tesco_order_id'   => $tesco_order_id,
-                    'orms_tpn'         => $value,
-                    'ean_barcode'      => $ean_code[$i],
-                    'case_size'        => $case_size[$i],
-                    'size'             => $size[$i]
-                ]);
-                $i++;
+                // $size_details = TescoStickerOrdersSizeDetails::create([
+                //                 'tesco_order_id'   => $tesco_order_id,
+                //                 'orms_tpn'         => $value['orms_tpn'],
+                //                 'ean_barcode'      => $value['ean_code'],
+                //                 'case_size'        => $value['case_size'],
+                //                 'size'             => $value['size']
+                //             ]);
+                // $size_table_id = $size_details->id;
+                // for ($i=0; $i < ; $i++) 
+                // { 
+                // }
+                // $i = 0;
+                // foreach ($counts as $count) 
+                // {
+                //   $count_insert = TescoStickerOrdersCount::create([
+                //               'tesco_order_id'   => $size_table_id,
+                //               'template_name'    => $templates[$i],
+                //               'count'            => $count,
+                //               'order_status'     => "Submitted",
+                //               'artwork_status'   => "Submitted",
+                //               'print_status'     => "Submitted"
+                //             ]);
+                //   $i++;
+                // }
             }
             
             $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -365,12 +438,12 @@ class OrderManagementCntrl extends Controller
         return $result;
     }
     /**
-     * Store UK ratio TCL1,TCL2 and TSL1 template orders
+     * Store UK ratio  templates orders
      * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioTCL1TCL2TSL1Orders(Request $request)
+    public function setUKRatioOrders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */
@@ -405,50 +478,12 @@ class OrderManagementCntrl extends Controller
         return $result;
     }
     /**
-     * Store UK ratio THL1 template orders
+     * Store UK single  templates orders
      * @param \Illuminate\Http\Request
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioTHL1Orders(Request $request)
-    {
-        try {
-            /** [ Creating new object for TescoOrders() class ] */
-            $tesco_order_obj = new TescoOrders();
-            $tesco_order = $tesco_order_obj->createTescoOrder($request);
-            $tesco_order_id = $tesco_order->id;  
-            $inserted = TescoStickerOrdersSizeDetails::create([
-                          'tesco_order_id'   => $tesco_order_id,
-                          'tpnd'             => $request['tpnd'],
-                          'itf_barcode'      => $request['itf_code'],
-                          'units_per_carton' => $request['units_per_carton'],
-                          'thl1_count'       => $request['ratio_thl1_count'],
-                          'order_status'     => "Submitted",
-                          'artwork_status'   => "Submitted",
-                          'print_status'     => "Submitted"
-                        ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-
-        } catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-        }
-        return $result;
-    }
-    /**
-     * Store UK single TCL4, TSL3 template orders
-     * @param \Illuminate\Http\Request
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function setUKSingleTCL4TSL3Orders(Request $request)
+    public function setUKSingleOrders(Request $request)
     {
         try {
             /** [ Creating new object for TescoOrders() class ] */

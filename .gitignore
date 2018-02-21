@@ -12,5 +12,5 @@ yarn-error.log
 .env
 composer.lock
 vendor
-
+/config/tabula.php
 readme\.md

@@ -310,7 +310,7 @@ function createOrders(parsedObj = false) {
 
                        /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
-                        html += '<option value="'+ item.id +'">'+ item.supplier_name + '</option>';
+                        html += '<option value="'+ item.id +'">'+ item.company_name + '</option>';
                         });  
 
                      html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_rfid">RFID Compliant</label> <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()"><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_tag_at_source">Tag At Source</label> <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()"><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
@@ -319,21 +319,21 @@ function createOrders(parsedObj = false) {
                         /**  [ Dynamic quantity table for UK ratio templates ] */
                         if(type === 'ratio')
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Units per carton</th>';
+                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Units per carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '</tr><tr>';
+                             html += '<th rowspan="2">Actions</th></tr><tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
 
-                             html += '</tr></thead><tbody id="table_row"><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd" name="uk_ratio_tpnd" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf" name="uk_ratio_itf" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc" name="uk_ratio_upc" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_1" name="uk_ratio_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_1" name="uk_ratio_upc_1" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                         else
@@ -360,19 +360,19 @@ function createOrders(parsedObj = false) {
                         /**  [ Dynamic quantity table for CE ratio templates ] */
                         if(type === 'ratio')
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Cases per carton</th>';
+                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Cases per carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '</tr><tr>';
+                             html += '<th rowspan="2">Actions</th></tr><tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody><tr><td>1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_orms_tpn" name="ce_ratio_orms_tpn" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_itf" name="ce_ratio_itf" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm" required="" id="ce_ratio_cpc" name="ce_ratio_cpc" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" id="ce_ratio_itf_1" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
-                              html += '</tr></tbody></table></div><hr></div>';
+                              html += '<td></td></tr></tbody></table></div><hr></div>';
 
                         }
                         else
@@ -388,7 +388,7 @@ function createOrders(parsedObj = false) {
                              });
                              html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size" onchange="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td><div class="form-group has-feedback"> <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
                              });
                               html += '<td></td></tr></tbody></table></div><hr></div>';
 
@@ -531,7 +531,7 @@ function PopupTesco(data,name) {
  * @author <praveen>
  * 
  */
-function addUKSingle(rem,e,templates) {
+function addUKSingle(rem,e) {
 try{
          e.preventDefault(); 
          /** [ Get template details from localstorage ] */
@@ -555,32 +555,47 @@ try{
 
          /** [ Call setSerialNumber function ] */
          setSerialNumber()
-
-         /* [ Toggle required field validation in quantity table ] */
-          $(':checkbox').on('change',function(){
-           var th = $(this), id = th.prop('id');
-           if(th.is(':checked'))
-           {
-               /* [ add required for input field ] */
-               $('input[id="'  + id + '"]').prop('required',true) 
-            }
-            else
-            {
-                /* [ remove required from input field ] */
-                $('input[id="'  + id + '"]').prop('required',false) 
-                /* [ remove validation error from input field ] */
-                $('input[id="'  + id + '"]').siblings('').html('')
-                $('input[id="'  + id + '"]').parent().removeClass('has-error has-danger');
-            }
-          });
-
          
    } catch (e) {
     /** [error statements] */
    console.log("Error:"+e)
  }
 }
+/**
+ *  addUKRatio function for adding dynamic table row for UK ratio templates 
+ * @author <praveen>
+ * 
+ */
+function addUKRatio(rem,e) {
+try{
+         e.preventDefault(); 
+         /** [ Get template details from localstorage ] */
+         var data = JSON.parse(localStorage.getItem("data"));
+         var a = [] 
+         /** [ Get data-id of add button ] */
+         var id = $(rem).attr("data-id"); 
+         var val = parseInt(id) + 1; 
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+             $.each(data, function(i, item){
+               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+             });
+          html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
+         $('#table_row').append(html);
 
+         /** [ Refresh boostrap form-validator ]  */
+         $('#create_tesco_order_form').validator('update'); 
+
+          /** [ Update data-id of add button ] */
+         $(rem).attr("data-id", val); 
+
+         /** [ Call setSerialNumber function ] */
+         setSerialNumber()
+         
+   } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }
+}
 /**
  * Tesco Create Order by PO upload Method.
  * Get the template type and zone from the form along with PDF.
@@ -635,7 +650,74 @@ function  uploadPurchaseOrder(formData) {
     }
 }
 
+/**
+ *  addCESingle function for adding dynamic table row for CE single templates 
+ * @author <praveen>
+ * 
+ */
+function addCESingle(rem,e) {
+try{
+     e.preventDefault(); 
+     /** [ Get template details from localstorage ] */
+     var data = JSON.parse(localStorage.getItem("data"));
+     var a = [] 
+     /** [ Get data-id of add button ] */
+     var id = $(rem).attr("data-id"); 
+     var val = parseInt(id) + 1; 
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+         $.each(data, function(i, item){
+           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+         });
+      html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
+     $('#table_row').append(html);
 
+     /** [ Refresh boostrap form-validator ]  */
+     $('#create_tesco_order_form').validator('update'); 
+
+      /** [ Update data-id of add button ] */
+     $(rem).attr("data-id", val); 
+
+     /** [ Call setSerialNumber function ] */
+     setSerialNumber()
+   } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }
+}
+/**
+ *  addCERatio function for adding dynamic table row for CE Ratio templates 
+ * @author <praveen>
+ * 
+ */
+function addCERatio(rem,e) {
+try{
+     e.preventDefault(); 
+     /** [ Get template details from localstorage ] */
+     var data = JSON.parse(localStorage.getItem("data"));
+     var a = [] 
+     /** [ Get data-id of add button ] */
+     var id = $(rem).attr("data-id"); 
+     var val = parseInt(id) + 1; 
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+         $.each(data, function(i, item){
+           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+         });
+      html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
+     $('#table_row').append(html);
+
+     /** [ Refresh boostrap form-validator ]  */
+     $('#create_tesco_order_form').validator('update'); 
+
+      /** [ Update data-id of add button ] */
+     $(rem).attr("data-id", val); 
+
+     /** [ Call setSerialNumber function ] */
+     setSerialNumber()
+   } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }
+}
 /**
   * Removes row from order quantity table
   *
@@ -672,60 +754,6 @@ function setSerialNumber()
        j++; 
     })
 }
-/**
- *  addCESingle function for adding dynamic table row for CE single templates 
- * @author <praveen>
- * 
- */
-function addCESingle(rem,e,templates) {
-try{
-     e.preventDefault(); 
-     /** [ Get template details from localstorage ] */
-     var data = JSON.parse(localStorage.getItem("data"));
-     var a = [] 
-     /** [ Get data-id of add button ] */
-     var id = $(rem).attr("data-id"); 
-     var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
-         $.each(data, function(i, item){
-           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
-         });
-      html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this)"></i></a></td></tr>';
-     $('#table_row').append(html);
-
-     /** [ Refresh boostrap form-validator ]  */
-     $('#create_tesco_order_form').validator('update'); 
-
-      /** [ Update data-id of add button ] */
-     $(rem).attr("data-id", val); 
-
-     /** [ Call setSerialNumber function ] */
-     setSerialNumber()
-
-     /* [ Toggle required field validation in quantity table ] */
-      $(':checkbox').on('change',function(){
-       var th = $(this), id = th.prop('id');
-       if(th.is(':checked'))
-       {
-           /* [ add required for input field ] */
-           $('input[id="'  + id + '"]').prop('required',true) 
-        }
-        else
-        {
-            /* [ remove required from input field ] */
-            $('input[id="'  + id + '"]').prop('required',false) 
-            /* [ remove validation error from input field ] */
-            $('input[id="'  + id + '"]').siblings('').html('')
-            $('input[id="'  + id + '"]').parent().removeClass('has-error has-danger');
-        }
-      });
-         
-   } catch (e) {
-    /** [error statements] */
-   console.log("Error:"+e)
- }
-}
-
 /**
  * [ dynamicSVGTemplates function for creating dynamic svg file ]
  * @author <praveen@wizroots.com>
@@ -1244,14 +1272,22 @@ function dynamicSVGTemplatescard(id,item)
 function setTescoOrder()
 {
     try {
-        var zone              =  localStorage.getItem("zone");
-        var type              =  localStorage.getItem("template type");
+        var zone   =  localStorage.getItem("zone");
+        var type   =  localStorage.getItem("template type");
+        var data   =  JSON.parse(localStorage.getItem("data"));
 
         if(zone === "CE")
         {
             if(type === "ratio")
             {
-                storeCERatio()
+                if(data[0].template_name === 'THL 1')
+                {
+                    storeCERatioTHL1();
+                }
+                else
+                {
+                    storeCERatioTCL1TCL2TSL1();
+                }
                 
             }
             else
@@ -1302,40 +1338,73 @@ function tescoOrderCommonData()
     zone              =  localStorage.getItem("zone");
     type              =  localStorage.getItem("template type");
     data              =  JSON.parse(localStorage.getItem("data"));
-    templates         = [];
-    counts            = [];
-    console.log(data)
-    $('.count').each(function(i, item)
-    {
-        counts[i]    = $(item).val() === ''?0:$(item).val();
-        templates[i]    = data[i].template_name;
-        
-    });
+    
 }
 /**
- * [storeCERatio for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * [storeCERatioTCL1TCL2TSL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @author <praveen>
  */
 
-function storeCERatio()
+function storeCERatioTCL1TCL2TSL1()
 {
     try {
         /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
         tescoOrderCommonData();
-        
-        console.log(templates)
-        console.log(counts)
-        /** [ Create array of ce single case size ] */
-        
-        var orms_tpn =  $("#ce_ratio_orms_tpn").val();
-        var itf_code =  $("#ce_ratio_itf").val();
-        var cases_per_carton =  $("#ce_ratio_cpc").val();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_TCL1        = [];
+        var count_TCL2        = [];
+        var count_TSL1        = [];
 
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+        /** [ Create array of ce ratio tcl1 count ] */
+        $('.count_TCL1').each(function(i, item)
+        {
+            count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TCL1 = count_TCL1.join(',');
+        /** [ Create array of ce ratio tcl2 count ] */
+        $('.count_TCL2').each(function(i, item)
+        {
+            count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TCL2 = count_TCL2.join(',');
+        /** [ Create array of ce ratio tsl1 count ] */
+        $('.count_TSL1').each(function(i, item)
+        {
+            count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_TSL1 = count_TSL1.join(',');
         $.ajax({
                      url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                      type: 'POST',
                      data: {
-                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,templates:templates,counts:counts,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                      },
                      dataType:"json",
                      beforeSend: function () {
@@ -1344,7 +1413,86 @@ function storeCERatio()
                      success: function (data) {
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+/**
+ * [storeCERatioTHL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * @author <praveen>
+ */
+
+function storeCERatioTHL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_THL1        = [];
+
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+        /** [ Create array of ce ratio tcl1 count ] */
+        $('.count_THL1').each(function(i, item)
+        {
+            count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+            
+        });
+        count_THL1 = count_THL1.join(',');
+        
+        $.ajax({
+                     url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
+                     type: 'POST',
+                     data: {
+                         _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
+                     },
+                     dataType:"json",
+                     beforeSend: function () {
+                         $(".loader").show();
+                     },
+                     success: function (data) {
+                           $('.snackbar_span').html('Your order has been placed successfully');
+                           showSnackbar();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -1375,105 +1523,59 @@ function storeCESingle()
     try {
         /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
         tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var templates   = [];
+        var counts      = [];
         var quantity    = [];
         
-        console.log(templates)
-        console.log(counts)
-      $.each(($('#table_row tr')), function(i){
-        i+=1;
-        quantity.push({
-            "orms_tpn": $(this).find("#ce_single_orms_tpn_"+i).val(),
-            "ean_code": $(this).find("#ce_single_ean_"+i).val(),
-            "case_size": $(this).find("#ce_single_case_size_"+i).val(),
-            "size": $(this).find("#ce_single_size_"+i).val(),
-            "templates" : templates,
-            "count" :counts
+        $('.count').each(function(i, item)
+        {
+            counts[i]    = $(item).val() === ''?0:$(item).val();
+            templates[i] = $(this).data("tname");
         });
-      });
-
-
-        
-        console.log(quantity)
-        /** @type {Array} [ initializing empty arrays ] */
-        // var orms_tpn          = [];
-        // var ean_code          = [];
-        // var case_size         = [];
-        // var size              = [];
-        // var single_tcl4_count = [];
-        // var single_tsl3_count = [];
-
-        // /** [ Create array of ce single orms tpn ] */
-        // $('.ce_single_orms_tpn').each(function(i, item)
-        // {
-        //     orms_tpn[i]    = $(item).val();
-            
-        // });
-        // orms_tpn   = orms_tpn.join(',');
-        // /** [ Create array of ce single ean barcode ] */
-        // $('.ce_single_ean').each(function(i, item)
-        // {
-        //     ean_code[i]    = $(item).val();
-            
-        // });
-        // ean_code = ean_code.join(',');
-        // /** [ Create array of ce single case size ] */
-        // $('.ce_single_case_size').each(function(i, item)
-        // {
-        //     case_size[i]    = $(item).val();
-            
-        // });
-        // case_size = case_size.join(',');
-        // /** [ Create array of ce single size ] */
-        // $('.ce_single_size').each(function(i, item)
-        // {
-        //     size[i]    = $(item).val();
-            
-        // });
-        // size = size.join(',');
-        // /** [ Create array of ce single tcl4 count ] */
-        // $('.ce_single_TCL4_count').each(function(i, item)
-        // {
-        //     single_tcl4_count[i]    = $(item).val() === ''?0:$(item).val();
-            
-        // });
-        // single_tcl4_count = single_tcl4_count.join(',');
-        // /** [ Create array of ce single tsl3 count ] */
-        // $('.ce_single_TSL3_count').each(function(i, item)
-        // {
-        //     single_tsl3_count[i]    = $(item).val() === ''?0:$(item).val();
-            
-        // });
-        // single_tsl3_count = single_tsl3_count.join(',');
-
-        // $.ajax({
-        //              url: base_url + "/admin/tesco/set-ce-single-tcl4tsl3-template-orders",
-        //              type: 'POST',
-        //              data: {
-        //                  _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,single_tcl4_count:single_tcl4_count,single_tsl3_count:single_tsl3_count,order_id:,zone:zone,type:type,templates:templates
-        //              },
-        //              dataType:"json",
-        //              beforeSend: function () {
-        //                  $(".loader").show();
-        //              },
-        //              success: function (data) {
-        //                    $('.snackbar_span').html('Your order has been placed successfully');
-        //                    showSnackbar();
-        //                    location.reload();
-        //              },
-        //              error: function (data) {
-        //                 console.log(data);
-        //              },
-        //              complete: function () {
-        //                   /** [To make top menu active] */
-        //                   $(function () {
-        //                       var url = window.location;
-        //                       $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-        //                       $('.dynamic-menu a').filter(function () {
-        //                           return this.href == url;
-        //                       }).parent('li').addClass('current-page').find('a').addClass('active');
-        //                   });
-        //              }
-        //          })
+        $.each(($('#table_row tr')), function(i){
+          i+=1;
+          quantity.push({
+              "orms_tpn": $(this).find("#ce_single_orms_tpn_"+i).val(),
+              "ean_code": $(this).find("#ce_single_ean_"+i).val(),
+              "case_size": $(this).find("#ce_single_case_size_"+i).val(),
+              "size": $(this).find("#ce_single_size_"+i).val(),
+              "templates" : templates,
+              "counts" : counts
+          });
+        });
+console.log(templates)
+console.log(counts)
+console.log(quantity)
+    $.ajax({
+                 url: base_url + "/admin/tesco/set-ce-single-template-orders",
+                 type: 'POST',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,templates:templates,counts:counts,quantity:quantity
+                 },
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                       $('.snackbar_span').html('Your order has been placed successfully');
+                       showSnackbar();
+                       //location.reload();
+                 },
+                 error: function (data) {
+                    console.log(data);
+                 },
+                 complete: function () {
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
     } catch(e) {
         /** [error statements] */
         console.log("Error:"+e)

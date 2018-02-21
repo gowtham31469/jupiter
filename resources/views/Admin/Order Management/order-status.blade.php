@@ -33,12 +33,12 @@
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="po_file hidden">
+                    <div class="po_file hidden" id="po_file">
                         <a href="#"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
                         <p> OR </p>
                         <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
                     </div>
-                    <div class="po_upload">
+                    <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
                         <input type="hidden" name="tableName" id="tableName" value="" >
