@@ -739,15 +739,38 @@ class OrderManagementCntrl extends Controller
     {
 		$name=$request->name;
         $svg=urldecode($request->svg);
-        define ('PDF_FONT_NAME_MAIN', 'calibrib');
-        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
         PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
-        PDF::SetFont('calibrib');
+        PDF::SetFont('frankgothcnbt');
         PDF::AddPage();
-        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }	
+	
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTescoSmall(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 

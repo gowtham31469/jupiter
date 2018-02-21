@@ -219,6 +219,7 @@ Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrd
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
 
 Route::post('admin/tesco/print-div-tesco', 'Admin\Tesco\OrderManagementCntrl@printDivTesco');
+Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@printDivTescoSmall');
 
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
