@@ -263,7 +263,13 @@ class OrderManagementCntrl extends Controller
       //Execute tabula method to extract the quantity table.
       $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
-      if(count($pack_b) > 2) {
+      foreach ($pack_b as $key => $value) {
+        if(count($value['data']) < 2) {
+          unset($pack_b[$key]);
+        }
+      }
+      $pack_b = array_values($pack_b); // 'reindex' array
+      if(count($pack_b) > 1) {
         //return the ratio pack B row
         return json_encode($pack_b[1]['data'][5]);
       } else {
