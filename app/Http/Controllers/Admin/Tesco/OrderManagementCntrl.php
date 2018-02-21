@@ -17,6 +17,7 @@ use App\TescoStickerOrdersSizeDetails;
 use App\TescoPolybagCartonStickerOrders;
 use App\TescoStickerOrdersCount;
 use App\Classes\TescoOrders;
+use PDF;
 
 class OrderManagementCntrl extends Controller
 {
@@ -533,4 +534,26 @@ class OrderManagementCntrl extends Controller
         }
         return $result;
     }
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTesco(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'calibrib');
+        define ('PDF_FONT_NAME_DATA', 'calibrib');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('calibrib');
+        PDF::AddPage();
+        PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
 }
