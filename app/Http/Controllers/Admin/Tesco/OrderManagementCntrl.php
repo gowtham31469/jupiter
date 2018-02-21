@@ -330,6 +330,7 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
+                   /** [ Invoking createTCL1Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -347,6 +348,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                   /** [ Invoking createTCL2Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -364,6 +366,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                  /** [ Invoking createTSL1Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -383,6 +386,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+                 /** [ Invoking createTHL1Order function using class instance ] */
                  $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
@@ -435,6 +439,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                   /** [ Invoking createTCL4Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -453,6 +458,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                   /** [ Invoking createTSL3Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -473,6 +479,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+                 /** [ Invoking createTHL3Order function using class instance ] */
                  $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
@@ -525,6 +532,7 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
+                   /** [ Invoking createTCL1Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -542,6 +550,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                   /** [ Invoking createTCL2Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -559,6 +568,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                   /** [ Invoking createTSL1Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -578,6 +588,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+                 /** [ Invoking createTHL1Order function using class instance ] */
                  $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
@@ -630,6 +641,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                   /** [ Invoking createTCL4Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -648,6 +660,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                   /** [ Invoking createTSL3Order function using class instance ] */
                    $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
@@ -668,6 +681,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+                 /** [ Invoking createTHL3Order function using class instance ] */
                  $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
