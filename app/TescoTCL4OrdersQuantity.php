@@ -18,5 +18,5 @@ class TescoTCL4OrdersQuantity extends Model
       *
       * @var array
       */
-      protected $fillable = ['tcl4_order_id','tpnd','itf_barcode','units_per_carton','ean_barcode','size','case_size','orms_tpn','cases_per_carton','count'];
+      protected $fillable = ['tcl4_order_id','tpnd','itf_barcode','units_per_carton','ean_barcode','size','case_size','orms_tpn','cases_per_carton','count','cases_per_carton'];
 }
