@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
+use App\Classes\ProfomaInvoice;
 use Response;
 use View;
 use DB;
@@ -106,4 +107,19 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
 	}
+
+    public function getTescoPI(Request $request)
+    {
+        try
+        {
+            $pi_obj = new ProfomaInvoice();
+            $data   = $pi_obj->getTescoPIDetails($request);
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 }
