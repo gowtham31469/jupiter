@@ -426,7 +426,7 @@ function createOrders(parsedObj = false) {
                        $('#datePicker1').datepicker({
                             autoclose: true,
                             minViewMode: 1,
-                            format: 'MM yyyy',
+                            format: 'MM,yyyy',
                             startDate: today,
                         })
                       /** [ bootstrap validator for create tesco order form ] **/
