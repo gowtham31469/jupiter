@@ -113,9 +113,14 @@ function parseRatioType(data) {
         var row_length = ele.length;
         switch(ind) {
             case 0:
-                var po = (row_length === 7) ? ele[6].text : ele[7].text;
-                po = po.split(":");
-                ratioObj.purchaseOrder = po[1].trim();
+                var new_element = removeEmptyValues(ele);
+                if(new_element.length < 2) {
+                    var po = new_element[0].text;
+                    po = po.split(":");
+                    ratioObj.purchaseOrder = po[1].trim();
+                } else {
+                    ratioObj.purchaseOrder = new_element[1].text.trim();
+                }
                 break;
             case 1:
                 ratioObj.type = ele[0].text;
@@ -130,10 +135,9 @@ function parseRatioType(data) {
                 ratioObj.styleNumber =  ele[1].text.trim();
                 break;
             case 4:
+                ele[1].text = ele[1].text.replace('12/18', '').trim();
                 var short_desc = ele[1].text.split('  ');
-                console.log(short_desc, short_desc.length);
                 ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
-                //ratioObj.shortDescription =  ele[1].text.trim();
         }
     });
 
