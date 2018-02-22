@@ -5,7 +5,7 @@
  */
 function parseXML(data, callback) {
     try {
-        Check for Purchase Order Type
+        //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
         switch(po_type) {
