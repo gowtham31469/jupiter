@@ -28,6 +28,7 @@ use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
+use PDF;
 
 class OrderManagementCntrl extends Controller
 {
@@ -188,7 +189,7 @@ class OrderManagementCntrl extends Controller
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
-          $name = $file->getClientOriginalName();
+          $name = str_replace(" ", "_", $file->getClientOriginalName());
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
           //Check the type of PO
           $po_type = $this->checkPOType($path);
@@ -707,4 +708,94 @@ class OrderManagementCntrl extends Controller
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
+    /**
+     * Store UK single THL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKSingleTHL3Orders(Request $request)
+    {
+        try {
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id; 
+
+            $tpnd                = explode(',',$request['tpnd']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_thl3_count   = explode(',',$request['single_thl3_count']);
+
+            $i = 0;
+            foreach($tpnd as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'thl3_count'       => $single_thl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTesco(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }	
+	
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTescoSmall(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
 }
