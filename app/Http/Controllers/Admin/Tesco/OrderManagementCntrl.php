@@ -28,6 +28,7 @@ use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
+use PDF;
 
 class OrderManagementCntrl extends Controller
 {
@@ -321,6 +322,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
                 
@@ -329,7 +331,8 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   /** [ Invoking createTCL1Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -346,7 +349,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL2oOrder($request);
+                   /** [ Invoking createTCL2Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -363,7 +367,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL1oOrder($request);
+                  /** [ Invoking createTSL1Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -382,7 +387,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
-                 $tesco_order     = $tesco_order_obj->createTHL1oOrder($request);
+                 /** [ Invoking createTHL1Order function using class instance ] */
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($orms_tpn as $tpn) 
@@ -425,6 +431,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
                 
@@ -433,7 +440,8 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL4oOrder($request);
+                   /** [ Invoking createTCL4Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -451,7 +459,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL3oOrder($request);
+                   /** [ Invoking createTSL3Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($orms_tpn as $tpn) 
@@ -471,7 +480,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
-                 $tesco_order     = $tesco_order_obj->createTHL3oOrder($request);
+                 /** [ Invoking createTHL3Order function using class instance ] */
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($orms_tpn as $tpn) 
@@ -514,6 +524,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
                 
@@ -522,7 +533,8 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL1oOrder($request);
+                   /** [ Invoking createTCL1Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -539,7 +551,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL2oOrder($request);
+                   /** [ Invoking createTCL2Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -556,7 +569,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL1oOrder($request);
+                   /** [ Invoking createTSL1Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -575,7 +589,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
-                 $tesco_order     = $tesco_order_obj->createTHL1oOrder($request);
+                 /** [ Invoking createTHL1Order function using class instance ] */
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($tpnd as $value) 
@@ -618,6 +633,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             foreach ($templates as $template) 
             {
+              $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
                 
@@ -626,7 +642,8 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                   $tesco_order     = $tesco_order_obj->createTCL4oOrder($request);
+                   /** [ Invoking createTCL4Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -644,7 +661,8 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
-                   $tesco_order     = $tesco_order_obj->createTSL3oOrder($request);
+                   /** [ Invoking createTSL3Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
                    $tesco_order_id  = $tesco_order->id;
                    $i = 0;
                    foreach ($tpnd as $value) 
@@ -664,7 +682,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
-                 $tesco_order     = $tesco_order_obj->createTHL3oOrder($request);
+                 /** [ Invoking createTHL3Order function using class instance ] */
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
                  $tesco_order_id  = $tesco_order->id;
                  $i = 0;
                  foreach ($tpnd as $value) 
@@ -689,4 +708,94 @@ class OrderManagementCntrl extends Controller
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
+    /**
+     * Store UK single THL3 template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function setUKSingleTHL3Orders(Request $request)
+    {
+        try {
+            /** [ Creating new object for TescoOrders() class ] */
+            $tesco_order_obj = new TescoOrders();
+            $tesco_order = $tesco_order_obj->createTescoOrder($request);
+            $tesco_order_id = $tesco_order->id; 
+
+            $tpnd                = explode(',',$request['tpnd']);
+            $ean_code            = explode(',',$request['ean_code']);
+            $case_size           = explode(',',$request['case_size']);
+            $size                = explode(',',$request['size']);
+            $single_thl3_count   = explode(',',$request['single_thl3_count']);
+
+            $i = 0;
+            foreach($tpnd as $value)
+            {
+                TescoStickerOrdersSizeDetails::create([
+                    'tesco_order_id'   => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_code[$i],
+                    'case_size'        => $case_size[$i],
+                    'size'             => $size[$i],
+                    'thl3_count'       => $single_thl3_count[$i],
+                    'order_status'     => "Submitted",
+                    'artwork_status'   => "Submitted",
+                    'print_status'     => "Submitted"
+                ]);
+                $i++;
+            }
+            
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTesco(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    }	
+	
+	/**
+	 * Print Preview For Stickers
+	 *
+	 * @return pdf
+	 */
+	
+    public function printDivTescoSmall(Request $request)
+    {
+		$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+        PDF::AddPage();
+        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
 }

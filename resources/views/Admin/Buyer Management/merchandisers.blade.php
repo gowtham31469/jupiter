@@ -18,7 +18,7 @@
                       <table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                         <thead>
                           <tr>
-                            <th>Id</th>
+                            <th>Sl. No</th>
                             <th>Merchandiser Name</th>
                             <th>Merchandiser Email</th>
                             <th>Merchandiser Phone</th>

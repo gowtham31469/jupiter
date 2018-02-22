@@ -5,18 +5,16 @@
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
 	.st1{fill:none;}
-	.st2{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT;}
+	.st2{font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;}
 	.st3{font-size:8px;}
 </style>
 <g>
-	<rect class="st0" width="113.4" height="85"/>
+	<rect style="fill:#FFFFFF;" width="113.4" height="85"/>
 </g>
-<rect x="-241.2" y="-321.7" class="st1" width="595.3" height="841.9"/>
-<g id="barcode" width="355" height="155"  transform="matrix(0.2395 0 0 0.2377 14.7402 16)">
+<rect x="-241.2" y="-321.7" style="fill:none;" width="595.3" height="841.9"/>
+<g id="barcode" width="355" height="155" transform="matrix(0.2395 0 0 0.2377 14.7402 16)">
 </g>
-<text transform="matrix(1 0 0 1 14.5 65.5)" class="st2 st3" id="description">CHK SS V NECK STRP T20 </text>
-<g xmlns="http://www.w3.org/2000/svg" style="text-anchor: middle;">
-	<text class="st2 st3" transform="matrix(1 0 0 1 38 74)">ORMS TPN:</text>
-	<text class="st2 st3" id="tpnd" style="text-anchor:start;" transform="matrix(1 0 0 1 57 74)">123456789</text>
-</g>
+<text transform="matrix(1 0 0 1 14.5 65.5)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="description">CHK SS V NECK STRP T20 </text>
+<text transform="matrix(1 0 0 1 26.5 77.5)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">TPND:</text>
+<text transform="matrix(1 0 0 1 49.5 77.5)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:8px;" id="tpnd">999999999</text>
 </svg>
