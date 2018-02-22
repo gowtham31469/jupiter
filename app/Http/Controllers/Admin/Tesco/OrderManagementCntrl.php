@@ -189,7 +189,7 @@ class OrderManagementCntrl extends Controller
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
-          $name = $file->getClientOriginalName();
+          $name = str_replace(" ", "_", $file->getClientOriginalName());
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
           //Check the type of PO
           $po_type = $this->checkPOType($path);
