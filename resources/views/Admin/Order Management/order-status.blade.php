@@ -380,9 +380,8 @@
                 $('#po-file-upload').modal('hide')
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 showSnackbar();
-                
             });
-            this.on("error", function(file, response) {
+            this.on("error", function(file, response){
                 this.removeFile(file);
                 $('.snackbar_span').html('Something went wrong');
                 $('#snackbar').css('background-color','#F44336');
@@ -391,6 +390,10 @@
         }
     };
 
+    /** To refresh modal and form data**/
+    $(".modal").on("hidden.bs.modal", function(){
+      
+    });
     </script>
 
     @endsection

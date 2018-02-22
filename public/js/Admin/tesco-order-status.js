@@ -282,6 +282,7 @@ function tescoPOUpload(obj,id,po_file,tableName)
 
 $(".update-po-file").click(function () {
     $('#po_upload').removeClass('hidden')
+    $('.upload-po').removeClass('hidden')
 });
 
 /**
