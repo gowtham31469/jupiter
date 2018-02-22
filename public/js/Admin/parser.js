@@ -4,7 +4,7 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-    try {
+   // try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
@@ -18,10 +18,10 @@ function parseXML(data, callback) {
         }
         callback(parsedObj);
 
-    } catch(e) {
-        // error statements
-        console.log("Error:"+e);
-    }
+    // } catch(e) {
+    //     // error statements
+    //     console.log("Error:"+e);
+    // }
 }
 
 /**
@@ -59,7 +59,7 @@ function parseSingleType(data) {
                     var tab = JSON.parse(data.details.table);
                     var size = tab[0].data[1][3].text;
                     singleObj.styleNumber =  style[1].trim();
-                    singleObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
+                    singleObj.shortDescription =  ele[2].text.replace(size, '').trim();
                     break;
             }
         });
@@ -121,7 +121,8 @@ function parseRatioType(data) {
                 ratioObj.type = ele[0].text;
                 break;
             case 2:
-                var product = ele[3].text.split(":");
+                var new_element = removeEmptyValues(ele);
+                var product = new_element[1].text.split(":");
                 var season = product[1].trim().split(" ");
                 ratioObj.seasonCode = season[0];
                 break;
@@ -129,7 +130,10 @@ function parseRatioType(data) {
                 ratioObj.styleNumber =  ele[1].text.trim();
                 break;
             case 4:
-                ratioObj.shortDescription =  ele[1].text.trim();
+                var short_desc = ele[1].text.split('  ');
+                console.log(short_desc, short_desc.length);
+                ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
+                //ratioObj.shortDescription =  ele[1].text.trim();
         }
     });
 
@@ -166,6 +170,22 @@ function parseRatioType(data) {
     return ratioObj;
     
 }
+
+/**
+ * Method to remove the empty spaces from the object
+ * @param  {array} element element array with empty values
+ * @return {array} element element array without empty values
+ */
+function removeEmptyValues(element) {
+    element = $.grep(element, function (el, i) {
+        if (el.text === '') { // or whatever
+            return false;
+        }
+        return true; // keep the element in the array
+    });
+    return element;
+}
+
 /**
  * Method to render the parsed objects to the input field
  * @param  {[type]} parsedObj [description]
