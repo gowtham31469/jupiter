@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Modules;
 use App\Classes\ProfomaInvoice;
+use App\ProfomaInvoice as PI;
+use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
 use DB;
@@ -89,7 +91,7 @@ class OrderStatusCntrl extends Controller
             $table_name  = $request->tableName;
 			$data 		 = DB::table($table_name)->where('id',$template_id)
 						      ->update([
-                                  'po_number' => $po_number,
+                                  'purchase_order_no' => $po_number,
                                   'po_status' => "PO Approved"
                                 ]);
             if (count($data)>0)
@@ -122,4 +124,105 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
+    /**
+     * method to approve the profoma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function approveTescoPI(Request $request)
+    {
+        try
+        {
+            $row_id     =   $request->id;
+            $table_name =   $request->table_name;
+            $total_qnty =   0 ; 
+            $sub_total  =   0 ;
+            $pi_obj     =   new ProfomaInvoice();
+            $data       =   $pi_obj->getTescoPIDetails($request);
+            if (count($data)>0)
+            {
+                
+                $pi_details = PI::create([
+                    'company_id' => $data['company_details']->id,
+                    'customer_id'      => $data['bank_details']->id,
+                    'shipping_address' => $data['ship_to']->address,
+                    'billing_address'  => $data['bill_to']->address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply
+                    
+                ]);
+                foreach ($data['item_details'] as $key => $value)
+                {
+                    $total_qnty+= $value->quantity;
+                    $sub_total += $value->quantity *$value->unit_price;
+                    ProfomaInvoiceItemDetails::create([
+                        'pi_id'     => $pi_details->id,
+                        'material'  => $value->material_name,
+                        'size'      => $value->size,
+                        'style'     => $value->style,
+                        'quantity'  => $value->quantity,
+                        'unit_cost' => $value->unit_price
+                    ]);
+                }
+                PI::where('id',$pi_details->id)
+                            ->update([
+                              'total_quantity'   => $total_qnty,
+                              'sub_total'        => $sub_total,
+                              'tax'              => $data['item_details'][0]->tax,
+                              'bill_amount'      => $sub_total*$data['item_details'][0]->tax
+                            ]);
+            }
+            
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Approved"
+                            ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+    /**
+     * method to reject the profoma invoice
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function rejectTescoPI(Request $request)
+    {
+        try
+        {
+            $row_id     =   $request->id;
+            $table_name =   $request->table_name;
+            $data       =   DB::table($table_name)
+                            ->where('id',$row_id)
+                            ->update([
+                              'pi_status' => "PI Rejected"
+                            ]);
+            if ($data)
+            {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
 }

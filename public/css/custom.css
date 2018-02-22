@@ -981,7 +981,9 @@ span.sticker-details {
 .label-Approved {
     background: #2ecc71;
 }
-
+.label-Submitted {
+    background: #2ecc71;
+}
 .label-Pending {
     background: #2c3e50;
 }

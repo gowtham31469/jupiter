@@ -143,7 +143,7 @@ function orderStatus() {
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
             } else {
-
+                
             }
         },
         error: function (data) {

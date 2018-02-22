@@ -955,6 +955,7 @@ function genaratePI(id,table_name,uvc,pi_status)
 {
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var buyer_id = localStorage.getItem("buyer_id");
     var tr = ""
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
@@ -963,6 +964,7 @@ function genaratePI(id,table_name,uvc,pi_status)
         data: {
             _token: csrf_token,
             table_name: table_name,
+            buyer_id : buyer_id,
             id:id,
             uvc:uvc
         },
@@ -1028,10 +1030,10 @@ function genaratePI(id,table_name,uvc,pi_status)
                         }
                         else
                         {
-                        	$('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'","'+uvc+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'","'+uvc+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                        	$('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                         }
-                       
-                        
+                       var logo = base_url+data.data.company_details.logo
+                        $('#company-logo').attr('src',logo);
                        $('#profoma-invoice').modal("show")
                     }
                     else
@@ -1063,7 +1065,7 @@ function genaratePI(id,table_name,uvc,pi_status)
  * @param  {[type]} table_name [description]
  * @return {[type]}            [description]
  */
-function approvePI(id,table_name,uvc)
+function approvePI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -1073,7 +1075,6 @@ function approvePI(id,table_name,uvc)
         data: {
             _token: csrf_token,
             table_name: table_name,
-            uvc:uvc,
             id:id
         },
         beforeSend: function () {
@@ -1114,7 +1115,7 @@ function approvePI(id,table_name,uvc)
  * @param  {[type]} table_name [description]
  * @return {[type]}            [description]
  */
-function rejectPI(id,table_name,uvc)
+function rejectPI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -1124,7 +1125,6 @@ function rejectPI(id,table_name,uvc)
         data: {
             _token: csrf_token,
             table_name: table_name,
-            uvc:uvc,
             id:id
         },
         beforeSend: function () {
