@@ -821,7 +821,10 @@ function dynamicSVGTemplates()
 	   console.log("Error:"+e)
 	 }                 
 }
-
+/**
+ * [ dynamicSVGTemplatescard function for creating dynamic card svg file ]
+ * @author <praveen@wizroots.com>
+ */
 function dynamicSVGTemplatescard(id,item)
 {
 	
@@ -905,7 +908,7 @@ function dynamicSVGTemplatescard(id,item)
 					  }
 				 }
                  var size  = $('#ce_single_size_1').val();
-                 /** if size is not empty, Get equivalent ce size for entered size (for TSL 3) */
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
                     $.ajax({
@@ -987,9 +990,7 @@ function dynamicSVGTemplatescard(id,item)
                   {
                       svgDoc.getElementById("description").innerHTML = ''; 
                   }
-				  
-				 
-				   /** [ Dynamically change svg barcode ] */
+				  /** [ Dynamically change svg barcode ] */
 				  if(uk_ratio_itf.length === 14)
 				  {
 					jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
@@ -998,9 +999,6 @@ function dynamicSVGTemplatescard(id,item)
 				  {
 					 //svgDoc.getElementById("barcode").innerHTML = '';
 				  }
-				 
-				  
-				  
               }
               else
               {
@@ -1031,7 +1029,7 @@ function dynamicSVGTemplatescard(id,item)
 					  }
 				 }
                  var size  = $('#uk_single_size_1').val();
-                 /** if size is not empty, Get equivalent uk size for entered size (for TSL 3)*/
+                 /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
                  if(size != '')
                  {
                     $.ajax({
@@ -1092,7 +1090,6 @@ function dynamicSVGTemplatescard(id,item)
             var po_number        = $('#tesco_po_number').val();
             var uk_style         = $('#tesco_uk_style').val();
             var ce_style         = $('#tesco_ce_style').val();
-            var description      = $('#tesco_description').val();
             var tesco_eqos       = $('#tesco_eqos').val();
             var supplier         = $('#tesco_supplier option:selected').text();
             var department       = $('#tesco_department option:selected').text();
@@ -1129,15 +1126,6 @@ function dynamicSVGTemplatescard(id,item)
            else
            {
               svgDoc.getElementById("uk_style").innerHTML = '';
-           }
-           /** [ Dynamically change svg short description ] */
-           if(description != '')
-           {
-              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-           }
-           else
-           {
-              svgDoc.getElementById("description").innerHTML = '';
            }
            /** [ Dynamically change svg EQOS code ] */
            if(tesco_eqos != '')
@@ -1219,6 +1207,7 @@ function dynamicSVGTemplatescard(id,item)
                   var pieces_in_ratio = $('#ce_ratio_cpc_1').val();
                   var tpnd = $('#ce_ratio_orms_tpn_1').val();
 				  var ce_ratio_itf  = $('#ce_ratio_itf_1').val();
+                  var description      = $('#tesco_description').val();
                   /** [ Dynamically change svg CE pieces in ratio ] */
                    if(pieces_in_ratio != '')
                    {
@@ -1252,6 +1241,15 @@ function dynamicSVGTemplatescard(id,item)
                          
                        }
                    }
+                   /** [ Dynamically change svg short description ] */
+                   if(description != '')
+                   {
+                      svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                   }
+                   else
+                   {
+                      svgDoc.getElementById("description").innerHTML = '';
+                   }
               }
               else
               {
@@ -1259,6 +1257,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#ce_single_orms_tpn_1').val();
                  var case_size = $('#ce_single_case_size_1').val();
 				 var ce_single_ean  = $('#ce_single_ean_1').val();
+                 var description      = $('#tesco_description').val();
                  /** [ Dynamically change svg CE single tpnd number ] */
                  if(orms_tpn != '')
                  {
@@ -1291,6 +1290,60 @@ function dynamicSVGTemplatescard(id,item)
 
 					   }
 			     }
+                 var size  = $('#ce_single_size_1').val();
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
+                 if(size != '')
+                 {
+                    $.ajax({
+                     url: base_url + "/admin/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (data) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                           }
+                           else if(data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+                 }
+                 else
+                 {
+                     /** [ Dynamically change svg short description ] */
+                     if(description != '')
+                     {
+                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     }
+                     else
+                     {
+                        svgDoc.getElementById("description").innerHTML = '';
+                     }
+                 }
                  
               }
            }
@@ -1302,6 +1355,7 @@ function dynamicSVGTemplatescard(id,item)
                    var pieces_in_ratio = $('#uk_ratio_upc_1').val();
                    var tpnd = $('#uk_ratio_tpnd_1').val();
 				   var uk_ratio_itf  = $('#uk_ratio_itf_1').val();
+                   var description      = $('#tesco_description').val();
 
                    /** [ Dynamically change svg UK pieces in ratio ] */
                    if(pieces_in_ratio != '')
@@ -1335,8 +1389,15 @@ function dynamicSVGTemplatescard(id,item)
                          
                        }
                    }
-				 
-				  
+                   /** [ Dynamically change svg short description ] */
+                   if(description != '')
+                   {
+                      svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                   }
+                   else
+                   {
+                      svgDoc.getElementById("description").innerHTML = '';
+                   }
               }
               else
               {
@@ -1344,6 +1405,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#uk_single_tpnd_1').val();
                  var case_size = $('#uk_single_case_size_1').val();
 				 var uk_single_ean  = $('#uk_single_ean_1').val();
+                 var description      = $('#tesco_description').val();
                  /** [ Dynamically change svg Uk single tpnd number ] */
                  if(orms_tpn != '')
                  {
@@ -1377,6 +1439,60 @@ function dynamicSVGTemplatescard(id,item)
 
 					   }
 			     }
+                 var size  = $('#ce_single_size_1').val();
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
+                 if(size != '')
+                 {
+                    $.ajax({
+                     url: base_url + "/admin/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (data) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                           }
+                           else if(data.size_chart.length != 0)
+                           {
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (data) {
+                        console.log(data);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+                 }
+                 else
+                 {
+                     /** [ Dynamically change svg short description ] */
+                     if(description != '')
+                     {
+                        svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                     }
+                     else
+                     {
+                        svgDoc.getElementById("description").innerHTML = '';
+                     }
+                 }
               }  
            }
         } 
