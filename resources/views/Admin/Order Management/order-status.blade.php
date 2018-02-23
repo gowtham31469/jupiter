@@ -392,7 +392,7 @@
 
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function(){
-      
+      myDropzone.removeAllFiles();
     });
     </script>
 

@@ -135,6 +135,7 @@ class OrderStatusCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
+            $buyer_id   =   $request->buyer_id;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
