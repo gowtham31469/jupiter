@@ -399,6 +399,59 @@ border: 0;
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="tabbable"> {{-- Only required for left/right tabs --}}
+            <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab">Single PO Upload</a></li>
+            <li><a href="#tab2" data-toggle="tab">Combined PO Upload</a></li>
+            </ul>
+            <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+                <div class="container">
+                    <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-check form-group has-feedback">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="" name="pi_required" id="pi_required" type="checkbox">
+                          TCL 1 
+                        </label>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-check form-group has-feedback">
+                        <label class="form-check-label">
+                          <input class="form-check-input" value="" name="delivery_date_required" id="delivery_date_required" type="checkbox">
+                          TCL 2
+                        </label>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab2">
+                <p>Data 2.</p>
+            </div>
+            </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 	<div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">
@@ -501,7 +554,7 @@ border: 0;
 
 
 		$(document).ready(function() {
-
+            $('#exampleModalCenter').modal('show')
 			/** Clear local storage data **/
 			localStorage.removeItem("hang_tag");
 			localStorage.removeItem("special_tag");
