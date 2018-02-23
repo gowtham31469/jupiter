@@ -19,7 +19,7 @@
                     <table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <th>Sl. No</th>
                           <th>Buyer Name</th>
                           <th>Buyer Email</th>
                           <th>Buyer Phone</th>

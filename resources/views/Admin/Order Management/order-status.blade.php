@@ -33,12 +33,12 @@
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="po_file hidden">
-                        <a href="#"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
-                        <p> OR </p>
+                    <div class="po_file hidden" id="po_file">
+                        <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
+                        <br>
                         <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
                     </div>
-                    <div class="po_upload">
+                    <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
                         <input type="hidden" name="tableName" id="tableName" value="" >
@@ -138,7 +138,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img style="height:50px;" src="/images/logo.png" class="img-responsive">
+                                        <img id="company-logo" style="height:50px;" src="" class="img-responsive">
                                         <p><strong>Date:</strong> {{ date('d-m-Y ') }}</p>
                                         <p><strong>PI:</strong>493</p>
                                         <p><strong>REV:</strong>2</p>
@@ -380,9 +380,8 @@
                 $('#po-file-upload').modal('hide')
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 showSnackbar();
-                
             });
-            this.on("error", function(file, response) {
+            this.on("error", function(file, response){
                 this.removeFile(file);
                 $('.snackbar_span').html('Something went wrong');
                 $('#snackbar').css('background-color','#F44336');
@@ -391,6 +390,10 @@
         }
     };
 
+    /** To refresh modal and form data**/
+    $(".modal").on("hidden.bs.modal", function(){
+      
+    });
     </script>
 
     @endsection

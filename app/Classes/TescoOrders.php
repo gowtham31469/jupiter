@@ -7,21 +7,49 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
-use App\TescoPolybagCartonStickerOrders;
-
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
+/**
+   * Class to store the tesco template orders
+   * @author [Praveen] <[praveen@wizroots.com]>
+   */
 class TescoOrders
 {
 	/**
-	 * method to store the tesco orders
-	 * @param  [type] $request
+	 * method to store the tesco TCL1 orders
+	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTescoOrder($request)
+	public function createTCL1Order($request,$template_id)
 	{
 		try {
-            $max_id = TescoPolybagCartonStickerOrders::max('id');
-            $order_id = "JGAM_".$max_id;
-            $result = TescoPolybagCartonStickerOrders::create([
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTCL1Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTCL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -36,7 +64,12 @@ class TescoOrders
                           'tesco_brand_id'       => $request['brand'],
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
-                          'tag_at_source'        => $request['tag_at_source']
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
                         ]);
             
         } catch (\Exception $e)
@@ -45,4 +78,304 @@ class TescoOrders
         }
         return $result;
 	}
+  /**
+   * method to store the tesco TCL2 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTCL2Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTCL2Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTCL2Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * method to store the tesco TSL1 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTSL1Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTSL1Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTSL1Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * method to store the tesco THL1 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTHL1Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTHL1Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTHL1Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * method to store the tesco TCL4 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTCL4Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTCL4Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTCL4Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * method to store the tesco TSL3 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTSL3Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTSL3Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTSL3Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
+  /**
+   * method to store the tesco THL3 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function createTHL3Order($request,$template_id)
+  {
+    try {
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
+            if($customer_details->pi_required == 1)
+            {
+              $pi_status = "PI Approval Pending";
+            }
+            else
+            {
+              $pi_status = "";
+            }
+            /** [ Get orders table maximum id value for creating order id] */
+            $max_id = TescoTHL3Orders::max('id');
+            $order_id = "JGAM_00".($max_id+1);
+            $result = TescoTHL3Orders::create([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Submitted",
+                          'artwork_status'       => "Submitted",
+                          'print_status'         => "Submitted",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status
+                        ]);
+            
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+  }
 }

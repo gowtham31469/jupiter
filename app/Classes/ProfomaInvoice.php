@@ -23,6 +23,7 @@ class ProfomaInvoice
 		$id         =   $request->id;
         $table_name =   $request->table_name;
         $uvc        =   $request->uvc;
+        $buyer_id   =   $request->buyer_id;
         $data['company_details'] =  DB::table('orchestra_item_master')
                                           ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
@@ -53,7 +54,7 @@ class ProfomaInvoice
                                             ->join('orchestra_hang_tag_orders_qty','orchestra_hang_tag_orders_qty.oht_id','=','orchestra_hang_tag_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_hang_tag_orders.template_front_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_hang_tag_orders_qty.oht_id',$id)
                                             ->select('size','quantity','orchestra_hang_tag_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();
@@ -64,7 +65,7 @@ class ProfomaInvoice
                                             ->join('orchestra_main_label_orders_qty','orchestra_main_label_orders_qty.oml_id','=','orchestra_main_label_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_main_label_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_main_label_orders_qty.oml_id',$id)
                                             ->select('size','quantity','orchestra_main_label_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();        
@@ -74,7 +75,7 @@ class ProfomaInvoice
                                             ->join('orchestra_solid_carton_sticker_orders_qty','orchestra_solid_carton_sticker_orders_qty.oscs_id','=','orchestra_solid_carton_sticker_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_solid_carton_sticker_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_solid_carton_sticker_orders_qty.oscs_id',$id)
                                             ->select('size','quantity','orchestra_solid_carton_sticker_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get(); 
@@ -84,7 +85,7 @@ class ProfomaInvoice
                                             ->join('orchestra_solid_poly_bag_sticker_order_qty','orchestra_solid_poly_bag_sticker_order_qty.ospbs_id','=','orchestra_solid_poly_bag_sticker_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_solid_poly_bag_sticker_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_solid_poly_bag_sticker_order_qty.ospbs_id',$id)
                                             ->select('size','quantity','orchestra_solid_poly_bag_sticker_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get(); 
@@ -93,7 +94,7 @@ class ProfomaInvoice
                 $data['item_details']    = DB::table('orchestra_standard_carton_sticker_orders')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_standard_carton_sticker_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_standard_carton_sticker_orders.id',$id)
                                             ->select(DB::raw('"-" as size'),'final_order_qty as quantity','orchestra_standard_carton_sticker_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();
@@ -102,7 +103,7 @@ class ProfomaInvoice
                 $data['item_details']    = DB::table('orchestra_standard_polybag_sticker_orders')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_standard_polybag_sticker_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_standard_polybag_sticker_orders.id',$id)
                                             ->select(DB::raw('"-" as size'),'final_order_qty as quantity','orchestra_standard_polybag_sticker_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();
@@ -112,7 +113,7 @@ class ProfomaInvoice
                                             ->join('orchestra_wash_care_label_orders_qty','orchestra_wash_care_label_orders_qty.owcl_id','=','orchestra_wash_care_label_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_wash_care_label_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_wash_care_label_orders_qty.owcl_id',$id)
                                             ->select('size','quantity','orchestra_wash_care_label_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get(); 
@@ -122,7 +123,7 @@ class ProfomaInvoice
                                             ->join('orchestra_special_tag_orders_qty','orchestra_special_tag_orders_qty.ost_id','=','orchestra_special_tag_orders.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=','orchestra_special_tag_orders.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
-                                            ->where('price_taxation.buyer_id',1)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('orchestra_special_tag_orders_qty.ost_id',$id)
                                             ->select('size','quantity','orchestra_special_tag_orders.uvc as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
                                             ->get();
@@ -134,4 +135,49 @@ class ProfomaInvoice
         }
         return $data;
 	}
+
+    /**
+     * method for getting all the details for tesco PI generation
+     * @param  [type] $request [id]
+     * @return [type]          [table_name]
+     */
+    public function getTescoPIDetails($request)
+    {
+        $id         =   $request->id;
+        $table_name =   $request->table_name;
+        $buyer_id   =   $request->buyer_id;
+        $data['company_details'] =  DB::table('tesco_item_master')
+                                          ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
+                                          ->join('company','company.id','=','tesco_item_master.company_id')
+                                          ->where($table_name.'.id',$id)
+                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->first();
+        $customer_details       = DB::table($table_name)
+                                  ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
+                                  ->where($table_name.'.id',$id)
+                                  ->select('customers.*')
+                                  ->first();
+        $data['bank_details']   = $customer_details;
+        $data['bill_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_billing_address',1)
+                                  ->select('address','country')
+                                  ->first();                 
+        $data['ship_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_shipping_address',1)
+                                  ->select('address','country')
+                                  ->first();
+        $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+        $data['item_details']    = DB::table($table_name)
+                                            ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                                            ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                                            ->where('price_taxation.customer_id',$customer_details->id)
+                                            ->where('price_taxation.buyer_id',$buyer_id)
+                                            ->where($table_name.'_quanty.'.$qnty_id,$id)
+                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
+                                            ->get();
+        return $data;
+       
+    }  
 }
