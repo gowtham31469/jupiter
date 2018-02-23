@@ -4,24 +4,24 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-   // try {
+   try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
         switch(po_type) {
-            case 'SINGLE': parsedObj = parseSingleType(data);
+            case 'single': parsedObj = parseSingleType(data);
                 break;
-            case 'RATIO PACK  A': parsedObj = parseRatioType(data);
+            case 'ratio': parsedObj = parseRatioType(data);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
+         $(".loader").hide();
         callback(parsedObj);
-
-    // } catch(e) {
-    //     // error statements
-    //     console.log("Error:"+e);
-    // }
+    } catch(e) {
+        // error statements
+        console.log("Error:"+e);
+    }
 }
 
 /**
@@ -209,20 +209,18 @@ function renderParsedValues(parsedObj) {
     $('#tesco_description').val(parsedObj.shortDescription);
 
 
-    if(parsedObj.type === 'SINGLE') {
+    if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {
-            if(type === 'single') {
-                var index = i + 1;
-                $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
-                $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
-                $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
-                $('#'+zone+'_single_size_'+index).val(j.Size);  
-            }
+            var index = i + 1;
+            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
+            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
+            $('#'+zone+'_single_size_'+index).val(j.Size);  
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }
         });  
-    } else if(parsedObj.type === 'RATIO PACK  A') {
+    } else if(type === 'ratio') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
             $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
@@ -232,9 +230,6 @@ function renderParsedValues(parsedObj) {
                 $('.add-row-btn').trigger('click');
             }
         }); 
-        // $('#'+zone+'_ratio_tpnd').val(parsedObj.orderQuantity.TPND);
-        // $('#'+zone+'_ratio_itf').val(parsedObj.orderQuantity.barCode);
-        // $('#'+zone+'_ratio_upc').val(parsedObj.orderQuantity.unitsPerCarton);
     }
 
     dynamicSVGTemplates();

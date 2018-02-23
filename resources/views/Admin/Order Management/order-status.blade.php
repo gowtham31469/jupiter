@@ -379,6 +379,7 @@
                 this.removeFile(file);
                 $('#po-file-upload').modal('hide')
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
+                tescoOrderStatus() 
                 showSnackbar();
             });
             this.on("error", function(file, response){
@@ -392,7 +393,7 @@
 
     /** To refresh modal and form data**/
     $(".modal").on("hidden.bs.modal", function(){
-      
+      myDropzone.removeAllFiles();
     });
     </script>
 

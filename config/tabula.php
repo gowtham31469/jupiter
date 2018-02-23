@@ -23,6 +23,22 @@ return [
    /*
     |--------------------------------------------------------------------------
     | Dimension to find out the PDF purchase order type.
+    |   Portion of the page to analyze
+    |   (top,left,bottom,right). Example: --area
+    |   269.875,12.75,790.5,561. Default is entire page
+    |    y1 = top
+    |    x1 = left
+    |    y2 = top + height
+    |    x2 = left + width
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+   'po_series' => ' -p 1  -a 13,350,30,460 -f JSON ',
+
+   /*
+    |--------------------------------------------------------------------------
+    | Dimension to find out the PDF purchase order type.
     |--------------------------------------------------------------------------
     |
     |

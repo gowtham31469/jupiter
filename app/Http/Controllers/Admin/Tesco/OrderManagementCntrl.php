@@ -191,14 +191,48 @@ class OrderManagementCntrl extends Controller
           $file = $request->file('purchase_order');
           $name = str_replace(" ", "_", $file->getClientOriginalName());
           $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          //Read the Purchase Order Series
+          $po_number = $this->getPOSeries($path);
+          $po_series = explode('-', $po_number);
+          $po_series = $po_series[0];
           //Check the type of PO
           $po_type = $this->checkPOType($path);
+          $arr = explode(' ',trim($po_type));
+          $po_type = strtolower($arr[0]);
+
+          //Validate the Template and Purchase Order Series Number.
+          switch ($request->template_name) {
+            case 'TCL 1 , TCL 2 & TSL 1':
+              if($po_type !== 'ratio' || $po_series !== '460') {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
+              }
+              break;
+            case 'TCL 4 & TSL 3':
+              if($po_type !== 'single' || $po_series !== '460') {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
+              }
+              break;
+            case 'THL 1':
+              if($po_type !== 'ratio' || ($po_series !== '206' && $po_series !== '461')) {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
+              }
+              break;
+            case 'THL 3':
+              if($po_type !== 'single' || ($po_series !== '206' && $po_series !== '461')) {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
+              }
+              break;
+            default:
+              return response()->json(['error' => 'Unknown Template Name for UK'], 400);
+              break;
+          }
+          
           $data = '';
           switch ($po_type) {
-            case 'SINGLE':
+            case 'single':
               $data = $this->cropPDF($path, 'single');
               break;
-            case 'RATIO PACK  A':
+            case 'ratio':
               //Check for Ratio Pack B
               $packB = $this->checkPackB($path);
               $data  = $this->cropPDF($path, 'ratio');
@@ -207,11 +241,11 @@ class OrderManagementCntrl extends Controller
               }
               break;
             default:
-              return response()->json(['error' => 'Unknown PO Type']);
+              return response()->json(['error' => 'Unknown PO Type'], 400);
               break;
           }
           
-          return response()->json(['details' =>$data, 'type' => $po_type]);
+          return response()->json(['details' =>$data, 'type' => $po_type], 200);
         } else {
           return "File not found!!";
         }
@@ -233,6 +267,21 @@ class OrderManagementCntrl extends Controller
         $type    = json_decode($type, true);
         $type = $type[0]['data'][0][0]['text'];
         return $type;
+    }
+
+    /**
+     * Method to find the series of P.O uploaded.
+     * @param  [string] $file PDF file path.
+     * @return [string]       Type of the PDF
+     */
+    public function getPOSeries($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula    = Config::get('tabula.tabula_jar');
+        $po_series = Config::get('tabula.po_series');
+        $series    = shell_exec('java -jar '.$tabula.$po_series.$file);
+        $series    = json_decode($series, true);
+        $series    = $series[0]['data'][0][0]['text'];
+        return $series;
     }
 
     /**
