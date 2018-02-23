@@ -144,6 +144,7 @@ class OrderStatusCntrl extends Controller
             {
                 
                 $pi_details = PI::create([
+                    'buyer_id'  => $buyer_id,
                     'company_id' => $data['company_details']->id,
                     'customer_id'      => $data['bank_details']->id,
                     'shipping_address' => $data['ship_to']->address,
@@ -176,7 +177,7 @@ class OrderStatusCntrl extends Controller
             $data       =   DB::table($table_name)
                             ->where('id',$row_id)
                             ->update([
-                              'pi_status' => "PI Approved"
+                               'pi_status' => "PI Approved"
                             ]);
             if ($data)
             {

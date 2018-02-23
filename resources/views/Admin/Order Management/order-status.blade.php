@@ -379,6 +379,7 @@
                 this.removeFile(file);
                 $('#po-file-upload').modal('hide')
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
+                tescoOrderStatus() 
                 showSnackbar();
             });
             this.on("error", function(file, response){

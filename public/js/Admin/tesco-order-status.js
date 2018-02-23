@@ -248,7 +248,7 @@ function tescoSetPO(obj,id,tableName)
    {
 	   $(obj).closest('tr').find('.tesco-po').focus();
 	   $(obj).closest('tr').find('.tesco-po').css('border-color', '#F44336');
-	   $('.snackbar_span').html('Please a valid PO Number');
+	   $('.snackbar_span').html('Please enter a valid PO number');
        $('#snackbar').css('background-color','#F44336');
        showSnackbar();
    }
