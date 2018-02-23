@@ -399,7 +399,7 @@ function createOrders(parsedObj = false) {
                       $.each(data.templates, function(i, item){
                        html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
                       });
-                      html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
+                      html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
 
                       $('.main-content').html(html).selectpicker('refresh');
 
@@ -1672,9 +1672,10 @@ function storeCERatioTCL1TCL2TSL1()
                          $(".loader").show();
                      },
                      success: function (data) {
+                           console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -1751,9 +1752,18 @@ function storeCERatioTHL1()
                          $(".loader").show();
                      },
                      success: function (data) {
+                           console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           /** [ Backdrop for bootstrap modal ] */
+                             $('#exampleModalCenter').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                           $('#exampleModalCenter').modal('show');
+                           
+                             $('.submit-btn').attr('disabled');
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -1845,9 +1855,10 @@ function storeCESingleTCL4TSL3()
                          $(".loader").show();
                      },
                      success: function (data) {
+                           console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -1931,9 +1942,10 @@ function storeCESingleTHL3()
                          $(".loader").show();
                      },
                      success: function (data) {
+                        console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -2025,9 +2037,10 @@ function storeUKRatioTCL1TCL2TSL1()
                          $(".loader").show();
                      },
                      success: function (data) {
+                        console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -2103,9 +2116,10 @@ function storeUKRatioTHL1()
                          $(".loader").show();
                      },
                      success: function (data) {
+                        console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -2197,9 +2211,10 @@ function storeUKSingleTCL4TSL3()
                          $(".loader").show();
                      },
                      success: function (data) {
+                        console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
@@ -2283,9 +2298,10 @@ function storeUKSingleTHL3()
                          $(".loader").show();
                      },
                      success: function (data) {
+                        console.log(data)
                            $('.snackbar_span').html('Your order has been placed successfully');
                            showSnackbar();
-                           location.reload();
+                           //location.reload();
                      },
                      error: function (data) {
                         console.log(data);
