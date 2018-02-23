@@ -32,10 +32,12 @@ function tescoOrderStatus()
                var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
+                     "order": [[ 6, "desc" ]],
                     initComplete: function () {
                         
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+
                         $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
 		                $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
 		                $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
@@ -94,6 +96,12 @@ function tescoStatusTable(data,path)
 	                {
                 		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
 	                }
+                }
+                else if (key == "OrderDate") {
+                   
+                    var orderDate = moment(value[key] ).format('DD-MM-YYYY');
+                    tr += '<td align="center"><span style=display:none;>'+value[key]+'</span>'+orderDate+'</td>';
+                   
                 }
                 else if (key == "PI Status")
                 {
@@ -322,6 +330,17 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no)
                }
                else
                {
+                    if(data.data.bank_details.is_advance_payment == 0)
+                    {
+                        $('.advnc').addClass('hidden')
+                        $('.bond').addClass('hidden')
+                    }
+                    if(data.data.bank_details.is_freight_cost_free == 1)
+                    {
+                        $('.freight').addClass('hidden')
+                        $('.bond').addClass('hidden')
+                    }
+                    
                     $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
@@ -333,7 +352,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no)
                     var subtotal = 0;
                     var tax = 0 ;
                                
-                    var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th>Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                    var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th class="size-pi">Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
                
                     if (data.data.item_details.length!=0)
                     {
@@ -343,12 +362,14 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no)
                             if (value.size == "")
                             {
                                 size = "-" ;
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
                             }
                             else
                             {
                                 size = value.size ;
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
                             }
-                            tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                            
                             totalqnty+=value.quantity;
                             subtotal+=value.quantity*value.unit_price;
 
@@ -371,7 +392,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no)
                         $('#item_details').html(tr)
                         if (pi_status=="true")
                         {
-                            $('.pi_actions').html('<button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            $('.pi_actions').html('<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                         }
                         else
                         {

@@ -751,7 +751,7 @@ function table(data,path){
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
                    
-                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+                    tr += '<td align="center"><a href="javascript:void(0)" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     var str=value[key] ;
                     $status=str.replace(/ /g, "");
@@ -834,11 +834,11 @@ function table(data,path){
                 {    
                     if (value[key]==1)
                     {    
-                       tr += '<td align="center"><a href="#" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
+                       tr += '<td align="center"><a href="javascript:void(0)" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
-                        tr += '<td align="center"><a href="#" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }   
                 }
             }

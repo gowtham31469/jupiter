@@ -32,11 +32,11 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center">
                     <div class="po_file hidden" id="po_file">
-                        <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o" style="font-size:36px"></i></a>
+                        <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
-                        <button type="button" class="btn btn-primary update-po-file">Update PO File</button> 
+                        <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
                     </div>
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
@@ -49,8 +49,8 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary disabled upload-po">Upload</button>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-sm disabled upload-po">Upload</button>
                 </div>
             </div>
         </div>
@@ -172,7 +172,7 @@
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong>Advance Payment   |   Freight at your cost</strong></p>
+                                    <p class="text-right"><strong><span class="advnc">Advance Payment</span><span class="bond">|</span><span class="freight">Freight at your cost</span></strong></p>
                                 </div>
                                 <hr/>
                             </div>
