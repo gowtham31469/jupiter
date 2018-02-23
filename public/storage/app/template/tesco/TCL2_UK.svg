@@ -4,7 +4,7 @@
 	 viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
-	.st1{font-family:'FranklinGothicBT-RomanCondensed',FrankGoth Cn BT;}
+	.st1{font-family:'FranklinGothicBT-RomanCondensed';}
 	.st2{font-size:28px;}
 	.st3{font-size:10px;}
 	.st4{font-size:11px;}
@@ -14,43 +14,53 @@
 	.st8{letter-spacing:5;}
 	.st9{letter-spacing:21;}
 	.st10{letter-spacing:18;}
-	.st11{letter-spacing:-1;}
 </style>
 <g>
-	<rect y="0" class="st0" width="360" height="226.8"/>
+	<rect class="st0" width="360" height="226.8"/>
 </g>
-<text transform="matrix(1 0 0 1 265.1979 33.2704)" class="st1 st2" id="season_code">XXXX</text>
+<text id="season_code" transform="matrix(1 0 0 1 265.1979 33.2704)" class="st1 st2">XXXX</text>
 <text transform="matrix(1 0 0 1 204.2858 59.6503)" class="st1 st3">Dept: </text>
-<text transform="matrix(1 0 0 1 286.2916 59.6503)" class="st1 st4" id="department">LADIESWEAR</text>
+<text id="department" transform="matrix(1 0 0 1 226.2878 59.6503)" class="st1 st4">LADIESWEAR</text>
 <text transform="matrix(1 0 0 1 204.2858 74.6503)" class="st1 st3">Brand: </text>
-<text transform="matrix(1 0 0 1 286.2916 74.6503)" class="st1 st4" id="brand">F&amp;F</text>
-<text transform="matrix(1 0 0 1 286.2916 89.6502)" class="st1 st4" id="rfid">YES / NO</text>
+<text id="brand" transform="matrix(1 0 0 1 232.2881 74.6503)" class="st1 st4">F&amp;F</text>
+<text id="rfid" transform="matrix(1 0 0 1 286.2916 89.6502)" class="st1 st4">YES / NO</text>
 <text transform="matrix(1 0 0 1 204.2858 89.6503)" class="st1 st3">RFID Compliant:</text>
-<text transform="matrix(1 0 0 1 286.2916 104.6502)" class="st1 st4" id="tag_at_source">YES / NO</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 286.2916 104.6502)" class="st1 st4">YES / NO</text>
 <text transform="matrix(1 0 0 1 204.2858 104.6502)" class="st1 st3">Tag At Source:</text>
-<text transform="matrix(1 0 0 1 102.5726 65.2292)" class="st1 st5" id="tpnd">012698515</text>
+<text id="tpnd" transform="matrix(1 0 0 1 102.5726 65.2292)" class="st1 st5">012698515</text>
 <text transform="matrix(1 0 0 1 15.2107 83.9704)" class="st1 st5">PO No: </text>
-<text transform="matrix(1 0 0 1 102.5726 84.0786)" class="st1 st5" id="po_number">460-81998</text>
-<text transform="matrix(1 0 0 1 15.2107 97.1476)"><tspan x="0" y="0" class="st1 st3">UK Style Ref:</tspan><tspan x="53.5" y="0" class="st1 st3 st6"> </tspan><tspan x="99.3" y="0" class="st1 st3"> </tspan></text>
+<text id="po_number" transform="matrix(1 0 0 1 102.5726 84.0786)" class="st1 st5">460-81998</text>
+<text transform="matrix(1 0 0 1 15.2107 97.1476)" class="st1 st3">UK Style Ref:</text>
+<text transform="matrix(1 0 0 1 68.7107 97.1476)" class="st1 st3 st6"> </text>
+<text transform="matrix(1 0 0 1 114.5107 97.1476)" class="st1 st3"> </text>
 <g>
-	<text transform="matrix(0.85 0 0 1 15.2107 111.5718)" class="st1 st7">CE Style Ref (VPN/OPTION ID):</text>
+	<text transform="matrix(0.85 0 0 1 15.2109 111.5718)" class="st1 st7">CE Style Ref (VPN/OPTION ID):</text>
 </g>
-<text transform="matrix(1 0 0 1 102.223 97.1443)" class="st1 st3" id="uk_style">AB123456</text>
-<text transform="matrix(1 0 0 1 102.5726 111.572)" class="st1 st3" id="ce_style">123-4567</text>
-<text transform="matrix(1 0 0 1 15.2107 125.9961)"><tspan x="0" y="0" class="st1 st3">Short Description:</tspan><tspan x="74.3" y="0" class="st1 st3 st8"> </tspan><tspan x="83.1" y="0" class="st1 st3"> </tspan></text>
-<text transform="matrix(1 0 0 1 102.5716 125.996)" class="st1 st3" id="description">CHK SS V NECK STRP T20</text>
-<text transform="matrix(1 0 0 1 15.2107 140.4199)"><tspan x="0" y="0" class="st1 st3">EQOS Code:</tspan><tspan x="48.8" y="0" class="st1 st3 st9"> </tspan><tspan x="72.6" y="0" class="st1 st3"> </tspan></text>
-<text transform="matrix(1 0 0 1 102.5716 140.4201)" class="st1 st3" id="eqos">XXX</text>
-<text transform="matrix(1 0 0 1 15.2107 154.8441)"><tspan x="0" y="0" class="st1 st3">Supplier Name:</tspan><tspan x="61.9" y="0" class="st1 st3 st10"> </tspan><tspan x="82.9" y="0" class="st1 st3"> </tspan></text>
-<text transform="matrix(1 0 0 1 102.5716 154.8441)" class="st1 st3" id="supplier">AB Clothing</text>
+<text id="uk_style" transform="matrix(1 0 0 1 102.223 97.1443)" class="st1 st3">AB123456</text>
+<text id="ce_style" transform="matrix(1 0 0 1 102.5726 111.572)" class="st1 st3">123-4567</text>
+<text transform="matrix(1 0 0 1 15.2107 125.9961)" class="st1 st3">Short Description:</text>
+<text transform="matrix(1 0 0 1 89.5107 125.9961)" class="st1 st3 st8"> </text>
+<text transform="matrix(1 0 0 1 98.3107 125.9961)" class="st1 st3"> </text>
+<text id="description" transform="matrix(1 0 0 1 102.5716 125.996)" class="st1 st3">CHK SS V NECK STRP T20</text>
+<text transform="matrix(1 0 0 1 15.2107 140.4199)" class="st1 st3">EQOS Code:</text>
+<text transform="matrix(1 0 0 1 64.0107 140.4199)" class="st1 st3 st9"> </text>
+<text transform="matrix(1 0 0 1 87.8107 140.4199)" class="st1 st3"> </text>
+<text id="eqos" transform="matrix(1 0 0 1 102.5716 140.4201)" class="st1 st3">XXX</text>
+<text transform="matrix(1 0 0 1 15.2107 154.8441)" class="st1 st3">Supplier Name:</text>
+<text transform="matrix(1 0 0 1 77.1107 154.8441)" class="st1 st3 st10"> </text>
+<text transform="matrix(1 0 0 1 98.1107 154.8441)" class="st1 st3"> </text>
+<text id="supplier" transform="matrix(1 0 0 1 102.5716 154.8441)" class="st1 st3">AB Clothing</text>
 <text transform="matrix(1 0 0 1 15.2107 65.2292)" class="st1 st5">TPND: </text>
-<text transform="matrix(1 0 0 1 24.9816 33.2704)"><tspan x="0" y="0" class="st1 st2">B/D (R</tspan><tspan x="72.6" y="0" class="st1 st2 st11">A</tspan><tspan x="86.3" y="0" class="st1 st2">TIO)</tspan></text>
-<text transform="matrix(1 0 0 1 204.5719 169.6064)" class="st1 st3">No of pieces in one ratio:</text>
-<text id="pieces_in_ratio" class="st1 st3" transform="matrix(1 0 0 1 338.59 169.6064)">3</text>
-<text transform="matrix(1 0 0 1 204.5719 154.5131)" class="st1 st3">No of ratios in one carton:</text>
-<text transform="matrix(1 0 0 1 204.5719 184.6064)" class="st1 st3">Box ____ of ____</text>
+<text transform="matrix(1 0 0 1 24.9816 33.2704)" class="st1 st2">B/D (R</text>
+<text transform="matrix(1 0 0 1 97.5816 33.2704)" class="st1 st2">A</text>
+<text transform="matrix(1 0 0 1 111.2816 33.2704)" class="st1 st2">TIO)</text>
+<text transform="matrix(1 0 0 1 204.5719 184.6073)" class="st1 st3">No of pieces in one ratio:</text>
+<text id="pieces_in_ratio" transform="matrix(1 0 0 1 308.5881 184.6073)" class="st1 st3">3</text>
+<text transform="matrix(1 0 0 1 204.5719 169.5141)" class="st1 st3">No of ratios in one carton:</text>
+<text transform="matrix(1 0 0 1 313.5789 169.5141)" class="st1 st3">0000</text>
+<text transform="matrix(1 0 0 1 204.5719 199.6073)" class="st1 st3">Box ____ of ____</text>
 <g>
 	<text transform="matrix(1 0 0 1 15.1311 219.1768)" class="st1 st3">MANUFACTURED DATE: </text>
-	<text transform="matrix(1 0 0 1 145.131 219.1768)" class="st1 st4" id="manufactured_date"> MONTH YEAR</text>
+	<text id="manufactured_date" transform="matrix(1 0 0 1 145.131 219.1768)" class="st1 st4"> MONTH YEAR</text>
 </g>
 </svg>
