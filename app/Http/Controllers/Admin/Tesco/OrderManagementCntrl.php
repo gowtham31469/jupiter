@@ -194,6 +194,9 @@ class OrderManagementCntrl extends Controller
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
           $po_series = explode('-', $po_number);
+          if(count($po_series) < 2) {
+            return response()->json(['error' => 'Unknown Purchase Order for UK'], 400);
+          }
           $po_series = $po_series[0];
           //Check the type of PO
           $po_type = $this->checkPOType($path);
@@ -244,8 +247,11 @@ class OrderManagementCntrl extends Controller
               return response()->json(['error' => 'Unknown PO Type'], 400);
               break;
           }
+          //Get the Supplier Information from page 1
+          $data['supplier'] = $this->getSupplierInfo($path);
+
           
-          return response()->json(['details' =>$data, 'type' => $po_type], 200);
+          return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
         } else {
           return "File not found!!";
         }
@@ -325,6 +331,20 @@ class OrderManagementCntrl extends Controller
       } else {
         return false;
       }
+    }
+
+    /**
+     * Method to get the supplier number and name.
+     * @param  [path] $file File to be cropped
+     * @return [str]       JSON extracted string
+     */
+    public function getSupplierInfo($file) {
+      //Read the tabula configuration from config/tabula.php.
+      $tabula      = Config::get('tabula.tabula_jar');
+      $sup_info    = Config::get('tabula.supplier_info');
+      //Execute tabula method to extract the seller section.
+      $sup_info = shell_exec('java -jar '.$tabula.$sup_info.$file);
+      return $sup_info;
     }
 
     /**
