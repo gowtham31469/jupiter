@@ -981,8 +981,13 @@ span.sticker-details {
 .label-Approved {
     background: #2ecc71;
 }
-
+.label-OrderPlaced {
+    background: #2ecc71;
+}
 .label-Pending {
+    background: #2c3e50;
+}
+.label-POPending {
     background: #2c3e50;
 }
 

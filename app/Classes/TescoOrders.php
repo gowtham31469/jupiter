@@ -65,11 +65,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -115,11 +116,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -165,11 +167,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -215,11 +218,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -265,11 +269,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -315,11 +320,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)
@@ -365,11 +371,12 @@ class TescoOrders
                           'tesco_supplier_id'    => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
-                          'order_status'         => "Submitted",
-                          'artwork_status'       => "Submitted",
-                          'print_status'         => "Submitted",
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
-                          'pi_status'            => $pi_status
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending"
                         ]);
             
         } catch (\Exception $e)

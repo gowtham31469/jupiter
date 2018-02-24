@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 360 226.8" style="enable-background:new 0 0 360 226.8;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  }
-	.st2{font-size:28px;}
-	.st3{letter-spacing:-1;}
-	.st4{font-size:10px;}
-	.st5{font-size:11px;}
-	.st6{font-size:18px;}
-	.st7{font-size:15px;}
-	.st8{letter-spacing:43;}
-	.st9{font-size:8px;}
-	.st10{letter-spacing:5;}
-	.st11{letter-spacing:18;}
-</style>
 <rect y="0" style="fill:#FFFFFF;" width="360" height="226.8"/>
 <text transform="matrix(1 0 0 1 265.1979 30.2704)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:28px; " id="season_code">XXXX</text>
 <text transform="matrix(1 0 0 1 25.2101 30.2704)">
@@ -30,7 +16,7 @@
 <text transform="matrix(1 0 0 1 102.573 62.2292)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:18px;" id="tpnd">012698515</text>
 <text transform="matrix(1 0 0 1 14.2108 80.9704)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:15px;">ORMS PO No: </text>
 <text transform="matrix(1 0 0 1 102.5726 81.0786)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:18px;" id="po_number">460-81998</text>
-<text transform="matrix(1 0 0 1 15.2108 94.1476)"><tspan x="0" y="0" class="st1 st4">UK Style Ref:</tspan><tspan x="53.5" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;   font-size:10px; letter-spacing:43;"> </tspan><tspan x="99.3" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  "> </tspan></text>
+<text transform="matrix(1 0 0 1 15.2108 94.1476)"><tspan x="0" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;font-size:10px;">UK Style Ref:</tspan><tspan x="53.5" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;   font-size:10px; letter-spacing:43;"> </tspan><tspan x="99.3" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  "> </tspan></text>
 <g>
 	<text transform="matrix(0.85 0 0 1 15.2108 108.5718)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:8px;" >CE Style Ref (VPN/OPTION ID):</text>
 </g>

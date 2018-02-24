@@ -758,8 +758,6 @@ function table(data,path){
 					{
 						 tr += '<td align="center"><a href="#" onclick=artwork_modal("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
 					}
-                   
-                   
                 } else if (key == "Status") {
                     var str=value[key] ;
                     $status=str.replace(/ /g, "");
@@ -842,11 +840,11 @@ function table(data,path){
                 {    
                     if (value[key]==1)
                     {    
-                       tr += '<td align="center"><a href="#" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="#" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
+                       tr += '<td align="center"><a href="javascript:void(0)" onclick=genaratePI("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+action_status+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'")></i></a></td>';
                     }
                     else
                     {
-                        tr += '<td align="center"><a href="#" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" onclick=showPOUpload("'+value.id+'","'+value.tableName+'","'+value.UVC+'","'+value.qntytable+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                     }   
                 }
             }
@@ -963,6 +961,7 @@ function genaratePI(id,table_name,uvc,pi_status)
 {
     $('#uvc_number').text(uvc)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var buyer_id = localStorage.getItem("buyer_id");
     var tr = ""
     $.ajax({
         url: base_url + "/admin/orchestra/order-management/show-profoma-invoice",
@@ -971,6 +970,7 @@ function genaratePI(id,table_name,uvc,pi_status)
         data: {
             _token: csrf_token,
             table_name: table_name,
+            buyer_id : buyer_id,
             id:id,
             uvc:uvc
         },
@@ -1036,10 +1036,10 @@ function genaratePI(id,table_name,uvc,pi_status)
                         }
                         else
                         {
-                        	$('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'","'+uvc+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'","'+uvc+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                        	$('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=approvePI("'+id+'","'+table_name+'")>Approve</button><button class="btn btn-danger btn-xs" onclick=rejectPI("'+id+'","'+table_name+'")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                         }
-                       
-                        
+                       var logo = base_url+data.data.company_details.logo
+                        $('#company-logo').attr('src',logo);
                        $('#profoma-invoice').modal("show")
                     }
                     else
@@ -1071,7 +1071,7 @@ function genaratePI(id,table_name,uvc,pi_status)
  * @param  {[type]} table_name [description]
  * @return {[type]}            [description]
  */
-function approvePI(id,table_name,uvc)
+function approvePI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -1081,7 +1081,6 @@ function approvePI(id,table_name,uvc)
         data: {
             _token: csrf_token,
             table_name: table_name,
-            uvc:uvc,
             id:id
         },
         beforeSend: function () {
@@ -1122,7 +1121,7 @@ function approvePI(id,table_name,uvc)
  * @param  {[type]} table_name [description]
  * @return {[type]}            [description]
  */
-function rejectPI(id,table_name,uvc)
+function rejectPI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -1132,7 +1131,6 @@ function rejectPI(id,table_name,uvc)
         data: {
             _token: csrf_token,
             table_name: table_name,
-            uvc:uvc,
             id:id
         },
         beforeSend: function () {

@@ -60,8 +60,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -86,8 +86,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -111,8 +111,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -148,8 +148,8 @@
                     </div>
                      </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -185,8 +185,8 @@
                     </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -210,8 +210,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -316,8 +316,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -423,8 +423,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -448,8 +448,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -498,8 +498,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -549,8 +549,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -574,8 +574,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -680,8 +680,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                    {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                 </div>
                {!! Form::close() !!}
             </div>
@@ -787,8 +787,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -812,8 +812,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -918,8 +918,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1025,8 +1025,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1050,8 +1050,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1156,8 +1156,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1263,8 +1263,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1288,8 +1288,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1331,8 +1331,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1375,8 +1375,8 @@
                     </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1400,8 +1400,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1458,8 +1458,8 @@
                     
                 </div>
                 <div class="modal-footer">
-                    {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                    {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                 </div>
            {!! Form::close() !!}
         </div>
@@ -1575,8 +1575,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1601,8 +1601,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1626,8 +1626,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1663,8 +1663,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1700,8 +1700,8 @@
                        
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1725,8 +1725,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1757,8 +1757,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1789,8 +1789,8 @@
                        
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1814,8 +1814,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1849,8 +1849,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::submit('Submit', ['class' => 'btn btn-primary'] ) !!}
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
                     </div>
                {!! Form::close() !!}
             </div>
@@ -1886,8 +1886,8 @@
                        
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Update', ['class' => 'btn btn-primary'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1911,8 +1911,8 @@
                        </div>
                    </div>
                    <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Delete', ['class' => 'btn btn-primary'] ) !!}
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary btn-sm'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
