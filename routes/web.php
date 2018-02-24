@@ -38,6 +38,7 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');
+Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
@@ -175,6 +176,9 @@ Route::get('/erp/dashboard', function(){
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
+Route::post('admin/orchestra/order-management/reorder', 'Admin\Orchestra\OrderManagementCntrl@reOrder');
+Route::post('admin/orchestra/order-management/reorder-artwork', 'Admin\Orchestra\OrderManagementCntrl@reOrderArtwork');
+Route::post('admin/orchestra/order-management/extra-quantity', 'Admin\Orchestra\OrderManagementCntrl@extraQuantity');
 Route::post('admin/orchestra/order-management/back-label-orders', 'Admin\Orchestra\OrderManagementCntrl@backLabelOrders');
 Route::post('admin/orchestra/order-management/back-sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@backStickerOrders');
 Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@stickerOrders');
@@ -230,6 +234,11 @@ Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManag
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
+
+//Reorder
+
+Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');
+Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderManagementCntrl@reOrderArtwork');
 
 
 // Route::get('upload', 'UploadController@index');

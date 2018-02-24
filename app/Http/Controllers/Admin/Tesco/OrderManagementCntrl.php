@@ -798,4 +798,37 @@ class OrderManagementCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
+	
+	/**
+     * This Function is used to Show the style number in reorder page.
+     *
+     * @return json value
+     */
+	public function reOrder(Request $request)
+    {
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+		echo json_encode($data);
+    }
+	/**
+     * This Function is used to list all the artwork for particular style number.
+     *
+     * @return json value
+     */
+	public function reOrderArtwork(Request $request)
+    {
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+		echo json_encode($data);
+    }
 }
