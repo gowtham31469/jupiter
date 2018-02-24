@@ -16,7 +16,7 @@
 <text transform="matrix(1 0 0 1 102.573 62.2292)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:18px;" id="tpnd">012698515</text>
 <text transform="matrix(1 0 0 1 14.2108 80.9704)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:15px;">ORMS PO No: </text>
 <text transform="matrix(1 0 0 1 102.5726 81.0786)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:18px;" id="po_number">460-81998</text>
-<text transform="matrix(1 0 0 1 15.2108 94.1476)"><tspan x="0" y="0" class="st1 st4">UK Style Ref:</tspan><tspan x="53.5" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;   font-size:10px; letter-spacing:43;"> </tspan><tspan x="99.3" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  "> </tspan></text>
+<text transform="matrix(1 0 0 1 15.2108 94.1476)"><tspan x="0" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;font-size:10px;">UK Style Ref:</tspan><tspan x="53.5" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;   font-size:10px; letter-spacing:43;"> </tspan><tspan x="99.3" y="0" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  "> </tspan></text>
 <g>
 	<text transform="matrix(0.85 0 0 1 15.2108 108.5718)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT;  font-size:8px;" >CE Style Ref (VPN/OPTION ID):</text>
 </g>
