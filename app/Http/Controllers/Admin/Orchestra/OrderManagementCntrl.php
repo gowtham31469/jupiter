@@ -1637,5 +1637,106 @@ class OrderManagementCntrl extends Controller
 	
 		echo true;
     }
+	/**
+     * This Function is used to Show the UVC Number in reorder page.
+     *
+     * @return json value
+     */
+	public function reOrder(Request $request)
+    {
+              $data['orchestra_hang_tag_orders'] = DB::table('orchestra_hang_tag_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_main_label_orders'] = DB::table('orchestra_main_label_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_solid_carton_sticker_orders'] = DB::table('orchestra_solid_carton_sticker_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_solid_poly_bag_sticker_orders'] = DB::table('orchestra_solid_poly_bag_sticker_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_standard_carton_sticker_orders'] = DB::table('orchestra_standard_carton_sticker_orders')->select('*')->where('status',"Approved")->get();
+			  $data['orchestra_standard_polybag_sticker_orders'] = DB::table('orchestra_standard_polybag_sticker_orders')->select('*')->where('status',"Approved")->get();
+              echo json_encode($data);
+    }
+	/**
+     * This Function is used to list all the artwork for particular uvc number.
+     *
+     * @return json value
+     */
+	public function reOrderArtwork(Request $request)
+    {
+          $uvc        =   $request->uvc;
+          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Hang Tag" as TemplateName'),DB::raw('"Label" as Labeltype'),DB::raw('"Hang Tag" as TemplateType'),DB::raw('"orchestra_hang_tag_orders" as type'))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id',DB::raw('"Special Tag" as TemplateName'),DB::raw('"Label" as Labeltype'),DB::raw('"Special Tag" as TemplateType'),DB::raw('"orchestra_special_tag_orders" as type'))->where('uvc',$uvc)->get();
+		
+		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id','orchestra_main_label_orders.template_name as TemplateName',DB::raw('"Label" as Labeltype'),DB::raw('"Main and Size Labels" as TemplateType'),DB::raw('"orchestra_main_label_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw('"Label" as Labeltype'),DB::raw('"Wash Care Labels" as TemplateType'),DB::raw('"orchestra_wash_care_label_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Solid Carton Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Solid Carton Stickers" as TemplateType'),DB::raw('"orchestra_solid_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Solid Poly Bag Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Solid Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_solid_poly_bag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Carton Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Standard Carton Stickers" as TemplateType'),DB::raw('"orchestra_standard_carton_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		 $data['orchestra_standard_polybag_sticker_orders']=DB::table('orchestra_standard_polybag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_polybag_sticker_orders.template_id')->select('orchestra_standard_polybag_sticker_orders.*','orchestra_item_master.company_id',DB::raw('"Standard Poly Bag Stickers" as TemplateName'),DB::raw('"Sticker" as Labeltype'),DB::raw('"Standard Poly Bag Stickers" as TemplateType'),DB::raw('"orchestra_standard_polybag_sticker_orders" as type'))->where('uvc',$uvc)->get();
+		
+		
+		 echo json_encode($data);
+    }
+	/**
+     * This Function is used to get the artwork and quantity information.
+     *
+     * @return json value
+     */
+	public function extraQuantity(Request $request)
+    {
+          $type         =   $request->type;
+		  $id        =   $request->id;
+		  if($type == "orchestra_hang_tag_orders")
+		  {
+			  $data['qty']=DB::table($type.'_qty')->where('oht_id',$id)->select('*')->get();
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_front']=DB::table('orchestra_template')->where('item_id',$data['template']{0}->template_front_id)->where('position','front')->select('*')->get();
+			  $data['template_back']=DB::table('orchestra_template')->where('item_id',$data['template']{0}->template_front_id)->where('position','back')->select('*')->get();
+		  }
+		  else if($type == "orchestra_special_tag_orders")
+		  {
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+		  }
+		  else if($type == "orchestra_main_label_orders")
+		  {
+			  $data['qty']=DB::table($type.'_qty')->where('oml_id',$id)->select('*')->get();
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+		  }
+		  else if($type == "orchestra_wash_care_label_orders")
+		  {
+			  $data['qty']=DB::table($type.'_qty')->where('owcl_id',$id)->select('*')->get();
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+		  }
+          else if($type == "orchestra_solid_carton_sticker_orders")
+		  {
+			  $data['qty']=DB::table($type.'_qty')->where('oscs_id',$id)->select('*')->get();
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
+		  } 
+		  else if($type == "orchestra_solid_poly_bag_sticker_orders")
+		  {
+			  $data['qty']=DB::table('orchestra_solid_poly_bag_sticker_order_qty')->where('ospbs_id',$id)->select('*')->get();
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
+		  } 
+		  else if($type == "orchestra_standard_carton_sticker_orders")
+		  {
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
+		  } 
+		  else if($type == "orchestra_standard_polybag_sticker_orders")
+		  {
+			  $data['template']=DB::table($type)->where('id',$id)->select('*')->get();
+			  $data['template_file']=DB::table('orchestra_template')->where('id',$data['template']{0}->template_id)->select('*')->get();
+		  }
+          echo json_encode($data);
+    }
 }
 
