@@ -987,6 +987,9 @@ span.sticker-details {
 .label-Pending {
     background: #2c3e50;
 }
+.label-POPending {
+    background: #2c3e50;
+}
 
 .label-PIApprovalPending {
     background: #9b59b6;
