@@ -3,7 +3,7 @@
  * @author Praveen
  * @return View
  */
-
+var globalOrderType = 0;
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -44,11 +44,13 @@ function tescoOrders() {
                     if (selectedType === '1') {
                         $(".po-upload").removeClass("hidden");
                         //$(".po-number-search").show();
-                        $('#po_upload').prop('required',true)
+                        $('#po_upload').prop('required',true);
+                        globalOrderType = 1;
                     } else {
                         $(".po-upload").addClass("hidden");
                         //$(".po-number-search").hide();
-                        $('#po_upload').prop('required',false)
+                        $('#po_upload').prop('required',false);
+                        globalOrderType = 0;
                     }
 
                 });
@@ -212,6 +214,11 @@ function tescoOrders() {
                         localStorage.setItem("zone", data.node.original.zone);
                         localStorage.setItem("template type", data.node.original.type);
                         localStorage.setItem("template_group", data.node.text.trim());
+                        if(data.node.original.zone === 'UK' && globalOrderType === 1) {
+                            
+                        } else if(data.node.original.zone === 'CE' && globalOrderType === 1) {
+                           
+                        }
                     }
                 });
 
