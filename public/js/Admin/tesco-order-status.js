@@ -73,7 +73,7 @@ function tescoStatusTable(data,path)
     var columnsIn = data[0];
     for (var key in columnsIn)
     {
-        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id")
+        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id")
         {
         	th += "<th style='text-align: center;'>" + key + "</th>";
         }
@@ -169,7 +169,7 @@ function tescoStatusTable(data,path)
                    var pi_required = value['pi_required'];
                    if (pi_required==1)
                    {
-                        tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
                    }
                    else
                    {
@@ -178,7 +178,7 @@ function tescoStatusTable(data,path)
                    
                 }
                 
-                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id")
+                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id")
                 {
                 	if (value[key]== "" || value[key]==null)
                 	{
@@ -297,7 +297,7 @@ $(".update-po-file").click(function () {
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
  */
-function genarateTescoPI(obj,id,tableName,pi_status,style_no)
+function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_po)
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -311,6 +311,10 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no)
             _token: csrf_token,
             table_name: tableName,
             buyer_id :buyer_id,
+            pi_status:pi_status,
+            style_no:style_no,
+            template_id:template_id,
+            buyer_po:buyer_po,
             id:id
         },
         beforeSend: function (){

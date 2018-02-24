@@ -18,5 +18,5 @@ class ProfomaInvoice extends Model
       *
       * @var array
       */
-      protected $fillable = ['company_id','customer_id','shipping_address','billing_address','total_quantity','sub_total','tax','bill_amount','place_of_supply','buyer_id'];
+      protected $fillable = ['company_id','customer_id','shipping_address','billing_address','total_quantity','sub_total','tax','bill_amount','place_of_supply','buyer_id','uvc_style_no','template_id','buyer_po_no'];
 }
