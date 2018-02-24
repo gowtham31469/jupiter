@@ -14,4 +14,4 @@ composer.lock
 vendor
 /config/tabula.php
 readme\.md
-/public/storage/app/TESCO/purchaseOrder
+/public/storage/app/TESCO/purchaseOrder/
