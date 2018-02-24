@@ -750,8 +750,15 @@ function table(data,path){
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
-                   
-                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+
+					if($('.logo').text() == "Orders")
+					{
+						 tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+					}
+					else
+					{
+						 tr += '<td align="center"><a href="#" onclick=artwork_modal("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+					}
                 } else if (key == "Status") {
                     var str=value[key] ;
                     $status=str.replace(/ /g, "");
@@ -6925,4 +6932,9 @@ function clonewashcarelabels(index)
             localStorage.setItem('wash_composition_final'+washcare, wash_finals);
                 
             });
+}
+function artwork_modal(uvc,po)
+{
+	alert(uvc)
+	alert(po)
 }
