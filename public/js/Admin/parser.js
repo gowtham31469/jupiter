@@ -4,7 +4,7 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-   try {
+   // try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
@@ -17,10 +17,10 @@ function parseXML(data, callback) {
                 break;
         }
         callback(parsedObj);
-    } catch(e) {
-        // error statements
-        console.log("Error:"+e);
-    }
+    // } catch(e) {
+    //     // error statements
+    //     console.log("Error:"+e);
+    // }
 }
 
 /**
@@ -38,18 +38,18 @@ function parseSingleType(data) {
         //*********************************************************************************************************
         //*********************************************************************************************************
         //*********************************************************************************************************
+        if (data.details.hasOwnProperty("supplier")) {
+            var supplier = JSON.parse(data.details.supplier);
+            supplier = supplier[0].data.slice(-3);
+            //Supplier Code
+            supplier_code = supplier[0][0].text;
+            supplier_code = supplier_code.split(':');
+            singleObj.supplierCode = supplier_code[1].trim();
+
+             //Supplier Name
+            singleObj.supplierName = supplier[2][0].text.trim();
+        }
         
-        var supplier = JSON.parse(data.details.supplier);
-        supplier = supplier[0].data.slice(-3);
-        //Supplier Code
-        supplier_code = supplier[0][0].text;
-        supplier_code = supplier_code.split(':');
-        singleObj.supplierCode = supplier_code[1].trim();
-
-         //Supplier Name
-        singleObj.supplierName = supplier[2][0].text.trim();
-
-
         //*********************************************************************************************************
         //*********************************************************************************************************
         //********************************************* ORDER INFORMATION SECTION *********************************
@@ -126,16 +126,18 @@ function parseRatioType(data) {
     var ratioObj = {};
     //********************************************* SUPPLIER INFO SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
+    if (data.details.hasOwnProperty("supplier")) {
+        var supplier = JSON.parse(data.details.supplier);
+        supplier = supplier[0].data.slice(-3);
+        console.log(supplier);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        ratioObj.supplierCode = supplier_code[1].trim();
 
-    var supplier = JSON.parse(data.details.supplier);
-    supplier = supplier[0].data.slice(-3);
-    //Supplier Code
-    supplier_code = supplier[0][0].text;
-    supplier_code = supplier_code.split(':');
-    ratioObj.supplierCode = supplier_code[1].trim();
-
-     //Supplier Name
-    ratioObj.supplierName = supplier[2][0].text.trim();
+         //Supplier Name
+        ratioObj.supplierName = supplier[2][0].text.trim();
+    }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
