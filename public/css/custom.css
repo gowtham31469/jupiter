@@ -1170,7 +1170,7 @@ p.dropdown-toggle i {
 }
 
 .has-error .form-control:after {
-    content: "text";
+    content: "";
     position: absolute;
     right: 0;
 
