@@ -393,6 +393,10 @@ class OrderManagementCntrl extends Controller
             $cases_per_carton = explode(',',$request['cases_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
+            $delivery_date_req= $customer_details->delivery_date_required;
+            $pi_required      = $customer_details->pi_required;
+
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -404,7 +408,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                    /** [ Invoking createTCL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -425,7 +429,7 @@ class OrderManagementCntrl extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                    /** [ Invoking createTCL2Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 2' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -445,7 +449,7 @@ class OrderManagementCntrl extends Controller
                 else
                 {
                   /** [ Invoking createTSL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TSL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -467,7 +471,7 @@ class OrderManagementCntrl extends Controller
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
                  /** [ Invoking createTHL1Order function using class instance ] */
-                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required);
                  $tesco_order_id  = $tesco_order->id;
                  $templates_inserted = array('THL 1' => $tesco_order_id);
                  $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -486,7 +490,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
 
         } catch (\Exception $e)
         {
@@ -511,6 +515,10 @@ class OrderManagementCntrl extends Controller
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
+            $delivery_date_req= $customer_details->delivery_date_required;
+            $pi_required      = $customer_details->pi_required;
+
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -523,7 +531,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                    /** [ Invoking createTCL4Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 4' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -544,7 +552,7 @@ class OrderManagementCntrl extends Controller
                 else
                 {
                    /** [ Invoking createTSL3Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TSL 3' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -567,7 +575,7 @@ class OrderManagementCntrl extends Controller
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
                  /** [ Invoking createTHL3Order function using class instance ] */
-                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required);
                  $tesco_order_id  = $tesco_order->id;
                  $templates_inserted = array('THL 3' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -587,7 +595,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
 
         } catch (\Exception $e)
         {
@@ -611,6 +619,10 @@ class OrderManagementCntrl extends Controller
             $units_per_carton = explode(',',$request['units_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
+            $delivery_date_req= $customer_details->delivery_date_required;
+            $pi_required      = $customer_details->pi_required;
+
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -623,7 +635,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                    /** [ Invoking createTCL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -643,7 +655,7 @@ class OrderManagementCntrl extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                    /** [ Invoking createTCL2Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 2' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -663,7 +675,7 @@ class OrderManagementCntrl extends Controller
                 else
                 {
                    /** [ Invoking createTSL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TSL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -685,7 +697,7 @@ class OrderManagementCntrl extends Controller
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
                  /** [ Invoking createTHL1Order function using class instance ] */
-                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id);
+                 $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required);
                  $tesco_order_id  = $tesco_order->id;
                  $templates_inserted = array('THL 1' => $tesco_order_id);
                  $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -704,7 +716,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
 
         } catch (\Exception $e)
         {
@@ -728,6 +740,10 @@ class OrderManagementCntrl extends Controller
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
+            $last_insertions  = [];
+            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
+            $delivery_date_req= $customer_details->delivery_date_required;
+            $pi_required      = $customer_details->pi_required;
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -740,7 +756,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                    /** [ Invoking createTCL4Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 4' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);  
@@ -761,7 +777,7 @@ class OrderManagementCntrl extends Controller
                 else
                 {
                    /** [ Invoking createTSL3Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id);
+                   $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TSL 3' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -784,7 +800,7 @@ class OrderManagementCntrl extends Controller
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
                  /** [ Invoking createTHL3Order function using class instance ] */
-                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id);
+                 $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required);
                  $tesco_order_id  = $tesco_order->id;
                  $templates_inserted = array('THL 3' => $tesco_order_id);
                  $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -804,7 +820,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
 
         } catch (\Exception $e)
         {

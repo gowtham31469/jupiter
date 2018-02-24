@@ -750,6 +750,7 @@ function table(data,path){
 
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
+
 					if($('.logo').text() == "Orders")
 					{
 						 tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
