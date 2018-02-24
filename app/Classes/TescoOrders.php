@@ -32,12 +32,12 @@ class TescoOrders
 	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1Order($request,$template_id)
+	public function createTCL1Order($request,$template_id,$pi_required)
 	{
 		try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
+            
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -84,12 +84,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2Order($request,$template_id)
+  public function createTCL2Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -135,12 +134,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1Order($request,$template_id)
+  public function createTSL1Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -186,12 +184,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1Order($request,$template_id)
+  public function createTHL1Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -237,12 +234,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4Order($request,$template_id)
+  public function createTCL4Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -288,12 +284,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3Order($request,$template_id)
+  public function createTSL3Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }
@@ -339,12 +334,11 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3Order($request,$template_id)
+  public function createTHL3Order($request,$template_id,$pi_required)
   {
     try {
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required')->first();
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($customer_details->pi_required == 1)
+            if($pi_required == 1)
             {
               $pi_status = "PI Approval Pending";
             }

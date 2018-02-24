@@ -424,105 +424,33 @@ border: 0;
             </div>
         </div>
     </div>
-
-
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order Upload</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="tabbable"> {{-- Only required for left/right tabs --}}
-                <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab1" data-toggle="tab">Single PO Upload</a></li>
-                <li><a href="#tab2" data-toggle="tab">Combined PO Upload</a></li>
-                </ul>
-                <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-check form-group has-feedback">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" name="template" id="template">
-                                  TCL 1
-                                </label>
-                                <div class="help-block with-errors"></div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="form-group has-feedback"> 
-                                    <label for="delivery_date">Delivery Date</label>
-                                    <div class="input-group delivery_date date" data-provide="datepicker" id="datePicker1">
-                                     <input value="" id="delivery_date" name="delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date">
-                                      <div class="input-group-addon" >
-                                       <span class="glyphicon glyphicon-th" > </span > 
-                                   </div > 
-                                   </div >
-                                   <div class="help-block with-errors"></div>
-                                 </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <label for="po_file">Purchase Order File</label>
-                                  <span class="control-fileupload">
-                                  <label for="file">Choose a file :</label>
-                                  <input type="file" id="file" class="po-fileupload">
-                                </span>
-                              </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-check form-group has-feedback">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" name="template" id="template">
-                                  TCL 2
-                                </label>
-                                <div class="help-block with-errors"></div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="form-group has-feedback"> 
-                                    <label for="delivery_date">Delivery Date</label>
-                                    <div class="input-group delivery_date date" data-provide="datepicker" id="datePicker1">
-                                     <input value="" id="delivery_date" name="delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date">
-                                      <div class="input-group-addon" >
-                                       <span class="glyphicon glyphicon-th" > </span > 
-                                   </div > 
-                                   </div >
-                                   <div class="help-block with-errors"></div>
-                                 </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <label for="po_file">Purchase Order File</label>
-                                  <span class="control-fileupload">
-                                  <label for="file">Choose a file :</label>
-                                  <input type="file" id="file" class="po-fileupload">
-                                </span>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane" id="tab2">
-                    <p>Data 2.</p>
-                </div>
-                </div>
+{{-- Artwork po-upload and delivery date upload modal --}}
+<div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order Upload</h4>
             </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary btn-sm">Submit</button>
+            <div class="modal-body">
+                <div class="tabbable">{{-- Only required for left/right tabs --}}
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#single" data-toggle="tab">Single PO Upload</a>
+                        </li>
+                        <li>
+                            <a href="#combined" data-toggle="tab">Combined PO Upload</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="single"></div>
+                        <div class="tab-pane" id="combined"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 	<div id="snackbar"><span class="snackbar_span"></span></div>
-    <style type="text/css">
-    
-    </style>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";
@@ -624,7 +552,6 @@ border: 0;
 
 
 		$(document).ready(function() {
-$('#exampleModalCenter').modal('show')
 			/** Clear local storage data **/
 			localStorage.removeItem("hang_tag");
 			localStorage.removeItem("special_tag");
