@@ -751,7 +751,7 @@ function table(data,path){
                     tr += '<td align="center">' + Disney + '</td>';
                 } else if (key == "UVC") {
                    
-                    tr += '<td align="center"><a href="javascript:void(0)" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+                    tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
                 } else if (key == "Status") {
                     var str=value[key] ;
                     $status=str.replace(/ /g, "");
