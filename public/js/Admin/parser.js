@@ -16,7 +16,6 @@ function parseXML(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
-         $(".loader").hide();
         callback(parsedObj);
     } catch(e) {
         // error statements
@@ -40,8 +39,15 @@ function parseSingleType(data) {
         //*********************************************************************************************************
         //*********************************************************************************************************
         
-         var supplier = JSON.parse(data.details.supplier_info);
+        var supplier = JSON.parse(data.details.supplier);
+        supplier = supplier[0].data.slice(-3);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        singleObj.supplierCode = supplier_code[1].trim();
 
+         //Supplier Name
+        singleObj.supplierName = supplier[2][0].text.trim();
 
 
         //*********************************************************************************************************
@@ -118,6 +124,18 @@ function parseSingleType(data) {
  */
 function parseRatioType(data) {
     var ratioObj = {};
+    //********************************************* SUPPLIER INFO SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+
+    var supplier = JSON.parse(data.details.supplier);
+    supplier = supplier[0].data.slice(-3);
+    //Supplier Code
+    supplier_code = supplier[0][0].text;
+    supplier_code = supplier_code.split(':');
+    ratioObj.supplierCode = supplier_code[1].trim();
+
+     //Supplier Name
+    ratioObj.supplierName = supplier[2][0].text.trim();
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
@@ -218,6 +236,7 @@ function renderParsedValues(parsedObj) {
      } else {
         $('#tesco_uk_style').val(parsedObj.styleNumber);
      }
+    $('#tesco_eqos').val(parsedObj.supplierCode);
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 
