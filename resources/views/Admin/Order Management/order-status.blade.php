@@ -260,60 +260,38 @@
                 </div>
             </div>
         </div>
-     <div class="left-panel col-md-12" style="display: none;">
+      <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"></div>
         <div class="div-max">
-            <div class="loader">
-                <div class=" fa-3x">
-                    <i class="fa fa-spinner fa-pulse"></i>
-                </div>
-            </div>
-            <br>
-            <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">
-                <div class="col-md-3">
-                    <div class="form-group has-feedback">
-                        <label for="tesco_po_number">PO Number</label>
-                        <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required=""  placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()">
-                        <div class="help-block with-errors"></div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback"> 
+            <div class="col-md-4">
+            <div class="scroll">
+               <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">
+                       <div class="form-group has-feedback"> 
                         <label for="tesco_uk_style">UK Style Ref.</label>
                         <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style"  placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback"> 
+                             <div class="form-group has-feedback"> 
                         <label for="tesco_ce_style">CE Style Ref.</label>
                         <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback"> 
+                     <div class="form-group has-feedback"> 
                         <label for="tesco_season_code">Season Code</label> 
                         <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required=""  placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()">
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
                     <div class="form-group has-feedback"> 
                         <label for="tesco_description">Short Description</label> 
                         <input type="text" class="form-control" name="tesco_description" id="tesco_description" required=""  placeholder="Enter Description"  maxlength="24" onkeyup="dynamicSVGTemplates()">
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback"> 
+                          <div class="form-group has-feedback"> 
                         <label for="tesco_eqos">EQOS Site Code</label> 
                         <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required=""  placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback"> 
+                                  <div class="form-group has-feedback"> 
                         <label for="tesco_manufacture_date">Manufactured Date</label>
                         <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"> 
                             <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()"> 
@@ -323,9 +301,7 @@
                         </div >
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback">
+                              <div class="form-group has-feedback">
                         <label for="tesco_department">Department</label>
                         <select class="selectpicker" data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">
                             <option selected value="">Select Department</option>
@@ -335,10 +311,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="col-md-3"> 
-                    <div class="form-group has-feedback">
+                        <div class="form-group has-feedback">
                         <label for="tesco_brand">Brand</label> 
                         <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required="">
                             <option value="">Select Brand</option>
@@ -348,9 +321,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback">
+                           <div class="form-group has-feedback">
                         <label for="tesco_supplier">Supplier</label> 
                         <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
                             <option value="">Select Supplier</option> @foreach($tesco_suppliers as $suppliers)
@@ -359,9 +330,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback">
+                         <div class="form-group has-feedback">
                         <label for="tesco_rfid">RFID Compliant</label> 
                         <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">
                             <option value="">Select RFID Compliant</option>
@@ -369,9 +338,7 @@
                             <option value="no">No</option> 
                         </select>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group has-feedback">
+                       <div class="form-group has-feedback">
                         <label for="tesco_tag_at_source">Tag At Source</label> 
                         <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()">
                             <option value="">Select Tag At Source</option>
@@ -379,14 +346,21 @@
                             <option value="no">No</option> 
                         </select>
                     </div>
-                </div>
-                <div class="edit-qty-table-div">
-                    
-                </div>
-            <div class="buttons pull-right" style="margin-top:10px;">
-                <button type="button" class="btn btn-default btn-sm remove" data-dismiss="modal">Close</button>
+               </form>
             </div>
-        </div>
+            </div>
+            <div class="col-md-8">
+            <div class="scroll">
+                <div class="edit-qty-table-div"></div>
+                </div>
+            </div>
+            
+            <div class="loader">
+                <div class=" fa-3x">
+                    <i class="fa fa-spinner fa-pulse"></i>
+                </div>
+            </div>
+         </div> 
     </div>
     {{-- Show snackbar html code --}}
      <div id="snackbar"><span class="snackbar_span"></span></div>
