@@ -4,7 +4,7 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-   // try {
+   try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
@@ -17,10 +17,10 @@ function parseXML(data, callback) {
                 break;
         }
         callback(parsedObj);
-    // } catch(e) {
-    //     // error statements
-    //     console.log("Error:"+e);
-    // }
+    } catch(e) {
+        // error statements
+        console.error("Error:"+e);
+    }
 }
 
 /**
@@ -114,7 +114,7 @@ function parseSingleType(data) {
         return singleObj;
         
     } catch(e) {
-        console.log("Error:"+e);
+        console.error("Error:"+e);
     }
 }
 
@@ -130,7 +130,6 @@ function parseRatioType(data) {
     if (data.details.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.details.supplier);
         supplier = supplier[0].data.slice(-3);
-        console.log(supplier);
         //Supplier Code
         supplier_code = supplier[0][0].text;
         supplier_code = supplier_code.split(':');
@@ -231,7 +230,6 @@ function removeEmptyValues(element) {
  * @return {[type]}           [description]
  */
 function renderParsedValues(parsedObj) {
-    console.log(parsedObj);
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
     $('#tesco_po_number').val(parsedObj.purchaseOrder);
@@ -267,8 +265,6 @@ function renderParsedValues(parsedObj) {
             }
         }); 
     }
-
-    dynamicSVGTemplates();
 }
 
 var _validFileExtensions = [".pdf"];    

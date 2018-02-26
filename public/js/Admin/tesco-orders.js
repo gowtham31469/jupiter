@@ -482,6 +482,7 @@ function createOrders(parsedObj = false) {
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
                             renderParsedValues(parsedObj);
+                            setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
                  error: function (data) {
@@ -720,10 +721,6 @@ function  uploadPurchaseOrder(formData) {
                         showSnackbar();
                     }
                  },
-                 success: function (data) {
-                    //Call the parse method which resides on parser.js
-                     parseXML(data, createOrders);
-                 },
                  error: function (data) {
                     console.log(data);
                  },
@@ -867,8 +864,8 @@ function dynamicSVGTemplates()
 		});   
 		} catch (e) {
 		/** [error statements] */
-	   console.log("Error:"+e)
-	 }                 
+	       console.error(e);
+        }   
 }
 /**
  * [ dynamicSVGTemplatescard function for creating dynamic card svg file ]
@@ -1105,7 +1102,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1367,7 +1364,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1516,7 +1513,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1621,7 +1618,7 @@ function setTescoOrder()
         
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 
@@ -1772,7 +1769,7 @@ function storeCERatioTCL1TCL2TSL1()
                        $('.submit-btn').addClass('disabled');
                  },
                  error: function (data) {
-                    console.log(data);
+                    console.error(data);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -1788,7 +1785,7 @@ function storeCERatioTCL1TCL2TSL1()
              })
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 /**

@@ -15,7 +15,6 @@ function price_template_list() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
             if(data.customer_list.length === 0){
@@ -35,7 +34,6 @@ function price_template_list() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     });
 
@@ -48,10 +46,9 @@ function price_template_list() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"></div><div class="viewDiv"></div></div> </div>')
+            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="viewDiv"></div></div> </div>')
 
             $('#tree1').jstree({
                 'core': {
@@ -99,8 +96,9 @@ function price_template_list() {
                             _token: csrf_token
                         },
                         beforeSend: function () {
+                            $(".loader").css("margin-left", "22%");
                             $(".loader").show();
-                            $(".loader").css('margin-top', '12%');
+                            $('.viewDiv').html('');
                         },
                         success: function (data) {
 
@@ -124,7 +122,6 @@ function price_template_list() {
                         complete: function () {
                             setTimeout(function(){ showPricing(); }, 400);
                             $(".loader").hide();
-                            $(".loader").css('margin-top', '0%');
                         }
                     })
                 }
@@ -135,7 +132,6 @@ function price_template_list() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
 }
@@ -186,7 +182,6 @@ function savePricing() {
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
             //incluude toast
@@ -196,7 +191,6 @@ function savePricing() {
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
             showSnackbar();
         }
     });
