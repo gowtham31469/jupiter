@@ -203,8 +203,6 @@ class OrderManagementCntrl extends Controller
           $arr = explode(' ',trim($po_type));
           $po_type = strtolower($arr[0]);
 
-          $supplier = false;
-
           //Validate the Template and Purchase Order Series Number.
           switch ($request->template_name) {
             case 'TCL 1 , TCL 2 & TSL 1':
@@ -221,15 +219,11 @@ class OrderManagementCntrl extends Controller
               if($po_type !== 'ratio' || ($po_series !== '206' && $po_series !== '461')) {
                 return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
               }
-              //Get the Supplier Information from page 1
-              $supplier = $this->getSupplierInfo($path);
               break;
             case 'THL 3':
               if($po_type !== 'single' || ($po_series !== '206' && $po_series !== '461')) {
                 return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
               }
-              //Get the Supplier Information from page 1
-             $supplier = $this->getSupplierInfo($path);
               break;
             default:
               return response()->json(['error' => 'Unknown Template Name for UK'], 400);
@@ -252,12 +246,7 @@ class OrderManagementCntrl extends Controller
               return response()->json(['error' => 'Unknown PO Type'], 400);
               break;
           }
-
-          if($supplier) {
-            $data['supplier'] = $supplier;
-          }
-
-          
+          $data['supplier'] = $this->getSupplierInfo($path);
           return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
         } else {
           return "File not found!!";

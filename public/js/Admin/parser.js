@@ -44,10 +44,11 @@ function parseSingleType(data) {
             //Supplier Code
             supplier_code = supplier[0][0].text;
             supplier_code = supplier_code.split(':');
-            singleObj.supplierCode = supplier_code[1].trim();
-
-             //Supplier Name
-            singleObj.supplierName = supplier[2][0].text.trim();
+            if(supplier_code[0] === 'Supplier No. ') {
+                singleObj.supplierCode = supplier_code[1].trim();
+                //Supplier Name
+                singleObj.supplierName = supplier[2][0].text.trim();
+            }
         }
         
         //*********************************************************************************************************
@@ -133,10 +134,11 @@ function parseRatioType(data) {
         //Supplier Code
         supplier_code = supplier[0][0].text;
         supplier_code = supplier_code.split(':');
-        ratioObj.supplierCode = supplier_code[1].trim();
-
-         //Supplier Name
-        ratioObj.supplierName = supplier[2][0].text.trim();
+        if(supplier_code[0] === 'Supplier No. ') {
+            ratioObj.supplierCode = supplier_code[1].trim();
+            //Supplier Name
+            ratioObj.supplierName = supplier[2][0].text.trim();
+        }      
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
