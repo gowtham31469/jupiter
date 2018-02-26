@@ -941,8 +941,8 @@ class OrderManagementCntrl extends Controller
 			if($type == "tesco_tcl1_orders")
 			{
 				$tasks = TescoTCL1Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -950,13 +950,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTCL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->tcl1_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_tcl2_orders")
 			{
 				$tasks = TescoTCL2Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -964,13 +966,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTCL2OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->tcl2_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_tcl4_orders")
 			{
 				$tasks = TescoTCL4Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -978,13 +982,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTCL4OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->tcl4_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_thl1_orders")
 			{
 				$tasks = TescoTHL1Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -992,13 +998,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTHL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->thl1_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_thl3_orders")
 			{
 				$tasks = TescoTHL3Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -1006,13 +1014,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTHL3OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->thl3_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_tsl1_orders")
 			{
 				$tasks = TescoTSL1Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -1020,13 +1030,15 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTSL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->tsl1_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
 			if($type == "tesco_tsl3_orders")
 			{
 				$tasks = TescoTSL3Orders::find($id);
-				$newTask = $tasks->replicate();
-				$newTask->save();
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -1034,8 +1046,148 @@ class OrderManagementCntrl extends Controller
 					$tasks = TescoTSL3OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
+					$newTask->tsl3_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}	
+		    echo true;
+    }
+	/**
+     * This Function is used to set the tesco repeat order.
+     *
+     * @return json value
+     */
+	public function setTescoRepeatorder(Request $request)
+    {
+            $type         =   $request->type;
+		    $id           =   $request->id;
+			$po           =   $request->po;
+			if($type == "tesco_tcl1_orders")
+			{
+				$tasks = TescoTCL1Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl1_order_id = $newTasks->id;
+					$newTask->save();
 				}
 			}
-			
+			if($type == "tesco_tcl2_orders")
+			{
+				$tasks = TescoTCL2Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL2OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl2_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}
+			if($type == "tesco_tcl4_orders")
+			{
+				$tasks = TescoTCL4Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL4OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl4_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}
+			if($type == "tesco_thl1_orders")
+			{
+				$tasks = TescoTHL1Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTHL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->thl1_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}
+			if($type == "tesco_thl3_orders")
+			{
+				$tasks = TescoTHL3Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTHL3OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->thl3_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}
+			if($type == "tesco_tsl1_orders")
+			{
+				$tasks = TescoTSL1Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTSL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tsl1_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}
+			if($type == "tesco_tsl3_orders")
+			{
+				$tasks = TescoTSL3Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				$newTasks->po_number =$po;
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTSL3OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tsl3_order_id = $newTasks->id;
+					$newTask->save();
+				}
+			}	
+		    echo true;
     }
 }
