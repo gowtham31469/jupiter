@@ -51,11 +51,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_TCL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_TCL100".($max_id+1);
             }
             
             
@@ -112,11 +112,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_TCL200".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_TCL200".($max_id+1);
             }
             $result = TescoTCL2Orders::create([
                           'order_id'             => $order_id,
@@ -171,11 +171,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_TSL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_TSL100".($max_id+1);
             }
             $result = TescoTSL1Orders::create([
                           'order_id'             => $order_id,
@@ -230,11 +230,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_THL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_THL100".($max_id+1);
             }
             $result = TescoTHL1Orders::create([
                           'order_id'             => $order_id,
@@ -289,11 +289,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_TCL400".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_TCL400".($max_id+1);
             }
             $result = TescoTCL4Orders::create([
                           'order_id'             => $order_id,
@@ -348,11 +348,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_TSL300".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_TSL300".($max_id+1);
             }
             $result = TescoTSL3Orders::create([
                           'order_id'             => $order_id,
@@ -407,11 +407,11 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_00".($max_id+1);
+              $order_id = "JGAM_THL300".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_00".($max_id+1);
+              $order_id = "SPECTRA_THL300".($max_id+1);
             }
             $result = TescoTHL3Orders::create([
                           'order_id'             => $order_id,
