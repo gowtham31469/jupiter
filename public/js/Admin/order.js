@@ -519,7 +519,6 @@ function orderStatus() {
 							},
 							complete: function () {
 								$(".loader").hide();
-								$(".loader").css('margin-top', '0%');
 							}
 						})
 					} else {
@@ -541,7 +540,6 @@ function orderStatus() {
 									},
 									complete: function () {
 										$(".loader").hide();
-										$(".loader").css('margin-top', '0%');
 									}
 								})
 							}
@@ -1086,7 +1084,6 @@ function approvePI(id,table_name)
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         statusCode:
         {
@@ -1111,7 +1108,6 @@ function approvePI(id,table_name)
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
 
@@ -1136,7 +1132,6 @@ function rejectPI(id,table_name)
         },
         beforeSend: function () {
             $(".loader").show();
-            $(".loader").css('margin-top', '12%');
         },
         statusCode:
         {
@@ -1161,7 +1156,6 @@ function rejectPI(id,table_name)
         },
         complete: function () {
             $(".loader").hide();
-            $(".loader").css('margin-top', '0%');
         }
     })
 }
@@ -1748,7 +1742,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							},
 							complete: function () {
 								$(".loader").hide();
-								$(".loader").css('margin-top', '0%');
 							}
 						})
 					} else {
@@ -1809,7 +1802,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 			},
 			complete: function () {
 				$(".loader").hide();
-				$(".loader").css('margin-top', '0%');
 			}
 		})
 	});
@@ -2073,7 +2065,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							},
 							complete: function () {
 								$(".loader").hide();
-								$(".loader").css('margin-top', '0%');
 							}
 						})
 					} else {
@@ -2134,7 +2125,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 			},
 			complete: function () {
 				$(".loader").hide();
-				$(".loader").css('margin-top', '0%');
 			}
 		})
 	});
@@ -4842,7 +4832,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 							},
 							complete: function () {
 								$(".loader").hide();
-								$(".loader").css('margin-top', '0%');
 							}
 						})
 					} else {
@@ -4903,7 +4892,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 			},
 			complete: function () {
 				$(".loader").hide();
-				$(".loader").css('margin-top', '0%');
 			}
 		})
 	});
