@@ -569,7 +569,6 @@ function updateArtwork(id,table_name)
                     $('#tesco_description').val(data.order_details.short_description);                   
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-                   $('#tesco_department').html('<option>Text</option>');
                     $('.edit-qty-table-div').html('<div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4>') 
                 }
                        
