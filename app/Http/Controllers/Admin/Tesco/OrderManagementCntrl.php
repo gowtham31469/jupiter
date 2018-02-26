@@ -190,7 +190,7 @@ class OrderManagementCntrl extends Controller
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
           $name = str_replace(" ", "_", $file->getClientOriginalName());
-          $path = $file->move('storage/app/TESCO/purchaseOrder', $name);
+          $path = $file->move('storage/app/TESCO/purchaseOrder', time().'_'.$name);
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
           $po_series = explode('-', $po_number);
@@ -246,7 +246,7 @@ class OrderManagementCntrl extends Controller
               return response()->json(['error' => 'Unknown PO Type'], 400);
               break;
           }
-          $data['supplier'] = $this->getSupplierInfo($path);
+          $data['supplier'] = $this->getSupplierInfo($path);  
           return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
         } else {
           return "File not found!!";
