@@ -4,7 +4,7 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-   try {
+   // try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
@@ -16,12 +16,11 @@ function parseXML(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
-         $(".loader").hide();
         callback(parsedObj);
-    } catch(e) {
-        // error statements
-        console.log("Error:"+e);
-    }
+    // } catch(e) {
+    //     // error statements
+    //     console.log("Error:"+e);
+    // }
 }
 
 /**
@@ -32,6 +31,25 @@ function parseXML(data, callback) {
 function parseSingleType(data) {
     try{
         var singleObj = {};
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //********************************************* SUPPLIER SECTION    ***************************************
+        //********************************************* PARSE THE JSON TABULA *************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        if (data.details.hasOwnProperty("supplier")) {
+            var supplier = JSON.parse(data.details.supplier);
+            supplier = supplier[0].data.slice(-3);
+            //Supplier Code
+            supplier_code = supplier[0][0].text;
+            supplier_code = supplier_code.split(':');
+            singleObj.supplierCode = supplier_code[1].trim();
+
+             //Supplier Name
+            singleObj.supplierName = supplier[2][0].text.trim();
+        }
+        
         //*********************************************************************************************************
         //*********************************************************************************************************
         //********************************************* ORDER INFORMATION SECTION *********************************
@@ -45,7 +63,8 @@ function parseSingleType(data) {
             var row_length = ele.length;
             switch(ind) {
                 case 0:
-                    singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                    // singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                    singleObj.purchaseOrder = data.po_number;
                     break;
                 case 1:
                     singleObj.type = ele[0].text;
@@ -105,6 +124,20 @@ function parseSingleType(data) {
  */
 function parseRatioType(data) {
     var ratioObj = {};
+    //********************************************* SUPPLIER INFO SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    if (data.details.hasOwnProperty("supplier")) {
+        var supplier = JSON.parse(data.details.supplier);
+        supplier = supplier[0].data.slice(-3);
+        console.log(supplier);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        ratioObj.supplierCode = supplier_code[1].trim();
+
+         //Supplier Name
+        ratioObj.supplierName = supplier[2][0].text.trim();
+    }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
@@ -205,6 +238,7 @@ function renderParsedValues(parsedObj) {
      } else {
         $('#tesco_uk_style').val(parsedObj.styleNumber);
      }
+    $('#tesco_eqos').val(parsedObj.supplierCode);
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 

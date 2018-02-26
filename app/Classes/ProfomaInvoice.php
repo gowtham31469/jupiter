@@ -155,7 +155,7 @@ class ProfomaInvoice
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone')
                                   ->first();
         $data['bank_details']   = $customer_details;
         $data['bill_to']        = DB::table('customer_bill_address')
@@ -180,4 +180,49 @@ class ProfomaInvoice
         return $data;
        
     }  
+
+    public function getApprovedTescoPI($request)
+    {
+        $pi_status      = $request->pi_status;
+        $buyer_id       = $request->buyer_id;
+        $pi_status      = $request->pi_status;
+        $style_no       = $request->style_no;
+        $template_id    = $request->template_id;
+        $buyer_po       = $request->buyer_po;
+        $template_id    = $request->template_id;
+
+        $pi_details = DB::table('profoma_invoices')
+        ->where('buyer_id',$buyer_id)
+        ->where('uvc_style_no',$style_no)
+        ->where('template_id',$template_id)
+        ->where('buyer_po_no',$buyer_po)
+        ->select('profoma_invoices.*')
+        ->first();
+        $data['company_details'] =  DB::table('tesco_item_master')
+                                       ->join('company','company.id','=','tesco_item_master.company_id')
+                                        ->where('tesco_item_master.id',$pi_details->company_id)
+                                        ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->first();
+        $customer_details       = DB::table('customers')
+                                  ->where('customers.id',$pi_details->customer_id)
+                                  ->select('customers.*')
+                                  ->first();
+        $data['bank_details']   = $customer_details;
+        $data['bill_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_billing_address',1)
+                                  ->select('address','country')
+                                  ->first();                 
+        $data['ship_to']        = DB::table('customer_bill_address')
+                                  ->where('customer_bill_address.customer_id',$customer_details->id)
+                                  ->where('customer_bill_address.is_shipping_address',1)
+                                  ->select('address','country')
+                                  ->first();
+        $data['item_details']    = DB::table('profoma_invoice_item_details')
+                                    ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'))
+                                    ->get();
+        return $data;
+
+    }
 }
