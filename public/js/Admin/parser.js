@@ -4,7 +4,7 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-   // try {
+   try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
@@ -17,10 +17,10 @@ function parseXML(data, callback) {
                 break;
         }
         callback(parsedObj);
-    // } catch(e) {
-    //     // error statements
-    //     console.log("Error:"+e);
-    // }
+    } catch(e) {
+        // error statements
+        console.error("Error:"+e);
+    }
 }
 
 /**
@@ -44,10 +44,11 @@ function parseSingleType(data) {
             //Supplier Code
             supplier_code = supplier[0][0].text;
             supplier_code = supplier_code.split(':');
-            singleObj.supplierCode = supplier_code[1].trim();
-
-             //Supplier Name
-            singleObj.supplierName = supplier[2][0].text.trim();
+            if(supplier_code[0] === 'Supplier No. ') {
+                singleObj.supplierCode = supplier_code[1].trim();
+                //Supplier Name
+                singleObj.supplierName = supplier[2][0].text.trim();
+            }
         }
         
         //*********************************************************************************************************
@@ -113,7 +114,7 @@ function parseSingleType(data) {
         return singleObj;
         
     } catch(e) {
-        console.log("Error:"+e);
+        console.error("Error:"+e);
     }
 }
 
@@ -129,14 +130,14 @@ function parseRatioType(data) {
     if (data.details.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.details.supplier);
         supplier = supplier[0].data.slice(-3);
-        console.log(supplier);
         //Supplier Code
         supplier_code = supplier[0][0].text;
         supplier_code = supplier_code.split(':');
-        ratioObj.supplierCode = supplier_code[1].trim();
-
-         //Supplier Name
-        ratioObj.supplierName = supplier[2][0].text.trim();
+        if(supplier_code[0] === 'Supplier No. ') {
+            ratioObj.supplierCode = supplier_code[1].trim();
+            //Supplier Name
+            ratioObj.supplierName = supplier[2][0].text.trim();
+        }      
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -229,7 +230,6 @@ function removeEmptyValues(element) {
  * @return {[type]}           [description]
  */
 function renderParsedValues(parsedObj) {
-    console.log(parsedObj);
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
     $('#tesco_po_number').val(parsedObj.purchaseOrder);
@@ -265,8 +265,32 @@ function renderParsedValues(parsedObj) {
             }
         }); 
     }
+}
 
-    dynamicSVGTemplates();
+var _validFileExtensions = [".pdf"];    
+function ValidateSingleInput(oInput) {
+    if (oInput.type == "file") {
+        var sFileName = oInput.value;
+         if (sFileName.length > 0) {
+            var blnValid = false;
+            for (var j = 0; j < _validFileExtensions.length; j++) {
+                var sCurExtension = _validFileExtensions[j];
+                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                    blnValid = true;
+                    break;
+                }
+            }
+             
+            if (!blnValid) {
+                $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file format. Please upload a PDF file.");
+                $('#snackbar').css('background-color','#F44336');
+                showSnackbar();
+                $("#"+oInput.id).val(null);
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 /**

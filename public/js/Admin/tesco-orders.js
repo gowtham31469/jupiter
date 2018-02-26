@@ -27,7 +27,7 @@ function tescoOrders() {
             $(".loader").show();
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card"> <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"> <div class="form-group has-feedback"> <label for="order_type" class="form_label">Select Order Type</label> <select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""> <option value="">Select Order Type</option> <option value="1">PO Upload</option> <option value="2">Manual Entry</option> </select> <div class="help-block with-errors"></div></div><div class="form-group"> <label for="template" class="form_label">Select Template</label> <input class="search-input form-control" placeholder="Search for Awesomeness"> <div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "> <label>Upload UK PO</label> <input type="file" name="purchase_order" id="po_upload" class="form-control" required/> <div class="help-block with-errors"></div></div></div><div class="ce-po-upload hidden"> <div class="form-group files" id="multiple_file1"> <label>Upload CE-ORMS Sheet</label> <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" required/> <div class="help-block with-errors"></div></div><div class="form-group files" id="multiple_file2"> <label>Upload CE-RETEK Sheet</label> <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" required/> <div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button> </form> </div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "> <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
+                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card"> <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"> <div class="form-group has-feedback"> <label for="order_type" class="form_label">Select Order Type</label> <select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""> <option value="">Select Order Type</option> <option value="1">PO Upload</option> <option value="2">Manual Entry</option> </select> <div class="help-block with-errors"></div></div><div class="form-group"> <label for="template" class="form_label">Select Template</label> <input class="search-input form-control" placeholder="Search for Awesomeness"> <div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "> <label>Upload UK PO</label> <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div><div class="ce-po-upload hidden"> <div class="form-group files" id="multiple_file1"> <label>Upload CE-ORMS Sheet</label> <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div><div class="form-group files" id="multiple_file2"> <label>Upload CE-RETEK Sheet</label> <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button> </form> </div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "> <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
 
                 /** [ Search  functionality foe jstree nodes ] */
                 $(".search-input").keyup(function () {
@@ -461,6 +461,7 @@ function createOrders(parsedObj = false) {
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
                             renderParsedValues(parsedObj);
+                            setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
                  error: function (data) {
@@ -699,10 +700,6 @@ function  uploadPurchaseOrder(formData) {
                         showSnackbar();
                     }
                  },
-                 success: function (data) {
-                    //Call the parse method which resides on parser.js
-                     parseXML(data, createOrders);
-                 },
                  error: function (data) {
                     console.log(data);
                  },
@@ -846,8 +843,8 @@ function dynamicSVGTemplates()
 		});   
 		} catch (e) {
 		/** [error statements] */
-	   console.log("Error:"+e)
-	 }                 
+	       console.error(e);
+        }   
 }
 /**
  * [ dynamicSVGTemplatescard function for creating dynamic card svg file ]
@@ -1084,7 +1081,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1346,7 +1343,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1495,7 +1492,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1600,7 +1597,7 @@ function setTescoOrder()
         
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 
@@ -1884,7 +1881,7 @@ function storeCERatioTCL1TCL2TSL1()
                           });
                  },
                  error: function (data) {
-                    console.log(data);
+                    console.error(data);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -1900,7 +1897,7 @@ function storeCERatioTCL1TCL2TSL1()
              })
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 /**

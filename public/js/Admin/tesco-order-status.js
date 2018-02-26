@@ -97,12 +97,14 @@ function tescoStatusTable(data,path)
                 		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
 	                }
                 }
-                else if (key == "OrderDate") {
+                else if (key == "OrderDate")
+                {
                    
                     var orderDate = moment(value[key] ).format('DD-MM-YYYY');
                     tr += '<td align="center"><span style=display:none;>'+value[key]+'</span>'+orderDate+'</td>';
                    
                 }
+                
                 else if (key == "PI Status")
                 {
                     var str=value[key] ;
@@ -155,12 +157,12 @@ function tescoStatusTable(data,path)
                     if (zone=="CE")
                     {
                         style_no = value.ce_style_ref
-                        tr += '<td align="center">'+style_no+'</td>';
+                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'")>'+style_no+'</a></td>';
                     }
                     else
                     {
                         style_no = value.uk_style_ref
-                        tr += '<td align="center">'+value.uk_style_ref+'</td>';
+                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'")>'+value.uk_style_ref+'</a></td>';
                     }
                 }
                 else if (key == "Actions")
@@ -441,7 +443,7 @@ function tescoApprovePI(id,table_name)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
-        url: base_url + "/admin/orchestra/approve-tesco-pi",
+        url: base_url + "/admin/tesco/approve-tesco-pi",
         type: "Post",
         dataType: "json",
         data: {
@@ -495,7 +497,7 @@ function tescoRejectPI(id,table_name)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
-        url: base_url + "/admin/orchestra/reject-tesco-pi",
+        url: base_url + "/admin/tesco/reject-tesco-pi",
         type: "Post",
         dataType: "json",
         data: {
@@ -535,4 +537,59 @@ function tescoRejectPI(id,table_name)
             $(".loader").css('margin-top', '0%');
         }
     })
+}
+function updateArtwork(id,table_name)
+{
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/tesco/edit-artwork",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            table_name: table_name,
+            id:id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function(data)
+            {
+                 console.log(data.order_details)
+                if (data.order_details!=0)
+                {
+                    $('#tesco_po_number').val(data.order_details.po_number);
+                    $('#tesco_uk_style').val(data.order_details.uk_style_ref);
+                    $('#tesco_ce_style').val(data.order_details.ce_style_ref);
+                    $('#tesco_eqos').val(data.order_details.eqos_site_code);
+                    $('#tesco_description').val(data.order_details.short_description);                   
+                    $('#tesco_season_code').val(data.order_details.season_code);
+                    $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
+                   $('#tesco_department').html('<option>Text</option>');
+                    $('.edit-qty-table-div').html('<div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4>') 
+                }
+                       
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong!');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+
+    $('.left-panel').addClass('active');
+    $('.left-panel').show();
 }

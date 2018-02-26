@@ -172,14 +172,13 @@
             <div class="col-md-5 scroll" style="overflow-y: scroll;height: 100%;">
                 <h4>Quantity Information</h4>
                 <hr>
-               <div class="quantity"></div>
+               
                 <div class="merchandiser-area">
-                {!! Form::open(['id' => 'add_merchandiser_comment_form','data-toggle' => 'validator','role' => 'form']) !!}
+              
+					<div class="quantity"></div>
                         <div class="buttons pull-right" style="margin-top:10px;">
-			                {!! Form::submit('Submit', ['class' => 'btn btn-primary submitbutton','name' => 'approve'] ) !!}
-			                {!! Form::button('Close', ['class' => 'btn btn-danger remove'] ) !!}
+			              
 			            </div>
-               {!! Form::close() !!}
                 </div>
             </div>
        
