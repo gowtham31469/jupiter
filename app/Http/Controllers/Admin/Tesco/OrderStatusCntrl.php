@@ -89,10 +89,20 @@ class OrderStatusCntrl extends Controller
 			$po_number   = $request->po_number;
 			$template_id = $request->id;
             $table_name  = $request->tableName;
+            $po_details = DB::table($table_name)->where('id',$template_id)->select('po_file')->first();
+            
+            if ($po_details->po_file =="" || $po_details->po_file=="null")
+            {
+                $po_status = "PO Pending";
+            }
+            else
+            {
+                $po_status = "PO Approved";
+            }
 			$data 		 = DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'purchase_order_no' => $po_number,
-                                  'po_status' => "PO Approved"
+                                  'po_status' => $po_status
                                 ]);
             if (count($data)>0)
             {
@@ -239,6 +249,39 @@ class OrderStatusCntrl extends Controller
             else
             {
                 $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to get the details about a particular artwork
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function editArtwork(Request $request)
+    {
+        try
+        {
+            $row_id     =   $request->id;
+            $table_name =   $request->table_name;
+            $order_details       =   DB::table($table_name)->where('id',$row_id)
+                            ->select('*')->first();
+            $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+            $quantity_details = DB::table($table_name.'_quanty')
+                                ->where($qnty_id,$order_details->id)->get();
+
+            if (count($order_details) && count($quantity_details))
+            {
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> true,'message'=>'Error'],400);
             }
         }
         catch (\Exception $e)
