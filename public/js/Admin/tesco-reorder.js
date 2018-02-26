@@ -63,7 +63,7 @@ function reordertescoartworks()
 	var uvc=$('#uvc_number').val();
 	var buyer = localStorage.getItem("reorder_buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	if(uvc != "Select UVC Number")
+	if(uvc != "Select Style Number")
 	{
 		$('.how_it_works').html("");
 		$('.list_div').html('<ul class="list-group"></ul>');
@@ -73,32 +73,24 @@ function reordertescoartworks()
 			dataType: "json",
 			data: {
 				_token: csrf_token,
-				uvc:uvc
+				style:uvc
 			},
 			beforeSend: function () {
 
 			},
 			success: function (data) {
-				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
+				var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				
 				$(newObj).each(function(key,index){
-					if(index.Labeltype == "Label")
+					if(index.zone == "CE")
 					{
-						var span='<span class="label labels">'+index.Labeltype+'</span>';
+						var span='<span class="label labels">'+index.zone+'</span>';
 					}
 					else
 					{
-						var span='<span class="label sticker">'+index.Labeltype+'</span>';
+						var span='<span class="label sticker">'+index.zone+'</span>';
 					}
-
-					if(index.TemplateType=="Main and Size Labels" || index.TemplateType=="Wash Care Labels")
-					{
-						var name=index.TemplateName+' - '+index.TemplateType;
-					}
-					else
-					{
-					   var name=index.TemplateName;
-					}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">UVC-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+name+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantity("'+index.type+'","'+index.id+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div ul').show('slow')
 				})
 				
 			},
@@ -116,4 +108,295 @@ function reordertescoartworks()
 		$('.how_it_works').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
 		$('.list_div').html('<ul class="list-group"></ul>');
 	}
+}
+
+/**
+ * This Function is used to get the artwork and quantity information.
+ *
+ * @return View
+ */
+
+function extraQuantityTesco(type,id,name,zone)
+{
+	var buyer = localStorage.getItem("reorder_buyer");
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/extra-quantity",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			type:type,
+			id:id
+		},
+		beforeSend: function () {
+			
+		},
+		success: function (data) {
+			
+			if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
+			{
+				var qty="Cases per carton";
+			}
+			else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE") || (name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+			{
+				var qty="Case Size";
+			}
+			else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
+			{
+				var qty="Units per carton";
+			}
+			
+			var tr="";
+			$(data.qty).each(function(key,index){
+				 tr += '<tr><td class="tpnd">' + index.tpnd + '</td><td class="barcode">' + index.itf_barcode + '</td><td class="size">' + index.units_per_carton + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
+			});
+			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>TPND</th><th>ITF Barcode</th> <th>'+qty+'</th> <th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></form>')
+			
+			$('.artwork_name').text(name + " Artwork");
+			$('.sample-artwork').html('<object style="display:inline;height: calc( 100vh - 250px );border: 1px solid #333;" id="reorder_svg" class="center-block" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object>');
+			contentdocument(data,name,zone)
+			
+			$('#qty_table').validator().on('submit', function (e) {
+				if (e.isDefaultPrevented()) {
+
+				} else {
+					e.preventDefault();
+					setTescoReorder(type,id)
+				}
+			})
+
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			$('.left-panel').show();
+	 		$('.left-panel').addClass('active');
+		}
+	})
+}
+
+/**
+ * This Function is used to get the artwork and quantity information.
+ *
+ * @return View
+ */
+
+function contentdocument(data,name,zone)
+{
+	
+	if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
+	{
+		var pieces_in_ratio=data.qty[0].cases_per_carton;
+	}
+	else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE") || (name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+	{
+		var pieces_in_ratio=data.qty[0].case_size;
+	}
+	else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
+	{
+		var pieces_in_ratio=data.qty[0].units_per_carton;
+	}
+	var mySVG = document.getElementById("reorder_svg");
+	var svgDoc;
+	mySVG.addEventListener("load", function () {
+		
+		if(name == "TSL3")
+		{
+		   svgDoc1 = mySVG.contentDocument;
+		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		}
+		else if(name == "TSL1")
+		{
+		   svgDoc1 = mySVG.contentDocument;
+		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		}
+		else
+		{
+		    var rfid = data.template[0].rfid_compliant;
+			var tag = data.template[0].tag_at_source;
+			var rfid_yes = rfid == 1 ? "Yes":"No";
+			var tag_yes = tag == 1 ? "Yes":"No";
+			var brand=data.template[0].brand;
+			svgDoc1 = mySVG.contentDocument;
+			svgDoc1.getElementById("season_code").innerHTML = data.template[0].season_code;
+			svgDoc1.getElementById("department").innerHTML =data.template[0].department;
+			svgDoc1.getElementById("rfid").innerHTML =rfid_yes;
+			svgDoc1.getElementById("tag_at_source").innerHTML =tag_yes;
+			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+			svgDoc1.getElementById("po_number").innerHTML = data.template[0].po_number;
+			svgDoc1.getElementById("uk_style").innerHTML = data.template[0].uk_style_ref;
+			svgDoc1.getElementById("ce_style").innerHTML = data.template[0].ce_style_ref;
+			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
+			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
+			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
+			svgDoc1.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+			svgDoc1.getElementById("brand").innerHTML =brand.toUpperCase().replace('&', '&amp;');
+
+			if(name == "TSL3" || name == "THL3" )
+			{
+				jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+			}
+			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
+			{
+				jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+			}
+		}
+		
+		
+	}, false);
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodetesco(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ITF14",
+		width: 2.50,
+		height: 100,
+		fontSize: 30,
+		flat:true
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+	
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to invoke Ean 13 JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcodetescoean(code, id, svgDoc) {
+
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 3.45,
+		height: 125,
+		fontSize: 35,
+		flat:true
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+	console.log(img.src);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+	
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+/**
+ * This Function is used to set tesco reorder.
+ * 
+ * @return view
+ */
+function setTescoReorder(type,id)
+{
+	var buyer = localStorage.getItem("reorder_buyer");
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		url: base_url + "/admin/" + buyer + "/order-management/set-tesco-reorder",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			type:type,
+			id:id
+		},
+		beforeSend: function () {
+			
+		},
+		success: function (data) {
+			$('.left-panel').removeClass('active');
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			
+		}
+	})
 }
