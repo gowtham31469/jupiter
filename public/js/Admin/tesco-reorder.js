@@ -40,7 +40,7 @@ function reOrderTesco()
 				for(i = 0; i< uniqueNames.length; i++){    
 					 options+="<option>"+uniqueNames[i]+"</option>";
 				}
-			$('.main-content').html('<ul class="nav nav-tabs nav-justified"> <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Reorder / Additional Quantity</a> </li><li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Repeat Order</a> </li></ul><div class="tab-content card"> <div class="tab-pane fade in show active" id="panel1" role="tabpanel"><div class="container pad-top"><div class="col-md-8 col-md-offset-2 "><div class="image-container text-center"> <img src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Reorder / Additional Quantity</h4></div><form><div class="form-group select_div"> <select class="form-control" id="uvc_number" onchange=reordertescoartworks()>'+options+'</select></div></form><div class="how_it_works text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div class="list_div"><ul class="list-group"></ul></div></div></div> </div><div class="tab-pane fade" id="panel2" role="tabpanel"></div></div>')
+			$('.main-content').html('<ul class="nav nav-tabs"> <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Reorder / Additional Quantity</a> </li><li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Repeat Order</a> </li></ul><div class="tab-content "> <div class="tab-pane fade in active" id="panel1" role="tabpanel"><div class="container pad-top"><div class="col-md-8 col-md-offset-2 "><div class="image-container text-center"> <img src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Reorder / Additional Quantity</h4></div><form><div class="form-group select_div"> <select class="form-control" id="uvc_number" onchange=reordertescoartworks()>'+options+'</select></div></form><div class="how_it_works_reorder text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div class="list_div list_div_reorder"><ul class="list-group"></ul></div></div></div> </div><div class="tab-pane fade" id="panel2" role="tabpanel"><div class="container pad-top"><div class="col-md-8 col-md-offset-2 "><div class="image-container text-center"> <img src="'+base_url+'/images/repeat.png" alt="Repeat" class="img-rounded"><h4>Repeat Order</h4></div><form><div class="form-group select_div"> <select class="form-control" id="style_number" onchange=repeatordertescoartworks()>'+options+'</select></div></form><div class="how_it_works_repeat text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div class="list_div list_div_repeat"><ul class="list-group"></ul></div></div></div></div></div>')
 		},
 		error: function (data) {
 
@@ -65,8 +65,8 @@ function reordertescoartworks()
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	if(uvc != "Select Style Number")
 	{
-		$('.how_it_works').html("");
-		$('.list_div').html('<ul class="list-group"></ul>');
+		$('.how_it_works_reorder').html("");
+		$('.list_div_reorder').html('<ul class="list-group"></ul>');
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/reorder-artwork",
 			type: "Post",
@@ -90,7 +90,7 @@ function reordertescoartworks()
 					{
 						var span='<span class="label sticker">'+index.zone+'</span>';
 					}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 				})
 				
 			},
@@ -105,8 +105,65 @@ function reordertescoartworks()
 	}
 	else
 	{
-		$('.how_it_works').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
-		$('.list_div').html('<ul class="list-group"></ul>');
+		$('.how_it_works_reorder').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
+		$('.list_div_reorder').html('<ul class="list-group"></ul>');
+	}
+}
+/**
+ * This Function is used to Show the existing artworks for selected style number.
+ *
+ * @return View
+ */
+
+function repeatordertescoartworks()
+{
+	var uvc=$('#style_number').val();
+	var buyer = localStorage.getItem("reorder_buyer");
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	if(uvc != "Select Style Number")
+	{
+		$('.how_it_works_repeat').html("");
+		$('.list_div_repeat').html('<ul class="list-group"></ul>');
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/reorder-artwork",
+			type: "Post",
+			dataType: "json",
+			data: {
+				_token: csrf_token,
+				style:uvc
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+				var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				
+				$(newObj).each(function(key,index){
+					if(index.zone == "CE")
+					{
+						var span='<span class="label labels">'+index.zone+'</span>';
+					}
+					else
+					{
+						var span='<span class="label sticker">'+index.zone+'</span>';
+					}
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+				})
+				
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+				$(".loader").hide();
+				$(".loader").css('margin-top', '0%');
+			}
+		})
+	}
+	else
+	{
+		$('.how_it_works_repeat').html('<h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>');
+		$('.list_div_repeat').html('<ul class="list-group"></ul>');
 	}
 }
 
@@ -151,7 +208,19 @@ function extraQuantityTesco(type,id,name,zone)
 			$(data.qty).each(function(key,index){
 				 tr += '<tr><td class="tpnd">' + index.tpnd + '</td><td class="barcode">' + index.itf_barcode + '</td><td class="size">' + index.units_per_carton + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
 			});
-			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>TPND</th><th>ITF Barcode</th> <th>'+qty+'</th> <th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></form>')
+			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>TPND</th><th>ITF Barcode</th> <th>'+qty+'</th> <th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
+			
+			var item = $('.nav-item.active').find('a').text();
+			if(item == "Repeat Order")
+			{
+				$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
+			}
+				
+				
+			
+			$('.remove').click(function(){
+				 $('.left-panel').removeClass('active');
+			})
 			
 			$('.artwork_name').text(name + " Artwork");
 			$('.sample-artwork').html('<object style="display:inline;height: calc( 100vh - 250px );border: 1px solid #333;" id="reorder_svg" class="center-block" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object>');
@@ -175,6 +244,18 @@ function extraQuantityTesco(type,id,name,zone)
 	 		$('.left-panel').addClass('active');
 		}
 	})
+}
+/**
+ * This Function is used to render po in artwork.
+ *
+ * @return View
+ */
+function repeatorderpo()
+{
+	var mySVG = document.getElementById("reorder_svg");
+	var svgDoc;
+    var po=$('.purchase_order_number').val();
+    svgDoc1.getElementById("po_number").innerHTML = po;
 }
 
 /**
@@ -206,14 +287,14 @@ function contentdocument(data,name,zone)
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
-			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
 		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
-			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
 		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else
@@ -375,28 +456,83 @@ function jsbarcodetescoean(code, id, svgDoc) {
  */
 function setTescoReorder(type,id)
 {
-	var buyer = localStorage.getItem("reorder_buyer");
-    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	$.ajax({
-		url: base_url + "/admin/" + buyer + "/order-management/set-tesco-reorder",
-		type: "Post",
-		dataType: "json",
-		data: {
-			_token: csrf_token,
-			type:type,
-			id:id
-		},
-		beforeSend: function () {
-			
-		},
-		success: function (data) {
-			$('.left-panel').removeClass('active');
-		},
-		error: function (data) {
+	var item = $('.nav-item.active').find('a').text();
+	var po=$('.purchase_order_number').val();
+	if(item == "Repeat Order")
+	{
+		var buyer = localStorage.getItem("reorder_buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",
+			type: "Post",
+			dataType: "json",
+			data: {
+				_token: csrf_token,
+				type:type,
+				id:id,
+				po:po
+			},
+			beforeSend: function () {
 
-		},
-		complete: function () {
-			
-		}
-	})
+			},
+			success: function (data) {
+				$('.left-panel').removeClass('active');
+				$('.snackbar_span').html('Repeat Order Created Successfully ...!');
+				showSnackbar();
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+
+			}
+		})
+	}
+	else
+	{
+		var buyer = localStorage.getItem("reorder_buyer");
+		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		$.ajax({
+			url: base_url + "/admin/" + buyer + "/order-management/set-tesco-reorder",
+			type: "Post",
+			dataType: "json",
+			data: {
+				_token: csrf_token,
+				type:type,
+				id:id
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+				$('.left-panel').removeClass('active');
+				$('.snackbar_span').html('Reorder Created Successfully ...!');
+				showSnackbar();
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+
+			}
+		})
+	}
+	
+}
+/** [showSnackbar function] */
+function showSnackbar() {
+	try {
+		// Get the snackbar DIV
+		var x = document.getElementById("snackbar")
+
+		// Add the "show" class to DIV
+		x.className = "show";
+
+		// After 3 seconds, remove the show class from DIV
+		setTimeout(function () {
+			x.className = x.className.replace("show", "");
+		}, 3000);
+	} catch (e) {
+		console.log("Error:" + e)
+	}
 }

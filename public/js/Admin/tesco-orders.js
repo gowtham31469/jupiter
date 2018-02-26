@@ -319,7 +319,6 @@ function createOrders(parsedObj = false) {
                  data: {template_id:template_id},
                  beforeSend: function () {
                      $(".loader").show();
-                     $(".loader").css('margin-top','12%');
                  },
                  success: function (data) {
                      localStorage.setItem("data", JSON.stringify(data.templates));
@@ -477,7 +476,6 @@ function createOrders(parsedObj = false) {
                           }).parent('li').addClass('current-page').find('a').addClass('active');
                       });
                       $(".loader").hide();
-                      $(".loader").css('margin-top','0%');
                  }
              })
         
