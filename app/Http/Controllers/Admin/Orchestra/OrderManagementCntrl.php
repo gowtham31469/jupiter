@@ -1322,9 +1322,22 @@ class OrderManagementCntrl extends Controller
             $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
+
+            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
+            
+            if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+            {
+                $po_status = "PO Pending";
+            }
+            else
+            {
+                $po_status = "PO Approved";
+            }
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
-                          'po_file' => $destination_path_insert
+                          'po_file' => $destination_path_insert,
+                          'po_status' => $po_status
+
                         ]);
             if ($data)
             {

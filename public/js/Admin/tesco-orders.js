@@ -27,7 +27,7 @@ function tescoOrders() {
             $(".loader").show();
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card"> <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"> <div class="form-group has-feedback"> <label for="order_type" class="form_label">Select Order Type</label> <select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""> <option value="">Select Order Type</option> <option value="1">PO Upload</option> <option value="2">Manual Entry</option> </select> <div class="help-block with-errors"></div></div><div class="form-group"> <label for="template" class="form_label">Select Template</label> <input class="search-input form-control" placeholder="Search for Awesomeness"> <div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "> <label>Upload UK PO</label> <input type="file" name="purchase_order" id="po_upload" class="form-control" required/> <div class="help-block with-errors"></div></div></div><div class="ce-po-upload hidden"> <div class="form-group files" id="multiple_file1"> <label>Upload CE-ORMS Sheet</label> <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" required/> <div class="help-block with-errors"></div></div><div class="form-group files" id="multiple_file2"> <label>Upload CE-RETEK Sheet</label> <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" required/> <div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button> </form> </div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "> <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
+                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card"> <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"> <div class="form-group has-feedback"> <label for="order_type" class="form_label">Select Order Type</label> <select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""> <option value="">Select Order Type</option> <option value="1">PO Upload</option> <option value="2">Manual Entry</option> </select> <div class="help-block with-errors"></div></div><div class="form-group"> <label for="template" class="form_label">Select Template</label> <input class="search-input form-control" placeholder="Search for Awesomeness"> <div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "> <label>Upload UK PO</label> <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div><div class="ce-po-upload hidden"> <div class="form-group files" id="multiple_file1"> <label>Upload CE-ORMS Sheet</label> <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div><div class="form-group files" id="multiple_file2"> <label>Upload CE-RETEK Sheet</label> <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button> </form> </div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "> <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
 
                 /** [ Search  functionality foe jstree nodes ] */
                 $(".search-input").keyup(function () {
@@ -278,7 +278,7 @@ function tescoOrders() {
                         else
                         {
                             /**  [ Show validation error message ] **/
-                            $('.template-error').html('<span style="color:#a94442">Please select a template in the list.</span>');
+                            $('.template-error').html('<span style="color:#F44336">Please select a template in the list.</span>');
                         }
                     }
                 })
@@ -310,10 +310,7 @@ function createOrders(parsedObj = false) {
         var template_id = localStorage.getItem("templates");
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
-        var random_order_id = 'JGAM_1517'+Math.floor(Math.random() * 1000000000);
         $('.top-content').html('<span class="pull-right">Please Note : If any select list does not contain required information, please contact Administrator</span>');
-//        <h3 class="content-heading" >Order details for : '+random_order_id+'</h3>
-
 
          $.ajax({
                  url: base_url + "/admin/tesco/templates-details",
@@ -436,24 +433,6 @@ function createOrders(parsedObj = false) {
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
 
                       $('.main-content').html(html).selectpicker('refresh');
-
-                      /* [ Toggle required field validation in quantity table ] */
-                      $(':checkbox').on('change',function(){
-                       var th = $(this), id = th.prop('id');
-                       if(th.is(':checked'))
-                       {
-                           /* [ add required for input field ] */
-                           $('input[id="'  + id + '"]').prop('required',true) 
-                        }
-                        else
-                        {
-                            /* [ remove required from input field ] */
-                            $('input[id="'  + id + '"]').prop('required',false) 
-                            /* [ remove validation error from input field ] */
-                            $('input[id="'  + id + '"]').siblings('').html('')
-                            $('input[id="'  + id + '"]').parent().removeClass('has-error has-danger');
-                        }
-                      });
                       /** @type {Date} [Manufactured date Datepicker format & validation] */
                       var date = new Date();
                       var today = new Date(date.getFullYear(), date.getMonth());
@@ -482,6 +461,7 @@ function createOrders(parsedObj = false) {
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
                             renderParsedValues(parsedObj);
+                            setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
                  error: function (data) {
@@ -720,10 +700,6 @@ function  uploadPurchaseOrder(formData) {
                         showSnackbar();
                     }
                  },
-                 success: function (data) {
-                    //Call the parse method which resides on parser.js
-                     parseXML(data, createOrders);
-                 },
                  error: function (data) {
                     console.log(data);
                  },
@@ -867,8 +843,8 @@ function dynamicSVGTemplates()
 		});   
 		} catch (e) {
 		/** [error statements] */
-	   console.log("Error:"+e)
-	 }                 
+	       console.error(e);
+        }   
 }
 /**
  * [ dynamicSVGTemplatescard function for creating dynamic card svg file ]
@@ -1105,7 +1081,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1367,7 +1343,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1516,7 +1492,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function (data) {
-                        console.log(data);
+                        console.error(data);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1621,7 +1597,7 @@ function setTescoOrder()
         
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 
@@ -1721,42 +1697,34 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       delivery_date_req = data.delivery_date_required;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
                        /** Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
+                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                       $.each(data.last_insertions, function (index, value) { 
+                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','_')+'" id="'+index.replace(' ','_')+'" style="margin-right: 10px;"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                        });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                       html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                       /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
                        }
                        html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for combined po upload modal tab */
                        $('#combined').html(html);
 
                        /** Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
-
+                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                       var i = 1;
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
-                       /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
-                       {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       else
-                       {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html +='</div></div><hr>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="'+index.replace(' ','')+'" value="" id="'+index.replace(' ','')+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="'+index.replace(' ','')+'" name="'+index.replace(' ','')+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="'+index.replace(' ','')+'" name="'+index.replace(' ','')+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                       i++;
                        });
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
@@ -1770,9 +1738,150 @@ function storeCERatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
+                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
+                          $('.template-checkbox:checkbox').on('change',function(){
+                           var th = $(this), id = th.prop('id');
+                           if(th.is(':checked'))
+                           {
+                               $('input[id="'  + id + '"]').prop('disabled',false) 
+                               $('.template-error').html('');
+                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
+                               if(delivery_date_req === 1)
+                               {
+                                 $('input[id="'  + id + '"]').prop('required',true)
+                               }
+                               else
+                               {
+                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
+                               }
+                            }
+                            else
+                            {
+                                /** [ Make all input fields disabled, except checkboxes ] */
+                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
+                                /** [ Make all input fields empty ] */
+                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
+                                /* [ remove required from input field ] */
+                                $('input[id="'  + id + '"]').prop('required',false) 
+                                /* [ remove validation error from input field ] */
+                                $('#upload_single_po_form').validator('validate');
+                            }
+                          });
+                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
+                          $('.template-checkbox1:checkbox').on('change',function(){
+                           var th = $(this), id = th.prop('id');
+                           if(th.is(':checked'))
+                           {
+                               var checkbox_clicked = 0;
+                               /** [ Get count of checkboxes checked ] */
+                                $('.template-checkbox1').each(function(i, item)
+                                {
+                                  if ($(this).is(':checked'))
+                                    {
+                                      checkbox_clicked++;
+                                    }
+                                    
+                                });
+                                /** [ Hide validation error, if atleast 2 artwork selected ] */
+                                if(checkbox_clicked === 2)
+                                {
+                                    $('.template-error1').html('');
+                                }
+                           }
+                           else
+                           {
+                                /** [ Clear all input fields values] */
+                                $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
+                                /* [ remove validation error from input field ] */
+                                $('#upload_combined_po_form').validator('validate');
+                           }
+                          });
+                       /** [ bootstrap validator for upload single po form ] **/
+                        $('#upload_single_po_form').validator().on('submit', function (e) {
+                            if (e.isDefaultPrevented()) 
+                            {
+                                
+                            }
+                            else 
+                            {
+                                e.preventDefault();
+                                var checkbox_clicked = 0;
+                                /** [ Get count of checkboxes checked ] */
+                                $('.template-checkbox').each(function(i, item)
+                                {
+                                  if ($(this).is(':checked'))
+                                    {
+                                      checkbox_clicked++;
+                                    }
+                                    
+                                });
+                                /** [ Show validation error, if atleast 1 artwork not selected ] */
+                                if(checkbox_clicked === 0)
+                                {
+                                    $('.template-error1').html('');
+                                    /**  [ Show validation error message ] **/
+                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
+                                }
+                                else
+                                {
+                                    $('.template-error').html('')
+                                    alert('success')
+                                }
+                            }
+
+                        })
+                        /** [ bootstrap validator for upload combined po form ] **/
+                        $('#upload_combined_po_form').validator().on('submit', function (e) {
+                            if (e.isDefaultPrevented()) 
+                            {
+                                
+                            }
+                            else 
+                            {
+                                e.preventDefault();
+                                var checkbox_clicked = 0;
+                                 /** [ Get count of checkboxes checked ] */
+                                $('.template-checkbox1').each(function(i, item)
+                                {
+                                  if ($(this).is(':checked'))
+                                    {
+                                      checkbox_clicked++;
+                                    }
+                                    
+                                });
+                                /** [ Show validation error, if atleast 2 artwork not selected ] */
+                                if(checkbox_clicked < 2)
+                                {
+                                    $('.template-error').html('');
+                                    /**  [ Show validation error message ] **/
+                                    $('.template-error1').html('<span style="color:#F44336">Please select atleast 2 artwork.</span>');
+                                }
+                                else
+                                {
+                                    $('.template-error1').html('');
+                                    alert('success')
+                                }
+                            }
+
+                        })
+                        /** Clear combined tab validation errors */
+                        $('#single_tab').on('click',function(){
+                           $('.template-error1').html('');
+                          });
+                        /** Clear single tab validation errors */
+                        $('#combined_tab').on('click',function(){
+                           $('.template-error').html('');
+                          });
                  },
                  error: function (data) {
-                    console.log(data);
+                    console.error(data);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -1788,7 +1897,7 @@ function storeCERatioTCL1TCL2TSL1()
              })
     } catch(e) {
         /** [error statements] */
-        console.log("Error:"+e)
+        console.error("Error:"+e)
     }
 }
 /**
@@ -1849,38 +1958,20 @@ function storeCERatioTHL1()
                  success: function (data) {
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       else
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
-
+                       $('#combined_tab').addClass('hidden');
                        /** Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -1896,6 +1987,13 @@ function storeCERatioTHL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -1993,9 +2091,9 @@ function storeCESingleTCL4TSL3()
                        /** Po upload modal for combined po upload modal */
                        var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
+                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                        });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                       /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
@@ -2013,15 +2111,15 @@ function storeCESingleTCL4TSL3()
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2037,6 +2135,13 @@ function storeCESingleTCL4TSL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -2123,38 +2228,21 @@ function storeCESingleTHL3()
                  success: function (data) {
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       else
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                       $('#combined_tab').addClass('hidden');
 
                        /** Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2170,6 +2258,13 @@ function storeCESingleTHL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -2267,9 +2362,9 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** Po upload modal for combined po upload modal */
                        var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
+                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                        });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                       /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
@@ -2287,15 +2382,15 @@ function storeUKRatioTCL1TCL2TSL1()
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2311,6 +2406,13 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -2389,38 +2491,21 @@ function storeUKRatioTHL1()
                  success: function (data) {
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       else
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                       $('#combined_tab').addClass('hidden');
 
                        /** Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2436,6 +2521,13 @@ function storeUKRatioTHL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -2533,9 +2625,9 @@ function storeUKSingleTCL4TSL3()
                        /** Po upload modal for combined po upload modal */
                        var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
+                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                        });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                       /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
@@ -2553,15 +2645,15 @@ function storeUKSingleTCL4TSL3()
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2577,6 +2669,13 @@ function storeUKSingleTCL4TSL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);
@@ -2663,38 +2762,21 @@ function storeUKSingleTHL3()
                  success: function (data) {
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required=""> '+index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                      html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                       }
-                       else
-                       {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="combined_delivery_date"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                       $('#combined_tab').addClass('hidden');
 
                        /** Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid">';
 
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="">'+index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-fileupload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input" type="checkbox" value="'+value+'" name="template" id="template" required="" style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div>';
                        /** [ Delivery Date mandatory or not for particular customer] */
                        if(data.delivery_date_required === 1)
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" required="" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        else
                        {
-                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker1"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         html +='<div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker2"> <input value="" id="single_delivery_date" name="single_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div>';
                        }
                        html +='</div></div><hr>';
                        });
@@ -2710,6 +2792,13 @@ function storeUKSingleTHL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
                        $('.submit-btn').addClass('disabled');
+                       /** @type {Date} [Delivery date Datepicker format & validation] */
+                       var date = new Date();
+                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       $('#datePicker2').datepicker({
+                            autoclose: true,
+                            startDate: today,
+                        })
                  },
                  error: function (data) {
                     console.log(data);

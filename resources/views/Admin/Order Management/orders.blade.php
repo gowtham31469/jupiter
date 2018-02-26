@@ -264,32 +264,6 @@ border: 0;
 .templateDiv {
     text-align: center;
 }
-/**  Po upload modal */
-.po-fileupload {
-    display: block !important;
-    right: 1px;
-    top: 1px;
-    height: 34px;
-    opacity: 0;
-    width: 100%;
-    background: none;
-    position: absolute;
-    overflow: hidden;
-    z-index: 2;
-}
-
-.control-fileupload {
-    display: block;
-    border: 1px solid #d6d7d6;
-    background: #FFF;
-    border-radius: 4px;
-    width: 100%;
-    height: 36px;
-    line-height: 36px;
-    padding: 0px 10px 2px 10px;
-    overflow: hidden;
-    position: relative;
-}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
@@ -434,10 +408,10 @@ border: 0;
             <div class="modal-body">
                 <div class="tabbable">{{-- Only required for left/right tabs --}}
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                        <li class="active" id='single_tab'>
                             <a href="#single" data-toggle="tab">Single PO Upload</a>
                         </li>
-                        <li>
+                        <li id='combined_tab'>
                             <a href="#combined" data-toggle="tab">Combined PO Upload</a>
                         </li>
                     </ul>
