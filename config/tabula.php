@@ -18,7 +18,23 @@ return [
     |
     |
     */
-   'tabula_jar' => '/var/www/html/tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar',
+
+   /*
+    |--------------------------------------------------------------------------
+    | Dimension to find out the PDF purchase order type.
+    |   Portion of the page to analyze
+    |   (top,left,bottom,right). Example: --area
+    |   269.875,12.75,790.5,561. Default is entire page
+    |    y1 = top
+    |    x1 = left
+    |    y2 = top + height
+    |    x2 = left + width
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+   'po_series' => ' -p 1  -a 13,350,30,460 -f JSON ',
 
    /*
     |--------------------------------------------------------------------------
@@ -28,6 +44,15 @@ return [
     |
     */
    'po_type' => ' -p 2  -a 0,10,40,200  -f JSON ',
+
+   /*
+    |--------------------------------------------------------------------------
+    | Dimension to find out the PDF purchase order type.
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+   'supplier_info' => ' -p 1  -a 65,480,240,734  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
@@ -63,5 +88,14 @@ return [
     |
     */
     'ratio_quantity' => ' -p 2 -a 130,10,160,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Quantity of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'check_packB' => ' -l -p 2 -a 10,10,1000,1000 -f JSON ',
 
 ];

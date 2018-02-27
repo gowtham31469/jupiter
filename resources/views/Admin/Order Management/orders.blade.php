@@ -264,7 +264,6 @@ border: 0;
 .templateDiv {
     text-align: center;
 }
-
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
@@ -399,6 +398,32 @@ border: 0;
             </div>
         </div>
     </div>
+{{-- Artwork po-upload and delivery date upload modal --}}
+<div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable">{{-- Only required for left/right tabs --}}
+                    <ul class="nav nav-tabs">
+                        <li class="active" id='single_tab'>
+                            <a href="#single" data-toggle="tab">Single PO Upload</a>
+                        </li>
+                        <li id='combined_tab'>
+                            <a href="#combined" data-toggle="tab">Combined PO Upload</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="single"></div>
+                        <div class="tab-pane" id="combined"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">
@@ -501,7 +526,6 @@ border: 0;
 
 
 		$(document).ready(function() {
-
 			/** Clear local storage data **/
 			localStorage.removeItem("hang_tag");
 			localStorage.removeItem("special_tag");

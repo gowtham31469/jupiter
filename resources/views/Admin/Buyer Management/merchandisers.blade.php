@@ -18,7 +18,7 @@
                       <table id="merchandisers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                         <thead>
                           <tr>
-                            <th>Id</th>
+                            <th>Sl. No</th>
                             <th>Merchandiser Name</th>
                             <th>Merchandiser Email</th>
                             <th>Merchandiser Phone</th>
@@ -100,8 +100,8 @@
                       </div>
                   </div>
                   <div class="modal-footer">
-                      {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                      {!! Form::button('Submit', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                      {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                   </div>
              {!! Form::close() !!}
           </div>
@@ -149,8 +149,8 @@
                      </div>
                  </div>
                  <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Update', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -175,8 +175,8 @@
                      </div>
                  </div>
                  <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>

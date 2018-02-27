@@ -124,6 +124,7 @@ function addCustomer()
         var freight_charge_free =  $('#freight_charge_free').is(':checked')?1:0;
         var freight_cost        =  $('#freight_charge').val();
         var po_required         =  $('#po_required').is(':checked')?1:0;
+        var delivery_date_req   =  $('#delivery_date_required').is(':checked')?1:0;
 
         /** @type {Array} [ initializing empty arrays ] */
         var contact_person  = [];
@@ -264,7 +265,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_cost:freight_cost,freight_charge_free:freight_charge_free,po_required:po_required},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_cost:freight_cost,freight_charge_free:freight_charge_free,po_required:po_required,delivery_date_req:delivery_date_req},
             beforeSend: function () {
               $(".loader").show();
             },
@@ -784,8 +785,8 @@ function addCustomer()
                     $('#edit_password').attr('minlength',6)
                    }
 
-                   /** [ Advance payment method checked or not checkbox ] */
-                   if(data.customers[0].is_advance_payment === 1)
+                    /** [ Advance payment method checkbox checked or not  ] */
+                    if(data.customers[0].is_advance_payment === 1)
                     {
                       $('#edit_advance_payment').prop('checked', true);
                     }
@@ -793,7 +794,15 @@ function addCustomer()
                     {
                       $('#edit_advance_payment').prop('checked', false);
                     }
-
+                     /** [ Delivery date mandatory checkbox  checked or not  ] */
+                     if(data.customers[0].delivery_date_required === 1)
+                      {
+                        $('#edit_delivery_date_required').prop('checked', true);
+                      }
+                      else
+                      {
+                        $('#edit_delivery_date_required').prop('checked', false);
+                      }
                     /** [ Dynamic hide and show of freight cost textbox, based on radio button selection ] */
                     if(data.customers[0].is_freight_cost_free === 1)
                     {
@@ -1114,6 +1123,7 @@ function addCustomer()
           var freight_charge_free =  $('#edit_freight_charge_free').is(':checked')?1:0;
           var freight_cost        =  $('#edit_freight_charge').val();
           var po_required         =  $('#edit_po_required').is(':checked')?1:0;
+          var delivery_date_req   =  $('#edit_delivery_date_required').is(':checked')?1:0;
 
           var contact_person  = [];
           var contact_phone   = [];

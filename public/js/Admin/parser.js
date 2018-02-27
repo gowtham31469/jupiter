@@ -4,26 +4,23 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseXML(data, callback) {
-    //try {
+   try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
         switch(po_type) {
-            case 'SINGLE': parsedObj = parseSingleType(data);
+            case 'single': parsedObj = parseSingleType(data);
                 break;
-            case 'RATIO PACK  A': parsedObj = parseRatioType(data);
-                break;
-            case 'RATIO PACK  A RATIO PACK  B': //parseRatioPackType(data);
+            case 'ratio': parsedObj = parseRatioType(data);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
         callback(parsedObj);
-
-    // } catch(e) {
-    //     // error statements
-    //     console.log("Error:"+e);
-    // }
+    } catch(e) {
+        // error statements
+        console.error("Error:"+e);
+    }
 }
 
 /**
@@ -36,6 +33,26 @@ function parseSingleType(data) {
         var singleObj = {};
         //*********************************************************************************************************
         //*********************************************************************************************************
+        //********************************************* SUPPLIER SECTION    ***************************************
+        //********************************************* PARSE THE JSON TABULA *************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        //*********************************************************************************************************
+        if (data.details.hasOwnProperty("supplier")) {
+            var supplier = JSON.parse(data.details.supplier);
+            supplier = supplier[0].data.slice(-3);
+            //Supplier Code
+            supplier_code = supplier[0][0].text;
+            supplier_code = supplier_code.split(':');
+            if(supplier_code[0] === 'Supplier No. ') {
+                singleObj.supplierCode = supplier_code[1].trim();
+                //Supplier Name
+                singleObj.supplierName = supplier[2][0].text.trim();
+            }
+        }
+        
+        //*********************************************************************************************************
+        //*********************************************************************************************************
         //********************************************* ORDER INFORMATION SECTION *********************************
         //********************************************* PARSE THE JSON TABULA *************************************
         //*********************************************************************************************************
@@ -43,12 +60,12 @@ function parseSingleType(data) {
         //*********************************************************************************************************
 
         var info = JSON.parse(data.details.info);
-        console.log(info[0].data);
         $.each(info[0].data, function(ind, ele) {
             var row_length = ele.length;
             switch(ind) {
-                case 0: 
-                    singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                case 0:
+                    // singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
+                    singleObj.purchaseOrder = data.po_number;
                     break;
                 case 1:
                     singleObj.type = ele[0].text;
@@ -62,7 +79,7 @@ function parseSingleType(data) {
                     var tab = JSON.parse(data.details.table);
                     var size = tab[0].data[1][3].text;
                     singleObj.styleNumber =  style[1].trim();
-                    singleObj.shortDescription =  (row_length === 5) ? ele[2].text.replace(size, '') : ele[2].text;
+                    singleObj.shortDescription =  ele[2].text.replace(size, '').trim();
                     break;
             }
         });
@@ -79,7 +96,6 @@ function parseSingleType(data) {
         var values = [];
         var tabula = JSON.parse(data.details.table);
         tabula[0].data.pop(); //Remove the total quantity row from the object
-        console.log(tabula[0].data);
         $.each(tabula[0].data, function(index,element) {
             var row = {};
             element.pop();//Remove the extra space element from the array
@@ -95,11 +111,10 @@ function parseSingleType(data) {
             } 
         });
         singleObj.orderQuantity = values;
-        console.log(singleObj);
         return singleObj;
         
     } catch(e) {
-        console.log("Error:"+e);
+        console.error("Error:"+e);
     }
 }
 
@@ -110,6 +125,20 @@ function parseSingleType(data) {
  */
 function parseRatioType(data) {
     var ratioObj = {};
+    //********************************************* SUPPLIER INFO SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    if (data.details.hasOwnProperty("supplier")) {
+        var supplier = JSON.parse(data.details.supplier);
+        supplier = supplier[0].data.slice(-3);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        if(supplier_code[0] === 'Supplier No. ') {
+            ratioObj.supplierCode = supplier_code[1].trim();
+            //Supplier Name
+            ratioObj.supplierName = supplier[2][0].text.trim();
+        }      
+    }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
@@ -118,15 +147,21 @@ function parseRatioType(data) {
         var row_length = ele.length;
         switch(ind) {
             case 0:
-                var po = (row_length === 7) ? ele[6].text : ele[7].text;
-                po = po.split(":");
-                ratioObj.purchaseOrder = po[1].trim();
+                var new_element = removeEmptyValues(ele);
+                if(new_element.length < 2) {
+                    var po = new_element[0].text;
+                    po = po.split(":");
+                    ratioObj.purchaseOrder = po[1].trim();
+                } else {
+                    ratioObj.purchaseOrder = new_element[1].text.trim();
+                }
                 break;
             case 1:
                 ratioObj.type = ele[0].text;
                 break;
             case 2:
-                var product = ele[3].text.split(":");
+                var new_element = removeEmptyValues(ele);
+                var product = new_element[1].text.split(":");
                 var season = product[1].trim().split(" ");
                 ratioObj.seasonCode = season[0];
                 break;
@@ -134,7 +169,9 @@ function parseRatioType(data) {
                 ratioObj.styleNumber =  ele[1].text.trim();
                 break;
             case 4:
-                ratioObj.shortDescription =  ele[1].text.trim();
+                ele[1].text = ele[1].text.replace('12/18', '').trim();
+                var short_desc = ele[1].text.split('  ');
+                ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
         }
     });
 
@@ -142,20 +179,57 @@ function parseRatioType(data) {
     //********************************************* ORDER QUANTITY SECTION ************************************
     //********************************************* PARSE THE JSON TABULA *************************************
     ratioObj.orderQuantity = {};
-    var tabula = JSON.parse(data.details.table);
-    ratioObj.orderQuantity.TPND             = tabula[0].data[0][5].text;
-    ratioObj.orderQuantity.barCode          = tabula[0].data[0][4].text;
-    ratioObj.orderQuantity.unitsPerCarton   = tabula[0].data[0][2].text;
+    var tabula = [];
+    var packA = JSON.parse(data.details.table);
+    tabula.push(packA[0].data[0]);
+    if (data.details.hasOwnProperty("ratioPackB")) {
+        var packB = JSON.parse(data.details.ratioPackB);
+        tabula.push(packB);
+    }
+    var values = [];
+    $.each(tabula, function(index,element) {
+        var row = {};
+        $.each(element, function(i, val) {
+            switch(i) {
+                case 2 : row.unitsPerCarton =  val.text;
+                break;
+
+                case 4 : row.barCode =  val.text;
+                break;
+
+                case 5 : row.tpnd = val.text;
+                break;
+            }
+        });
+        values.push(row);
+        
+    });
+    ratioObj.orderQuantity = values;
     return ratioObj;
     
 }
+
+/**
+ * Method to remove the empty spaces from the object
+ * @param  {array} element element array with empty values
+ * @return {array} element element array without empty values
+ */
+function removeEmptyValues(element) {
+    element = $.grep(element, function (el, i) {
+        if (el.text === '') { // or whatever
+            return false;
+        }
+        return true; // keep the element in the array
+    });
+    return element;
+}
+
 /**
  * Method to render the parsed objects to the input field
  * @param  {[type]} parsedObj [description]
  * @return {[type]}           [description]
  */
 function renderParsedValues(parsedObj) {
-    console.log(parsedObj);
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
     $('#tesco_po_number').val(parsedObj.purchaseOrder);
@@ -164,29 +238,59 @@ function renderParsedValues(parsedObj) {
      } else {
         $('#tesco_uk_style').val(parsedObj.styleNumber);
      }
+    $('#tesco_eqos').val(parsedObj.supplierCode);
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 
-    if(parsedObj.type === 'SINGLE') {
+
+    if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {
-            if(type === 'single') {
-                var index = i + 1;
-                $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
-                $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
-                $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
-                $('#'+zone+'_single_size_'+index).val(j.Size);  
-            }
+            var index = i + 1;
+            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+            $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
+            $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
+            $('#'+zone+'_single_size_'+index).val(j.Size);  
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }
         });  
-    } else if(parsedObj.type === 'RATIO PACK  A') {
-        $('#'+zone+'_ratio_tpnd').val(parsedObj.orderQuantity.TPND);
-        $('#'+zone+'_ratio_itf').val(parsedObj.orderQuantity.barCode);
-        $('#'+zone+'_ratio_upc').val(parsedObj.orderQuantity.unitsPerCarton);
+    } else if(type === 'ratio') {
+        $.each(parsedObj.orderQuantity, function(i, j) {
+            var index = i + 1;
+            $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
+            $('#'+zone+'_ratio_itf_'+index).val(j.barCode);
+            $('#'+zone+'_ratio_upc_'+index).val(j.unitsPerCarton);
+            if(parsedObj.orderQuantity.length !== (i+1)) {
+                $('.add-row-btn').trigger('click');
+            }
+        }); 
     }
+}
 
-    dynamicSVGTemplates();
+var _validFileExtensions = [".pdf"];    
+function ValidateSingleInput(oInput) {
+    if (oInput.type == "file") {
+        var sFileName = oInput.value;
+         if (sFileName.length > 0) {
+            var blnValid = false;
+            for (var j = 0; j < _validFileExtensions.length; j++) {
+                var sCurExtension = _validFileExtensions[j];
+                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                    blnValid = true;
+                    break;
+                }
+            }
+             
+            if (!blnValid) {
+                $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file format. Please upload a PDF file.");
+                $('#snackbar').css('background-color','#F44336');
+                showSnackbar();
+                $("#"+oInput.id).val(null);
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 /**

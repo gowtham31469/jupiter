@@ -101,9 +101,11 @@ class OrderController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
-            
+            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
+            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
+            $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
             $buyers = DB::table('buyers')->select('*')->get();
-            return view('Admin/Order Management/order-status',['buyers' => $buyers]);
+            return view('Admin/Order Management/order-status',['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
         }
         else
         {
@@ -111,6 +113,34 @@ class OrderController extends Controller
         }
 
     }    
+	
+	 /**
+	 * Show the Order Status dashboard.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	
+    public function reorder()
+    {
+        $module_var = new Modules();
+        $is_allowed = $module_var->permittedModules();
+        if($is_allowed)
+        {
+            $get_main_module = $module_var->getMainModules();
+            $get_sub_module = $module_var->getSubModules(9);
+            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            });
+            
+            $buyers = DB::table('buyers')->select('*')->get();
+            return view('Admin/Order Management/reorder',['buyers' => $buyers]);
+        }
+        else
+        {
+             return redirect('/admin/dashboard');
+        }
+
+    }  
 	
 	/**
 	 * Print Preview For 150 * 100 Size Stickers

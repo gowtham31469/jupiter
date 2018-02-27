@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddManufactureDateToTescoThl1OrdersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('tesco_thl1_orders', function (Blueprint $table) {
+            $table->string('manufacture_date')->after('eqos_site_code');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('tesco_thl1_orders', function (Blueprint $table) {
+            $table->dropColumn('manufacture_date');
+        });
+    }
+}

@@ -38,6 +38,7 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');
+Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
 Route::post('admin/orchestra/order-management/compositions-details', 'Admin\Orchestra\OrderManagementCntrl@compositionDetails');
 
 Route::post('admin/order-management/print-pdf', 'Admin\OrderManagement\OrderController@printPdf');
@@ -175,6 +176,9 @@ Route::get('/erp/dashboard', function(){
 
 Route::get('admin/orchestra/order-management', 'Admin\Orchestra\OrderManagementCntrl@index');
 Route::post('admin/orchestra/order-management/label-orders', 'Admin\Orchestra\OrderManagementCntrl@labelOrders');
+Route::post('admin/orchestra/order-management/reorder', 'Admin\Orchestra\OrderManagementCntrl@reOrder');
+Route::post('admin/orchestra/order-management/reorder-artwork', 'Admin\Orchestra\OrderManagementCntrl@reOrderArtwork');
+Route::post('admin/orchestra/order-management/extra-quantity', 'Admin\Orchestra\OrderManagementCntrl@extraQuantity');
 Route::post('admin/orchestra/order-management/back-label-orders', 'Admin\Orchestra\OrderManagementCntrl@backLabelOrders');
 Route::post('admin/orchestra/order-management/back-sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@backStickerOrders');
 Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\OrderManagementCntrl@stickerOrders');
@@ -218,17 +222,26 @@ Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@ge
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createOrderByTabula');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
 
+Route::post('admin/tesco/print-div-tesco', 'Admin\Tesco\OrderManagementCntrl@printDivTesco');
+Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@printDivTescoSmall');
+
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
-Route::post('admin/tesco/set-ce-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleTHL3Orders');
-Route::post('admin/tesco/set-uk-ratio-tcl1tcl2tsl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTCL1TCL2TSL1Orders');
-Route::post('admin/tesco/set-uk-ratio-thl1-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioTHL1Orders');
-Route::post('admin/tesco/set-uk-single-tcl4tsl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleTCL4TSL3Orders');
-Route::post('admin/tesco/set-uk-single-thl3-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleTHL3Orders');
+
+Route::post('admin/tesco/set-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioOrders');
+Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleOrders');
 
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
+
+//Reorder
+
+Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');
+Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderManagementCntrl@reOrderArtwork');
+Route::post('admin/tesco/order-management/extra-quantity', 'Admin\Tesco\OrderManagementCntrl@extraQuantity');
+Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\OrderManagementCntrl@setTescoReorder');
+Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
 
 
 // Route::get('upload', 'UploadController@index');
@@ -324,5 +337,10 @@ Route::delete('admin/tesco/delete-tesco-sizecharts', 'Admin\Settings\Tesco\Tesco
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');
+Route::post('admin/tesco/order-management/show-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@getTescoPI');
+Route::post('admin/tesco/approve-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@approveTescoPI');
+Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectTescoPI');
+Route::post('admin/tesco/edit-artwork', 'Admin\Tesco\OrderStatusCntrl@editArtwork');
+
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
