@@ -249,10 +249,17 @@
 		if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
 			localStorage.setItem("reorder_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
 			localStorage.setItem("reorder_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+			if (localStorage.getItem("reorder_buyer") === 'orchestra') {
+				reOrder();
+			} else {
+
+				reOrderTesco();
+			}
 		} else {
 			localStorage.removeItem("reorder_buyer");
 			localStorage.removeItem("reorder_buyer_id");
 			location.reload()
+			
 		}
 	});
 </script>
