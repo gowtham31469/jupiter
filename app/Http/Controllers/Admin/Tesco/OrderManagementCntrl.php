@@ -934,6 +934,31 @@ class OrderManagementCntrl extends Controller
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
 				
+				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id1',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->save();
+				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
 				{
@@ -948,6 +973,31 @@ class OrderManagementCntrl extends Controller
 			{
 				$tasks = TescoTCL2Orders::find($id);
 				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				$factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -966,6 +1016,31 @@ class OrderManagementCntrl extends Controller
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
 				
+				$factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->save();
+				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
 				{
@@ -980,6 +1055,32 @@ class OrderManagementCntrl extends Controller
 			{
 				$tasks = TescoTHL1Orders::find($id);
 				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -998,6 +1099,32 @@ class OrderManagementCntrl extends Controller
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
 				
+				
+				$factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->save();
+				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
 				{
@@ -1014,6 +1141,32 @@ class OrderManagementCntrl extends Controller
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
 				
+				
+				$factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->save();
+				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
 				{
@@ -1028,6 +1181,31 @@ class OrderManagementCntrl extends Controller
 			{
 				$tasks = TescoTSL3Orders::find($id);
 				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				$factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -1057,8 +1235,33 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTCL1Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
+				
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
 				foreach($data['tesco'] as $value)
@@ -1075,6 +1278,30 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTCL2Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				$factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
@@ -1093,6 +1320,31 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTCL4Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
@@ -1111,6 +1363,31 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTHL1Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
@@ -1129,6 +1406,31 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTHL3Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
@@ -1147,6 +1449,31 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTSL1Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
@@ -1165,6 +1492,31 @@ class OrderManagementCntrl extends Controller
 				$tasks = TescoTSL3Orders::find($id);
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->save();
 				
