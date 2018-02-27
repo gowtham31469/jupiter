@@ -268,6 +268,11 @@
                 <h4 class="text-center">Order Details</h4>
                 <div class="scroll">
                     <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">
+						 <div class="form-group has-feedback">
+                            <label for="tesco_uk_style">PO Number.</label>
+                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" disabled required="" onkeyup="dynamicSVGTemplates()">
+                            <div class="help-block with-errors"></div>
+                        </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_uk_style">UK Style Ref.</label>
                             <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()">
@@ -356,7 +361,7 @@
                 <h4 class="text-center">Artwork</h4>
                 <div class="row">
                 <div class=" col-md-6 col-md-offset-3 artwork_tesco">
-                <object style="border: 2px #333 solid;" class="center-block svg2" data="/storage/app/template/tesco/TCL1_CE.svg" type="image/svg+xml"></object>
+               
                  </div>
                 <div class="col-md-12">
                     <div class="edit-qty-table-div"></div>
