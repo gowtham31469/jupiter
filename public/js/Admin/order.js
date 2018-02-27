@@ -347,7 +347,7 @@ function orderStatus() {
 					if (sList > 0) {
 
 						$('#update_po_status').removeClass('hidden')
-					$('#update_new_po_status').addClass('hidden')
+					    $('#update_new_po_status').addClass('hidden')
 						$('#new_pos_status').addClass('hidden')
 						$('#map_po_div_status').removeClass('hidden')
 						$('#new_po_div_status').addClass('hidden')
@@ -357,9 +357,6 @@ function orderStatus() {
 					} else {
 						$('#check_error_status').removeClass('hidden')
 					}
-
-
-
 				});
 										
 										
@@ -415,8 +412,6 @@ function orderStatus() {
 					} else {
 						$('#check_error_status').removeClass('hidden')
 					}
-
-
 				});
 				
 				
@@ -864,8 +859,22 @@ function table(data,path){
  */
 function showPOUpload(id,table_name,uvc,qntytable)
 {
+    if (po_file!= "null")
+    {
+        $('#po_upload').addClass('hidden')
+        $('.upload-po').addClass('hidden')
+        $('#po_file').removeClass('hidden')
+    }
+    else
+    {
+        $('#po_upload').removeClass('hidden')
+        $('.upload-po').removeClass('hidden')
+        $('#po_file').addClass('hidden')
+    }
+    var po_link = base_url+po_file
+    $('#po_link').attr("href",po_link);
     $('#rowID').val(id);
-    $('#tableName').val(table_name);
+    $('#tableName').val(tableName);
     $('#po-file-upload').modal('show')
 }
 /**

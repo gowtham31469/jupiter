@@ -102,6 +102,7 @@
                             <input id="new_po_no" type="text" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
                             <p class="help-block">Example block-level help text here.</p>
@@ -244,8 +245,9 @@
                             <input id="new_po_no_status" type="text" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
-                            <input type="file" id="new_po_file_status">
+                            <input type="file" accept="application/pdf" id="new_po_file_status">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
                     </div>
@@ -254,7 +256,6 @@
 
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
                     <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
-
                     <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
                 </div>
             </div>
@@ -375,149 +376,149 @@
          </div> 
     </div>
     {{-- Show snackbar html code --}}
-     <div id="snackbar"><span class="snackbar_span"></span></div>
-                                @endsection @else
-                                <script type="text/javascript">
-                                    window.location = "{{ url('/admin') }}";
-                                </script>
-                                @endif @section('jqueryIncludes')
+<div id="snackbar"><span class="snackbar_span"></span></div>
+@endsection @else
+<script type="text/javascript">
+    window.location = "{{ url('/admin') }}";
+</script>
+@endif @section('jqueryIncludes')
 
-                                <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-                                <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-                                <script src="{{ asset('js/Admin/order.js') }}"></script>
-                                <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
-                                <script>
-                                    localStorage.removeItem("page_navigation");
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
+<script>
+    localStorage.removeItem("page_navigation");
 
-                                    $(function() {
-                                        $('[data-toggle="tooltip"]').tooltip()
-                                        $('.po').attr("disabled", "disabled");
-                                    })
-                                    $(document).ready(function() {
-                                        $('.logo').html('Order Status');
-                                        $('.select-buyer').click(function() {
-                                            $('.select-buyer').addClass('hidden');
-                                        })
-                                        $('.buyer-nav-select').html($('.buyer-div').html())
-                                        if (localStorage.getItem("status_buyer") === null) {
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+        $('.po').attr("disabled", "disabled");
+    })
+    $(document).ready(function() {
+        $('.logo').html('Order Status');
+        $('.select-buyer').click(function() {
+            $('.select-buyer').addClass('hidden');
+        })
+        $('.buyer-nav-select').html($('.buyer-div').html())
+        if (localStorage.getItem("status_buyer") === null) {
 
-                                        } else if (localStorage.getItem("status_buyer") === 'orchestra') {
-                                            orderStatus();
-                                        } else {
-                                            tescoOrderStatus();
-                                        }
-                                        $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
-                                        $('.buyer-nav-select .buyer-select').selectpicker({
-                                            style: 'btn-default',
-                                            size: 4
-                                        });
-                                        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-                                            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-                                                localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-                                                localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-                                                var buyer = $(this).find("option:selected").text().toLowerCase();
-                                                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                                $.ajax({
-                                                    url: base_url + "/admin/order-management/order_sub_modules",
-                                                    type: "Post",
-                                                    dataType: "json",
-                                                    data: {
-                                                        _token: csrf_token,
-                                                        buyer: buyer
-                                                    },
-                                                    beforeSend: function() {
+        } else if (localStorage.getItem("status_buyer") === 'orchestra') {
+            orderStatus();
+        } else {
+            tescoOrderStatus();
+        }
+        $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
+        $('.buyer-nav-select .buyer-select').selectpicker({
+            style: 'btn-default',
+            size: 4
+        });
+        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var buyer = $(this).find("option:selected").text().toLowerCase();
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType: "json",
+                    data: {
+                        _token: csrf_token,
+                        buyer: buyer
+                    },
+                    beforeSend: function() {
 
-                                                    },
-                                                    success: function(data) {
-                                                        if (buyer === 'orchestra') {
-                                                            orderStatus();
-                                                        } else {
-                                                            tescoOrderStatus();
-                                                        }
-                                                    },
-                                                    error: function(data) {
+                    },
+                    success: function(data) {
+                        if (buyer === 'orchestra') {
+                            orderStatus();
+                        } else {
+                            tescoOrderStatus();
+                        }
+                    },
+                    error: function(data) {
 
-                                                    },
-                                                    complete: function() {
-                                                        $(".loader").hide();
-                                                        $(".loader").css('margin-top', '0%');
-                                                    }
-                                                })
-                                            } else {
-                                                localStorage.removeItem("status_buyer");
-                                                localStorage.removeItem("status_buyer_id");
-                                                location.reload()
-                                            }
-                                        });
-                                    });
+                    },
+                    complete: function() {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top', '0%');
+                    }
+                })
+            } else {
+                localStorage.removeItem("status_buyer");
+                localStorage.removeItem("status_buyer_id");
+                location.reload()
+            }
+        });
+    });
 
-                                    Dropzone.options.poUpload = {
+    Dropzone.options.poUpload = {
 
-                                        // Prevents Dropzone from uploading dropped files immediately
-                                        url: base_url + "/admin/orchestra/set-po-file",
-                                        autoProcessQueue: false,
-                                        maxFilesize: 500,
-                                        maxFiles: 1,
-                                        acceptedFiles: ".pdf",
-                                        addRemoveLinks: true,
+        // Prevents Dropzone from uploading dropped files immediately
+        url: base_url + "/admin/orchestra/set-po-file",
+        autoProcessQueue: false,
+        maxFilesize: 500,
+        maxFiles: 1,
+        acceptedFiles: ".pdf",
+        addRemoveLinks: true,
 
-                                        init: function() {
+        init: function() {
 
-                                            var submitButton = document.querySelector(".upload-po")
-                                            myDropzone = this; // closure
+            var submitButton = document.querySelector(".upload-po")
+            myDropzone = this; // closure
 
 
-                                            submitButton.addEventListener("click", function() {
-                                                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-                                            });
+            submitButton.addEventListener("click", function() {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
 
-                                            // You might want to show the submit button only when 
-                                            // files are dropped here:
+            // You might want to show the submit button only when 
+            // files are dropped here:
 
-                                            this.on("addedfile", function(file) {
-                                                var filename = file.name;
-                                                $('.upload-po').removeClass('disabled')
-                                                // Show submit button here and/or inform user to click it.
-                                            });
-                                            this.on("complete", function(file) {
-                                                this.removeFile(file);
+            this.on("addedfile", function(file) {
+                var filename = file.name;
+                $('.upload-po').removeClass('disabled')
+                // Show submit button here and/or inform user to click it.
+            });
+            this.on("complete", function(file) {
+                this.removeFile(file);
 
-                                            });
-                                            this.on("queuecomplete", function(file) {
+            });
+            this.on("queuecomplete", function(file) {
 
-                                            });
-                                            this.on("success", function(file, response) {
-                                                $('.dz-remove').hide();
-                                                this.removeFile(file);
-                                                $('#po-file-upload').modal('hide')
-                                                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
-                                                tescoOrderStatus()
-                                                showSnackbar();
-                                            });
-                                            this.on("error", function(file, response) {
-                                                this.removeFile(file);
-                                                $('.snackbar_span').html('Something went wrong');
-                                                $('#snackbar').css('background-color', '#F44336');
-                                                showSnackbar();
-                                            });
-                                        }
-                                    };
+            });
+            this.on("success", function(file, response) {
+                $('.dz-remove').hide();
+                this.removeFile(file);
+                $('#po-file-upload').modal('hide')
+                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
+                tescoOrderStatus()
+                showSnackbar();
+            });
+            this.on("error", function(file, response) {
+                this.removeFile(file);
+                $('.snackbar_span').html('Something went wrong');
+                $('#snackbar').css('background-color', '#F44336');
+                showSnackbar();
+            });
+        }
+    };
 
-                                    /** To refresh modal and form data**/
-                                    $(".modal").on("hidden.bs.modal", function() {
-                                        myDropzone.removeAllFiles();
-                                    });
-                                    var date = new Date();
-                                    var today = new Date(date.getFullYear(), date.getMonth());
-                                    $('#datePicker1').datepicker({
-                                        autoclose: true,
-                                        minViewMode: 1,
-                                        format: 'MM,yyyy',
-                                        startDate: today,
-                                    })
-                                    $('.remove').click(function() {
-                                        $('.left-panel').removeClass('active');
-                                    })
-                                </script>
+    /** To refresh modal and form data**/
+    $(".modal").on("hidden.bs.modal", function() {
+        myDropzone.removeAllFiles();
+    });
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth());
+    $('#datePicker1').datepicker({
+        autoclose: true,
+        minViewMode: 1,
+        format: 'MM,yyyy',
+        startDate: today,
+    })
+    $('.remove').click(function() {
+        $('.left-panel').removeClass('active');
+    })
+</script>
 
-                                @endsection
+@endsection
