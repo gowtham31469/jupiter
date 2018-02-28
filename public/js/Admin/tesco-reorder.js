@@ -486,6 +486,14 @@ function setTescoReorder(type,id)
 {
 	var item = $('.nav-item.active').find('a').text();
 	var po=$('.purchase_order_number').val();
+	var count=[];
+	 $('.tot_qty_table').each(function(i, item)
+        {
+            count[i]    = $(item).val();
+            
+        });
+        count = count.join(',');
+	
 	if(item == "Repeat Order")
 	{
 		var buyer = localStorage.getItem("reorder_buyer");
@@ -498,7 +506,8 @@ function setTescoReorder(type,id)
 				_token: csrf_token,
 				type:type,
 				id:id,
-				po:po
+				po:po,
+				counts:count
 			},
 			beforeSend: function () {
 
@@ -527,7 +536,8 @@ function setTescoReorder(type,id)
 			data: {
 				_token: csrf_token,
 				type:type,
-				id:id
+				id:id,
+				counts:count
 			},
 			beforeSend: function () {
 
