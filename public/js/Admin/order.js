@@ -621,7 +621,7 @@ function orderStatus() {
                         // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 					 $.fn.dataTableExt.afnFiltering.length = 0;
                     $tableSel.dataTable().fnDraw();
-                        filterByDate(6, start, end); // We call our filter function
+                        filterByDate(5, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                     });
 
@@ -667,6 +667,7 @@ var filterByDate = function (column, startDate, endDate) {
 	// Custom filter syntax requires pushing the new filter to the global filter array
 	$.fn.dataTableExt.afnFiltering.push(
 		function (oSettings, aData, iDataIndex) {
+			
 			var columnDate=aData[column].toString().split("-").reverse().join("-");
 		
 			var rowDate = normalizeDate(columnDate),
@@ -683,7 +684,6 @@ var filterByDate = function (column, startDate, endDate) {
 			} else {
 				return false;
 			}
-			f
 		}
 	);
 };
