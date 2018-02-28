@@ -29,7 +29,9 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use PDF;
-use App\Classes\TescoPOUpload;
+use App\Classes\TescoSinglePOUpload;
+use App\Classes\TescoCombinedPOUpload;
+
 
 class OrderManagementCntrl extends Controller
 {
@@ -1533,59 +1535,149 @@ class OrderManagementCntrl extends Controller
 		    echo true;
     }
     /**
-     * Function to upload single po file for tesco
+     * Function to upload single buyer po file for tesco
      * @author <Praveen>
      * @return boolean true or false
      */
     public function uploadSingleOrdersPO(Request $request)
     {
       
-      return explode(',',$request['templates']);
-      
-       // try {
-       //  return "hai";
-       //       // $templates     = explode(',',$request['templates']);
-       //       // $po_number     = explode(',',$request['po_number']);
-       //       // $po_file       = explode(',',$request['po_file']);
-       //       // return $delivery_date = explode(',',$request['delivery_date']);
-
-       //       /** [ Creating new object for TescoPOUpload() class ] */
-       //       // $tesco_po_obj = new TescoPOUpload(); 
-       //       // $i = 0;
-       //       // foreach ($templates as $value) 
-       //       // {
-       //       //  switch ($value['name']) 
-       //       //  {
-       //       //    case 'TCL1':
-       //       //      $result = $tesco_po_obj->uploadTCL1PO($value['id'],$po_number[$i],$delivery_date[$i],$po_file[$i]);
-       //       //      break;
-       //       //    case 'TCL2':
-       //       //      $result = $tesco_po_obj->uploadTCL2PO($value['id'],$po_number[$i],$delivery_date[$i],$po_file[$i]);
-       //       //      break;
-       //       //    case 'TSL1':
-       //       //      $result = $tesco_po_obj->uploadTSL1PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
-       //       //      break;
-       //       //    case 'TCL4':
-       //       //      $result = $tesco_po_obj->uploadTCL4PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
-       //       //      break;
-       //       //    case 'TSL3':
-       //       //      $result = $tesco_po_obj->uploadTSL3PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
-       //       //      break;
-       //       //    case 'THL1':
-       //       //      $result = $tesco_po_obj->uploadTHL1PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
-       //       //      break;
-       //       //    case 'THL3':
-       //       //      $result = $tesco_po_obj->uploadTHL3PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
-       //       //      break;
-       //       //    default:
-       //       //      $result = "Invalid Template";
-       //       //      break;
-       //       //  }
-       //       // }
+       try {
+             /** [ Creating new object for TescoSinglePOUpload() class ] */
+             $tesco_po_obj = new TescoSinglePOUpload(); 
+             if($request['template_1'])
+             {
+                switch ($request['template_1']) 
+                {
+                  case 'TCL1':
+                    $uploaded = $tesco_po_obj->uploadTCL1PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
+                    break;
+                  case 'TCL4':
+                    $uploaded = $tesco_po_obj->uploadTCL4PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
+                    break;
+                  case 'THL1':
+                    $uploaded = $tesco_po_obj->uploadTHL1PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
+                    break;
+                  case 'THL3':
+                    $uploaded = $tesco_po_obj->uploadTHL3PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if ($request['template_2']) {
+               switch ($request['template_2']) 
+                {
+                  case 'TCL2':
+                    $uploaded = $tesco_po_obj->uploadTCL2PO($request['template_id_2'],$request['po_number_2'],$request['po_file_2'],$request['delivery_date_2']);
+                    break;
+                  case 'TSL3':
+                    $uploaded = $tesco_po_obj->uploadTSL3PO($request['template_id_2'],$request['po_number_2'],$request['po_file_2'],$request['delivery_date_2']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if ($request['template_3']) {
+               switch ($request['template_3']) 
+                {
+                  case 'TSL1':
+                    $uploaded = $tesco_po_obj->uploadTSL1PO($request['template_id_3'],$request['po_number_3'],$request['po_file_3'],$request['delivery_date_3']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if (($uploaded != '') || ($uploaded != "Invalid Template")) 
+             {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+             }
+             else
+             {
+              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+             }
            
-       // } catch (\Exception $e) {
-       //     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       // }
-       // return $result;
+       } catch (\Exception $e) {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+       return $result;
+    }
+    /**
+     * Function to upload combined buyer po file for tesco
+     * @author <Praveen>
+     * @return boolean true or false
+     */
+    public function uploadCombinedOrdersPO(Request $request)
+    {
+      
+       try {
+             /** [ Creating new object for TescoCombinedPOUpload() class ] */
+              $tesco_po_obj = new TescoCombinedPOUpload(); 
+              $po_file = $request['po_file'];
+              $path = $po_file->getRealPath();
+              $filename = $po_file->getClientOriginalName();
+              $destination_path='/storage/app/public/po-files/';
+              $path='storage/app/public/po-files/';
+              $Orname = $po_file->getClientOriginalName();
+              $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
+              $po_file->move($path,$filename);
+              $destination_path_insert=$destination_path.$filename;
+
+             if($request['template_1'])
+             {
+                switch ($request['template_1']) 
+                {
+                  case 'TCL1':
+                    $uploaded = $tesco_po_obj->uploadTCL1PO($request['template_id_1'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
+                    break;
+                  case 'TCL4':
+                    $uploaded = $tesco_po_obj->uploadTCL4PO($request['template_id_1'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if ($request['template_2']) {
+               switch ($request['template_2']) 
+                {
+                  case 'TCL2':
+                    $uploaded = $tesco_po_obj->uploadTCL2PO($request['template_id_2'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
+                    break;
+                  case 'TSL3':
+                    $uploaded = $tesco_po_obj->uploadTSL3PO($request['template_id_2'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if ($request['template_3']) {
+               switch ($request['template_3']) 
+                {
+                  case 'TSL1':
+                    $uploaded = $tesco_po_obj->uploadTSL1PO($request['template_id_3'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
+                    break;
+                  default:
+                    $uploaded = "Invalid Template";
+                    break;
+                }
+             }
+             if (($uploaded != '') || ($uploaded != "Invalid Template")) 
+             {
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+             }
+             else
+             {
+              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+             }
+           
+       } catch (\Exception $e) {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+       return $result;
     }
 }
