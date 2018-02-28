@@ -120,11 +120,17 @@ function addCustomer()
         var pi_required         =  $('#pi_required').is(':checked')?1:0;
         var payment_term        =  $("#payment_terms option:selected").val();
         var place_of_supply     =  $("#place_of_supply option:selected").val();
-        var advance_payment     =  $('#advance_payment').is(':checked')?1:0;
-        var freight_charge_free =  $('#freight_charge_free').is(':checked')?1:0;
-        var freight_cost        =  $('#freight_charge').val();
         var po_required         =  $('#po_required').is(':checked')?1:0;
         var delivery_date_req   =  $('#delivery_date_required').is(':checked')?1:0;
+        var freight             =  $("#freight option:selected").val();
+        if($('#freight option:selected').text() === "Nominated Forwarded")
+        {
+          var forwarder = $("#forwarder option:selected").val();
+        }
+        else
+        {
+          var forwarder = '';
+        }
 
         /** @type {Array} [ initializing empty arrays ] */
         var contact_person  = [];
@@ -237,12 +243,6 @@ function addCustomer()
             
         });
 
-        /** [ Set freight cost id null, set freight cost as 0 ] **/
-        if(freight_cost == '')
-        {
-          freight_cost = 0;
-        }
-
         /** [ Create array of multi selected buyers ] */
         $.each($("#buyer option:selected"), function(){
           buyers.push($(this).val());
@@ -265,7 +265,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_cost:freight_cost,freight_charge_free:freight_charge_free,po_required:po_required,delivery_date_req:delivery_date_req},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder},
             beforeSend: function () {
               $(".loader").show();
             },
@@ -741,10 +741,14 @@ function addCustomer()
                   $('#edit_branch').val(data.customers[0].branch);
                   $('#edit_place_of_supply').val(data.customers[0].place_of_supply);
                   $('#edit_payment_terms').val(data.customers[0].payment_terms);
+                  $('#edit_freight').val(data.customers[0].freight_type);
+                  $('#edit_forwarder').val(data.customers[0].nominated_forwarder);
                   
                   /** [ Refresh  bootstrap selectpicker ] */
                   $('#edit_place_of_supply').selectpicker('refresh');
                   $('#edit_payment_terms').selectpicker('refresh');
+                  $('#edit_freight').selectpicker('refresh');
+                  $('#edit_forwarder').selectpicker('refresh');
 
                   /** [ PI required field checked or not checkbox ] */
                   if(data.customers[0].pi_required === 1)
@@ -784,16 +788,6 @@ function addCustomer()
                     $('#edit_password').prop('required',true)
                     $('#edit_password').attr('minlength',6)
                    }
-
-                    /** [ Advance payment method checkbox checked or not  ] */
-                    if(data.customers[0].is_advance_payment === 1)
-                    {
-                      $('#edit_advance_payment').prop('checked', true);
-                    }
-                    else
-                    {
-                      $('#edit_advance_payment').prop('checked', false);
-                    }
                      /** [ Delivery date mandatory checkbox  checked or not  ] */
                      if(data.customers[0].delivery_date_required === 1)
                       {
@@ -803,24 +797,16 @@ function addCustomer()
                       {
                         $('#edit_delivery_date_required').prop('checked', false);
                       }
-                    /** [ Dynamic hide and show of freight cost textbox, based on radio button selection ] */
-                    if(data.customers[0].is_freight_cost_free === 1)
-                    {
-                      $('#edit_freight_charge_free').prop('checked', true);
-                      $('#edit_freight_charge_req').prop('checked', false);
-                      $('div.edit_freight_charge_div').hide();
-                      $('#edit_freight_charge').prop('required',false)
-                      $('div.edit_freight_charge_div').removeClass('has-error has-danger');
-                    }
-                    else
-                    {
-                      $('#edit_freight_charge_req').prop('checked', true);
-                      $('#edit_freight_charge_free').prop('checked', false);
-                      $('div.edit_freight_charge_div').show();
-                      $('#edit_freight_charge').prop('required',true)
-                      $('#edit_freight_charge').val(data.customers[0].freight_cost);
-                    }
-
+                 /** Hide and show forwarder div based on freight type */
+                 if(data.customers[0].freight_type === 3)
+                  {
+                    $('.edit_forwarder_div').show(); 
+                  }
+                  else
+                  {
+                    $('.edit_forwarder_div').hide(); 
+                  }
+                 
                  /** [ Create dyanmic address form ] */
                  $.each(data.address,function(key,value){
                    key += 1;
@@ -1101,6 +1087,14 @@ function addCustomer()
   function editCustomer()
   {
     try{
+          if($('#edit_freight option:selected').text() === "Nominated Forwarded")
+          {
+            var forwarder = $("#edit_forwarder option:selected").val();
+          }
+          else
+          {
+            var forwarder = '';
+          }
           var id                  =  $('#customer_edit_id').val();
           var factory_code        =  $('#edit_factory_code').val();
           var company_name        =  $('#edit_company_name').val();
@@ -1119,11 +1113,9 @@ function addCustomer()
           var branch              =  $('#edit_branch').val();
           var payment_term        =  $("#edit_payment_terms option:selected").val();
           var place_of_supply     =  $("#edit_place_of_supply option:selected").val();
-          var advance_payment     =  $('#edit_advance_payment').is(':checked')?1:0;
-          var freight_charge_free =  $('#edit_freight_charge_free').is(':checked')?1:0;
-          var freight_cost        =  $('#edit_freight_charge').val();
           var po_required         =  $('#edit_po_required').is(':checked')?1:0;
           var delivery_date_req   =  $('#edit_delivery_date_required').is(':checked')?1:0;
+          var freight             =  $("#edit_freight option:selected").val();
 
           var contact_person  = [];
           var contact_phone   = [];
@@ -1237,12 +1229,6 @@ function addCustomer()
               
           });
 
-          /** [ Set freight cost id null, set freight cost as 0 ] **/
-          if(freight_cost == '')
-          {
-            freight_cost = 0;
-          }
-
           /** [ Create array of multi selected buyers ] */
           $.each($("#edit_buyer option:selected"), function(){
             buyers.push($(this).val());
@@ -1265,7 +1251,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,advance_payment:advance_payment,freight_charge_free:freight_charge_free,freight_cost:freight_cost,po_required:po_required},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder},
               beforeSend: function () {
                 $(".loader").show();
               },
