@@ -17,6 +17,8 @@ use App\CustomerBillAddress;
 use App\CustomerBuyers;
 use App\PaymentTerms;
 use App\PlaceOfSupply;
+use App\FreightTerms;
+use App\NominatedForwarder;
 /**
  * Customer management controller
  * @author <Praveen>
@@ -213,14 +215,13 @@ class CustomerManagementController extends Controller
                 $branch               = $request['branch'];
                 $place_of_supply      = $request['place_of_supply'];
                 $payment_term         = $request['payment_term'];
-                $advance_payment      = $request['advance_payment'];
-                $freight_charge_free  = $request['freight_charge_free'];
-                $freight_cost         = $request['freight_cost'];
                 $po_required          = $request['po_required'];
                 $delivery_date_req    = $request['delivery_date_req'];
+                $forwarder            = $request['forwarder'];
+                $freight              = $request['freight'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
-                if($email_exists)
+                if(count($email_exists) > 0)
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -256,12 +257,11 @@ class CustomerManagementController extends Controller
                                 'bank'                   => $bank,
                                 'branch'                 => $branch,
                                 'place_of_supply'        => $place_of_supply,
-                                'freight_cost'           => $freight_cost,
-                                'is_freight_cost_free'   => $freight_charge_free,
                                 'payment_terms'          => $payment_term,
-                                'is_advance_payment'     => $advance_payment,
                                 'po_required'            => $po_required,
-                                'delivery_date_required' => $delivery_date_req
+                                'delivery_date_required' => $delivery_date_req,
+                                'nominated_forwarder'    => $forwarder,
+                                'freight_type'           => $freight
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -372,7 +372,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.is_advance_payment','customers.is_freight_cost_free','customers.freight_cost','customers.po_required','customers.delivery_date_required')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -428,11 +428,10 @@ class CustomerManagementController extends Controller
                     $input['branch']                 = Input::get('branch');
                     $input['place_of_supply']        = Input::get('place_of_supply');
                     $input['payment_term']           = Input::get('payment_term');
-                    $input['advance_payment']        = Input::get('advance_payment');
-                    $input['freight_cost']           = Input::get('freight_cost');
-                    $input['freight_charge_free']    = Input::get('freight_charge_free');
                     $input['po_required']            = Input::get('po_required');
                     $input['delivery_date_required'] = Input::get('delivery_date_req');
+                    $input['forwarder']              = Input::get('forwarder');
+                    $input['freight']                = Input::get('freight');
 
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -489,11 +488,10 @@ class CustomerManagementController extends Controller
                           'branch'                 => $input['branch'],
                           'place_of_supply'        => $input['place_of_supply'],
                           'payment_terms'          => $input['payment_term'],
-                          'is_advance_payment'     => $input['advance_payment'],
-                          'freight_cost'           => $input['freight_cost'],
-                          'is_freight_cost_free'   => $input['freight_charge_free'],
                           'po_required'            => $input['po_required'],
-                          'delivery_date_required' => $input['delivery_date_required']
+                          'delivery_date_required' => $input['delivery_date_required'],
+                          'nominated_forwarder'    => $input['forwarder'],
+                          'freight_type'           => $input['freight']
                         ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)
@@ -594,6 +592,8 @@ class CustomerManagementController extends Controller
            $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
            $payment_terms = DB::table('payment_terms')->pluck('payment_terms','id')->all();
            $place_of_supply = DB::table('place_of_supply')->pluck('place_of_supply','id')->all();
+           $forwarder = DB::table('nominated_forwarders')->pluck('forwarder','id')->all();
+           $freight_terms = DB::table('freight_terms')->pluck('freight_terms','id')->all();
            
            $customers = DB::table('customers')
                          ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active','customers.account_holder','customers.ifsc_code','customers.bank','customers.branch')
@@ -704,7 +704,7 @@ class CustomerManagementController extends Controller
                View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                    return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
                });
-               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers,'buyers' => $buyers,'payment_terms' => $payment_terms,'place_of_supply' => $place_of_supply]);
+               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers,'buyers' => $buyers,'payment_terms' => $payment_terms,'place_of_supply' => $place_of_supply,'freight' => $freight_terms,'forwarder' => $forwarder]);
            }
            else
            {
