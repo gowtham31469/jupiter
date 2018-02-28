@@ -722,21 +722,22 @@ function tescoStatusTable(data,path)
                 }
                 else if (key =="StyleNo")
                 {
-                    var order_flag = value.order_flag
+                    var order_flag = value.order_flag;
+                    var span_style ='';
                     if (order_flag == "reOrder")
                     {
-                        var span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
+                        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
                     }
                     if (order_flag == "repeatOrder")
                     {
-                        var span_style = '<span title="Reorder" class="batch-reorder">R</span>'
+                        span_style = '<span title="Reorder" class="batch-reorder">R</span>'
                     }
                     var zone = value.Zone
                     var style_no = "";
                     if (zone=="CE")
                     {
                         style_no = value.ce_style_ref
-                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+style_no+'</a></td>';
+                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+span_style+''+style_no+'</a></td>';
                     }
                     else
                     {
