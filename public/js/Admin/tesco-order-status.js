@@ -494,7 +494,7 @@ function tescoOrderStatus()
                var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
-                     "order": [[ 6, "desc" ]],
+                     "order": [[ 0, "desc" ]],
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
@@ -552,9 +552,9 @@ function tescoOrderStatus()
                     },
                     function (start, end, label) {
                         // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-                    $.fn.dataTableExt.afnFiltering.length = 0;
-                    $tableSel.dataTable().fnDraw();
-                        filterByDate(7, start, end); // We call our filter function
+						$.fn.dataTableExt.afnFiltering.length = 0;
+						$tableSel.dataTable().fnDraw();
+                        filterByDate(6, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                     });
 
@@ -618,7 +618,6 @@ var filterByDate = function (column, startDate, endDate) {
             } else {
                 return false;
             }
-            f
         }
     );
 };
@@ -671,7 +670,7 @@ function tescoStatusTable(data,path)
                 {
                    
                     var orderDate = moment(value[key] ).format('DD-MM-YYYY');
-                    tr += '<td align="center"><span style=display:none;>'+value[key]+'</span>'+orderDate+'</td>';
+                    tr += '<td align="center">'+orderDate+'</td>';
                    
                 }
                 
@@ -727,12 +726,12 @@ function tescoStatusTable(data,path)
                     if (zone=="CE")
                     {
                         style_no = value.ce_style_ref
-                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+style_no+'</a></td>';
+                        tr += '<td align="center"><span style=display:none;>'+value.OrderDate+'</span><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+style_no+'</a></td>';
                     }
                     else
                     {
                         style_no = value.uk_style_ref
-                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+value.uk_style_ref+'</a></td>';
+                        tr += '<td align="center"><span style=display:none;>'+value.OrderDate+'</span><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+value.uk_style_ref+'</a></td>';
                     }
                 }
                 else if (key == "Actions")
