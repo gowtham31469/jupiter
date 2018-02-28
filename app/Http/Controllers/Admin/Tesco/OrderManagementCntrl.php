@@ -29,9 +29,8 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use PDF;
-use App\Classes\TescoSinglePOUpload;
+use App\Classes\TescoPOUpload;
 use App\Classes\TescoCombinedPOUpload;
-
 
 class OrderManagementCntrl extends Controller
 {
@@ -256,12 +255,12 @@ class OrderManagementCntrl extends Controller
           
           switch ($po_type) {
             case 'single':
-              $data = $this->cropPDF($path, 'single');
+              $data = $this->cropPDF($path, 'single', 'UK');
               break;
             case 'ratio':
               //Check for Ratio Pack B
-              $packB = $this->checkPackB($path);
-              $data  = $this->cropPDF($path, 'ratio');
+              $packB = $this->checkPackB($path , 'UK');
+              $data  = $this->cropPDF($path, 'ratio', 'UK');
               if($packB) {
                 $data['ratioPackB'] = $packB;
               }
@@ -286,94 +285,79 @@ class OrderManagementCntrl extends Controller
      */
     public function createOrderForCE($request) {
       try {
-        //Check the files has been uploaded or not
-        if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
-          //Move the orms file
-          $orms = $request->file('ce_orms_purchase_order');
-          $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
-          $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
-          //Move the retek file
-          $retek = $request->file('ce_retek_purchase_order');
-          $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
-          $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
-
-          //Parse ORMS File
-          list($orms_no, $orms_table) = $this->parseORMS($orms_path);
+          $output = array();
           $orms_data = array();
-          $orms_data['order_number'] = $orms_no;
-          $orms_data['order_table']  = $orms_table;
-          return $orms_data;
+          $retek_data = array();
+          //Check the files has been uploaded or not
+          if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
+            //Move the orms file
+            $orms = $request->file('ce_orms_purchase_order');
+            $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
+            $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
-          // //Read the Purchase Order Series
-          // $po_number = $this->getPOSeries($path);
-          // $po_series = explode('-', $po_number);
-          // if(count($po_series) < 2) {
-          //   return response()->json(['error' => 'Unknown Purchase Order for UK'], 400);
-          // }
-          // $po_series = $po_series[0];
-          // //Check the type of PO
-          // $po_type = $this->checkPOType($path);
-          // $arr = explode(' ',trim($po_type));
-          // $po_type = strtolower($arr[0]);
+            //Move the retek file
+            $retek = $request->file('ce_retek_purchase_order');
+            $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
+            $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
 
-          // //Validate the Template and Purchase Order Series Number.
-          // switch ($request->template_name) {
-          //   case 'TCL 1 , TCL 2 & TSL 1':
-          //     if($po_type !== 'ratio' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'TCL 4 & TSL 3':
-          //     if($po_type !== 'single' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 1':
-          //     if($po_type !== 'ratio' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 3':
-          //     if($po_type !== 'single' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown Template Name for UK'], 400);
-          //     break;
-          // }
+            //Parse ORMS File
+            if(!$this->parseORMS($orms_path)) {
+              return response()->json(['error' => 'Unrecognized ORMS file'], 400);
+            }
+            list($orms_no, $retek_no, $orms_table) = $this->parseORMS($orms_path);
+            $orms_data['order_number'] = trim($orms_no);
+            $orms_data['retek_number'] = trim($retek_no);
+            $orms_data['order_table']  = $orms_table;
+            $output['orms'] = $orms_data;
+            //Check the RETEK purchase order validation
+            //Check the purchase order type whether it is Single or Ratio.
+            $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
+            //Compare RETEK PO number from both the sheets
+            if($retek_data['retek_po_number'] !== $orms_data['retek_number']) {
+              return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
+            }
+            $po_type   = $this->checkPOType($retek_path);
+            $arr = explode(' ',trim($po_type));
+            $retek_data['retek_po_type'] = strtolower($arr[0]);
+
+            switch ($retek_data['retek_po_type']) {
+              case 'single':
+                $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
+                $retek_data['info'] = $retek_single_data['info'];
+                $retek_data['table'] = $retek_single_data['table'];
+                break;
+              case 'ratio':
+                //Check for Ratio Pack B
+                $packB = $this->checkPackB($retek_path, 'CE');
+                $retek_ratio_data   = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info'] = $retek_ratio_data['info'];
+                $retek_data['table'] = $retek_ratio_data['table'];
+                if($packB) {
+                  $retek_data['ratioPackB'] = $packB;
+                }
+                break;
+              default:
+                return response()->json(['error' => 'Unknown PO Type'], 400);
+                break;
+            }
+
+            $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
+            $output['retek'] = $retek_data;
+            return response()->json(['output' =>$output], 200);
           
-          // switch ($po_type) {
-          //   case 'single':
-          //     $data = $this->cropPDF($path, 'single');
-          //     break;
-          //   case 'ratio':
-          //     //Check for Ratio Pack B
-          //     $packB = $this->checkPackB($path);
-          //     $data  = $this->cropPDF($path, 'ratio');
-          //     if($packB) {
-          //       $data['ratioPackB'] = $packB;
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown PO Type'], 400);
-          //     break;
-          // }
-          // $data['supplier'] = $this->getSupplierInfo($path);  
-          // return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
-        } else {
-          return response()->json(['error' => 'File not found'], 400);
+          } else {
+            return response()->json(['error' => 'File not found'], 400);
+          }
+        } catch (\Exception $e) {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-      } catch (\Exception $e) {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
     }
 
     /**
      * Method to parse the CE type purchase order
      * @param  [string] $file PDF file path.
-     * @return [json]  ORMS PO parsed data
+     * @return [array]  ORMS PO parsed data
      */
     public function parseORMS($file) {
       //Read the tabula configuration from config/tabula.php.
@@ -381,12 +365,15 @@ class OrderManagementCntrl extends Controller
         $orms_number  = Config::get('tabula.orms_number');
         $orms_table   = Config::get('tabula.orms_table');
         $ce_orms_no   = json_decode(shell_exec('java -jar '.$tabula.$orms_number.$file), true);
-        if($ce_orms_no[0]['data'][0][0]['text'] !== 'ORMS ORDER NUMBER:') {
-          return false;
+        if (strpos($ce_orms_no[0]['data'][0][0]['text'], 'ORMS ORDER NUMBER:') === false) {
+            return false;
         }
-        $ce_orms_table   = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
-
-        return array($ce_orms_no, $ce_orms_table);
+        $orms_po_number   = $ce_orms_no[0]['data'][0][0]['text'];
+        $retek_po_number  = $ce_orms_no[0]['data'][1][0]['text'];
+        $ce_orms_no       = explode(':', $orms_po_number);
+        $ce_retek_no      = explode(':', $retek_po_number);
+        $ce_orms_table    = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
+        return array($ce_orms_no[1], $ce_retek_no[1], $ce_orms_table[0]['data']);
     }
 
 
@@ -423,14 +410,15 @@ class OrderManagementCntrl extends Controller
     /**
      * Method to get the appropriate dimensions from the PDF
      * @param  [path] $file File to be cropped
-     * @param  [str] $type Purchase Order type
+     * @param  [str]  $type Purchase Order type
+     * @param  [str]  $zone Template Zone CE/UK
      * @return [str]       JSON extracted string
      */
-    public function cropPDF($file, $type) {
+    public function cropPDF($file, $type, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $quantity    = Config::get('tabula.'.$type.'_quantity');
-      $information = Config::get('tabula.'.$type.'_info');
+      $quantity    = Config::get('tabula.'.$zone.'_'.$type.'_quantity');
+      $information = Config::get('tabula.'.$zone.'_'.$type.'_info');
       //Execute tabula method to extract the quantity table.
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
@@ -442,12 +430,12 @@ class OrderManagementCntrl extends Controller
      * @param  [path] $file File to be cropped
      * @return [str]       JSON extracted string
      */
-    public function checkPackB($file) {
+    public function checkPackB($file, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $check_packB = Config::get('tabula.check_packB');
+      $check_packB = Config::get('tabula.'.$zone.'_check_packB');
       //Execute tabula method to extract the quantity table.
-      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
+      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file);
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
       foreach ($pack_b as $key => $value) {
         if(count($value['data']) < 2) {
@@ -954,15 +942,15 @@ class OrderManagementCntrl extends Controller
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
-	/**
-	 * Print Preview For Stickers
-	 *
-	 * @return pdf
-	 */
-	
+  /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
     public function printDivTesco(Request $request)
     {
-		$name=$request->name;
+    $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -975,17 +963,17 @@ class OrderManagementCntrl extends Controller
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
-    }	
-	
-	/**
-	 * Print Preview For Stickers
-	 *
-	 * @return pdf
-	 */
-	
+    } 
+  
+  /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
     public function printDivTescoSmall(Request $request)
     {
-		$name=$request->name;
+    $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -999,370 +987,69 @@ class OrderManagementCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
-	
-	/**
+  
+  /**
      * This Function is used to Show the style number in reorder page.
      *
      * @return json value
      */
-	public function reOrder(Request $request)
+  public function reOrder(Request $request)
     {
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
-		echo json_encode($data);
+    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
+    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
+    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
+    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
+    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
+    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+    echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to list all the artwork for particular style number.
      *
      * @return json value
      */
-	public function reOrderArtwork(Request $request)
+  public function reOrderArtwork(Request $request)
     {
-		$style=$request->style;
+    $style=$request->style;
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->get();
-		echo json_encode($data);
+    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->get();
+    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->get();
+    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->get();
+    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->get();
+    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->get();
+    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->get();
+    echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to get the artwork and quantity information.
      *
      * @return json value
      */
-	public function extraQuantity(Request $request)
+  public function extraQuantity(Request $request)
     {
           $type         =   $request->type;
-		  $id           =   $request->id;
-		  $type_id      =   explode('_',$type);
-		  $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
-		
-		  $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
+      $id           =   $request->id;
+      $type_id      =   explode('_',$type);
+      $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
+    
+      $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
           ->join('tesco_department','tesco_department.id','=',$type.'.tesco_department_id')->join('customers','customers.id','=',$type.'.tesco_supplier_id')->where($type.'.id',$id)->select($type.'.*','customers.company_name','tesco_brand.brand','tesco_department.department')->get();
-		
-		  $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
-		 
+    
+      $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+     
           echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to set the tesco reorder.
      *
      * @return json value
      */
-	public function setTescoReorder(Request $request)
+  public function setTescoReorder(Request $request)
     {
             $type         =   $request->type;
 		    $id           =   $request->id;
-			if($type == "tesco_tcl1_orders")
-			{
-				$tasks = TescoTCL1Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id1',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTCL1OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->tcl1_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_tcl2_orders")
-			{
-				$tasks = TescoTCL2Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				$factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTCL2OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->tcl2_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_tcl4_orders")
-			{
-				$tasks = TescoTCL4Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				$factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTCL4OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->tcl4_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_thl1_orders")
-			{
-				$tasks = TescoTHL1Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				
-				$factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTHL1OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->thl1_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_thl3_orders")
-			{
-				$tasks = TescoTHL3Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				
-				$factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTHL3OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->thl3_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_tsl1_orders")
-			{
-				$tasks = TescoTSL1Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				
-				$factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTSL1OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->tsl1_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}
-			if($type == "tesco_tsl3_orders")
-			{
-				$tasks = TescoTSL3Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				$factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
-				if($pi_required == 1)
-				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
-				}
-				else
-				{
-					$po_status="PO Pending";
-					$pi_status="";
-				}
-				$newTasks->po_status = $po_status;
-				$newTasks->pi_status = $pi_status;
-				$newTasks->save();
-				
-				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
-				foreach($data['tesco'] as $value)
-				{
-					$tasks = TescoTSL3OrdersQuantity::find($value->id);
-					$newTask = $tasks->replicate();
-					$newTask->save();
-					$newTask->tsl3_order_id = $newTasks->id;
-					$newTask->save();
-				}
-			}	
-		    echo true;
-    }
-	/**
-     * This Function is used to set the tesco repeat order.
-     *
-     * @return json value
-     */
-	public function setTescoRepeatorder(Request $request)
-    {
-            $type         =   $request->type;
-		    $id           =   $request->id;
-			$po           =   $request->po;
+			$counts       =   explode(',',$request->counts);
 			if($type == "tesco_tcl1_orders")
 			{
 				$tasks = TescoTCL1Orders::find($id);
@@ -1392,18 +1079,359 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
-				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
-				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTCL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_tcl2_orders")
+			{
+				$tasks = TescoTCL2Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				$factory=DB::table('tesco_tcl2_orders')->join('customers','customers.id','=','tesco_tcl2_orders.tesco_supplier_id')->where('tesco_tcl2_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL2OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl2_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_tcl4_orders")
+			{
+				$tasks = TescoTCL4Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				$factory=DB::table('tesco_tcl4_orders')->join('customers','customers.id','=','tesco_tcl4_orders.tesco_supplier_id')->where('tesco_tcl4_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL4OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl4_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_thl1_orders")
+			{
+				$tasks = TescoTHL1Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_thl1_orders')->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')->where('tesco_thl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTHL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->thl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_thl3_orders")
+			{
+				$tasks = TescoTHL3Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_thl3_orders')->join('customers','customers.id','=','tesco_thl3_orders.tesco_supplier_id')->where('tesco_thl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTHL3OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->thl3_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_tsl1_orders")
+			{
+				$tasks = TescoTSL1Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				
+				$factory=DB::table('tesco_tsl1_orders')->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')->where('tesco_tsl1_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTSL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tsl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}
+			if($type == "tesco_tsl3_orders")
+			{
+				$tasks = TescoTSL3Orders::find($id);
+				$newTasks = $tasks->replicate();
+				$newTasks->save();
+				
+				$factory=DB::table('tesco_tsl3_orders')->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')->where('tesco_tsl3_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTSL3OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tsl3_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
+				}
+			}	
+		    echo true;
+    }
+  /**
+     * This Function is used to set the tesco repeat order.
+     *
+     * @return json value
+     */
+  public function setTescoRepeatorder(Request $request)
+    {
+            $type         =   $request->type;
+        $id           =   $request->id;
+      $po           =   $request->po;
+      if($type == "tesco_tcl1_orders")
+      {
+        $tasks = TescoTCL1Orders::find($id);
+        $newTasks = $tasks->replicate();
+        $newTasks->save();
+        
+        $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+        
+        $pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+				  $pi_status="PI Approval Pending";
+				  if($factory{0}->po_required == 1)
+				  {
+					$po_status="PO Pending";
+				  }
+				  else
+				  {
+					$po_status="";
+				  }
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
+				$newTasks->save();
+				
+				
+				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoTCL1OrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->tcl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
+					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_tcl2_orders")
@@ -1436,16 +1464,21 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTCL2OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl2_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_tcl4_orders")
@@ -1479,16 +1512,21 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTCL4OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl4_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_thl1_orders")
@@ -1522,16 +1560,21 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTHL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_thl3_orders")
@@ -1565,16 +1608,21 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTHL3OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl3_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_tsl1_orders")
@@ -1608,16 +1656,21 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTSL1OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl1_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}
 			if($type == "tesco_tsl3_orders")
@@ -1651,164 +1704,79 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
+				$i=0;
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoTSL3OrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl3_order_id = $newTasks->id;
+					$newTask->count = $counts[$i];
 					$newTask->save();
+					$i++;
 				}
 			}	
 		    echo true;
     }
     /**
-     * Function to upload single buyer po file for tesco
+     * Function to upload single po file for tesco
      * @author <Praveen>
      * @return boolean true or false
      */
     public function uploadSingleOrdersPO(Request $request)
     {
       
-       try {
-             /** [ Creating new object for TescoSinglePOUpload() class ] */
-             $tesco_po_obj = new TescoSinglePOUpload(); 
-             if($request['template_1'])
-             {
-                switch ($request['template_1']) 
-                {
-                  case 'TCL1':
-                    $uploaded = $tesco_po_obj->uploadTCL1PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
-                    break;
-                  case 'TCL4':
-                    $uploaded = $tesco_po_obj->uploadTCL4PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
-                    break;
-                  case 'THL1':
-                    $uploaded = $tesco_po_obj->uploadTHL1PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
-                    break;
-                  case 'THL3':
-                    $uploaded = $tesco_po_obj->uploadTHL3PO($request['template_id_1'],$request['po_number_1'],$request['po_file_1'],$request['delivery_date_1']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if ($request['template_2']) {
-               switch ($request['template_2']) 
-                {
-                  case 'TCL2':
-                    $uploaded = $tesco_po_obj->uploadTCL2PO($request['template_id_2'],$request['po_number_2'],$request['po_file_2'],$request['delivery_date_2']);
-                    break;
-                  case 'TSL3':
-                    $uploaded = $tesco_po_obj->uploadTSL3PO($request['template_id_2'],$request['po_number_2'],$request['po_file_2'],$request['delivery_date_2']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if ($request['template_3']) {
-               switch ($request['template_3']) 
-                {
-                  case 'TSL1':
-                    $uploaded = $tesco_po_obj->uploadTSL1PO($request['template_id_3'],$request['po_number_3'],$request['po_file_3'],$request['delivery_date_3']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if (($uploaded != '') || ($uploaded != "Invalid Template")) 
-             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
-             }
-             else
-             {
-              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-             }
-           
-       } catch (\Exception $e) {
-           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-       return $result;
-    }
-    /**
-     * Function to upload combined buyer po file for tesco
-     * @author <Praveen>
-     * @return boolean true or false
-     */
-    public function uploadCombinedOrdersPO(Request $request)
-    {
+      return explode(',',$request['templates']);
       
-       try {
-             /** [ Creating new object for TescoCombinedPOUpload() class ] */
-              $tesco_po_obj = new TescoCombinedPOUpload(); 
-              $po_file = $request['po_file'];
-              $path = $po_file->getRealPath();
-              $filename = $po_file->getClientOriginalName();
-              $destination_path='/storage/app/public/po-files/';
-              $path='storage/app/public/po-files/';
-              $Orname = $po_file->getClientOriginalName();
-              $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
-              $po_file->move($path,$filename);
-              $destination_path_insert=$destination_path.$filename;
+       // try {
+       //  return "hai";
+       //       // $templates     = explode(',',$request['templates']);
+       //       // $po_number     = explode(',',$request['po_number']);
+       //       // $po_file       = explode(',',$request['po_file']);
+       //       // return $delivery_date = explode(',',$request['delivery_date']);
 
-             if($request['template_1'])
-             {
-                switch ($request['template_1']) 
-                {
-                  case 'TCL1':
-                    $uploaded = $tesco_po_obj->uploadTCL1PO($request['template_id_1'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
-                    break;
-                  case 'TCL4':
-                    $uploaded = $tesco_po_obj->uploadTCL4PO($request['template_id_1'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if ($request['template_2']) {
-               switch ($request['template_2']) 
-                {
-                  case 'TCL2':
-                    $uploaded = $tesco_po_obj->uploadTCL2PO($request['template_id_2'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
-                    break;
-                  case 'TSL3':
-                    $uploaded = $tesco_po_obj->uploadTSL3PO($request['template_id_2'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if ($request['template_3']) {
-               switch ($request['template_3']) 
-                {
-                  case 'TSL1':
-                    $uploaded = $tesco_po_obj->uploadTSL1PO($request['template_id_3'],$request['po_number'],$destination_path_insert,$request['delivery_date']);
-                    break;
-                  default:
-                    $uploaded = "Invalid Template";
-                    break;
-                }
-             }
-             if (($uploaded != '') || ($uploaded != "Invalid Template")) 
-             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
-             }
-             else
-             {
-              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-             }
+       //       /** [ Creating new object for TescoPOUpload() class ] */
+       //       // $tesco_po_obj = new TescoPOUpload(); 
+       //       // $i = 0;
+       //       // foreach ($templates as $value) 
+       //       // {
+       //       //  switch ($value['name']) 
+       //       //  {
+       //       //    case 'TCL1':
+       //       //      $result = $tesco_po_obj->uploadTCL1PO($value['id'],$po_number[$i],$delivery_date[$i],$po_file[$i]);
+       //       //      break;
+       //       //    case 'TCL2':
+       //       //      $result = $tesco_po_obj->uploadTCL2PO($value['id'],$po_number[$i],$delivery_date[$i],$po_file[$i]);
+       //       //      break;
+       //       //    case 'TSL1':
+       //       //      $result = $tesco_po_obj->uploadTSL1PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
+       //       //      break;
+       //       //    case 'TCL4':
+       //       //      $result = $tesco_po_obj->uploadTCL4PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
+       //       //      break;
+       //       //    case 'TSL3':
+       //       //      $result = $tesco_po_obj->uploadTSL3PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
+       //       //      break;
+       //       //    case 'THL1':
+       //       //      $result = $tesco_po_obj->uploadTHL1PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
+       //       //      break;
+       //       //    case 'THL3':
+       //       //      $result = $tesco_po_obj->uploadTHL3PO($value['id'],$po_number[$i],$po_file[$i],$delivery_date[$i]);
+       //       //      break;
+       //       //    default:
+       //       //      $result = "Invalid Template";
+       //       //      break;
+       //       //  }
+       //       // }
            
-       } catch (\Exception $e) {
-           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-       return $result;
+       // } catch (\Exception $e) {
+       //     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       // }
+       // return $result;
     }
 }
