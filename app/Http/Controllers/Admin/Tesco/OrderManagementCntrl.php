@@ -29,7 +29,7 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use PDF;
-use App\Classes\TescoPOUpload;
+use App\Classes\TescoSinglePOUpload;
 use App\Classes\TescoCombinedPOUpload;
 
 class OrderManagementCntrl extends Controller
