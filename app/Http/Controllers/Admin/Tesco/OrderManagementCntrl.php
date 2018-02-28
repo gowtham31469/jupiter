@@ -30,6 +30,7 @@ use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use PDF;
 use App\Classes\TescoPOUpload;
+use App\Classes\TescoCombinedPOUpload;
 
 class OrderManagementCntrl extends Controller
 {
@@ -182,16 +183,37 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * Method to create tesco order from purchase order using Tabula-Java
+     * Method to create Tesco Sticker Orders using PO upload.
+     * @param  Request $request Formdata
+     * @return [type] view
+     */
+    public function createStickerOrders(Request $request) {
+      try {
+        if($request->zone === 'UK') {
+          //handle the order using createOrderForUK method
+            return $this->createOrderForUK($request);
+        } else if($request->zone === 'CE') {
+          //handle the order using createOrderForCE method
+            return $this->createOrderForCE($request);
+        } else {
+           return response()->json(['error' => 'Unknown Template Zone'], 400);
+        }
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    /**
+     * Method to create tesco order for UK zone from purchase order using Tabula-Java
      * @return \Illuminate\Http\Response
      */
-    public function createOrderByTabula(Request $request) {
+    public function createOrderForUK($request) {
       try {
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
           $name = str_replace(" ", "_", $file->getClientOriginalName());
-          $path = $file->move('storage/app/TESCO/purchaseOrder', time().'_'.$name);
+          $path = $file->move('storage/app/TESCO/purchaseOrder/UK', time().'_'.$name);
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
           $po_series = explode('-', $po_number);
@@ -233,12 +255,12 @@ class OrderManagementCntrl extends Controller
           
           switch ($po_type) {
             case 'single':
-              $data = $this->cropPDF($path, 'single');
+              $data = $this->cropPDF($path, 'single', 'UK');
               break;
             case 'ratio':
               //Check for Ratio Pack B
-              $packB = $this->checkPackB($path);
-              $data  = $this->cropPDF($path, 'ratio');
+              $packB = $this->checkPackB($path , 'UK');
+              $data  = $this->cropPDF($path, 'ratio', 'UK');
               if($packB) {
                 $data['ratioPackB'] = $packB;
               }
@@ -250,12 +272,110 @@ class OrderManagementCntrl extends Controller
           $data['supplier'] = $this->getSupplierInfo($path);  
           return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
         } else {
-          return "File not found!!";
+          return response()->json(['error' => 'File not found'], 400);
         }
       } catch (\Exception $e) {
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
     }
+
+        /**
+     * Method to create tesco order for CE zone from purchase order using Tabula-Java
+     * @return \Illuminate\Http\Response
+     */
+    public function createOrderForCE($request) {
+      try {
+
+          $output = array();
+          $orms_data = array();
+          $retek_data = array();
+          //Check the files has been uploaded or not
+          if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
+            //Move the orms file
+            $orms = $request->file('ce_orms_purchase_order');
+            $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
+            $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
+
+            //Move the retek file
+            $retek = $request->file('ce_retek_purchase_order');
+            $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
+            $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
+
+            //Parse ORMS File
+            if(!$this->parseORMS($orms_path)) {
+              return response()->json(['error' => 'Unrecognized ORMS file'], 400);
+            }
+            list($orms_no, $retek_no, $orms_table) = $this->parseORMS($orms_path);
+            $orms_data['order_number'] = trim($orms_no);
+            $orms_data['retek_number'] = trim($retek_no);
+            $orms_data['order_table']  = $orms_table;
+            $output['orms'] = $orms_data;
+            //Check the RETEK purchase order validation
+            //Check the purchase order type whether it is Single or Ratio.
+            $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
+            //Compare RETEK PO number from both the sheets
+            if($retek_data['retek_po_number'] !== $orms_data['retek_number']) {
+              return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
+            }
+            $po_type   = $this->checkPOType($retek_path);
+            $arr = explode(' ',trim($po_type));
+            $retek_data['retek_po_type'] = strtolower($arr[0]);
+
+            switch ($retek_data['retek_po_type']) {
+              case 'single':
+                $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
+                $retek_data['info'] = $retek_single_data['info'];
+                $retek_data['table'] = $retek_single_data['table'];
+                break;
+              case 'ratio':
+                //Check for Ratio Pack B
+                $packB = $this->checkPackB($retek_path, 'CE');
+                $retek_ratio_data   = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info'] = $retek_ratio_data['info'];
+                $retek_data['table'] = $retek_ratio_data['table'];
+                if($packB) {
+                  $retek_data['ratioPackB'] = $packB;
+                }
+                break;
+              default:
+                return response()->json(['error' => 'Unknown PO Type'], 400);
+                break;
+            }
+
+            $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
+            $output['retek'] = $retek_data;
+            return response()->json(['output' =>$output], 200);
+          
+          } else {
+            return response()->json(['error' => 'File not found'], 400);
+          }
+        } catch (\Exception $e) {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+
+    /**
+     * Method to parse the CE type purchase order
+     * @param  [string] $file PDF file path.
+     * @return [array]  ORMS PO parsed data
+     */
+    public function parseORMS($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula       = Config::get('tabula.tabula_jar');
+        $orms_number  = Config::get('tabula.orms_number');
+        $orms_table   = Config::get('tabula.orms_table');
+        $ce_orms_no   = json_decode(shell_exec('java -jar '.$tabula.$orms_number.$file), true);
+        if (strpos($ce_orms_no[0]['data'][0][0]['text'], 'ORMS ORDER NUMBER:') === false) {
+            return false;
+        }
+        $orms_po_number   = $ce_orms_no[0]['data'][0][0]['text'];
+        $retek_po_number  = $ce_orms_no[0]['data'][1][0]['text'];
+        $ce_orms_no       = explode(':', $orms_po_number);
+        $ce_retek_no      = explode(':', $retek_po_number);
+        $ce_orms_table    = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
+        return array($ce_orms_no[1], $ce_retek_no[1], $ce_orms_table[0]['data']);
+    }
+
 
     /**
      * Method to find the type of P.O uploaded.
@@ -268,7 +388,7 @@ class OrderManagementCntrl extends Controller
         $po_type = Config::get('tabula.po_type');
         $type    = shell_exec('java -jar '.$tabula.$po_type.$file);
         $type    = json_decode($type, true);
-        $type = $type[0]['data'][0][0]['text'];
+        $type    = $type[0]['data'][0][0]['text'];
         return $type;
     }
 
@@ -290,14 +410,15 @@ class OrderManagementCntrl extends Controller
     /**
      * Method to get the appropriate dimensions from the PDF
      * @param  [path] $file File to be cropped
-     * @param  [str] $type Purchase Order type
+     * @param  [str]  $type Purchase Order type
+     * @param  [str]  $zone Template Zone CE/UK
      * @return [str]       JSON extracted string
      */
-    public function cropPDF($file, $type) {
+    public function cropPDF($file, $type, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $quantity    = Config::get('tabula.'.$type.'_quantity');
-      $information = Config::get('tabula.'.$type.'_info');
+      $quantity    = Config::get('tabula.'.$zone.'_'.$type.'_quantity');
+      $information = Config::get('tabula.'.$zone.'_'.$type.'_info');
       //Execute tabula method to extract the quantity table.
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
@@ -309,12 +430,12 @@ class OrderManagementCntrl extends Controller
      * @param  [path] $file File to be cropped
      * @return [str]       JSON extracted string
      */
-    public function checkPackB($file) {
+    public function checkPackB($file, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $check_packB = Config::get('tabula.check_packB');
+      $check_packB = Config::get('tabula.'.$zone.'_check_packB');
       //Execute tabula method to extract the quantity table.
-      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
+      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file);
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
       foreach ($pack_b as $key => $value) {
         if(count($value['data']) < 2) {
@@ -821,15 +942,15 @@ class OrderManagementCntrl extends Controller
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
-	/**
-	 * Print Preview For Stickers
-	 *
-	 * @return pdf
-	 */
-	
+  /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
     public function printDivTesco(Request $request)
     {
-		$name=$request->name;
+    $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -842,17 +963,17 @@ class OrderManagementCntrl extends Controller
         PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
-    }	
-	
-	/**
-	 * Print Preview For Stickers
-	 *
-	 * @return pdf
-	 */
-	
+    } 
+  
+  /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
     public function printDivTescoSmall(Request $request)
     {
-		$name=$request->name;
+    $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -866,65 +987,65 @@ class OrderManagementCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
-	
-	/**
+  
+  /**
      * This Function is used to Show the style number in reorder page.
      *
      * @return json value
      */
-	public function reOrder(Request $request)
+  public function reOrder(Request $request)
     {
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
-		echo json_encode($data);
+    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
+    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
+    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
+    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
+    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
+    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+    echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to list all the artwork for particular style number.
      *
      * @return json value
      */
-	public function reOrderArtwork(Request $request)
+  public function reOrderArtwork(Request $request)
     {
-		$style=$request->style;
+    $style=$request->style;
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->get();
-		echo json_encode($data);
+    $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->get();
+    $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->get();
+    $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->get();
+    $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->get();
+    $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->get();
+    $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->get();
+    echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to get the artwork and quantity information.
      *
      * @return json value
      */
-	public function extraQuantity(Request $request)
+  public function extraQuantity(Request $request)
     {
           $type         =   $request->type;
-		  $id           =   $request->id;
-		  $type_id      =   explode('_',$type);
-		  $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
-		
-		  $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
+      $id           =   $request->id;
+      $type_id      =   explode('_',$type);
+      $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
+    
+      $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
           ->join('tesco_department','tesco_department.id','=',$type.'.tesco_department_id')->join('customers','customers.id','=',$type.'.tesco_supplier_id')->where($type.'.id',$id)->select($type.'.*','customers.company_name','tesco_brand.brand','tesco_department.department')->get();
-		
-		  $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
-		 
+    
+      $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
+     
           echo json_encode($data);
     }
-	/**
+  /**
      * This Function is used to set the tesco reorder.
      *
      * @return json value
      */
-	public function setTescoReorder(Request $request)
+  public function setTescoReorder(Request $request)
     {
             $type         =   $request->type;
 		    $id           =   $request->id;
@@ -1256,37 +1377,36 @@ class OrderManagementCntrl extends Controller
 			}	
 		    echo true;
     }
-	/**
+  /**
      * This Function is used to set the tesco repeat order.
      *
      * @return json value
      */
-	public function setTescoRepeatorder(Request $request)
+  public function setTescoRepeatorder(Request $request)
     {
             $type         =   $request->type;
-		    $id           =   $request->id;
-			$po           =   $request->po;
-			if($type == "tesco_tcl1_orders")
-			{
-				$tasks = TescoTCL1Orders::find($id);
-				$newTasks = $tasks->replicate();
-				$newTasks->save();
-				
-				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
-				
-				$pi_required=$factory{0}->pi_required;
+        $id           =   $request->id;
+      $po           =   $request->po;
+      if($type == "tesco_tcl1_orders")
+      {
+        $tasks = TescoTCL1Orders::find($id);
+        $newTasks = $tasks->replicate();
+        $newTasks->save();
+        
+        $factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
+        
+        $pi_required=$factory{0}->pi_required;
 				if($pi_required == 1)
 				{
-					$pi_status="PI Approval Pending";
-					if($factory{0}->po_required == 1)
-					{
-						$po_status="PO Pending";
-					}
-					else
-					{
-						$po_status="";
-					}
-
+				  $pi_status="PI Approval Pending";
+				  if($factory{0}->po_required == 1)
+				  {
+					$po_status="PO Pending";
+				  }
+				  else
+				  {
+					$po_status="";
+				  }
 				}
 				else
 				{
