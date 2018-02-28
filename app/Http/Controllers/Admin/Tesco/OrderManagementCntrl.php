@@ -254,12 +254,12 @@ class OrderManagementCntrl extends Controller
           
           switch ($po_type) {
             case 'single':
-              $data = $this->cropPDF($path, 'single');
+              $data = $this->cropPDF($path, 'single', 'UK');
               break;
             case 'ratio':
               //Check for Ratio Pack B
-              $packB = $this->checkPackB($path);
-              $data  = $this->cropPDF($path, 'ratio');
+              $packB = $this->checkPackB($path , 'UK');
+              $data  = $this->cropPDF($path, 'ratio', 'UK');
               if($packB) {
                 $data['ratioPackB'] = $packB;
               }
@@ -284,94 +284,79 @@ class OrderManagementCntrl extends Controller
      */
     public function createOrderForCE($request) {
       try {
-        //Check the files has been uploaded or not
-        if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
-          //Move the orms file
-          $orms = $request->file('ce_orms_purchase_order');
-          $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
-          $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
-          //Move the retek file
-          $retek = $request->file('ce_retek_purchase_order');
-          $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
-          $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
-
-          //Parse ORMS File
-          list($orms_no, $orms_table) = $this->parseORMS($orms_path);
+          $output = array();
           $orms_data = array();
-          $orms_data['order_number'] = $orms_no;
-          $orms_data['order_table']  = $orms_table;
-          return $orms_data;
+          $retek_data = array();
+          //Check the files has been uploaded or not
+          if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
+            //Move the orms file
+            $orms = $request->file('ce_orms_purchase_order');
+            $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
+            $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
-          // //Read the Purchase Order Series
-          // $po_number = $this->getPOSeries($path);
-          // $po_series = explode('-', $po_number);
-          // if(count($po_series) < 2) {
-          //   return response()->json(['error' => 'Unknown Purchase Order for UK'], 400);
-          // }
-          // $po_series = $po_series[0];
-          // //Check the type of PO
-          // $po_type = $this->checkPOType($path);
-          // $arr = explode(' ',trim($po_type));
-          // $po_type = strtolower($arr[0]);
+            //Move the retek file
+            $retek = $request->file('ce_retek_purchase_order');
+            $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
+            $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
 
-          // //Validate the Template and Purchase Order Series Number.
-          // switch ($request->template_name) {
-          //   case 'TCL 1 , TCL 2 & TSL 1':
-          //     if($po_type !== 'ratio' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'TCL 4 & TSL 3':
-          //     if($po_type !== 'single' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 1':
-          //     if($po_type !== 'ratio' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 3':
-          //     if($po_type !== 'single' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown Template Name for UK'], 400);
-          //     break;
-          // }
+            //Parse ORMS File
+            if(!$this->parseORMS($orms_path)) {
+              return response()->json(['error' => 'Unrecognized ORMS file'], 400);
+            }
+            list($orms_no, $retek_no, $orms_table) = $this->parseORMS($orms_path);
+            $orms_data['order_number'] = trim($orms_no);
+            $orms_data['retek_number'] = trim($retek_no);
+            $orms_data['order_table']  = $orms_table;
+            $output['orms'] = $orms_data;
+            //Check the RETEK purchase order validation
+            //Check the purchase order type whether it is Single or Ratio.
+            $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
+            //Compare RETEK PO number from both the sheets
+            if($retek_data['retek_po_number'] !== $orms_data['retek_number']) {
+              return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
+            }
+            $po_type   = $this->checkPOType($retek_path);
+            $arr = explode(' ',trim($po_type));
+            $retek_data['retek_po_type'] = strtolower($arr[0]);
+
+            switch ($retek_data['retek_po_type']) {
+              case 'single':
+                $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
+                $retek_data['info'] = $retek_single_data['info'];
+                $retek_data['table'] = $retek_single_data['table'];
+                break;
+              case 'ratio':
+                //Check for Ratio Pack B
+                $packB = $this->checkPackB($retek_path, 'CE');
+                $retek_ratio_data   = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info'] = $retek_ratio_data['info'];
+                $retek_data['table'] = $retek_ratio_data['table'];
+                if($packB) {
+                  $retek_data['ratioPackB'] = $packB;
+                }
+                break;
+              default:
+                return response()->json(['error' => 'Unknown PO Type'], 400);
+                break;
+            }
+
+            $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
+            $output['retek'] = $retek_data;
+            return response()->json(['output' =>$output], 200);
           
-          // switch ($po_type) {
-          //   case 'single':
-          //     $data = $this->cropPDF($path, 'single');
-          //     break;
-          //   case 'ratio':
-          //     //Check for Ratio Pack B
-          //     $packB = $this->checkPackB($path);
-          //     $data  = $this->cropPDF($path, 'ratio');
-          //     if($packB) {
-          //       $data['ratioPackB'] = $packB;
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown PO Type'], 400);
-          //     break;
-          // }
-          // $data['supplier'] = $this->getSupplierInfo($path);  
-          // return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
-        } else {
-          return response()->json(['error' => 'File not found'], 400);
+          } else {
+            return response()->json(['error' => 'File not found'], 400);
+          }
+        } catch (\Exception $e) {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-      } catch (\Exception $e) {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
     }
 
     /**
      * Method to parse the CE type purchase order
      * @param  [string] $file PDF file path.
-     * @return [json]  ORMS PO parsed data
+     * @return [array]  ORMS PO parsed data
      */
     public function parseORMS($file) {
       //Read the tabula configuration from config/tabula.php.
@@ -379,12 +364,15 @@ class OrderManagementCntrl extends Controller
         $orms_number  = Config::get('tabula.orms_number');
         $orms_table   = Config::get('tabula.orms_table');
         $ce_orms_no   = json_decode(shell_exec('java -jar '.$tabula.$orms_number.$file), true);
-        if($ce_orms_no[0]['data'][0][0]['text'] !== 'ORMS ORDER NUMBER:') {
-          return false;
+        if (strpos($ce_orms_no[0]['data'][0][0]['text'], 'ORMS ORDER NUMBER:') === false) {
+            return false;
         }
-        $ce_orms_table   = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
-
-        return array($ce_orms_no, $ce_orms_table);
+        $orms_po_number   = $ce_orms_no[0]['data'][0][0]['text'];
+        $retek_po_number  = $ce_orms_no[0]['data'][1][0]['text'];
+        $ce_orms_no       = explode(':', $orms_po_number);
+        $ce_retek_no      = explode(':', $retek_po_number);
+        $ce_orms_table    = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
+        return array($ce_orms_no[1], $ce_retek_no[1], $ce_orms_table[0]['data']);
     }
 
 
@@ -421,14 +409,15 @@ class OrderManagementCntrl extends Controller
     /**
      * Method to get the appropriate dimensions from the PDF
      * @param  [path] $file File to be cropped
-     * @param  [str] $type Purchase Order type
+     * @param  [str]  $type Purchase Order type
+     * @param  [str]  $zone Template Zone CE/UK
      * @return [str]       JSON extracted string
      */
-    public function cropPDF($file, $type) {
+    public function cropPDF($file, $type, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $quantity    = Config::get('tabula.'.$type.'_quantity');
-      $information = Config::get('tabula.'.$type.'_info');
+      $quantity    = Config::get('tabula.'.$zone.'_'.$type.'_quantity');
+      $information = Config::get('tabula.'.$zone.'_'.$type.'_info');
       //Execute tabula method to extract the quantity table.
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
@@ -440,12 +429,12 @@ class OrderManagementCntrl extends Controller
      * @param  [path] $file File to be cropped
      * @return [str]       JSON extracted string
      */
-    public function checkPackB($file) {
+    public function checkPackB($file, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
-      $check_packB = Config::get('tabula.check_packB');
+      $check_packB = Config::get('tabula.'.$zone.'_check_packB');
       //Execute tabula method to extract the quantity table.
-      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file); 
+      $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file);
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
       foreach ($pack_b as $key => $value) {
         if(count($value['data']) < 2) {
