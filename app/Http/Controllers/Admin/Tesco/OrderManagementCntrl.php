@@ -182,37 +182,16 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * Method to create Tesco Sticker Orders using PO upload.
-     * @param  Request $request Formdata
-     * @return [type] view
-     */
-    public function createStickerOrders(Request $request) {
-      try {
-        if($request->zone === 'UK') {
-          //handle the order using createOrderForUK method
-            return $this->createOrderForUK($request);
-        } else if($request->zone === 'CE') {
-          //handle the order using createOrderForCE method
-            return $this->createOrderForCE($request);
-        } else {
-           return response()->json(['error' => 'Unknown Template Zone'], 400);
-        }
-      } catch (\Exception $e) {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
-    }
-
-    /**
-     * Method to create tesco order for UK zone from purchase order using Tabula-Java
+     * Method to create tesco order from purchase order using Tabula-Java
      * @return \Illuminate\Http\Response
      */
-    public function createOrderForUK($request) {
+    public function createOrderByTabula(Request $request) {
       try {
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
           $name = str_replace(" ", "_", $file->getClientOriginalName());
-          $path = $file->move('storage/app/TESCO/purchaseOrder/UK', time().'_'.$name);
+          $path = $file->move('storage/app/TESCO/purchaseOrder', time().'_'.$name);
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
           $po_series = explode('-', $po_number);
@@ -271,122 +250,12 @@ class OrderManagementCntrl extends Controller
           $data['supplier'] = $this->getSupplierInfo($path);  
           return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
         } else {
-          return response()->json(['error' => 'File not found'], 400);
+          return "File not found!!";
         }
       } catch (\Exception $e) {
         return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
     }
-
-        /**
-     * Method to create tesco order for CE zone from purchase order using Tabula-Java
-     * @return \Illuminate\Http\Response
-     */
-    public function createOrderForCE($request) {
-      try {
-        //Check the files has been uploaded or not
-        if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
-          //Move the orms file
-          $orms = $request->file('ce_orms_purchase_order');
-          $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
-          $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
-
-          //Move the retek file
-          $retek = $request->file('ce_retek_purchase_order');
-          $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
-          $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
-
-          //Parse ORMS File
-          list($orms_no, $orms_table) = $this->parseORMS($orms_path);
-          $orms_data = array();
-          $orms_data['order_number'] = $orms_no;
-          $orms_data['order_table']  = $orms_table;
-          return $orms_data;
-
-          // //Read the Purchase Order Series
-          // $po_number = $this->getPOSeries($path);
-          // $po_series = explode('-', $po_number);
-          // if(count($po_series) < 2) {
-          //   return response()->json(['error' => 'Unknown Purchase Order for UK'], 400);
-          // }
-          // $po_series = $po_series[0];
-          // //Check the type of PO
-          // $po_type = $this->checkPOType($path);
-          // $arr = explode(' ',trim($po_type));
-          // $po_type = strtolower($arr[0]);
-
-          // //Validate the Template and Purchase Order Series Number.
-          // switch ($request->template_name) {
-          //   case 'TCL 1 , TCL 2 & TSL 1':
-          //     if($po_type !== 'ratio' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'TCL 4 & TSL 3':
-          //     if($po_type !== 'single' || $po_series !== '460') {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 1':
-          //     if($po_type !== 'ratio' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   case 'THL 3':
-          //     if($po_type !== 'single' || ($po_series !== '206' && $po_series !== '461')) {
-          //       return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown Template Name for UK'], 400);
-          //     break;
-          // }
-          
-          // switch ($po_type) {
-          //   case 'single':
-          //     $data = $this->cropPDF($path, 'single');
-          //     break;
-          //   case 'ratio':
-          //     //Check for Ratio Pack B
-          //     $packB = $this->checkPackB($path);
-          //     $data  = $this->cropPDF($path, 'ratio');
-          //     if($packB) {
-          //       $data['ratioPackB'] = $packB;
-          //     }
-          //     break;
-          //   default:
-          //     return response()->json(['error' => 'Unknown PO Type'], 400);
-          //     break;
-          // }
-          // $data['supplier'] = $this->getSupplierInfo($path);  
-          // return response()->json(['details' =>$data, 'type' => $po_type, 'po_number' => $po_number], 200);
-        } else {
-          return response()->json(['error' => 'File not found'], 400);
-        }
-      } catch (\Exception $e) {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
-    }
-
-    /**
-     * Method to parse the CE type purchase order
-     * @param  [string] $file PDF file path.
-     * @return [json]  ORMS PO parsed data
-     */
-    public function parseORMS($file) {
-      //Read the tabula configuration from config/tabula.php.
-        $tabula       = Config::get('tabula.tabula_jar');
-        $orms_number  = Config::get('tabula.orms_number');
-        $orms_table   = Config::get('tabula.orms_table');
-        $ce_orms_no   = json_decode(shell_exec('java -jar '.$tabula.$orms_number.$file), true);
-        if($ce_orms_no[0]['data'][0][0]['text'] !== 'ORMS ORDER NUMBER:') {
-          return false;
-        }
-        $ce_orms_table   = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
-
-        return array($ce_orms_no, $ce_orms_table);
-    }
-
 
     /**
      * Method to find the type of P.O uploaded.
@@ -399,7 +268,7 @@ class OrderManagementCntrl extends Controller
         $po_type = Config::get('tabula.po_type');
         $type    = shell_exec('java -jar '.$tabula.$po_type.$file);
         $type    = json_decode($type, true);
-        $type    = $type[0]['data'][0][0]['text'];
+        $type = $type[0]['data'][0][0]['text'];
         return $type;
     }
 
@@ -1065,7 +934,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks = $tasks->replicate();
 				$newTasks->save();
 				
-				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id1',$id)->select('*')->get();
+				$factory=DB::table('tesco_tcl1_orders')->join('customers','customers.id','=','tesco_tcl1_orders.tesco_supplier_id')->where('tesco_tcl1_orders.id',$id)->select('*')->get();
 				
 				$pi_required=$factory{0}->pi_required;
 				if($pi_required == 1)
@@ -1088,6 +957,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
@@ -1129,6 +1000,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -1170,6 +1043,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -1212,6 +1087,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -1254,6 +1131,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1296,6 +1175,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1337,6 +1218,8 @@ class OrderManagementCntrl extends Controller
 				}
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -1391,6 +1274,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				
@@ -1434,6 +1319,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -1477,6 +1364,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -1520,6 +1409,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -1563,6 +1454,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1606,6 +1499,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1649,6 +1544,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = "";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();

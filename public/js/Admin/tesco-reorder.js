@@ -90,7 +90,7 @@ function reordertescoartworks()
 					{
 						var span='<span class="label sticker">'+index.zone+'</span>';
 					}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 				})
 				
 			},
@@ -147,7 +147,7 @@ function repeatordertescoartworks()
 					{
 						var span='<span class="label sticker">'+index.zone+'</span>';
 					}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-4"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
 				})
 				
 			},
@@ -173,7 +173,7 @@ function repeatordertescoartworks()
  * @return View
  */
 
-function extraQuantityTesco(type,id,name,zone)
+function extraQuantityTesco(type,id,name,zone,po_number)
 {
 	var buyer = localStorage.getItem("reorder_buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -233,7 +233,15 @@ function extraQuantityTesco(type,id,name,zone)
 			var item = $('.nav-item.active').find('a').text();
 			if(item == "Repeat Order")
 			{
-				$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
+				if((name == "TSL1") ||(name == "TSL3"))
+				{
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" style="display:none" onkeyup="repeatorderpo()" value="'+po_number+'" placeholder="PO Number"><div class="help-block with-errors"></div>')
+				}
+				else
+				{
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
+				}
+				
 			}
 				
 				

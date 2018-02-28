@@ -267,7 +267,7 @@
             
 				<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
 					<div class="col-md-4">
-                <h4 class="text-center">Order Details</h4>
+                <h4 class="text-center osorderdetails">Order Details</h4>
                 <div class="scroll" style="height: calc(100vh - 80px);">
 					
 						<input type="hidden" id="edit_template_name">
@@ -364,7 +364,7 @@
             </div>
             <div class="col-md-8">
             <div class="scroll" style="height: calc(100vh - 40px);">
-                <h4 class="text-center">Artwork</h4>
+                <h4 class="text-center osartwork">Artwork</h4>
                 <div class="row">
                 <div class=" col-md-6 col-md-offset-3 artwork_tesco">
                
