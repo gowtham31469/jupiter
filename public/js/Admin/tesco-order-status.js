@@ -600,6 +600,7 @@ function showFilter() {
  */
 var filterByDate = function (column, startDate, endDate) {
     // Custom filter syntax requires pushing the new filter to the global filter array
+    
     $.fn.dataTableExt.afnFiltering.push(
         function (oSettings, aData, iDataIndex) {
             var columnDate=aData[column].toString().split("-").reverse().join("-");
@@ -607,7 +608,6 @@ var filterByDate = function (column, startDate, endDate) {
             var rowDate = normalizeDate(columnDate),
                 start = normalizeDate(startDate),
                 end = normalizeDate(endDate);
-
             // If our date from the row is between the start and end
             if (start <= rowDate && rowDate <= end) {
                 return true;
@@ -642,7 +642,7 @@ function tescoStatusTable(data,path)
     var columnsIn = data[0];
     for (var key in columnsIn)
     {
-        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id")
+        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag")
         {
         	th += "<th style='text-align: center;'>" + key + "</th>";
         }
@@ -668,9 +668,9 @@ function tescoStatusTable(data,path)
                 }
                 else if (key == "OrderDate")
                 {
-                   
                     var orderDate = moment(value[key] ).format('DD-MM-YYYY');
                     tr += '<td align="center">'+orderDate+'</td>';
+
                    
                 }
                 
@@ -719,8 +719,17 @@ function tescoStatusTable(data,path)
                     tr += '<td align="center">'+$status_text+'</td>';
                    
                 }
-                else if (key =="StyleNumber")
+                else if (key =="StyleNo")
                 {
+                    var order_flag = value.order_flag
+                    if (order_flag == "reOrder")
+                    {
+                        var span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
+                    }
+                    if (order_flag == "repeatOrder")
+                    {
+                        var span_style = '<span title="Reorder" class="batch-reorder">R</span>'
+                    }
                     var zone = value.Zone
                     var style_no = "";
                     if (zone=="CE")
@@ -737,20 +746,40 @@ function tescoStatusTable(data,path)
                 else if (key == "Actions")
                 {
                    var po_file     = value['po_file'];
+                   if (po_file!=null)
+                   {
+                        style_po = "style='border-color:#FFFFFF'"
+                   }
+                   else{
+                        style_po = "style='border-color:#FF0000'"
+                   }                
                    var pi_required = value['pi_required'];
                    
                    if (pi_required==1)
                    {
-                        tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
+                        tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
                    }
                    else
                    {
-                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order"></i></a></td>';
-                   }
-                   
+                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                   }                  
                 }
-                
-                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id")
+                else if (key =="DeliveryDate")
+                {   
+                    
+                   if (value[key] == '00/00/0000')
+                   {
+                        tr += '<td><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") ></td>';
+                   }
+                   else
+                   {
+                        tr += '<td><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")></td>';
+                   }
+                  
+                   
+                  
+                }
+                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag")
                 {
                 	if (value[key]== "" || value[key]==null)
                 	{
@@ -767,6 +796,61 @@ function tescoStatusTable(data,path)
     })
     return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
+var date = new Date();
+var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+$('body').on('focus',".datepicker_recurring_start", function(){
+    $(this).datepicker({
+        autoclose: true,
+        startDate: today,
+        format:'dd/mm/yyyy'
+    });
+});
+function updateDeliveryDate(obj,tableID,tableName)
+{
+    $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
+    alert(deliveryDate)
+    $.ajax({
+        url: base_url + "/admin/tesco/update-delivery-date",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            deliveryDate:deliveryDate,
+            tableName:tableName,
+            id:tableID
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function(data)
+            {
+               $('#snackbar').css('background-color','#00b6ff');
+               $('.snackbar_span').html('Delivery Date updated Successfully');
+               $(obj).closest('tr').find('.datepicker_recurring_start').val(po_number);
+               showSnackbar();                        
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+    
+}
+
 /**
  * [tescoSetPO description]
  * @param  {[type]} obj [description]
@@ -905,17 +989,18 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                }
                else
                {
-                    if(data.data.bank_details.is_advance_payment == 0)
+                    console.log(data.data.bank_details.pi_date)
+                    $('.advnc').text(data.data.bank_details.payment_terms)
+                    $('.freight').text(data.data.bank_details.freight_terms)
+                    $('.pi_number').text(data.data.company_details.pi_number)
+                    $('.pi-date').text(data.data.company_details.pi_date)
+                    if (data.data.company_details.rev_number!=0)
                     {
-                        $('.advnc').addClass('hidden')
-                        $('.bond').addClass('hidden')
-                    }
-                    if(data.data.bank_details.is_freight_cost_free == 1)
-                    {
-                        $('.freight').addClass('hidden')
-                        $('.bond').addClass('hidden')
+                       $('.rev').removeClass('hidden')
+                       $('.rev_number').text(data.data.company_details.rev_number) 
                     }
                     
+
                     $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
