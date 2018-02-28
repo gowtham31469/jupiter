@@ -431,7 +431,6 @@ class OrderStatusCntrl extends Controller
                                 ->where($qnty_id,$order_details->id)->get();
 			
  			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-			
             if (count($order_details) && count($quantity_details))
             {
                 $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
