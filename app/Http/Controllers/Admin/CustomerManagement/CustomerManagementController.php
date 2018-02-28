@@ -112,7 +112,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_contact_persons.customer_id','=',$customer_id)
                          ->where('customer_contact_persons.default_contact_person','=',1)
                          ->first();
-                if(count($default_contact) > 0)
+                if($default_contact)
                 {
                   $value->contact_person = $default_contact->contact_person;
                   $value->contact_email  = $default_contact->contact_email;
@@ -131,7 +131,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_billing_address','=',1)
                          ->first();
-                if(count($is_billing_address) > 0)
+                if($is_billing_address)
                 {
                   $value->bill_address   = $is_billing_address->bill_address;
                   $value->bill_country   = $is_billing_address->bill_country;
@@ -152,7 +152,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_shipping_address','=',1)
                          ->first();
-                if(count($is_shipping_address) > 0)
+                if($is_shipping_address)
                 {
                   $value->ship_address   = $is_shipping_address->ship_address;
                   $value->ship_country   = $is_shipping_address->ship_country;
@@ -220,7 +220,7 @@ class CustomerManagementController extends Controller
                 $delivery_date_req    = $request['delivery_date_req'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
-                if(count($email_exists) > 0)
+                if($email_exists)
                 {
                   $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
                 }
@@ -639,7 +639,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_contact_persons.customer_id','=',$customer_id)
                          ->where('customer_contact_persons.default_contact_person','=',1)
                          ->first();
-                if(count($default_contact) > 0)
+                if($default_contact)
                 {
                   $value->contact_person = $default_contact->contact_person;
                   $value->contact_email  = $default_contact->contact_email;
@@ -658,7 +658,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_billing_address','=',1)
                          ->first();
-                if(count($is_billing_address) > 0)
+                if($is_billing_address)
                 {
                   $value->bill_address   = $is_billing_address->bill_address;
                   $value->bill_country   = $is_billing_address->bill_country;
@@ -679,7 +679,7 @@ class CustomerManagementController extends Controller
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_shipping_address','=',1)
                          ->first();
-                if(count($is_shipping_address) > 0)
+                if($is_shipping_address)
                 {
                   $value->ship_address   = $is_shipping_address->ship_address;
                   $value->ship_country   = $is_shipping_address->ship_country;
