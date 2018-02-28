@@ -264,10 +264,16 @@
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"></div>
         <div class="div-max">
-            <div class="col-md-4">
-                <h4 class="text-center">Order Details</h4>
-                <div class="scroll">
-                    <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">
+            
+				<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
+					<div class="col-md-4">
+                <h4 class="text-center osorderdetails">Order Details</h4>
+                <div class="scroll" style="height: calc(100vh - 80px);">
+					
+						<input type="hidden" id="edit_template_name">
+						<input type="hidden" id="edit_zone">
+						<input type="hidden" id="edit_template_type">
+						<input type="hidden" id="edit_id">
 						 <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
                             <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" disabled required="" onkeyup="dynamicSVGTemplates()">
@@ -353,26 +359,29 @@
                             <option value="no">No</option> 
                         </select>
                     </div>
-               </form>
+               
             </div>
             </div>
             <div class="col-md-8">
-            <div class="scroll">
-                <h4 class="text-center">Artwork</h4>
+            <div class="scroll" style="height: calc(100vh - 40px);">
+                <h4 class="text-center osartwork">Artwork</h4>
                 <div class="row">
                 <div class=" col-md-6 col-md-offset-3 artwork_tesco">
                
                  </div>
                 <div class="col-md-12">
                     <div class="edit-qty-table-div"></div>
-                    <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button>
+					<div class="osfooter">
+					
+					</div>
+                   
                 </div>
                  
                     
                     </div>
                 </div>
             </div>
-            
+            </form>
             <div class="loader">
                 <div class=" fa-3x">
                     <i class="fa fa-spinner fa-pulse"></i>
