@@ -3811,11 +3811,18 @@ try{
              cache: false,
              contentType: false,
              processData: false,
-             success: function (data) {
-                $('.snackbar_span').html('PO File upload successfully');
-                showSnackbar();
-                $('#poUploadModal').modal('hide');
-                location.reload();
+             statusCode:
+             {
+                200: function(data) {
+                    $('.snackbar_span').html('PO File upload successfully');
+                    showSnackbar();
+                    $('#poUploadModal').modal('hide');
+                    location.reload();    
+                },
+                400: function() {
+                    $('.snackbar_span').html("Something went wrong !. Try again");
+                    showSnackbar();
+                }
              },
              error: function (data) {
                 console.error(data);
@@ -3847,11 +3854,18 @@ try{
              cache: false,
              contentType: false,
              processData: false,
-             success: function (data) {
-                $('.snackbar_span').html('PO File upload successfully');
-                showSnackbar();
-                $('#poUploadModal').modal('hide');
-                location.reload();
+             statusCode:
+             {
+                200: function(data) {
+                    $('.snackbar_span').html('PO File upload successfully');
+                    showSnackbar();
+                    $('#poUploadModal').modal('hide');
+                    location.reload();    
+                },
+                400: function() {
+                    $('.snackbar_span').html("Something went wrong !. Try again");
+                    showSnackbar();
+                }
              },
              error: function (data) {
                 console.error(data);
