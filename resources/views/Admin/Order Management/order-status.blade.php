@@ -38,8 +38,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
-                <div class="modal-body text-center">
-                    <div class="po_file hidden" id="po_file">
+                <div class="modal-body">
+                    <div class="po_file hidden text-center" id="po_file">
                         <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
                         <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
@@ -107,18 +107,14 @@
                             <input type="file" id="new_po_file">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
-
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="update_new_po" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="update_po" class="btn btn-primary hidden">Update</button>
-
-                    <button type="button" id="new_pos" class="btn btn-primary hidden">Update</button>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_new_po" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="update_po" class="btn btn-primary  btn-smhidden">Update</button>
+                    <button type="button" id="new_pos" class="btn btn-primary  btn-sm btn-sm hidden">Update</button>
+                    
                 </div>
             </div>
         </div>
@@ -145,9 +141,9 @@
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
                                         <img id="company-logo" style="height:50px;" src="" class="img-responsive">
-                                        <p><strong>Date:</strong> {{ date('d-m-Y ') }}</p>
-                                        <p><strong>PI:</strong>493</p>
-                                        <p><strong>REV:</strong>2</p>
+                                        <p><strong>Date:</strong><span class="pi-date"></span> </p>
+                                        <p><strong>PI : </strong><span class="pi_number"> </span></p>
+                                        <p class="rev hidden"><strong>REV : </strong><span class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
 
@@ -178,7 +174,7 @@
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong><span class="advnc">Advance Payment</span><span class="bond">|</span><span class="freight">Freight at your cost</span></strong></p>
+                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight at your cost  : <span class="bond"></span></strong><span class="freight"> </span></p>
                                 </div>
                                 <hr/>
                             </div>
@@ -253,7 +249,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
                     <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
                     <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
@@ -533,6 +529,8 @@
     $('.remove').click(function() {
         $('.left-panel').removeClass('active');
     })
+
+   
 </script>
 
 @endsection

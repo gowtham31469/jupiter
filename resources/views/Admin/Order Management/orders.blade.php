@@ -403,7 +403,7 @@ border: 0;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order Upload</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
             </div>
             <div class="modal-body">
                 <div class="tabbable">{{-- Only required for left/right tabs --}}

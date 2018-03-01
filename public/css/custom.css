@@ -1003,7 +1003,7 @@ span.sticker-details {
     background: #f90530;
 }
 
-.label-POApproved {
+.label-POUploaded {
     background: #2ecc71;
 }
 
@@ -1332,3 +1332,27 @@ a.notification:focus {
 .navbar-default .dropdown-menu.notify-drop .notify-drop-footer a:hover {
     color: #333;
 }
+
+.trClass td{
+    position: relative;
+}
+span.batch-reorder{
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 10px;
+    background: #FF5722;
+    color: #fff;
+    padding: 1px 4px;
+    font-weight: bold;
+}
+span.batch-additional {
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+    top: 0;
+    background: #2196F3;
+    color: #fff;
+    padding: 1px 4px;
+    font-weight: bold;
+    }
