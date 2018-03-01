@@ -424,6 +424,19 @@ border: 0;
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="body_msg">
+                
+            </div>
+            <div class="modal-footer">
+               <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+               <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 	<div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">
@@ -616,7 +629,7 @@ border: 0;
 				}
 			});
 		});
-
+        
 	</script>
 
 	@endsection

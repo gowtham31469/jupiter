@@ -1274,24 +1274,28 @@ function updateArtwork(id,table_name,TemplateName)
 						var qty="Cases per carton";
 						var barcode_tr="ITF Barcode";
 						var tpnd_tr="ORMS TPND";
+						var th_tr="";
 					}
 					else if((TemplateName == "TCL4" && zone=="CE") || (TemplateName == "TSL3" && zone=="CE") || (TemplateName == "THL3" && zone=="CE"))
 					{
 						var qty="Case Size";
 						var barcode_tr="EAN Barcode";
 						var tpnd_tr="ORMS TPND";
+						var th_tr="<th>Size</th>";
 					}
 					else if((TemplateName == "TCL4" && zone=="UK") || (TemplateName == "TSL3" && zone=="UK") || (TemplateName == "THL3" && zone=="UK"))
 					{
 						var qty="Case Size";
 						var barcode_tr="EAN Barcode";
 						var tpnd_tr="TPND";
+						var th_tr="<th>Size</th>";
 					}
 					else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
 					{
 						var qty="Units per carton";
 						var barcode_tr="ITF Barcode";
 						var tpnd_tr="TPND";
+						var th_tr="";
 					}
                    
 					var tr="";
@@ -1304,6 +1308,7 @@ function updateArtwork(id,table_name,TemplateName)
 							var barcode_td=value.itf_barcode;
 							var maxlength=14;
 							var tpnd=value.orms_tpn;
+							var th_td="";
 						}
 						else if((TemplateName == "TCL4" && zone=="CE") || (TemplateName == "TSL3" && zone=="CE") || (TemplateName == "THL3" && zone=="CE"))
 						{
@@ -1311,6 +1316,7 @@ function updateArtwork(id,table_name,TemplateName)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.orms_tpn;
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" onkeypress="return isNumber(event)" value="'+value.size+'" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
 						}
 						else if((TemplateName == "TCL4" && zone=="UK") || (TemplateName == "TSL3" && zone=="UK") || (TemplateName == "THL3" && zone=="UK"))
 						{
@@ -1318,6 +1324,7 @@ function updateArtwork(id,table_name,TemplateName)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.tpnd;
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" onkeypress="return isNumber(event)" value="'+value.size+'" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
 						}
 						else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
 						{
@@ -1325,6 +1332,7 @@ function updateArtwork(id,table_name,TemplateName)
 							var barcode_td=value.itf_barcode;
 							var maxlength=14;
 							var tpnd=value.tpnd;
+							var th_td="";
 						}
 						
 					    if(value.id == data.quantity_details[0].id)
@@ -1336,10 +1344,10 @@ function updateArtwork(id,table_name,TemplateName)
 					   		var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
 					    }
 						
-							tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required=""  placeholder="Count" type="text"><div class="help-block with-errors"></div></div></td><td>'+delete_td+'</td></tr>';
+							tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required=""  placeholder="Count" type="text"><div class="help-block with-errors"></div></div></td><td>'+delete_td+'</td></tr>';
 						i++;
 					})
-					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick="addRowOs(this)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> <th>Count</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+					 $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'") data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Count</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
 					
 					$('#edit_template_name').val(TemplateName)
 					$('#edit_zone').val(data.order_details.zone)
@@ -1406,6 +1414,7 @@ function setEditOrderStatus()
         var barcode      = [];
         var size 		 = [];
         var count        = [];
+		var single_size        = [];
 
         /** [ Create array of ce ratio orms tpn ] */
         $('.ce_ratio_orms_tpn').each(function(i, item)
@@ -1435,6 +1444,7 @@ function setEditOrderStatus()
             
         });
         count = count.join(',');
+	
 		var po_number         =  $('#tesco_po_number').val();
 		var uk_style          =  $('#tesco_uk_style').val();
 		var ce_style          =  $('#tesco_ce_style').val();
@@ -1452,11 +1462,30 @@ function setEditOrderStatus()
 		var type              =  $('#edit_template_type').val()
 		var template_name     =  $('#edit_template_name').val()
 	    var edit_id           =  $('#edit_id').val()
+		
+	
+		if((template_name == "TCL1") ||(template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1"))
+		{
+			single_size="";
+		}
+		else if((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3"))
+		{
+			/** [ Create array of ce ratio tcl1 count ] */
+			$('.ce_single_size').each(function(i, item)
+			{
+				single_size[i]    = $(item).val();
+
+			});
+			single_size = single_size.join(',');
+		}
+	
+		
+		
 	
 	 			$.ajax({
                      url: base_url + "/admin/tesco/set-tesco-order-status",
                      type: 'post',
-                     data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name},
+                     data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
                      success: function (data) {
 						 $('.left-panel').removeClass('active');  
 						 location.reload()
@@ -1470,12 +1499,35 @@ function setEditOrderStatus()
                  })
 }
 
-function addRowOs(obj)
+function addRowOs(obj,TemplateName,zone)
 {
 	var maxlength =$('#os_barcode_1').attr('maxlength')
 	var i = parseInt($(obj).attr('data-id'))+1;
 	$(obj).attr('data-id',i);
-	$('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="" required=""  placeholder="Count" type="text"><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
+	
+	if((TemplateName == "TCL1" && zone=="CE") ||(TemplateName == "TCL2" && zone=="CE") || (TemplateName == "TSL1" && zone=="CE") || (TemplateName == "THL1" && zone=="CE"))
+	{
+		var qty="Cases per carton";
+		var th_td="";
+	}
+	else if((TemplateName == "TCL4" && zone=="CE") || (TemplateName == "TSL3" && zone=="CE") || (TemplateName == "THL3" && zone=="CE"))
+	{
+		var qty="Case Size";
+		var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+	}
+	else if((TemplateName == "TCL4" && zone=="UK") || (TemplateName == "TSL3" && zone=="UK") || (TemplateName == "THL3" && zone=="UK"))
+	{
+		var qty="Case Size";
+		var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+	}
+	else if((TemplateName == "TCL1" && zone=="UK") ||(TemplateName == "TCL2" && zone=="UK") || (TemplateName == "TSL1" && zone=="UK") || (TemplateName == "THL1" && zone=="UK"))
+	{
+		var qty="Units per carton";
+		var th_td="";
+	}
+	
+	
+	$('.edit-qty-table-div table tbody').append('<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="" required=""  placeholder="Count" type="text"><div class="help-block with-errors"></div></div></td><td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a></td></tr>');
 	$('#create_tesco_order_status_form').validator('update'); 
 }
 
@@ -1814,7 +1866,19 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
            /** [ Dynamically change  svg department ] */
            if($('#tesco_department option:selected').val() != '')
            {
+			  
               svgDoc.getElementById("department").innerHTML = department.toUpperCase().replace('&', '&amp;');
+			   
+			   var str =department.trim();
+			   var justify_len = str.length;
+			   if(justify_len < 17)
+			   {
+				   svgDoc.getElementById("department").style.fontSize = "11px";
+			   }
+			   else
+			   {
+				  svgDoc.getElementById("department").style.fontSize = "9px"; 
+			   }
            }  
            else
            { 

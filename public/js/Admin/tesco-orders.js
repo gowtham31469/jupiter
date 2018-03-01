@@ -1549,8 +1549,60 @@ function setTescoOrder()
                 }
                 else
                 {
-                    /** Function to store CE ratio TCL1, TCL2, TSL1 template */
-                    storeCERatioTCL1TCL2TSL1();
+                    var count_TCL1        = [];
+                    var count_TCL2        = [];
+                    var count_TSL1        = [];
+                    /** [ Create array of ce ratio tcl1 count ] */
+                    $('.count_TCL1').each(function(i, item)
+                    {
+                        count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL1 = count_TCL1.join(',');
+                    /** [ Create array of ce ratio tcl2 count ] */
+                    $('.count_TCL2').each(function(i, item)
+                    {
+                        count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL2 = count_TCL2.join(',');
+                    /** [ Create array of ce ratio tsl1 count ] */
+                    $('.count_TSL1').each(function(i, item)
+                    {
+                        count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TSL1 = count_TSL1.join(',');
+                    var msg = "Artwork count missing for following artworks: <br>";
+                    if ($.inArray('0', count_TCL1) > -1)
+                    {
+                       msg += 'TCL 1<br>';
+                    }
+                    if ($.inArray('0', count_TCL2) > -1)
+                    {
+                       msg += 'TCL 2<br>';
+                    }
+                    if ($.inArray('0', count_TSL1) > -1)
+                    {
+                       msg += 'TSL 1<br>';
+                    }
+                    msg += "Do you want to place order ?"
+                    if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirm').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store CE ratio TCL1, TCL2, TSL1 template */
+                        storeCERatioTCL1TCL2TSL1();
+                    }
+                    
                 }
                 
             }
