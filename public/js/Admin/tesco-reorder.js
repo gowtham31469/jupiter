@@ -223,19 +223,28 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 					{
 						var unit_qty = index.cases_per_carton;
 						var barcode_td=index.itf_barcode;
+						var tpnd_td=index.orms_tpn;
 					}
-					else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE") || (name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+					else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 					{
 						var unit_qty = index.case_size;
 						var barcode_td=index.ean_barcode;
+						var tpnd_td=index.orms_tpn;
+					}
+					else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+					{
+						var unit_qty = index.case_size;
+						var barcode_td=index.ean_barcode;
+						var tpnd_td=index.tpnd;
 					}
 					else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 					{
 						var unit_qty = index.units_per_carton;
 						var barcode_td=index.itf_barcode;
+						var tpnd_td=index.tpnd;
 					}
 
-				 tr += '<tr><td class="tpnd">' + index.tpnd + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> <th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			
@@ -307,31 +316,38 @@ function contentdocument(data,name,zone)
 	if((name == "TCL1" && zone=="CE") ||(name == "TCL2" && zone=="CE") || (name == "TSL1" && zone=="CE") || (name == "THL1" && zone=="CE"))
 	{
 		var pieces_in_ratio=data.qty[0].cases_per_carton;
+		var tpnd_td=data.qty[0].orms_tpn;
 	}
-	else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE") || (name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+	else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 	{
 		var pieces_in_ratio=data.qty[0].case_size;
+		var tpnd_td=data.qty[0].orms_tpn;
+	}
+	else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
+	{
+		var pieces_in_ratio=data.qty[0].case_size;
+		var tpnd_td=data.qty[0].tpnd;
 	}
 	else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 	{
 		var pieces_in_ratio=data.qty[0].units_per_carton;
+		var tpnd_td=data.qty[0].tpnd;
 	}
 	var mySVG = document.getElementById("reorder_svg");
 	var svgDoc;
 	mySVG.addEventListener("load", function () {
-		
 		if(name == "TSL3")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
-		   svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
-		   svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else
@@ -346,7 +362,7 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("department").innerHTML =data.template[0].department;
 			svgDoc1.getElementById("rfid").innerHTML =rfid_yes;
 			svgDoc1.getElementById("tag_at_source").innerHTML =tag_yes;
-			svgDoc1.getElementById("tpnd").innerHTML = data.qty[0].tpnd;
+			svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 			svgDoc1.getElementById("po_number").innerHTML = data.template[0].po_number;
 			svgDoc1.getElementById("uk_style").innerHTML = data.template[0].uk_style_ref;
 			svgDoc1.getElementById("ce_style").innerHTML = data.template[0].ce_style_ref;
