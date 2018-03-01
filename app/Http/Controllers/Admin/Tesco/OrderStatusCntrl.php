@@ -278,43 +278,43 @@ class OrderStatusCntrl extends Controller
             }
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_tcl1_orders.*',DB::raw('"TCL 1" as Template'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_tcl1_orders.*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['tcl2'] = DB::table('tesco_tcl2_orders')
                             ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_tcl2_orders.*',DB::raw('"TCL 2" as Template'),DB::raw('"tesco_tcl2_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_tcl2_orders.*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['tcl4'] = DB::table('tesco_tcl4_orders')
                             ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_tcl4_orders.*',DB::raw('"TCL 4" as Template'),DB::raw('"tesco_tcl4_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_tcl4_orders.*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['thl1'] = DB::table('tesco_thl1_orders')
                             ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_thl1_orders.*',DB::raw('"THL 1" as Template'),DB::raw('"tesco_thl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_thl1_orders.*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['thl3'] = DB::table('tesco_thl3_orders')
                             ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_thl3_orders.*',DB::raw('"THL 3" as Template'),DB::raw('"tesco_thl3_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_thl3_orders.*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['tsl1'] = DB::table('tesco_tsl1_orders')
                             ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_tsl1_orders.*',DB::raw('"TSL 1" as Template'),DB::raw('"tesco_tsl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_tsl1_orders.*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
                             ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
-                            ->select('tesco_tsl3_orders.*',DB::raw('"TSL 3" as Template'),DB::raw('"tesco_tsl3_orders" as tableName'),'tesco_item_master.company_id')
+                            ->select('tesco_tsl3_orders.*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
                             ->get();
@@ -461,10 +461,10 @@ class OrderStatusCntrl extends Controller
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->get();
-
+			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
             if (count($order_details) && count($quantity_details))
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
             }
             else
             {
@@ -477,5 +477,148 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
+	/**
+     * Edit the tesco orders
+     * 
+     * @return boolean values
+     */
+    public function setTescoOrderStatus(Request $request)
+    {
+        $tpnd         	 = explode(',',$request['tpnd']);
+		$barcode         = explode(',',$request['barcode']);
+		$size			 = explode(',',$request['size']);
+		$count			 = explode(',',$request['count']);
+		$template_id     = $request['edit_id'];
+		$template_name     = $request['template_name'];
+		$zone =$request['zone'];
+		if($template_name == "TCL1")
+		{
+			$table_name="tesco_tcl1_orders";
+			$qty_table_name="tesco_tcl1_orders_quanty";
+			$foreign_key="tcl1_order_id";
+			$single_size	= $request['single_size'];
+		}
+		else if($template_name == "TCL2")
+		{
+			$table_name="tesco_tcl2_orders";
+			$qty_table_name="tesco_tcl2_orders_quanty";
+			$foreign_key="tcl2_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "TCL4")
+		{
+			$table_name="tesco_tcl4_orders";
+			$qty_table_name="tesco_tcl4_orders_quanty";
+			$foreign_key="tcl4_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		else if($template_name == "TSL1")
+		{
+			$table_name="tesco_tsl1_orders";
+			$qty_table_name="tesco_tsl1_orders_quanty";
+			$foreign_key="tsl1_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "TSL3")
+		{
+			$table_name="tesco_tsl3_orders";
+			$qty_table_name="tesco_tsl3_orders_quanty";
+			$foreign_key="tsl3_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		else if($template_name == "THL1")
+		{
+			$table_name="tesco_thl1_orders";
+			$qty_table_name="tesco_thl1_orders_quanty";
+			$foreign_key="thl1_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "THL3")
+		{
+			$table_name="tesco_thl3_orders";
+			$qty_table_name="tesco_thl3_orders_quanty";
+			$foreign_key="thl3_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		
+		DB::table($table_name)->where('id',$template_id)
+						      ->update([
+                                  'zone'                 => $request['zone'],
+								  'template_type'        => $request['type'],
+								  'po_number'            => $request['po_number'],
+								  'uk_style_ref'         => $request['uk_style'],
+								  'ce_style_ref'         => $request['ce_style'],
+								  'season_code'          => $request['season_code'],
+								  'short_description'    => $request['description'],
+								  'eqos_site_code'       => $request['eqos'],
+								  'manufacture_date'     => $request['manufacture_date'],
+								  'tesco_department_id'  => $request['department'],
+								  'tesco_brand_id'       => $request['brand'],
+								  'tesco_supplier_id'    => $request['supplier'],
+								  'rfid_compliant'       => $request['rfid'],
+								  'tag_at_source'        => $request['tag_at_source'],
+                                ]);
+		
+		DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
+		$i=0;
+		foreach($tpnd as $value)
+		{
+			if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
+			{
+					
+				
+					DB::table($qty_table_name)->insert([
+					  'orms_tpn'           => $value,
+					  'itf_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'cases_per_carton'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>"0"
+					]);
+			}
+			else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
+			{
+					
+				DB::table($qty_table_name)->insert([
+					  'orms_tpn'           => $value,
+					  'ean_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'case_size'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>$single_size[$i]
+					]);
+			}
+			else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
+			{
+				
+				DB::table($qty_table_name)->insert([
+				  'tpnd'           => $value,
+				  'ean_barcode'        => $barcode[$i],
+				  $foreign_key       =>$template_id,
+				  'case_size'   => $size[$i],
+				  'count'         	   => $count[$i],
+				  'size'  			=>$single_size[$i]
+				]);
+			}
+			else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
+			{
+				
+				DB::table($qty_table_name)->insert([
+					  'tpnd'           		=> $value,
+					  'itf_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'units_per_carton'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>"0"
+				]);
+			}
+			$i++;
+		}
+		
+		
+		echo true;	
+			  
+    }
+
 
 }

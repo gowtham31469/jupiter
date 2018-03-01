@@ -123,7 +123,7 @@ return [
     |
     |
     */
-    'CE_single_info' => ' -p 2 -a 0,0,80,1000  -f JSON ',
+    'CE_single_info' => ' -p 2 -a 40,0,80,1000  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
@@ -132,7 +132,7 @@ return [
     |
     |
     */
-    'CE_single_quantity' => ' -p 2 -a 121,9,400,440  -f JSON ',
+    'CE_single_quantity' => ' -p 2 -a 125,9,400,440  -f JSON ',
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information of SINGLE type

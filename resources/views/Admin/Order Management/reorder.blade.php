@@ -233,11 +233,13 @@
 	})
 	$('.buyer-nav-select').html($('.buyer-div').html())
 	if (localStorage.getItem("reorder_buyer") === null) {
+		$('.main-content').removeClass('card')
 
 	} else if (localStorage.getItem("reorder_buyer") === 'orchestra') {
+		$('.main-content').addClass('card')
 		reOrder();
 	} else {
-
+		$('.main-content').addClass('card')
 		reOrderTesco();
 	}
 	$('.buyer-select').val(localStorage.getItem("reorder_buyer_id"))
@@ -250,14 +252,16 @@
 			localStorage.setItem("reorder_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
 			localStorage.setItem("reorder_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
 			if (localStorage.getItem("reorder_buyer") === 'orchestra') {
+				$('.main-content').addClass('card')
 				reOrder();
 			} else {
-
+				$('.main-content').addClass('card')
 				reOrderTesco();
 			}
 		} else {
 			localStorage.removeItem("reorder_buyer");
 			localStorage.removeItem("reorder_buyer_id");
+			$('.main-content').removeClass('card')
 			location.reload()
 			
 		}
