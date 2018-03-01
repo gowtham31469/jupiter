@@ -523,7 +523,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                    /** [ Invoking createTCL1Order function using class instance ] */
-                  return $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
