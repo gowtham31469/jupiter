@@ -1458,6 +1458,7 @@ function setEditOrderStatus()
                      data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name},
                      success: function (data) {
 						 $('.left-panel').removeClass('active');  
+						 location.reload()
                      },
                      error: function (data) {
                         console.log(data);

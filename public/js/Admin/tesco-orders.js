@@ -269,7 +269,7 @@ function tescoOrders() {
                                 formData.append('type', localStorage.getItem("template type"));
                                 formData.append('zone', localStorage.getItem("zone"));
                                 formData.append('template_name', localStorage.getItem("template_group"));
-                                uploadPurchaseOrder(formData);
+                                uploadPurchaseOrder(formData, localStorage.getItem("zone"));
                             } else {
                                 createOrders();
                             }
@@ -662,7 +662,7 @@ try{
  * Render the the order form with autofilled fields which are parsed from the customer PDF.
  * @return {xml} XML from the parser. 
  */
-function  uploadPurchaseOrder(formData) {
+function  uploadPurchaseOrder(formData, zone) {
     try {
         $.ajaxSetup({
             headers: {
@@ -684,8 +684,14 @@ function  uploadPurchaseOrder(formData) {
                  statusCode:
                  {
                     200: function(data) {
-                       //Call the parse method which resides on parser.js
-                        parseXML(data, createOrders);       
+                        if(zone === 'UK') {
+                            //Call the parse method which resides on parser.js
+                            parseUKPurchaseOrder(data, createOrders);
+                        } else {
+                            //Call the parse method which resides on parser.js
+                            parseCEPurchaseOrder(data, createOrders);
+                        }
+                              
                     },
                     422: function(data) {  
                         $('.snackbar_span').html("File Mismatch!! Please check the file.");
@@ -1723,7 +1729,7 @@ function storeCERatioTCL1TCL2TSL1()
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                        var i = 1;
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
                        });
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';

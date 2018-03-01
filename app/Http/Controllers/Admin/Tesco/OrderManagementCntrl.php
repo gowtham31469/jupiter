@@ -344,7 +344,7 @@ class OrderManagementCntrl extends Controller
 
             $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
             $output['retek'] = $retek_data;
-            return response()->json(['output' =>$output], 200);
+            return response()->json(['details' =>$output], 200);
           
           } else {
             return response()->json(['error' => 'File not found'], 400);
@@ -523,7 +523,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                    /** [ Invoking createTCL1Order function using class instance ] */
-                  return $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -693,7 +693,7 @@ class OrderManagementCntrl extends Controller
                  $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required);
                  $tesco_order_id  = $tesco_order->id;
                  $templates_inserted = array('THL 3' => $tesco_order_id);
-                   $last_insertions = array_merge($last_insertions,$templates_inserted);
+                 $last_insertions = array_merge($last_insertions,$templates_inserted);
                  $i = 0;
                  foreach ($orms_tpn as $tpn) 
                  {
@@ -750,7 +750,7 @@ class OrderManagementCntrl extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                    /** [ Invoking createTCL1Order function using class instance ] */
-                  return $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
                    $tesco_order_id  = $tesco_order->id;
                    $templates_inserted = array('TCL 1' => $tesco_order_id);
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
