@@ -1081,6 +1081,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$id)->select('*')->get();
@@ -1127,6 +1128,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -1173,6 +1175,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -1220,6 +1223,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -1267,6 +1271,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1314,6 +1319,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1360,6 +1366,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
@@ -1383,10 +1390,11 @@ class OrderManagementCntrl extends Controller
      * @return json value
      */
   public function setTescoRepeatorder(Request $request)
-    {
-            $type         =   $request->type;
-        $id           =   $request->id;
+  {
+      $type         =   $request->type;
+      $id           =   $request->id;
       $po           =   $request->po;
+	  $counts       =   explode(',',$request->counts);
       if($type == "tesco_tcl1_orders")
       {
         $tasks = TescoTCL1Orders::find($id);
@@ -1418,6 +1426,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+		  		$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				
@@ -1466,6 +1475,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$id)->select('*')->get();
@@ -1514,6 +1524,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$id)->select('*')->get();
@@ -1562,6 +1573,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$id)->select('*')->get();
@@ -1610,6 +1622,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$id)->select('*')->get();
@@ -1658,6 +1671,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$id)->select('*')->get();
@@ -1706,6 +1720,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = "";
+				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
 				$data['tesco']=DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$id)->select('*')->get();
