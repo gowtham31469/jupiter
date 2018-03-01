@@ -242,7 +242,7 @@
                         </div>
                         <div class="form-group">
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
-                            <label for="exampleInputFile">PO File</label>
+                            <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
@@ -501,6 +501,7 @@
                 $('.dz-remove').hide();
                 this.removeFile(file);
                 $('#po-file-upload').modal('hide')
+                $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 tescoOrderStatus()
                 showSnackbar();
