@@ -269,7 +269,7 @@ function tescoOrders() {
                                 formData.append('type', localStorage.getItem("template type"));
                                 formData.append('zone', localStorage.getItem("zone"));
                                 formData.append('template_name', localStorage.getItem("template_group"));
-                                uploadPurchaseOrder(formData);
+                                uploadPurchaseOrder(formData, localStorage.getItem("zone"));
                             } else {
                                 createOrders();
                             }
@@ -662,7 +662,7 @@ try{
  * Render the the order form with autofilled fields which are parsed from the customer PDF.
  * @return {xml} XML from the parser. 
  */
-function  uploadPurchaseOrder(formData) {
+function  uploadPurchaseOrder(formData, zone) {
     try {
         $.ajaxSetup({
             headers: {
@@ -684,8 +684,14 @@ function  uploadPurchaseOrder(formData) {
                  statusCode:
                  {
                     200: function(data) {
-                       //Call the parse method which resides on parser.js
-                        parseXML(data, createOrders);       
+                        if(zone === 'UK') {
+                            //Call the parse method which resides on parser.js
+                            parseUKPurchaseOrder(data, createOrders);
+                        } else {
+                            //Call the parse method which resides on parser.js
+                            parseCEPurchaseOrder(data, createOrders);
+                        }
+                              
                     },
                     422: function(data) {  
                         $('.snackbar_span').html("File Mismatch!! Please check the file.");

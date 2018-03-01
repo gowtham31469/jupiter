@@ -1,9 +1,9 @@
 /**
- * Method to parse the xml string object.
+ * Method to parse the json string object.
  * Invoked inside uploadPurchaseOrder() method.
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
-function parseXML(data, callback) {
+function parseUKPurchaseOrder(data, callback) {
    try {
         //Check for Purchase Order Type
         var parsedObj;
@@ -24,12 +24,149 @@ function parseXML(data, callback) {
 }
 
 /**
+ * Method to parse the json string object.
+ * Invoked inside uploadPurchaseOrder() method.
+ * @param  {string} xml Data obtained from uploadPurchaseOrder() method
+ */
+function parseCEPurchaseOrder(data, callback) {
+   // try {
+        var cParsedObj = {};
+        //Parse the ORMS data
+        cParsedObj.purchaseOrder  =  data.details.orms.order_number;
+        cParsedObj.orderQuantity =  parseORMSTable(data.details.orms.order_table);
+        //Check for Purchase Order Type
+        var po_type = data.details.retek.retek_po_type;
+        switch(po_type) {
+            case 'single': parseSingleTypeForCE(data.details.retek, cParsedObj);
+                break;
+            case 'ratio' : parseRatioType(data);
+                break;
+            default: console.log("Failed to identify Purchase Order Type!! Exiting..");
+                break;
+        }
+        callback(cParsedObj);
+    // } catch(e) {
+    //     // error statements
+    //     console.error("Error:"+e);
+    // }
+      console.log(cParsedObj);
+}
+
+/**
+ * Method to parse the ORMS quantity table from CE ORMS table
+ * @param  {json} data ORMS raw json
+ * @return {[type]} parsed table
+ */
+function parseORMSTable(tabula) {
+    var header = [];
+    var values = [];
+    $.each(tabula, function(index, element) {
+        var row = {};
+        $.each(element, function(i, val) {
+            if(index === 0) {
+                switch(i) {
+                    case 0: header.push('TPND');
+                        break;
+                    case 1: header.push('EAN_Barcode');
+                        break;
+                    case 2: header.push('Size');
+                        break;
+                }
+                
+            } else {
+                if(i === 2) {
+                    val = val.text.split(' ');
+                    if(typeof(val[1]) != "undefined" && val[1] !== null) {
+                        row[header[i]] = val[1];
+                    } else {
+                        row[header[i]] = '-';
+                    }
+                   
+                } else {
+                   row[header[i]] = val.text;
+                }
+                  
+            }
+        });
+        if(index !== 0) {
+           values.push(row); 
+        } 
+    });
+    return values;
+
+}
+
+/**
+ * Method to parse data for CE SINGLE type.
+ * @param  {json} json string to be parsed.
+ * @return {object}     Object array with all the required fields.
+ */
+function parseSingleTypeForCE(data, cParsedObj) {
+    //********************************************* SUPPLIER INFO SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    if (data.hasOwnProperty("supplier")) {
+        var supplier = JSON.parse(data.supplier);
+        supplier = supplier[0].data.slice(-3);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        if(supplier_code[0] === 'Supplier No. ') {
+            cParsedObj.supplierCode = supplier_code[1].trim();
+            //Supplier Name
+            cParsedObj.supplierName = supplier[2][0].text.trim();
+        }      
+    }
+    //********************************************* ORDER INFORMATION SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+
+    var info = JSON.parse(data.info);
+    $.each(info[0].data, function(ind, ele) {
+        var row_length = ele.length;
+        switch(ind) {
+            case 0:
+                //Extract VPN - CE STYLE NUMBER
+                var new_element = removeEmptyValues(ele);
+                var vpn = new_element[0].text.split(":");
+                cParsedObj.styleNumber  = vpn[1].trim();
+                break;
+            case 1:
+                //Extract 24 Char Description
+                var new_element = removeEmptyValues(ele);
+                cParsedObj.shortDescription = new_element[2].text;
+                break;
+            case 2:
+                //Extract Season Code
+                var new_element = removeEmptyValues(ele);
+                var season = new_element[1].text.split(":");
+                cParsedObj.seasonCode = season[1];
+                break;
+        }
+    });
+
+
+    //********************************************* ORDER QUANTITY SECTION ************************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    var tabula = JSON.parse(data.table);
+    var ormsQty = cParsedObj.orderQuantity;
+    tabula[0].data.pop(); //Remove the total quantity row from the object
+    tabula[0].data.shift(); //Remove the table headers from the array
+    var retek_size = [];    //Create a new array with size as index and casesize as value
+    for(var i in tabula[0].data) {
+        retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
+    }
+    //Size wise mapping of ORMS and RETEK tables.
+    $.each(ormsQty, function(index,element) {
+        ormsQty[index].Case_Size = retek_size[element.Size];
+    });
+}
+
+/**
  * Method to parse data for SINGLE type.
  * @param  {json} data string to be parsed.
  * @return {object}     Object array with all the required fields.
  */
 function parseSingleType(data) {
-    try{
+    try {
         var singleObj = {};
         //*********************************************************************************************************
         //*********************************************************************************************************
@@ -246,7 +383,12 @@ function renderParsedValues(parsedObj) {
     if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
-            $('#'+zone+'_single_tpnd_'+index).val(j.TPND);
+            if(zone === 'ce') {
+                $('#ce_single_orms_tpn_'+index).val(j.TPND);
+            } else {
+                $('#uk_single_tpnd_'+index).val(j.TPND);
+            }
+            
             $('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode);
             $('#'+zone+'_single_case_size_'+index).val(j.Case_Size);
             $('#'+zone+'_single_size_'+index).val(j.Size);  
