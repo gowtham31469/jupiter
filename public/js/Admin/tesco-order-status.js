@@ -120,6 +120,7 @@ function tescoOrderStatus()
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
+                                                    console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -798,12 +799,13 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00/00/0000')
+                   if (value[key] == '00-00-0000')
                    {
                         tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") ></td>';
                    }
                    else
                    {
+                       
                         tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")></td>';
                    }
                   
@@ -833,7 +835,7 @@ $('body').on('focus',".datepicker_recurring_start", function(){
     $(this).datepicker({
         autoclose: true,
         startDate: today,
-        format:'dd/mm/yyyy'
+        format:'dd-mm-yyyy'
     });
 });
 function updateDeliveryDate(obj,tableID,tableName)
@@ -841,7 +843,6 @@ function updateDeliveryDate(obj,tableID,tableName)
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
-    alert(deliveryDate)
     $.ajax({
         url: base_url + "/admin/tesco/update-delivery-date",
         type: "Post",
@@ -875,7 +876,7 @@ function updateDeliveryDate(obj,tableID,tableName)
         error: function (data){
             console.log(data);
         },
-        complete: function () {
+        complete: function (){
             $(".loader").hide();
         }
     })

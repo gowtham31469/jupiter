@@ -1331,7 +1331,7 @@ class OrderManagementCntrl extends Controller
             }
             else
             {
-                $po_status = "PO Approved";
+                $po_status = "PO Uploaded";
             }
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
