@@ -1033,34 +1033,43 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     }
                     
 
-                    $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/><strong>GSTN :'+data.data.company_details.phone+'</strong>')
+                    $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/>GSTN : '+data.data.company_details.gstin)
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                    $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.bank_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>OD</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.bank_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.bank_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.bank_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.bank_details.ifsc_code+'</td></tr></table>')
+                    $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>'+data.data.company_details.account_type+'</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.company_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
                
                
                     var i = 0;
                     var totalqnty = 0;
                     var subtotal = 0;
                     var tax = 0 ;
-                               
-                    var tr = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Material</th><th class="size-pi">Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                    var tr = '';
+                    if (data.data.bank_details.template_type == "single")
+                    {
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Artwork</th><th class="size-pi">Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
+                    }
+                    else
+                    {
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Artwork</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                    }        
+                     
                
                     if (data.data.item_details.length!=0)
                     {
+
                         tax = data.data.item_details[0].tax;
                         $.each(data.data.item_details, function (index, value)
                         {
-                            if (value.size == "")
-                            {
-                                size = "-" ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
-                            }
-                            else
+                            if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
                                 tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
                             }
+                            else
+                            {
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                            }
+                            
                             
                             totalqnty+=value.quantity;
                             subtotal+=value.quantity*value.unit_price;
