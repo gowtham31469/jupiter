@@ -13,12 +13,12 @@ return [
 
    /*
     |--------------------------------------------------------------------------
-    | SET the JAVA executable path
+    | SET the TABULA-JAVA jar file path
     |--------------------------------------------------------------------------
     |
     |
     */
-   'tabula_jar' => 'C:\xampp\cgi-bin\tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => 'C:\xampp\htdocs\jupiter\tabula-1.0.1-jar-with-dependencies.jar',
 
    /*
     |--------------------------------------------------------------------------
@@ -167,6 +167,6 @@ return [
     |
     |
     */
-    'CE_check_packB' => ' -l -p 2 -a 10,10,1000,1000 -f JSON ',
+    'CE_check_packB' => ' -l -n -p 2 -a 10,10,1000,1000 -f JSON ',
 
 ];
