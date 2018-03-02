@@ -182,7 +182,8 @@ class OrderStatusCntrl extends Controller
                     'uvc_style_no'     => $style_no,
                     'shipping_address' => $data['ship_to']->address,
                     'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'template_type'  => $data['bank_details']->template_type
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)

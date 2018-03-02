@@ -1044,6 +1044,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     var subtotal = 0;
                     var tax = 0 ;
                     var tr = '';
+                    
                     if (data.data.bank_details.template_type == "single")
                     {
                         tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Artwork</th><th class="size-pi">Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    

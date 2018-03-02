@@ -33,7 +33,12 @@ class AddBankToCompanyTable extends Migration
     {
         Schema::table('company', function (Blueprint $table)
         {
-            //
+            $table->dropColumn('account_no');
+            $table->dropColumn('account_holder');
+            $table->dropColumn('ifsc_code');
+            $table->dropColumn('bank');
+            $table->dropColumn('branch');
+            $table->dropColumn('account_type');
         });
     }
 }
