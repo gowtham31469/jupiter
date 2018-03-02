@@ -305,11 +305,9 @@ class OrderManagementCntrl extends Controller
             if(!$this->parseORMS($orms_path)) {
               return response()->json(['error' => 'Unrecognized ORMS file'], 400);
             }
-            list($orms_no, $retek_no, $orms_table) = $this->parseORMS($orms_path);
+            list($orms_no, $retek_no) = $this->parseORMS($orms_path);
             $orms_data['order_number'] = trim($orms_no);
             $orms_data['retek_number'] = trim($retek_no);
-            $orms_data['order_table']  = $orms_table;
-            $output['orms'] = $orms_data;
             //Check the RETEK purchase order validation
             //Check the purchase order type whether it is Single or Ratio.
             $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
@@ -323,16 +321,19 @@ class OrderManagementCntrl extends Controller
 
             switch ($retek_data['retek_po_type']) {
               case 'single':
+                $orms_table = $this->parseORMSTable($orms_path, 'single');
+                $orms_data['order_table']  = $orms_table;
                 $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
                 $retek_data['info'] = $retek_single_data['info'];
                 $retek_data['table'] = $retek_single_data['table'];
                 break;
               case 'ratio':
-                //Check for Ratio Pack B
-                $packB = $this->checkPackB($retek_path, 'CE');
-                $retek_ratio_data   = $this->cropPDF($retek_path, 'ratio', 'CE');
-                $retek_data['info'] = $retek_ratio_data['info'];
-                $retek_data['table'] = $retek_ratio_data['table'];
+                $orms_table = $this->parseORMSTable($orms_path, 'ratio');
+                $orms_data['order_table']  = $orms_table;
+                $packB = $this->checkPackB($retek_path, 'CE');//Check for Ratio Pack B
+                $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info']   = $retek_ratio_data['info'];
+                $retek_data['table']  = $retek_ratio_data['table'];
                 if($packB) {
                   $retek_data['ratioPackB'] = $packB;
                 }
@@ -343,6 +344,7 @@ class OrderManagementCntrl extends Controller
             }
 
             $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
+            $output['orms'] = $orms_data;
             $output['retek'] = $retek_data;
             return response()->json(['details' =>$output], 200);
           
@@ -363,7 +365,6 @@ class OrderManagementCntrl extends Controller
       //Read the tabula configuration from config/tabula.php.
         $tabula       = Config::get('tabula.tabula_jar');
         $orms_number  = Config::get('tabula.orms_number');
-        $orms_table   = Config::get('tabula.orms_table');
         $ce_orms_no   = json_decode(shell_exec('java -jar '.$tabula.$orms_number.$file), true);
         if (strpos($ce_orms_no[0]['data'][0][0]['text'], 'ORMS ORDER NUMBER:') === false) {
             return false;
@@ -372,8 +373,20 @@ class OrderManagementCntrl extends Controller
         $retek_po_number  = $ce_orms_no[0]['data'][1][0]['text'];
         $ce_orms_no       = explode(':', $orms_po_number);
         $ce_retek_no      = explode(':', $retek_po_number);
+        return array($ce_orms_no[1], $ce_retek_no[1]);
+    }
+
+    /**
+     * Method to parse the CE type purchase order
+     * @param  [string] $file PDF file path.
+     * @return [array]  ORMS PO parsed data
+     */
+    public function parseORMSTable($file, $type) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula       = Config::get('tabula.tabula_jar');
+        $orms_table   = Config::get('tabula.orms_table_'.$type);
         $ce_orms_table    = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
-        return array($ce_orms_no[1], $ce_retek_no[1], $ce_orms_table[0]['data']);
+        return $ce_orms_table[0]['data'];
     }
 
 
@@ -437,6 +450,7 @@ class OrderManagementCntrl extends Controller
       //Execute tabula method to extract the quantity table.
       $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file);
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
+      print_r($pack_b);
       foreach ($pack_b as $key => $value) {
         if(count($value['data']) < 2) {
           unset($pack_b[$key]);

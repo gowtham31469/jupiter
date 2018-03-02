@@ -33,13 +33,16 @@ function parseCEPurchaseOrder(data, callback) {
         var cParsedObj = {};
         //Parse the ORMS data
         cParsedObj.purchaseOrder  =  data.details.orms.order_number;
-        cParsedObj.orderQuantity =  parseORMSTable(data.details.orms.order_table);
         //Check for Purchase Order Type
         var po_type = data.details.retek.retek_po_type;
         switch(po_type) {
-            case 'single': parseSingleTypeForCE(data.details.retek, cParsedObj);
+            case 'single':
+                    cParsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
+                    parseSingleTypeForCE(data.details.retek, cParsedObj);
                 break;
-            case 'ratio' : parseRatioType(data);
+            case 'ratio' :
+                    cParsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
+                    parseRatioTypeForCE(data.details.retek, cParsedObj);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
@@ -53,11 +56,55 @@ function parseCEPurchaseOrder(data, callback) {
 }
 
 /**
- * Method to parse the ORMS quantity table from CE ORMS table
+ * Method to parse the ORMS quantity table from CE ORMS table for SINGLE Type
  * @param  {json} data ORMS raw json
  * @return {[type]} parsed table
  */
-function parseORMSTable(tabula) {
+function parseSingleORMSTable(tabula) {
+    var header = [];
+    var values = [];
+    $.each(tabula, function(index, element) {
+        var row = {};
+        $.each(element, function(i, val) {
+            if(index === 0) {
+                switch(i) {
+                    case 0: header.push('TPND');
+                        break;
+                    case 1: header.push('EAN_Barcode');
+                        break;
+                    case 2: header.push('Size');
+                        break;
+                }
+                
+            } else {
+                if(i === 2) {
+                    val = val.text.split(' ');
+                    if(typeof(val[1]) != "undefined" && val[1] !== null) {
+                        row[header[i]] = val[1];
+                    } else {
+                        row[header[i]] = '-';
+                    }
+                   
+                } else {
+                   row[header[i]] = val.text;
+                }
+                  
+            }
+        });
+        if(index !== 0) {
+           values.push(row); 
+        } 
+    });
+    return values;
+
+}
+
+/**
+ * Method to parse the ORMS quantity table from CE ORMS table for RATIO Type
+ * @param  {json} data ORMS raw json
+ * @return {[type]} parsed table
+ */
+function parseRatioORMSTable(tabula) {
     var header = [];
     var values = [];
     $.each(tabula, function(index, element) {
@@ -102,6 +149,70 @@ function parseORMSTable(tabula) {
  * @return {object}     Object array with all the required fields.
  */
 function parseSingleTypeForCE(data, cParsedObj) {
+    //********************************************* SUPPLIER INFO SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    if (data.hasOwnProperty("supplier")) {
+        var supplier = JSON.parse(data.supplier);
+        supplier = supplier[0].data.slice(-3);
+        //Supplier Code
+        supplier_code = supplier[0][0].text;
+        supplier_code = supplier_code.split(':');
+        if(supplier_code[0] === 'Supplier No. ') {
+            cParsedObj.supplierCode = supplier_code[1].trim();
+            //Supplier Name
+            cParsedObj.supplierName = supplier[2][0].text.trim();
+        }      
+    }
+    //********************************************* ORDER INFORMATION SECTION *********************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+
+    var info = JSON.parse(data.info);
+    $.each(info[0].data, function(ind, ele) {
+        var row_length = ele.length;
+        switch(ind) {
+            case 0:
+                //Extract VPN - CE STYLE NUMBER
+                var new_element = removeEmptyValues(ele);
+                var vpn = new_element[0].text.split(":");
+                cParsedObj.styleNumber  = vpn[1].trim();
+                break;
+            case 1:
+                //Extract 24 Char Description
+                var new_element = removeEmptyValues(ele);
+                cParsedObj.shortDescription = new_element[2].text;
+                break;
+            case 2:
+                //Extract Season Code
+                var new_element = removeEmptyValues(ele);
+                var season = new_element[1].text.split(":");
+                cParsedObj.seasonCode = season[1];
+                break;
+        }
+    });
+
+
+    //********************************************* ORDER QUANTITY SECTION ************************************
+    //********************************************* PARSE THE JSON TABULA *************************************
+    var tabula = JSON.parse(data.table);
+    var ormsQty = cParsedObj.orderQuantity;
+    tabula[0].data.pop(); //Remove the total quantity row from the object
+    tabula[0].data.shift(); //Remove the table headers from the array
+    var retek_size = [];    //Create a new array with size as index and casesize as value
+    for(var i in tabula[0].data) {
+        retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
+    }
+    //Size wise mapping of ORMS and RETEK tables.
+    $.each(ormsQty, function(index,element) {
+        ormsQty[index].Case_Size = retek_size[element.Size];
+    });
+}
+
+/**
+ * Method to parse data for CE RATIO type.
+ * @param  {json} json string to be parsed.
+ * @return {object}     Object array with all the required fields.
+ */
+function parseRatioTypeForCE(data, cParsedObj) {
     //********************************************* SUPPLIER INFO SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
