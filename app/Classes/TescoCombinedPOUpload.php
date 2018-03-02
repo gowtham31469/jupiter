@@ -30,10 +30,10 @@ class TescoCombinedPOUpload
 		try {
             $result = TescoTCL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -52,10 +52,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTCL2Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -74,10 +74,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTSL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -96,10 +96,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTCL4Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -118,10 +118,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTSL3Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -140,10 +140,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTHL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)
@@ -162,10 +162,10 @@ class TescoCombinedPOUpload
     try {
             $result = TescoTHL3Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'         => "PO Uploaded",
                           'purchase_order_no' => $po_number,
-                          'po_file' => $destination_path_insert,
-                          'delivery_date' => $delivery_date
+                          'po_file'           => $destination_path_insert,
+                          'delivery_date'     => $delivery_date
                         ]);
             
         } catch (\Exception $e)

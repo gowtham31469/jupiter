@@ -1177,6 +1177,15 @@ function dynamicSVGTemplatescard(id,item)
            /** [ Dynamically change  svg department ] */
            if($('#tesco_department option:selected').val() != '')
            {
+              /** [Give font-size for department] */
+              if(department.length < 17)
+              {
+                svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+              }
+              else
+              {
+                svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+              }
               svgDoc.getElementById("department").innerHTML = department.toUpperCase().replace('&', '&amp;');
            }  
            else
@@ -1534,9 +1543,18 @@ function dynamicSVGTemplatescard(id,item)
 function setTescoOrder()
 {
     try {
-        var zone   =  localStorage.getItem("zone");
-        var type   =  localStorage.getItem("template type");
-        var data   =  JSON.parse(localStorage.getItem("data"));
+        var zone       =  localStorage.getItem("zone");
+        var type       =  localStorage.getItem("template type");
+        var data       =  JSON.parse(localStorage.getItem("data"));
+        
+        var count_TCL1 = [];
+        var count_TCL2 = [];
+        var count_TSL1 = [];
+        var count_TCL4 = [];
+        var count_TSL3 = [];
+        var count_THL3 = [];
+        var count_THL1 = [];
+        var msg        = '';
 
         if(zone === "CE")
         {
@@ -1544,13 +1562,94 @@ function setTescoOrder()
             {
                 if(data[0].template_name === 'THL 1')
                 {
-                    /** Function to store CE ratio THL1 template */
-                    storeCERatioTHL1();
+                    /** [ Create array of ce ratio thl1 count ] */
+                    $('.count_THL1').each(function(i, item)
+                    {
+                        count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+
+                    count_THL1 = count_THL1.join(',');
+                    
+                    if ($.inArray('0', count_THL1) > -1)
+                    {
+                       msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_THL1) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store CE ratio THL1 template */
+                        storeCERatioTHL1();
+                    }
+                    
                 }
                 else
                 {
-                    /** Function to store CE ratio TCL1, TCL2, TSL1 template */
-                    storeCERatioTCL1TCL2TSL1();
+                    /** [ Create array of ce ratio tcl1 count ] */
+                    $('.count_TCL1').each(function(i, item)
+                    {
+                        count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL1 = count_TCL1.join(',');
+
+                    /** [ Create array of ce ratio tcl2 count ] */
+                    $('.count_TCL2').each(function(i, item)
+                    {
+                        count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL2 = count_TCL2.join(',');
+
+                    /** [ Create array of ce ratio tsl1 count ] */
+                    $('.count_TSL1').each(function(i, item)
+                    {
+                        count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TSL1 = count_TSL1.join(',');
+                    
+                    if ($.inArray('0', count_TCL1) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if ($.inArray('0', count_TCL2) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if ($.inArray('0', count_TSL1) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store CE ratio TCL1, TCL2, TSL1 template */
+                        storeCERatioTCL1TCL2TSL1();
+                    }
+                    
                 }
                 
             }
@@ -1558,13 +1657,80 @@ function setTescoOrder()
             {
                if(data[0].template_name === 'THL 3')
                 {
-                    /** Function to store CE single THL3 template */
-                    storeCESingleTHL3();
+                    /** [ Create array of ce single thl3 count ] */
+                    $('.count_THL3').each(function(i, item)
+                    {
+                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_THL3 = count_THL3.join(',');
+                    
+                    if ($.inArray('0', count_THL3) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_THL3) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store CE single THL3 template */
+                        storeCESingleTHL3();
+                    }
+                    
                 }
                 else
                 {
-                    /** Function to store CE single TCL4, TSL3 template */
-                    storeCESingleTCL4TSL3();
+                    /** [ Create array of ce single tcl4 count ] */
+                    $('.count_TCL4').each(function(i, item)
+                    {
+                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL4 = count_TCL4.join(',');
+
+                    /** [ Create array of ce single tsl3 count ] */
+                    $('.count_TSL3').each(function(i, item)
+                    {
+                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TSL3 = count_TSL3.join(',');
+                    
+                    if ($.inArray('0', count_TCL4) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if ($.inArray('0', count_TSL3) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store CE single TCL4, TSL3 template */
+                         storeCESingleTCL4TSL3();
+                    }
                 }
             }
         }
@@ -1574,13 +1740,92 @@ function setTescoOrder()
             {
                 if(data[0].template_name === 'THL 1')
                 {
-                    /** Function to store UK ratio THL1 template */
-                    storeUKRatioTHL1();
+                    /** [ Create array of uk ratio thl1 count ] */
+                    $('.count_THL1').each(function(i, item)
+                    {
+                        count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_THL1 = count_THL1.join(',');
+                    
+                    if ($.inArray('0', count_THL1) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_THL1) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store UK ratio THL1 template */
+                        storeUKRatioTHL1();
+                    }
+                    
                 }
                 else
                 {
-                    /** Function to store UK ratio TCL1, TCL2, TSL1 template */
-                    storeUKRatioTCL1TCL2TSL1();
+                    /** [ Create array of uk ratio tcl1 count ] */
+                    $('.count_TCL1').each(function(i, item)
+                    {
+                        count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL1 = count_TCL1.join(',');
+
+                    /** [ Create array of uk ratio tcl2 count ] */
+                    $('.count_TCL2').each(function(i, item)
+                    {
+                        count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL2 = count_TCL2.join(',');
+
+                    /** [ Create array of uk ratio tsl1 count ] */
+                    $('.count_TSL1').each(function(i, item)
+                    {
+                        count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TSL1 = count_TSL1.join(',');
+                    
+                    if ($.inArray('0', count_TCL1) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li><br>';
+                    }
+                    if ($.inArray('0', count_TCL2) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if ($.inArray('0', count_TSL1) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store UK ratio TCL1, TCL2, TSL1 template */
+                        storeUKRatioTCL1TCL2TSL1();
+                    }
                 }
                 
             }
@@ -1588,13 +1833,80 @@ function setTescoOrder()
             {
                if(data[0].template_name === 'THL 3')
                 {
-                    /** Function to store UK single THL3 template */
-                    storeUKSingleTHL3();
+                    /** [ Create array of uk single thl3 count ] */
+                    $('.count_THL3').each(function(i, item)
+                    {
+                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_THL3 = count_THL3.join(',');
+                    
+                    if ($.inArray('0', count_THL3) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_THL3) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store UK single THL3 template */
+                        storeUKSingleTHL3();
+                    }
+                    
                 }
                 else
                 {
-                    /** Function to store UK single TCL4, TSL3 template */
-                    storeUKSingleTCL4TSL3();
+                    /** [ Create array of uk single tcl4 count ] */
+                    $('.count_TCL4').each(function(i, item)
+                    {
+                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TCL4 = count_TCL4.join(',');
+
+                    /** [ Create array of uk single tsl3 count ] */
+                    $('.count_TSL3').each(function(i, item)
+                    {
+                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
+                        
+                    });
+                    count_TSL3 = count_TSL3.join(',');
+                    
+                    if ($.inArray('0', count_TCL4) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if ($.inArray('0', count_TSL3) > -1)
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                    }
+
+                    if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                    {
+                        $('#body_msg').html(msg);
+                        /** [ Backdrop for bootstrap modal ] */
+                         $('#confirmOrder').modal({
+                              backdrop: 'static',
+                              keyboard: false
+                         })
+                        $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
+                        $('#confirmOrder').modal('show');
+                    }
+                    else
+                    {
+                        /** Function to store UK single TCL4, TSL3 template */
+                         storeUKSingleTCL4TSL3();
+                    }
                 }
             }
         }
@@ -1628,6 +1940,7 @@ function tescoOrderCommonData()
     zone              =  localStorage.getItem("zone");
     type              =  localStorage.getItem("template type");
     data              =  JSON.parse(localStorage.getItem("data"));
+
     
 }
 /**
@@ -1655,6 +1968,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         orms_tpn   = orms_tpn.join(',');
+
         /** [ Create array of ce ratio itf barcode ] */
         $('.ce_ratio_itf').each(function(i, item)
         {
@@ -1662,6 +1976,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         itf_code = itf_code.join(',');
+
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
         {
@@ -1669,6 +1984,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         cases_per_carton = cases_per_carton.join(',');
+
         /** [ Create array of ce ratio tcl1 count ] */
         $('.count_TCL1').each(function(i, item)
         {
@@ -1676,6 +1992,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         count_TCL1 = count_TCL1.join(',');
+
         /** [ Create array of ce ratio tcl2 count ] */
         $('.count_TCL2').each(function(i, item)
         {
@@ -1683,6 +2000,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         count_TCL2 = count_TCL2.join(',');
+
         /** [ Create array of ce ratio tsl1 count ] */
         $('.count_TSL1').each(function(i, item)
         {
@@ -1690,6 +2008,7 @@ function storeCERatioTCL1TCL2TSL1()
             
         });
         count_TSL1 = count_TSL1.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
@@ -1702,52 +2021,75 @@ function storeCERatioTCL1TCL2TSL1()
                  },
                  success: function (data) {
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Buyer Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                       var j = 0;
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                         j++;
-                       });
-                       html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
+                       /** [ Show single po upload tab ,if order placed for single artwork] */
+                       if(length === 1)
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         $('#combined_tab').hide();
+                         /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                           $.each(data.last_insertions, function (index, value) { 
+                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
                        }
                        else
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                           /** Buyer Po upload modal for combined po upload modal */
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                           $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                           });
+                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                          /** [ Delivery Date mandatory or not for particular customer] */
+                           if(data.delivery_date_required === 1)
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                           }
+                           else
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                           }
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for combined po upload modal tab */
+                           $('#combined').html(html);
 
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
-                       var i = 1;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                       i++;
-                       });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
+                           /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                           $.each(data.last_insertions, function (index, value) { 
+                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
+                       }
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap validator */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
@@ -1758,8 +2100,9 @@ function storeCERatioTCL1TCL2TSL1()
                             autoclose: true,
                             startDate: today,
                         })
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -1786,9 +2129,10 @@ function storeCERatioTCL1TCL2TSL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                         /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox1:checkbox').on('change',function(){
+                        $('.template-checkbox1:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -1815,7 +2159,8 @@ function storeCERatioTCL1TCL2TSL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_combined_po_form').validator('validate');
                            }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -1835,6 +2180,7 @@ function storeCERatioTCL1TCL2TSL1()
                                     }
                                     
                                 });
+
                                 /** [ Show validation error, if atleast 1 artwork not selected ] */
                                 if(checkbox_clicked === 0)
                                 {
@@ -1860,8 +2206,8 @@ function storeCERatioTCL1TCL2TSL1()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
+
                         /** [ bootstrap validator for upload combined po form ] **/
                         $('#upload_combined_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -1915,20 +2261,22 @@ function storeCERatioTCL1TCL2TSL1()
                             }
 
                         })
+
                         /** Clear combined tab validation errors */
                         $('#single_tab').on('click',function(){
                            $('.template-error1').html('');
-                          });
+                        });
+
                         /** Clear single tab validation errors */
                         $('#combined_tab').on('click',function(){
                            $('.template-error').html('');
-                          });
+                        });
                  },
                  error: function (data) {
                     console.error(data);
                  },
                  complete: function () {
-                    $(".loader").hide();
+                      $(".loader").hide();
                       /** [To make top menu active] */
                       $(function () {
                           var url = window.location;
@@ -1967,6 +2315,7 @@ function storeCERatioTHL1()
             
         });
         orms_tpn   = orms_tpn.join(',');
+
         /** [ Create array of ce ratio itf barcode ] */
         $('.ce_ratio_itf').each(function(i, item)
         {
@@ -1974,6 +2323,7 @@ function storeCERatioTHL1()
             
         });
         itf_code = itf_code.join(',');
+
         /** [ Create array of ce ratio case per carton ] */
         $('.ce_ratio_cpc').each(function(i, item)
         {
@@ -1981,6 +2331,7 @@ function storeCERatioTHL1()
             
         });
         cases_per_carton = cases_per_carton.join(',');
+
         /** [ Create array of ce ratio tcl1 count ] */
         $('.count_THL1').each(function(i, item)
         {
@@ -2002,40 +2353,48 @@ function storeCERatioTHL1()
                  success: function (data) {
                        $('#combined_tab').hide();
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
+
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                        var i = 1;
-                       var j = 0;
                       $.each(data.last_insertions, function (index, value) { 
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
-                       j++;
                        });
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator */
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button  */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
                             })
                        }
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2062,7 +2421,8 @@ function storeCERatioTHL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2154,6 +2514,7 @@ function storeCESingleTCL4TSL3()
             
         });
         orms_tpn   = orms_tpn.join(',');
+
         /** [ Create array of ce single ean barcode ] */
         $('.ce_single_ean').each(function(i, item)
         {
@@ -2161,6 +2522,7 @@ function storeCESingleTCL4TSL3()
             
         });
         ean_code = ean_code.join(',');
+
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
         {
@@ -2168,6 +2530,7 @@ function storeCESingleTCL4TSL3()
             
         });
         case_size = case_size.join(',');
+
         /** [ Create array of ce single tcl1 count ] */
         $('.ce_single_size').each(function(i, item)
         {
@@ -2175,20 +2538,23 @@ function storeCESingleTCL4TSL3()
             
         });
         size = size.join(',');
-        /** [ Create array of ce single tcl2 count ] */
+
+        /** [ Create array of ce single tcl4 count ] */
         $('.count_TCL4').each(function(i, item)
         {
             count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
             
         });
         count_TCL4 = count_TCL4.join(',');
-        /** [ Create array of ce single tsl1 count ] */
+
+        /** [ Create array of ce single tsl3 count ] */
         $('.count_TSL3').each(function(i, item)
         {
             count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
             
         });
         count_TSL3 = count_TSL3.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
@@ -2201,52 +2567,77 @@ function storeCESingleTCL4TSL3()
                  },
                  success: function (data) {
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Buyer Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                       html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
+
+                       /** [ Show single po upload tab ,if order placed for single artwork] */
+                       if(length === 1)
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         $('#combined_tab').hide()
+                         /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                          $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
                        }
                        else
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                           /** Buyer Po upload modal for combined po upload modal */
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                           $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                           });
+                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                          /** [ Delivery Date mandatory or not for particular customer] */
+                           if(data.delivery_date_required === 1)
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                           }
+                           else
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                           }
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for combined po upload modal tab */
+                           $('#combined').html(html);
 
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
-                       var i = 1;
-                       var j = 0;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                       i++;
-                       j++;
-                       });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
+                           /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                          $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
+                       }
+                       
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
@@ -2257,8 +2648,9 @@ function storeCESingleTCL4TSL3()
                             autoclose: true,
                             startDate: today,
                         })
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2285,9 +2677,10 @@ function storeCESingleTCL4TSL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                         /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox1:checkbox').on('change',function(){
+                        $('.template-checkbox1:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2314,7 +2707,8 @@ function storeCESingleTCL4TSL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_combined_po_form').validator('validate');
                            }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2359,8 +2753,8 @@ function storeCESingleTCL4TSL3()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
+
                         /** [ bootstrap validator for upload combined po form ] **/
                         $('#upload_combined_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2412,16 +2806,17 @@ function storeCESingleTCL4TSL3()
                                    uploadCombinedPO(formData);
                                 }
                             }
-
                         })
+
                         /** Clear combined tab validation errors */
                         $('#single_tab').on('click',function(){
                            $('.template-error1').html('');
-                          });
+                        });
+
                         /** Clear single tab validation errors */
                         $('#combined_tab').on('click',function(){
                            $('.template-error').html('');
-                          });
+                        });
                  },
                  error: function (data) {
                     console.log(data);
@@ -2467,6 +2862,7 @@ function storeCESingleTHL3()
             
         });
         orms_tpn   = orms_tpn.join(',');
+
         /** [ Create array of ce single ean barcode ] */
         $('.ce_single_ean').each(function(i, item)
         {
@@ -2474,6 +2870,7 @@ function storeCESingleTHL3()
             
         });
         ean_code = ean_code.join(',');
+
         /** [ Create array of ce single case size ] */
         $('.ce_single_case_size').each(function(i, item)
         {
@@ -2481,6 +2878,7 @@ function storeCESingleTHL3()
             
         });
         case_size = case_size.join(',');
+
         /** [ Create array of ce single tcl1 count ] */
         $('.ce_single_size').each(function(i, item)
         {
@@ -2488,6 +2886,7 @@ function storeCESingleTHL3()
             
         });
         size = size.join(',');
+
         /** [ Create array of ce single thl3 count ] */
         $('.count_THL3').each(function(i, item)
         {
@@ -2495,6 +2894,7 @@ function storeCESingleTHL3()
             
         });
         count_THL3 = count_THL3.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
@@ -2508,40 +2908,47 @@ function storeCESingleTHL3()
                  success: function (data) {
                        $('#combined_tab').hide();
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                        var i = 1;
-                       var j = 0;
                       $.each(data.last_insertions, function (index, value) { 
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
-                       j++;
                        });
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
                             })
                        }
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2568,7 +2975,8 @@ function storeCESingleTHL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2612,7 +3020,6 @@ function storeCESingleTHL3()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
                  },
                  error: function (data) {
@@ -2660,6 +3067,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         tpnd   = tpnd.join(',');
+
         /** [ Create array of uk ratio itf barcode ] */
         $('.uk_ratio_itf').each(function(i, item)
         {
@@ -2667,6 +3075,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         itf_code = itf_code.join(',');
+
         /** [ Create array of uk ratio units per carton ] */
         $('.uk_ratio_upc').each(function(i, item)
         {
@@ -2674,6 +3083,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         units_per_carton = units_per_carton.join(',');
+
         /** [ Create array of uk ratio tcl1 count ] */
         $('.count_TCL1').each(function(i, item)
         {
@@ -2681,6 +3091,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         count_TCL1 = count_TCL1.join(',');
+
         /** [ Create array of uk ratio tcl2 count ] */
         $('.count_TCL2').each(function(i, item)
         {
@@ -2688,6 +3099,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         count_TCL2 = count_TCL2.join(',');
+
         /** [ Create array of uk ratio tsl1 count ] */
         $('.count_TSL1').each(function(i, item)
         {
@@ -2695,6 +3107,7 @@ function storeUKRatioTCL1TCL2TSL1()
             
         });
         count_TSL1 = count_TSL1.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
@@ -2707,52 +3120,77 @@ function storeUKRatioTCL1TCL2TSL1()
                  },
                  success: function (data) {
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Buyer Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                       });
-                       html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
+
+                       /** [ Show single po upload tab ,if order placed for single artwork] */
+                       if(length === 1)
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         $('#combined_tab').hide()
+                         /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                          $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
                        }
                        else
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                            /** Buyer Po upload modal for combined po upload modal */
+                               var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                               $.each(data.last_insertions, function (index, value) { 
+                               html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                               });
+                               html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                              /** [ Delivery Date mandatory or not for particular customer] */
+                               if(data.delivery_date_required === 1)
+                               {
+                                 html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                               }
+                               else
+                               {
+                                 html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                               }
+                               html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                               /** Dynamic content for combined po upload modal tab */
+                               $('#combined').html(html);
 
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
-                       var i = 1;
-                       var j = 0;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                       i++;
-                       j++;
-                       });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
+                               /** Buyer Po upload modal for single po upload modal */
+                               var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                               var i = 1;
+                              $.each(data.last_insertions, function (index, value) { 
+                               html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                               i++;
+                               });
+                               html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                               /** Dynamic content for single po upload modal tab */
+                               $('#single').html(html);
+                       }
+                       
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator  */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
@@ -2762,9 +3200,10 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('#datePicker3').datepicker({
                             autoclose: true,
                             startDate: today,
-                        })
+                       })
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2791,9 +3230,10 @@ function storeUKRatioTCL1TCL2TSL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                         /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox1:checkbox').on('change',function(){
+                        $('.template-checkbox1:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -2820,7 +3260,8 @@ function storeUKRatioTCL1TCL2TSL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_combined_po_form').validator('validate');
                            }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2865,8 +3306,8 @@ function storeUKRatioTCL1TCL2TSL1()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
+
                         /** [ bootstrap validator for upload combined po form ] **/
                         $('#upload_combined_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -2918,16 +3359,17 @@ function storeUKRatioTCL1TCL2TSL1()
                                    uploadCombinedPO(formData);
                                 }
                             }
-
                         })
+
                         /** Clear combined tab validation errors */
                         $('#single_tab').on('click',function(){
                            $('.template-error1').html('');
-                          });
+                        });
+
                         /** Clear single tab validation errors */
                         $('#combined_tab').on('click',function(){
                            $('.template-error').html('');
-                          });
+                        });
                  },
                  error: function (data) {
                     console.log(data);
@@ -2972,6 +3414,7 @@ function storeUKRatioTHL1()
             
         });
         tpnd   = tpnd.join(',');
+
         /** [ Create array of uk ratio itf barcode ] */
         $('.uk_ratio_itf').each(function(i, item)
         {
@@ -2979,6 +3422,7 @@ function storeUKRatioTHL1()
             
         });
         itf_code = itf_code.join(',');
+
         /** [ Create array of uk ratio units per carton ] */
         $('.uk_ratio_upc').each(function(i, item)
         {
@@ -2986,13 +3430,15 @@ function storeUKRatioTHL1()
             
         });
         units_per_carton = units_per_carton.join(',');
-        /** [ Create array of uk ratio tcl1 count ] */
+
+        /** [ Create array of uk ratio thl1 count ] */
         $('.count_THL1').each(function(i, item)
         {
             count_THL1[i]    = $(item).val() === ''?0:$(item).val();
             
         });
         count_THL1 = count_THL1.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
@@ -3006,40 +3452,48 @@ function storeUKRatioTHL1()
                  success: function (data) {
                        $('#combined_tab').hide();
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
+
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                        var i = 1;
-                       var j = 0;
                       $.each(data.last_insertions, function (index, value) { 
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
-                       j++;
                        });
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
                             })
                        }
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -3066,7 +3520,8 @@ function storeUKRatioTHL1()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -3110,7 +3565,6 @@ function storeUKRatioTHL1()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
                  },
                  error: function (data) {
@@ -3158,6 +3612,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         tpnd   = tpnd.join(',');
+
         /** [ Create array of uk single ean barcode ] */
         $('.uk_single_ean').each(function(i, item)
         {
@@ -3165,6 +3620,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         ean_code = ean_code.join(',');
+
         /** [ Create array of uk single case size ] */
         $('.uk_single_case_size').each(function(i, item)
         {
@@ -3172,6 +3628,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         case_size = case_size.join(',');
+
         /** [ Create array of uk single tcl1 count ] */
         $('.uk_single_size').each(function(i, item)
         {
@@ -3179,6 +3636,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         size = size.join(',');
+
         /** [ Create array of uk single tcl2 count ] */
         $('.count_TCL4').each(function(i, item)
         {
@@ -3186,6 +3644,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         count_TCL4 = count_TCL4.join(',');
+
         /** [ Create array of uk single tsl1 count ] */
         $('.count_TSL3').each(function(i, item)
         {
@@ -3193,6 +3652,7 @@ function storeUKSingleTCL4TSL3()
             
         });
         count_TSL3 = count_TSL3.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
@@ -3205,52 +3665,79 @@ function storeUKSingleTCL4TSL3()
                  },
                  success: function (data) {
                        delivery_date_req = data.delivery_date_required;
+                       var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
-                       /** Buyer Po upload modal for combined po upload modal */
-                       var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                       var j = 0;
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                       j++;
-                       });
-                       html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                      /** [ Delivery Date mandatory or not for particular customer] */
-                       if(data.delivery_date_required === 1)
+
+                       /** [ Show single po upload tab ,if order placed for single artwork] */
+                       if(length === 1)
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                         $('#combined_tab').hide()
+                         /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                          $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
                        }
                        else
                        {
-                         html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                       }
-                       html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for combined po upload modal tab */
-                       $('#combined').html(html);
+                          /** Buyer Po upload modal for combined po upload modal */
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                           
+                           $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                           
+                           });
+                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                          /** [ Delivery Date mandatory or not for particular customer] */
+                           if(data.delivery_date_required === 1)
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                           }
+                           else
+                           {
+                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                           }
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for combined po upload modal tab */
+                           $('#combined').html(html);
 
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
-                       var i = 1;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                       i++;
-                       });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
+                           /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var i = 1;
+                          $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           i++;
+                           });
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
+                       }
+                       
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator  */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
@@ -3261,8 +3748,9 @@ function storeUKSingleTCL4TSL3()
                             autoclose: true,
                             startDate: today,
                         })
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -3289,9 +3777,10 @@ function storeUKSingleTCL4TSL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
+
                         /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox1:checkbox').on('change',function(){
+                        $('.template-checkbox1:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -3318,7 +3807,8 @@ function storeUKSingleTCL4TSL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_combined_po_form').validator('validate');
                            }
-                          });
+                        });
+
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -3363,8 +3853,8 @@ function storeUKSingleTCL4TSL3()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
+
                         /** [ bootstrap validator for upload combined po form ] **/
                         $('#upload_combined_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -3416,16 +3906,17 @@ function storeUKSingleTCL4TSL3()
                                    uploadCombinedPO(formData);
                                 }
                             }
-
                         })
+
                         /** Clear combined tab validation errors */
                         $('#single_tab').on('click',function(){
                            $('.template-error1').html('');
-                          });
+                        });
+
                         /** Clear single tab validation errors */
                         $('#combined_tab').on('click',function(){
                            $('.template-error').html('');
-                          });
+                        });
                  },
                  error: function (data) {
                     console.log(data);
@@ -3471,6 +3962,7 @@ function storeUKSingleTHL3()
             
         });
         tpnd   = tpnd.join(',');
+
         /** [ Create array of uk single ean barcode ] */
         $('.uk_single_ean').each(function(i, item)
         {
@@ -3478,6 +3970,7 @@ function storeUKSingleTHL3()
             
         });
         ean_code = ean_code.join(',');
+
         /** [ Create array of uk single case size ] */
         $('.uk_single_case_size').each(function(i, item)
         {
@@ -3485,6 +3978,7 @@ function storeUKSingleTHL3()
             
         });
         case_size = case_size.join(',');
+
         /** [ Create array of uk single tcl1 count ] */
         $('.uk_single_size').each(function(i, item)
         {
@@ -3492,6 +3986,7 @@ function storeUKSingleTHL3()
             
         });
         size = size.join(',');
+
         /** [ Create array of uk single tcl2 count ] */
         $('.count_THL3').each(function(i, item)
         {
@@ -3499,6 +3994,7 @@ function storeUKSingleTHL3()
             
         });
         count_THL3 = count_THL3.join(',');
+
         $.ajax({
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
@@ -3514,6 +4010,7 @@ function storeUKSingleTHL3()
                        delivery_date_req = data.delivery_date_required;
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
+
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                        var i = 1;
@@ -3526,26 +4023,34 @@ function storeUKSingleTHL3()
                        html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
                               keyboard: false
                          })
+
                        $('#poUploadModal').modal('show');
+
+                       /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
+
+                       /** Disable submit order button */
                        $('.submit-btn').prop('disabled',true);
+
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var date = new Date();
                        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                       for (var i=1; i <= j; i++) 
+                       for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
                             })
                        }
+
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                          $('.template-checkbox:checkbox').on('change',function(){
+                        $('.template-checkbox:checkbox').on('change',function(){
                            var th = $(this), id = th.prop('id');
                            if(th.is(':checked'))
                            {
@@ -3572,7 +4077,7 @@ function storeUKSingleTHL3()
                                 /* [ remove validation error from input field ] */
                                 $('#upload_single_po_form').validator('validate');
                             }
-                          });
+                        });
                        /** [ bootstrap validator for upload single po form ] **/
                         $('#upload_single_po_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) 
@@ -3616,7 +4121,6 @@ function storeUKSingleTHL3()
                                     uploadSinglePO(formData);
                                 }
                             }
-
                         })
                  },
                  error: function (data) {

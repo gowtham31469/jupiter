@@ -39,7 +39,7 @@ class TescoSinglePOUpload
 
             $result = TescoTCL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -70,7 +70,7 @@ class TescoSinglePOUpload
 
             $result = TescoTCL2Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -101,7 +101,7 @@ class TescoSinglePOUpload
 
             $result = TescoTSL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -132,7 +132,7 @@ class TescoSinglePOUpload
 
             $result = TescoTCL4Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -163,7 +163,7 @@ class TescoSinglePOUpload
 
             $result = TescoTSL3Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -194,7 +194,7 @@ class TescoSinglePOUpload
 
             $result = TescoTHL1Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date
@@ -225,7 +225,7 @@ class TescoSinglePOUpload
 
             $result = TescoTHL3Orders::where('id',$template_id)
                           ->update([
-                          'po_status'   => "PO Approved",
+                          'po_status'   => "PO Uploaded",
                           'purchase_order_no' => $po_number,
                           'po_file' => $destination_path_insert,
                           'delivery_date' => $delivery_date

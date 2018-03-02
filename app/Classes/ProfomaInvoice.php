@@ -30,7 +30,7 @@ class ProfomaInvoice
                                           ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
                                           ->where('orchestra_hang_tag_orders.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
 
         $customer_details = DB::table('orchestra_item_details')
@@ -158,15 +158,15 @@ class ProfomaInvoice
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
                                           ->join('company','company.id','=','tesco_item_master.company_id')
                                           ->where($table_name.'.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
-          if ($data['company_details']->id == 1)
-          {
-            $data['company_details']->pi_number = "JGA00".$pi_id;
-          }
-          else{
-           $data['company_details']->pi_number = "SP00".$pi_id;
-          }
+        if ($data['company_details']->id == 1)
+        {
+          $data['company_details']->pi_number = "JGA00".$pi_id;
+        }
+        else{
+         $data['company_details']->pi_number = "SP00".$pi_id;
+        }
         $data['company_details']->rev_number = 0;
         $data['company_details']->pi_date = $today->toDateString();
         $customer_details       = DB::table($table_name)
@@ -174,7 +174,7 @@ class ProfomaInvoice
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type')
                                   ->first();
         if ($customer_details)
         {
@@ -227,7 +227,7 @@ class ProfomaInvoice
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')
                                         ->where('tesco_item_master.id',$pi_details->company_id)
-                                        ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                        ->select('company.*')
                                           ->first();
 
         if ($pi_details->company_id == 1)
@@ -251,6 +251,7 @@ class ProfomaInvoice
           if ($customer_details->nominated_forwarder!=null)
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
+           $customer_details->template_type = $pi_details->template_type;
           }
         }                        
         $data['bank_details']   = $customer_details;
