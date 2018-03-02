@@ -424,15 +424,18 @@ border: 0;
         </div>
     </div>
 </div>
-<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="confirmOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-body" id="body_msg">
-                
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm Order</h4>
+            </div>
+            <div class="modal-body">
+                <h5 id="body_msg"></h5>
             </div>
             <div class="modal-footer">
-               <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
-               <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+               <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
             </div>
         </div>
     </div>
