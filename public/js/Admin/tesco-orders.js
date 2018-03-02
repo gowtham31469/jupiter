@@ -1799,7 +1799,7 @@ function setTescoOrder()
                     
                     if ($.inArray('0', count_TCL1) > -1)
                     {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li><br>';
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
                     }
                     if ($.inArray('0', count_TCL2) > -1)
                     {
