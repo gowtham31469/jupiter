@@ -30,7 +30,7 @@ class ProfomaInvoice
                                           ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
                                           ->where('orchestra_hang_tag_orders.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
 
         $customer_details = DB::table('orchestra_item_details')
@@ -158,7 +158,7 @@ class ProfomaInvoice
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
                                           ->join('company','company.id','=','tesco_item_master.company_id')
                                           ->where($table_name.'.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
           if ($data['company_details']->id == 1)
           {
@@ -227,7 +227,7 @@ class ProfomaInvoice
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')
                                         ->where('tesco_item_master.id',$pi_details->company_id)
-                                        ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                        ->select('company.*')
                                           ->first();
 
         if ($pi_details->company_id == 1)

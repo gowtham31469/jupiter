@@ -141,8 +141,11 @@
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
                                         <img id="company-logo" style="height:50px;" src="" class="img-responsive">
-                                        <p><strong>Date:</strong><span class="pi-date"></span> </p>
-                                        <p><strong>PI : </strong><span class="pi_number"> </span></p>
+                                        <p><strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span> </p>
+                                        <p><strong>PI </strong>
+                                            <span style="padding-left: 31px;"> : </span>
+                                            <span style="padding-left: 6px;" class="pi_number"></span></p>
                                         <p class="rev hidden"><strong>REV : </strong><span class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
