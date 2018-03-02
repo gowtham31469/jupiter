@@ -251,6 +251,7 @@ class ProfomaInvoice
           if ($customer_details->nominated_forwarder!=null)
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
+           $customer_details->template_type = $pi_details->template_type;
           }
         }                        
         $data['bank_details']   = $customer_details;
