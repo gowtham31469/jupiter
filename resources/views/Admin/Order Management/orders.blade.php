@@ -398,7 +398,7 @@ border: 0;
             </div>
         </div>
     </div>
-{{-- Artwork po-upload and delivery date upload modal --}}
+{{-- Artwork buyer po-upload and delivery date upload modal --}}
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -424,6 +424,8 @@ border: 0;
         </div>
     </div>
 </div>
+
+{{-- Confirm artwork order modal --}}
 <div class="modal fade" id="confirmOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
