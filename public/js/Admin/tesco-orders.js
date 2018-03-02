@@ -1575,7 +1575,7 @@ function setTescoOrder()
                     {
                        msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                     }
-
+                    
                     if(($.inArray('0', count_THL1) > -1))
                     {
                         $('#body_msg').html(msg);
@@ -1584,6 +1584,7 @@ function setTescoOrder()
                               backdrop: 'static',
                               keyboard: false
                          })
+
                         $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
                         $('#confirmOrder').modal('show');
                     }
