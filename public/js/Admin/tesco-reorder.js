@@ -196,24 +196,28 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 				var qty="Cases per carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="ORMS TPND";
+				var th_tr="";
 			}
 			else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 			{
 				var qty="Case Size";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="ORMS TPND";
+				var th_tr="<th>Size</th>";
 			}
 			else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
 			{
 				var qty="Case Size";
 				var barcode_tr="EAN Barcode";
 				var tpnd_tr="TPND";
+				var th_tr="<th>Size</th>";
 			}
 			else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 			{
 				var qty="Units per carton";
 				var barcode_tr="ITF Barcode";
 				var tpnd_tr="TPND";
+				var th_tr="";
 			}
 			
 			var tr="";
@@ -224,29 +228,33 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 						var unit_qty = index.cases_per_carton;
 						var barcode_td=index.itf_barcode;
 						var tpnd_td=index.orms_tpn;
+						var th_td="";
 					}
 					else if((name == "TCL4" && zone=="CE") || (name == "TSL3" && zone=="CE") || (name == "THL3" && zone=="CE"))
 					{
 						var unit_qty = index.case_size;
 						var barcode_td=index.ean_barcode;
 						var tpnd_td=index.orms_tpn;
+						var th_td="<td>"+index.size+"</td>";
 					}
 					else if((name == "TCL4" && zone=="UK") || (name == "TSL3" && zone=="UK") || (name == "THL3" && zone=="UK"))
 					{
 						var unit_qty = index.case_size;
 						var barcode_td=index.ean_barcode;
 						var tpnd_td=index.tpnd;
+						var th_td="<td>"+index.size+"</td>";
 					}
 					else if((name == "TCL1" && zone=="UK") ||(name == "TCL2" && zone=="UK") || (name == "TSL1" && zone=="UK") || (name == "THL1" && zone=="UK"))
 					{
 						var unit_qty = index.units_per_carton;
 						var barcode_td=index.itf_barcode;
 						var tpnd_td=index.tpnd;
+						var th_td="";
 					}
 
-				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
 			});
-			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> <th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
+			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> '+th_tr+'<th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			
 			var item = $('.nav-item.active').find('a').text();
 			if(item == "Repeat Order")

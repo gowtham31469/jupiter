@@ -141,8 +141,11 @@
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
                                         <img id="company-logo" style="height:50px;" src="" class="img-responsive">
-                                        <p><strong>Date:</strong><span class="pi-date"></span> </p>
-                                        <p><strong>PI : </strong><span class="pi_number"> </span></p>
+                                        <p><strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span> </p>
+                                        <p><strong>PI </strong>
+                                            <span style="padding-left: 31px;"> : </span>
+                                            <span style="padding-left: 6px;" class="pi_number"></span></p>
                                         <p class="rev hidden"><strong>REV : </strong><span class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
@@ -161,7 +164,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 92px;">
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -242,7 +245,7 @@
                         </div>
                         <div class="form-group">
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
-                            <label for="exampleInputFile">PO File</label>
+                            <br><label >PO File</label>
                             <input type="file" accept="application/pdf" id="new_po_file_status">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
@@ -501,6 +504,7 @@
                 $('.dz-remove').hide();
                 this.removeFile(file);
                 $('#po-file-upload').modal('hide')
+                $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
                 tescoOrderStatus()
                 showSnackbar();

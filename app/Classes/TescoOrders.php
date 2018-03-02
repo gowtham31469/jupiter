@@ -110,7 +110,7 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTCL2Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_TCL200".($max_id+1);
@@ -172,7 +172,7 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTSL1Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_TSL100".($max_id+1);
@@ -234,7 +234,7 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTHL1Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_THL100".($max_id+1);
@@ -296,7 +296,7 @@ class TescoOrders
            /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTCL4Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_TCL400".($max_id+1);
@@ -358,7 +358,7 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTSL3Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_TSL300".($max_id+1);
@@ -420,7 +420,7 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTHL3Orders::max('id');
             if($company_id->company_id == 1)
             {
               $order_id = "JGA_THL300".($max_id+1);
