@@ -344,7 +344,7 @@ class OrderManagementCntrl extends Controller
 
             $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
             $output['retek'] = $retek_data;
-            return response()->json(['details' =>$output], 200);
+            return response()->json(['output' =>$output], 200);
           
           } else {
             return response()->json(['error' => 'File not found'], 400);
