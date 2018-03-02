@@ -368,6 +368,18 @@ function contentdocument(data,name,zone)
 			svgDoc1 = mySVG.contentDocument;
 			svgDoc1.getElementById("season_code").innerHTML = data.template[0].season_code;
 			svgDoc1.getElementById("department").innerHTML =data.template[0].department;
+			
+			 var str =data.template[0].department.trim();
+			   var justify_len = str.length;
+			   if(justify_len < 17)
+			   {
+				   svgDoc1.getElementById("department").style.fontSize = "11px";
+			   }
+			   else
+			   {
+				  svgDoc1.getElementById("department").style.fontSize = "9px"; 
+			   }
+			
 			svgDoc1.getElementById("rfid").innerHTML =rfid_yes;
 			svgDoc1.getElementById("tag_at_source").innerHTML =tag_yes;
 			svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
