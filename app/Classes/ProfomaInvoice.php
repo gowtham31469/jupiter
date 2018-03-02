@@ -160,13 +160,13 @@ class ProfomaInvoice
                                           ->where($table_name.'.id',$id)
                                           ->select('company.*')
                                           ->first();
-          if ($data['company_details']->id == 1)
-          {
-            $data['company_details']->pi_number = "JGA00".$pi_id;
-          }
-          else{
-           $data['company_details']->pi_number = "SP00".$pi_id;
-          }
+        if ($data['company_details']->id == 1)
+        {
+          $data['company_details']->pi_number = "JGA00".$pi_id;
+        }
+        else{
+         $data['company_details']->pi_number = "SP00".$pi_id;
+        }
         $data['company_details']->rev_number = 0;
         $data['company_details']->pi_date = $today->toDateString();
         $customer_details       = DB::table($table_name)
@@ -174,7 +174,7 @@ class ProfomaInvoice
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type')
                                   ->first();
         if ($customer_details)
         {
