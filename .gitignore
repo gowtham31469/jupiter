@@ -12,6 +12,6 @@ yarn-error.log
 .env
 composer.lock
 vendor
-/config/tabula.php
+config/tabula.php
 readme\.md
 /public/storage/app/TESCO/purchaseOrder/
