@@ -455,6 +455,7 @@ border: 0;
         </div>
     </div>
 </div>
+
 {{-- Artwork count missing for all artworks modal --}}
 <div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -464,7 +465,7 @@ border: 0;
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
-                                <h4 style="color: #00b6ff !important">Please enter atleast 1 artwork quantity(count).</h4>
+                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity(count) and count must be greater than 0.</h4>
                             </div>
                         </div>
                     </div>
@@ -476,7 +477,8 @@ border: 0;
         </div>
     </div>
 </div>
-	<div id="snackbar"><span class="snackbar_span"></span></div>
+
+<div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";

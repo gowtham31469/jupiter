@@ -106,7 +106,7 @@ class OrderStatusCntrl extends Controller
                                   'purchase_order_no' => $po_number,
                                   'po_status' => $po_status
                                 ]);
-            if (count($data)>0)
+            if ($data)
             {
                 $result = response()->json(['error'=> false,'message' =>'success'],200);
             }
@@ -163,7 +163,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            if (count($data)>0)
+            if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
                 {
@@ -464,7 +464,7 @@ class OrderStatusCntrl extends Controller
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->get();
 			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-            if (count($order_details) && count($quantity_details))
+            if ($order_details && $quantity_details)
             {
                 $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
             }

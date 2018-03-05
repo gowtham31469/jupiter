@@ -576,6 +576,7 @@ class OrderManagementCntrl extends Controller
             $cases_per_carton = explode(',',$request['cases_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -588,8 +589,6 @@ class OrderManagementCntrl extends Controller
                 $count_TCL1       = explode(',',$request['count_TCL1']);
                 $count_TCL2       = explode(',',$request['count_TCL2']);
                 $count_TSL1       = explode(',',$request['count_TSL1']);
-
-                
 
                 if($template['template_name'] == "TCL 1")
                 {
@@ -629,6 +628,7 @@ class OrderManagementCntrl extends Controller
                        {
                         $templates_inserted = [];
                        }
+                       
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
                   }
@@ -671,7 +671,8 @@ class OrderManagementCntrl extends Controller
                      else
                      {
                       $templates_inserted = [];
-                     }         
+                     }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -714,6 +715,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      } 
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -759,6 +761,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    } 
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                }
@@ -790,6 +793,7 @@ class OrderManagementCntrl extends Controller
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -799,7 +803,6 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
-                
                 $count_TCL4       = explode(',',$request['count_TCL4']);
                 $count_TSL3       = explode(',',$request['count_TSL3']);
                 
@@ -842,6 +845,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -885,6 +889,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -893,6 +898,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+
                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
@@ -930,6 +936,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    }
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                }
@@ -960,6 +967,7 @@ class OrderManagementCntrl extends Controller
             $units_per_carton = explode(',',$request['units_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -969,10 +977,10 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
-                
                 $count_TCL1       = explode(',',$request['count_TCL1']);
                 $count_TCL2       = explode(',',$request['count_TCL2']);
                 $count_TSL1       = explode(',',$request['count_TSL1']);
+
                 if($template['template_name'] == "TCL 1")
                 {
                   /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
@@ -1011,6 +1019,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1053,6 +1062,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1095,6 +1105,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1103,6 +1114,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+
                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL1)) 
                  {
@@ -1139,6 +1151,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                    }
@@ -1178,7 +1191,6 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
-                
                 $count_TCL4       = explode(',',$request['count_TCL4']);
                 $count_TSL3       = explode(',',$request['count_TSL3']);
                 
@@ -1221,6 +1233,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                    }
@@ -1264,6 +1277,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1272,6 +1286,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+
                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
@@ -1309,6 +1324,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    }
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }

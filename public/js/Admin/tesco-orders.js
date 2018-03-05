@@ -1581,9 +1581,9 @@ function setTescoOrder()
 
                     /** [ Create single array of atrworks, for validation ] */
                     var empty_count = 0;
-                    var l = count_THL1.length;
+                    var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -1654,11 +1654,11 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var templates_array = [];
-                    templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
-                    var empty_count = 0;
-                    var l = templates_array.length;
+                    templates_array     = count_TCL1.concat(count_TCL2).concat(count_TSL1);
+                    var empty_count     = 0;
+                    var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0){
+                        if(templates_array[i] === 0 || templates_array[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -1726,9 +1726,9 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var empty_count = 0;
-                    var l = count_THL3.length;
+                    var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -1790,11 +1790,11 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var templates_array = [];
-                    templates_array = count_TCL4.concat(count_TSL3);
-                    var empty_count = 0;
-                    var l = templates_array.length;
+                    templates_array     = count_TCL4.concat(count_TSL3);
+                    var empty_count     = 0;
+                    var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0){
+                        if(templates_array[i] === 0 || templates_array[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -1859,9 +1859,9 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var empty_count = 0;
-                    var l = count_THL1.length;
+                    var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -1931,11 +1931,11 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var templates_array = [];
-                    templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
-                    var empty_count = 0;
-                    var l = templates_array.length;
+                    templates_array     = count_TCL1.concat(count_TCL2).concat(count_TSL1);
+                    var empty_count     = 0;
+                    var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0){
+                        if(templates_array[i] === 0 || templates_array[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -2004,9 +2004,9 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var empty_count = 0;
-                    var l = count_THL3.length;
+                    var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
                             empty_count += 1;
                         }
                     }
@@ -2068,11 +2068,11 @@ function setTescoOrder()
                     
                     /** [ Create single array of atrworks, for validation ] */
                     var templates_array = [];
-                    templates_array = count_TCL4.concat(count_TSL3);
-                    var empty_count = 0;
-                    var l = templates_array.length;
+                    templates_array     = count_TCL4.concat(count_TSL3);
+                    var empty_count     = 0;
+                    var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0){
+                        if(templates_array[i] === 0 || templates_array[i] === '0'){
                             empty_count += 1;
                         }
                     }
