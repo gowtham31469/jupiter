@@ -332,10 +332,11 @@ class OrderManagementCntrl extends Controller
                 $orms_data['order_table']  = $orms_table;
                 //$packB = $this->checkPackB($retek_path, 'CE');//Check for Ratio Pack B
                 $ratio_table          = $this->extractCERatioTable($retek_path, 'CE');//Check for Ratio Pack B
-                $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
-                $retek_data['info']   = $retek_ratio_data['info'];
+                // $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_ratio_data     = $this->cropVerticalPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info']   = json_encode($retek_ratio_data['info']);
                 //$retek_data['table']  = $retek_ratio_data['table'];
-                $retek_data['table']  = json_encode($ratio_table[0]);
+                $retek_data['ratioPackA']  = json_encode($ratio_table[0]);
                 if(count($ratio_table) > 1) {
                   $retek_data['ratioPackB'] = json_encode($ratio_table[1]);
                 }
@@ -438,6 +439,31 @@ class OrderManagementCntrl extends Controller
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
       return ['info' => $info, 'table' => $table];
+    }
+
+    /**
+     * Method to get the info section from the PDF
+     * @param  [path] $file File to be cropped
+     * @param  [str]  $type Purchase Order type
+     * @param  [str]  $zone Template Zone CE/UK
+     * @return [str]  JSON extracted string
+     */
+    public function cropVerticalPDF($file, $type, $zone) {
+      //Read the tabula configuration from config/tabula.php.
+      $tabula      = Config::get('tabula.tabula_jar');
+      $column_1    = Config::get('tabula.'.$zone.'_'.$type.'_info_col_1');
+      $column_2    = Config::get('tabula.'.$zone.'_'.$type.'_info_col_2');
+      //Execute tabula method to extract the quantity table.
+      $info1    = shell_exec('java -jar '.$tabula.$column_1.$file);
+      $info2    = shell_exec('java -jar '.$tabula.$column_2.$file);
+      $info1    = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $info1), true);
+      $info2    = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $info2), true);
+      foreach ($info2[0]['data'] as $key => $value) {
+        if($value[0]['text'] === 'Season Code :') {
+            array_push($info1[0]['data'], $value);
+        }
+      }
+      return ['info' => $info1];
     }
 
     /**
@@ -550,6 +576,7 @@ class OrderManagementCntrl extends Controller
             $cases_per_carton = explode(',',$request['cases_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -563,10 +590,9 @@ class OrderManagementCntrl extends Controller
                 $count_TCL2       = explode(',',$request['count_TCL2']);
                 $count_TSL1       = explode(',',$request['count_TSL1']);
 
-                
-
                 if($template['template_name'] == "TCL 1")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL1)) 
                   {
                       /** [ Invoking createTCL1Order function using class instance ] */
@@ -602,6 +628,7 @@ class OrderManagementCntrl extends Controller
                        {
                         $templates_inserted = [];
                        }
+                       
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
                   }
@@ -609,6 +636,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL2)) 
                   {
                      /** [ Invoking createTCL2Order function using class instance ] */
@@ -643,13 +671,15 @@ class OrderManagementCntrl extends Controller
                      else
                      {
                       $templates_inserted = [];
-                     }         
+                     }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL1)) 
                   {
                     /** [ Invoking createTSL1Order function using class instance ] */
@@ -685,6 +715,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      } 
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -693,6 +724,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL1)) 
                  {
                    /** [ Invoking createTHL1Order function using class instance ] */
@@ -728,6 +761,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    } 
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                }
@@ -759,6 +793,7 @@ class OrderManagementCntrl extends Controller
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -768,12 +803,12 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
-                
                 $count_TCL4       = explode(',',$request['count_TCL4']);
                 $count_TSL3       = explode(',',$request['count_TSL3']);
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL4)) 
                   {
                      /** [ Invoking createTCL4Order function using class instance ] */
@@ -810,12 +845,14 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL3)) 
                   {
                      /** [ Invoking createTSL3Order function using class instance ] */
@@ -852,6 +889,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -860,6 +898,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
                    /** [ Invoking createTHL3Order function using class instance ] */
@@ -896,6 +936,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    }
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                }
@@ -926,6 +967,7 @@ class OrderManagementCntrl extends Controller
             $units_per_carton = explode(',',$request['units_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -935,12 +977,13 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 1")
               {
-                
                 $count_TCL1       = explode(',',$request['count_TCL1']);
                 $count_TCL2       = explode(',',$request['count_TCL2']);
                 $count_TSL1       = explode(',',$request['count_TSL1']);
+
                 if($template['template_name'] == "TCL 1")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL1)) 
                   {
                      /** [ Invoking createTCL1Order function using class instance ] */
@@ -976,12 +1019,14 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL2)) 
                   {
                      /** [ Invoking createTCL2Order function using class instance ] */
@@ -1017,12 +1062,14 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL1)) 
                   {
                      /** [ Invoking createTSL1Order function using class instance ] */
@@ -1058,6 +1105,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1066,6 +1114,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL1)) 
                  {
                    /** [ Invoking createTHL1Order function using class instance ] */
@@ -1101,6 +1151,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                    }
@@ -1140,12 +1191,12 @@ class OrderManagementCntrl extends Controller
               $template_id      = $template['id'];
               if($template['template_name'] != "THL 3")
               {
-                
                 $count_TCL4       = explode(',',$request['count_TCL4']);
                 $count_TSL3       = explode(',',$request['count_TSL3']);
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL4)) 
                   {
                      /** [ Invoking createTCL4Order function using class instance ] */
@@ -1182,12 +1233,14 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                    }
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL3)) 
                   {
                      /** [ Invoking createTSL3Order function using class instance ] */
@@ -1224,6 +1277,7 @@ class OrderManagementCntrl extends Controller
                      {
                       $templates_inserted = [];
                      }
+
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
@@ -1232,6 +1286,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
                    /** [ Invoking createTHL3Order function using class instance ] */
@@ -1268,6 +1324,7 @@ class OrderManagementCntrl extends Controller
                    {
                     $templates_inserted = [];
                    }
+
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
                  }
