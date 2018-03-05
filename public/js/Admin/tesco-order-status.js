@@ -766,13 +766,13 @@ function tescoStatusTable(data,path)
                     {
                         style_no = value.ce_style_ref
 
-                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+span_style+''+style_no+'</a></td>';
+                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
 
                     }
                     else
                     {
                         style_no = value.uk_style_ref
-                        tr += '<td align="center"><a class="" href="javascript:void(0)" onclick=updateArtwork("'+value.tableID+'","'+value.tableName+'","'+value.TemplateName.replace(/ /g, "")+'")>'+value.uk_style_ref+'</a></td>';
+                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+value.uk_style_ref+'</a></td>';
                     }
                 }
                 else if (key == "Actions")
@@ -1234,8 +1234,11 @@ function tescoRejectPI(id,table_name)
         }
     })
 }
-function updateArtwork(id,table_name,TemplateName)
+function updateArtwork(obj)
 {
+	var id			=$(obj).parent().attr('data-id');
+	var table_name	=$(obj).parent().attr('data-table');
+	var TemplateName=$(obj).parent().attr('data-template');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/tesco/edit-artwork",
@@ -1898,6 +1901,17 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
            if($('#tesco_brand option:selected').val() != '')
            {
               svgDoc.getElementById("brand").innerHTML = brand.toUpperCase().replace('&', '&amp;');
+			   
+			   var str =brand.trim();
+			   var justify_len = str.length;
+			   if(justify_len < 15)
+			   {
+				   svgDoc.getElementById("brand").style.fontSize = "11px";
+			   }
+			   else
+			   {
+				  svgDoc.getElementById("brand").style.fontSize = "9px"; 
+			   }
            } 
            else
            {
