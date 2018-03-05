@@ -567,6 +567,7 @@ class OrderManagementCntrl extends Controller
 
                 if($template['template_name'] == "TCL 1")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL1)) 
                   {
                       /** [ Invoking createTCL1Order function using class instance ] */
@@ -609,6 +610,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL2)) 
                   {
                      /** [ Invoking createTCL2Order function using class instance ] */
@@ -650,6 +652,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL1)) 
                   {
                     /** [ Invoking createTSL1Order function using class instance ] */
@@ -693,6 +696,8 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL1)) 
                  {
                    /** [ Invoking createTHL1Order function using class instance ] */
@@ -774,6 +779,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL4)) 
                   {
                      /** [ Invoking createTCL4Order function using class instance ] */
@@ -816,6 +822,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL3)) 
                   {
                      /** [ Invoking createTSL3Order function using class instance ] */
@@ -860,6 +867,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
                    /** [ Invoking createTHL3Order function using class instance ] */
@@ -941,6 +949,7 @@ class OrderManagementCntrl extends Controller
                 $count_TSL1       = explode(',',$request['count_TSL1']);
                 if($template['template_name'] == "TCL 1")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL1)) 
                   {
                      /** [ Invoking createTCL1Order function using class instance ] */
@@ -982,6 +991,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL2)) 
                   {
                      /** [ Invoking createTCL2Order function using class instance ] */
@@ -1023,6 +1033,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL1)) 
                   {
                      /** [ Invoking createTSL1Order function using class instance ] */
@@ -1066,6 +1077,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL1)) 
                  {
                    /** [ Invoking createTHL1Order function using class instance ] */
@@ -1146,6 +1158,7 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TCL4)) 
                   {
                      /** [ Invoking createTCL4Order function using class instance ] */
@@ -1188,6 +1201,7 @@ class OrderManagementCntrl extends Controller
                 }
                 else
                 {
+                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                   if (array_filter($count_TSL3)) 
                   {
                      /** [ Invoking createTSL3Order function using class instance ] */
@@ -1232,6 +1246,7 @@ class OrderManagementCntrl extends Controller
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
+                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
                  if (array_filter($count_THL3)) 
                  {
                    /** [ Invoking createTHL3Order function using class instance ] */
