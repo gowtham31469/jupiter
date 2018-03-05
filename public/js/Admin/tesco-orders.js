@@ -2313,11 +2313,13 @@ function storeCERatioTCL1TCL2TSL1()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
                        $('#datePicker3').datepicker({
                             autoclose: true,
                             startDate: today,
+                            format: 'yyyy-mm-dd',
                         })
 
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
@@ -2609,6 +2611,7 @@ function storeCERatioTHL1()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
 
@@ -2861,11 +2864,13 @@ function storeCESingleTCL4TSL3()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
                        $('#datePicker3').datepicker({
                             autoclose: true,
                             startDate: today,
+                            format: 'yyyy-mm-dd',
                         })
 
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
@@ -3163,6 +3168,7 @@ function storeCESingleTHL3()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
 
@@ -3414,11 +3420,13 @@ function storeUKRatioTCL1TCL2TSL1()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
                        $('#datePicker3').datepicker({
                             autoclose: true,
                             startDate: today,
+                            format: 'yyyy-mm-dd',
                        })
 
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
@@ -3708,6 +3716,7 @@ function storeUKRatioTHL1()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
 
@@ -3961,11 +3970,13 @@ function storeUKSingleTCL4TSL3()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
                        $('#datePicker3').datepicker({
                             autoclose: true,
                             startDate: today,
+                            format: 'yyyy-mm-dd',
                         })
 
                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
@@ -4265,6 +4276,7 @@ function storeUKSingleTHL3()
                            $('#delivery_date_'+i).datepicker({
                              autoclose: true,
                              startDate: today,
+                             format: 'yyyy-mm-dd',
                             })
                        }
 
