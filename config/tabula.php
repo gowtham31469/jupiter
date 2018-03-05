@@ -18,7 +18,7 @@ return [
     |
     |
     */
-   'tabula_jar' => 'C:\xampp\htdocs\JGA\tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => 'C:\xampp\htdocs\jupiter\tabula-1.0.1-jar-with-dependencies.jar',
 
    /*
     |--------------------------------------------------------------------------
@@ -142,6 +142,7 @@ return [
     |
     */
     'CE_single_quantity' => ' -p 2 -a 125,9,400,440  -f JSON ',
+
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information of SINGLE type
@@ -150,6 +151,24 @@ return [
     |
     */
     'CE_ratio_info' => ' -p 2 -a 40,0,90,1000  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Get Information of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'CE_ratio_info_col_1' => ' -p 2 -a 40,10,90,250  -f JSON ',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SET Tabula command for Get Information of SINGLE type
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'CE_ratio_info_col_2' => ' -p 2 -a 40,250,90,500  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
