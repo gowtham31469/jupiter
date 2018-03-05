@@ -1898,6 +1898,17 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
            if($('#tesco_brand option:selected').val() != '')
            {
               svgDoc.getElementById("brand").innerHTML = brand.toUpperCase().replace('&', '&amp;');
+			   
+			   var str =brand.trim();
+			   var justify_len = str.length;
+			   if(justify_len < 15)
+			   {
+				   svgDoc.getElementById("brand").style.fontSize = "11px";
+			   }
+			   else
+			   {
+				  svgDoc.getElementById("brand").style.fontSize = "9px"; 
+			   }
            } 
            else
            {
