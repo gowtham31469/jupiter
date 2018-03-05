@@ -1186,6 +1186,7 @@ function dynamicSVGTemplatescard(id,item)
               {
                 svgDoc.getElementById("department").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
               }
+              /** [ Dynamically change svg department] */
               svgDoc.getElementById("department").innerHTML = department.toUpperCase().replace('&', '&amp;');
            }  
            else
@@ -1195,6 +1196,15 @@ function dynamicSVGTemplatescard(id,item)
            /** [ Dynamically change svg brand ] */
            if($('#tesco_brand option:selected').val() != '')
            {
+              /** [Give font-size for brand] */
+              if(brand.length < 17)
+              {
+                svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;");
+              }
+              else
+              {
+                svgDoc.getElementById("brand").setAttribute("style", "font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:9px;");
+              }
               svgDoc.getElementById("brand").innerHTML = brand.toUpperCase().replace('&', '&amp;');
            } 
            else
@@ -1569,31 +1579,53 @@ function setTescoOrder()
                         
                     });
 
-                    count_THL1 = count_THL1.join(',');
-                    
-                    if ($.inArray('0', count_THL1) > -1)
-                    {
-                       msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var empty_count = 0;
+                    var l = count_THL1.length;
+                    for(var i= 0; i< l; i++){
+                        if(count_THL1[i] === 0){
+                            empty_count += 1;
+                        }
                     }
-                    
-                    if(($.inArray('0', count_THL1) > -1))
-                    {
-                        $('#body_msg').html(msg);
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
 
-                        $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
-                        $('#confirmOrder').modal('show');
-                    }
-                    else
+                    /** [ Join artworks count array using ' , '] */
+                    count_THL1 = count_THL1.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        /** Function to store CE ratio THL1 template */
-                        storeCERatioTHL1();
+                        /** [ Backdrop for bootstrap modal ] */
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    
+                    else 
+                    {
+                        if ($.inArray('0', count_THL1) > -1)
+                        {
+                           msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                        }
+                        
+                        if(($.inArray('0', count_THL1) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+
+                            $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store CE ratio THL1 template */
+                            storeCERatioTHL1();
+                        }
+                    }
                 }
                 else
                 {
@@ -1603,7 +1635,7 @@ function setTescoOrder()
                         count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL1 = count_TCL1.join(',');
+                    
 
                     /** [ Create array of ce ratio tcl2 count ] */
                     $('.count_TCL2').each(function(i, item)
@@ -1611,7 +1643,7 @@ function setTescoOrder()
                         count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL2 = count_TCL2.join(',');
+                    
 
                     /** [ Create array of ce ratio tsl1 count ] */
                     $('.count_TSL1').each(function(i, item)
@@ -1619,38 +1651,65 @@ function setTescoOrder()
                         count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TSL1 = count_TSL1.join(',');
                     
-                    if ($.inArray('0', count_TCL1) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                    }
-                    if ($.inArray('0', count_TCL2) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                    }
-                    if ($.inArray('0', count_TSL1) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var templates_array = [];
+                    templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
+                    var empty_count = 0;
+                    var l = templates_array.length;
+                    for(var i= 0; i< l; i++){
+                        if(templates_array[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_TCL1 = count_TCL1.join(',');
+                    count_TCL2 = count_TCL2.join(',');
+                    count_TSL1 = count_TSL1.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store CE ratio TCL1, TCL2, TSL1 template */
-                        storeCERatioTCL1TCL2TSL1();
+                        if ($.inArray('0', count_TCL1) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                        }
+                        if ($.inArray('0', count_TCL2) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                        }
+                        if ($.inArray('0', count_TSL1) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store CE ratio TCL1, TCL2, TSL1 template */
+                            storeCERatioTCL1TCL2TSL1();
+                        }
                     }
-                    
                 }
                 
             }
@@ -1664,30 +1723,53 @@ function setTescoOrder()
                         count_THL3[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_THL3 = count_THL3.join(',');
                     
-                    if ($.inArray('0', count_THL3) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var empty_count = 0;
+                    var l = count_THL3.length;
+                    for(var i= 0; i< l; i++){
+                        if(count_THL3[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_THL3) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_THL3 = count_THL3.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store CE single THL3 template */
-                        storeCESingleTHL3();
+                        if ($.inArray('0', count_THL3) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_THL3) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store CE single THL3 template */
+                            storeCESingleTHL3();
+                        }
                     }
-                    
                 }
                 else
                 {
@@ -1697,7 +1779,7 @@ function setTescoOrder()
                         count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL4 = count_TCL4.join(',');
+                    
 
                     /** [ Create array of ce single tsl3 count ] */
                     $('.count_TSL3').each(function(i, item)
@@ -1705,32 +1787,59 @@ function setTescoOrder()
                         count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TSL3 = count_TSL3.join(',');
                     
-                    if ($.inArray('0', count_TCL4) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if ($.inArray('0', count_TSL3) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var templates_array = [];
+                    templates_array = count_TCL4.concat(count_TSL3);
+                    var empty_count = 0;
+                    var l = templates_array.length;
+                    for(var i= 0; i< l; i++){
+                        if(templates_array[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_TSL3 = count_TSL3.join(',');
+                    count_TCL4 = count_TCL4.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store CE single TCL4, TSL3 template */
-                         storeCESingleTCL4TSL3();
+                        if ($.inArray('0', count_TCL4) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                        }
+                        if ($.inArray('0', count_TSL3) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store CE single TCL4, TSL3 template */
+                             storeCESingleTCL4TSL3();
+                        }
                     }
                 }
             }
@@ -1747,30 +1856,53 @@ function setTescoOrder()
                         count_THL1[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_THL1 = count_THL1.join(',');
                     
-                    if ($.inArray('0', count_THL1) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var empty_count = 0;
+                    var l = count_THL1.length;
+                    for(var i= 0; i< l; i++){
+                        if(count_THL1[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_THL1) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_THL1 = count_THL1.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store UK ratio THL1 template */
-                        storeUKRatioTHL1();
+                        if ($.inArray('0', count_THL1) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_THL1) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store UK ratio THL1 template */
+                            storeUKRatioTHL1();
+                        }
                     }
-                    
                 }
                 else
                 {
@@ -1780,7 +1912,7 @@ function setTescoOrder()
                         count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL1 = count_TCL1.join(',');
+                    
 
                     /** [ Create array of uk ratio tcl2 count ] */
                     $('.count_TCL2').each(function(i, item)
@@ -1788,7 +1920,7 @@ function setTescoOrder()
                         count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL2 = count_TCL2.join(',');
+                    
 
                     /** [ Create array of uk ratio tsl1 count ] */
                     $('.count_TSL1').each(function(i, item)
@@ -1796,36 +1928,64 @@ function setTescoOrder()
                         count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TSL1 = count_TSL1.join(',');
                     
-                    if ($.inArray('0', count_TCL1) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                    }
-                    if ($.inArray('0', count_TCL2) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                    }
-                    if ($.inArray('0', count_TSL1) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var templates_array = [];
+                    templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
+                    var empty_count = 0;
+                    var l = templates_array.length;
+                    for(var i= 0; i< l; i++){
+                        if(templates_array[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_TCL1 = count_TCL1.join(',');
+                    count_TCL2 = count_TCL2.join(',');
+                    count_TSL1 = count_TSL1.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store UK ratio TCL1, TCL2, TSL1 template */
-                        storeUKRatioTCL1TCL2TSL1();
+                        if ($.inArray('0', count_TCL1) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                        }
+                        if ($.inArray('0', count_TCL2) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                        }
+                        if ($.inArray('0', count_TSL1) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store UK ratio TCL1, TCL2, TSL1 template */
+                            storeUKRatioTCL1TCL2TSL1();
+                        }
                     }
                 }
                 
@@ -1840,30 +2000,54 @@ function setTescoOrder()
                         count_THL3[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_THL3 = count_THL3.join(',');
                     
-                    if ($.inArray('0', count_THL3) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                    
+                    /** [ Create single array of atrworks, for validation ] */
+                    var empty_count = 0;
+                    var l = count_THL3.length;
+                    for(var i= 0; i< l; i++){
+                        if(count_THL3[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_THL3) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_THL3 = count_THL3.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store UK single THL3 template */
-                        storeUKSingleTHL3();
+                        if ($.inArray('0', count_THL3) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_THL3) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store UK single THL3 template */
+                            storeUKSingleTHL3();
+                        }
                     }
-                    
                 }
                 else
                 {
@@ -1873,7 +2057,7 @@ function setTescoOrder()
                         count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TCL4 = count_TCL4.join(',');
+                    
 
                     /** [ Create array of uk single tsl3 count ] */
                     $('.count_TSL3').each(function(i, item)
@@ -1881,32 +2065,59 @@ function setTescoOrder()
                         count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
                         
                     });
-                    count_TSL3 = count_TSL3.join(',');
                     
-                    if ($.inArray('0', count_TCL4) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if ($.inArray('0', count_TSL3) > -1)
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                    /** [ Create single array of atrworks, for validation ] */
+                    var templates_array = [];
+                    templates_array = count_TCL4.concat(count_TSL3);
+                    var empty_count = 0;
+                    var l = templates_array.length;
+                    for(var i= 0; i< l; i++){
+                        if(templates_array[i] === 0){
+                            empty_count += 1;
+                        }
                     }
 
-                    if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                    /** [ Join artworks count array using ' , '] */
+                    count_TCL4 = count_TCL4.join(',');
+                    count_TSL3 = count_TSL3.join(',');
+
+                    /** [ Check if count of empty quantity in the array is equal to array length ] */
+                    if(empty_count === l)
                     {
-                        $('#body_msg').html(msg);
                         /** [ Backdrop for bootstrap modal ] */
-                         $('#confirmOrder').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                        $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
-                        $('#confirmOrder').modal('show');
+                        $('#countMissingModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#countMissingModal').modal('show');
                     }
-                    else
+                    else 
                     {
-                        /** Function to store UK single TCL4, TSL3 template */
-                         storeUKSingleTCL4TSL3();
+                        if ($.inArray('0', count_TCL4) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                        }
+                        if ($.inArray('0', count_TSL3) > -1)
+                        {
+                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
+                        }
+
+                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        {
+                            $('#body_msg').html(msg);
+                            /** [ Backdrop for bootstrap modal ] */
+                             $('#confirmOrder').modal({
+                                  backdrop: 'static',
+                                  keyboard: false
+                             })
+                            $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
+                            $('#confirmOrder').modal('show');
+                        }
+                        else
+                        {
+                            /** Function to store UK single TCL4, TSL3 template */
+                             storeUKSingleTCL4TSL3();
+                        }
                     }
                 }
             }

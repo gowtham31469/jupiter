@@ -105,42 +105,10 @@ function parseSingleORMSTable(tabula) {
  * @return {[type]} parsed table
  */
 function parseRatioORMSTable(tabula) {
-    var header = [];
     var values = [];
-    $.each(tabula, function(index, element) {
-        var row = {};
-        $.each(element, function(i, val) {
-            if(index === 0) {
-                switch(i) {
-                    case 0: header.push('TPND');
-                        break;
-                    case 1: header.push('EAN_Barcode');
-                        break;
-                    case 2: header.push('Size');
-                        break;
-                }
-                
-            } else {
-                if(i === 2) {
-                    val = val.text.split(' ');
-                    if(typeof(val[1]) != "undefined" && val[1] !== null) {
-                        row[header[i]] = val[1];
-                    } else {
-                        row[header[i]] = '-';
-                    }
-                   
-                } else {
-                   row[header[i]] = val.text;
-                }
-                  
-            }
-        });
-        if(index !== 0) {
-           values.push(row); 
-        } 
-    });
+    values['tpnd'] = tabula[1][0]['text'];
+    values['itf']  = tabula[1][2]['text'];
     return values;
-
 }
 
 /**
@@ -237,19 +205,14 @@ function parseRatioTypeForCE(data, cParsedObj) {
             case 0:
                 //Extract VPN - CE STYLE NUMBER
                 var new_element = removeEmptyValues(ele);
-                var vpn = new_element[0].text.split(":");
+                var vpn = new_element[1].text;
                 cParsedObj.styleNumber  = vpn[1].trim();
                 break;
-            case 1:
+            case 2:
                 //Extract 24 Char Description
                 var new_element = removeEmptyValues(ele);
-                cParsedObj.shortDescription = new_element[2].text;
-                break;
-            case 2:
-                //Extract Season Code
-                var new_element = removeEmptyValues(ele);
-                var season = new_element[1].text.split(":");
-                cParsedObj.seasonCode = season[1];
+                cParsedObj.shortDescription = new_element[1].text;
+                cParsedObj.seasonCode = new_element[3].text;
                 break;
         }
     });
@@ -258,17 +221,18 @@ function parseRatioTypeForCE(data, cParsedObj) {
     //********************************************* ORDER QUANTITY SECTION ************************************
     //********************************************* PARSE THE JSON TABULA *************************************
     var tabula = JSON.parse(data.table);
-    var ormsQty = cParsedObj.orderQuantity;
-    tabula[0].data.pop(); //Remove the total quantity row from the object
-    tabula[0].data.shift(); //Remove the table headers from the array
-    var retek_size = [];    //Create a new array with size as index and casesize as value
-    for(var i in tabula[0].data) {
-        retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
-    }
-    //Size wise mapping of ORMS and RETEK tables.
-    $.each(ormsQty, function(index,element) {
-        ormsQty[index].Case_Size = retek_size[element.Size];
-    });
+    console.log(tabula);
+    // var ormsQty = cParsedObj.orderQuantity;
+    // tabula[0].data.pop(); //Remove the total quantity row from the object
+    // tabula[0].data.shift(); //Remove the table headers from the array
+    // var retek_size = [];    //Create a new array with size as index and casesize as value
+    // for(var i in tabula[0].data) {
+    //     retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
+    // }
+    // //Size wise mapping of ORMS and RETEK tables.
+    // $.each(ormsQty, function(index,element) {
+    //     ormsQty[index].Case_Size = retek_size[element.Size];
+    // });
 }
 
 /**
