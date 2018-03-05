@@ -29,7 +29,7 @@ function parseUKPurchaseOrder(data, callback) {
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseCEPurchaseOrder(data, callback) {
-   // try {
+   try {
         var cParsedObj = {};
         //Parse the ORMS data
         cParsedObj.purchaseOrder  =  data.details.orms.order_number;
@@ -48,11 +48,11 @@ function parseCEPurchaseOrder(data, callback) {
                 break;
         }
         callback(cParsedObj);
-    // } catch(e) {
-    //     // error statements
-    //     console.error("Error:"+e);
-    // }
-      console.log(cParsedObj);
+    } catch(e) {
+        // error statements
+        console.error("Error:"+e);
+    }
+     // console.log(cParsedObj);
 }
 
 /**
@@ -200,39 +200,44 @@ function parseRatioTypeForCE(data, cParsedObj) {
 
     var info = JSON.parse(data.info);
     $.each(info[0].data, function(ind, ele) {
-        var row_length = ele.length;
         switch(ind) {
             case 0:
                 //Extract VPN - CE STYLE NUMBER
-                var new_element = removeEmptyValues(ele);
-                var vpn = new_element[1].text;
-                cParsedObj.styleNumber  = vpn[1].trim();
+                cParsedObj.styleNumber  = ele[1].text;
                 break;
             case 2:
                 //Extract 24 Char Description
-                var new_element = removeEmptyValues(ele);
-                cParsedObj.shortDescription = new_element[1].text;
-                cParsedObj.seasonCode = new_element[3].text;
+                cParsedObj.shortDescription = ele[1].text;
                 break;
+            case 3:
+                //Extract Season Code
+                cParsedObj.seasonCode = ele[1].text;
+                break;
+
         }
     });
 
 
     //********************************************* ORDER QUANTITY SECTION ************************************
     //********************************************* PARSE THE JSON TABULA *************************************
-    var tabula = JSON.parse(data.table);
-    console.log(tabula);
-    // var ormsQty = cParsedObj.orderQuantity;
-    // tabula[0].data.pop(); //Remove the total quantity row from the object
-    // tabula[0].data.shift(); //Remove the table headers from the array
-    // var retek_size = [];    //Create a new array with size as index and casesize as value
-    // for(var i in tabula[0].data) {
-    //     retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
-    // }
-    // //Size wise mapping of ORMS and RETEK tables.
-    // $.each(ormsQty, function(index,element) {
-    //     ormsQty[index].Case_Size = retek_size[element.Size];
-    // });
+    var tabula = [];
+    var packA = JSON.parse(data.ratioPackA);
+    tabula.push(packA);
+    if (data.hasOwnProperty("ratioPackB")) {
+        var packB = JSON.parse(data.ratioPackB);
+        tabula.push(packB);
+    }
+    var ormsQty = cParsedObj.orderQuantity;
+
+    var values = [];
+    $.each(tabula, function(index,element) {
+        var row = {};
+        row.tpnd = ormsQty.tpnd;
+        row.itf = ormsQty.itf;
+        row.cpc = element[2].text;   
+        values.push(row);
+    });
+    cParsedObj.orderQuantity = values;
 }
 
 /**
@@ -403,10 +408,10 @@ function parseRatioType(data) {
         var row = {};
         $.each(element, function(i, val) {
             switch(i) {
-                case 2 : row.unitsPerCarton =  val.text;
+                case 2 : row.upc =  val.text;
                 break;
 
-                case 4 : row.barCode =  val.text;
+                case 4 : row.itf =  val.text;
                 break;
 
                 case 5 : row.tpnd = val.text;
@@ -454,7 +459,6 @@ function renderParsedValues(parsedObj) {
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 
-
     if(type === 'single') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
@@ -474,9 +478,14 @@ function renderParsedValues(parsedObj) {
     } else if(type === 'ratio') {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
-            $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
-            $('#'+zone+'_ratio_itf_'+index).val(j.barCode);
-            $('#'+zone+'_ratio_upc_'+index).val(j.unitsPerCarton);
+            $('#'+zone+'_ratio_itf_'+index).val(j.itf);
+            if(zone === 'ce') {
+                $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd);
+                $('#'+zone+'_ratio_cpc_'+index).val(j.cpc);
+            } else {
+                $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
+                $('#'+zone+'_ratio_upc_'+index).val(j.upc);
+            }
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
             }

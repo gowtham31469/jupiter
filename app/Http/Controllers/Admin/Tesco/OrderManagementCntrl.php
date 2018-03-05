@@ -332,10 +332,11 @@ class OrderManagementCntrl extends Controller
                 $orms_data['order_table']  = $orms_table;
                 //$packB = $this->checkPackB($retek_path, 'CE');//Check for Ratio Pack B
                 $ratio_table          = $this->extractCERatioTable($retek_path, 'CE');//Check for Ratio Pack B
-                $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
-                $retek_data['info']   = $retek_ratio_data['info'];
+                // $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
+                $retek_ratio_data     = $this->cropVerticalPDF($retek_path, 'ratio', 'CE');
+                $retek_data['info']   = json_encode($retek_ratio_data['info']);
                 //$retek_data['table']  = $retek_ratio_data['table'];
-                $retek_data['table']  = json_encode($ratio_table[0]);
+                $retek_data['ratioPackA']  = json_encode($ratio_table[0]);
                 if(count($ratio_table) > 1) {
                   $retek_data['ratioPackB'] = json_encode($ratio_table[1]);
                 }
@@ -438,6 +439,31 @@ class OrderManagementCntrl extends Controller
       $info    = shell_exec('java -jar '.$tabula.$information.$file);
       $table   = shell_exec('java -jar '.$tabula.$quantity.$file);
       return ['info' => $info, 'table' => $table];
+    }
+
+    /**
+     * Method to get the info section from the PDF
+     * @param  [path] $file File to be cropped
+     * @param  [str]  $type Purchase Order type
+     * @param  [str]  $zone Template Zone CE/UK
+     * @return [str]  JSON extracted string
+     */
+    public function cropVerticalPDF($file, $type, $zone) {
+      //Read the tabula configuration from config/tabula.php.
+      $tabula      = Config::get('tabula.tabula_jar');
+      $column_1    = Config::get('tabula.'.$zone.'_'.$type.'_info_col_1');
+      $column_2    = Config::get('tabula.'.$zone.'_'.$type.'_info_col_2');
+      //Execute tabula method to extract the quantity table.
+      $info1    = shell_exec('java -jar '.$tabula.$column_1.$file);
+      $info2    = shell_exec('java -jar '.$tabula.$column_2.$file);
+      $info1    = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $info1), true);
+      $info2    = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $info2), true);
+      foreach ($info2[0]['data'] as $key => $value) {
+        if($value[0]['text'] === 'Season Code :') {
+            array_push($info1[0]['data'], $value);
+        }
+      }
+      return ['info' => $info1];
     }
 
     /**
