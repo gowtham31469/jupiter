@@ -391,7 +391,19 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
 			svgDoc1.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+			
 			svgDoc1.getElementById("brand").innerHTML =brand.toUpperCase().replace('&', '&amp;');
+			
+			 var str =brand.trim();
+		     var justify_len = str.length;
+		     if(justify_len < 15)
+		     {
+			     svgDoc1.getElementById("brand").style.fontSize = "11px";
+		     }
+		     else
+		     {
+			    svgDoc1.getElementById("brand").style.fontSize = "9px"; 
+		     }
 
 			if(name == "TSL3" || name == "THL3" )
 			{

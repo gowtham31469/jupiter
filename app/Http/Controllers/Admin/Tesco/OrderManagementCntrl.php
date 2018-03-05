@@ -331,12 +331,13 @@ class OrderManagementCntrl extends Controller
                 $orms_table = $this->parseORMSTable($orms_path, 'ratio');
                 $orms_data['order_table']  = $orms_table;
                 //$packB = $this->checkPackB($retek_path, 'CE');//Check for Ratio Pack B
-                $packB = $this->checkCEPackB($retek_path, 'CE');//Check for Ratio Pack B
+                $ratio_table          = $this->extractCERatioTable($retek_path, 'CE');//Check for Ratio Pack B
                 $retek_ratio_data     = $this->cropPDF($retek_path, 'ratio', 'CE');
                 $retek_data['info']   = $retek_ratio_data['info'];
-                $retek_data['table']  = $retek_ratio_data['table'];
-                if($packB) {
-                  $retek_data['ratioPackB'] = $packB;
+                //$retek_data['table']  = $retek_ratio_data['table'];
+                $retek_data['table']  = json_encode($ratio_table[0]);
+                if(count($ratio_table) > 1) {
+                  $retek_data['ratioPackB'] = json_encode($ratio_table[1]);
                 }
                 break;
               default:
@@ -347,7 +348,7 @@ class OrderManagementCntrl extends Controller
             $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
             $output['orms'] = $orms_data;
             $output['retek'] = $retek_data;
-            return response()->json(['output' =>$output], 200);
+            return response()->json(['details' =>$output], 200);
           
           } else {
             return response()->json(['error' => 'File not found'], 400);
@@ -466,29 +467,30 @@ class OrderManagementCntrl extends Controller
     }
 
     /**
-     * Method to check Ratio Pack B exist or not
+     * Method to extract Ratio table from Page 2 for CE
      * @param  [path] $file File to be cropped
      * @return [str]       JSON extracted string
      */
-    public function checkCEPackB($file, $zone) {
+    public function extractCERatioTable($file, $zone) {
       //Read the tabula configuration from config/tabula.php.
       $tabula      = Config::get('tabula.tabula_jar');
       $check_packB = Config::get('tabula.'.$zone.'_check_packB');
       //Execute tabula method to extract the quantity table.
       $pack_b = shell_exec('java -jar '.$tabula.$check_packB.$file);
       $pack_b = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $pack_b), true);
-      foreach ($pack_b as $key => $value) {
-        if(count($value['data']) < 2) {
-          unset($pack_b[$key]);
+      $ratio_arr = array();
+      foreach ($pack_b as $key => $data_arr) {
+        foreach ($data_arr['data'] as $i => $val) {
+          if($val[0]['text'] === 'Ratio Pack Description') {
+            array_push($ratio_arr, $data_arr['data'][$i+1]);
+          }
         }
       }
-      // $pack_b = array_values($pack_b); // 'reindex' array
-      // if(count($pack_b) > 1) {
-      //   //return the ratio pack B row
-      //   return json_encode($pack_b[1]['data'][5]);
-      // } else {
-      //   return false;
-      // }
+      if(count($ratio_arr) > 0) {
+        return $ratio_arr;
+      } else {
+        return false;
+      }
     }
 
     /**
