@@ -52,7 +52,7 @@ function parseCEPurchaseOrder(data, callback) {
         // error statements
         console.error("Error:"+e);
     }
-     // console.log(cParsedObj);
+    console.log(cParsedObj);
 }
 
 /**
@@ -65,6 +65,11 @@ function parseSingleORMSTable(tabula) {
     var values = [];
     $.each(tabula, function(index, element) {
         var row = {};
+        var table_length = element.length;
+        console.log(table_length);
+        if(table_length === 4) {
+            element.splice(2,1);
+        }
         $.each(element, function(i, val) {
             if(index === 0) {
                 switch(i) {
@@ -77,7 +82,7 @@ function parseSingleORMSTable(tabula) {
                 }
                 
             } else {
-                if(i === 2) {
+                if(i === 2 && table_length !== 4) {
                     val = val.text.split(' ');
                     if(typeof(val[1]) != "undefined" && val[1] !== null) {
                         row[header[i]] = val[1];
@@ -95,6 +100,7 @@ function parseSingleORMSTable(tabula) {
            values.push(row); 
         } 
     });
+    console.log(values)
     return values;
 
 }
