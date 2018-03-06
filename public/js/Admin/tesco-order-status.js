@@ -526,11 +526,11 @@ function tescoOrderStatus()
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select Style Number</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Artwork Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+                        $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select Style Number</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectTemplate"> <option disabled selected>Select Template Name</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
                         //For Custom Filters
                         this.api().columns().every(function (i) {
                             var column = this;
-                            if (i === 0 || i === 5 || i === 8) {
+                            if (i === 0 || i === 5 || i === 3) {
                                 var select;
                                 switch (i) {
                                     case 0:
@@ -539,8 +539,8 @@ function tescoOrderStatus()
                                     case 5:
                                         select = $('#supplierName')
                                         break;
-                                    case 8:
-                                        select = $('#selectStatus')
+                                    case 3:
+                                        select = $('#selectTemplate')
                                         break;
                                 }
                                 select.on('change', function () {
@@ -565,7 +565,7 @@ function tescoOrderStatus()
                 $("#reset").on("click", function () {
                     $('#styleNumber').val('').change();
                     $('#supplierName').val('').change();
-                    $('#selectStatus').val('').change();
+                    $('#selectTemplate').val('').change();
                     $.fn.dataTableExt.afnFiltering.length = 0;
                     $tableSel.dataTable().fnDraw();
                     $('input[name="daterange"]').val('Filter by Order Date');
