@@ -13,6 +13,7 @@ use App\ProfomaInvoiceItemDetails;
 use Response;
 use View;
 use DB;
+use Excel;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
@@ -43,31 +44,31 @@ class OrderStatusCntrl extends Controller
 		{			
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                              ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPONo','tesco_tcl1_orders.zone as Zone',DB::raw('"TCL 1" as TemplateName'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_tcl1_orders.created_at as OrderDate','tesco_tcl1_orders.artwork_status as Artwork Status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','tesco_tcl1_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw('"TCL 1" as TemplateName'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_tcl1_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_tcl1_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_tcl1_orders.artwork_status as Artwork Status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag')
                             ->get();
             $data['tcl2'] = DB::table('tesco_tcl2_orders')
                             ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPONo','tesco_tcl2_orders.zone as Zone',DB::raw('"TCL 2" as TemplateName'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_tcl2_orders.created_at as OrderDate','tesco_tcl2_orders.artwork_status as Artwork Status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl2_orders" as tableName'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','tesco_tcl2_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw('"TCL 2" as TemplateName'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_tcl2_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_tcl2_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_tcl2_orders.artwork_status as Artwork Status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl2_orders" as tableName'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag')
                             ->get();
             $data['tcl4'] = DB::table('tesco_tcl4_orders')
                             ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPONo','tesco_tcl4_orders.zone as Zone',DB::raw('"TCL 4" as TemplateName'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_tcl4_orders.created_at as OrderDate','tesco_tcl4_orders.artwork_status as Artwork Status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl4_orders" as tableName'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','tesco_tcl4_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw('"TCL 4" as TemplateName'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_tcl4_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_tcl4_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_tcl4_orders.artwork_status as Artwork Status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tcl4_orders" as tableName'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag')
                             ->get();
             $data['thl1'] = DB::table('tesco_thl1_orders')
                             ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPONo','tesco_thl1_orders.zone as Zone',DB::raw('"THL 1" as TemplateName'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_thl1_orders.created_at as OrderDate','tesco_thl1_orders.artwork_status as Artwork Status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_thl1_orders" as tableName'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','tesco_thl1_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw('"THL 1" as TemplateName'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_thl1_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_thl1_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_thl1_orders.artwork_status as Artwork Status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_thl1_orders" as tableName'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag')
                             ->get();
             $data['thl3'] = DB::table('tesco_thl3_orders')
                             ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPONo','tesco_thl3_orders.zone as Zone',DB::raw('"THL 3" as TemplateName'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_thl3_orders.created_at as OrderDate','tesco_thl3_orders.artwork_status as Artwork Status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_thl3_orders" as tableName'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','tesco_thl3_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw('"THL 3" as TemplateName'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_thl3_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_thl3_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_thl3_orders.artwork_status as Artwork Status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_thl3_orders" as tableName'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag')
                             ->get();
             $data['tsl1'] = DB::table('tesco_tsl1_orders')
                             ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPONo','tesco_tsl1_orders.zone as Zone',DB::raw('"TSL 1" as TemplateName'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_tsl1_orders.created_at as OrderDate','tesco_tsl1_orders.artwork_status as Artwork Status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tsl1_orders" as tableName'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','tesco_tsl1_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw('"TSL 1" as TemplateName'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_tsl1_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_tsl1_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_tsl1_orders.artwork_status as Artwork Status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tsl1_orders" as tableName'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag')
                             ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
-                            ->select(DB::raw('"-" as StyleNumber'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPONo','tesco_tsl3_orders.zone as Zone',DB::raw('"TSL 3" as TemplateName'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier Name','tesco_tsl3_orders.created_at as OrderDate','tesco_tsl3_orders.artwork_status as Artwork Status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tsl3_orders" as tableName'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','tesco_tsl3_orders.template_id')
+                            ->select(DB::raw('"-" as StyleNo'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw('"TSL 3" as TemplateName'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Supplier','tesco_tsl3_orders.created_at as OrderDate',DB::raw("DATE_FORMAT(tesco_tsl3_orders.delivery_date,'%d-%m-%Y') as DeliveryDate"),'tesco_tsl3_orders.artwork_status as Artwork Status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw('"-" as Actions'),DB::raw('"tesco_tsl3_orders" as tableName'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag')
                             ->get();
 
 	     	$result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
@@ -97,14 +98,15 @@ class OrderStatusCntrl extends Controller
             }
             else
             {
-                $po_status = "PO Approved";
+                $po_status = "PO Uploaded";
             }
+
 			$data 		 = DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'purchase_order_no' => $po_number,
                                   'po_status' => $po_status
                                 ]);
-            if (count($data)>0)
+            if ($data)
             {
                 $result = response()->json(['error'=> false,'message' =>'success'],200);
             }
@@ -161,7 +163,7 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-            if (count($data)>0)
+            if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
                 {
@@ -180,7 +182,8 @@ class OrderStatusCntrl extends Controller
                     'uvc_style_no'     => $style_no,
                     'shipping_address' => $data['ship_to']->address,
                     'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'template_type'  => $data['bank_details']->template_type
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -259,6 +262,192 @@ class OrderStatusCntrl extends Controller
     }
 
     /**
+     * method to get the tesco artworks for a particular style number
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getArtwork(Request $request)
+    {
+        try 
+        {
+            $style_num = $request->styleNum;
+            $zone      = $request->zone;
+            if ($zone=="CE") {
+               $col = "ce_style_ref";
+            }
+            else{
+                 $col = "uk_style_ref";
+            }
+            $data['tcl1'] = DB::table('tesco_tcl1_orders')
+                            ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_tcl1_orders.*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tcl2'] = DB::table('tesco_tcl2_orders')
+                            ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_tcl2_orders.*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tcl4'] = DB::table('tesco_tcl4_orders')
+                            ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_tcl4_orders.*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['thl1'] = DB::table('tesco_thl1_orders')
+                            ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_thl1_orders.*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['thl3'] = DB::table('tesco_thl3_orders')
+                            ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_thl3_orders.*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tsl1'] = DB::table('tesco_tsl1_orders')
+                            ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_tsl1_orders.*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $data['tsl3'] = DB::table('tesco_tsl3_orders')
+                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
+                            ->select('tesco_tsl3_orders.*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as tableName'),'tesco_item_master.company_id')
+                            ->where("zone",$zone)
+                            ->where($col,$style_num)
+                            ->get();
+            $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to update the po number and po file for the selected artworks
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function updateArtworkPO(Request $request)
+    {
+        try
+        {
+            $id        =  explode(',',$request->id);
+            $po        =  $request->po;          
+            $po_file = $request->file('po_file');
+            $filename = $request->file('po_file')->getClientOriginalName();
+            $destination_path='/storage/app/public/po-files/';
+            $path='storage/app/public/po-files/';
+            $Orname = $po_file->getClientOriginalName();
+            $filename= str_random(6).'_'.preg_replace('/\s+/', '-', $Orname);
+            $po_file->move($path,$filename);
+            $destination_path_insert=$destination_path.$filename;
+            foreach($id as $val)
+            {
+                $value    =  explode('-',$val);
+                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
+            
+                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+                {
+                    $po_status = "PO Pending";
+                }
+                else
+                {
+                    $po_status = "PO Uploaded";
+                }
+                
+                DB::table($value[0])->where('id',$value[1])
+                   ->update([
+                        'purchase_order_no' => $po,
+                        'po_file' => $destination_path_insert,
+                        'po_status' => $po_status
+                  ]);
+            }
+            $result = response()->json(['error'=> false,'message' =>'success'],200); 
+           
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+    
+    /**
+     * method to copy the existing PO number to another artwork
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function copyArtworkPO(Request $request)
+    {
+        try
+        {
+            $id        =   explode(',',$request->id);
+            $po        =   $request->po;
+            
+            foreach($id as $val)
+            {
+                $value    =  explode('-',$val);
+            
+                $po_details = DB::table($value[0])->where('id',$value[1])->select('purchase_order_no')->first();
+            
+                if ($po_details->purchase_order_no =="" || $po_details->purchase_order_no=="null")
+                {
+                    $po_status = "PO Pending";
+                }
+                else
+                {
+                    $po_status = "PO Uploaded";
+                }
+                DB::table($value[0])->where('id',$value[1])
+                   ->update([
+                        'purchase_order_no' => $po,
+                        'po_status' => $po_status
+                  ]);
+            }
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * method to update the delivery date of a particular artwork
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function updateDeliveryDate(Request $request)
+    {
+        try
+        {
+            $row_id       =   $request->id;
+            $table_name   =   $request->tableName; 
+            $deliveryDate =   $request->deliveryDate; 
+            $date = str_replace('/', '-', $deliveryDate);
+            $deliveryDt =  date('Y-m-d', strtotime($deliveryDate));
+            DB::table($table_name)->where('id',$row_id)
+                   ->update([
+                        'delivery_date' => $deliveryDt
+                  ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
      * method to get the details about a particular artwork
      * @param  Request $request [description]
      * @return [type]           [description]
@@ -274,10 +463,10 @@ class OrderStatusCntrl extends Controller
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
             $quantity_details = DB::table($table_name.'_quanty')
                                 ->where($qnty_id,$order_details->id)->get();
-
-            if (count($order_details) && count($quantity_details))
+			$template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
+            if ($order_details && $quantity_details)
             {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details],200);
+                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file],200);
             }
             else
             {
@@ -290,5 +479,148 @@ class OrderStatusCntrl extends Controller
         }
         return $result;
     }
+	/**
+     * Edit the tesco orders
+     * 
+     * @return boolean values
+     */
+    public function setTescoOrderStatus(Request $request)
+    {
+        $tpnd         	 = explode(',',$request['tpnd']);
+		$barcode         = explode(',',$request['barcode']);
+		$size			 = explode(',',$request['size']);
+		$count			 = explode(',',$request['count']);
+		$template_id     = $request['edit_id'];
+		$template_name     = $request['template_name'];
+		$zone =$request['zone'];
+		if($template_name == "TCL1")
+		{
+			$table_name="tesco_tcl1_orders";
+			$qty_table_name="tesco_tcl1_orders_quanty";
+			$foreign_key="tcl1_order_id";
+			$single_size	= $request['single_size'];
+		}
+		else if($template_name == "TCL2")
+		{
+			$table_name="tesco_tcl2_orders";
+			$qty_table_name="tesco_tcl2_orders_quanty";
+			$foreign_key="tcl2_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "TCL4")
+		{
+			$table_name="tesco_tcl4_orders";
+			$qty_table_name="tesco_tcl4_orders_quanty";
+			$foreign_key="tcl4_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		else if($template_name == "TSL1")
+		{
+			$table_name="tesco_tsl1_orders";
+			$qty_table_name="tesco_tsl1_orders_quanty";
+			$foreign_key="tsl1_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "TSL3")
+		{
+			$table_name="tesco_tsl3_orders";
+			$qty_table_name="tesco_tsl3_orders_quanty";
+			$foreign_key="tsl3_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		else if($template_name == "THL1")
+		{
+			$table_name="tesco_thl1_orders";
+			$qty_table_name="tesco_thl1_orders_quanty";
+			$foreign_key="thl1_order_id";
+			$single_size = $request['single_size'];
+		}
+		else if($template_name == "THL3")
+		{
+			$table_name="tesco_thl3_orders";
+			$qty_table_name="tesco_thl3_orders_quanty";
+			$foreign_key="thl3_order_id";
+			$single_size = explode(',',$request['single_size']);
+		}
+		
+		DB::table($table_name)->where('id',$template_id)
+						      ->update([
+                                  'zone'                 => $request['zone'],
+								  'template_type'        => $request['type'],
+								  'po_number'            => $request['po_number'],
+								  'uk_style_ref'         => $request['uk_style'],
+								  'ce_style_ref'         => $request['ce_style'],
+								  'season_code'          => $request['season_code'],
+								  'short_description'    => $request['description'],
+								  'eqos_site_code'       => $request['eqos'],
+								  'manufacture_date'     => $request['manufacture_date'],
+								  'tesco_department_id'  => $request['department'],
+								  'tesco_brand_id'       => $request['brand'],
+								  'tesco_supplier_id'    => $request['supplier'],
+								  'rfid_compliant'       => $request['rfid'],
+								  'tag_at_source'        => $request['tag_at_source'],
+                                ]);
+		
+		DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
+		$i=0;
+		foreach($tpnd as $value)
+		{
+			if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE") || ($template_name == "THL1" && $zone=="CE"))
+			{
+					
+				
+					DB::table($qty_table_name)->insert([
+					  'orms_tpn'           => $value,
+					  'itf_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'cases_per_carton'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>"0"
+					]);
+			}
+			else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
+			{
+					
+				DB::table($qty_table_name)->insert([
+					  'orms_tpn'           => $value,
+					  'ean_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'case_size'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>$single_size[$i]
+					]);
+			}
+			else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
+			{
+				
+				DB::table($qty_table_name)->insert([
+				  'tpnd'           => $value,
+				  'ean_barcode'        => $barcode[$i],
+				  $foreign_key       =>$template_id,
+				  'case_size'   => $size[$i],
+				  'count'         	   => $count[$i],
+				  'size'  			=>$single_size[$i]
+				]);
+			}
+			else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
+			{
+				
+				DB::table($qty_table_name)->insert([
+					  'tpnd'           		=> $value,
+					  'itf_barcode'        => $barcode[$i],
+					  $foreign_key       =>$template_id,
+					  'units_per_carton'   => $size[$i],
+					  'count'         	   => $count[$i],
+					  'size'  			=>"0"
+				]);
+			}
+			$i++;
+		}
+		
+		
+		echo true;	
+			  
+    }
+
 
 }

@@ -51,14 +51,15 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_TCL100".($max_id+1);
+              $order_id = "JGA_TCL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_TCL100".($max_id+1);
+              $order_id = "SP_TCL100".($max_id+1);
             }
-            
-            
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTCL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -109,15 +110,18 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTCL2Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_TCL200".($max_id+1);
+              $order_id = "JGA_TCL200".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_TCL200".($max_id+1);
+              $order_id = "SP_TCL200".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTCL2Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -168,15 +172,18 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTSL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_TSL100".($max_id+1);
+              $order_id = "JGA_TSL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_TSL100".($max_id+1);
+              $order_id = "SP_TSL100".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTSL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -227,15 +234,18 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTHL1Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_THL100".($max_id+1);
+              $order_id = "JGA_THL100".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_THL100".($max_id+1);
+              $order_id = "SP_THL100".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTHL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -286,15 +296,18 @@ class TescoOrders
            /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTCL4Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_TCL400".($max_id+1);
+              $order_id = "JGA_TCL400".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_TCL400".($max_id+1);
+              $order_id = "SP_TCL400".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTCL4Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -345,15 +358,18 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTSL3Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_TSL300".($max_id+1);
+              $order_id = "JGA_TSL300".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_TSL300".($max_id+1);
+              $order_id = "SP_TSL300".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+
             $result = TescoTSL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
@@ -404,15 +420,18 @@ class TescoOrders
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
-            $max_id = TescoTCL1Orders::max('id');
+            $max_id = TescoTHL3Orders::max('id');
             if($company_id->company_id == 1)
             {
-              $order_id = "JGAM_THL300".($max_id+1);
+              $order_id = "JGA_THL300".($max_id+1);
             }
             else
             {
-              $order_id = "SPECTRA_THL300".($max_id+1);
+              $order_id = "SP_THL300".($max_id+1);
             }
+            /** [ Check if price is available for this template ] */
+            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            
             $result = TescoTHL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],

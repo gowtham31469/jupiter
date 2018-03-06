@@ -38,8 +38,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
                 </div>
-                <div class="modal-body text-center">
-                    <div class="po_file hidden" id="po_file">
+                <div class="modal-body">
+                    <div class="po_file hidden text-center" id="po_file">
                         <a href="javascript:void(0)" target="_blank" id="po_link"><i class="fa fa-file-pdf-o fa-4x" style="color: #ff151599;"></i></a>
                         <br>
                         <button type="button" class="btn btn-primary btn-xs update-po-file" style="margin-top: 10px;">Update PO File</button>
@@ -102,22 +102,19 @@
                             <input id="new_po_no" type="text" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
                             <input type="file" id="new_po_file">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
-
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="update_new_po" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="update_po" class="btn btn-primary hidden">Update</button>
-
-                    <button type="button" id="new_pos" class="btn btn-primary hidden">Update</button>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_new_po" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="update_po" class="btn btn-primary  btn-smhidden">Update</button>
+                    <button type="button" id="new_pos" class="btn btn-primary  btn-sm btn-sm hidden">Update</button>
+                    
                 </div>
             </div>
         </div>
@@ -144,9 +141,12 @@
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
                                         <img id="company-logo" style="height:50px;" src="" class="img-responsive">
-                                        <p><strong>Date:</strong> {{ date('d-m-Y ') }}</p>
-                                        <p><strong>PI:</strong>493</p>
-                                        <p><strong>REV:</strong>2</p>
+                                        <p><strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span> </p>
+                                        <p><strong>PI </strong>
+                                            <span style="padding-left: 31px;"> : </span>
+                                            <span style="padding-left: 6px;" class="pi_number"></span></p>
+                                        <p class="rev hidden"><strong>REV : </strong><span class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
 
@@ -164,7 +164,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 92px;">
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -177,7 +177,7 @@
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong><span class="advnc">Advance Payment</span><span class="bond">|</span><span class="freight">Freight at your cost</span></strong></p>
+                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight at your cost  : <span class="bond"></span></strong><span class="freight"> </span></p>
                                 </div>
                                 <hr/>
                             </div>
@@ -244,17 +244,17 @@
                             <input id="new_po_no_status" type="text" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFile">PO File</label>
-                            <input type="file" id="new_po_file_status">
+                            <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
+                            <br><label >PO File</label>
+                            <input type="file" accept="application/pdf" id="new_po_file_status">
                             <p class="help-block">Example block-level help text here.</p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
                     <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
-
                     <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
                 </div>
             </div>
@@ -263,10 +263,21 @@
     <div class="left-panel col-md-12" style="display: none;">
         <div class="loader"></div>
         <div class="div-max">
-            <div class="col-md-4">
-                <h4 class="text-center">Order Details</h4>
-                <div class="scroll">
-                    <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">
+            
+				<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">
+					<div class="col-md-4">
+                <h4 class="text-center osorderdetails">Order Details</h4>
+                <div class="scroll" style="height: calc(100vh - 80px);">
+					
+						<input type="hidden" id="edit_template_name">
+						<input type="hidden" id="edit_zone">
+						<input type="hidden" id="edit_template_type">
+						<input type="hidden" id="edit_id">
+						 <div class="form-group has-feedback">
+                            <label for="tesco_uk_style">PO Number.</label>
+                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" disabled required="" onkeyup="dynamicSVGTemplates()">
+                            <div class="help-block with-errors"></div>
+                        </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_uk_style">UK Style Ref.</label>
                             <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()">
@@ -347,26 +358,29 @@
                             <option value="no">No</option> 
                         </select>
                     </div>
-               </form>
+               
             </div>
             </div>
             <div class="col-md-8">
-            <div class="scroll">
-                <h4 class="text-center">Artwork</h4>
+            <div class="scroll" style="height: calc(100vh - 40px);">
+                <h4 class="text-center osartwork">Artwork</h4>
                 <div class="row">
                 <div class=" col-md-6 col-md-offset-3 artwork_tesco">
-                <object style="border: 2px #333 solid;" class="center-block svg2" data="/storage/app/template/tesco/TCL1_CE.svg" type="image/svg+xml"></object>
+               
                  </div>
                 <div class="col-md-12">
                     <div class="edit-qty-table-div"></div>
-                    <button class="btn btn-danger pull-right input-sm" id="close" type="button">Close</button>
+					<div class="osfooter">
+					
+					</div>
+                   
                 </div>
                  
                     
                     </div>
                 </div>
             </div>
-            
+            </form>
             <div class="loader">
                 <div class=" fa-3x">
                     <i class="fa fa-spinner fa-pulse"></i>
@@ -375,149 +389,152 @@
          </div> 
     </div>
     {{-- Show snackbar html code --}}
-     <div id="snackbar"><span class="snackbar_span"></span></div>
-                                @endsection @else
-                                <script type="text/javascript">
-                                    window.location = "{{ url('/admin') }}";
-                                </script>
-                                @endif @section('jqueryIncludes')
+<div id="snackbar"><span class="snackbar_span"></span></div>
+@endsection @else
+<script type="text/javascript">
+    window.location = "{{ url('/admin') }}";
+</script>
+@endif @section('jqueryIncludes')
 
-                                <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-                                <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-                                <script src="{{ asset('js/Admin/order.js') }}"></script>
-                                <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
-                                <script>
-                                    localStorage.removeItem("page_navigation");
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
+<script>
+    localStorage.removeItem("page_navigation");
 
-                                    $(function() {
-                                        $('[data-toggle="tooltip"]').tooltip()
-                                        $('.po').attr("disabled", "disabled");
-                                    })
-                                    $(document).ready(function() {
-                                        $('.logo').html('Order Status');
-                                        $('.select-buyer').click(function() {
-                                            $('.select-buyer').addClass('hidden');
-                                        })
-                                        $('.buyer-nav-select').html($('.buyer-div').html())
-                                        if (localStorage.getItem("status_buyer") === null) {
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+        $('.po').attr("disabled", "disabled");
+    })
+    $(document).ready(function() {
+        $('.logo').html('Order Status');
+        $('.select-buyer').click(function() {
+            $('.select-buyer').addClass('hidden');
+        })
+        $('.buyer-nav-select').html($('.buyer-div').html())
+        if (localStorage.getItem("status_buyer") === null) {
 
-                                        } else if (localStorage.getItem("status_buyer") === 'orchestra') {
-                                            orderStatus();
-                                        } else {
-                                            tescoOrderStatus();
-                                        }
-                                        $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
-                                        $('.buyer-nav-select .buyer-select').selectpicker({
-                                            style: 'btn-default',
-                                            size: 4
-                                        });
-                                        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-                                            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-                                                localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-                                                localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-                                                var buyer = $(this).find("option:selected").text().toLowerCase();
-                                                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                                $.ajax({
-                                                    url: base_url + "/admin/order-management/order_sub_modules",
-                                                    type: "Post",
-                                                    dataType: "json",
-                                                    data: {
-                                                        _token: csrf_token,
-                                                        buyer: buyer
-                                                    },
-                                                    beforeSend: function() {
+        } else if (localStorage.getItem("status_buyer") === 'orchestra') {
+            orderStatus();
+        } else {
+            tescoOrderStatus();
+        }
+        $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
+        $('.buyer-nav-select .buyer-select').selectpicker({
+            style: 'btn-default',
+            size: 4
+        });
+        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+                localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var buyer = $(this).find("option:selected").text().toLowerCase();
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: base_url + "/admin/order-management/order_sub_modules",
+                    type: "Post",
+                    dataType: "json",
+                    data: {
+                        _token: csrf_token,
+                        buyer: buyer
+                    },
+                    beforeSend: function() {
 
-                                                    },
-                                                    success: function(data) {
-                                                        if (buyer === 'orchestra') {
-                                                            orderStatus();
-                                                        } else {
-                                                            tescoOrderStatus();
-                                                        }
-                                                    },
-                                                    error: function(data) {
+                    },
+                    success: function(data) {
+                        if (buyer === 'orchestra') {
+                            orderStatus();
+                        } else {
+                            tescoOrderStatus();
+                        }
+                    },
+                    error: function(data) {
 
-                                                    },
-                                                    complete: function() {
-                                                        $(".loader").hide();
-                                                        $(".loader").css('margin-top', '0%');
-                                                    }
-                                                })
-                                            } else {
-                                                localStorage.removeItem("status_buyer");
-                                                localStorage.removeItem("status_buyer_id");
-                                                location.reload()
-                                            }
-                                        });
-                                    });
+                    },
+                    complete: function() {
+                        $(".loader").hide();
+                        $(".loader").css('margin-top', '0%');
+                    }
+                })
+            } else {
+                localStorage.removeItem("status_buyer");
+                localStorage.removeItem("status_buyer_id");
+                location.reload()
+            }
+        });
+    });
 
-                                    Dropzone.options.poUpload = {
+    Dropzone.options.poUpload = {
 
-                                        // Prevents Dropzone from uploading dropped files immediately
-                                        url: base_url + "/admin/orchestra/set-po-file",
-                                        autoProcessQueue: false,
-                                        maxFilesize: 500,
-                                        maxFiles: 1,
-                                        acceptedFiles: ".pdf",
-                                        addRemoveLinks: true,
+        // Prevents Dropzone from uploading dropped files immediately
+        url: base_url + "/admin/orchestra/set-po-file",
+        autoProcessQueue: false,
+        maxFilesize: 500,
+        maxFiles: 1,
+        acceptedFiles: ".pdf",
+        addRemoveLinks: true,
 
-                                        init: function() {
+        init: function() {
 
-                                            var submitButton = document.querySelector(".upload-po")
-                                            myDropzone = this; // closure
+            var submitButton = document.querySelector(".upload-po")
+            myDropzone = this; // closure
 
 
-                                            submitButton.addEventListener("click", function() {
-                                                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
-                                            });
+            submitButton.addEventListener("click", function() {
+                myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+            });
 
-                                            // You might want to show the submit button only when 
-                                            // files are dropped here:
+            // You might want to show the submit button only when 
+            // files are dropped here:
 
-                                            this.on("addedfile", function(file) {
-                                                var filename = file.name;
-                                                $('.upload-po').removeClass('disabled')
-                                                // Show submit button here and/or inform user to click it.
-                                            });
-                                            this.on("complete", function(file) {
-                                                this.removeFile(file);
+            this.on("addedfile", function(file) {
+                var filename = file.name;
+                $('.upload-po').removeClass('disabled')
+                // Show submit button here and/or inform user to click it.
+            });
+            this.on("complete", function(file) {
+                this.removeFile(file);
 
-                                            });
-                                            this.on("queuecomplete", function(file) {
+            });
+            this.on("queuecomplete", function(file) {
 
-                                            });
-                                            this.on("success", function(file, response) {
-                                                $('.dz-remove').hide();
-                                                this.removeFile(file);
-                                                $('#po-file-upload').modal('hide')
-                                                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
-                                                tescoOrderStatus()
-                                                showSnackbar();
-                                            });
-                                            this.on("error", function(file, response) {
-                                                this.removeFile(file);
-                                                $('.snackbar_span').html('Something went wrong');
-                                                $('#snackbar').css('background-color', '#F44336');
-                                                showSnackbar();
-                                            });
-                                        }
-                                    };
+            });
+            this.on("success", function(file, response) {
+                $('.dz-remove').hide();
+                this.removeFile(file);
+                $('#po-file-upload').modal('hide')
+                $('#snackbar').css('background-color','#00b6ff');
+                $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
+                tescoOrderStatus()
+                showSnackbar();
+            });
+            this.on("error", function(file, response) {
+                this.removeFile(file);
+                $('.snackbar_span').html('Something went wrong');
+                $('#snackbar').css('background-color', '#F44336');
+                showSnackbar();
+            });
+        }
+    };
 
-                                    /** To refresh modal and form data**/
-                                    $(".modal").on("hidden.bs.modal", function() {
-                                        myDropzone.removeAllFiles();
-                                    });
-                                    var date = new Date();
-                                    var today = new Date(date.getFullYear(), date.getMonth());
-                                    $('#datePicker1').datepicker({
-                                        autoclose: true,
-                                        minViewMode: 1,
-                                        format: 'MM,yyyy',
-                                        startDate: today,
-                                    })
-                                    $('.remove').click(function() {
-                                        $('.left-panel').removeClass('active');
-                                    })
-                                </script>
+    /** To refresh modal and form data**/
+    $(".modal").on("hidden.bs.modal", function() {
+        myDropzone.removeAllFiles();
+    });
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth());
+    $('#datePicker1').datepicker({
+        autoclose: true,
+        minViewMode: 1,
+        format: 'MM,yyyy',
+        startDate: today,
+    })
+    $('.remove').click(function() {
+        $('.left-panel').removeClass('active');
+    })
 
-                                @endsection
+   
+</script>
+
+@endsection

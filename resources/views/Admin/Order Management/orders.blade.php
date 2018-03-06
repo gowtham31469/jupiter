@@ -398,12 +398,12 @@ border: 0;
             </div>
         </div>
     </div>
-{{-- Artwork po-upload and delivery date upload modal --}}
+{{-- Artwork buyer po-upload and delivery date upload modal --}}
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order Upload</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
             </div>
             <div class="modal-body">
                 <div class="tabbable">{{-- Only required for left/right tabs --}}
@@ -424,7 +424,61 @@ border: 0;
         </div>
     </div>
 </div>
-	<div id="snackbar"><span class="snackbar_span"></span></div>
+
+{{-- Confirm artwork order modal --}}
+<div class="modal fade" id="confirmOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm Order</h4>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Artwork count missing for following artworks:</h4>
+                                <ol id="body_msg" style="font-weight: bolder;">
+                                    
+                                </ol>
+                                <h4>Do you want to place the order ?</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
+               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Artwork count missing for all artworks modal --}}
+<div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity(count) and count must be greater than 0.</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";
@@ -616,7 +670,7 @@ border: 0;
 				}
 			});
 		});
-
+        
 	</script>
 
 	@endsection

@@ -10,6 +10,7 @@ use App\CustomerBillAddress;
 use DB;
 use Auth;
 use App\RolePermissionMdl;
+use Carbon\Carbon;
 
 class ProfomaInvoice
 {
@@ -20,20 +21,24 @@ class ProfomaInvoice
 	 */
 	public function getPIDetails($request)
 	{
-		$id         =   $request->id;
+		    $id         =   $request->id;
         $table_name =   $request->table_name;
         $uvc        =   $request->uvc;
         $buyer_id   =   $request->buyer_id;
+
         $data['company_details'] =  DB::table('orchestra_item_master')
                                           ->join('orchestra_hang_tag_orders','orchestra_hang_tag_orders.template_front_id','=','orchestra_item_master.id')
                                           ->join('company','company.id','=','orchestra_item_master.company_id')
                                           ->where('orchestra_hang_tag_orders.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
+
         $customer_details = DB::table('orchestra_item_details')
                           ->join('customers','orchestra_item_details.FactoryCode','=','customers.factory_code')
+                          ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
+                          ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                           ->where('orchestra_item_details.UVC',$uvc)
-                          ->select('customers.*')
+                          ->select('customers.*','payment_terms.payment_terms','freight_terms.freight_terms')
                           ->first();
         $data['bank_details'] =  $customer_details;
         $data['bill_to'] = DB::table('customer_bill_address')
@@ -146,17 +151,38 @@ class ProfomaInvoice
         $id         =   $request->id;
         $table_name =   $request->table_name;
         $buyer_id   =   $request->buyer_id;
+        $pi_id      =   DB::table('profoma_invoices')->max('id');
+        $today      =   Carbon::now('Asia/Kolkata');
+        
         $data['company_details'] =  DB::table('tesco_item_master')
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
                                           ->join('company','company.id','=','tesco_item_master.company_id')
                                           ->where($table_name.'.id',$id)
-                                          ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                          ->select('company.*')
                                           ->first();
+        if ($data['company_details']->id == 1)
+        {
+          $data['company_details']->pi_number = "JGA00".$pi_id;
+        }
+        else{
+         $data['company_details']->pi_number = "SP00".$pi_id;
+        }
+        $data['company_details']->rev_number = 0;
+        $data['company_details']->pi_date = $today->toDateString();
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
+                                  ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
+                                  ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type')
                                   ->first();
+        if ($customer_details)
+        {
+          if ($customer_details->nominated_forwarder!=null)
+          {
+           $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
+          }
+        }
         $data['bank_details']   = $customer_details;
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
@@ -196,17 +222,38 @@ class ProfomaInvoice
         ->where('uvc_style_no',$style_no)
         ->where('template_id',$template_id)
         ->where('buyer_po_no',$buyer_po)
-        ->select('profoma_invoices.*')
+        ->select('profoma_invoices.*',DB::raw("DATE_FORMAT(profoma_invoices.created_at,'%Y-%m-%d') as pi_date"))
         ->first();
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')
                                         ->where('tesco_item_master.id',$pi_details->company_id)
-                                        ->select('company.id','company.name','company.address','company.logo','company.phone')
+                                        ->select('company.*')
                                           ->first();
+
+        if ($pi_details->company_id == 1)
+        {
+          $data['company_details']->pi_number = "JGA00".$pi_details->id;
+        }
+        else{
+         $data['company_details']->pi_number = "SP00".$pi_details->id;
+        }
+        $data['company_details']->rev_number = $pi_details->revision_no;
+        
+        $data['company_details']->pi_date    = $pi_details->pi_date;
         $customer_details       = DB::table('customers')
+                                  ->join('payment_terms','customers.payment_terms','=','payment_terms.id')
+                                  ->join('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where('customers.id',$pi_details->customer_id)
-                                  ->select('customers.*')
+                                  ->select('customers.*','payment_terms.payment_terms','freight_terms.freight_terms')
                                   ->first();
+        if ($customer_details)
+        {
+          if ($customer_details->nominated_forwarder!=null)
+          {
+           $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
+           $customer_details->template_type = $pi_details->template_type;
+          }
+        }                        
         $data['bank_details']   = $customer_details;
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
