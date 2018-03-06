@@ -31,6 +31,7 @@ use App\Classes\TescoOrders;
 use PDF;
 use App\Classes\TescoCombinedPOUpload;
 use App\Classes\TescoPOUploadTemplatesSwitch;
+use Carbon\Carbon;
 
 class OrderManagementCntrl extends Controller
 {
@@ -289,6 +290,7 @@ class OrderManagementCntrl extends Controller
           $output = array();
           $orms_data = array();
           $retek_data = array();
+          $template_type = 'TCL';
           //Check the files has been uploaded or not
           if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
             //Move the orms file
@@ -305,7 +307,7 @@ class OrderManagementCntrl extends Controller
             if(!$this->parseORMS($orms_path)) {
               return response()->json(['error' => 'Unrecognized ORMS file'], 400);
             }
-            list($orms_no, $retek_no) = $this->parseORMS($orms_path);
+            list($orms_no, $retek_no)  = $this->parseORMS($orms_path);
             $orms_data['order_number'] = trim($orms_no);
             $orms_data['retek_number'] = trim($retek_no);
             //Check the RETEK purchase order validation
@@ -318,6 +320,43 @@ class OrderManagementCntrl extends Controller
             $po_type   = $this->checkPOType($retek_path);
             $arr = explode(' ',trim($po_type));
             $retek_data['retek_po_type'] = strtolower($arr[0]);
+
+            //Check for Packing Method to identify whether it is TCL or THL
+            //If Packing Method is 'HANGING' then it is THL
+            //If Packing Method is 'BOX' or something like that then it is TCL
+            $isTHL = $this->checkPackingMethod($retek_path);
+            if(gettype($isTHL) !== 'boolean') {
+              return response()->json(['error' => $isTHL], 400);
+            } else if($isTHL){
+              $template_type = 'THL';
+            }
+            
+            //Validate the Template and Packaging Method.
+            switch ($request->template_name) {
+              case 'TCL 1 , TCL 2 & TSL 1':
+                if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'TCL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+              case 'TCL 4 & TSL 3':
+                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+              case 'THL 1':
+                if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'THL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+              case 'THL 3':
+                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'THL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+              default:
+                return response()->json(['error' => 'Unknown Template Name for CE'], 400);
+                break;
+            }
 
             switch ($retek_data['retek_po_type']) {
               case 'single':
@@ -337,9 +376,11 @@ class OrderManagementCntrl extends Controller
                 $retek_data['info']   = json_encode($retek_ratio_data['info']);
                 //$retek_data['table']  = $retek_ratio_data['table'];
                 $retek_data['ratioPackA']  = json_encode($ratio_table[0]);
-                if(count($ratio_table) > 1) {
-                  $retek_data['ratioPackB'] = json_encode($ratio_table[1]);
-                }
+                //Parse Ratio Pack B
+                //Not Required for CE
+                // if(count($ratio_table) > 1) {
+                //   $retek_data['ratioPackB'] = json_encode($ratio_table[1]);
+                // }
                 break;
               default:
                 return response()->json(['error' => 'Unknown PO Type'], 400);
@@ -390,6 +431,33 @@ class OrderManagementCntrl extends Controller
         $orms_table   = Config::get('tabula.orms_table_'.$type);
         $ce_orms_table    = json_decode(shell_exec('java -jar '.$tabula.$orms_table.$file), true);
         return $ce_orms_table[0]['data'];
+    }
+
+    /**
+     * Method to parse the packing method to determine is it THL or TCL
+     * @param  [string] $file PDF file path.
+     * @return [array]  ORMS PO parsed data
+     */
+    public function checkPackingMethod($file) {
+      //Read the tabula configuration from config/tabula.php.
+        $tabula           = Config::get('tabula.tabula_jar');
+        $packing_method   = Config::get('tabula.packing_method');
+        $info_col_3      = json_decode(shell_exec('java -jar '.$tabula.$packing_method.$file), true);
+        foreach ($info_col_3[0]['data'] as $key => $value) {
+          foreach ($value as $i => $val) {
+            if(strpos($val['text'], 'Packaging Method :') !== false) {
+              $method = explode(':', $value[1]['text']);
+              $method = (count($method) === 1) ? $value[$i+1]['text'] : trim($method[1]);
+              if($method === 'HANGING') {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          }
+
+        }
+        return 'Unable to process the packing method';
     }
 
 
@@ -580,7 +648,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
-
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -768,7 +836,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -797,6 +865,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
 
             foreach ($templates as $template) 
             {
@@ -943,7 +1012,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -971,6 +1040,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
 
             foreach ($templates as $template) 
             {
@@ -1158,7 +1228,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -1186,6 +1256,8 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
+            
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1331,7 +1403,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
