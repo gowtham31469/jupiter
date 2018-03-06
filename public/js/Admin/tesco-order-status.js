@@ -834,7 +834,7 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 $('body').on('focus',".datepicker_recurring_start", function(){
     $(this).datepicker({
         autoclose: true,
-        startDate: today,
+        startDate: "+7d",
         format:'dd-mm-yyyy'
     });
 });
