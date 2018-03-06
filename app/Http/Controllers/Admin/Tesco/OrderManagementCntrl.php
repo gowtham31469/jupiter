@@ -31,6 +31,7 @@ use App\Classes\TescoOrders;
 use PDF;
 use App\Classes\TescoCombinedPOUpload;
 use App\Classes\TescoPOUploadTemplatesSwitch;
+use Carbon\Carbon;
 
 class OrderManagementCntrl extends Controller
 {
@@ -580,7 +581,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
-
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -768,7 +769,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -797,6 +798,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
 
             foreach ($templates as $template) 
             {
@@ -943,7 +945,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -971,6 +973,7 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
 
             foreach ($templates as $template) 
             {
@@ -1158,7 +1161,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {
@@ -1186,6 +1189,8 @@ class OrderManagementCntrl extends Controller
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay(7);
+            
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1331,7 +1336,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
 
         } catch (\Exception $e)
         {

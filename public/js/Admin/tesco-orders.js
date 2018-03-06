@@ -2240,6 +2240,7 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -2305,10 +2306,10 @@ function storeCERatioTCL1TCL2TSL1()
 
                        /** Disable submit button */
                        $('.submit-btn').prop('disabled',true);
+                       
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -2574,6 +2575,7 @@ function storeCERatioTHL1()
                  },
                  success: function (data) {
                        $('#combined_tab').hide();
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -2605,8 +2607,7 @@ function storeCERatioTHL1()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -2789,6 +2790,7 @@ function storeCESingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -2858,8 +2860,7 @@ function storeCESingleTCL4TSL3()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -3132,6 +3133,7 @@ function storeCESingleTHL3()
                  },
                  success: function (data) {
                        $('#combined_tab').hide();
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -3162,8 +3164,7 @@ function storeCESingleTHL3()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -3345,6 +3346,7 @@ function storeUKRatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -3414,8 +3416,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -3679,6 +3680,7 @@ function storeUKRatioTHL1()
                  },
                  success: function (data) {
                        $('#combined_tab').hide();
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -3710,8 +3712,7 @@ function storeUKRatioTHL1()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -3893,6 +3894,7 @@ function storeUKSingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -3964,8 +3966,7 @@ function storeUKSingleTCL4TSL3()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
@@ -4237,6 +4238,7 @@ function storeUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
+                       var order_date = data.ordered_date.date;
                        $('#combined_tab').hide();
                        delivery_date_req = data.delivery_date_required;
                        $('.snackbar_span').html('Your order has been placed successfully');
@@ -4270,8 +4272,7 @@ function storeUKSingleTHL3()
                        $('.submit-btn').prop('disabled',true);
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var date = new Date();
-                       var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                       var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
                        {
                            $('#delivery_date_'+i).datepicker({
