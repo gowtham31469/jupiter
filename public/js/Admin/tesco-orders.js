@@ -23,6 +23,8 @@ function tescoOrders() {
         data: {
             _token: csrf_token
         },
+        tryCount : 0,
+        retryLimit : 2,
         beforeSend: function () {
             $(".loader").show();
         },
@@ -176,6 +178,8 @@ function tescoOrders() {
                                 template_id: template_id,
                                 _token: csrf_token
                             },
+                            tryCount : 0,
+                            retryLimit : 2,
                             beforeSend: function () {
                                 $(".loader").show();
                             },
@@ -201,8 +205,12 @@ function tescoOrders() {
                                 $('.templateDiv').css('width', '100%')
 
                             },
-                            error: function (data) {
-
+                            error: function(errorXHR, errorStatus, errorThrown) {
+                              this.tryCount++;
+                              if (this.tryCount <= this.retryLimit) {
+                                  $.ajax(this);
+                                  return;
+                              }
                             },
                             complete: function () {
                                 $(".loader").hide();
@@ -284,8 +292,12 @@ function tescoOrders() {
                 })
 
         },
-        error: function (data) {
-
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
         },
         complete: function () {
             
@@ -318,6 +330,8 @@ function createOrders(parsedObj = false) {
                  type: "get",
                  dataType:"json",
                  data: {template_id:template_id},
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },
@@ -464,8 +478,12 @@ function createOrders(parsedObj = false) {
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [ To make top menu active ] */
@@ -533,15 +551,21 @@ function PopupTesco(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
 			url = data;
 		},
-		error: function (data) {
-
-		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
 	if (success) { //AND THIS CHANGED
 		window.open(url)
@@ -571,15 +595,21 @@ function PopupTescoSmall(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
 			success = true;
 			url = data;
 		},
-		error: function (data) {
-
-		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
 	if (success) { //AND THIS CHANGED
 		window.open(url)
@@ -600,7 +630,7 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND" maxlength="9"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
              $.each(data, function(i, item){
                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              });
@@ -635,7 +665,7 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              $.each(data, function(i, item){
                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              });
@@ -679,6 +709,8 @@ function  uploadPurchaseOrder(formData, zone) {
                  cache: false,
                  contentType: false,
                  processData: false,
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },       
@@ -705,8 +737,12 @@ function  uploadPurchaseOrder(formData, zone) {
                         showSnackbar();
                     }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -741,7 +777,7 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
            html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          });
@@ -775,7 +811,7 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
            html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          });
@@ -945,6 +981,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -964,8 +1002,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.log(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1066,6 +1108,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1085,8 +1129,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1347,6 +1395,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1366,8 +1416,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1496,6 +1550,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1515,8 +1571,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -2225,6 +2285,8 @@ function storeCERatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2485,8 +2547,12 @@ function storeCERatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.error(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -2559,6 +2625,8 @@ function storeCERatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2683,8 +2751,12 @@ function storeCERatioTHL1()
 
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -2775,6 +2847,8 @@ function storeCESingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3034,8 +3108,12 @@ function storeCESingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3117,6 +3195,8 @@ function storeCESingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3239,8 +3319,12 @@ function storeCESingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3331,6 +3415,8 @@ function storeUKRatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3590,8 +3676,12 @@ function storeUKRatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3664,6 +3754,8 @@ function storeUKRatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3787,8 +3879,12 @@ function storeUKRatioTHL1()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3879,6 +3975,8 @@ function storeUKSingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -4140,8 +4238,12 @@ function storeUKSingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4223,6 +4325,8 @@ function storeUKSingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -4346,8 +4450,12 @@ function storeUKSingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4539,6 +4647,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4557,8 +4667,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }
@@ -4582,6 +4696,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4600,8 +4716,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }
