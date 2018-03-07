@@ -70,6 +70,8 @@ function orchestraSettings() {
         data: {
             _token: csrf_token
         },
+        tryCount : 0,
+        retryLimit : 2,
         beforeSend: function () {
             $(".loader").show();
         },
@@ -91,8 +93,12 @@ function orchestraSettings() {
 	              $('#orchestra-garments-list-table_length select').addClass('form-control input-sm');
 
         },
-        error: function (data) {
-
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
         },
         complete: function () {
             $(".loader").hide();
@@ -136,6 +142,8 @@ function showSnackbar() {
              url: base_url + "/admin/orchestra/add-orchestra-garments",
              method: 'POST',
              data: {_token:csrf_token,name:name},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -153,8 +161,12 @@ function showSnackbar() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -183,6 +195,8 @@ function showSnackbar() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -197,8 +211,12 @@ function showSnackbar() {
                  $('#edit_orchestra_garments_form').validator('validate');
                  $('#editOrchestraGarmentsModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -227,6 +245,8 @@ function showSnackbar() {
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -237,8 +257,12 @@ function showSnackbar() {
                        orchestraSettings()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -267,6 +291,8 @@ function showSnackbar() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -281,8 +307,12 @@ function showSnackbar() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -313,6 +343,8 @@ function showSnackbar() {
           data: {
               _token: csrf_token
           },
+          tryCount : 0,
+          retryLimit : 2,
           beforeSend: function () {
               $(".loader").show();
           },
@@ -333,8 +365,12 @@ function showSnackbar() {
                   $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
           },
-          error: function (data) {
-
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
           },
           complete: function () {
               $(".loader").hide();
@@ -360,6 +396,8 @@ function showSnackbar() {
              url: base_url + "/admin/orchestra/add-orchestra-agegroup",
              method: 'POST',
              data: {_token:csrf_token,name:name,color:color},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -377,8 +415,12 @@ function showSnackbar() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -407,6 +449,8 @@ function showSnackbar() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -422,8 +466,12 @@ function showSnackbar() {
                  $('#edit_orchestra_agegroup_form').validator('validate');
                  $('#editOrchestraAgeGroupModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -453,6 +501,8 @@ function showSnackbar() {
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name,color:color},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -463,8 +513,12 @@ function showSnackbar() {
                        ageGroup()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -493,6 +547,8 @@ function showSnackbar() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -507,8 +563,12 @@ function showSnackbar() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -537,6 +597,8 @@ function countries() {
         data: {
             _token: csrf_token
         },
+        tryCount : 0,
+        retryLimit : 2,
         beforeSend: function () {
             $(".loader").show();
         },
@@ -562,8 +624,12 @@ function countries() {
                 $('#orchestra-countries-list-table_length select').addClass('form-control input-sm');
 
         },
-        error: function (data) {
-
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
         },
         complete: function () {
             $(".loader").hide();
@@ -599,6 +665,8 @@ function countries() {
              url: base_url + "/admin/orchestra/add-orchestra-country",
              method: 'POST',
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -616,8 +684,12 @@ function countries() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -646,6 +718,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -671,8 +745,12 @@ function countries() {
                  $('#edit_orchestra_country_form').validator('validate');
                  $('#editOrchestraCountryModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -712,6 +790,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -722,8 +802,12 @@ function countries() {
                        countries()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -751,6 +835,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -765,8 +851,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -794,6 +884,8 @@ function countries() {
           data: {
               _token: csrf_token
           },
+          tryCount : 0,
+          retryLimit : 2,
           beforeSend: function () {
               $(".loader").show();
           },
@@ -818,8 +910,12 @@ function countries() {
                   $('#orchestra-productfamily-list-table_length select').addClass('form-control input-sm');
 
           },
-          error: function (data) {
-
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
           },
           complete: function () {
               $(".loader").hide();
@@ -848,6 +944,8 @@ function countries() {
                url: base_url + "/admin/orchestra/add-orchestra-productfamily",
                method: 'POST',
                data: {_token:csrf_token,english:english,french:french,code:code,arabic:arabic},
+               tryCount : 0,
+               retryLimit : 2,
                beforeSend: function () {
                  $(".loader").show();
                },
@@ -865,8 +963,12 @@ function countries() {
                          showSnackbar();
                     }
                },
-               error: function (data) {
-                  console.log(data);
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                },
                complete: function () {
                          $(".loader").hide();
@@ -895,6 +997,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -913,8 +1017,12 @@ function countries() {
                  $('#edit_orchestra_productfamily_form').validator('validate');
                  $('#editOrchestraProductFamilyModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -947,6 +1055,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,arabic:arabic,code:code},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -957,8 +1067,12 @@ function countries() {
                        productFamily()()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -987,6 +1101,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1001,8 +1117,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1031,6 +1151,8 @@ function countries() {
             data: {
                 _token: csrf_token
             },
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -1055,8 +1177,12 @@ function countries() {
                     $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
 
             },
-            error: function (data) {
-
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
             },
             complete: function () {
                 $(".loader").hide();
@@ -1092,6 +1218,8 @@ function countries() {
              url: base_url + "/admin/orchestra/add-orchestra-special-instructions",
              method: 'POST',
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1109,8 +1237,12 @@ function countries() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -1139,6 +1271,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1164,8 +1298,12 @@ function countries() {
                  $('#edit_orchestra_special_instruction_form').validator('validate');
                  $('#editOrchestraSpecialInstructionModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -1205,6 +1343,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1215,8 +1355,12 @@ function countries() {
                        specialInstruction()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1245,6 +1389,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1259,8 +1405,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1288,6 +1438,8 @@ function countries() {
             data: {
                 _token: csrf_token
             },
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -1312,8 +1464,12 @@ function countries() {
                     $('#orchestra-composition-list-table_length select').addClass('form-control input-sm');
 
             },
-            error: function (data) {
-
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
             },
             complete: function () {
                 $(".loader").hide();
@@ -1349,6 +1505,8 @@ function countries() {
              url: base_url + "/admin/orchestra/add-orchestra-compositions",
              method: 'POST',
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1366,8 +1524,12 @@ function countries() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -1396,6 +1558,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1421,8 +1585,12 @@ function countries() {
                  $('#edit_orchestra_composition_form').validator('validate');
                  $('#editOrchestraCompositionModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -1462,6 +1630,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1472,8 +1642,12 @@ function countries() {
                        compositions()
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1502,6 +1676,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1516,8 +1692,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1545,6 +1725,8 @@ function countries() {
             data: {
                 _token: csrf_token
             },
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -1569,8 +1751,12 @@ function countries() {
                     $('#orchestra-part-list-table_length select').addClass('form-control input-sm');
 
             },
-            error: function (data) {
-
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
             },
             complete: function () {
                 $(".loader").hide();
@@ -1606,6 +1792,8 @@ function countries() {
              url: base_url + "/admin/orchestra/add-orchestra-parts",
              method: 'POST',
              data: {_token:csrf_token,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1623,8 +1811,12 @@ function countries() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -1653,6 +1845,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1678,8 +1872,12 @@ function countries() {
                  $('#edit_orchestra_part_form').validator('validate');
                  $('#editOrchestraPartModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -1719,6 +1917,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,english:english,french:french,spanish:spanish,portuguese:portuguese,italian:italian,dutch:dutch,german:german,russian:russian,chinese:chinese,arabic:arabic,greek:greek,turkish:turkish},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1729,8 +1929,12 @@ function countries() {
                        parts();
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1759,6 +1963,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1773,8 +1979,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1802,6 +2012,8 @@ function countries() {
             data: {
                 _token: csrf_token
             },
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -1825,9 +2037,13 @@ function countries() {
                     $("#orchestra-size-chart-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
             },
-            error: function (data) {
-
-            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+             },
             complete: function () {
                 $(".loader").hide();
             }
@@ -1853,6 +2069,8 @@ function countries() {
              url: base_url + "/admin/orchestra/add-orchestra-size-chart",
              method: 'POST',
              data: {_token:csrf_token,age:age,in:inch,cm:cm},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1870,8 +2088,12 @@ function countries() {
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                        $(".loader").hide();
@@ -1900,6 +2122,8 @@ function countries() {
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -1916,8 +2140,12 @@ function countries() {
                  $('#edit_orchestra_size-chart_form').validator('validate');
                  $('#editOrchestraSizeChartModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                  $(".loader").hide();
@@ -1948,6 +2176,8 @@ function countries() {
            },
            method:"put",
            data: {_token:csrf_token,id:id,age:age,cm:cm,in:inch},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -1958,8 +2188,12 @@ function countries() {
                        sizeChart();
                   }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -1988,6 +2222,8 @@ function countries() {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -2002,8 +2238,12 @@ function countries() {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
@@ -2030,6 +2270,8 @@ function orchestraSymbols() {
           data: {
               _token: csrf_token
           },
+          tryCount : 0,
+          retryLimit : 2,
           beforeSend: function () {
               $(".loader").show();
           },
@@ -2051,8 +2293,12 @@ function orchestraSymbols() {
                    $('#orchestra-symbols-list-table_length select').addClass('form-control input-sm');
   
           },
-          error: function (data) {
-  
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
           },
           complete: function () {
               $(".loader").hide();
@@ -2086,6 +2332,8 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
             cache: false,
             contentType: false,
             processData: false,
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -2102,9 +2350,13 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                         showSnackbar();
                 }
             },
-            error: function (data) {
-                // console.log(data);
-             },
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
             complete: function () {
                 $(".loader").hide();
             }
@@ -2135,6 +2387,8 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
             cache: false,
             contentType: false,
             processData: false,
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
                 $(".loader").show();
             },
@@ -2151,9 +2405,13 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                         showSnackbar();
                 }
             },
-            error: function (data) {
-                console.log(data);
-             },
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
             complete: function () {
                 $(".loader").hide();
             }
@@ -2236,6 +2494,8 @@ function readURL(input) {
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [ Show response status based on HTTP status code ] */
@@ -2250,8 +2510,12 @@ function readURL(input) {
                      showSnackbar();
                 }
            },
-           error: function (data) {
-              console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      $(".loader").hide();
