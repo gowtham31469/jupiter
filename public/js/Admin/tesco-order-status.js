@@ -523,6 +523,21 @@ function tescoOrderStatus()
                 $tableSel.DataTable({
                     "pageLength": 25,
                      "order": [[ 7, "desc" ]],
+                     "aoColumns": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                { "sType": "date-uk" },
+                                null,
+                                 null,
+                                  null,
+                                   null,
+                                    null,
+                                     null,
+                            ],
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
@@ -621,6 +636,22 @@ function tescoOrderStatus()
         }
     })
 }
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+"date-uk-pre": function ( a ) {
+    var ukDatea = a.split('/');
+    return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+},
+
+"date-uk-asc": function ( a, b ) {
+    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+},
+
+"date-uk-desc": function ( a, b ) {
+    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+}
+} );
+
 function showFilter() {
     $('.filter-window').toggle();
 }
