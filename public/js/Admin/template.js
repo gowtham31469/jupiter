@@ -109,10 +109,10 @@ function template_list() {
                                 $('.viewDiv').html('');
                                 $.each(data, function (index, value) {
                                     if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
 
                                     } else {
-                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>'+value[0].template_name+'</p><label>Reference Number : </label><p>'+value[0].ref_no+'</p><label>Company Name : </label><p>'+value[0].company_name+'</p></div></div>')
 
                                     }
                                 });

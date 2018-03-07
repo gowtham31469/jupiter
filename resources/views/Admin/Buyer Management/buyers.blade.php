@@ -14,7 +14,7 @@
               </div>
           <div class="clearfix"></div>
                 <div class="main-content">
-                    <div class="loader"></div>
+                    <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
                     <div class="col" id="buyer-table">
                     <table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
                       <thead>
