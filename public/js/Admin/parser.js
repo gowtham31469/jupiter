@@ -52,7 +52,7 @@ function parseCEPurchaseOrder(data, callback) {
         // error statements
         console.error("Error:"+e);
     }
-    console.log(cParsedObj);
+    // console.log(cParsedObj);
 }
 
 /**
@@ -63,10 +63,10 @@ function parseCEPurchaseOrder(data, callback) {
 function parseSingleORMSTable(tabula) {
     var header = [];
     var values = [];
+    tabula.pop();  //Remove the total quantity row from the object
     $.each(tabula, function(index, element) {
         var row = {};
         var table_length = element.length;
-        console.log(table_length);
         if(table_length === 4) {
             element.splice(2,1);
         }
@@ -100,7 +100,6 @@ function parseSingleORMSTable(tabula) {
            values.push(row); 
         } 
     });
-    console.log(values)
     return values;
 
 }
