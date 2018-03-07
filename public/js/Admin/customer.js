@@ -28,6 +28,8 @@
               type: "Post",
               dataType:"json",
               data: {_token:csrf_token},
+              tryCount : 0,
+              retryLimit : 2,
               beforeSend: function () {
                   $(".loader").show();
               },
@@ -76,9 +78,13 @@
                 /** [ Call autopopulateCountry function for auto-populating country in textbox  ] */
                 autopopulateCountry(0)
               },
-              error: function (data) {
-                console.log(data);
-              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+               },
               complete: function () {
                   /** [ To make top menu active ] */
                   $(function () {
@@ -266,6 +272,8 @@ function addCustomer()
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
             data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder},
+            tryCount : 0,
+            retryLimit : 2,
             beforeSend: function () {
               $(".loader").show();
             },
@@ -288,8 +296,12 @@ function addCustomer()
                       $("#customer_result").addClass("alert alert-warning");
                  }
             },
-            error: function (data) {
-                console.log(data);
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
             complete: function () {
               /** [ To make top menu active ] */
@@ -615,6 +627,8 @@ function addCustomer()
                },
                method:"put",
                data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
                statusCode: {
 
                     /** [ Show response status based on HTTP status code ] */
@@ -624,8 +638,12 @@ function addCustomer()
                         showSnackbar();
                     }
                },
-               error: function (data) {
-                  console.log(data);
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                },
                complete: function () {
                  customersListView();
@@ -666,6 +684,8 @@ function addCustomer()
                },
                method:"put",
                data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
                statusCode: {
 
                     /** [ Show response status based on HTTP status code ] */
@@ -675,8 +695,12 @@ function addCustomer()
                          showSnackbar();
                     }
                },
-               error: function (data) {
-                  console.log(data);
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                },
                complete: function () {
                  customersListView();
@@ -718,6 +742,8 @@ function addCustomer()
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -932,8 +958,12 @@ function addCustomer()
                  $('#edit_customer_form').validator('update');
                  $('#editCustomerModal').modal('show');
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
               $('#edit_customer_form').validator('validate');
@@ -1252,6 +1282,8 @@ function addCustomer()
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
               data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,account_no:account_no,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,account_holder:account_holder,ifsc_code:ifsc_code,bank:bank,branch:branch,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder},
+              tryCount : 0,
+              retryLimit : 2,
               beforeSend: function () {
                 $(".loader").show();
               },
@@ -1270,9 +1302,13 @@ function addCustomer()
                         $("#customer_upadte_result").addClass("alert alert-warning");
                    }
               },
-              error: function (data) {
-                console.log(data);
-              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+               },
               complete: function () {
                        /** [ To make top menu active ] */
                         $(function () {
@@ -1307,6 +1343,8 @@ function addCustomer()
              },
              method:"delete",
              data:{_token:csrf_token,id:id},
+             tryCount : 0,
+             retryLimit : 2,
              statusCode: {
 
                   /** [Show response status based on HTTP status code] */
@@ -1321,8 +1359,12 @@ function addCustomer()
                        showSnackbar();
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                 /** [ To make top menu active ] */

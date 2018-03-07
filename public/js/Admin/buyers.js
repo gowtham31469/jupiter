@@ -16,6 +16,8 @@
          type: "get",
          dataType:"json",
          data: {_token:csrf_token},
+         tryCount : 0,
+         retryLimit : 2,
          beforeSend: function () {
              $(".loader").show();
          },
@@ -40,8 +42,12 @@
               $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
               $('#buyers-list-table_length select').addClass('form-control input-sm');
          },
-         error: function (data) {
-            console.log(data);
+         error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
          },
          complete: function () {
               /** [To make top menu active] */
@@ -77,6 +83,8 @@
              url: base_url + "/admin/buyer-management/add-jga-buyer",
              method: 'POST',
              data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -98,8 +106,12 @@
                        $("#buyer_result").addClass("alert alert-warning");
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                       /** [ To make top menu active ] */
@@ -136,11 +148,12 @@
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
              success: function(data){
-
                  /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#buyer_edit_id').val(id);
@@ -159,9 +172,13 @@
                  $('#edit_buyer_form').validator('validate');
                  $('#editBuyerModal').modal('show');
              },
-             error: function (data) {
-                  console.log(data);
-             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+              },
              complete: function () {
                  /** [ To make top menu active ] */
                   $(function () {
@@ -200,6 +217,8 @@
            },
            method:"put",
            data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -215,8 +234,12 @@
                      $("#edit_buyer_result").addClass("alert alert-warning");
                 }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                      /** [ To make top menu active ] */
@@ -252,6 +275,8 @@
            },
            method:"delete",
            data:{_token:csrf_token,id:id},
+           tryCount : 0,
+           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -266,8 +291,12 @@
                      showSnackbar();
                 }
            },
-           error: function (data) {
-                console.log(data);
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
            },
            complete: function () {
                    /** [ To make top menu active ] */
@@ -299,6 +328,8 @@
                type: "get",
                dataType:"json",
                data: {_token:csrf_token},
+               tryCount : 0,
+               retryLimit : 2,
                beforeSend: function () {
                    $(".loader").show();
                },
@@ -323,8 +354,12 @@
                     $("#merchandisers-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#merchandisers-list-table_length select').addClass('form-control input-sm');
                },
-               error: function (data) {
-                  console.log(data);
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                },
                complete: function () {
                     /** [To make top menu active] */
@@ -361,6 +396,8 @@
               url: base_url + "/admin/buyer-management/add-merchandiser",
               method: 'POST',
               data: {_token:csrf_token,name:name,email:email,phone:phone,address:address,p:password},
+              tryCount : 0,
+              retryLimit : 2,
               beforeSend: function () {
                 $(".loader").show();
               },
@@ -383,9 +420,13 @@
                         $("#add_merchandiser_result").addClass("alert alert-warning");
                    }
               },
-              error: function (data) {
-                console.log(data);
-              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+               },
               complete: function () {
                         /** [ To make top menu active ] */
                         $(function () {
@@ -420,6 +461,8 @@
              dataType:"json",
              method:"get",
              data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -443,8 +486,12 @@
                  $('#edit_merchandiser_form').validator('validate');
                  $('#editMerchandiserModal').modal('show');
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                   /** [ To make top menu active ] */
@@ -480,6 +527,8 @@
          $.ajax({
              url:base_url + "/admin/buyer-management/update-merchandiser-details",
              dataType:"json",
+             tryCount : 0,
+             retryLimit : 2,
              beforeSend: function () {
                $(".loader").show();
              },
@@ -500,8 +549,12 @@
                        $("#edit_merchandiser_result").addClass("alert alert-warning");
                   }
              },
-             error: function (data) {
-                console.log(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
              },
              complete: function () {
                      /** [ To make top menu active ] */
@@ -533,6 +586,8 @@
            $.ajax({
                url:base_url + "/admin/buyer-management/delete-merchandiser",
                dataType:"json",
+               tryCount : 0,
+               retryLimit : 2,
                beforeSend: function () {
                  $(".loader").show();
                },
@@ -552,8 +607,12 @@
                          showSnackbar();
                     }
                },
-               error: function (data) {
-                  console.log(data);
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                },
                complete: function () {
                      /** [ To make top menu active ] */
