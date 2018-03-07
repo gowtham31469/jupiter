@@ -112,7 +112,6 @@ function approve()
          data: {_token:csrf_token,comment:comment,id:id},
          beforeSend: function () {
            $(".loader").show();
-           $(".loader").css('margin-top','12%');
          },
          statusCode: {
               200: function() {
@@ -124,7 +123,6 @@ function approve()
          },
          complete: function () {
                    $(".loader").hide();
-                   $(".loader").css('margin-top','0%');
          }
 	         })
 	     } catch (e) {
@@ -148,7 +146,6 @@ function reject()
          data: {_token:csrf_token,comment:comment,id:id},
          beforeSend: function () {
            $(".loader").show();
-           $(".loader").css('margin-top','12%');
          },
          statusCode: {
               200: function() {
@@ -160,7 +157,6 @@ function reject()
          },
          complete: function () {
                    $(".loader").hide();
-                   $(".loader").css('margin-top','0%');
          }
 	         })
 	     } catch (e) {

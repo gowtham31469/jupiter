@@ -42,7 +42,7 @@
     </div>
     {{-- While clicking view , Show left panel --}}
     <div class="left-panel col-md-12" style="display: none;">
-    	<div class="loader"></div>
+    	<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">
             <div class="col-md-7">
                 <h4>Washcare Label</h4>

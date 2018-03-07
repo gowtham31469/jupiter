@@ -184,10 +184,10 @@ function tescoOrders() {
                                     $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         } else {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         }
                                     });
@@ -311,7 +311,7 @@ function createOrders(parsedObj = false) {
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
         var word        = localStorage.getItem("templates").length === 1?'Artwork':'Artworks';
-        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div><span class="pull-right">Please Note : If any select list does not contain required information, please contact Administrator</span>');
+        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div>');
 
          $.ajax({
                  url: base_url + "/admin/tesco/templates-details",
@@ -428,7 +428,7 @@ function createOrders(parsedObj = false) {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
                       });
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
 
@@ -1584,7 +1584,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1605,13 +1605,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-                        
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1659,9 +1655,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1682,20 +1692,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1730,7 +1727,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1751,13 +1748,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1797,9 +1790,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1819,16 +1822,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1865,7 +1860,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1886,13 +1881,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1940,9 +1931,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1963,20 +1968,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -2012,7 +2004,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -2033,13 +2025,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -2079,9 +2067,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -2101,16 +2099,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -2267,7 +2257,7 @@ function storeCERatioTCL1TCL2TSL1()
                            $.each(data.last_insertions, function (index, value) { 
                            html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                            });
-                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                           /** [ Delivery Date mandatory or not for particular customer] */
                            if(data.delivery_date_required === 1)
                            {
@@ -2804,7 +2794,7 @@ function storeCESingleTCL4TSL3()
                            var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
                            var i = 1;
                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
                            html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
@@ -3374,7 +3364,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                $.each(data.last_insertions, function (index, value) { 
                                html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                                });
-                               html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                               html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                               /** [ Delivery Date mandatory or not for particular customer] */
                                if(data.delivery_date_required === 1)
                                {
@@ -3924,7 +3914,7 @@ function storeUKSingleTCL4TSL3()
                            html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
                            
                            });
-                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required=""> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
                           /** [ Delivery Date mandatory or not for particular customer] */
                            if(data.delivery_date_required === 1)
                            {
