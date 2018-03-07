@@ -1584,7 +1584,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1605,13 +1605,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-                        
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1659,9 +1655,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1682,20 +1692,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1730,7 +1727,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1751,13 +1748,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1797,9 +1790,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1819,16 +1822,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1865,7 +1860,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1886,13 +1881,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1940,9 +1931,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1963,20 +1968,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -2012,7 +2004,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -2033,13 +2025,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -2079,9 +2067,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -2101,16 +2099,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
