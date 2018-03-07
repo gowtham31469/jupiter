@@ -523,6 +523,21 @@ function tescoOrderStatus()
                 $tableSel.DataTable({
                     "pageLength": 25,
                      "order": [[ 7, "desc" ]],
+                     "aoColumns": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                { "sType": "date-uk" },
+                                null,
+                                 null,
+                                  null,
+                                   null,
+                                    null,
+                                     null,
+                            ],
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
@@ -621,6 +636,22 @@ function tescoOrderStatus()
         }
     })
 }
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+"date-uk-pre": function ( a ) {
+    var ukDatea = a.split('/');
+    return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+},
+
+"date-uk-asc": function ( a, b ) {
+    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+},
+
+"date-uk-desc": function ( a, b ) {
+    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+}
+} );
+
 function showFilter() {
     $('.filter-window').toggle();
 }
@@ -697,7 +728,7 @@ function tescoStatusTable(data,path)
                 }
                 else if (key == "OrderDate")
                 {
-                    var orderDate = moment(value[key] ).format('DD-MM-YYYY');
+                    var orderDate = moment(value[key] ).format('DD/MM/YYYY');
                     tr += '<td align="center">'+orderDate+'</td>';
 
                    
@@ -799,7 +830,7 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00-00-0000')
+                   if (value[key] == '00/00/0000')
                    {
                         tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") ></td>';
                    }
@@ -835,7 +866,7 @@ $('body').on('focus',".datepicker_recurring_start", function(){
     $(this).datepicker({
         autoclose: true,
         startDate: "+7d",
-        format:'dd-mm-yyyy'
+        format:'dd/mm/yyyy'
     });
 });
 function updateDeliveryDate(obj,tableID,tableName)
@@ -1025,7 +1056,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(data.data.company_details.pi_date)
+                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'))
                     if (data.data.company_details.rev_number!=0)
                     {
                        $('.rev').removeClass('hidden')
@@ -1081,15 +1112,15 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
                         if (data.data.bank_details.place_of_supply==1)
                         {
-                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
                         }
                         else if (data.data.bank_details.place_of_supply==2)
                         {
-                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
                         }
                         else
                         {
-                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
                         }
                         $('#item_details').html(tr)
                         if (pi_status=="true")
