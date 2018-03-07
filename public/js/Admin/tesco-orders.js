@@ -311,7 +311,7 @@ function createOrders(parsedObj = false) {
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
         var word        = localStorage.getItem("templates").length === 1?'Artwork':'Artworks';
-        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div><span class="pull-right">Please Note : If any select list does not contain required information, please contact Administrator</span>');
+        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div>');
 
          $.ajax({
                  url: base_url + "/admin/tesco/templates-details",
