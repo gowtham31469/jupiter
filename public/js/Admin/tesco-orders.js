@@ -469,7 +469,7 @@ function createOrders(parsedObj = false) {
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_manufacture_date">Manufactured Date</label>\
                                             <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">\
-                                                <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()" readonly>\
+                                                <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()">\
                                                 <div class="input-group-addon">\
                                                 <span class="glyphicon glyphicon-th"> </span >\
                                             </div >\
@@ -3412,7 +3412,7 @@ function storeCERatioTHL1()
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
                                     <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
                                 </div>\
-                                </form>';
+                               </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
