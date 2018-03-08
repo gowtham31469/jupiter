@@ -283,7 +283,8 @@
 						<input type="hidden" id="edit_id">
 						 <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
-                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" disabled required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
+							 <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
