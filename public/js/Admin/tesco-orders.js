@@ -23,6 +23,8 @@ function tescoOrders() {
         data: {
             _token: csrf_token
         },
+        tryCount : 0,
+        retryLimit : 2,
         beforeSend: function () {
             $(".loader").show();
         },
@@ -176,6 +178,8 @@ function tescoOrders() {
                                 template_id: template_id,
                                 _token: csrf_token
                             },
+                            tryCount : 0,
+                            retryLimit : 2,
                             beforeSend: function () {
                                 $(".loader").show();
                             },
@@ -184,10 +188,10 @@ function tescoOrders() {
                                     $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         } else {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
 
                                         }
                                     });
@@ -201,8 +205,12 @@ function tescoOrders() {
                                 $('.templateDiv').css('width', '100%')
 
                             },
-                            error: function (data) {
-
+                            error: function(errorXHR, errorStatus, errorThrown) {
+                              this.tryCount++;
+                              if (this.tryCount <= this.retryLimit) {
+                                  $.ajax(this);
+                                  return;
+                              }
                             },
                             complete: function () {
                                 $(".loader").hide();
@@ -284,8 +292,12 @@ function tescoOrders() {
                 })
 
         },
-        error: function (data) {
-
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
         },
         complete: function () {
             
@@ -311,13 +323,15 @@ function createOrders(parsedObj = false) {
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
         var word        = localStorage.getItem("templates").length === 1?'Artwork':'Artworks';
-        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div><span class="pull-right">Please Note : If any select list does not contain required information, please contact Administrator</span>');
+        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div>');
 
          $.ajax({
                  url: base_url + "/admin/tesco/templates-details",
                  type: "get",
                  dataType:"json",
                  data: {template_id:template_id},
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },
@@ -428,7 +442,7 @@ function createOrders(parsedObj = false) {
                     
                       html += '<h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
+                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
                       });
                       html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
 
@@ -464,8 +478,12 @@ function createOrders(parsedObj = false) {
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [ To make top menu active ] */
@@ -533,6 +551,8 @@ function PopupTesco(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
@@ -551,9 +571,13 @@ function PopupTesco(data,name) {
 			  document.body.removeChild(element);
 			
 		},
-		error: function (data) {
-
-		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
 //	if (success) { //AND THIS CHANGED
 //		window.open(url)
@@ -583,6 +607,8 @@ function PopupTescoSmall(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
@@ -601,9 +627,13 @@ function PopupTescoSmall(data,name) {
 			  document.body.removeChild(element);
 			
 		},
-		error: function (data) {
-
-		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
 //	if (success) { //AND THIS CHANGED
 //		window.open(url)
@@ -624,7 +654,7 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND" maxlength="9"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
              $.each(data, function(i, item){
                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              });
@@ -659,7 +689,7 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              $.each(data, function(i, item){
                html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
              });
@@ -703,6 +733,8 @@ function  uploadPurchaseOrder(formData, zone) {
                  cache: false,
                  contentType: false,
                  processData: false,
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },       
@@ -729,8 +761,12 @@ function  uploadPurchaseOrder(formData, zone) {
                         showSnackbar();
                     }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -765,7 +801,7 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
            html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          });
@@ -799,7 +835,7 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          $.each(data, function(i, item){
            html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
          });
@@ -969,6 +1005,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -988,8 +1026,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.log(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1090,6 +1132,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1109,8 +1153,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1371,6 +1419,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1390,8 +1440,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1520,6 +1574,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1539,8 +1595,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1608,7 +1668,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1629,13 +1689,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-                        
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1683,9 +1739,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1706,20 +1776,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1754,7 +1811,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1775,13 +1832,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1821,9 +1874,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1843,16 +1906,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -1889,7 +1944,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL1.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL1[i] === 0 || count_THL1[i] === '0'){
+                        if(count_THL1[i] === 0 || count_THL1[i] === '0' || count_THL1[i] === '00' || count_THL1[i] === '000' || count_THL1[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -1910,13 +1965,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL1) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL1) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -1964,9 +2015,23 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL1.includes('0') || count_TCL1.includes('00') || count_TCL1.includes('000') || count_TCL1.includes('0000') || count_TCL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
+                    }
+                    if (count_TCL2.includes('0') || count_TCL2.includes('00') || count_TCL2.includes('000') || count_TCL2.includes('0000') || count_TCL2.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
+                    }
+                    if (count_TSL1.includes('0') || count_TSL1.includes('00') || count_TSL1.includes('000') || count_TSL1.includes('0000') || count_TSL1.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -1987,20 +2052,7 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 1</strong></li>';
-                        }
-                        if ($.inArray('0', count_TCL2) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 2</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL1) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 1</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_TCL1) > -1) || ($.inArray('0', count_TCL2) > -1) || ($.inArray('0', count_TSL1) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -2036,7 +2088,7 @@ function setTescoOrder()
                     var empty_count = 0;
                     var l           = count_THL3.length;
                     for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0'){
+                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
                             empty_count += 1;
                         }
                     }
@@ -2057,13 +2109,9 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_THL3) > -1)
+                        if (empty_count > 0)
                         {
-                           msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                        }
-
-                        if(($.inArray('0', count_THL3) > -1))
-                        {
+                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
                              $('#confirmOrder').modal({
@@ -2103,9 +2151,19 @@ function setTescoOrder()
                     var empty_count     = 0;
                     var l               = templates_array.length;
                     for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0'){
+                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
                             empty_count += 1;
                         }
+                    }
+
+                    /** Check If artwork count array contains atleast one '0' OR empty value **/
+                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
+                    }
+                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
+                    {
+                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
                     }
 
                     /** [ Join artworks count array using ' , '] */
@@ -2125,16 +2183,8 @@ function setTescoOrder()
                     else 
                     {
                         /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if ($.inArray('0', count_TCL4) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                        }
-                        if ($.inArray('0', count_TSL3) > -1)
-                        {
-                           msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                        }
 
-                        if(($.inArray('0', count_TCL4) > -1) || ($.inArray('0', count_TSL3) > -1))
+                        if(empty_count > 0)
                         {
                             $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
@@ -2259,6 +2309,8 @@ function storeCERatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2280,7 +2332,7 @@ function storeCERatioTCL1TCL2TSL1()
                             html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -2301,7 +2353,7 @@ function storeCERatioTCL1TCL2TSL1()
                            {
                              html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
@@ -2312,7 +2364,7 @@ function storeCERatioTCL1TCL2TSL1()
                             html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -2519,8 +2571,12 @@ function storeCERatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.error(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -2593,6 +2649,8 @@ function storeCERatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2612,7 +2670,7 @@ function storeCERatioTHL1()
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group  has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                         i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -2717,8 +2775,12 @@ function storeCERatioTHL1()
 
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -2809,6 +2871,8 @@ function storeCESingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2831,7 +2895,7 @@ function storeCESingleTCL4TSL3()
                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -2852,7 +2916,7 @@ function storeCESingleTCL4TSL3()
                            {
                              html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
@@ -2863,7 +2927,7 @@ function storeCESingleTCL4TSL3()
                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -3068,8 +3132,12 @@ function storeCESingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3151,6 +3219,8 @@ function storeCESingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3169,7 +3239,7 @@ function storeCESingleTHL3()
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -3273,8 +3343,12 @@ function storeCESingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3365,6 +3439,8 @@ function storeUKRatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3387,7 +3463,7 @@ function storeUKRatioTCL1TCL2TSL1()
                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -3408,7 +3484,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                {
                                  html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
                                }
-                               html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                               html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                                /** Dynamic content for combined po upload modal tab */
                                $('#combined').html(html);
 
@@ -3419,7 +3495,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                                i++;
                                });
-                               html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                               html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                                /** Dynamic content for single po upload modal tab */
                                $('#single').html(html);
                        }
@@ -3624,8 +3700,12 @@ function storeUKRatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3698,6 +3778,8 @@ function storeUKRatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3717,7 +3799,7 @@ function storeUKRatioTHL1()
                        html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                        i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -3821,8 +3903,12 @@ function storeUKRatioTHL1()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3913,6 +3999,8 @@ function storeUKSingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3935,7 +4023,7 @@ function storeUKSingleTCL4TSL3()
                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -3958,7 +4046,7 @@ function storeUKSingleTCL4TSL3()
                            {
                              html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
@@ -3969,7 +4057,7 @@ function storeUKSingleTCL4TSL3()
                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -4174,8 +4262,12 @@ function storeUKSingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4257,6 +4349,8 @@ function storeUKSingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -4277,7 +4371,7 @@ function storeUKSingleTHL3()
                        i++;
                        j++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" >Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -4380,8 +4474,12 @@ function storeUKSingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4573,6 +4671,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4591,8 +4691,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }
@@ -4616,6 +4720,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4634,8 +4740,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }

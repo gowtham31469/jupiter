@@ -185,7 +185,7 @@
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight at your cost  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
                                 </div>
                                 <hr/>
                             </div>

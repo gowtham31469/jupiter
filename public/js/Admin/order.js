@@ -1027,15 +1027,15 @@ function genaratePI(id,table_name,uvc,pi_status)
                         tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
                         if (data.data.bank_details.place_of_supply==1)
                         {
-                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+inWords(billamnt)+' only</p></div><hr /></div>'
                         }
                         else if (data.data.bank_details.place_of_supply==2)
                         {
-                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+inWords(billamnt)+' only</p></div><hr /></div>'
                         }
                         else
                         {
-                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+numToString(billamnt)+' only</p></div><hr /></div>'
+                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p class="text-uppercase">'+inWords(billamnt)+' only</p></div><hr /></div>'
                         }
                         $('#item_details').html(tr)
                         if (pi_status=="true")
@@ -1169,101 +1169,22 @@ function rejectPI(id,table_name)
     })
 }
 
-
-function numToString(billamnt)
+var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+function inWords(num)
 {
-    var r=0;
-    var txter=billamnt.toFixed();
-    var sizer=txter.length;
-    var numStr="";
-    if(isNaN(txter))
-    {
-    alert(" Invalid number");
-   
-    }
-    var n=parseInt(billamnt);
-    var places=0;
-    var str="";
-    var entry=0;
-    while(n>=1)
-    {
-    r=parseInt(n%10);
-
-    if(places<3 && entry==0)
-    {
-    numStr=txter.substring(txter.length-0,txter.length-3) // Checks for 1 to 999.
-    str=onlyDigit(numStr); //Calls function for last 3 digits of the value.
-    entry=1;
-    }
-
-    if(places==3)
-    {
-     numStr=txter.substring(txter.length-5,txter.length-3) 
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Thousand "+str;
-     }
-    }
-
-    if(places==5)
-    {
-     numStr=txter.substring(txter.length-7,txter.length-5) //Substring for 5 place to 7 place of the string
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Lakhs "+str; //Appends the word lakhs to it
-     }
-    }
-
-    if(places==6)
-    {
-     numStr=txter.substring(txter.length-9,txter.length-7)  //Substring for 7 place to 8 place of the string
-     if(numStr!="")
-     {
-      str=onlyDigit(numStr)+ " Crores "+str;        //Appends the word Crores
-     }
-    }
-
-    n=parseInt(n/10);
-    places++;
-    }
-   return(str);
+    if ((num = num.toString()).length > 9) return 'overflow';
+    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return;
+    var str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+    str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + 'only ' : '';
+    return str;
 }
 
-function onlyDigit(n) {
-	//Arrays to store the string equivalent of the number to convert in words
-	var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-	var randomer = ['', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-	var tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-	var r = 0;
-	var num = parseInt(n);
-	var str = "";
-	var pl = "";
-	var tenser = "";
-	while (num >= 1) {
-		r = parseInt(num % 10);
-		tenser = r + tenser;
-		if (tenser <= 19 && tenser > 10) //Logic for 10 to 19 numbers
-		{
-			str = randomer[tenser - 10];
-		} else {
-			if (pl == 0) //If units place then call units array.
-			{
-				str = units[r];
-			} else if (pl == 1) //If tens place then call tens array.
-			{
-				str = tens[r] + " " + str;
-			}
-		}
-		if (pl == 2) //If hundreds place then call units array.
-		{
-			str = units[r] + " Hundred " + str;
-		}
-
-		num = parseInt(num / 10);
-		pl++;
-	}
-	return str;
-}
 /**
  * This Function is used to select the order is label order or sticker order.
  * Depends upon the decision it will show label order details page or sticker details page. 
