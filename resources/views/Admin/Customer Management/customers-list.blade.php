@@ -257,7 +257,7 @@
                               <div class="form-group has-feedback form-inline">
                                 {!! Form::label('day_count', 'Deliver order after &nbsp;') !!}
                                 {!! Form::text('day_count',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Days','required','style' => 'width: 60px;','maxlength' => '3','onkeypress' => 'return isNumber(event)')) !!}
-                                {!! Form::label('day_count', '&nbsp;Days') !!}  
+                                {!! Form::label('day_count', '&nbsp;Days.') !!}  
                                   <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -552,7 +552,7 @@
                     <div class="form-group has-feedback form-inline">
                       {!! Form::label('edit_day_count', 'Deliver order after &nbsp;') !!}
                       {!! Form::text('edit_day_count',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Days','required','style' => 'width: 60px;','maxlength' => '3','onkeypress' => 'return isNumber(event)')) !!}
-                      {!! Form::label('edit_day_count', '&nbsp;Days') !!}  
+                      {!! Form::label('edit_day_count', '&nbsp;Days.') !!}  
                         <div class="help-block with-errors"></div>
                     </div>
                   </div>
