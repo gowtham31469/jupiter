@@ -2920,7 +2920,7 @@ function storeCERatioTCL1TCL2TSL1()
                                                 <div class="form-group has-feedback">\
                                                     <label for="single_delivery_date">Delivery Date</label>\
                                                     <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                         <div class="input-group-addon"> \
                                                           <span class="glyphicon glyphicon-th"></span >\
                                                         </div >\
@@ -2982,7 +2982,7 @@ function storeCERatioTCL1TCL2TSL1()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon">\
                                                <span class="glyphicon glyphicon-th"></span >\
                                             </div >\
@@ -2996,7 +2996,7 @@ function storeCERatioTCL1TCL2TSL1()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
                                             </div>\
                                         </div>\
@@ -3047,7 +3047,7 @@ function storeCERatioTCL1TCL2TSL1()
                                                 <div class="form-group has-feedback">\
                                                     <label for="single_delivery_date">Delivery Date</label>\
                                                     <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                         <div class="input-group-addon"> \
                                                           <span class="glyphicon glyphicon-th"></span >\
                                                         </div >\
@@ -3394,7 +3394,7 @@ function storeCERatioTHL1()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon"> \
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -3660,7 +3660,7 @@ function storeCESingleTCL4TSL3()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon">\
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -3726,7 +3726,7 @@ function storeCESingleTCL4TSL3()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon">\
                                               <span class="glyphicon glyphicon-th"></span >\
                                             </div >\
@@ -3740,7 +3740,7 @@ function storeCESingleTCL4TSL3()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon"> \
                                               <span class="glyphicon glyphicon-th"></span>\
                                             </div>\
@@ -3792,7 +3792,7 @@ function storeCESingleTCL4TSL3()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon">\
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -4146,7 +4146,7 @@ function storeCESingleTHL3()
                                         <div class="form-group has-feedback">\
                                             <label for="single_delivery_date">Delivery Date</label>\
                                             <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                 <div class="input-group-addon"> \
                                                   <span class="glyphicon glyphicon-th"> </span >\
                                               </div >\
@@ -4412,7 +4412,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                                 <div class="form-group has-feedback">\
                                                     <label for="single_delivery_date">Delivery Date</label>\
                                                     <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                         <div class="input-group-addon"> \
                                                           <span class="glyphicon glyphicon-th"></span >\
                                                         </div >\
@@ -4474,7 +4474,7 @@ function storeUKRatioTCL1TCL2TSL1()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon">\
                                                <span class="glyphicon glyphicon-th"></span >\
                                             </div >\
@@ -4488,7 +4488,7 @@ function storeUKRatioTCL1TCL2TSL1()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
                                             </div>\
                                         </div>\
@@ -4539,7 +4539,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                                 <div class="form-group has-feedback">\
                                                     <label for="single_delivery_date">Delivery Date</label>\
                                                     <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                         <div class="input-group-addon"> \
                                                           <span class="glyphicon glyphicon-th"></span >\
                                                         </div >\
@@ -4884,7 +4884,7 @@ function storeUKRatioTHL1()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon"> \
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -5149,7 +5149,7 @@ function storeUKSingleTCL4TSL3()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon">\
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -5215,7 +5215,7 @@ function storeUKSingleTCL4TSL3()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon">\
                                               <span class="glyphicon glyphicon-th"></span >\
                                             </div >\
@@ -5229,7 +5229,7 @@ function storeUKSingleTCL4TSL3()
                              html +='<div class="form-group has-feedback">\
                                         <label for="combined_delivery_date">Delivery Date</label>\
                                         <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date" >\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                             <div class="input-group-addon"> \
                                               <span class="glyphicon glyphicon-th"></span>\
                                             </div>\
@@ -5281,7 +5281,7 @@ function storeUKSingleTCL4TSL3()
                                             <div class="form-group has-feedback">\
                                                 <label for="single_delivery_date">Delivery Date</label>\
                                                 <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                     <div class="input-group-addon">\
                                                       <span class="glyphicon glyphicon-th"> </span >\
                                                     </div >\
@@ -5635,7 +5635,7 @@ function storeUKSingleTHL3()
                                         <div class="form-group has-feedback">\
                                             <label for="single_delivery_date">Delivery Date</label>\
                                             <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="" >\
+                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
                                                 <div class="input-group-addon"> \
                                                   <span class="glyphicon glyphicon-th"> </span >\
                                               </div >\
