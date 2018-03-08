@@ -32,7 +32,7 @@
           </div>
         <div class="tesco-sidebar sidebar style-4" style="display: none;">
           <h4>Tesco Metadata</h4>
-          <ul class="customer-select meta-data-list">
+          <ul class="customer-select meta-data-list-1">
             <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
             <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
@@ -1937,7 +1937,10 @@
     $(document).ready(function() {
         $('.select-buyer').click(function() {
             $('.select-buyer').addClass('hidden');
-            $('.meta-data-list li:first a').removeClass("active");
+            $('.meta-data-list li a').removeClass("active");
+            $('.meta-data-list li:first a').addClass("active");
+            $('.meta-data-list-1 li a').removeClass("active");
+            $('.meta-data-list-1 li:first a').addClass("active");
         })
         /* Show logo on left side */
         $('.logo').html('Settings')
@@ -1951,12 +1954,17 @@
         }else if(localStorage.getItem("buyer") === 'orchestra')
         {
             orchestraSettings();
+            $('.meta-data-list li a').removeClass("active");
+            $('.meta-data-list li:first a').addClass("active");
+            
             /** Hide default image, if buyer already selected */
             $('.select-buyer').addClass('hidden');
         }
         else
         {
           tescoBrands();
+          $('.meta-data-list-1 li a').removeClass("active");
+          $('.meta-data-list-1 li:first a').addClass("active");
           /** Hide default image, if buyer already selected */
             $('.select-buyer').addClass('hidden');
         }
@@ -1977,10 +1985,15 @@
                 /**  [ Show orchestraSettings page based on buyer selection ] */
                if(buyer === 'orchestra')
                 {
+                  $('.meta-data-list li a').removeClass("active");
+                  $('.meta-data-list li:first a').addClass("active");
                      orchestraSettings();
+
                 }
                 else
                 {
+                  $('.meta-data-list-1 li a').removeClass("active");
+                  $('.meta-data-list-1 li:first a').addClass("active");
                   tescoBrands();
                 } 
             } 
@@ -2793,6 +2806,10 @@
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
         $('.meta-data-list li a').removeClass("active");
+        $(this).addClass("active");
+      });
+        $('.meta-data-list-1 li a').click(function(){
+        $('.meta-data-list-1 li a').removeClass("active");
         $(this).addClass("active");
       });
     </script>

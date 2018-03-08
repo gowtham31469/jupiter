@@ -18,7 +18,7 @@ return [
     |
     |
     */
-   'tabula_jar' => 'C:\xampp\htdocs\jupiter\tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
 
    /*
     |--------------------------------------------------------------------------
@@ -114,7 +114,7 @@ return [
     |
     |
     */
-    'orms_table_single' => ' -p 1 -a 274,277,400,565 -f JSON ',
+    'orms_table_single' => ' -p 1 -a 274,277,550,565 -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
@@ -136,15 +136,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for check THL type
-    |--------------------------------------------------------------------------
-    |
-    |
-    */
-    'packing_method' => ' -p 2 -a 40,500,100,1000 -f JSON ',
-
-    /*
-    |--------------------------------------------------------------------------
     | SET Tabula command for Quantity of SINGLE type
     |--------------------------------------------------------------------------
     |
@@ -154,7 +145,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Get Information of RATIO type
+    | SET Tabula command for Get Information of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
@@ -163,7 +154,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Get Information of RATIO type
+    | SET Tabula command for Get Information of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
@@ -172,7 +163,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Get Information of RATIO type
+    | SET Tabula command for Get Information of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
@@ -181,7 +172,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Quantity of RATIO type
+    | SET Tabula command for Quantity of SINGLE type
     |--------------------------------------------------------------------------
     |
     |
@@ -190,7 +181,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SET Tabula command for Quantity of RATIO type
+    | SET Tabula command for Quantity of SINGLE type
     |--------------------------------------------------------------------------
     |
     |

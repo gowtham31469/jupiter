@@ -52,7 +52,7 @@ function parseCEPurchaseOrder(data, callback) {
         // error statements
         console.error("Error:"+e);
     }
-    console.log(cParsedObj);
+    // console.log(cParsedObj);
 }
 
 /**
@@ -63,10 +63,10 @@ function parseCEPurchaseOrder(data, callback) {
 function parseSingleORMSTable(tabula) {
     var header = [];
     var values = [];
+    tabula.pop();  //Remove the total quantity row from the object
     $.each(tabula, function(index, element) {
         var row = {};
         var table_length = element.length;
-        console.log(table_length);
         if(table_length === 4) {
             element.splice(2,1);
         }
@@ -100,7 +100,6 @@ function parseSingleORMSTable(tabula) {
            values.push(row); 
         } 
     });
-    console.log(values)
     return values;
 
 }
@@ -127,15 +126,7 @@ function parseSingleTypeForCE(data, cParsedObj) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        supplier = supplier[0].data.slice(-3);
-        //Supplier Code
-        supplier_code = supplier[0][0].text;
-        supplier_code = supplier_code.split(':');
-        if(supplier_code[0] === 'Supplier No. ') {
-            cParsedObj.supplierCode = supplier_code[1].trim();
-            //Supplier Name
-            cParsedObj.supplierName = supplier[2][0].text.trim();
-        }      
+        cParsedObj.supplierCode = readSupplierCode(supplier);      
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -191,15 +182,7 @@ function parseRatioTypeForCE(data, cParsedObj) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        supplier = supplier[0].data.slice(-3);
-        //Supplier Code
-        supplier_code = supplier[0][0].text;
-        supplier_code = supplier_code.split(':');
-        if(supplier_code[0] === 'Supplier No. ') {
-            cParsedObj.supplierCode = supplier_code[1].trim();
-            //Supplier Name
-            cParsedObj.supplierName = supplier[2][0].text.trim();
-        }      
+        cParsedObj.supplierCode = readSupplierCode(supplier);     
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -263,15 +246,16 @@ function parseSingleType(data) {
         //*********************************************************************************************************
         if (data.details.hasOwnProperty("supplier")) {
             var supplier = JSON.parse(data.details.supplier);
-            supplier = supplier[0].data.slice(-3);
-            //Supplier Code
-            supplier_code = supplier[0][0].text;
-            supplier_code = supplier_code.split(':');
-            if(supplier_code[0] === 'Supplier No. ') {
-                singleObj.supplierCode = supplier_code[1].trim();
-                //Supplier Name
-                singleObj.supplierName = supplier[2][0].text.trim();
-            }
+            singleObj.supplierCode = readSupplierCode(supplier);
+            // supplier = supplier[0].data.slice(-3);
+            // //Supplier Code
+            // supplier_code = supplier[0][0].text;
+            // supplier_code = supplier_code.split(':');
+            // if(supplier_code[0] === 'Supplier No. ') {
+            //     singleObj.supplierCode = supplier_code[1].trim();
+            //     //Supplier Name
+            //     singleObj.supplierName = supplier[2][0].text.trim();
+            // }
         }
         
         //*********************************************************************************************************
@@ -352,15 +336,7 @@ function parseRatioType(data) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.details.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.details.supplier);
-        supplier = supplier[0].data.slice(-3);
-        //Supplier Code
-        supplier_code = supplier[0][0].text;
-        supplier_code = supplier_code.split(':');
-        if(supplier_code[0] === 'Supplier No. ') {
-            ratioObj.supplierCode = supplier_code[1].trim();
-            //Supplier Name
-            ratioObj.supplierName = supplier[2][0].text.trim();
-        }      
+        ratioObj.supplierCode = readSupplierCode(supplier);    
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -445,6 +421,24 @@ function removeEmptyValues(element) {
         return true; // keep the element in the array
     });
     return element;
+}
+
+/**
+ * Method to read the supplier code from the Purchase order
+ * @return {object} supplier code
+ */
+function readSupplierCode(supplier) {
+    var sup_code = '';
+    $.each(supplier[0]['data'], function(i,val) {
+        var parse_text = val[0]['text'];
+        if(parse_text.search("Supplier No. :") !== -1) {
+            var sup_info = parse_text.split(':');
+            if(sup_info[1]) {
+                sup_code = sup_info[1].trim();
+            } 
+        }
+    });
+    return sup_code;
 }
 
 /**
