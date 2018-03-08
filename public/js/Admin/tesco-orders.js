@@ -23,11 +23,74 @@ function tescoOrders() {
         data: {
             _token: csrf_token
         },
+        tryCount : 0,
+        retryLimit : 2,
         beforeSend: function () {
             $(".loader").show();
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid"> <div class="row"> <div class="col-md-4"> <div class="card"> <h4>Create Order</h4> <hr/> <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"> <div class="form-group has-feedback"> <label for="order_type" class="form_label">Select Order Type</label> <select class="form-control order_type selectpicker" name="order_type" id="order_type" required=""> <option value="">Select Order Type</option> <option value="1">PO Upload</option> <option value="2">Manual Entry</option> </select> <div class="help-block with-errors"></div></div><div class="form-group"> <label for="template" class="form_label">Select Template</label> <input class="search-input form-control" placeholder="Search for Awesomeness"> <div class="template-error"></div></div><div id="jstree"></div><div class="form-group has-feedback"> <div class="po-upload hidden"> <div class="form-group files" id="single_file "> <label>Upload UK PO</label> <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div><div class="ce-po-upload hidden"> <div class="form-group files" id="multiple_file1"> <label>Upload CE-ORMS Sheet</label> <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div><div class="form-group files" id="multiple_file2"> <label>Upload CE-RETEK Sheet</label> <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/> <div class="help-block with-errors"></div></div></div></div><button class="btn btn-primary btn-block ">Create Order</button> </form> </div></div><div class="col-md-8 "> <div class="card " style="height:calc(100vh - 100px); "> <h4>Template Preview</h4> <hr/> <div class="row "> <div class="loader "> <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div><div class="descriptionDiv "></div></div></div></div></div></div>');
+                $('.main-content').html('<div class="container-fluid">\
+                                            <div class="row">\
+                                                <div class="col-md-4">\
+                                                    <div class="card">\
+                                                        <h4>Create Order</h4>\
+                                                        <hr/>\
+                                                        <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+                                                            <div class="form-group has-feedback">\
+                                                                <label for="order_type" class="form_label">Select Order Type</label>\
+                                                                <select class="form-control order_type selectpicker" name="order_type" id="order_type" required="">\
+                                                                    <option value="">Select Order Type</option>\
+                                                                    <option value="1">PO Upload</option>\
+                                                                    <option value="2">Manual Entry</option>\
+                                                                </select>\
+                                                                <div class="help-block with-errors"></div>\
+                                                            </div>\
+                                                            <div class="form-group">\
+                                                                <label for="template" class="form_label">Select Template</label>\
+                                                                <input class="search-input form-control" placeholder="Search for Awesomeness">\
+                                                                <div class="template-error"></div>\
+                                                            </div>\
+                                                            <div id="jstree"></div>\
+                                                            <div class="form-group has-feedback">\
+                                                                <div class="po-upload hidden">\
+                                                                    <div class="form-group files" id="single_file ">\
+                                                                        <label>Upload UK PO</label>\
+                                                                        <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
+                                                                        <div class="help-block with-errors"></div>\
+                                                                    </div>\
+                                                                </div>\
+                                                                <div class="ce-po-upload hidden">\
+                                                                    <div class="form-group files" id="multiple_file1">\
+                                                                        <label>Upload CE-ORMS Sheet</label>\
+                                                                        <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
+                                                                        <div class="help-block with-errors"></div>\
+                                                                    </div>\
+                                                                    <div class="form-group files" id="multiple_file2">\
+                                                                        <label>Upload CE-RETEK Sheet</label>\
+                                                                        <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
+                                                                        <div class="help-block with-errors"></div>\
+                                                                    </div>\
+                                                                </div>\
+                                                            </div>\
+                                                            <button class="btn btn-primary btn-block ">Create Order</button>\
+                                                        </form>\
+                                                    </div>\
+                                                </div>\
+                                                <div class="col-md-8 ">\
+                                                    <div class="card " style="height:calc(100vh - 100px); ">\
+                                                        <h4>Template Preview</h4>\
+                                                        <hr/>\
+                                                        <div class="row ">\
+                                                            <div class="loader ">\
+                                                                <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
+                                                            </div>\
+                                                            <div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div>\
+                                                            <div class="descriptionDiv "></div>\
+                                                        </div>\
+                                                    </div>\
+                                                </div>\
+                                            </div>\
+                                        </div>');
 
                 /** [ Search  functionality foe jstree nodes ] */
                 $(".search-input").keyup(function () {
@@ -176,6 +239,8 @@ function tescoOrders() {
                                 template_id: template_id,
                                 _token: csrf_token
                             },
+                            tryCount : 0,
+                            retryLimit : 2,
                             beforeSend: function () {
                                 $(".loader").show();
                             },
@@ -184,10 +249,30 @@ function tescoOrders() {
                                     $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4">\
+                                                <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
+                                                <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
+                                                <label>Template Name : </label>\
+                                                <p>' + value[0].template_name + '</p>\
+                                                <label>Reference Number : </label>\
+                                                <p>' + value[0].ref_no + '</p>\
+                                                <label>Company Name : </label>\
+                                                <p>' + value[0].company_name + '</p>\
+                                                </div>\
+                                                </div>')
 
                                         } else {
-                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><label>Template Name : </label><p>' + value[0].template_name + '</p><label>Reference Number : </label><p>' + value[0].ref_no + '</p><label>Company Name : </label><p>' + value[0].company_name + '</p></div></div>')
+                                            $('.templateDiv').append('<div class="col-md-4">\
+                                                <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
+                                                <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
+                                                <label>Template Name : </label>\
+                                                <p>' + value[0].template_name + '</p>\
+                                                <label>Reference Number : </label>\
+                                                <p>' + value[0].ref_no + '</p>\
+                                                <label>Company Name : </label>\
+                                                <p>' + value[0].company_name + '</p>\
+                                                </div>\
+                                                </div>')
 
                                         }
                                     });
@@ -201,8 +286,12 @@ function tescoOrders() {
                                 $('.templateDiv').css('width', '100%')
 
                             },
-                            error: function (data) {
-
+                            error: function(errorXHR, errorStatus, errorThrown) {
+                              this.tryCount++;
+                              if (this.tryCount <= this.retryLimit) {
+                                  $.ajax(this);
+                                  return;
+                              }
                             },
                             complete: function () {
                                 $(".loader").hide();
@@ -284,8 +373,12 @@ function tescoOrders() {
                 })
 
         },
-        error: function (data) {
-
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
         },
         complete: function () {
             
@@ -318,71 +411,283 @@ function createOrders(parsedObj = false) {
                  type: "get",
                  dataType:"json",
                  data: {template_id:template_id},
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },
                  success: function (data) {
                      localStorage.setItem("data", JSON.stringify(data.templates));
-                     var html = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><br><form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_po_number">PO Number</label> <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required=""  placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_uk_style">UK Style Ref.</label> <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style"  placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_ce_style">CE Style Ref.</label> <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_season_code">Season Code</label> <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required=""  placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_description">Short Description</label> <input type="text" class="form-control" name="tesco_description" id="tesco_description" required=""  placeholder="Enter Description"  maxlength="24" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_eqos">EQOS Site Code</label> <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required=""  placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="10"><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"> <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()"> <div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span > </div > </div ><div class="help-block with-errors"></div></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_department">Department</label><select class="selectpicker" data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()"><option value="">Select Department</option>';
+                     var html = '<div class="loader">\
+                                    <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
+                                </div>\
+                                <br>\
+                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_po_number">PO Number</label>\
+                                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_uk_style">UK Style Ref.</label>\
+                                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_ce_style">CE Style Ref.</label>\
+                                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_season_code">Season Code</label>\
+                                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_description">Short Description</label>\
+                                            <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="24" onkeyup="dynamicSVGTemplates()">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_eqos">EQOS Site Code</label>\
+                                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="10">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="tesco_manufacture_date">Manufactured Date</label>\
+                                            <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">\
+                                                <input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()">\
+                                                <div class="input-group-addon">\
+                                                <span class="glyphicon glyphicon-th"> </span >\
+                                            </div >\
+                                        </div >\
+                                        <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-3">\
+                                       <div class="form-group has-feedback">\
+                                         <label for="tesco_department">Department</label>\
+                                           <select class="selectpicker" data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">\
+                                             <option value="">Select Department</option>';
 
                       /** [ Show dynamic department selectbox ] */
                       $.each(data.tesco_department, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.department + '</option>';
                       });
 
-                     html +='</select></div></div><div class="clearfix"></div><div class="col-md-3"> <div class="form-group has-feedback"><label for="tesco_brand">Brand</label> <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required=""><option value="">Select Brand</option>';
+                     html +='</select>\
+                             </div>\
+                             </div>\
+                             <div class="clearfix"></div>\
+                             <div class="col-md-3"> \
+                               <div class="form-group has-feedback">\
+                                 <label for="tesco_brand">Brand</label> \
+                                   <select class="selectpicker" data-live-search="true" id="tesco_brand" name="tesco_brand" onchange="dynamicSVGTemplates()" required="">\
+                                     <option value="">Select Brand</option>';
 
                        /** [ Show dynamic brand selectbox ] */
                        $.each(data.tesco_brand, function(index, item) {
                         html += '<option value="'+ item.id +'">' + item.brand + '</option>';
                        });  
 
-                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_supplier">Supplier</label> <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()"><option value="">Select Supplier</option>';
+                     html +='</select>\
+                             </div>\
+                             </div>\
+                             <div class="col-md-3">\
+                              <div class="form-group has-feedback">\
+                               <label for="tesco_supplier">Supplier</label> \
+                                <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">\
+                                  <option value="">Select Supplier</option>';
 
                        /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
                         html += '<option value="'+ item.id +'">'+ item.company_name + '</option>';
                         });  
 
-                     html +='</select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_rfid">RFID Compliant</label> <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()"><option value="">Select RFID Compliant</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div><div class="col-md-3"><div class="form-group has-feedback"><label for="tesco_tag_at_source">Tag At Source</label> <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()"><option value="">Select Tag At Source</option><option value="yes">Yes</option><option value="no">No</option> </select></div></div>';
+                     html +='</select>\
+                            </div>\
+                            </div>\
+                            <div class="col-md-3">\
+                                <div class="form-group has-feedback">\
+                                    <label for="tesco_rfid">RFID Compliant</label>\
+                                    <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">\
+                                        <option value="">Select RFID Compliant</option>\
+                                        <option value="yes">Yes</option>\
+                                        <option value="no">No</option>\
+                                    </select>\
+                                </div>\
+                            </div>\
+                            <div class="col-md-3">\
+                                <div class="form-group has-feedback">\
+                                    <label for="tesco_tag_at_source">Tag At Source</label>\
+                                    <select class="selectpicker" id="tesco_tag_at_source" name="tesco_tag_at_source" required="" onchange="dynamicSVGTemplates()">\
+                                        <option value="">Select Tag At Source</option>\
+                                        <option value="yes">Yes</option>\
+                                        <option value="no">No</option>\
+                                    </select>\
+                                </div>\
+                            </div>';
                      if(zone === "UK")
                      {
                         /**  [ Dynamic quantity table for UK ratio templates ] */
                         if(type === 'ratio')
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Units per carton</th>';
+                            html +='<div class="qty-table-div">\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <hr>\
+                                            <h4>Order Quantity</h4>\
+                                            <p>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                            </p>\
+                                        </div>\
+                                    </div>\
+                                    <div class="table-responsive qty-table">\
+                                        <table class="table table-bordered text-center">\
+                                            <thead>\
+                                                <tr>\
+                                                    <th rowspan="2">Line No.</th>\
+                                                    <th rowspan="2">TPND</th>\
+                                                    <th rowspan="2">ITF Barcode</th>\
+                                                    <th rowspan="2">Units per carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '<th rowspan="2">Actions</th></tr><tr>';
+                             html += '<th rowspan="2">Actions</th>\
+                                     </tr>\
+                                     <tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
 
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_1" name="uk_ratio_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_1" name="uk_ratio_upc_1" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr>\
+                                        </thead>\
+                                        <tbody id="table_row">\
+                                            <tr>\
+                                                <td class="slno">1</td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_1" name="uk_ratio_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_1" name="uk_ratio_upc_1" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>';
 
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1"  maxlength="4" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td>\
+                                            <div class="form-group has-feedback">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </td>';
                              });
-                              html += '<td></td></tr></tbody></table></div><hr></div>';
+                              html += '<td></td>\
+                                        </tr>\
+                                        </tbody>\
+                                        </table>\
+                                        </div>\
+                                        <hr>\
+                                        </div>';
 
                         }
                         else
                         {
                             /**  [ Dynamic quantity table for UK single templates ] */
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">TPND</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
+                            html +='<div class="qty-table-div">\
+                                        <div class="row">\
+                                            <div class="col-md-12">\
+                                                <hr>\
+                                                <h4>Order Quantity</h4>\
+                                                <p>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                </p>\
+                                            </div>\
+                                        </div>\
+                                        <div class="table-responsive qty-table">\
+                                            <table class="table table-bordered text-center">\
+                                                <thead>\
+                                                    <tr>\
+                                                        <th rowspan="2">Line No.</th>\
+                                                        <th rowspan="2">TPND</th>\
+                                                        <th rowspan="2">EAN Barcode</th>\
+                                                        <th rowspan="2">Case Size</th>\
+                                                        <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '<th rowspan="2">Actions</th></tr><tr>';
+                             html += '<th rowspan="2">Actions</th>\
+                                      </tr>\
+                                      <tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9"> <div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1" onchange="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr>\
+                                        </thead>\
+                                        <tbody id="table_row">\
+                                            <tr>\
+                                                <td class="slno">1</td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_1" name="uk_single_size_1" onchange="dynamicSVGTemplates()" maxlength="9">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td>\
+                                            <div class="form-group has-feedback">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </td>';
                              });
-                              html += '<td></td></tr></tbody></table></div><hr></div>';
+                              html += '<td></td>\
+                                       </tr>\
+                                       </tbody>\
+                                       </table>\
+                                       </div>\
+                                       <hr></div>';
 
                         }
                      }
@@ -391,46 +696,196 @@ function createOrders(parsedObj = false) {
                         /**  [ Dynamic quantity table for CE ratio templates ] */
                         if(type === 'ratio')
                         {
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">ITF Barcode</th><th rowspan="2">Cases per carton</th>';
+                            html +='<div class="qty-table-div">\
+                                        <div class="row">\
+                                            <div class="col-md-12">\
+                                                <hr>\
+                                                <h4>Order Quantity</h4>\
+                                                <p>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                </p>\
+                                            </div>\
+                                        </div>\
+                                        <div class="table-responsive qty-table">\
+                                            <table class="table table-bordered text-center">\
+                                                <thead>\
+                                                    <tr>\
+                                                        <th rowspan="2">Line No.</th>\
+                                                        <th rowspan="2">ORMS TPN</th>\
+                                                        <th rowspan="2">ITF Barcode</th>\
+                                                        <th rowspan="2">Cases per carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '<th rowspan="2">Actions</th></tr><tr>';
+                             html += '<th rowspan="2">Actions</th>\
+                                      </tr><tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="5"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr>\
+                                        </thead>\
+                                        <tbody id="table_row">\
+                                            <tr>\
+                                                <td class="slno">1</td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="5">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td>\
+                                        <div class="form-group has-feedback"> \
+                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                        <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        </td>';
                              });
-                              html += '<td></td></tr></tbody></table></div><hr></div>';
+                              html += '<td></td>\
+                                       </tr>\
+                                       </tbody>\
+                                       </table>\
+                                       </div>\
+                                       <hr></div>';
 
                         }
                         else
                         {
                             /**  [ Dynamic quantity table for CE single templates ] */
-                            html +='<div class="qty-table-div"><div class="row"><div class="col-md-12"><hr><h4>Order Quantity</h4><p> <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button></p></div></div><div class="table-responsive qty-table"><table class="table table-bordered text-center"><thead><tr><th rowspan="2">Line No.</th><th rowspan="2">ORMS TPN</th><th rowspan="2">EAN Barcode</th><th rowspan="2">Case Size</th><th rowspan="2">Size</th>';
+                            html +='<div class="qty-table-div">\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <hr>\
+                                            <h4>Order Quantity</h4>\
+                                            <p>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                            </p>\
+                                        </div>\
+                                    </div>\
+                                    <div class="table-responsive qty-table">\
+                                        <table class="table table-bordered text-center">\
+                                            <thead>\
+                                                <tr>\
+                                                    <th rowspan="2">Line No.</th>\
+                                                    <th rowspan="2">ORMS TPN</th>\
+                                                    <th rowspan="2">EAN Barcode</th>\
+                                                    <th rowspan="2">Case Size</th>\
+                                                    <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
                              });
-                             html += '<th rowspan="2">Actions</th></tr><tr>';
+                             html += '<th rowspan="2">Actions</th>\
+                                      </tr>\
+                                      <tr>';
                              $.each(data.templates, function(i, item){
                                html += '<th>Count</th>';
                              });
-                             html += '</tr></thead><tbody id="table_row"><tr><td class="slno">1</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="6"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size" onchange="dynamicSVGTemplates()" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+                             html += '</tr>\
+                                        </thead>\
+                                        <tbody id="table_row">\
+                                            <tr>\
+                                                <td class="slno">1</td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Case Size" onkeyup="dynamicSVGTemplates()" maxlength="6">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_1" name="ce_single_size_1" required="" placeholder="Enter Size" onchange="dynamicSVGTemplates()" maxlength="9">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>';
                               $.each(data.templates, function(i, item){
-                               html += '<td><div class="form-group has-feedback"> <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+                               html += '<td>\
+                                        <div class="form-group has-feedback"> \
+                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count" maxlength="4">\
+                                        <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        </td>';
                              });
-                              html += '<td></td></tr></tbody></table></div><hr></div>';
+                              html += '<td></td>\
+                                       </tr>\
+                                       </tbody>\
+                                       </table>\
+                                       </div>\
+                                       <hr></div>';
 
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4><div class="row">';
-                      $.each(data.templates, function(i, item){
-                       html += '<div class="col-md-4"><div class="card add-card"><div class="card-title"><p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p><h5><b>'+item.template_name+'</b></h5></div><div class="row"><div class="col-md-8 col-md-offset-2"><div class="tesco_artwork"> <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object> <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog"> <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+item.template_name+'</h4></div><div class="modal-body"> <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object></div><div class="modal-footer"><button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button><div id="svgdiv" style="position:absolute;visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div></div></div></div></div></div>';
-                      });
-                      html += '</div><div class="bottom-bar"><div class="modal-footer"><span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span><button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button><button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button></div></div></div></div>';
+                      html += '<h4>Order Preview</h4>\
+                              <div class="row">';
+                                  $.each(data.templates, function(i, item){
+                                   html += '<div class="col-md-4">\
+                                            <div class="card add-card">\
+                                                <div class="card-title">\
+                                                    <p class="pull-right" onclick=openmodaltesco( "'+item.template_name.replace(' ', '')+'", "'+i+'") style="cursor:pointer">Click to view</p>\
+                                                    <h5><b>'+item.template_name+'</b></h5>\
+                                                </div>\
+                                                <div class="row">\
+                                                    <div class="col-md-8 col-md-offset-2">\
+                                                        <div class="tesco_artwork">\
+                                                            <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                                            <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
+                                                                <div class="modal-dialog">\
+                                                                    <div class="modal-content">\
+                                                                        <div class="modal-header">\
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                                            <h4 class="modal-title">'+item.template_name+'</h4></div>\
+                                                                        <div class="modal-body">\
+                                                                            <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                                                        </div>\
+                                                                        <div class="modal-footer">\
+                                                                            <button type="button" class="btn btn-primary" onclick=printDivTesco( "tesco_svg_modal'+i+'", "'+item.template_name.replace(' ', '')+'")>Print</button>\
+                                                                            <div id="svgdiv" style="position:absolute;visibility:hidden">\
+                                                                                <svg id="ean-13"></svg>\
+                                                                            </div>\
+                                                                        </div>\
+                                                                    </div>\
+                                                                </div>\
+                                                            </div>\
+                                                        </div>\
+                                                    </div>\
+                                                </div>\
+                                            </div>\
+                                        </div>';
+                                  });
+                      html += '</div>\
+                                <div class="bottom-bar">\
+                                    <div class="modal-footer">\
+                                     <span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span>\
+                                        <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
+                                        <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                    </div>\
+                                </div>\
+                                </div>\
+                                </div>';
 
                       $('.main-content').html(html).selectpicker('refresh');
                       /** @type {Date} [Manufactured date Datepicker format & validation] */
@@ -464,8 +919,12 @@ function createOrders(parsedObj = false) {
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [ To make top menu active ] */
@@ -521,7 +980,7 @@ function PopupTesco(data,name) {
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
-	var success = false;
+	//var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -533,19 +992,37 @@ function PopupTesco(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
-			success = true;
-			url = data;
-		},
-		error: function (data) {
+//			success = true;
+//			url = data;
+			
+			  var element = document.createElement('a');
+			  element.setAttribute('href', data);
+			  element.setAttribute('download', name);
 
+			  element.style.display = 'none';
+			  document.body.appendChild(element);
+
+			  element.click();
+
+			  document.body.removeChild(element);
+			
 		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
-	if (success) { //AND THIS CHANGED
-		window.open(url)
-	}
+//	if (success) { //AND THIS CHANGED
+//		window.open(url)
+//	}
 }
 /**
  * This Function is Sub Function of #printDivTesco.
@@ -559,7 +1036,7 @@ function PopupTescoSmall(data,name) {
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
-	var success = false;
+	//var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -571,19 +1048,37 @@ function PopupTescoSmall(data,name) {
 			svg: svg,
 			name:name
 		},
+        tryCount : 0,
+        retryLimit : 2,
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
-			success = true;
-			url = data;
-		},
-		error: function (data) {
+//			success = true;
+//			url = data;
+			
+			 var element = document.createElement('a');
+			  element.setAttribute('href', data);
+			  element.setAttribute('download', name);
 
+			  element.style.display = 'none';
+			  document.body.appendChild(element);
+
+			  element.click();
+
+			  document.body.removeChild(element);
+			
 		},
+		error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
 	})
-	if (success) { //AND THIS CHANGED
-		window.open(url)
-	}
+//	if (success) { //AND THIS CHANGED
+//		window.open(url)
+//	}
 }
 
 /**
@@ -600,11 +1095,44 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required=""  placeholder="Enter TPND"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr>\
+                        <td class="slno">'+val+'</td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_'+val+'" name="uk_single_tpnd_'+val+'" required="" placeholder="Enter TPND" maxlength="9">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_single_size" required="" placeholder="Enter Size" id="uk_single_size_'+val+'" name="uk_single_size_'+val+'">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>';
              $.each(data, function(i, item){
-               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+               html += '<td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>';
              });
-          html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a></td></tr>';
+          html += '<td>\
+                    <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a>\
+                   </td>\
+                   </tr>';
          $('#table_row').append(html);
 
          /** [ Refresh boostrap form-validator ]  */
@@ -635,11 +1163,39 @@ try{
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
-         var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+         var html = '<tr>\
+                        <td class="slno">'+val+'</td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_'+val+'" name="uk_ratio_tpnd_'+val+'" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>\
+                        <td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>';
              $.each(data, function(i, item){
-               html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+               html += '<td>\
+                            <div class="form-group has-feedback">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                                <div class="help-block with-errors"></div>\
+                            </div>\
+                        </td>';
              });
-          html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a></td></tr>';
+          html += '<td>\
+                     <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i>\
+                     </a>\
+                   </td>\
+                   </tr>';
          $('#table_row').append(html);
 
          /** [ Refresh boostrap form-validator ]  */
@@ -679,6 +1235,8 @@ function  uploadPurchaseOrder(formData, zone) {
                  cache: false,
                  contentType: false,
                  processData: false,
+                 tryCount : 0,
+                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },       
@@ -705,8 +1263,12 @@ function  uploadPurchaseOrder(formData, zone) {
                         showSnackbar();
                     }
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -741,11 +1303,45 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr>\
+                    <td class="slno">'+val+'</td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_'+val+'" name="ce_single_orms_tpn_'+val+'" required="" placeholder="Enter ORMS TPN" maxlength="13">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Case Size" maxlength="4">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_single_size" id="ce_single_size_'+val+'" name="ce_single_size_'+val+'" required="" placeholder="Enter Size">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>';
          $.each(data, function(i, item){
-           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+           html += '<td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>';
          });
-      html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a></td></tr>';
+      html += '<td>\
+                 <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i>\
+                 </a>\
+               </td>\
+               </tr>';
      $('#table_row').append(html);
 
      /** [ Refresh boostrap form-validator ]  */
@@ -775,11 +1371,39 @@ try{
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
-     var html = '<tr><td class="slno">'+val+'</td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode"><div class="help-block with-errors"></div></div></td><td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+     var html = '<tr>\
+                    <td class="slno">'+val+'</td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_'+val+'" name="ce_ratio_orms_tpn_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>';
          $.each(data, function(i, item){
-           html += '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4"><div class="help-block with-errors"></div></div></td>';
+           html += '<td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>';
          });
-      html += '<td><a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i></a></td></tr>';
+      html += '<td>\
+                <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i>\
+                </a>\
+               </td>\
+               </tr>';
      $('#table_row').append(html);
 
      /** [ Refresh boostrap form-validator ]  */
@@ -945,6 +1569,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -964,8 +1590,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.log(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1066,6 +1696,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1085,8 +1717,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1347,6 +1983,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1366,8 +2004,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1496,6 +2138,8 @@ function dynamicSVGTemplatescard(id,item)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
@@ -1515,8 +2159,12 @@ function dynamicSVGTemplatescard(id,item)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -2225,6 +2873,8 @@ function storeCERatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2240,45 +2890,181 @@ function storeCERatioTCL1TCL2TSL1()
                        {
                          $('#combined_tab').hide();
                          /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                               <div class="container-fluid">\
+                               <div class="template-error"></div>';
                            var i = 1;
                            $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                            html+= '<div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="form-check form-group has-feedback">\
+                                                <label class="form-check-label">\
+                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label>\
+                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="single_delivery_date">Delivery Date</label>\
+                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                        <div class="input-group-addon"> \
+                                                          <span class="glyphicon glyphicon-th"></span >\
+                                                        </div >\
+                                                    </div >\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                    <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
                        else
                        {
                            /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error1"></div>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <br> <strong>Select Artworks :</strong>';
                            $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                           html+= '<div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>';
                            });
-                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                           html += '</div>\
+                                        <hr>\
+                                        <div class="row">\
+                                            <div class="col-md-12">\
+                                                <div class="col-md-6">\
+                                                    <div class="form-group has-feedback">\
+                                                        <label for="po_number" class="form_label">PO Number</label>\
+                                                        <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </div>\
+                                                <div class="col-md-6">\
+                                                    <div class="form-group has-feedback">\
+                                                        <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </div>\
+                                                <div class="col-md-6">';
                           /** [ Delivery Date mandatory or not for particular customer] */
                            if(data.delivery_date_required === 1)
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon">\
+                                               <span class="glyphicon glyphicon-th"></span >\
+                                            </div >\
+                                        </div >\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
                            else
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
+                                            </div>\
+                                        </div>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '        </div>\
+                                          </div>\
+                                       </div>\
+                                    </div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
                            /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error"></div>';
                            var i = 1;
                            $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" ></span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                            html+= '<div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="form-check form-group has-feedback">\
+                                                <label class="form-check-label">\
+                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label>\
+                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="single_delivery_date">Delivery Date</label>\
+                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                        <div class="input-group-addon"> \
+                                                          <span class="glyphicon glyphicon-th"></span >\
+                                                        </div >\
+                                                    </div >\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div><hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -2485,8 +3271,12 @@ function storeCERatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.error(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -2559,6 +3349,8 @@ function storeCERatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2572,13 +3364,55 @@ function storeCERatioTHL1()
                        showSnackbar();
 
                        /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                             <div class="container-fluid">\
+                               <div class="template-error"></div>';
                        var i = 1;
                        $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group  has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                       html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group  has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon"> \
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                                <hr>';
                         i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div>\
+                                <div class="modal-footer">\
+                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                </div>\
+                                </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -2683,8 +3517,12 @@ function storeCERatioTHL1()
 
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -2775,6 +3613,8 @@ function storeCESingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -2791,45 +3631,186 @@ function storeCESingleTCL4TSL3()
                        {
                          $('#combined_tab').hide()
                          /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid">\
+                                <div class="template-error"></div>';
                            var i = 1;
                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon">\
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                   </div>\
+                                   <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
                        else
                        {
                            /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error1"></div>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <br> <strong>Select Artworks :</strong>';
                            $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
+                           html+= '<div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>';
                            });
-                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                           html += '</div>\
+                                    <hr>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label> \
+                                                     <span class="control-fileupload">\
+                                                       <label for="file">Choose a file :</label> \
+                                                        <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf">\
+                                                     </span>\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">';
                           /** [ Delivery Date mandatory or not for particular customer] */
                            if(data.delivery_date_required === 1)
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon">\
+                                              <span class="glyphicon glyphicon-th"></span >\
+                                            </div >\
+                                        </div >\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
                            else
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon"> \
+                                              <span class="glyphicon glyphicon-th"></span>\
+                                            </div>\
+                                        </div>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '     </div>\
+                                        </div>\
+                                       </div>\
+                                     </div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
                            /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                                    <div class="container-fluid">\
+                                        <div class="template-error"></div>';
                            var i = 1;
                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon">\
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                  </div>\
+                                  <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -3034,8 +4015,12 @@ function storeCESingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3117,6 +4102,8 @@ function storeCESingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3129,13 +4116,55 @@ function storeCESingleTHL3()
                        $('.snackbar_span').html('Your order has been placed successfully');
                        showSnackbar();
                        /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                             <div class="container-fluid">\
+                               <div class="template-error"></div>';
                        var i = 1;
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                       html+= '<div class="row">\
+                                <div class="col-md-12">\
+                                    <div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="po_number" class="form_label">PO Number</label>\
+                                            <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="po_file">Purchase Order File</label>\
+                                            <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="single_delivery_date">Delivery Date</label>\
+                                            <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                <div class="input-group-addon"> \
+                                                  <span class="glyphicon glyphicon-th"> </span >\
+                                              </div >\
+                                          </div >\
+                                          <div class="help-block with-errors"></div>\
+                                      </div>\
+                                  </div>\
+                              </div>\
+                            </div>\
+                            <hr>';
                        i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div>\
+                                <div class="modal-footer">\
+                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                </div>\
+                                </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -3239,8 +4268,12 @@ function storeCESingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3331,6 +4364,8 @@ function storeUKRatioTCL1TCL2TSL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3345,49 +4380,185 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
                        {
-                         $('#combined_tab').hide()
+                         $('#combined_tab').hide();
                          /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                               <div class="container-fluid">\
+                               <div class="template-error"></div>';
                            var i = 1;
-                          $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           $.each(data.last_insertions, function (index, value) { 
+                            html+= '<div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="form-check form-group has-feedback">\
+                                                <label class="form-check-label">\
+                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label>\
+                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="single_delivery_date">Delivery Date</label>\
+                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                        <div class="input-group-addon"> \
+                                                          <span class="glyphicon glyphicon-th"></span >\
+                                                        </div >\
+                                                    </div >\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                    <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
                        else
                        {
-                            /** Buyer Po upload modal for combined po upload modal */
-                               var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                               $.each(data.last_insertions, function (index, value) { 
-                               html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                               });
-                               html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
-                              /** [ Delivery Date mandatory or not for particular customer] */
-                               if(data.delivery_date_required === 1)
-                               {
-                                 html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
-                               }
-                               else
-                               {
-                                 html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
-                               }
-                               html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                               /** Dynamic content for combined po upload modal tab */
-                               $('#combined').html(html);
+                           /** Buyer Po upload modal for combined po upload modal */
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error1"></div>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <br> <strong>Select Artworks :</strong>';
+                           $.each(data.last_insertions, function (index, value) { 
+                           html+= '<div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>';
+                           });
+                           html += '</div>\
+                                        <hr>\
+                                        <div class="row">\
+                                            <div class="col-md-12">\
+                                                <div class="col-md-6">\
+                                                    <div class="form-group has-feedback">\
+                                                        <label for="po_number" class="form_label">PO Number</label>\
+                                                        <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </div>\
+                                                <div class="col-md-6">\
+                                                    <div class="form-group has-feedback">\
+                                                        <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </div>\
+                                                <div class="col-md-6">';
+                          /** [ Delivery Date mandatory or not for particular customer] */
+                           if(data.delivery_date_required === 1)
+                           {
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon">\
+                                               <span class="glyphicon glyphicon-th"></span >\
+                                            </div >\
+                                        </div >\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
+                           }
+                           else
+                           {
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
+                                            </div>\
+                                        </div>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
+                           }
+                           html += '        </div>\
+                                          </div>\
+                                       </div>\
+                                    </div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
+                           /** Dynamic content for combined po upload modal tab */
+                           $('#combined').html(html);
 
-                               /** Buyer Po upload modal for single po upload modal */
-                               var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
-                               var i = 1;
-                              $.each(data.last_insertions, function (index, value) { 
-                               html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'" > <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                               i++;
-                               });
-                               html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
-                               /** Dynamic content for single po upload modal tab */
-                               $('#single').html(html);
+                           /** Buyer Po upload modal for single po upload modal */
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error"></div>';
+                           var i = 1;
+                           $.each(data.last_insertions, function (index, value) { 
+                            html+= '<div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="form-check form-group has-feedback">\
+                                                <label class="form-check-label">\
+                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label>\
+                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="single_delivery_date">Delivery Date</label>\
+                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                        <div class="input-group-addon"> \
+                                                          <span class="glyphicon glyphicon-th"></span >\
+                                                        </div >\
+                                                    </div >\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div><hr>';
+                           i++;
+                           });
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
+                           /** Dynamic content for single po upload modal tab */
+                           $('#single').html(html);
                        }
                        
                        /** [ Backdrop for bootstrap modal ] */
@@ -3590,8 +4761,12 @@ function storeUKRatioTCL1TCL2TSL1()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3664,6 +4839,8 @@ function storeUKRatioTHL1()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3677,13 +4854,55 @@ function storeUKRatioTHL1()
                        showSnackbar();
 
                        /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                             <div class="container-fluid">\
+                               <div class="template-error"></div>';
                        var i = 1;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
-                       i++;
+                       $.each(data.last_insertions, function (index, value) { 
+                       html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group  has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon"> \
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                                <hr>';
+                        i++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div>\
+                                <div class="modal-footer">\
+                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                </div>\
+                                </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -3787,8 +5006,12 @@ function storeUKRatioTHL1()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3879,6 +5102,8 @@ function storeUKSingleTCL4TSL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -3895,47 +5120,186 @@ function storeUKSingleTCL4TSL3()
                        {
                          $('#combined_tab').hide()
                          /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid">\
+                                <div class="template-error"></div>';
                            var i = 1;
                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon">\
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                   </div>\
+                                   <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
                        else
                        {
-                          /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error1"></div><div class="row"><div class="col-md-12"> <br> <strong>Select Artworks :</strong>';
-                           
+                           /** Buyer Po upload modal for combined po upload modal */
+                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+                                <div class="container-fluid">\
+                                    <div class="template-error1"></div>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <br> <strong>Select Artworks :</strong>';
                            $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label><div class="help-block with-errors"></div></div>';
-                           
+                           html+= '<div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>';
                            });
-                           html += '</div><hr><div class="row"><div class="col-md-12"><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span><div class="help-block with-errors"></div></div></div><div class="col-md-6">';
+                           html += '</div>\
+                                    <hr>\
+                                    <div class="row">\
+                                        <div class="col-md-12">\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_number" class="form_label">PO Number</label>\
+                                                    <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">\
+                                                <div class="form-group has-feedback">\
+                                                    <label for="po_file">Purchase Order File</label> \
+                                                     <span class="control-fileupload">\
+                                                       <label for="file">Choose a file :</label> \
+                                                        <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf">\
+                                                     </span>\
+                                                    <div class="help-block with-errors"></div>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-6">';
                           /** [ Delivery Date mandatory or not for particular customer] */
                            if(data.delivery_date_required === 1)
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon" > <span class="glyphicon glyphicon-th"></span ></div ></div ><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon">\
+                                              <span class="glyphicon glyphicon-th"></span >\
+                                            </div >\
+                                        </div >\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
                            else
                            {
-                             html +='<div class="form-group has-feedback"> <label for="combined_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="datePicker3"> <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date"><div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span></div></div><div class="help-block with-errors"></div></div></div>';
+                             html +='<div class="form-group has-feedback">\
+                                        <label for="combined_delivery_date">Delivery Date</label>\
+                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                            <div class="input-group-addon"> \
+                                              <span class="glyphicon glyphicon-th"></span>\
+                                            </div>\
+                                        </div>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    </div>';
                            }
-                           html += '</div></div></div></div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html += '     </div>\
+                                        </div>\
+                                       </div>\
+                                     </div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for combined po upload modal tab */
                            $('#combined').html(html);
 
                            /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                                    <div class="container-fluid">\
+                                        <div class="template-error"></div>';
                            var i = 1;
                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                           html+= '<div class="row">\
+                                    <div class="col-md-12">\
+                                        <div class="form-check form-group has-feedback">\
+                                            <label class="form-check-label">\
+                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_number" class="form_label">PO Number</label>\
+                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="po_file">Purchase Order File</label>\
+                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-6">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="single_delivery_date">Delivery Date</label>\
+                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                    <div class="input-group-addon">\
+                                                      <span class="glyphicon glyphicon-th"> </span >\
+                                                    </div >\
+                                                </div >\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                  </div>\
+                                  <hr>';
                            i++;
                            });
-                           html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                           html +='</div>\
+                                    <div class="modal-footer">\
+                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    </div>\
+                                    </form>';
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
@@ -4140,8 +5504,12 @@ function storeUKSingleTCL4TSL3()
                            $('.template-error').html('');
                         });
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4223,6 +5591,8 @@ function storeUKSingleTHL3()
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
                  },
+                 tryCount : 0,
+                 retryLimit : 2,
                  dataType:"json",
                  beforeSend: function () {
                      $(".loader").show();
@@ -4235,15 +5605,55 @@ function storeUKSingleTHL3()
                        showSnackbar();
 
                        /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid"><div class="template-error"></div>';
+                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
+                             <div class="container-fluid">\
+                               <div class="template-error"></div>';
                        var i = 1;
-                       var j = 0;
                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row"><div class="col-md-12"><div class="form-check form-group has-feedback"> <label class="form-check-label"> <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'"  style="margin-right: 10px;">'+ index+'</label><div class="help-block with-errors"></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_number" class="form_label">PO Number</label> <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled=""><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="po_file">Purchase Order File</label> <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf"><div class="help-block with-errors"></div></div></div><div class="col-md-6"><div class="form-group has-feedback"> <label for="single_delivery_date">Delivery Date</label><div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'"> <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled=""><div class="input-group-addon" > <span class="glyphicon glyphicon-th" > </span ></div ></div ><div class="help-block with-errors"></div></div></div></div></div><hr>';
+                       html+= '<div class="row">\
+                                <div class="col-md-12">\
+                                    <div class="form-check form-group has-feedback">\
+                                        <label class="form-check-label">\
+                                            <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
+                                        <div class="help-block with-errors"></div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="po_number" class="form_label">PO Number</label>\
+                                            <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="po_file">Purchase Order File</label>\
+                                            <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-md-6">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="single_delivery_date">Delivery Date</label>\
+                                            <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
+                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
+                                                <div class="input-group-addon"> \
+                                                  <span class="glyphicon glyphicon-th"> </span >\
+                                              </div >\
+                                          </div >\
+                                          <div class="help-block with-errors"></div>\
+                                      </div>\
+                                  </div>\
+                              </div>\
+                            </div>\
+                            <hr>';
                        i++;
-                       j++;
                        });
-                       html +='</div><div class="modal-footer"> <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="location.reload()">Upload Later</button> <button class="btn btn-primary btn-sm" type="submit">Upload</button></div></form>';
+                       html +='</div>\
+                                <div class="modal-footer">\
+                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                </div>\
+                                </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -4346,8 +5756,12 @@ function storeUKSingleTHL3()
                             }
                         })
                  },
-                 error: function (data) {
-                    console.log(data);
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4431,12 +5845,12 @@ function jsbarcodetesco(code, id, svgDoc) {
 	img.onload = function () {
 		ctx.drawImage(img, 0, 0);
 	};
-
+    
+    // img.src - contains base64 URI from svg
 	// https://developer.mozilla.org/en/DOM/window.btoa
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-	// img.src - contains base64 URI from svg
-	console.log(img.src);
+	
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -4490,11 +5904,10 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		ctx.drawImage(img, 0, 0);
 	};
 
+    // img.src - contains base64 URI from svg
 	// https://developer.mozilla.org/en/DOM/window.btoa
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -4539,6 +5952,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4557,8 +5972,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }
@@ -4582,6 +6001,8 @@ try{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
              data: formdata,
+             tryCount : 0,
+             retryLimit : 2,
              dataType:'JSON',
              async: true,
              cache: false,
@@ -4600,8 +6021,12 @@ try{
                     showSnackbar();
                 }
              },
-             error: function (data) {
-                console.error(data);
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
              },
              complete: function () {
              }

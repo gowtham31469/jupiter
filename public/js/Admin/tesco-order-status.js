@@ -532,11 +532,11 @@ function tescoOrderStatus()
                                 null,
                                 { "sType": "date-uk" },
                                 null,
-                                 null,
-                                  null,
-                                   null,
-                                    null,
-                                     null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
                             ],
                     initComplete: function () {
                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
@@ -639,7 +639,7 @@ function tescoOrderStatus()
 
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 "date-uk-pre": function ( a ) {
-    var ukDatea = a.split('/');
+    var ukDatea = a.split('-');
     return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
 },
 
@@ -728,7 +728,7 @@ function tescoStatusTable(data,path)
                 }
                 else if (key == "OrderDate")
                 {
-                    var orderDate = moment(value[key] ).format('DD/MM/YYYY');
+                    var orderDate = moment(value[key] ).format('DD-MM-YYYY');
                     tr += '<td align="center">'+orderDate+'</td>';
 
                    
@@ -830,14 +830,14 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00/00/0000')
+                   if (value[key] == '00-00-0000')
                    {
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") ></td>';
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
                    }
                    else
                    {
                        
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")></td>';
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
                    }
                   
                    
@@ -860,58 +860,75 @@ function tescoStatusTable(data,path)
     })
     return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
 }
-var date = new Date();
-var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+
 $('body').on('focus',".datepicker_recurring_start", function(){
     $(this).datepicker({
         autoclose: true,
         startDate: "+7d",
-        format:'dd/mm/yyyy'
+        format:'dd-mm-yyyy'
     });
 });
 function updateDeliveryDate(obj,tableID,tableName)
 {
+    var date = new Date();
+    var dd = date.getDate() +7;
+    var mm = date.getMonth()+1; //January is 0!
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    } 
+    if(mm<10){
+        mm='0'+mm;
+    } 
+    var today = dd+'-'+mm+'-'+yyyy;
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
-    $.ajax({
-        url: base_url + "/admin/tesco/update-delivery-date",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            deliveryDate:deliveryDate,
-            tableName:tableName,
-            id:tableID
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-               $('#snackbar').css('background-color','#00b6ff');
-               $('.snackbar_span').html('Delivery Date updated Successfully');
-               $(obj).closest('tr').find('.datepicker_recurring_start').val(po_number);
-               showSnackbar();                        
+
+    if (deliveryDate=="")
+    {
+        $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', 'rgb(244, 67, 54)');
+    }
+   
+            $('.snackbar_span').html('');
+            $.ajax({
+            url: base_url + "/admin/tesco/update-delivery-date",
+            type: "Post",
+            dataType: "json",
+            data: {
+                _token: csrf_token,
+                deliveryDate:deliveryDate,
+                tableName:tableName,
+                id:tableID
             },
-            400: function()
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            statusCode:
             {
-               $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
-               showSnackbar();
+                /** [Show response status based on HTTP status code] */
+                200: function(data)
+                {
+                   $('#snackbar').css('background-color','#00b6ff');
+                   $('.snackbar_span').html('Delivery Date updated Successfully');
+                  
+                   showSnackbar();                        
+                },
+                400: function()
+                {
+                   $('.snackbar_span').html('Something went wrong');
+                   $('#snackbar').css('background-color','#F44336');
+                   showSnackbar();
+                }
+            },
+            error: function (data){
+                console.log(data);
+            },
+            complete: function (){
+                $(".loader").hide();
             }
-        },
-        error: function (data){
-            console.log(data);
-        },
-        complete: function (){
-            $(".loader").hide();
-        }
-    })
-    
+        })    
 }
 
 /**
@@ -1095,11 +1112,11 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+(value.quantity*value.unit_price).toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+value.quantity*value.unit_price+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+(value.quantity*value.unit_price).toFixed(2)+'</td></tr>'
                             }
                             
                             
