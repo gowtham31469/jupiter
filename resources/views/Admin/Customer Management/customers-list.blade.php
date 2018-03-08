@@ -254,6 +254,11 @@
                                 </label>
                                 <div class="help-block with-errors"></div>
                               </div>
+                              <div class="form-group form-inline">
+                                  <label for="name">Deliver after </label>
+                                <input type="name" class="form-control" id="name" placeholder="Days">
+                                <label for="name">Days</label>
+                               </div>
                             </div>
                           </div>
                           <h4><strong>Bank Details</strong></h4>
