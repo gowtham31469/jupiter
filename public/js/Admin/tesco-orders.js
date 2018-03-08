@@ -521,7 +521,7 @@ function PopupTesco(data,name) {
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
-	var success = false;
+	//var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -536,16 +536,28 @@ function PopupTesco(data,name) {
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
-			success = true;
-			url = data;
+//			success = true;
+//			url = data;
+			
+			  var element = document.createElement('a');
+			  element.setAttribute('href', data);
+			  element.setAttribute('download', name);
+
+			  element.style.display = 'none';
+			  document.body.appendChild(element);
+
+			  element.click();
+
+			  document.body.removeChild(element);
+			
 		},
 		error: function (data) {
 
 		},
 	})
-	if (success) { //AND THIS CHANGED
-		window.open(url)
-	}
+//	if (success) { //AND THIS CHANGED
+//		window.open(url)
+//	}
 }
 /**
  * This Function is Sub Function of #printDivTesco.
@@ -559,7 +571,7 @@ function PopupTescoSmall(data,name) {
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
-	var success = false;
+	//var success = false;
 	var url = "";
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -574,16 +586,28 @@ function PopupTescoSmall(data,name) {
 		async: false,
 		success: function (data) {
 			//window.location.href=data;
-			success = true;
-			url = data;
+//			success = true;
+//			url = data;
+			
+			 var element = document.createElement('a');
+			  element.setAttribute('href', data);
+			  element.setAttribute('download', name);
+
+			  element.style.display = 'none';
+			  document.body.appendChild(element);
+
+			  element.click();
+
+			  document.body.removeChild(element);
+			
 		},
 		error: function (data) {
 
 		},
 	})
-	if (success) { //AND THIS CHANGED
-		window.open(url)
-	}
+//	if (success) { //AND THIS CHANGED
+//		window.open(url)
+//	}
 }
 
 /**

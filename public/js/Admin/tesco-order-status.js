@@ -863,7 +863,7 @@ function updateDeliveryDate(obj,tableID,tableName)
             {
                $('#snackbar').css('background-color','#00b6ff');
                $('.snackbar_span').html('Delivery Date updated Successfully');
-               $(obj).closest('tr').find('.datepicker_recurring_start').val(po_number);
+               //$(obj).closest('tr').find('.datepicker_recurring_start').val(po_number);
                showSnackbar();                        
             },
             400: function()

@@ -12,6 +12,14 @@
         margin-right: 0% !important;
         transition: 0.5s ease all;
     }
+	.tot_qty_table {
+		 height: 30px; 
+		 margin-bottom: 0px;
+	}
+	.qty-table-modal input, .qty-table-modal input::-webkit-input-placeholder {
+		font-size: 12px; 
+		font-weight: 400;
+	}
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
