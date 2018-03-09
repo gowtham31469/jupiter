@@ -6344,6 +6344,7 @@ function viewOrder(pNumber) {
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
                     createOrders();
+                    console.log(data.result);
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
