@@ -41,7 +41,6 @@ function tescoOrders() {
                 for(i = 0; i< uniqueNames.length; i++){    
                      options+="<option>"+uniqueNames[i]+"</option>";
                 }
-                console.log(options);
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -341,7 +340,7 @@ function tescoOrders() {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
                         template_id = data.node.id;
-
+                        console.log(data.node)
                         /** [ add values into local storage ] */
                         localStorage.setItem("templates", data.node.id);
                         localStorage.setItem("zone", data.node.original.zone);
@@ -410,11 +409,10 @@ function tescoOrders() {
                     if (e.isDefaultPrevented()) {
 
                     }
-                    else 
-                    {
+                    else {
                         e.preventDefault();
                         var po_num = $('#po_number').val();
-                        alert(po_num);
+                        viewOrder(po_num);  
                     }
                 })
 
@@ -6087,4 +6085,71 @@ try{
 */
 function loadTemplatePreview() {
     var po_num = $('#po_number').val();
+}
+
+/**
+ * AJAX method to fetch the order details.
+ * @return {[type]} [description]
+ */
+function viewOrder(pNumber) {
+    try {
+        $.ajax({
+            url: base_url + "/admin/tesco/view-order",
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {'po_number':pNumber},
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: 'JSON',
+            statusCode: {
+                200: function(data) {
+                    var node_ids = [];
+                    var zone = [];
+                    var type = [];
+                    var nodes;
+                    var template_zone;
+                    var template_type;
+                    $.each(data.result, function(index, object) {
+                        if( object && object !== "null" && object !== "undefined" ) {
+                            console.log(object);
+                            node_ids.push(object.template_id);
+                            zone.push(object.zone);
+                            type.push(object.template_type);
+                        }
+                    });
+                    console.log(node_ids,zone,type);
+                    if(node_ids.length > 0) {
+                        nodes = node_ids.toString();
+                    }
+                    if(zone.length > 0 && $.unique(zone).length === 1) {
+                        template_zone = zone[0];
+                    }
+                    if(type.length > 0 && $.unique(type).length === 1) {
+                        template_type = type[0];
+                    }  
+                    console.log(nodes,template_zone,template_type);                  
+                    localStorage.setItem("templates", nodes);
+                    localStorage.setItem("zone", template_zone);
+                    localStorage.setItem("template type", template_type);
+                    createOrders();
+                },
+                400: function() {
+                    $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
+                    showSnackbar();
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {}
+        })
+    } catch (e) {
+        console.error("Error:" + e)
+    }
 }

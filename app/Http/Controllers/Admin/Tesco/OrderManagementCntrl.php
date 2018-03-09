@@ -2326,4 +2326,39 @@ class OrderManagementCntrl extends Controller
        }
        return $result;
     }
+
+    /**
+     * Method to  fetch the order details.
+     * @param  Request $request Purchase Order Numbers
+     * @return [array]   Array of artworks
+     */
+    public function viewOrders(Request $request) {
+      try {
+        $result = '';
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->first();
+    
+  
+        $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->first();
+        
+        
+        $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->first();
+        
+        
+        $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->first();
+        
+        
+        $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->first();
+        
+        
+        $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->first();
+        
+        
+        $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->first();
+
+        $result = response()->json(['error'=> false,'result' => $data],200); 
+      } catch (\Exception $e) {
+         $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
 }
