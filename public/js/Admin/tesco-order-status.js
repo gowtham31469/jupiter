@@ -1132,15 +1132,15 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
                         if (data.data.bank_details.place_of_supply==1)
                         {
-                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
+                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize"> </p></div><hr /></div>'
                         }
                         else if (data.data.bank_details.place_of_supply==2)
                         {
-                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
+                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize"> </p></div><hr /></div>'
                         }
                         else
                         {
-                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+inWords(billamnt)+' </p></div><hr /></div>'
+                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize"> </p></div><hr /></div>'
                         }
                         $('#item_details').html(tr)
                         if (pi_status=="true")
