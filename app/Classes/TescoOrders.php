@@ -32,7 +32,7 @@ class TescoOrders
 	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1Order($request,$template_id,$pi_required)
+	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty)
 	{
 		try {
             
@@ -81,7 +81,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -95,7 +96,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2Order($request,$template_id,$pi_required)
+  public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -143,7 +144,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -157,7 +159,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1Order($request,$template_id,$pi_required)
+  public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -205,7 +207,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -219,7 +222,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1Order($request,$template_id,$pi_required)
+  public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -267,7 +270,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -281,7 +285,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4Order($request,$template_id,$pi_required)
+  public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -329,7 +333,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -343,7 +348,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3Order($request,$template_id,$pi_required)
+  public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -391,7 +396,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
@@ -405,7 +411,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3Order($request,$template_id,$pi_required)
+  public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
@@ -453,7 +459,8 @@ class TescoOrders
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending"
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
                         ]);
             
         } catch (\Exception $e)
