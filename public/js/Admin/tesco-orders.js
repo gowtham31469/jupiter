@@ -4,6 +4,7 @@
  * @return View
  */
 var globalOrderType = 0;
+var barcode_checks = 0;
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -588,6 +589,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -660,6 +662,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -737,6 +740,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -807,6 +811,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -1523,10 +1528,25 @@ function dynamicSVGTemplatescard(id,item)
 				   /** [ Dynamically change svg barcode ] */
 				  if(ce_ratio_itf.length === 14)
 				  {
-					jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                    var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                    if(barcodecheck == "false")
+                    {
+                        barcode_checks++;
+                        $('.barcode-error').html('');
+                        /**  [ Show validation error message ] **/
+                        $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    }
+                    else
+                    {
+                        barcode_checks = 0;
+                        $('.barcode-error').html('');
+                        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                    }
 				  }
 				  else
 				  {
+                     barcode_checks = 0;
+                     $('.barcode-error').html('');
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1554,10 +1574,25 @@ function dynamicSVGTemplatescard(id,item)
 					  /** [ Dynamically change svg barcode ] */
 					  if(ce_single_ean.length === 13)
 					  {
-						jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                        var barcodecheck = checkjsbarcodeean(ce_single_ean);
+                        if(barcodecheck == "false")
+                        {
+                            barcode_checks++;
+                            $('.barcode-error').html('');
+                            /**  [ Show validation error message ] **/
+                            $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                        }
+                        else
+                        {
+                            barcode_checks = 0;
+                            $('.barcode-error').html('');
+                            jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                        }
 					  }
 					  else
 					  {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
@@ -1653,10 +1688,26 @@ function dynamicSVGTemplatescard(id,item)
 				  /** [ Dynamically change svg barcode ] */
 				  if(uk_ratio_itf.length === 14)
 				  {
-					jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                    var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
+                    if(barcodecheck == "false")
+                    {
+                        barcode_checks++;
+                        $('.barcode-error').html('');
+                        /**  [ Show validation error message ] **/
+                        $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    }
+                    else
+                    {
+                        barcode_checks = 0;
+                        $('.barcode-error').html('');
+                        jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                    }
+					
 				  }
 				  else
 				  {
+                     barcode_checks = 0;
+                     $('.barcode-error').html('');
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1681,10 +1732,25 @@ function dynamicSVGTemplatescard(id,item)
 					  /** [ Dynamically change svg barcode ] */
 					  if(uk_single_ean.length === 13)
 					  {
-						jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                        var barcodecheck = checkjsbarcodeean(uk_single_ean);
+                        if(barcodecheck == "false")
+                        {
+                            barcode_checks++;
+                            $('.barcode-error').html('');
+                            /**  [ Show validation error message ] **/
+                            $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                        }
+                        else
+                        {
+                            barcode_checks = 0;
+                            $('.barcode-error').html('');
+                            jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                        }
 					  }
 					  else
 					  {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
@@ -1917,12 +1983,25 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg barcode ] */
                        if(ce_ratio_itf !='' && ce_ratio_itf.length === 14)
                        {
-                        
-                        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                            }
                        }
                        else
                        { 
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
                          svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -1966,12 +2045,25 @@ function dynamicSVGTemplatescard(id,item)
 					   /** [ Dynamically change svg barcode ] */
 					   if(ce_single_ean !='' && ce_single_ean.length === 13)
 					   {
-
-						  jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeean(ce_single_ean);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                            }
 					   }
 					   else
 					   { 
+                          barcode_checks = 0;
+                          $('.barcode-error').html('');
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2071,12 +2163,25 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg barcode ] */
                        if(uk_ratio_itf !='' && uk_ratio_itf.length === 14)
                        {
-                        
-                           jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                            }
                        }
                        else
-                       { 
+                       {   
+                           barcode_checks = 0;
+                           $('.barcode-error').html('');
                            svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -2121,12 +2226,25 @@ function dynamicSVGTemplatescard(id,item)
 					   /** [ Dynamically change svg barcode ] */
 					   if(uk_single_ean !='' && uk_single_ean.length === 13)
 					   {
-
-						   jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeean(uk_single_ean);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                            }
 					   }
 					   else
 					   { 
+                           barcode_checks = 0;
+                           $('.barcode-error').html('');
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2240,35 +2358,39 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL1 = count_THL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE ratio THL1 template */
-                            storeCERatioTHL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE ratio THL1 template */
+                                storeCERatioTHL1();
+                            }
                         }
                     }
                 }
@@ -2327,36 +2449,41 @@ function setTescoOrder()
                     count_TCL2 = count_TCL2.join(',');
                     count_TSL1 = count_TSL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE ratio TCL1, TCL2, TSL1 template */
-                            storeCERatioTCL1TCL2TSL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE ratio TCL1, TCL2, TSL1 template */
+                                storeCERatioTCL1TCL2TSL1();
+                            }
                         }
                     }
+                    
                 }
                 
             }
@@ -2383,37 +2510,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL3 = count_THL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE single THL3 template */
-                            storeCESingleTHL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE single THL3 template */
+                                storeCESingleTHL3();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2457,37 +2589,42 @@ function setTescoOrder()
                     count_TSL3 = count_TSL3.join(',');
                     count_TCL4 = count_TCL4.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE single TCL4, TSL3 template */
-                             storeCESingleTCL4TSL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE single TCL4, TSL3 template */
+                                 storeCESingleTCL4TSL3();
+                            }
                         }
                     }
+                    
                 }
             }
         }
@@ -2516,37 +2653,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL1 = count_THL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK ratio THL1 template */
-                            storeUKRatioTHL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK ratio THL1 template */
+                                storeUKRatioTHL1();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2603,36 +2745,41 @@ function setTescoOrder()
                     count_TCL2 = count_TCL2.join(',');
                     count_TSL1 = count_TSL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK ratio TCL1, TCL2, TSL1 template */
-                            storeUKRatioTCL1TCL2TSL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK ratio TCL1, TCL2, TSL1 template */
+                                storeUKRatioTCL1TCL2TSL1();
+                            }
                         }
                     }
+                    
                 }
                 
             }
@@ -2660,37 +2807,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL3 = count_THL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK single THL3 template */
-                            storeUKSingleTHL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK single THL3 template */
+                                storeUKSingleTHL3();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2734,37 +2886,42 @@ function setTescoOrder()
                     count_TCL4 = count_TCL4.join(',');
                     count_TSL3 = count_TSL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK single TCL4, TSL3 template */
-                             storeUKSingleTCL4TSL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK single TCL4, TSL3 template */
+                                 storeUKSingleTCL4TSL3();
+                            }
                         }
                     }
+                    
                 }
             }
         }
@@ -6034,4 +6191,60 @@ try{
   } catch (e) {
    console.log("Error:"+e)
  }
+}
+
+/**
+ * This Function is used to check ITF barcode is valid or not.
+ * 
+ * @return boolean
+ */
+
+function checkjsbarcodeitf(code) {
+    var return_value="";
+    JsBarcode("#ean-13", code, {
+        format: "ITF14",
+        width: 2.50,
+        height: 100,
+        fontSize: 30,
+        flat:true,
+        valid:function(valid){
+            if(valid == false)
+            {
+                return_value="false";
+            }
+            else
+            {
+                return_value="true";
+            }
+        }
+    });
+    return return_value;
+}
+
+/**
+ * This Function is used to check EAN barcode is valid or not.
+ * 
+ * @return boolean
+ */
+
+function checkjsbarcodeean(code) {
+    var return_value="";
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 3.45,
+        height: 125,
+        fontSize: 35,
+        flat:true,
+        valid:function(valid){
+            if(valid == false)
+            {
+                return_value="false";
+            }
+            else
+            {
+                return_value="true";
+            }
+        }
+    });
+    return return_value;
 }
