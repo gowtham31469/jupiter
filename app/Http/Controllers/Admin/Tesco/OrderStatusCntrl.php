@@ -106,14 +106,9 @@ class OrderStatusCntrl extends Controller
                                   'purchase_order_no' => $po_number,
                                   'po_status' => $po_status
                                 ]);
-            if ($data)
-            {
-                $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+       
 		}
         catch (\Exception $e)
         {
@@ -245,14 +240,8 @@ class OrderStatusCntrl extends Controller
                             ->update([
                               'pi_status' => "PI Rejected"
                             ]);
-            if ($data)
-            {
+    
                $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
         }
         catch (\Exception $e)
         {
