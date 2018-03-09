@@ -6270,13 +6270,11 @@ function viewOrder(pNumber) {
                     var template_type;
                     $.each(data.result, function(index, object) {
                         if( object && object !== "null" && object !== "undefined" ) {
-                            console.log(object);
                             node_ids.push(object.template_id);
                             zone.push(object.zone);
                             type.push(object.template_type);
                         }
                     });
-                    console.log(node_ids,zone,type);
                     if(node_ids.length > 0) {
                         nodes = node_ids.toString();
                     }
@@ -6285,8 +6283,7 @@ function viewOrder(pNumber) {
                     }
                     if(type.length > 0 && $.unique(type).length === 1) {
                         template_type = type[0];
-                    }  
-                    console.log(nodes,template_zone,template_type);                  
+                    }                  
                     localStorage.setItem("templates", nodes);
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
