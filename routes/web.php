@@ -220,6 +220,7 @@ Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementC
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createStickerOrders');
+Route::post('admin/tesco/view-order', 'Admin\Tesco\OrderManagementCntrl@viewOrders');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
 
 Route::post('admin/tesco/print-div-tesco', 'Admin\Tesco\OrderManagementCntrl@printDivTesco');
