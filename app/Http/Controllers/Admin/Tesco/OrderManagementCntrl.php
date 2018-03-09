@@ -661,11 +661,17 @@ class OrderManagementCntrl extends Controller
 
                 if($template['template_name'] == "TCL 1")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL1)) 
-                  {
+                  /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TCL1)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                       /** [ Invoking createTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
+                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                        $tesco_order_id  = $tesco_order->id;
 
                        $i = 0;
@@ -700,16 +706,21 @@ class OrderManagementCntrl extends Controller
                        
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
-                  }
                    
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL2)) 
-                  {
+                  /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TCL2)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                      /** [ Invoking createTCL2Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -744,15 +755,20 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
                 else
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TSL1)) 
-                  {
+                  /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TSL1)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                     /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -787,18 +803,23 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
               }
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
 
-                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                 if (array_filter($count_THL1)) 
-                 {
+                 /** check all entries of array equal to FALSE(ie. 0) */
+                  if (array_filter($count_THL1)) 
+                  {
+                      $is_order_count_empty = 1;
+                  }
+                  else
+                  {
+                      $is_order_count_empty = 0;
+                  }
                    /** [ Invoking createTHL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                    $tesco_order_id  = $tesco_order->id;
                    
                    $i = 0;
@@ -833,7 +854,6 @@ class OrderManagementCntrl extends Controller
 
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
-               }
               }
             }
             
@@ -879,11 +899,17 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL4)) 
-                  {
+                  /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TCL4)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                      /** [ Invoking createTCL4Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -919,15 +945,20 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
                 else
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TSL3)) 
-                  {
+                   /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TSL3)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                      /** [ Invoking createTSL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -963,18 +994,23 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
               }
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
 
-                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                 if (array_filter($count_THL3)) 
-                 {
+                 /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_THL3)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                    /** [ Invoking createTHL3Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty);
                    $tesco_order_id  = $tesco_order->id;
                    
                    $i = 0;
@@ -1010,7 +1046,6 @@ class OrderManagementCntrl extends Controller
 
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
-               }
               }
             }
             
@@ -1056,11 +1091,17 @@ class OrderManagementCntrl extends Controller
 
                 if($template['template_name'] == "TCL 1")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL1)) 
-                  {
+                  /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TCL1)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                      /** [ Invoking createTCL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -1095,15 +1136,20 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
                 else if($template['template_name'] == "TCL 2")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL2)) 
-                  {
+                    /** check all entries of array equal to FALSE(ie. 0) */
+                    if (array_filter($count_TCL2)) 
+                    {
+                        $is_order_count_empty = 1;
+                    }
+                    else
+                    {
+                        $is_order_count_empty = 0;
+                    }
                      /** [ Invoking createTCL2Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -1138,15 +1184,20 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
                 else
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
+                  /** check all entries of array equal to FALSE(ie. 0) */
                   if (array_filter($count_TSL1)) 
                   {
+                      $is_order_count_empty = 1;
+                  }
+                  else
+                  {
+                      $is_order_count_empty = 0;
+                  }
                      /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -1181,18 +1232,23 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
               }
               else
               {
                  $count_THL1       = explode(',',$request['count_THL1']);
 
-                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                 if (array_filter($count_THL1)) 
-                 {
+                 /** check all entries of array equal to FALSE(ie. 0) */
+                  if (array_filter($count_THL1)) 
+                  {
+                      $is_order_count_empty = 1;
+                  }
+                  else
+                  {
+                      $is_order_count_empty = 0;
+                  }
                    /** [ Invoking createTHL1Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty);
                    $tesco_order_id  = $tesco_order->id;
                    
                    $i = 0;
@@ -1227,7 +1283,6 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                   }
               }
             }
             
@@ -1272,11 +1327,17 @@ class OrderManagementCntrl extends Controller
                 
                 if($template['template_name'] == "TCL 4")
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TCL4)) 
-                  {
+                     /** check all entries of array equal to FALSE(ie. 0) */
+                      if (array_filter($count_TCL4)) 
+                      {
+                          $is_order_count_empty = 1;
+                      }
+                      else
+                      {
+                          $is_order_count_empty = 0;
+                      }
                      /** [ Invoking createTCL4Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -1312,15 +1373,20 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                   }
                 }
                 else
                 {
-                  /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                  if (array_filter($count_TSL3)) 
-                  {
+                      /** check all entries of array equal to FALSE(ie. 0) */
+                      if (array_filter($count_TSL3)) 
+                      {
+                          $is_order_count_empty = 1;
+                      }
+                      else
+                      {
+                          $is_order_count_empty = 0;
+                      }
                      /** [ Invoking createTSL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required);
+                     $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty);
                      $tesco_order_id  = $tesco_order->id;
                      
                      $i = 0;
@@ -1356,18 +1422,23 @@ class OrderManagementCntrl extends Controller
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
                 }
               }
               else
               {
                  $count_THL3       = explode(',',$request['count_THL3']);
 
-                 /** check all entries of array equal to FALSE(ie. 0), store order iff atleast 1 non-zero value exists  */
-                 if (array_filter($count_THL3)) 
-                 {
+                 /** check all entries of array equal to FALSE(ie. 0) */
+                  if (array_filter($count_THL3)) 
+                  {
+                      $is_order_count_empty = 1;
+                  }
+                  else
+                  {
+                      $is_order_count_empty = 0;
+                  }
                    /** [ Invoking createTHL3Order function using class instance ] */
-                   $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required);
+                   $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty);
                    $tesco_order_id  = $tesco_order->id;
                    
                    $i = 0;
@@ -1403,7 +1474,6 @@ class OrderManagementCntrl extends Controller
 
                    /** [ Return array of inserted id ] */
                    $last_insertions = array_merge($last_insertions,$templates_inserted);
-                 }
               }
             }
             
