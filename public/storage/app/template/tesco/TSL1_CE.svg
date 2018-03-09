@@ -19,4 +19,5 @@
     <text transform="matrix(1, 0, 0, 1, 17, 77.5)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;"><tspan>ORMS TPN:</tspan> <tspan style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="tpnd">999999999</tspan></text>
     
 </g>
+<text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 20.6108 56.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:45px;opacity: 0.1;" id="watermark"></text>
 </svg>

@@ -1422,6 +1422,32 @@ class OrderManagementCntrl extends Controller
   
     public function printDivTesco(Request $request)
     {
+		
+		//		 // Custom Header
+		//		PDF::setHeaderCallback(function($pdf) {
+		//				 $image_file= K_PATH_IMAGES.'logo_example.jpg';
+		//				 $pdf->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		//				// Set font
+		//				$pdf->SetFont('frankgothcnbt');
+		//				// Title
+		//				$pdf->Cell(0, 15, 'Something new right here!!!', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		//				$html = '<span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span><br /><span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span>';
+		//				$pdf->writeHTMLCell(0, 0, '', '', $html, 'LRTB', 1, 0, true, 'L', true);
+		//
+		//		});
+		//
+		//		// Custom Footer
+		//		PDF::setFooterCallback(function($pdf) {
+		//
+		//				// Position at 15 mm from bottom
+		//				$pdf->SetY(-15);
+		//				// Set font
+		//				$pdf->SetFont('frankgothcnbt');
+		//				// Page number
+		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		//
+		//		});
+		
     $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
