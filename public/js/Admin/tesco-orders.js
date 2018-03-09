@@ -3478,6 +3478,13 @@ function storeCERatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -3723,6 +3730,13 @@ function storeCERatioTHL1()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -4222,6 +4236,13 @@ function storeCESingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4474,6 +4495,13 @@ function storeCESingleTHL3()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -4968,6 +4996,13 @@ function storeUKRatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -5212,6 +5247,13 @@ function storeUKRatioTHL1()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -5711,6 +5753,13 @@ function storeUKSingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -5962,6 +6011,13 @@ function storeUKSingleTHL3()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
