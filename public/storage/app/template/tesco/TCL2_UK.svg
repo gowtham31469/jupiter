@@ -41,4 +41,5 @@
 <text transform="matrix(1 0 0 1 305.5719 158.6063)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">0000</text>
 <text transform="matrix(1 0 0 1 208.5719 189.6064)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Box ______ of _____:</text>
 <text id="pieces_in_ratio" transform="matrix(1 0 0 1 298.5719 174.6064)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">3</text>
+<text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>

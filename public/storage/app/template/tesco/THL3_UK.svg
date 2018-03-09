@@ -40,4 +40,5 @@
 </g>
 <g xmlns="http://www.w3.org/2000/svg" width="355" height="155" id="barcode" transform="matrix(0.2648 0 0 0.2774 55 148.0808)">
 </g>
+<text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>
