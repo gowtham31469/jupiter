@@ -610,6 +610,68 @@ class OrderStatusCntrl extends Controller
 		echo true;	
 			  
     }
+	
+	/**
+     * This function is used to check exist Po exists or not
+     * 
+     * @return boolean values
+     */
+    public function editCheckExistPo(Request $request)
+    {
+		$template_id    = $request['edit_id'];
+		$template_name  = $request['template_name'];
+		$uk_style	    = $request['uk_style'];
+		$po_number	    = $request['po_number'];
+		$ce_style	    = $request['ce_style'];
+		$zone =$request['zone'];
+		
+		if($template_name == "TCL1")
+		{
+			$table_name="tesco_tcl1_orders";
+			$qty_table_name="tesco_tcl1_orders_quanty";
+		}
+		else if($template_name == "TCL2")
+		{
+			$table_name="tesco_tcl2_orders";
+			$qty_table_name="tesco_tcl2_orders_quanty";
+		}
+		else if($template_name == "TCL4")
+		{
+			$table_name="tesco_tcl4_orders";
+			$qty_table_name="tesco_tcl4_orders_quanty";
+		}
+		else if($template_name == "TSL1")
+		{
+			$table_name="tesco_tsl1_orders";
+			$qty_table_name="tesco_tsl1_orders_quanty";
+		}
+		else if($template_name == "TSL3")
+		{
+			$table_name="tesco_tsl3_orders";
+			$qty_table_name="tesco_tsl3_orders_quanty";
+		}
+		else if($template_name == "THL1")
+		{
+			$table_name="tesco_thl1_orders";
+			$qty_table_name="tesco_thl1_orders_quanty";
+		}
+		else if($template_name == "THL3")
+		{
+			$table_name="tesco_thl3_orders";
+			$qty_table_name="tesco_thl3_orders_quanty";
+		}
+		$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('order_flag','newOrder')->where('id','!=',$template_id)->select('*')->get();
+		if(count($template_exists) > 0) 
+		{
+			echo "false";
+		}
+		else
+		{
+			echo "true";
+		}
+		
+		
+	}
 
 
 }
