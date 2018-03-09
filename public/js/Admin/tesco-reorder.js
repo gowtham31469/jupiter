@@ -280,7 +280,7 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 						var th_td="";
 					}
 
-				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
+				 tr += '<tr><td class="tpnd">' + tpnd_td + '</td><td class="barcode">' + barcode_td + '</td><td class="size">' + unit_qty + '</td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input maxlength="4" onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm tot_qty_table" value="" required placeholder="Count"><div class="help-block with-errors"></div></div></td></tr>';
 			});
 			$('.quantity').html('<form id="qty_table"><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th> '+th_tr+'<th>Count</th> </tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table><div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 			
@@ -289,11 +289,11 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 			{
 				if((name == "TSL1") ||(name == "TSL3"))
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" style="display:none" onkeyup="repeatorderpo()" value="'+po_number+'" placeholder="PO Number"><div class="help-block with-errors"></div>')
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input type="text" maxlength="9" class="form-control  input-sm purchase_order_number" style="display:none" onkeyup="repeatorderpo()" value="'+po_number+'" placeholder="PO Number"><div class="help-block with-errors"></div>')
 				}
 				else
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input maxlength="9" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
 				}
 				
 			}
@@ -327,6 +327,20 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 		}
 	})
 }
+
+/**
+ * This Function is used to restrict alpha numeric and special characters.
+ * 
+ * @return boolean
+ */
+
+function checkNumbersOnly(e) {
+
+	if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+		return false;
+	}
+}
+
 /**
  * This Function is used to render po in artwork.
  *
@@ -418,7 +432,17 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
-			svgDoc1.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+			
+			if(name == "TCL4" || name == "THL3" )
+			{
+				svgDoc1.getElementById("unit_per_case").innerHTML = pieces_in_ratio;
+			}
+			else
+			{
+				svgDoc1.getElementById("pieces_in_ratio").innerHTML = pieces_in_ratio;
+			}
+			
+			
 			
 			svgDoc1.getElementById("brand").innerHTML =brand.toUpperCase().replace('&', '&amp;');
 			

@@ -219,6 +219,7 @@ class CustomerManagementController extends Controller
                 $delivery_date_req    = $request['delivery_date_req'];
                 $forwarder            = $request['forwarder'];
                 $freight              = $request['freight'];
+                $delivery_day_count   = $request['day_count'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -261,7 +262,8 @@ class CustomerManagementController extends Controller
                                 'po_required'            => $po_required,
                                 'delivery_date_required' => $delivery_date_req,
                                 'nominated_forwarder'    => $forwarder,
-                                'freight_type'           => $freight
+                                'freight_type'           => $freight,
+                                'delivery_day_count'     => $delivery_day_count
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -372,7 +374,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -432,6 +434,7 @@ class CustomerManagementController extends Controller
                     $input['delivery_date_required'] = Input::get('delivery_date_req');
                     $input['forwarder']              = Input::get('forwarder');
                     $input['freight']                = Input::get('freight');
+                    $input['delivery_day_count']     = Input::get('day_count');
 
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -491,7 +494,8 @@ class CustomerManagementController extends Controller
                           'po_required'            => $input['po_required'],
                           'delivery_date_required' => $input['delivery_date_required'],
                           'nominated_forwarder'    => $input['forwarder'],
-                          'freight_type'           => $input['freight']
+                          'freight_type'           => $input['freight'],
+                          'delivery_day_count'     => $input['delivery_day_count']
                         ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)

@@ -885,43 +885,43 @@ function createOrders(parsedObj = false) {
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4>\
-                              <div class="row">';
-                                  $.each(data.templates, function(i, item){
-                                   html += '<div class="col-md-4">\
-                                            <div class="card add-card">\
-                                                <div class="card-title">\
-                                                    <p class="pull-right" onclick=openmodaltesco( "'+item.template_name.replace(' ', '')+'", "'+i+'") style="cursor:pointer">Click to view</p>\
-                                                    <h5><b>'+item.template_name+'</b></h5>\
-                                                </div>\
-                                                <div class="row">\
-                                                    <div class="col-md-8 col-md-offset-2">\
-                                                        <div class="tesco_artwork">\
-                                                            <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
-                                                            <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
-                                                                <div class="modal-dialog">\
-                                                                    <div class="modal-content">\
-                                                                        <div class="modal-header">\
-                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                                            <h4 class="modal-title">'+item.template_name+'</h4></div>\
-                                                                        <div class="modal-body">\
-                                                                            <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
-                                                                        </div>\
-                                                                        <div class="modal-footer">\
-                                                                            <button type="button" class="btn btn-primary" onclick=printDivTesco( "tesco_svg_modal'+i+'", "'+item.template_name.replace(' ', '')+'")>Print</button>\
-                                                                            <div id="svgdiv" style="position:absolute;visibility:hidden">\
-                                                                                <svg id="ean-13"></svg>\
-                                                                            </div>\
-                                                                        </div>\
-                                                                    </div>\
-                                                                </div>\
-                                                            </div>\
-                                                        </div>\
-                                                    </div>\
-                                                </div>\
-                                            </div>\
-                                        </div>';
-                                  });
+                      html += '<h4>Order Preview</h4><div class="row">';
+                      $.each(data.templates, function(i, item){
+                       html += '<div class="col-md-4">\
+                                  <div class="card add-card">\
+                                    <div class="card-title">\
+                                       <p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p>\
+                                       <h5><b>'+item.template_name+'</b></h5>\
+                                    </div>\
+                                    <div class="row">\
+                                       <div class="col-md-8 col-md-offset-2">\
+                                         <div class="tesco_artwork"> \
+                                           <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                           <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
+                                             <div class="modal-dialog">\
+                                               <div class="modal-content">\
+                                                 <div class="modal-header">\
+                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                   <h4 class="modal-title">'+item.template_name+'</h4>\
+                                                 </div>\
+                                                 <div class="modal-body">\
+                                                   <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                                 </div>\
+                                                 <div class="modal-footer">\
+                                                   <button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button>\
+                                                   <div id="svgdiv" style="position:absolute;visibility:hidden">\
+                                                     <svg id="ean-13"></svg>\
+                                                   </div>\
+                                                 </div>\
+                                               </div>\
+                                             </div>\
+                                          </div>\
+                                         </div>\
+                                      </div>\
+                                    </div>\
+                                  </div>\
+                                </div>';
+                      });
                       html += '</div>\
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
@@ -3458,7 +3458,7 @@ function storeCERatioTHL1()
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
                                     <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
                                 </div>\
-                                </form>';
+                               </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 

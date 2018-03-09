@@ -283,22 +283,23 @@
 						<input type="hidden" id="edit_id">
 						 <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
-                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" disabled required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
+							 <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_uk_style">UK Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." maxlength="10" required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_ce_style">CE Style Ref.</label>
-                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_ce_style" id="tesco_ce_style" maxlength="10" placeholder="Enter CE Style Ref." required="" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_season_code">Season Code</label>
-                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -308,7 +309,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_eqos">EQOS Site Code</label>
-                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="10" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
