@@ -1084,7 +1084,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
+    var buyer_id = localStorage.getItem("status_buyer_id");
     var tr = "";
     $.ajax({
         url: base_url + "/admin/tesco/order-management/show-tesco-pi",
@@ -1234,7 +1234,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
 function tescoApprovePI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
+    var buyer_id = localStorage.getItem("status_buyer_id");
     $.ajax({
         url: base_url + "/admin/tesco/approve-tesco-pi",
         type: "Post",
@@ -1288,7 +1288,7 @@ function tescoApprovePI(id,table_name)
 function tescoRejectPI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("buyer_id");
+    var buyer_id = localStorage.getItem("status_buyer_id");
     $.ajax({
         url: base_url + "/admin/tesco/reject-tesco-pi",
         type: "Post",
