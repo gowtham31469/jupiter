@@ -18,7 +18,7 @@ function tescoOrders() {
     try {
         /** [ ajax call to load tesco order page ] **/
         $.ajax({
-        url: base_url + "/admin/tesco/order-management/reorder",
+        url: base_url + "/admin/tesco/order-management/orders",
         type: "Post",
         dataType: "json",
         data: {
@@ -341,7 +341,6 @@ function tescoOrders() {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
                         template_id = data.node.id;
-                        console.log(data.node)
                         /** [ add values into local storage ] */
                         localStorage.setItem("templates", data.node.id);
                         localStorage.setItem("zone", data.node.original.zone);
@@ -442,7 +441,7 @@ function tescoOrders() {
  * @return View
  */
 
-function createOrders(parsedObj = false) {
+function createOrders(parsedObj = false, type = false) {
     try {
         /* [ Get values from local storage ] */
         var template_id = localStorage.getItem("templates");
@@ -964,7 +963,11 @@ function createOrders(parsedObj = false) {
                         $('.delete-row').tooltip('show')
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
-                            renderParsedValues(parsedObj);
+                            if(type) {
+                                mapStoredValues(parsedObj);
+                            } else {
+                                renderParsedValues(parsedObj);
+                            }
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
@@ -1284,8 +1287,6 @@ function  uploadPurchaseOrder(formData, zone) {
                  cache: false,
                  contentType: false,
                  processData: false,
-                 tryCount : 0,
-                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },       
@@ -1313,11 +1314,11 @@ function  uploadPurchaseOrder(formData, zone) {
                     }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  // this.tryCount++;
+                  // if (this.tryCount <= this.retryLimit) {
+                  //     $.ajax(this);
+                  //     return;
+                  // }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -6343,8 +6344,7 @@ function viewOrder(pNumber) {
                     localStorage.setItem("templates", nodes);
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
-                    createOrders();
-                    console.log(data.result);
+                    createOrders(data.result,"viewOrder");
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
@@ -6363,6 +6363,71 @@ function viewOrder(pNumber) {
     } catch (e) {
         console.error("Error:" + e)
     }
+}
+
+/**
+ * Function to render the stored order details to the create order page.
+ * @param  {object} oDetails Order Details object 
+ */
+function mapStoredValues(oDetails) {
+    var artwork_num = oDetails.length;
+    var count = 0;
+    $.each(oDetails, function(ind,ele) {
+        if(count === 0) {
+            $('#tesco_po_number').val(ele.po_number);
+            $('#tesco_ce_style').val(ele.ce_style_ref);
+            $('#tesco_uk_style').val(ele.uk_style_ref);
+            $('#tesco_season_code').val(ele.season_code);
+            $('#tesco_description').val(ele.short_description);
+            $('#tesco_eqos').val(ele.eqos_site_code);
+            $('#tesco_manufacture_date').val(ele.manufacture_date);
+            $('#tesco_department').val(ele.tesco_department_id);
+            $('#tesco_brand').val(ele.tesco_brand_id);
+            $('#tesco_supplier').val(ele.tesco_supplier_id);
+            $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
+            $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
+
+            if(ele.template_type === 'single') {
+                $.each(ele.order_quantity, function(i, j) {
+                    var index = i + 1;
+                    var zone = ele.zone.toLowerCase();
+                    if(zone === 'ce') {
+                        $('#ce_single_orms_tpn_'+index).val(j.orms_tpn);
+                    } else {
+                        $('#uk_single_tpnd_'+index).val(j.tpnd);
+                    }
+                    
+                    $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    $('#'+zone+'_single_case_size_'+index).val(j.case_size);
+                    $('#'+zone+'_single_size_'+index).val(j.size);  
+                    if(ele.order_quantity.length !== (i+1)) {
+                        $('.add-row-btn').trigger('click');
+                    }
+                });  
+            } else if(ele.template_type === 'ratio') {
+                $.each(ele.order_quantity, function(i, j) {
+                    var index = i + 1;
+                    var zone = ele.zone.toLowerCase();
+                    $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    if(zone === 'ce') {
+                        $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd);
+                        $('#'+zone+'_ratio_cpc_'+index).val(j.cases_per_carton);
+                    } else {
+                        $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);
+                        $('#'+zone+'_ratio_upc_'+index).val(j.units_per_carton);
+                    }
+                    if(ele.order_quantity.length !== (i+1)) {
+                        $('.add-row-btn').trigger('click');
+                    }
+                }); 
+            }
+        }
+        $.each(ele.order_quantity, function(loop, qty) {
+            $('#'+ele.zone.toLowerCase()+'_'+ele.template_type+'_count_'+ele.TemplateName.replace(/ /g,"")+'_'+(loop+1)).val(qty.count);
+        });
+        count++;
+    });
+    $(".selectpicker").selectpicker('refresh');
 }
 /**
  * This Function is used to check ITF barcode is valid or not.
