@@ -720,13 +720,14 @@ function tescoStatusTable(data,path)
                 
                 if (key =="PO Number") 
                 {
-                	if (value[key]== "" || value[key]==null)
+                	var po_file     = value['po_file'];
+                    if (value[key]== "" || value[key]==null)
 	                {
-	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
+	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
 	                }
 	                else
 	                {
-                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
+                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
 	                }
                 }
                 else if (key == "OrderDate")
@@ -779,7 +780,7 @@ function tescoStatusTable(data,path)
                         $status_text=" - ";
                     }
                     
-                    tr += '<td align="center">'+$status_text+'</td>';
+                    tr += '<td align="center class="po_status">'+$status_text+'</td>';
                    
                 }
                 else if (key =="StyleNo")
@@ -940,7 +941,7 @@ function updateDeliveryDate(obj,tableID,tableName)
  * @param  {[type]} id  [description]
  * @return {[type]}     [description]
  */
-function tescoSetPO(obj,id,tableName)
+function tescoSetPO(obj,id,tableName,po_file)
 {
    $('.tesco-po').css('border-color', '');
    var po_number  = $(obj).closest('tr').find('.tesco-po').val();
@@ -968,7 +969,13 @@ function tescoSetPO(obj,id,tableName)
                $('#snackbar').css('background-color','#00b6ff');
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $(obj).closest('tr').find('.tesco-po').val(po_number);
-               tescoOrderStatus() 
+               
+               if ($(obj).closest('tr').find('.po_class').text() =="PO Pending" && po_file!="null")
+               {
+                 $(obj).closest('tr').find('.po_class').html("PO Uploaded")
+                 $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
+               }
+
                showSnackbar();
                if (po_number==""){
                  $(obj).closest('tr').find('.tesco-po').attr('disabled');
@@ -1008,23 +1015,60 @@ function tescoSetPO(obj,id,tableName)
  */
 function tescoPOUpload(obj,id,po_file,tableName)
 {
-    if (po_file!= "null")
-    {
-        $('#po_upload').addClass('hidden')
-        $('.upload-po').addClass('hidden')
-        $('#po_file').removeClass('hidden')
-    }
-    else
-    {
-        $('#po_upload').removeClass('hidden')
-        $('.upload-po').removeClass('hidden')
-        $('#po_file').addClass('hidden')
-    }
-    var po_link = base_url+po_file
-    $('#po_link').attr("href",po_link);
-    $('#rowID').val(id);
-    $('#tableName').val(tableName);
-    $('#po-file-upload').modal('show')
+     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/tesco/get-po-file",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            tableName:tableName,
+            id:id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        statusCode:
+        {
+            /** [Show response status based on HTTP status code] */
+            200: function(data)
+            {
+              po_file = data.po_file;
+
+                if (po_file== "null")
+                {
+                    $('#po_upload').addClass('hidden')
+                    $('.upload-po').addClass('hidden')
+                    $('#po_file').removeClass('hidden')
+                }
+                else
+                {
+                    $('#po_upload').removeClass('hidden')
+                    $('.upload-po').removeClass('hidden')
+                    $('#po_file').addClass('hidden')
+                }
+                var po_link = base_url+po_file
+                $('#po_link').attr("href",po_link);
+                $('#rowID').val(id);
+                $('#tableName').val(tableName);
+                $('#po-file-upload').modal('show')
+                         
+            },
+            400: function()
+            {
+               $('.snackbar_span').html('Something went wrong');
+               $('#snackbar').css('background-color','#F44336');
+               showSnackbar();
+            }
+        },
+        error: function (data){
+            console.log(data);
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+
 }
 
 $(".update-po-file").click(function () {
@@ -1132,15 +1176,15 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
                         if (data.data.bank_details.place_of_supply==1)
                         {
-                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize"> </p></div><hr /></div>'
+                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                         }
                         else if (data.data.bank_details.place_of_supply==2)
                         {
-                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize"> </p></div><hr /></div>'
+                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
                         }
                         else
                         {
-                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize"> </p></div><hr /></div>'
+                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
                         }
                         $('#item_details').html(tr)
                         if (pi_status=="true")
@@ -1179,6 +1223,8 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
         }
     })
 }
+
+
 /**
  * method to call the PI approval functionality
  * @param  {[type]} id         [description]

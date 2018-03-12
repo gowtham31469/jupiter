@@ -512,10 +512,12 @@
             this.on("success", function(file, response) {
                 $('.dz-remove').hide();
                 this.removeFile(file);
+                console.log(response.po_file)
+                var po_link = base_url+response.po_file
+                $('#po_link').attr("href",po_link);
                 $('#po-file-upload').modal('hide')
                 $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');
-                tescoOrderStatus()
                 showSnackbar();
             });
             this.on("error", function(file, response) {

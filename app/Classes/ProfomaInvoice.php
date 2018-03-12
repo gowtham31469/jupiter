@@ -171,6 +171,7 @@ class ProfomaInvoice
         $data['company_details']->pi_date = $today->toDateString();
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
+                                  ->where($table_name.'.is_order_count_empty',0)
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
