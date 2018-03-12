@@ -401,7 +401,8 @@ border: 0;
 {{-- Artwork buyer po-upload and delivery date upload modal --}}
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div id="order-exists-alert"></div>
+        <div class="modal-content po-modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>

@@ -927,8 +927,8 @@ function createOrders(parsedObj = false, oType = false) {
                       html += '</div>\
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
-                                     <span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span>\
-                                     <button class="btn btn-xs btn-success submit-btn" type="button"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
+                                     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
+                                     <button class="btn btn-xs btn-success save-btn" type="button"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -3083,11 +3083,53 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
+                       
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
                        {
@@ -3271,7 +3313,7 @@ function storeCERatioTCL1TCL2TSL1()
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
-                       
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
@@ -3283,8 +3325,8 @@ function storeCERatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** Disable submit button */
-                       $('.submit-btn').prop('disabled',true);
+                       /** remove submit button */
+                       $('.submit-btn').remove();
                        
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
@@ -3566,12 +3608,53 @@ function storeCERatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+
                        $('#combined_tab').hide();
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -3638,7 +3721,7 @@ function storeCERatioTHL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button  */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -3840,8 +3923,48 @@ function storeCESingleTCL4TSL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -4045,7 +4168,7 @@ function storeCESingleTCL4TSL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4337,8 +4460,48 @@ function storeCESingleTHL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
                              <div class="container-fluid">\
@@ -4404,7 +4567,7 @@ function storeCESingleTHL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4605,8 +4768,48 @@ function storeUKRatioTCL1TCL2TSL1()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -4805,7 +5008,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5088,8 +5291,48 @@ function storeUKRatioTHL1()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -5156,7 +5399,7 @@ function storeUKRatioTHL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5357,8 +5600,48 @@ function storeUKSingleTCL4TSL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -5562,7 +5845,7 @@ function storeUKSingleTCL4TSL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5850,11 +6133,52 @@ function storeUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       var order_date = data.ordered_date.date;
                        $('#combined_tab').hide();
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       var length = Object.keys(data.last_insertions).length;
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -5921,7 +6245,7 @@ function storeUKSingleTHL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);

@@ -651,6 +651,7 @@ class OrderManagementCntrl extends Controller
             $cases_per_carton = explode(',',$request['cases_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $already_exists   = [];
 
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
@@ -682,7 +683,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTCL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                       /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TCL 1');
                     }
                     else
                     {
@@ -741,7 +743,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTCL2Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TCL 2');
                     }
                     else
                     {
@@ -799,7 +802,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTSL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TSL 1');
                     }
                     else
                     {
@@ -860,7 +864,8 @@ class OrderManagementCntrl extends Controller
                   $is_exists = TescoTHL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                   if($is_exists)
                   {
-                    return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                    /** [ Create array of already exists artworks ] */
+                    array_push($already_exists,'THL 1');
                   }
                   else
                   {
@@ -903,8 +908,10 @@ class OrderManagementCntrl extends Controller
                  }
               }
             }
+
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
+            return response()->json(['error'=> true,'message' =>'Data already exists','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           
 
         } catch (\Exception $e)
         {
@@ -929,6 +936,7 @@ class OrderManagementCntrl extends Controller
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $already_exists   = [];
 
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
@@ -960,7 +968,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTCL4Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TCL 4');
                     }
                     else
                     {
@@ -1019,7 +1028,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTSL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TSL 3');
                     }
                     else
                     {
@@ -1081,7 +1091,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTHL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'THL 3');
                     }
                     else
                     {
@@ -1126,7 +1137,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
 
         } catch (\Exception $e)
         {
@@ -1150,6 +1161,7 @@ class OrderManagementCntrl extends Controller
             $units_per_carton = explode(',',$request['units_per_carton']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $already_exists   = [];
 
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
@@ -1182,7 +1194,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTCL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TCL 1');
                     }
                     else
                     {
@@ -1240,7 +1253,8 @@ class OrderManagementCntrl extends Controller
                     $is_exists = TescoTCL2Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                     if($is_exists)
                     {
-                      return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                      /** [ Create array of already exists artworks ] */
+                       array_push($already_exists,'TCL 2');
                     }
                     else
                     {
@@ -1298,7 +1312,8 @@ class OrderManagementCntrl extends Controller
                   $is_exists = TescoTSL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                   if($is_exists)
                   {
-                    return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                    /** [ Create array of already exists artworks ] */
+                    array_push($already_exists,'TSL 1');
                   }
                   else
                   {
@@ -1359,7 +1374,8 @@ class OrderManagementCntrl extends Controller
                   $is_exists = TescoTHL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                   if($is_exists)
                   {
-                    return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                    /** [ Create array of already exists artworks ] */
+                    array_push($already_exists,'THL 1');
                   }
                   else
                   {
@@ -1403,7 +1419,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
 
         } catch (\Exception $e)
         {
@@ -1428,6 +1444,8 @@ class OrderManagementCntrl extends Controller
             $size             = explode(',',$request['size']);
             $templates        = $request['templates'];
             $last_insertions  = [];
+            $already_exists   = [];
+
             $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
             $delivery_date_req= $customer_details->delivery_date_required;
             $pi_required      = $customer_details->pi_required;
@@ -1458,7 +1476,8 @@ class OrderManagementCntrl extends Controller
                       $is_exists = TescoTCL4Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                       if($is_exists)
                       {
-                        return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                        /** [ Create array of already exists artworks ] */
+                        array_push($already_exists,'TCL 4');
                       }
                       else
                       {
@@ -1517,7 +1536,8 @@ class OrderManagementCntrl extends Controller
                       $is_exists = TescoTSL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                       if($is_exists)
                       {
-                        return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                        /** [ Create array of already exists artworks ] */
+                        array_push($already_exists,'TSL 3');
                       }
                       else
                       {
@@ -1579,7 +1599,8 @@ class OrderManagementCntrl extends Controller
                   $is_exists = TescoTHL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->first();
                   if($is_exists)
                   {
-                    return response()->json(['error'=> false,'message' =>'Data already exists'],409);
+                    /** [ Create array of already exists artworks ] */
+                    array_push($already_exists,'THL 3');
                   }
                   else
                   {
@@ -1624,7 +1645,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
 
         } catch (\Exception $e)
         {
