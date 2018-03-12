@@ -401,7 +401,8 @@ border: 0;
 {{-- Artwork buyer po-upload and delivery date upload modal --}}
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div id="order-exists-alert"></div>
+        <div class="modal-content po-modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
@@ -460,17 +461,6 @@ border: 0;
 {{-- Artwork count missing for all artworks modal --}}
 <div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="alert alert-warning alert-dismissible" role="alert" id="order-exists-alert">
-          <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-          <p>Order already exists for following artworks,</p>
-            <ol>
-                <li>TCL 1</li>
-                <li>TCL 2</li>
-            </ol>
-        </div>
         <div class="modal-content">
             <div class="modal-body">
                 <h5>
