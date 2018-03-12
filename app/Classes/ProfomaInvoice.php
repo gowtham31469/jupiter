@@ -160,6 +160,7 @@ class ProfomaInvoice
                                           ->where($table_name.'.id',$id)
                                           ->select('company.*')
                                           ->first();
+                                         
         if ($data['company_details']->id == 1)
         {
           $data['company_details']->pi_number = "JGA00".$pi_id;

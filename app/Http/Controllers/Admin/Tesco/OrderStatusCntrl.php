@@ -124,6 +124,11 @@ class OrderStatusCntrl extends Controller
         return $result;
 	}
 
+    /**
+     * method to get the profoma invoice details of an artwork
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function getTescoPI(Request $request)
     {
         try
