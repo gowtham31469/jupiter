@@ -441,7 +441,7 @@ function tescoOrders() {
  * @return View
  */
 
-function createOrders(parsedObj = false, type = false) {
+function createOrders(parsedObj = false, oType = false) {
     try {
         /* [ Get values from local storage ] */
         var template_id = localStorage.getItem("templates");
@@ -964,7 +964,7 @@ function createOrders(parsedObj = false, type = false) {
                         $('.delete-row').tooltip('show')
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
-                            if(type) {
+                            if(oType) {
                                 mapStoredValues(parsedObj);
                             } else {
                                 renderParsedValues(parsedObj);
@@ -6345,7 +6345,7 @@ function viewOrder(pNumber) {
                     localStorage.setItem("templates", nodes);
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
-                    createOrders(data.result,"viewOrder");
+                    createOrders(data.result, "viewOrder");
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
