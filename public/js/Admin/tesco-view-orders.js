@@ -26,6 +26,7 @@ function viewOrder(pNumber) {
                     var node_ids = [];
                     var zone = [];
                     var type = [];
+                    var group = [];
                     var nodes;
                     var template_zone;
                     var template_type;
@@ -34,6 +35,7 @@ function viewOrder(pNumber) {
                             node_ids.push(object.template_id);
                             zone.push(object.zone);
                             type.push(object.template_type);
+                            group.push(object.TemplateName);
                         }
                     });
                     if(node_ids.length > 0) {
@@ -44,10 +46,12 @@ function viewOrder(pNumber) {
                     }
                     if(type.length > 0 && $.unique(type).length === 1) {
                         template_type = type[0];
-                    }                  
+                    }
+                    group = group.toString();                  
                     localStorage.setItem("templates", nodes);
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
+                    localStorage.setItem("template_group", group);
                     createOrders(data.result, "viewOrder");
                 },
                 400: function() {
@@ -78,6 +82,8 @@ function mapStoredValues(oDetails) {
     var artwork_num = oDetails.length;
     var count = 0;
     var artwork_status = '';
+    var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
+    $('.page-header h4 strong').text(header);
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -142,7 +148,7 @@ function mapStoredValues(oDetails) {
         $('.selectpicker').prop('disabled', true);
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
-        $('.delete-row, .add-row-btn, .submit-btn,h1 .save-btn').remove();
+        $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
     }
     $(".selectpicker").selectpicker('refresh');
 }
