@@ -460,6 +460,17 @@ border: 0;
 {{-- Artwork count missing for all artworks modal --}}
 <div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
+        <div class="alert alert-warning alert-dismissible" role="alert" id="order-exists-alert">
+          <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <p>Order already exists for following artworks,</p>
+            <ol>
+                <li>TCL 1</li>
+                <li>TCL 2</li>
+            </ol>
+        </div>
         <div class="modal-content">
             <div class="modal-body">
                 <h5>

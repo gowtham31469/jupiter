@@ -928,7 +928,7 @@ function createOrders(parsedObj = false) {
                       html += '</div>\
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
-                                     <span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span>\
+                                     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success submit-btn" type="button"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
@@ -3082,6 +3082,7 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                    console.log(data)
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
