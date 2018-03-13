@@ -33,9 +33,14 @@ function tescoOrders() {
             
                 var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
                 var uniqueNames = [];
-                for(i = 0; i< newObj.length; i++) {    
+                var artwork_collection = {};
+                for(i = 0; i< newObj.length; i++) {
                     if(uniqueNames.indexOf(newObj[i].po_number) === -1) {
-                            uniqueNames.push(newObj[i].po_number);        
+                        uniqueNames.push(newObj[i].po_number); 
+                        artwork_collection[newObj[i].po_number] = newObj[i].template_id;     
+                    } else {
+                        var artwork_group = artwork_collection[newObj[i].po_number];
+                        artwork_collection[newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
                     }   
                 }
                 var options="<option value=''>Search Purchase Number</option>";
