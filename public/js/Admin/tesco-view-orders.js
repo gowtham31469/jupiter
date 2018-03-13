@@ -2,9 +2,75 @@
 * Function for loading the template preview
 */
 function loadTemplatePreview() {
-    var po_num = $('#po_number').val();
-}
+    var template_id = $('#po_number').find(':selected').data('tempid');
+    var csrf_token  = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/tesco/template-management/template-view",
+        type: "Post",
+        dataType: "json",
+        data: {
+            template_id: template_id,
+            _token: csrf_token
+        },
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+            if (data.length > 0) {
+                $('.templateDiv').html('');
+                $.each(data, function (index, value) {
+                    if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
+                        $('.templateDiv').append('<div class="col-md-4">\
+                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
+                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
+                            <label>Template Name : </label>\
+                            <p>' + value[0].template_name + '</p>\
+                            <label>Reference Number : </label>\
+                            <p>' + value[0].ref_no + '</p>\
+                            <label>Company Name : </label>\
+                            <p>' + value[0].company_name + '</p>\
+                            </div>\
+                            </div>')
 
+                    } else {
+                        $('.templateDiv').append('<div class="col-md-4">\
+                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
+                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
+                            <label>Template Name : </label>\
+                            <p>' + value[0].template_name + '</p>\
+                            <label>Reference Number : </label>\
+                            <p>' + value[0].ref_no + '</p>\
+                            <label>Company Name : </label>\
+                            <p>' + value[0].company_name + '</p>\
+                            </div>\
+                            </div>')
+
+                    }
+                });
+            } else {
+                $('.templateDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
+
+                $('.descriptionDiv').html('<b>Template Not Found</b>');
+                $('.descriptionDiv').css('margin-top', '0px')
+                $('.templateDiv').css('margin-top', '140px')
+            }
+            $('.templateDiv').css('width', '100%')
+
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+}
 /**
  * AJAX method to fetch the order details.
  * @return {[type]} [description]

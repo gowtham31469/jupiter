@@ -45,7 +45,7 @@ function tescoOrders() {
                 }
                 var options="<option value=''>Search Purchase Number</option>";
                 for(i = 0; i< uniqueNames.length; i++){    
-                     options+="<option>"+uniqueNames[i]+"</option>";
+                     options+="<option data-tempid='"+artwork_collection[uniqueNames[i]]+"'>"+uniqueNames[i]+"</option>";
                 }
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
@@ -268,7 +268,18 @@ function tescoOrders() {
                     $('.template-error').html('')
                     if (data.instance.is_leaf(data.node)) {
                         var template_id = data.node.id;
-                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                        
+                    }
+                });
+
+                /** [ To get selected leaf node ] */
+                var template_id = 0;
+                var type;
+                var zone;
+                $('#jstree').on('activate_node.jstree', function (e, data) {
+                    if (data.instance.is_leaf(data.node) != '') 
+                    {
+                        template_id = data.node.id;
                         $.ajax({
                             url: base_url + "/admin/tesco/template-management/template-view",
                             type: "Post",
@@ -335,17 +346,6 @@ function tescoOrders() {
                                 $(".loader").hide();
                             }
                         })
-                    }
-                });
-
-                /** [ To get selected leaf node ] */
-                var template_id = 0;
-                var type;
-                var zone;
-                $('#jstree').on('activate_node.jstree', function (e, data) {
-                    if (data.instance.is_leaf(data.node) != '') 
-                    {
-                        template_id = data.node.id;
                         /** [ add values into local storage ] */
                         localStorage.setItem("templates", data.node.id);
                         localStorage.setItem("zone", data.node.original.zone);
