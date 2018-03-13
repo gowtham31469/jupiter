@@ -6783,6 +6783,8 @@ function saveCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
                     $('.save-btn').data('insert','false');
                     $.each(data.last_insertions, function (index, value) {
                         $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
@@ -6874,6 +6876,8 @@ function saveCERatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
                     $('.save-btn').data('insert','false');
                     $.each(data.last_insertions, function (index, value) {
                         $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
