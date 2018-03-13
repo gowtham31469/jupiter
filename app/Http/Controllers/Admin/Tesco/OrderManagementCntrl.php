@@ -27,10 +27,11 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
-use App\Classes\TescoOrders;
-use PDF;
 use App\Classes\TescoCombinedPOUpload;
 use App\Classes\TescoPOUploadTemplatesSwitch;
+use App\Classes\TescoOrders;
+use App\Classes\SaveTescoOrders;
+use PDF;
 use Carbon\Carbon;
 
 class OrderManagementCntrl extends Controller
@@ -909,7 +910,7 @@ class OrderManagementCntrl extends Controller
             }
 
             
-            return response()->json(['error'=> true,'message' =>'Data already exists','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
            
 
         } catch (\Exception $e)
@@ -2650,5 +2651,268 @@ class OrderManagementCntrl extends Controller
          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
       return $result;
+    }
+        /**
+     * Save CE ratio template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function saveCERatioOrders(Request $request)
+    {
+      try {
+              /** [ Creating new object for SaveTescoOrders() class ] */
+              $tesco_order_obj = new SaveTescoOrders();
+          
+              $orms_tpn         = explode(',',$request['orms_tpn']);
+              $itf_code         = explode(',',$request['itf_code']);
+              $cases_per_carton = explode(',',$request['cases_per_carton']);
+              $templates        = $request['templates'];
+              $last_insertions  = [];
+              $already_exists   = [];
+
+              foreach ($templates as $template) 
+              {
+                $template_id      = $template['id'];
+                if($template['template_name'] != "THL 1")
+                {
+                  $count_TCL1       = explode(',',$request['count_TCL1']);
+                  $count_TCL2       = explode(',',$request['count_TCL2']);
+                  $count_TSL1       = explode(',',$request['count_TSL1']);
+
+                  if($template['template_name'] == "TCL 1")
+                  {
+                      /** [ Invoking saveTCL1Order function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id);
+
+                       if($request['is_insert'] == 'true')
+                       {
+                         $tesco_order_id  = $tesco_order->id;
+                         $templates_inserted = array('TCL 1' => $tesco_order_id);
+                         $i = 0;
+                         foreach ($orms_tpn as $tpn) 
+                         {
+                           TescoTCL1OrdersQuantity::create([
+                                'tcl1_order_id'    => $tesco_order_id,
+                                'orms_tpn'         => $tpn,
+                                'itf_barcode'      => $itf_code[$i],
+                                'cases_per_carton' => $cases_per_carton[$i],
+                                'count'            => $count_TCL1[$i]
+                              ]);
+                           $i++;
+                         }
+                       }
+                       else
+                       {
+                         TescoTCL1OrdersQuantity::where('tcl1_order_id',$request['tcl1_last_id'])
+                            ->delete();
+                         $i = 0;
+                         foreach ($orms_tpn as $tpn) 
+                         {
+                           TescoTCL1OrdersQuantity::create([
+                                'tcl1_order_id'    => $request['tcl1_last_id'],
+                                'orms_tpn'         => $tpn,
+                                'itf_barcode'      => $itf_code[$i],
+                                'cases_per_carton' => $cases_per_carton[$i],
+                                'count'            => $count_TCL1[$i]
+                              ]);
+                           $i++;
+                         }
+                         $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
+                       }
+
+                       /** [ Return array of inserted id ] */
+                       $last_insertions = array_merge($last_insertions,$templates_inserted);  
+                     
+                  }
+                  else if($template['template_name'] == "TCL 2")
+                  {
+                       /** [ Invoking saveTCL2Order function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id);
+                       
+                       if($request['is_insert'] == 'true')
+                       {
+                           $tesco_order_id  = $tesco_order->id;
+                           $templates_inserted = array('TCL 2' => $tesco_order_id);
+                           $i = 0;
+                           foreach ($orms_tpn as $tpn) 
+                           {
+                             TescoTCL2OrdersQuantity::create([
+                                  'tcl2_order_id'    => $tesco_order_id,
+                                  'orms_tpn'         => $tpn,
+                                  'itf_barcode'      => $itf_code[$i],
+                                  'cases_per_carton' => $cases_per_carton[$i],
+                                  'count'            => $count_TCL2[$i]
+                                ]);
+                             $i++;
+                           }
+                       }
+                       else
+                       {
+                          TescoTCL2OrdersQuantity::where('tcl2_order_id',$request['tcl2_last_id'])
+                            ->delete();
+                           $i = 0;
+                           foreach ($orms_tpn as $tpn) 
+                           {
+                             TescoTCL2OrdersQuantity::create([
+                                  'tcl2_order_id'    => $request['tcl2_last_id'],
+                                  'orms_tpn'         => $tpn,
+                                  'itf_barcode'      => $itf_code[$i],
+                                  'cases_per_carton' => $cases_per_carton[$i],
+                                  'count'            => $count_TCL2[$i]
+                                ]);
+                             $i++;
+                           }
+                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
+                       }
+
+                       /** [ Return array of inserted id ] */
+                       $last_insertions = array_merge($last_insertions,$templates_inserted);
+                  }
+                  else
+                  {
+                      /** [ Invoking saveTSL1Order function using class instance ] */
+                       $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id);
+                       
+                       if($request['is_insert'] == 'true')
+                       {
+                           $tesco_order_id  = $tesco_order->id;
+                           $templates_inserted = array('TSL 1' => $tesco_order_id);
+                           $i = 0;
+                           foreach ($orms_tpn as $tpn) 
+                           {
+                             TescoTSL1OrdersQuantity::create([
+                                  'tsl1_order_id'    => $tesco_order_id,
+                                  'orms_tpn'         => $tpn,
+                                  'itf_barcode'      => $itf_code[$i],
+                                  'cases_per_carton' => $cases_per_carton[$i],
+                                  'count'            => $count_TSL1[$i]
+                                ]);
+                             $i++;
+                           }
+                       }
+                       else
+                       {
+                           TescoTSL1OrdersQuantity::where('tsl1_order_id',$request['tsl1_last_id'])
+                            ->delete();
+                           $i = 0;
+                           foreach ($orms_tpn as $tpn) 
+                           {
+                             TescoTSL1OrdersQuantity::create([
+                                  'tsl1_order_id'    => $request['tsl1_last_id'],
+                                  'orms_tpn'         => $tpn,
+                                  'itf_barcode'      => $itf_code[$i],
+                                  'cases_per_carton' => $cases_per_carton[$i],
+                                  'count'            => $count_TSL1[$i]
+                                ]);
+                             $i++;
+                           }
+                          $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
+                       }
+
+                       /** [ Return array of inserted id ] */
+                       $last_insertions = array_merge($last_insertions,$templates_inserted);
+                  }
+                }
+                else
+                {
+                   $count_THL1       = explode(',',$request['count_THL1']);
+
+                   /** [ Invoking createTHL1Order function using class instance ] */
+                   $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id);
+                   
+                   
+                   if($request['is_insert'] == 'true')
+                   {
+                     $tesco_order_id  = $tesco_order->id;
+                     $templates_inserted = array('THL 1' => $tesco_order_id);
+                     $i = 0;
+                     foreach ($orms_tpn as $tpn) 
+                     {
+                       TescoTHL1OrdersQuantity::create([
+                            'thl1_order_id'    => $tesco_order_id,
+                            'orms_tpn'         => $tpn,
+                            'itf_barcode'      => $itf_code[$i],
+                            'cases_per_carton' => $cases_per_carton[$i],
+                            'count'            => $count_THL1[$i]
+                          ]);
+                       $i++;
+                     }
+                   }
+                   else
+                   {
+                     TescoTHL1OrdersQuantity::where('thl1_order_id',$request['thl1_last_id'])
+                            ->delete();
+                     $i = 0;
+                     foreach ($orms_tpn as $tpn) 
+                     {
+                       TescoTHL1OrdersQuantity::create([
+                            'thl1_order_id'    => $request['thl1_last_id'],
+                            'orms_tpn'         => $tpn,
+                            'itf_barcode'      => $itf_code[$i],
+                            'cases_per_carton' => $cases_per_carton[$i],
+                            'count'            => $count_THL1[$i]
+                          ]);
+                       $i++;
+                     }
+                     $templates_inserted = array('THL 1' => $request['thl1_last_id']);
+                   }
+
+                   /** [ Return array of inserted id ] */
+                   $last_insertions = array_merge($last_insertions,$templates_inserted);
+                }
+              }
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions],200);
+        } catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+     * Save CE single template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function saveCESingleOrders(Request $request)
+    {
+        try {
+
+        } catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+     * Save UK ratio template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function saveUKRatioOrders(Request $request)
+    {
+        try {
+            
+
+        } catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    /**
+     * Save UK single template orders
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function saveUKSingleOrders(Request $request)
+    {
+        try {
+            
+
+        } catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
     }
 }

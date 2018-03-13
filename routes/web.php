@@ -234,6 +234,11 @@ Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManag
 Route::post('admin/tesco/upload-tesco-single-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadSingleOrdersPO');
 Route::post('admin/tesco/upload-tesco-combined-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadCombinedOrdersPO');
 
+Route::put('admin/tesco/save-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCERatioOrders');
+Route::put('admin/tesco/save-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCESingleOrders');
+
+Route::put('admin/tesco/save-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKRatioOrders');
+Route::put('admin/tesco/save-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKSingleOrders');
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
