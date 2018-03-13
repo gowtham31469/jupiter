@@ -172,7 +172,5 @@
         
         
     </script>
-    @yield('jqueryIncludes')
-
 </body>
 </html>

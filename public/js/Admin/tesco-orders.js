@@ -4,6 +4,7 @@
  * @return View
  */
 var globalOrderType = 0;
+var barcode_checks = 0;
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -29,70 +30,107 @@ function tescoOrders() {
             $(".loader").show();
         },
         success: function (data) {
-                $('.main-content').html('<div class="container-fluid">\
-                                            <div class="row">\
-                                                <div class="col-md-4">\
-                                                    <div class="card">\
-                                                        <h4>Create Order</h4>\
-                                                        <hr/>\
-                                                        <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-                                                            <div class="form-group has-feedback">\
-                                                                <label for="order_type" class="form_label">Select Order Type</label>\
-                                                                <select class="form-control order_type selectpicker" name="order_type" id="order_type" required="">\
-                                                                    <option value="">Select Order Type</option>\
-                                                                    <option value="1">PO Upload</option>\
-                                                                    <option value="2">Manual Entry</option>\
-                                                                </select>\
-                                                                <div class="help-block with-errors"></div>\
-                                                            </div>\
-                                                            <div class="form-group">\
-                                                                <label for="template" class="form_label">Select Template</label>\
-                                                                <input class="search-input form-control" placeholder="Search for Awesomeness">\
-                                                                <div class="template-error"></div>\
-                                                            </div>\
-                                                            <div id="jstree"></div>\
-                                                            <div class="form-group has-feedback">\
-                                                                <div class="po-upload hidden">\
-                                                                    <div class="form-group files" id="single_file ">\
-                                                                        <label>Upload UK PO</label>\
-                                                                        <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
-                                                                        <div class="help-block with-errors"></div>\
-                                                                    </div>\
-                                                                </div>\
-                                                                <div class="ce-po-upload hidden">\
-                                                                    <div class="form-group files" id="multiple_file1">\
-                                                                        <label>Upload CE-ORMS Sheet</label>\
-                                                                        <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
-                                                                        <div class="help-block with-errors"></div>\
-                                                                    </div>\
-                                                                    <div class="form-group files" id="multiple_file2">\
-                                                                        <label>Upload CE-RETEK Sheet</label>\
-                                                                        <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>\
-                                                                        <div class="help-block with-errors"></div>\
-                                                                    </div>\
-                                                                </div>\
-                                                            </div>\
-                                                            <button class="btn btn-primary btn-block ">Create Order</button>\
-                                                        </form>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="col-md-8 ">\
-                                                    <div class="card " style="height:calc(100vh - 100px); ">\
-                                                        <h4>Template Preview</h4>\
-                                                        <hr/>\
-                                                        <div class="row ">\
-                                                            <div class="loader ">\
-                                                                <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
-                                                            </div>\
-                                                            <div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div>\
-                                                            <div class="descriptionDiv "></div>\
-                                                        </div>\
-                                                    </div>\
-                                                </div>\
-                                            </div>\
-                                        </div>');
-
-                /** [ Search  functionality foe jstree nodes ] */
+            
+                var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+                var uniqueNames = [];
+                var artwork_collection = {};
+                for(i = 0; i< newObj.length; i++) {
+                    if(uniqueNames.indexOf(newObj[i].po_number) === -1) {
+                        uniqueNames.push(newObj[i].po_number); 
+                        artwork_collection[newObj[i].po_number] = newObj[i].template_id;     
+                    } else {
+                        var artwork_group = artwork_collection[newObj[i].po_number];
+                        artwork_collection[newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
+                    }   
+                }
+                var options="<option value=''>Search Purchase Number</option>";
+                for(i = 0; i< uniqueNames.length; i++){    
+                     options+="<option data-tempid='"+artwork_collection[uniqueNames[i]]+"'>"+uniqueNames[i]+"</option>";
+                }
+                $('.main-content').html(`<div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <h4>Create Order</h4>
+                                                        <hr/>
+                                                        <ul class="nav nav-tabs">
+                                                            <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#viewOrder" role="tab">View Order</a> </li>
+                                                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newOrder" role="tab">New Order</a> </li>
+                                                        </ul>
+                                                        <div class="tab-content ">
+                                                            <div class="tab-pane fade in active" id="viewOrder" role="tabpanel">
+                                                                <div class="pad-top">
+                                                                    <form id="view_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
+                                                                        <div class="form-group has-feedback">
+                                                                            <label for="order_type" class="form_label">Select PO Number</label>
+                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true" onchange=loadTemplatePreview()>`+options+`</select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <button class="btn btn-primary btn-block ">View Order</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane fade" id="newOrder" role="tabpanel">
+                                                                <div class="pad-top">
+                                                                    <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
+                                                                        <div class="form-group has-feedback">
+                                                                            <label for="order_type" class="form_label">Select Order Type</label>
+                                                                            <select class="form-control order_type selectpicker" name="order_type" id="order_type" required="">
+                                                                                <option value="">Select Order Type</option>
+                                                                                <option value="1">PO Upload</option>
+                                                                                <option value="2">Manual Entry</option>
+                                                                            </select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="template" class="form_label">Select Template</label>
+                                                                            <input class="search-input form-control" placeholder="Search for Awesomeness">
+                                                                            <div class="template-error"></div>
+                                                                        </div>
+                                                                        <div id="jstree"></div>
+                                                                        <div class="form-group has-feedback">
+                                                                            <div class="po-upload hidden">
+                                                                                <div class="form-group files" id="single_file ">
+                                                                                    <label>Upload UK PO</label>
+                                                                                    <input type="file" name="purchase_order" id="po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ce-po-upload hidden">
+                                                                                <div class="form-group files" id="multiple_file1">
+                                                                                    <label>Upload CE-ORMS Sheet</label>
+                                                                                    <input type="file" name="ce_orms_purchase_order" id="ce_orms" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                                <div class="form-group files" id="multiple_file2">
+                                                                                    <label>Upload CE-RETEK Sheet</label>
+                                                                                    <input type="file" name="ce_retek_purchase_order" id="ce_retek" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <button class="btn btn-primary btn-block ">Create Order</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 ">
+                                                    <div class="card " style="height:calc(100vh - 100px); ">
+                                                        <h4>Template Preview</h4>
+                                                        <hr/>
+                                                        <div class="row ">
+                                                            <div class="loader ">
+                                                                <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+                                                            </div>
+                                                            <div class="templateDiv "><img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png "></div>
+                                                            <div class="descriptionDiv "></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`);
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
                     $('#jstree').jstree('search', searchString);
@@ -230,7 +268,18 @@ function tescoOrders() {
                     $('.template-error').html('')
                     if (data.instance.is_leaf(data.node)) {
                         var template_id = data.node.id;
-                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                        
+                    }
+                });
+
+                /** [ To get selected leaf node ] */
+                var template_id = 0;
+                var type;
+                var zone;
+                $('#jstree').on('activate_node.jstree', function (e, data) {
+                    if (data.instance.is_leaf(data.node) != '') 
+                    {
+                        template_id = data.node.id;
                         $.ajax({
                             url: base_url + "/admin/tesco/template-management/template-view",
                             type: "Post",
@@ -297,18 +346,6 @@ function tescoOrders() {
                                 $(".loader").hide();
                             }
                         })
-                    }
-                });
-
-                /** [ To get selected leaf node ] */
-                var template_id = 0;
-                var type;
-                var zone;
-                $('#jstree').on('activate_node.jstree', function (e, data) {
-                    if (data.instance.is_leaf(data.node) != '') 
-                    {
-                        template_id = data.node.id;
-
                         /** [ add values into local storage ] */
                         localStorage.setItem("templates", data.node.id);
                         localStorage.setItem("zone", data.node.original.zone);
@@ -370,6 +407,18 @@ function tescoOrders() {
                             $('.template-error').html('<span style="color:#F44336">Please select a template in the list.</span>');
                         }
                     }
+                });
+
+                /** [ bootstrap validator for create tesco order form ] **/
+                $('#view_order_form').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+
+                    }
+                    else {
+                        e.preventDefault();
+                        var po_num = $('#po_number').val();
+                        viewOrder(po_num);  
+                    }
                 })
 
         },
@@ -397,7 +446,7 @@ function tescoOrders() {
  * @return View
  */
 
-function createOrders(parsedObj = false) {
+function createOrders(parsedObj = false, oType = false) {
     try {
         /* [ Get values from local storage ] */
         var template_id = localStorage.getItem("templates");
@@ -588,6 +637,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -660,6 +710,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -737,6 +788,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -807,6 +859,7 @@ function createOrders(parsedObj = false) {
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
                                                         <div class="help-block with-errors"></div>\
+                                                        <div class="barcode-error"></div>\
                                                     </div>\
                                                 </td>\
                                                 <td>\
@@ -839,47 +892,48 @@ function createOrders(parsedObj = false) {
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4>\
-                              <div class="row">';
-                                  $.each(data.templates, function(i, item){
-                                   html += '<div class="col-md-4">\
-                                            <div class="card add-card">\
-                                                <div class="card-title">\
-                                                    <p class="pull-right" onclick=openmodaltesco( "'+item.template_name.replace(' ', '')+'", "'+i+'") style="cursor:pointer">Click to view</p>\
-                                                    <h5><b>'+item.template_name+'</b></h5>\
-                                                </div>\
-                                                <div class="row">\
-                                                    <div class="col-md-8 col-md-offset-2">\
-                                                        <div class="tesco_artwork">\
-                                                            <object style="border: 2px #333 solid;height: 147px;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
-                                                            <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
-                                                                <div class="modal-dialog">\
-                                                                    <div class="modal-content">\
-                                                                        <div class="modal-header">\
-                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                                            <h4 class="modal-title">'+item.template_name+'</h4></div>\
-                                                                        <div class="modal-body">\
-                                                                            <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
-                                                                        </div>\
-                                                                        <div class="modal-footer">\
-                                                                            <button type="button" class="btn btn-primary" onclick=printDivTesco( "tesco_svg_modal'+i+'", "'+item.template_name.replace(' ', '')+'")>Print</button>\
-                                                                            <div id="svgdiv" style="position:absolute;visibility:hidden">\
-                                                                                <svg id="ean-13"></svg>\
-                                                                            </div>\
-                                                                        </div>\
-                                                                    </div>\
-                                                                </div>\
-                                                            </div>\
-                                                        </div>\
-                                                    </div>\
-                                                </div>\
-                                            </div>\
-                                        </div>';
-                                  });
+                      html += '<h4>Order Preview</h4><div class="row">';
+                      $.each(data.templates, function(i, item){
+                       html += '<div class="col-md-4">\
+                                  <div class="card add-card">\
+                                    <div class="card-title">\
+                                       <p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p>\
+                                       <h5><b>'+item.template_name+'</b></h5>\
+                                    </div>\
+                                    <div class="row">\
+                                       <div class="col-md-8 col-md-offset-2">\
+                                         <div class="tesco_artwork"> \
+                                           <object style="border: 2px #333 solid;" id="tesco_svg'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                           <div class="modal fade" id="'+item.template_name.replace(' ', '')+'" role="dialog">\
+                                             <div class="modal-dialog">\
+                                               <div class="modal-content">\
+                                                 <div class="modal-header">\
+                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                   <h4 class="modal-title">'+item.template_name+'</h4>\
+                                                 </div>\
+                                                 <div class="modal-body">\
+                                                   <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
+                                                 </div>\
+                                                 <div class="modal-footer">\
+                                                   <button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button>\
+                                                   <div id="svgdiv" style="position:absolute;visibility:hidden">\
+                                                     <svg id="ean-13"></svg>\
+                                                   </div>\
+                                                 </div>\
+                                               </div>\
+                                             </div>\
+                                          </div>\
+                                         </div>\
+                                      </div>\
+                                    </div>\
+                                  </div>\
+                                </div>';
+                      });
                       html += '</div>\
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
-                                     <span class="pagename pull-left hidden-xs">Please submit changes before closing page.</span>\
+                                     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
+                                     <button class="btn btn-xs btn-success save-btn" type="button"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -915,7 +969,11 @@ function createOrders(parsedObj = false) {
                         $('.delete-row').tooltip('show')
                         $('.delete-row').tooltip('toggle')
                         if(parsedObj) {
-                            renderParsedValues(parsedObj);
+                            if(oType) {
+                                mapStoredValues(parsedObj);
+                            } else {
+                                renderParsedValues(parsedObj);
+                            }
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
                  },
@@ -1235,8 +1293,6 @@ function  uploadPurchaseOrder(formData, zone) {
                  cache: false,
                  contentType: false,
                  processData: false,
-                 tryCount : 0,
-                 retryLimit : 2,
                  beforeSend: function () {
                      $(".loader").show();
                  },       
@@ -1264,11 +1320,11 @@ function  uploadPurchaseOrder(formData, zone) {
                     }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  // this.tryCount++;
+                  // if (this.tryCount <= this.retryLimit) {
+                  //     $.ajax(this);
+                  //     return;
+                  // }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -1523,10 +1579,25 @@ function dynamicSVGTemplatescard(id,item)
 				   /** [ Dynamically change svg barcode ] */
 				  if(ce_ratio_itf.length === 14)
 				  {
-					jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                    var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                    if(barcodecheck == "false")
+                    {
+                        barcode_checks++;
+                        $('.barcode-error').html('');
+                        /**  [ Show validation error message ] **/
+                        $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    }
+                    else
+                    {
+                        barcode_checks = 0;
+                        $('.barcode-error').html('');
+                        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                    }
 				  }
 				  else
 				  {
+                     barcode_checks = 0;
+                     $('.barcode-error').html('');
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1554,10 +1625,25 @@ function dynamicSVGTemplatescard(id,item)
 					  /** [ Dynamically change svg barcode ] */
 					  if(ce_single_ean.length === 13)
 					  {
-						jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                        var barcodecheck = checkjsbarcodeean(ce_single_ean);
+                        if(barcodecheck == "false")
+                        {
+                            barcode_checks++;
+                            $('.barcode-error').html('');
+                            /**  [ Show validation error message ] **/
+                            $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                        }
+                        else
+                        {
+                            barcode_checks = 0;
+                            $('.barcode-error').html('');
+                            jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                        }
 					  }
 					  else
 					  {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
@@ -1653,10 +1739,26 @@ function dynamicSVGTemplatescard(id,item)
 				  /** [ Dynamically change svg barcode ] */
 				  if(uk_ratio_itf.length === 14)
 				  {
-					jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                    var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
+                    if(barcodecheck == "false")
+                    {
+                        barcode_checks++;
+                        $('.barcode-error').html('');
+                        /**  [ Show validation error message ] **/
+                        $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    }
+                    else
+                    {
+                        barcode_checks = 0;
+                        $('.barcode-error').html('');
+                        jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                    }
+					
 				  }
 				  else
 				  {
+                     barcode_checks = 0;
+                     $('.barcode-error').html('');
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1681,10 +1783,25 @@ function dynamicSVGTemplatescard(id,item)
 					  /** [ Dynamically change svg barcode ] */
 					  if(uk_single_ean.length === 13)
 					  {
-						jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                        var barcodecheck = checkjsbarcodeean(uk_single_ean);
+                        if(barcodecheck == "false")
+                        {
+                            barcode_checks++;
+                            $('.barcode-error').html('');
+                            /**  [ Show validation error message ] **/
+                            $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                        }
+                        else
+                        {
+                            barcode_checks = 0;
+                            $('.barcode-error').html('');
+                            jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                        }
 					  }
 					  else
 					  {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
@@ -1917,12 +2034,25 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg barcode ] */
                        if(ce_ratio_itf !='' && ce_ratio_itf.length === 14)
                        {
-                        
-                        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                            }
                        }
                        else
                        { 
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
                          svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -1966,12 +2096,25 @@ function dynamicSVGTemplatescard(id,item)
 					   /** [ Dynamically change svg barcode ] */
 					   if(ce_single_ean !='' && ce_single_ean.length === 13)
 					   {
-
-						  jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeean(ce_single_ean);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                            }
 					   }
 					   else
 					   { 
+                          barcode_checks = 0;
+                          $('.barcode-error').html('');
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2071,12 +2214,25 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg barcode ] */
                        if(uk_ratio_itf !='' && uk_ratio_itf.length === 14)
                        {
-                        
-                           jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                            }
                        }
                        else
-                       { 
+                       {   
+                           barcode_checks = 0;
+                           $('.barcode-error').html('');
                            svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -2121,12 +2277,25 @@ function dynamicSVGTemplatescard(id,item)
 					   /** [ Dynamically change svg barcode ] */
 					   if(uk_single_ean !='' && uk_single_ean.length === 13)
 					   {
-
-						   jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
-
+                            var barcodecheck = checkjsbarcodeean(uk_single_ean);
+                            if(barcodecheck == "false")
+                            {
+                                barcode_checks++;
+                                $('.barcode-error').html('');
+                                /**  [ Show validation error message ] **/
+                                $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                            }
+                            else
+                            {
+                                barcode_checks = 0;
+                                $('.barcode-error').html('');
+                                jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                            }
 					   }
 					   else
 					   { 
+                           barcode_checks = 0;
+                           $('.barcode-error').html('');
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2240,35 +2409,39 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL1 = count_THL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE ratio THL1 template */
-                            storeCERatioTHL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg = '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCERatioTHL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE ratio THL1 template */
+                                storeCERatioTHL1();
+                            }
                         }
                     }
                 }
@@ -2327,36 +2500,41 @@ function setTescoOrder()
                     count_TCL2 = count_TCL2.join(',');
                     count_TSL1 = count_TSL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE ratio TCL1, TCL2, TSL1 template */
-                            storeCERatioTCL1TCL2TSL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCERatioTCL1TCL2TSL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE ratio TCL1, TCL2, TSL1 template */
+                                storeCERatioTCL1TCL2TSL1();
+                            }
                         }
                     }
+                    
                 }
                 
             }
@@ -2383,37 +2561,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL3 = count_THL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE single THL3 template */
-                            storeCESingleTHL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE single THL3 template */
+                                storeCESingleTHL3();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2457,37 +2640,42 @@ function setTescoOrder()
                     count_TSL3 = count_TSL3.join(',');
                     count_TCL4 = count_TCL4.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store CE single TCL4, TSL3 template */
-                             storeCESingleTCL4TSL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store CE single TCL4, TSL3 template */
+                                 storeCESingleTCL4TSL3();
+                            }
                         }
                     }
+                    
                 }
             }
         }
@@ -2516,37 +2704,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL1 = count_THL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK ratio THL1 template */
-                            storeUKRatioTHL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 1</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKRatioTHL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK ratio THL1 template */
+                                storeUKRatioTHL1();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2603,36 +2796,41 @@ function setTescoOrder()
                     count_TCL2 = count_TCL2.join(',');
                     count_TSL1 = count_TSL1.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK ratio TCL1, TCL2, TSL1 template */
-                            storeUKRatioTCL1TCL2TSL1();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKRatioTCL1TCL2TSL1(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK ratio TCL1, TCL2, TSL1 template */
+                                storeUKRatioTCL1TCL2TSL1();
+                            }
                         }
                     }
+                    
                 }
                 
             }
@@ -2660,37 +2858,42 @@ function setTescoOrder()
                     /** [ Join artworks count array using ' , '] */
                     count_THL3 = count_THL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                        $('#countMissingModal').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        })
-                        $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                        if (empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-                             $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
-                             $('#confirmOrder').modal('show');
+                            $('#countMissingModal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                            $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK single THL3 template */
-                            storeUKSingleTHL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+                            if (empty_count > 0)
+                            {
+                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK single THL3 template */
+                                storeUKSingleTHL3();
+                            }
                         }
                     }
+                    
                 }
                 else
                 {
@@ -2734,37 +2937,42 @@ function setTescoOrder()
                     count_TCL4 = count_TCL4.join(',');
                     count_TSL3 = count_TSL3.join(',');
 
-                    /** [ Check if count of empty quantity in the array is equal to array length ] */
-                    if(empty_count === l)
+                    /** [Check if valid barcode entered] */
+                    if(barcode_checks === 0)
                     {
-                        /** [ Backdrop for bootstrap modal ] */
-                         $('#countMissingModal').modal({
-                             backdrop: 'static',
-                             keyboard: false
-                         })
-                         $('#countMissingModal').modal('show');
-                    }
-                    else 
-                    {
-                        /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                        if(empty_count > 0)
+                        /** [ Check if count of empty quantity in the array is equal to array length ] */
+                        if(empty_count === l)
                         {
-                            $('#body_msg').html(msg);
                             /** [ Backdrop for bootstrap modal ] */
-                             $('#confirmOrder').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
+                             $('#countMissingModal').modal({
+                                 backdrop: 'static',
+                                 keyboard: false
                              })
-                             $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
-                             $('#confirmOrder').modal('show');
+                             $('#countMissingModal').modal('show');
                         }
-                        else
+                        else 
                         {
-                            /** Function to store UK single TCL4, TSL3 template */
-                             storeUKSingleTCL4TSL3();
+                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+
+                            if(empty_count > 0)
+                            {
+                                $('#body_msg').html(msg);
+                                /** [ Backdrop for bootstrap modal ] */
+                                 $('#confirmOrder').modal({
+                                      backdrop: 'static',
+                                      keyboard: false
+                                 })
+                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
+                                 $('#confirmOrder').modal('show');
+                            }
+                            else
+                            {
+                                /** Function to store UK single TCL4, TSL3 template */
+                                 storeUKSingleTCL4TSL3();
+                            }
                         }
                     }
+                    
                 }
             }
         }
@@ -2880,11 +3088,53 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
+                       
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
                        {
@@ -3068,7 +3318,7 @@ function storeCERatioTCL1TCL2TSL1()
                            /** Dynamic content for single po upload modal tab */
                            $('#single').html(html);
                        }
-                       
+
                        /** [ Backdrop for bootstrap modal ] */
                          $('#poUploadModal').modal({
                               backdrop: 'static',
@@ -3080,8 +3330,8 @@ function storeCERatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** Disable submit button */
-                       $('.submit-btn').prop('disabled',true);
+                       /** remove submit button */
+                       $('.submit-btn').remove();
                        
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
@@ -3277,6 +3527,13 @@ function storeCERatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -3356,12 +3613,53 @@ function storeCERatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
+
                        $('#combined_tab').hide();
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -3412,7 +3710,7 @@ function storeCERatioTHL1()
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
                                     <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
                                 </div>\
-                                </form>';
+                               </form>';
                        /** Dynamic content for single po upload modal tab */
                        $('#single').html(html);
 
@@ -3428,7 +3726,7 @@ function storeCERatioTHL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button  */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -3522,6 +3820,13 @@ function storeCERatioTHL1()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -3623,8 +3928,48 @@ function storeCESingleTCL4TSL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -3828,7 +4173,7 @@ function storeCESingleTCL4TSL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4021,6 +4366,13 @@ function storeCESingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4113,8 +4465,48 @@ function storeCESingleTHL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
                              <div class="container-fluid">\
@@ -4180,7 +4572,7 @@ function storeCESingleTHL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4273,6 +4665,13 @@ function storeCESingleTHL3()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -4374,8 +4773,48 @@ function storeUKRatioTCL1TCL2TSL1()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -4574,7 +5013,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4767,6 +5206,13 @@ function storeUKRatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4850,8 +5296,48 @@ function storeUKRatioTHL1()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -4918,7 +5404,7 @@ function storeUKRatioTHL1()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5011,6 +5497,13 @@ function storeUKRatioTHL1()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -5112,8 +5605,48 @@ function storeUKSingleTCL4TSL3()
                        var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
                        var length = Object.keys(data.last_insertions).length;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** [ Show single po upload tab ,if order placed for single artwork] */
                        if(length === 1)
@@ -5317,7 +5850,7 @@ function storeUKSingleTCL4TSL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5510,6 +6043,13 @@ function storeUKSingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
+                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -5598,11 +6138,52 @@ function storeUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       var order_date = data.ordered_date.date;
                        $('#combined_tab').hide();
+                       var order_date = data.ordered_date.date;
                        delivery_date_req = data.delivery_date_required;
-                       $('.snackbar_span').html('Your order has been placed successfully');
-                       showSnackbar();
+                       var length = Object.keys(data.last_insertions).length;
+                       
+                       /** Show snackbar if order placed **/
+                       if(length > 0)
+                       {
+                         $('.snackbar_span').html('Your order has been placed successfully');
+                         showSnackbar();
+                       }
+
+                       /** [ Show order already exists alertbox] */
+                       if(data.already_exists.length === 0)
+                       {
+                         $('#order-exists-alert').html('');
+                       }
+                       else
+                       {
+                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                                   <span aria-hidden="true">×</span>\
+                                                 </button>\
+                                                <p>Order already exists for following artworks,</p>\
+                                               <ol>';
+                            $.each(data.already_exists, function (index, value) { 
+                                html_content += '<li>'+value+'</li>';
+                             });   
+                            html_content += '</ol>\
+                                            </div>';
+
+                         $('#order-exists-alert').html(html_content);
+
+                         /** [ Show only alertbox if data already exits ] */
+                         if(length === 0)
+                         {
+                            $('.po-modal-content').remove();
+                            $('.close-btn').attr('data-dismiss','modal')
+                         }
+                         else
+                         {
+                            $('.snackbar_span').html('Your order has been placed successfully');
+                            showSnackbar();
+                         }
+                       }
 
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
@@ -5669,7 +6250,7 @@ function storeUKSingleTHL3()
                        $('#upload_single_po_form').validator('update');
 
                        /** Disable submit order button */
-                       $('.submit-btn').prop('disabled',true);
+                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5761,6 +6342,13 @@ function storeUKSingleTHL3()
                   if (this.tryCount <= this.retryLimit) {
                       $.ajax(this);
                       return;
+                  }
+                  /** If data already exists */
+                  if(errorXHR.status === 409)
+                  {
+                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
+                    $('#snackbar').css('background-color','#F44336');
+                    showSnackbar();
                   }
                  },
                  complete: function () {
@@ -6034,4 +6622,60 @@ try{
   } catch (e) {
    console.log("Error:"+e)
  }
+}
+
+/**
+ * This Function is used to check ITF barcode is valid or not.
+ * 
+ * @return boolean
+ */
+
+function checkjsbarcodeitf(code) {
+    var return_value="";
+    JsBarcode("#ean-13", code, {
+        format: "ITF14",
+        width: 2.50,
+        height: 100,
+        fontSize: 30,
+        flat:true,
+        valid:function(valid){
+            if(valid == false)
+            {
+                return_value="false";
+            }
+            else
+            {
+                return_value="true";
+            }
+        }
+    });
+    return return_value;
+}
+
+/**
+ * This Function is used to check EAN barcode is valid or not.
+ * 
+ * @return boolean
+ */
+
+function checkjsbarcodeean(code) {
+    var return_value="";
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 3.45,
+        height: 125,
+        fontSize: 35,
+        flat:true,
+        valid:function(valid){
+            if(valid == false)
+            {
+                return_value="false";
+            }
+            else
+            {
+                return_value="true";
+            }
+        }
+    });
+    return return_value;
 }
