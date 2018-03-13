@@ -78,7 +78,6 @@ function viewOrder(pNumber) {
  * @param  {object} oDetails Order Details object 
  */
 function mapStoredValues(oDetails) {
-    console.log(oDetails);
     var artwork_num = oDetails.length;
     var count = 0;
     var artwork_status = '';
