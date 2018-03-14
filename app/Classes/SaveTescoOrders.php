@@ -8,19 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
 use App\TescoTCL1Orders;
-use App\TescoTCL1OrdersQuantity;
 use App\TescoTCL2Orders;
-use App\TescoTCL2OrdersQuantity;
 use App\TescoTCL4Orders;
-use App\TescoTCL4OrdersQuantity;
 use App\TescoTHL1Orders;
-use App\TescoTHL1OrdersQuantity;
 use App\TescoTHL3Orders;
-use App\TescoTHL3OrdersQuantity;
 use App\TescoTSL1Orders;
-use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
 /**
    * Class to save the tesco template orders
    * @author [Praveen] <[praveen@wizroots.com]>
@@ -35,6 +28,7 @@ class SaveTescoOrders
 	public function saveTCL1Order($request,$template_id)
 	{
 		try {
+           /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
              $result = TescoTCL1Orders::create([
@@ -106,6 +100,7 @@ class SaveTescoOrders
   public function saveTCL2Order($request,$template_id)
   {
     try {
+           /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
               $result = TescoTCL2Orders::create([
@@ -176,6 +171,7 @@ class SaveTescoOrders
   public function saveTSL1Order($request,$template_id)
   {
     try {
+           /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
               $result = TescoTSL1Orders::create([
@@ -246,6 +242,7 @@ class SaveTescoOrders
   public function saveTHL1Order($request,$template_id)
   {
     try {
+           /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
             $result = TescoTHL1Orders::create([
@@ -316,6 +313,7 @@ class SaveTescoOrders
   public function saveTCL4Order($request,$template_id)
   {
     try {
+           /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
               $result = TescoTCL4Orders::create([
@@ -386,6 +384,7 @@ class SaveTescoOrders
   public function saveTSL3Order($request,$template_id)
   {
     try {
+            /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
             {
               $result = TescoTSL3Orders::create([
@@ -456,10 +455,11 @@ class SaveTescoOrders
   public function saveTHL3Order($request,$template_id)
   {
     try {
+            /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
             {
-              $result = TescoTHL3Orders::create([
-                          'order_id'             => $order_id,
+              return $result = TescoTHL3Orders::create([
+                          'order_id'             => "",
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
                           'po_number'            => $request['po_number'],
@@ -487,7 +487,7 @@ class SaveTescoOrders
             {
               $result = TescoTHL3Orders::where('id',$request['thl3_last_id'])
                           ->update([
-                          'order_id'             => $order_id,
+                          'order_id'             => "",
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
                           'po_number'            => $request['po_number'],
