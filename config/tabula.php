@@ -18,7 +18,7 @@ return [
     |
     |
     */
-   'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => '/xampp/htdocs/JGA/tabula-1.0.1-jar-with-dependencies.jar',
 
    /*
     |--------------------------------------------------------------------------
