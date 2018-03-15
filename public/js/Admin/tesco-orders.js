@@ -1,10 +1,59 @@
 /**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt) {
+    try {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**  
+  * Validation for numeric values with dot
+  * @param   evt 
+  * @return {Boolean} 
+  * @author <praveen>    
+  */
+ function isNumberKey(evt){
+  try{
+       var charCode = (evt.which) ? evt.which : event.keyCode
+
+       if (charCode == 46)
+       {
+           var inputValue = $("#inputfield").val()
+           if (inputValue.indexOf('.') < 1)
+           {
+               return true;
+           }
+           return false;
+       }
+       /** [ Checking key stroke values for numeric values ] */
+       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+       {
+           return false;
+       }
+       return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  
+/**
  * This Function is used to show tesco orders page and template selection.
  * @author Praveen
  * @return View
  */
 var globalOrderType = 0;
 var barcode_checks = 0;
+
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -6809,10 +6858,12 @@ function saveCERatioTCL1TCL2TSL1()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6906,10 +6957,12 @@ function saveCERatioTHL1()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7022,10 +7075,12 @@ function saveCESingleTCL4TSL3()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7128,10 +7183,12 @@ function saveCESingleTHL3()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7246,10 +7303,12 @@ function saveUKRatioTCL1TCL2TSL1()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7343,10 +7402,12 @@ function saveUKRatioTHL1()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7459,10 +7520,12 @@ function saveUKSingleTCL4TSL3()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7565,10 +7628,12 @@ function saveUKSingleTHL3()
 
                     $('.save-btn').data('insert','false');
 
+                    var div_html='';
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
