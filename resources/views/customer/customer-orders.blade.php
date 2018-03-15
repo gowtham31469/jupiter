@@ -145,17 +145,100 @@
         </div>
     </div>
 </div>
+{{-- Artwork buyer po-upload and delivery date upload modal --}}
+<div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div id="order-exists-alert"></div>
+        <div class="modal-content po-modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable">{{-- Only required for left/right tabs --}}
+                    <ul class="nav nav-tabs">
+                        <li class="active" id='single_tab'>
+                            <a href="#single" data-toggle="tab">Single PO Upload</a>
+                        </li>
+                        <li id='combined_tab'>
+                            <a href="#combined" data-toggle="tab">Combined PO Upload</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="single"></div>
+                        <div class="tab-pane" id="combined"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Confirm artwork order modal --}}
+<div class="modal fade" id="confirmOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm Order</h4>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Artwork count missing for following artworks:</h4>
+                                <ol id="body_msg" style="font-weight: bolder;">
+                                    
+                                </ol>
+                                <h4>Do you want to place the order ?</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
+               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Artwork count missing for all artworks modal --}}
+<div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity(count) and count must be greater than 0.</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection @else
 <script type="text/javascript">
-    window.location = "{{ url('/admin') }}";
+    window.location = "{{ url('/customer') }}";
 </script>
 @endif @section('jqueryIncludes')      
-<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script>
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
-         localStorage.removeItem("special_tag");
-         localStorage.removeItem("main_label");
+        localStorage.removeItem("special_tag");
+        localStorage.removeItem("main_label");
         localStorage.removeItem("wash_label"); 
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
@@ -165,12 +248,13 @@
         })
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
-         if (localStorage.getItem("buyer") === null) {
-                
-         }
-        else
-        {
-             orders();
+         /** [ Show create order page based on buyer selection ] */
+        if (localStorage.getItem("buyer") === null) {
+
+        } else if (localStorage.getItem("buyer") === 'orchestra') {
+            orders();
+        } else {
+            tescoOrders();
         }
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
@@ -182,48 +266,18 @@
                 localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: base_url + "/admin/order-management/order_sub_modules",
-                    type: "Post",
-                    dataType: "json",
-                    data: {
-                        _token: csrf_token,
-                        buyer: $(this).find("option:selected").text().toLowerCase()
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(data) {
-                      
-                       orders();                    
-                    },
-                    error: function(data) {
-
-                    },
-                    complete: function() {
-                        $(".loader").hide();
-                        $(".loader").css('margin-top', '0%');
-                    }
-                })
+                var buyer = $(this).find("option:selected").text().toLowerCase();
+                /**  [ Show orders page based on buyer selection ] **/
+                if (buyer === 'orchestra') {
+                    orders();
+                } else {
+                    tescoOrders();
+                } 
             } else {
                 localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
                 location.reload()
             }
-        });
-        $(".order_type").change(function(){
-            var selectedType = $(".order_type option:selected").val();
-            if (selectedType === '1') 
-            {
-                $("#single_file").removeClass("hidden");
-                $("#multiple_file").removeClass("hidden");
-            }
-            else
-            {
-                $("#single_file").addClass("hidden");
-                $("#multiple_file").addClass("hidden");
-            }
-            
         });
     });
 </script>

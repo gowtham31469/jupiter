@@ -3186,7 +3186,7 @@ class OrderManagementCntrl extends Controller
       }
       return $result;
     }
-        /**
+   /**
      * Save CE ratio template orders
      * @param \Illuminate\Http\Request
      * @author <Praveen>
