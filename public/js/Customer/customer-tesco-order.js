@@ -6860,17 +6860,41 @@ function saveCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6959,17 +6983,41 @@ function saveCERatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7077,17 +7125,41 @@ function saveCESingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7185,17 +7257,41 @@ function saveCESingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7305,17 +7401,41 @@ function saveUKRatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7404,17 +7524,41 @@ function saveUKRatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7522,17 +7666,41 @@ function saveUKSingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7630,17 +7798,41 @@ function saveUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    $('.snackbar_span').html('Saved Successfully');
-                    showSnackbar();
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      $('.po-modal-content').remove();
+                      $('.close-btn').attr('data-dismiss','modal')
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
 
-                    $('.save-btn').data('insert','false');
+                     $('#order-exists-alert').html(html_content);
+                     $('#poUploadModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
 
-                    var div_html='';
-                    /** [ store last updated id as hidden input , for updating] */
-                    $.each(data.last_insertions, function (index, value) {
-                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                    });
-                    $('.invisible-div').html(div_html);
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
