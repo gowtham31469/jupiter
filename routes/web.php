@@ -124,7 +124,24 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
 	//TESCO
-	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderController@tescoOrderStatus');
+	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
+
+	//TESCO ORDER STATUS
+	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderController@index');
+	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderController@index');
+	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderController@setPONumber');
+	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderController@getTescoPI');
+	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderController@approveTescoPI');
+	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderController@rejectTescoPI');
+	Route::post('customer/tesco/edit-artwork', 'Customer\Tesco\OrderController@editArtwork');
+	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderController@getArtwork');
+	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderController@updateArtworkPO');
+	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderController@copyArtworkPO');
+	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderController@getPOFile');
+	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderController@updateDeliveryDate');
+	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderController@setTescoOrderStatus');
+	Route::post('customer/tesco/edit-check-exist-po', 'Customer\Tesco\OrderController@editCheckExistPo');
+	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderController@setCustomerPOFile');
 });
 
 
