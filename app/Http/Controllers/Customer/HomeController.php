@@ -61,7 +61,10 @@ class HomeController extends Controller
                           ->where('customer_buyers.customer_id',$customer_id)
                           ->get();
             $buyer_count = count($buyers);
-            return view('customer/customer-order-status')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
+            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
+            $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
+            return view('customer/customer-order-status')->with(['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'buyer_count' => $buyer_count]);
         } catch (\Exception $e)
           {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

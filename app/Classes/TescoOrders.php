@@ -8,19 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
 use App\TescoTCL1Orders;
-use App\TescoTCL1OrdersQuantity;
 use App\TescoTCL2Orders;
-use App\TescoTCL2OrdersQuantity;
 use App\TescoTCL4Orders;
-use App\TescoTCL4OrdersQuantity;
 use App\TescoTHL1Orders;
-use App\TescoTHL1OrdersQuantity;
 use App\TescoTHL3Orders;
-use App\TescoTHL3OrdersQuantity;
 use App\TescoTSL1Orders;
-use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
 /**
    * Class to store the tesco template orders
    * @author [Praveen] <[praveen@wizroots.com]>
@@ -60,7 +53,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTCL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -84,6 +80,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTCL1Orders::where('id',$request['tcl1_last_id'])
+                        ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -123,7 +148,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL2Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTCL2Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -147,6 +175,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTCL2Orders::where('id',$request['tcl2_last_id'])
+                        ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -186,7 +243,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTSL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTSL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -210,6 +270,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTSL1Orders::where('id',$request['tsl1_last_id'])
+                       ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -249,7 +338,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTHL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTHL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -273,6 +365,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTHL1Orders::where('id',$request['thl1_last_id'])
+                        ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -312,7 +433,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL4Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTCL4Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -336,6 +460,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTCL4Orders::where('id',$request['tcl4_last_id'])
+                          ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -375,7 +528,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTSL3Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTSL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -399,6 +555,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTSL3Orders::where('id',$request['tsl3_last_id'])
+                          ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {
@@ -438,7 +623,10 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
             
-            $result = TescoTHL3Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              $result = TescoTHL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -462,6 +650,35 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+            }
+            else
+            {
+              $result = TescoTHL3Orders::where('id',$request['thl3_last_id'])
+                          ->update([
+                          'order_id'             => $order_id,
+                          'zone'                 => $request['zone'],
+                          'template_type'        => $request['type'],
+                          'po_number'            => $request['po_number'],
+                          'uk_style_ref'         => $request['uk_style'],
+                          'ce_style_ref'         => $request['ce_style'],
+                          'season_code'          => $request['season_code'],
+                          'short_description'    => $request['description'],
+                          'eqos_site_code'       => $request['eqos'],
+                          'manufacture_date'     => $request['manufacture_date'],
+                          'tesco_department_id'  => $request['department'],
+                          'tesco_brand_id'       => $request['brand'],
+                          'tesco_supplier_id'    => $request['supplier'],
+                          'rfid_compliant'       => $request['rfid'],
+                          'tag_at_source'        => $request['tag_at_source'],
+                          'order_status'         => "Order Placed",
+                          'artwork_status'       => "Order Placed",
+                          'print_status'         => "Order Placed",
+                          'template_id'          => $template_id,
+                          'pi_status'            => $pi_status,
+                          'po_status'            => "PO Pending",
+                          'is_order_count_empty' => $is_order_count_empty
+                        ]);
+            }
             
         } catch (\Exception $e)
         {

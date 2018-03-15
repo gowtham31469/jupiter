@@ -147,8 +147,10 @@ function mapStoredValues(oDetails) {
     var artwork_num = oDetails.length;
     var count = 0;
     var artwork_status = '';
+    var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
+    $('.save-btn').data('insert','false');
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -205,8 +207,18 @@ function mapStoredValues(oDetails) {
         });
         count++;
         artwork_status = ele.artwork_status;
+        last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
+
     });
     if(artwork_status === 'Saved') {
+        var div_html='';
+        /** [ store last updated id as hidden input , for updating] */
+        for (var k in last_insertions){
+            if (last_insertions.hasOwnProperty(k)) {
+                 div_html += '<input id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
+            }
+        }
+        $('.invisible-div').html(div_html);
 
     } else {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
