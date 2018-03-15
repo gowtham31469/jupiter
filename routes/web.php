@@ -53,8 +53,6 @@ Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateContro
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
-
-Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
@@ -127,21 +125,39 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
 
 	//TESCO ORDER STATUS
-	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderController@index');
-	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderController@index');
-	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderController@setPONumber');
-	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderController@getTescoPI');
-	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderController@approveTescoPI');
-	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderController@rejectTescoPI');
-	Route::post('customer/tesco/edit-artwork', 'Customer\Tesco\OrderController@editArtwork');
-	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderController@getArtwork');
-	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderController@updateArtworkPO');
-	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderController@copyArtworkPO');
-	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderController@getPOFile');
-	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderController@updateDeliveryDate');
-	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderController@setTescoOrderStatus');
-	Route::post('customer/tesco/edit-check-exist-po', 'Customer\Tesco\OrderController@editCheckExistPo');
-	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderController@setCustomerPOFile');
+	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
+	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
+	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
+	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
+	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
+	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
+	Route::post('customer/tesco/edit-artwork', 'Customer\Tesco\OrderStatusController@editArtwork');
+	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
+	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
+	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
+	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
+	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
+	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
+	Route::post('customer/tesco/edit-check-exist-po', 'Customer\Tesco\OrderStatusController@editCheckExistPo');
+	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
+	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
+	Route::get('customer/tesco/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
+	Route::post('customer/tesco/template-view', 'Customer\Tesco\OrderController@templateView');
+	Route::post('customer/tesco/po-upload', 'Customer\Tesco\OrderController@createStickerOrders');
+    Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\OrderController@getTescoTSLSizechart');
+    Route::post('customer/tesco/set-ce-ratio-template-orders', 'Customer\Tesco\OrderController@setCERatioOrders');
+	Route::post('customer/tesco/set-ce-single-template-orders', 'Customer\Tesco\OrderController@setCESingleOrders');
+
+	Route::post('customer/tesco/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
+	Route::post('customer/tesco/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
+	Route::post('customer/tesco/upload-tesco-single-po-file', 'Customer\Tesco\OrderController@uploadSingleOrdersPO');
+	Route::post('customer/tesco/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
+
+	Route::put('customer/tesco/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
+	Route::put('customer/tesco/save-ce-single-template-orders', 'Customer\Tesco\OrderController@saveCESingleOrders');
+
+	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
+	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 });
 
 
@@ -233,6 +249,7 @@ Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
+Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');

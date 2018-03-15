@@ -1,10 +1,59 @@
 /**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt) {
+    try {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**  
+  * Validation for numeric values with dot
+  * @param   evt 
+  * @return {Boolean} 
+  * @author <praveen>    
+  */
+ function isNumberKey(evt){
+  try{
+       var charCode = (evt.which) ? evt.which : event.keyCode
+
+       if (charCode == 46)
+       {
+           var inputValue = $("#inputfield").val()
+           if (inputValue.indexOf('.') < 1)
+           {
+               return true;
+           }
+           return false;
+       }
+       /** [ Checking key stroke values for numeric values ] */
+       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+       {
+           return false;
+       }
+       return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+  
+/**
  * This Function is used to show tesco orders page and template selection.
  * @author Praveen
  * @return View
  */
 var globalOrderType = 0;
 var barcode_checks = 0;
+
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -892,7 +941,7 @@ function createOrders(parsedObj = false, oType = false) {
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4><div class="row">';
+                      html += '<div class="invisible-div"></div><h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
                        html += '<div class="col-md-4">\
                                   <div class="card add-card">\
@@ -3019,6 +3068,10 @@ function storeCERatioTCL1TCL2TSL1()
         var count_TCL1        = [];
         var count_TCL2        = [];
         var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
 
         /** [ Create array of ce ratio orms tpn ] */
         $('.ce_ratio_orms_tpn').each(function(i, item)
@@ -3072,7 +3125,7 @@ function storeCERatioTCL1TCL2TSL1()
                  url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -3554,6 +3607,8 @@ function storeCERatioTHL1()
         var itf_code          = [];
         var cases_per_carton  = [];
         var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
 
         /** [ Create array of ce ratio orms tpn ] */
         $('.ce_ratio_orms_tpn').each(function(i, item)
@@ -3591,7 +3646,7 @@ function storeCERatioTHL1()
                  url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data,thl1_last_id:thl1_last_id,is_insert:is_insert
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -3844,6 +3899,9 @@ function storeCESingleTCL4TSL3()
         var size              = [];
         var count_TCL4        = [];
         var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
 
         /** [ Create array of ce single orms tpn ] */
         $('.ce_single_orms_tpn').each(function(i, item)
@@ -3897,7 +3955,7 @@ function storeCESingleTCL4TSL3()
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4382,6 +4440,8 @@ function storeCESingleTHL3()
         var case_size         = [];
         var size              = [];
         var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
 
         /** [ Create array of ce single orms tpn ] */
         $('.ce_single_orms_tpn').each(function(i, item)
@@ -4427,7 +4487,7 @@ function storeCESingleTHL3()
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4677,6 +4737,11 @@ function storeUKRatioTCL1TCL2TSL1()
         var count_TCL1        = [];
         var count_TCL2        = [];
         var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+
 
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
@@ -4730,7 +4795,7 @@ function storeUKRatioTCL1TCL2TSL1()
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5209,6 +5274,8 @@ function storeUKRatioTHL1()
         var itf_code          = [];
         var units_per_carton  = [];
         var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
 
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
@@ -5246,7 +5313,7 @@ function storeUKRatioTHL1()
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5497,6 +5564,9 @@ function storeUKSingleTCL4TSL3()
         var size              = [];
         var count_TCL4        = [];
         var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
 
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
@@ -5550,7 +5620,7 @@ function storeUKSingleTCL4TSL3()
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -6035,6 +6105,8 @@ function storeUKSingleTHL3()
         var case_size         = [];
         var size              = [];
         var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
 
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
@@ -6080,7 +6152,7 @@ function storeUKSingleTHL3()
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -6497,7 +6569,6 @@ try{
                     $('.snackbar_span').html('PO File upload successfully');
                     showSnackbar();
                     $('#poUploadModal').modal('hide');
-                    location.reload();    
                 },
                 400: function() {
                     $('.snackbar_span').html("Something went wrong !. Try again");
@@ -6545,8 +6616,7 @@ try{
                 200: function(data) {
                     $('.snackbar_span').html('PO File upload successfully');
                     showSnackbar();
-                    $('#poUploadModal').modal('hide');
-                    location.reload();    
+                    $('#poUploadModal').modal('hide');  
                 },
                 400: function() {
                     $('.snackbar_span').html("Something went wrong !. Try again");
@@ -6785,10 +6855,15 @@ function saveCERatioTCL1TCL2TSL1()
                  success: function (data) {
                     $('.snackbar_span').html('Saved Successfully');
                     showSnackbar();
+
                     $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6814,6 +6889,7 @@ function saveCERatioTCL1TCL2TSL1()
         console.error("Error:"+e)
     }
 }
+
 /**
  * [saveCERatioTHL1 for storing tesco CE ratio THL1 Templates manual orders]
  * @author <praveen>
@@ -6878,10 +6954,15 @@ function saveCERatioTHL1()
                  success: function (data) {
                     $('.snackbar_span').html('Saved Successfully');
                     showSnackbar();
+
                     $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
                     });
+                    $('.invisible-div').html(div_html);
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6905,5 +6986,676 @@ function saveCERatioTHL1()
     } catch(e) {
         /** [error statements] */
         console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCESingleTCL4TSL3 for storing tesco CE single TCL4 AND TSL3 Templates manual orders]
+ * @author <praveen>
+ */
+function saveCESingleTCL4TSL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_TCL4        = [];
+        var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+
+        /** [ Create array of ce single orms tpn ] */
+        $('.ce_single_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce single ean barcode ] */
+        $('.ce_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of ce single case size ] */
+        $('.ce_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of ce single tcl1 count ] */
+        $('.ce_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of ce single tcl4 count ] */
+        $('.count_TCL4').each(function(i, item)
+        {
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL4 = count_TCL4.join(',');
+
+        /** [ Create array of ce single tsl3 count ] */
+        $('.count_TSL3').each(function(i, item)
+        {
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL3 = count_TSL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCESingleTHL3 for storing tesco CE single THL3 Template manual orders]
+ * @author <praveen>
+ */
+function saveCESingleTHL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
+
+        /** [ Create array of ce single orms tpn ] */
+        $('.ce_single_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce single ean barcode ] */
+        $('.ce_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of ce single case size ] */
+        $('.ce_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of ce single tcl1 count ] */
+        $('.ce_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of ce single thl3 count ] */
+        $('.count_THL3').each(function(i, item)
+        {
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL3 = count_THL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKRatioTCL1TCL2TSL1 for storing tesco UK ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKRatioTCL1TCL2TSL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd              = [];
+        var itf_code          = [];
+        var units_per_carton  = [];
+        var count_TCL1        = [];
+        var count_TCL2        = [];
+        var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+
+
+        /** [ Create array of uk ratio orms tpn ] */
+        $('.uk_ratio_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk ratio itf barcode ] */
+        $('.uk_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of uk ratio units per carton ] */
+        $('.uk_ratio_upc').each(function(i, item)
+        {
+            units_per_carton[i]    = $(item).val();
+            
+        });
+        units_per_carton = units_per_carton.join(',');
+
+        /** [ Create array of uk ratio tcl1 count ] */
+        $('.count_TCL1').each(function(i, item)
+        {
+            count_TCL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL1 = count_TCL1.join(',');
+
+        /** [ Create array of uk ratio tcl2 count ] */
+        $('.count_TCL2').each(function(i, item)
+        {
+            count_TCL2[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL2 = count_TCL2.join(',');
+
+        /** [ Create array of uk ratio tsl1 count ] */
+        $('.count_TSL1').each(function(i, item)
+        {
+            count_TSL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL1 = count_TSL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKRatioTHL1 for storing tesco UK ratio THL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKRatioTHL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd              = [];
+        var itf_code          = [];
+        var units_per_carton  = [];
+        var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
+
+        /** [ Create array of uk ratio orms tpn ] */
+        $('.uk_ratio_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk ratio itf barcode ] */
+        $('.uk_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of uk ratio units per carton ] */
+        $('.uk_ratio_upc').each(function(i, item)
+        {
+            units_per_carton[i]    = $(item).val();
+            
+        });
+        units_per_carton = units_per_carton.join(',');
+
+        /** [ Create array of uk ratio thl1 count ] */
+        $('.count_THL1').each(function(i, item)
+        {
+            count_THL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL1 = count_THL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKSingleTCL4TSL3 for storing tesco UK single TCL3 AND TSL3 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKSingleTCL4TSL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_TCL4        = [];
+        var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+
+        /** [ Create array of uk single orms tpn ] */
+        $('.uk_single_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk single ean barcode ] */
+        $('.uk_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of uk single case size ] */
+        $('.uk_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of uk single tcl1 count ] */
+        $('.uk_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of uk single tcl2 count ] */
+        $('.count_TCL4').each(function(i, item)
+        {
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL4 = count_TCL4.join(',');
+
+        /** [ Create array of uk single tsl1 count ] */
+        $('.count_TSL3').each(function(i, item)
+        {
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL3 = count_TSL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKSingleTHL3 for storing tesco UK single THL3 Template manual orders]
+ * @author <praveen>
+ */
+function saveUKSingleTHL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
+
+        /** [ Create array of uk single orms tpn ] */
+        $('.uk_single_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk single ean barcode ] */
+        $('.uk_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of uk single case size ] */
+        $('.uk_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of uk single tcl1 count ] */
+        $('.uk_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of uk single tcl2 count ] */
+        $('.count_THL3').each(function(i, item)
+        {
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL3 = count_THL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Saved Successfully');
+                    showSnackbar();
+
+                    $('.save-btn').data('insert','false');
+
+                    var div_html='';
+                    /** [ store last updated id as hidden input , for updating] */
+                    $.each(data.last_insertions, function (index, value) {
+                        div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                    });
+                    $('.invisible-div').html(div_html);
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
     }
 }

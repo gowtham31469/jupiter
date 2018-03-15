@@ -105,7 +105,165 @@
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
-}    
+}  
+
+/** Style for bottom-bar buttons */
+span > i {
+color: white;
+}
+span > input {
+background: none;
+color: white;
+padding: 0;
+border: 0;
+}
+    
+.more-menu {
+    width: 200px;
+}
+
+/* More Button / Dropdown Menu */
+
+.more-btn,
+.more-menu-btn {
+    background: none;
+    border: 0 none;
+    line-height: normal;
+    overflow: visible;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    width: 100%;
+    text-align: left;
+    outline: none;
+    cursor: pointer;
+}
+
+.more-dot {
+    background-color: #aab8c2;
+    margin: 0 auto;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 1px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.more-menu {
+    position: absolute;
+    top: 100%;
+    z-index: 900;
+    float: left;
+    padding: 10px 0;
+    margin-top: 9px;
+    background-color: #fff;
+    border: 1px solid #ccd8e0;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.25);
+    opacity: 0;
+    -webkit-transform: translate(0, 15px) scale(.95);
+    transform: translate(0, 15px) scale(.95);
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+    pointer-events: none;
+}
+
+.more-menu-caret {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    width: 18px;
+    height: 10px;
+    float: left;
+    overflow: hidden;
+}
+
+.more-menu-caret-outer,
+.more-menu-caret-inner {
+    position: absolute;
+    display: inline-block;
+    margin-left: -1px;
+    font-size: 0;
+    line-height: 1;
+}
+
+.more-menu-caret-outer {
+    border-bottom: 10px solid #c1d0da;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: auto;
+    left: 0;
+    top: 0;
+    width: auto;    
+}
+
+.more-menu-caret-inner {
+    top: 1px;
+    left: 1px;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid #fff;
+}
+
+.more-menu-items {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+
+.more-menu-item {
+    display: block;
+}
+
+.more-menu-btn {
+    min-width: 100%;
+    color: #66757f;
+    cursor: pointer;
+    display: block;
+    font-size: 13px;
+    line-height: 18px;
+    padding: 5px 20px;
+    position: relative;
+    white-space: nowrap;
+}
+
+.more-menu-item:hover {
+    background-color: #489fe5;
+}
+
+.more-menu-item:hover .more-menu-btn {
+    color: #fff;
+}
+
+.more-btn:hover .more-dot,
+.show-more-menu .more-dot {
+    background-color: #516471;
+}
+
+.show-more-menu .more-menu {
+    opacity: 1;
+    -webkit-transform: translate(0, 0) scale(1);
+    transform: translate(0, 0) scale(1);
+    pointer-events: auto;
+}
+.input-fields {
+ margin-bottom: 20px;
+ }
+ .input-fields input,
+ select {
+ width: 100%;
+ height: 20px;
+ -ms-box-sizing: content-box;
+ -moz-box-sizing: content-box;
+ box-sizing: content-box;
+ -webkit-box-sizing: content-box;
+ }
+ .order-details-notes {
+ font-weight: 300;
+ }
+.templateDiv {
+    text-align: center;
+}   
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -145,17 +303,100 @@
         </div>
     </div>
 </div>
+{{-- Artwork buyer po-upload and delivery date upload modal --}}
+<div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div id="order-exists-alert"></div>
+        <div class="modal-content po-modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable">{{-- Only required for left/right tabs --}}
+                    <ul class="nav nav-tabs">
+                        <li class="active" id='single_tab'>
+                            <a href="#single" data-toggle="tab">Single PO Upload</a>
+                        </li>
+                        <li id='combined_tab'>
+                            <a href="#combined" data-toggle="tab">Combined PO Upload</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="single"></div>
+                        <div class="tab-pane" id="combined"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Confirm artwork order modal --}}
+<div class="modal fade" id="confirmOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm Order</h4>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Artwork count missing for following artworks:</h4>
+                                <ol id="body_msg" style="font-weight: bolder;">
+                                    
+                                </ol>
+                                <h4>Do you want to place the order ?</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
+               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Artwork count missing for all artworks modal --}}
+<div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
+                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity(count) and count must be greater than 0.</h4>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection @else
 <script type="text/javascript">
-    window.location = "{{ url('/admin') }}";
+    window.location = "{{ url('/customer') }}";
 </script>
 @endif @section('jqueryIncludes')      
-<script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script>
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
-         localStorage.removeItem("special_tag");
-         localStorage.removeItem("main_label");
+        localStorage.removeItem("special_tag");
+        localStorage.removeItem("main_label");
         localStorage.removeItem("wash_label"); 
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
@@ -165,12 +406,13 @@
         })
          $('.logo').html('Orders')
          $('.buyer-nav-select').html($('.buyer-div').html())
-         if (localStorage.getItem("buyer") === null) {
-                
-         }
-        else
-        {
-             orders();
+         /** [ Show create order page based on buyer selection ] */
+        if (localStorage.getItem("buyer") === null) {
+
+        } else if (localStorage.getItem("buyer") === 'orchestra') {
+            orders();
+        } else {
+            tescoOrders();
         }
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
           $('.buyer-nav-select .buyer-select').selectpicker({
@@ -182,48 +424,18 @@
                 localStorage.setItem("buyer",$('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: base_url + "/admin/order-management/order_sub_modules",
-                    type: "Post",
-                    dataType: "json",
-                    data: {
-                        _token: csrf_token,
-                        buyer: $(this).find("option:selected").text().toLowerCase()
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(data) {
-                      
-                       orders();                    
-                    },
-                    error: function(data) {
-
-                    },
-                    complete: function() {
-                        $(".loader").hide();
-                        $(".loader").css('margin-top', '0%');
-                    }
-                })
+                var buyer = $(this).find("option:selected").text().toLowerCase();
+                /**  [ Show orders page based on buyer selection ] **/
+                if (buyer === 'orchestra') {
+                    orders();
+                } else {
+                    tescoOrders();
+                } 
             } else {
                 localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
                 location.reload()
             }
-        });
-        $(".order_type").change(function(){
-            var selectedType = $(".order_type option:selected").val();
-            if (selectedType === '1') 
-            {
-                $("#single_file").removeClass("hidden");
-                $("#multiple_file").removeClass("hidden");
-            }
-            else
-            {
-                $("#single_file").addClass("hidden");
-                $("#multiple_file").addClass("hidden");
-            }
-            
         });
     });
 </script>
