@@ -1302,7 +1302,7 @@ class OrderManagementCntrl extends Controller
         }
         return $result;
     }
-     /**
+    /**
      * method to set the po number and pdf file for an order
      * @param po_number and pdf (pdf is optional)
      * @return \Illuminate\Http\Response
