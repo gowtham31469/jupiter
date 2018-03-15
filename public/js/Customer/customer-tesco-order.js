@@ -891,7 +891,7 @@ function createOrders(parsedObj = false, oType = false) {
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4><div class="row">';
+                      html += '<div class="invisible-div"></div><h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
                        html += '<div class="col-md-4">\
                                   <div class="card add-card">\
@@ -6810,7 +6810,7 @@ function saveCERatioTCL1TCL2TSL1()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -6907,7 +6907,7 @@ function saveCERatioTHL1()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7023,7 +7023,7 @@ function saveCESingleTCL4TSL3()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7129,7 +7129,7 @@ function saveCESingleTHL3()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7247,7 +7247,7 @@ function saveUKRatioTCL1TCL2TSL1()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7344,7 +7344,7 @@ function saveUKRatioTHL1()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7460,7 +7460,7 @@ function saveUKSingleTCL4TSL3()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -7566,7 +7566,7 @@ function saveUKSingleTHL3()
 
                     /** [ store last updated id as hidden input , for updating] */
                     $.each(data.last_insertions, function (index, value) {
-                        $('.qty-table-div').append('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
+                        $('.invisible-div').html('<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">');
                     });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
