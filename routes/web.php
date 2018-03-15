@@ -124,6 +124,9 @@ Route::group(['middleware' => 'customer_auth'], function()
 	//TESCO
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
 
+	//TESCO VIEW ORDER
+	Route::post('customer/tesco/view-order', 'Customer\Tesco\OrderController@viewOrders');
+
 	//TESCO ORDER STATUS
 	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');

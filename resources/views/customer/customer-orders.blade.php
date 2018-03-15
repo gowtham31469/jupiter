@@ -392,6 +392,7 @@ border: 0;
 </script>
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
+<script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script>
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
