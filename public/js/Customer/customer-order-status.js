@@ -1555,7 +1555,7 @@ function tescoStatusTable(data,path)
     $.each(data, function (index, value)
     {
         var action_status = false;
-        tr += '<tr class="trClass" id="' + value.tableID + '">';
+        tr += '<tr class="trClass" id="'+value.tableName+'_'+ value.tableID + '">';
         for (var key in columnsIn) {
             if (key != "id")
             {
@@ -1857,60 +1857,24 @@ function tescoSetPO(obj,id,tableName,po_file)
  */
 function tescoPOUpload(obj,id,po_file,tableName)
 {
-     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: base_url + "/customer/tesco/get-po-file",
-        type: "Post",
-        dataType: "json",
-        data: {
-            _token: csrf_token,
-            tableName:tableName,
-            id:id
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode:
-        {
-            /** [Show response status based on HTTP status code] */
-            200: function(data)
-            {
-              po_file = data.po_file;
-
-                if (po_file== "null")
-                {
-                    $('#po_upload').addClass('hidden')
-                    $('.upload-po').addClass('hidden')
-                    $('#po_file').removeClass('hidden')
-                }
-                else
-                {
-                    $('#po_upload').removeClass('hidden')
-                    $('.upload-po').removeClass('hidden')
-                    $('#po_file').addClass('hidden')
-                }
-                var po_link = base_url+po_file
-                $('#po_link').attr("href",po_link);
-                $('#rowID').val(id);
-                $('#tableName').val(tableName);
-                $('#po-file-upload').modal('show')
-                         
-            },
-            400: function()
-            {
-               $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
-               showSnackbar();
-            }
-        },
-        error: function (data){
-            console.log(data);
-        },
-        complete: function () {
-            $(".loader").hide();
-        }
-    })
-
+    var csrf_token = $('meta[name="csrf-token"]').attr('content'); 
+    if (po_file== "null") 
+    { 
+        $('#po_upload').removeClass('hidden') 
+        $('.upload-po').removeClass('hidden') 
+        $('#po_file').addClass('hidden') 
+    } 
+    else 
+    { 
+        $('#po_upload').addClass('hidden') 
+        $('.upload-po').addClass('hidden') 
+        $('#po_file').removeClass('hidden') 
+    } 
+    var po_link = base_url+po_file 
+    $('#po_link').attr("href",po_link); 
+    $('#rowID').val(id); 
+    $('#tableName').val(tableName); 
+    $('#po-file-upload').modal('show') 
 }
 
 $(".update-po-file").click(function () {
