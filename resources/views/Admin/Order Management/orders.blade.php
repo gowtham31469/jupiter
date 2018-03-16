@@ -480,6 +480,12 @@ border: 0;
     </div>
 </div>
 
+{{-- Order already exists warning modal --}}
+<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div id="order-exists-msg"></div>
+    </div>
+</div>
 <div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">

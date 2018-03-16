@@ -3422,11 +3422,11 @@ class OrderManagementCntrl extends Controller
                    $count_THL1       = explode(',',$request['count_THL1']);
 
                    /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-                   $is_exists = TescoTSL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTHL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
-                      array_push($already_exists,'TSL 1');
+                      array_push($already_exists,'THL 1');
                     }
                     else
                     {

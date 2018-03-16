@@ -6865,11 +6865,9 @@ function saveCERatioTCL1TCL2TSL1()
                    /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
                        var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -6880,8 +6878,8 @@ function saveCERatioTCL1TCL2TSL1()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -6988,11 +6986,9 @@ function saveCERatioTHL1()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7003,8 +6999,8 @@ function saveCERatioTHL1()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7130,11 +7126,9 @@ function saveCESingleTCL4TSL3()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7145,8 +7139,8 @@ function saveCESingleTCL4TSL3()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7262,11 +7256,9 @@ function saveCESingleTHL3()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7277,8 +7269,8 @@ function saveCESingleTHL3()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7406,11 +7398,9 @@ function saveUKRatioTCL1TCL2TSL1()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7421,8 +7411,8 @@ function saveUKRatioTCL1TCL2TSL1()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7529,11 +7519,9 @@ function saveUKRatioTHL1()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7544,8 +7532,8 @@ function saveUKRatioTHL1()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7671,11 +7659,9 @@ function saveUKSingleTCL4TSL3()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7686,8 +7672,8 @@ function saveUKSingleTCL4TSL3()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
@@ -7803,11 +7789,9 @@ function saveUKSingleTHL3()
                     /** [ Show order already exists alertbox] */
                    if(data.already_exists.length > 0)
                    {
-                      $('.po-modal-content').remove();
-                      $('.close-btn').attr('data-dismiss','modal')
-                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
                                             <p>Order already exists for following artworks,</p>\
@@ -7818,8 +7802,8 @@ function saveUKSingleTHL3()
                         html_content += '</ol>\
                                         </div>';
 
-                     $('#order-exists-alert').html(html_content);
-                     $('#poUploadModal').modal('show');
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
                     }
                     else
                     {
