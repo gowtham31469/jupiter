@@ -695,6 +695,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTCL1OrdersQuantity::where('tcl1_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($orms_tpn as $tpn) 
                          {
@@ -790,6 +792,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL2OrdersQuantity::where('tcl2_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -887,6 +891,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTSL1OrdersQuantity::where('tsl1_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -987,6 +993,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                        $tesco_order_id  = $tesco_order->id;
+                       TescoTHL1OrdersQuantity::where('thl1_order_id',$tesco_order_id)
+                          ->delete();
                        $i = 0;
                        foreach ($orms_tpn as $tpn) 
                        {
@@ -1128,6 +1136,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL4OrdersQuantity::where('tcl4_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -1227,6 +1237,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTSL3OrdersQuantity::where('tsl3_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -1329,6 +1341,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTHL3OrdersQuantity::where('thl3_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -1471,6 +1485,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL1OrdersQuantity::where('tcl1_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
@@ -1568,6 +1584,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL2OrdersQuantity::where('tcl2_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
@@ -1665,6 +1683,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                        $tesco_order_id  = $tesco_order->id;
+                       TescoTSL1OrdersQuantity::where('tsl1_order_id',$tesco_order_id)
+                          ->delete();
                        $i = 0;
                        foreach ($tpnd as $value) 
                        {
@@ -1765,6 +1785,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTHL1OrdersQuantity::where('thl1_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
@@ -1905,6 +1927,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                              $tesco_order_id  = $tesco_order->id;
+                             TescoTCL4OrdersQuantity::where('tcl4_order_id',$tesco_order_id)
+                                ->delete();
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
@@ -2004,6 +2028,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                              $tesco_order_id  = $tesco_order->id;
+                             TescoTSL3OrdersQuantity::where('tsl3_order_id',$tesco_order_id)
+                                ->delete();
                              $i = 0;
                              foreach ($tpnd as $value) 
                              {
@@ -2106,6 +2132,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTHL3OrdersQuantity::where('thl3_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($tpnd as $value) 
                            {
@@ -3232,6 +3260,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTCL1OrdersQuantity::where('tcl1_order_id',$tesco_order_id)
+                            ->delete();
                          $templates_inserted = array('TCL 1' => $tesco_order_id);
                          $i = 0;
                          foreach ($orms_tpn as $tpn) 
@@ -3288,6 +3318,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL2OrdersQuantity::where('tcl2_order_id',$tesco_order_id)
+                            ->delete();
                            $templates_inserted = array('TCL 2' => $tesco_order_id);
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
@@ -3344,6 +3376,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTSL1OrdersQuantity::where('tsl1_order_id',$tesco_order_id)
+                            ->delete();
                            $templates_inserted = array('TSL 1' => $tesco_order_id);
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
@@ -3403,6 +3437,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTHL1OrdersQuantity::where('thl1_order_id',$tesco_order_id)
+                                ->delete();
                          $templates_inserted = array('THL 1' => $tesco_order_id);
                          $i = 0;
                          foreach ($orms_tpn as $tpn) 
@@ -3493,6 +3529,8 @@ class OrderManagementCntrl extends Controller
                          if($request['is_insert'] == 'true')
                          {
                            $tesco_order_id  = $tesco_order->id;
+                           TescoTCL4OrdersQuantity::where('tcl4_order_id',$tesco_order_id)
+                              ->delete();
                            $i = 0;
                            foreach ($orms_tpn as $tpn) 
                            {
@@ -3552,6 +3590,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTSL3OrdersQuantity::where('tsl3_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($orms_tpn as $tpn) 
                          {
@@ -3614,6 +3654,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                        $tesco_order_id  = $tesco_order->id;
+                       TescoTHL3OrdersQuantity::where('thl3_order_id',$tesco_order_id)
+                          ->delete();
                        $i = 0;
                        foreach ($orms_tpn as $tpn) 
                        {
@@ -3710,6 +3752,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTCL1OrdersQuantity::where('tcl1_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
@@ -3767,6 +3811,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTCL2OrdersQuantity::where('tcl2_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
@@ -3824,6 +3870,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                        $tesco_order_id  = $tesco_order->id;
+                       TescoTSL1OrdersQuantity::where('tsl1_order_id',$tesco_order_id)
+                          ->delete();
                        $i = 0;
                        foreach ($tpnd as $value) 
                        {
@@ -3884,6 +3932,8 @@ class OrderManagementCntrl extends Controller
                        if($request['is_insert'] == 'true')
                        {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTHL1OrdersQuantity::where('thl1_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
@@ -3977,6 +4027,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTCL4OrdersQuantity::where('tcl4_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
@@ -4036,6 +4088,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTSL3OrdersQuantity::where('tsl3_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
@@ -4098,6 +4152,8 @@ class OrderManagementCntrl extends Controller
                      if($request['is_insert'] == 'true')
                      {
                          $tesco_order_id  = $tesco_order->id;
+                         TescoTHL3OrdersQuantity::where('thl3_order_id',$tesco_order_id)
+                            ->delete();
                          $i = 0;
                          foreach ($tpnd as $value) 
                          {
