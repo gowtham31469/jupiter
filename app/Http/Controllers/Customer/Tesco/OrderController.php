@@ -55,13 +55,13 @@ class OrderController extends Controller
      */
     public function Orders()
     {
-      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
       echo json_encode($data);
     }
 

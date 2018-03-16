@@ -1555,7 +1555,7 @@ function tescoStatusTable(data,path)
     $.each(data, function (index, value)
     {
         var action_status = false;
-        tr += '<tr class="trClass" id="' + value.id + '">';
+        tr += '<tr class="trClass" id="' + value.tableID + '">';
         for (var key in columnsIn) {
             if (key != "id")
             {
@@ -1666,7 +1666,7 @@ function tescoStatusTable(data,path)
                    
                    if (pi_required==1)
                    {
-                        tr += '<td align="center"><a href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
                    }
                    else
                    {
@@ -2099,7 +2099,10 @@ function tescoApprovePI(id,table_name)
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
                $('#profoma-invoice').modal("hide")
-               orderStatus() 
+               $('#'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
+               var attrbs = $('#'+id+' .pi_generation').attr('onclick');
+               var attrbs = attrbs.replace("false", "true");
+               $('#'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
 
             },
@@ -2153,7 +2156,7 @@ function tescoRejectPI(id,table_name)
                $('.snackbar_span').html('PI Rejected!');
                $('#snackbar').css('background-color','#1abb9c');
                $('#profoma-invoice').modal("hide")
-               orderStatus() 
+               $('#'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
                showSnackbar();             
             },
             400: function()
