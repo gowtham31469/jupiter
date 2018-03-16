@@ -15,9 +15,9 @@ use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 /**
-   * Class to update the tesco template orders while submiting.
-   * @author [Praveen] <[praveen@wizroots.com]>
-   */
+ * Class to update the tesco template orders while submiting.
+ * @author [Praveen] <[praveen@wizroots.com]>
+ */
 class SubmitTescoOrdersUpdateQuery
 {
 	/**

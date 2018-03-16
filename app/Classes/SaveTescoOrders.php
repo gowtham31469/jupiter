@@ -16,9 +16,9 @@ use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 use App\Classes\SaveTescoOrdersUpdateQuery;
 /**
-   * Class to save the tesco template orders
-   * @author [Praveen] <[praveen@wizroots.com]>
-   */
+ * Class to save the tesco template orders
+ * @author [Praveen] <[praveen@wizroots.com]>
+ */
 class SaveTescoOrders
 {
 	/**
