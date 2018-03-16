@@ -1220,8 +1220,7 @@ function tescoApprovePI(id,table_name)
             {
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
-               $('#profoma-invoice').modal("hide")
-               //tescoOrderStatus() 
+               $('#profoma-invoice').modal("hide");
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
                var attrbs = attrbs.replace("false", "true");
@@ -1279,7 +1278,6 @@ function tescoRejectPI(id,table_name)
                $('.snackbar_span').html('PI Rejected!');
                $('#snackbar').css('background-color','#1abb9c');
                $('#profoma-invoice').modal("hide")
-               //tescoOrderStatus() 
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
                showSnackbar();             
             },
