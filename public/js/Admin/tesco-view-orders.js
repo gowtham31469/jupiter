@@ -83,6 +83,9 @@ function viewOrder(pNumber) {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            beforeSend: function () {
+                $(".loader").show();
+            },
             data: {'po_number':pNumber},
             tryCount: 0,
             retryLimit: 2,
@@ -132,7 +135,9 @@ function viewOrder(pNumber) {
                     return;
                 }
             },
-            complete: function() {}
+            complete: function() {
+                $(".loader").hide();
+            }
         })
     } catch (e) {
         console.error("Error:" + e)
