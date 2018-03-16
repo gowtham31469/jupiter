@@ -6770,7 +6770,6 @@ function saveTescoOrder()
         else
         {
            $('.snackbar_span').html('Please Enter a Valid PO Number !!');
-           $('#snackbar').css('background-color','#F44336');
            showSnackbar();
         }
         
