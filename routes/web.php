@@ -380,4 +380,16 @@ Route::post('admin/tesco/set-tesco-order-status', 'Admin\Tesco\OrderStatusCntrl@
 
 Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPo');
 
+Route::get('customer/reorder', 'Customer\HomeController@reorder');
+
+//Reorder
+
+Route::post('customer/tesco/reorder', 'Customer\Tesco\ReorderController@reOrder');
+Route::post('customer/tesco/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
+Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderController@repeatOrderArtwork');
+Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
+Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
+Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
+
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
