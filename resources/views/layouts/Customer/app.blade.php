@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.themes.min.css">
+     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 </head>
 <body class="customer-wallpaper">
     <div class="container-fluid">
@@ -67,6 +68,7 @@
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
+    @yield('jqueryIncludes')
 <script>
 $('.logout-button').click(function() 
         {
@@ -93,6 +95,5 @@ $('.logout-button').click(function()
         }).parent('li').addClass('current-page').find('a').addClass('active');
     });
     </script>
-    @yield('jqueryIncludes')
 </body>
 </html>
