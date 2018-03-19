@@ -3150,6 +3150,7 @@ function storeCERatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3172,13 +3173,8 @@ function storeCERatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
                        
@@ -3670,6 +3666,7 @@ function storeCERatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3692,13 +3689,8 @@ function storeCERatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -3976,6 +3968,7 @@ function storeCESingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3998,13 +3991,8 @@ function storeCESingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -4508,6 +4496,7 @@ function storeCESingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -4530,15 +4519,11 @@ function storeCESingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
-                         }
                        }
+                       
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
                              <div class="container-fluid">\
@@ -4814,6 +4799,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -4836,13 +4822,8 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -5332,6 +5313,7 @@ function storeUKRatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -5354,13 +5336,8 @@ function storeUKRatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -5637,6 +5614,7 @@ function storeUKSingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -5659,13 +5637,8 @@ function storeUKSingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -6169,6 +6142,7 @@ function storeUKSingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -6191,13 +6165,8 @@ function storeUKSingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
