@@ -417,6 +417,7 @@ border: 0;
                             <a href="#combined" data-toggle="tab">Combined PO Upload</a>
                         </li>
                     </ul>
+                    {{-- <p>Note : If you don't want to upload PO at this point, click upload later button. Later you can upload PO on the order status page.</p> --}}
                     <div class="tab-content">
                         <div class="tab-pane active" id="single"></div>
                         <div class="tab-pane" id="combined"></div>

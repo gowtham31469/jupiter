@@ -3173,6 +3173,9 @@ function storeCERatioTCL1TCL2TSL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3180,12 +3183,13 @@ function storeCERatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -3202,13 +3206,8 @@ function storeCERatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
                        
@@ -3406,11 +3405,6 @@ function storeCERatioTCL1TCL2TSL1()
                        /** Update bootstrap validator */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
-                       
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -3695,6 +3689,9 @@ function storeCERatioTHL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3702,12 +3699,13 @@ function storeCERatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -3724,13 +3722,8 @@ function storeCERatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -3797,10 +3790,6 @@ function storeCERatioTHL1()
 
                        /** Update bootstrap 1000hz validator */
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4002,6 +3991,9 @@ function storeCESingleTCL4TSL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4009,12 +4001,13 @@ function storeCESingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -4031,13 +4024,8 @@ function storeCESingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -4241,10 +4229,6 @@ function storeCESingleTCL4TSL3()
                        /** Update bootstrap 1000hz validator */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4535,6 +4519,9 @@ function storeCESingleTHL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4542,12 +4529,13 @@ function storeCESingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -4564,15 +4552,11 @@ function storeCESingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
-                         }
                        }
+                       
                        /** Buyer Po upload modal for single po upload modal */
                        var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
                              <div class="container-fluid">\
@@ -4636,10 +4620,6 @@ function storeCESingleTHL3()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4842,6 +4822,9 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4849,12 +4832,13 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -4871,13 +4855,8 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -5076,10 +5055,6 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5361,6 +5336,9 @@ function storeUKRatioTHL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5368,12 +5346,13 @@ function storeUKRatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -5390,13 +5369,8 @@ function storeUKRatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -5463,10 +5437,6 @@ function storeUKRatioTHL1()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5667,6 +5637,9 @@ function storeUKSingleTCL4TSL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5674,12 +5647,13 @@ function storeUKSingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -5696,13 +5670,8 @@ function storeUKSingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -5906,10 +5875,6 @@ function storeUKSingleTCL4TSL3()
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -6200,6 +6165,9 @@ function storeUKSingleTHL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -6207,12 +6175,13 @@ function storeUKSingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -6229,13 +6198,8 @@ function storeUKSingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -6302,10 +6266,6 @@ function storeUKSingleTHL3()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** remove save & submit button */
-                       $('.submit-btn').remove();
-                       $('.save-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -6897,7 +6857,7 @@ function saveCERatioTCL1TCL2TSL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7018,7 +6978,7 @@ function saveCERatioTHL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7158,7 +7118,7 @@ function saveCESingleTCL4TSL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7288,7 +7248,7 @@ function saveCESingleTHL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7430,7 +7390,7 @@ function saveUKRatioTCL1TCL2TSL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7551,7 +7511,7 @@ function saveUKRatioTHL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7691,7 +7651,7 @@ function saveUKSingleTCL4TSL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7821,7 +7781,7 @@ function saveUKSingleTHL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\

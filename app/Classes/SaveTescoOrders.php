@@ -35,7 +35,7 @@ class SaveTescoOrders
            if($request['is_insert'] == 'true')
            {
             /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-            $is_exists = TescoTCL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+            $is_exists = TescoTCL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
             
               if($is_exists)
               {
@@ -102,7 +102,7 @@ class SaveTescoOrders
            if($request['is_insert'] == 'true')
            {
             /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-            $is_exists = TescoTCL2Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+            $is_exists = TescoTCL2Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
             
               if($is_exists)
               {
@@ -168,7 +168,7 @@ class SaveTescoOrders
            if($request['is_insert'] == 'true')
            {
             /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-            $is_exists = TescoTSL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+            $is_exists = TescoTSL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
             
               if($is_exists)
               {
@@ -235,7 +235,7 @@ class SaveTescoOrders
            if($request['is_insert'] == 'true')
            {
             /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-            $is_exists = TescoTHL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+            $is_exists = TescoTHL1Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
             
               if($is_exists)
               {
@@ -301,7 +301,7 @@ class SaveTescoOrders
            if($request['is_insert'] == 'true')
            {
               /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-              $is_exists = TescoTCL4Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+              $is_exists = TescoTCL4Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
               
                 if($is_exists)
                 {
@@ -367,7 +367,7 @@ class SaveTescoOrders
             if($request['is_insert'] == 'true')
             {
               /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-              $is_exists = TescoTSL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+              $is_exists = TescoTSL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
               
                 if($is_exists)
                 {
@@ -433,7 +433,7 @@ class SaveTescoOrders
             if($request['is_insert'] == 'true')
             {
               /** [ Check if order already placed for this PO number+CE style+UK style combination ] */
-              $is_exists = TescoTHL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('uk_style_ref','=',$request['uk_style'])->where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->first();
+              $is_exists = TescoTHL3Orders::select('id')->where('po_number','=',$request['po_number'])->where('order_status','=','Saved')->first();
               
                 if($is_exists)
                 {
