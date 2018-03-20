@@ -402,7 +402,7 @@ Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@edi
 
 Route::get('customer/reorder', 'Customer\HomeController@reorder');
 
-//Reorder
+//Customer Reorder
 
 Route::post('customer/tesco/reorder', 'Customer\Tesco\ReorderController@reOrder');
 Route::post('customer/tesco/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
@@ -411,5 +411,11 @@ Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@e
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
+
+
+//Customer Print Option
+
+Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
+Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');

@@ -1059,15 +1059,54 @@ function createOrders(parsedObj = false, oType = false) {
 function printDivTesco(data,name) {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
-		var svgRoot = svgDoc.documentElement;
+		var zone = localStorage.getItem("zone");
 		var name=name+"-sticker";
 	    if(name == "TSL1-sticker" || name == "TSL3-sticker")
 		{
-			PopupTescoSmall(svgRoot,name);
+			var svgarr=[];
+			$('#table_row tr').each(function(key, val) { 
+				var svgRoot = svgDoc.documentElement;
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				var svg = encodeURI(str)
+				svgarr.push(svg)
+			})
+			var svg_fin = svgarr.join(',_');
+			
+			PopupTescoSmall(svg_fin,name);
 		}
 		else
 		{
-			PopupTesco(svgRoot,name);
+			var svgarr=[];
+			$('#table_row tr').each(function(key, val) { 
+				var svgRoot = svgDoc.documentElement;
+				if((name == "TCL1-sticker" && zone=="CE") ||(name == "TCL2-sticker" && zone=="CE") || (name == "TSL1-sticker" && zone=="CE") || (name == "THL1-sticker" && zone=="CE"))
+				{
+					svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
+				}
+				else if((name == "TCL4-sticker" && zone=="CE") || (name == "THL3-sticker" && zone=="CE"))
+				{
+					svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
+				}
+				else if((name == "TCL4-sticker" && zone=="UK") || (name == "THL3-sticker" && zone=="UK"))
+				{
+					svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.uk_single_case_size').val();
+				}
+				else if((name == "TCL1-sticker" && zone=="UK") ||(name == "TCL2-sticker" && zone=="UK") || (name == "TSL1-sticker" && zone=="UK") || (name == "THL1-sticker" && zone=="UK"))
+				{
+					svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.uk_ratio_upc').val();
+				}
+				
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				var svg = encodeURI(str)
+				svgarr.push(svg)
+			})
+			var svg_fin = svgarr.join(',_');
+			
+			PopupTesco(svg_fin,name);
 		}
 	
 		
@@ -1081,10 +1120,7 @@ function printDivTesco(data,name) {
 
 function PopupTesco(data,name) {
 	
-	var s = new XMLSerializer();
-	var d = data;
-	var str = s.serializeToString(d);
-	var svg = encodeURI(str)
+	
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
@@ -1094,7 +1130,7 @@ function PopupTesco(data,name) {
 		type: "post",
 		data: {
 			_token: csrf_token,
-			svg: svg,
+			svg: data,
 			name:name
 		},
         tryCount : 0,
@@ -1137,10 +1173,7 @@ function PopupTesco(data,name) {
 
 function PopupTescoSmall(data,name) {
 	
-	var s = new XMLSerializer();
-	var d = data;
-	var str = s.serializeToString(d);
-	var svg = encodeURI(str)
+	
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
@@ -1150,7 +1183,7 @@ function PopupTescoSmall(data,name) {
 		type: "post",
 		data: {
 			_token: csrf_token,
-			svg: svg,
+			svg: data,
 			name:name
 		},
         tryCount : 0,
@@ -6536,6 +6569,7 @@ function openmodaltesco(modal,i)
 	var svgDoc;
 	mySVG.addEventListener("load", function () {
 		svgDoc = mySVG.contentDocument;
+		svgDoc.getElementById("watermark").innerHTML = "JGA";
 		dynamicSVGTemplatescard("tesco_svg_modal"+i,data[i]);  
 	}, false);
 	
