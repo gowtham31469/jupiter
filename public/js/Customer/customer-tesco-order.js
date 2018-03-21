@@ -8163,7 +8163,7 @@ function mapStoredValues(oDetails) {
 function loadArtworkNames(style, artwork_collection) {
     if(Object.keys(artwork_collection).length !== 0 && artwork_collection.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
-        var options="<option value=''>Search Style Number</option>";
+        var options="<option value=''>Search Artwork</option>";
         $.each(artwork_collection[style], function(po,templs) {
             var node = $('#jstree').jstree(true).get_node(templs);
             options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+templs+"'>"+node.text+"</option>";
