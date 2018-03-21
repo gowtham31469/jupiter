@@ -540,6 +540,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+		  	$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"TCL 1" as TemplateName'))->get();	
 			}
 			if($type == "tesco_tcl2_orders")
 			{
@@ -588,6 +589,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"TCL 2" as TemplateName'))->get();
 			}
 			if($type == "tesco_tcl4_orders")
 			{
@@ -637,6 +639,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"TCL 4" as TemplateName'))->get();
 			}
 			if($type == "tesco_thl1_orders")
 			{
@@ -686,6 +689,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"THL 1" as TemplateName'))->get();
 			}
 			if($type == "tesco_thl3_orders")
 			{
@@ -735,6 +739,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"THL 3" as TemplateName'))->get();
 			}
 			if($type == "tesco_tsl1_orders")
 			{
@@ -784,6 +789,7 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"TSL 1" as TemplateName'))->get();
 			}
 			if($type == "tesco_tsl3_orders")
 			{
@@ -833,7 +839,9 @@ class ReorderController extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw('"TSL 3" as TemplateName'))->get();
 			}	
-		    echo true;
+		    
+			echo $data;
     }
 }
