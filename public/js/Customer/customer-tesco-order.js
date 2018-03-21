@@ -80,20 +80,61 @@ function tescoOrders() {
         success: function (data) {
             
                 var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
-                var uniqueNames = [];
+                var CEUniqueNames = [];
+                var UKUniqueNames = [];
+                var CEPOCollection = [];
+                var UKPOCollection = [];
                 var artwork_collection = {};
-                for(i = 0; i< newObj.length; i++) {
-                    if(uniqueNames.indexOf(newObj[i].po_number) === -1) {
-                        uniqueNames.push(newObj[i].po_number); 
-                        artwork_collection[newObj[i].po_number] = newObj[i].template_id;     
-                    } else {
-                        var artwork_group = artwork_collection[newObj[i].po_number];
-                        artwork_collection[newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
-                    }   
+                                for(i = 0; i< newObj.length; i++) {
+                    if(newObj[i].zone === 'CE' && newObj[i].ce_style_ref !== null) {
+                        if(CEUniqueNames.indexOf(newObj[i].ce_style_ref) === -1) {
+                            CEPOCollection.push(newObj[i].po_number); 
+                            CEUniqueNames.push(newObj[i].ce_style_ref);
+                            artwork_collection[newObj[i].ce_style_ref] = {};
+                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id;    
+                        } else {
+                            if(CEPOCollection.indexOf(newObj[i].po_number) === -1) {
+                                CEPOCollection.push(newObj[i].po_number);
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                            } else {
+                                var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
+                            }
+                        }
+
+                    } else if(newObj[i].zone === 'UK' && newObj[i].uk_style_ref !== null) {
+                        if(UKUniqueNames.indexOf(newObj[i].uk_style_ref) === -1) {
+                            UKPOCollection.push(newObj[i].po_number);
+                            UKUniqueNames.push(newObj[i].uk_style_ref);
+                            artwork_collection[newObj[i].uk_style_ref] = {};
+                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                        } else {
+                            if(UKPOCollection.indexOf(newObj[i].po_number) === -1) {
+                                UKPOCollection.push(newObj[i].po_number);
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                            } else {
+                                var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
+                            }
+                            
+                        }
+                    }
+                       
                 }
-                var options="<option value=''>Search Purchase Number</option>";
-                for(i = 0; i< uniqueNames.length; i++){    
-                     options+="<option data-tempid='"+artwork_collection[uniqueNames[i]]+"'>"+uniqueNames[i]+"</option>";
+                var options="<option value=''>Search Style Number</option>";
+                if(CEUniqueNames.length > 0) {
+                    options+="<optgroup label='CE'>";
+                    for(i = 0; i< CEUniqueNames.length; i++) {    
+                        options+="<option>"+CEUniqueNames[i]+"</option>";
+                    }
+                    options+="</optgroup>";
+                }
+                if(UKUniqueNames.length > 0) {
+                    options+="<optgroup label='UK'>";
+                    for(i = 0; i< UKUniqueNames.length; i++) { 
+                        options+="<option>"+UKUniqueNames[i]+"</option>";
+                    }
+                    options+="</optgroup>";
                 }
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
@@ -110,8 +151,13 @@ function tescoOrders() {
                                                                 <div class="pad-top">
                                                                     <form id="view_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
                                                                         <div class="form-group has-feedback">
-                                                                            <label for="order_type" class="form_label">Select PO Number</label>
-                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true" onchange=loadTemplatePreview()>`+options+`</select>
+                                                                            <label for="style_num" class="form_label">Select Style Number</label>
+                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true">`+options+`</select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <div class="form-group has-feedback artwork_list hidden">
+                                                                            <label for="order_type" class="form_label">Select Artwork</label>
+                                                                            <select class="form-control selectpicker" name="artwork_list" id="artwork_list" required data-live-search="true" onchange="loadTemplatePreview()"></select>
                                                                             <div class="help-block with-errors"></div>
                                                                         </div>
                                                                         <button class="btn btn-primary btn-block ">View Order</button>
@@ -182,6 +228,10 @@ function tescoOrders() {
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
                     $('#jstree').jstree('search', searchString);
+                });
+
+                $('body').on('change', '#po_number', function() {
+                    loadArtworkNames(this.value,artwork_collection);
                 });
 
                 /** [ Load selectpicker ] */
@@ -464,7 +514,7 @@ function tescoOrders() {
                     }
                     else {
                         e.preventDefault();
-                        var po_num = $('#po_number').val();
+                        var po_num = $('#artwork_list').val();
                         viewOrder(po_num);  
                     }
                 })
@@ -7840,7 +7890,7 @@ function saveUKSingleTHL3()
 * Function for loading the template preview
 */
 function loadTemplatePreview() {
-    var template_id = $('#po_number').find(':selected').data('tempid');
+    var template_id = $('#artwork_list').find(':selected').data('tempid');
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/customer/tesco/template-view",
@@ -8071,4 +8121,23 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
     }
     $(".selectpicker").selectpicker('refresh');
+}
+/**
+ * Function to load the artworks for correspinding style number
+ * @param  {string} style     Style Number of the order
+ * @param  {object} artwork_collection Collection of all orders
+ */
+function loadArtworkNames(style, artwork_collection) {
+    if(Object.keys(artwork_collection).length !== 0 && artwork_collection.constructor === Object) {
+        $('.artwork_list').removeClass('hidden');
+        var options="<option value=''>Search Style Number</option>";
+        $.each(artwork_collection[style], function(po,templs) {
+            var node = $('#jstree').jstree(true).get_node(templs);
+            options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+templs+"'>"+node.text+"</option>";
+        });
+        $('#artwork_list').html(options);
+        $('#artwork_list').selectpicker('refresh');
+    } else {
+        throw "artwork_collection_empty";
+    }
 }
