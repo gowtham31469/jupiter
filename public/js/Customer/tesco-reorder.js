@@ -405,14 +405,14 @@ function contentdocument(data,name,zone)
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 		}
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else
 		{
@@ -473,7 +473,7 @@ function contentdocument(data,name,zone)
 
 			if(name == "TSL3" || name == "THL3" )
 			{
-				jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+				jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 			}
 			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
 			{
@@ -619,6 +619,7 @@ function setTescoReorder(type,id)
 	
 	if(item == "Repeat Order")
 	{
+		var uvc=$('#style_number').val();
 		var buyer = localStorage.getItem("reorder_buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		$.ajax({
@@ -637,6 +638,16 @@ function setTescoReorder(type,id)
 			},
 			success: function (data) {
 				$('.left-panel').removeClass('active');
+					if(data[0].zone == "CE")
+					{
+						var span='<span class="label labels">'+data[0].zone+'</span>';
+					}
+					else
+					{
+						var span='<span class="label sticker">'+data[0].zone+'</span>';
+					}
+					$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+data[0].po_number+'</p></div><div class="col-md-2"><p class="name">'+data[0].TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+data[0].type+'","'+data[0].id+'","'+data[0].TemplateName.replace(' ', '')+'","'+data[0].zone+'","'+data[0].po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+				
 				$('.snackbar_span').html('Repeat Order Created Successfully ...!');
 				showSnackbar();
 			},

@@ -405,14 +405,14 @@ function contentdocument(data,name,zone)
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 		}
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else
 		{
@@ -473,7 +473,7 @@ function contentdocument(data,name,zone)
 
 			if(name == "TSL3" || name == "THL3" )
 			{
-				jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+				jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 			}
 			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
 			{
