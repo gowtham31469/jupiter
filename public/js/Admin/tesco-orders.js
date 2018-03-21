@@ -3158,7 +3158,7 @@ function storeCERatioTCL1TCL2TSL1()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -3674,7 +3674,7 @@ function storeCERatioTHL1()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -3976,7 +3976,7 @@ function storeCESingleTCL4TSL3()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -4509,7 +4509,7 @@ function storeCESingleTHL3()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -4816,7 +4816,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -5335,7 +5335,7 @@ function storeUKRatioTHL1()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -5641,7 +5641,7 @@ function storeUKSingleTCL4TSL3()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -6174,7 +6174,7 @@ function storeUKSingleTHL3()
                        else
                        {
                            var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                                <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                                  <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
                                                    <span aria-hidden="true">×</span>\
                                                  </button>\
@@ -6691,9 +6691,17 @@ function saveTescoOrder()
         var zone       =  localStorage.getItem("zone");
         var type       =  localStorage.getItem("template type");
         var data       =  JSON.parse(localStorage.getItem("data"));
-        var po_number  =  $('#tesco_po_number').val();
+        /** [ Switch style number based on zone ] */
+        if(zone === 'UK')
+        {
+            var style  =  $('#tesco_uk_style').val();
+        }
+        else
+        {
+            var style  =  $('#tesco_ce_style').val();
+        }
         
-        if((po_number != '') && (po_number != 'null') && (po_number != 'Null') && (po_number != 'NULL'))
+        if((style != '') && (style != 'null') && (style != 'Null') && (style != 'NULL'))
         {
             if(zone === "CE")
             {
@@ -6758,7 +6766,7 @@ function saveTescoOrder()
         }
         else
         {
-           $('.snackbar_span').html('Please Enter a Valid PO Number !!');
+           $('.snackbar_span').html('Please Enter '+zone+' Style Number !!');
            showSnackbar();
         }
         
@@ -6855,7 +6863,7 @@ function saveCERatioTCL1TCL2TSL1()
                    if(data.already_exists.length > 0)
                    {
                        var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -6976,7 +6984,7 @@ function saveCERatioTHL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7116,7 +7124,7 @@ function saveCESingleTCL4TSL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7246,7 +7254,7 @@ function saveCESingleTHL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7388,7 +7396,7 @@ function saveUKRatioTCL1TCL2TSL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7509,7 +7517,7 @@ function saveUKRatioTHL1()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7649,7 +7657,7 @@ function saveUKSingleTCL4TSL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
@@ -7779,7 +7787,7 @@ function saveUKSingleTHL3()
                    if(data.already_exists.length > 0)
                    {
                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number.</strong>\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this Style Number.</strong>\
                                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
                                                <span aria-hidden="true">×</span>\
                                              </button>\
