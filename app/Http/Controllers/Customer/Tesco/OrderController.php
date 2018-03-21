@@ -192,7 +192,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
 
                     if($is_exists)
                     {
@@ -290,7 +290,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -389,7 +389,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -491,7 +491,7 @@ class OrderController extends Controller
                   }
 
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -634,7 +634,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -735,7 +735,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -839,7 +839,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this CE style ] */
-                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -983,7 +983,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1082,7 +1082,7 @@ class OrderController extends Controller
                     }
 
                     /** [ Check if order already placed for this UK style ] */
-                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                    $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1181,7 +1181,7 @@ class OrderController extends Controller
                   }
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1283,7 +1283,7 @@ class OrderController extends Controller
                   }
 
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1425,7 +1425,7 @@ class OrderController extends Controller
                       }
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                      $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1526,7 +1526,7 @@ class OrderController extends Controller
                       }
 
                       /** [ Check if order already placed for this UK style ] */
-                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                      $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -1630,7 +1630,7 @@ class OrderController extends Controller
                   }
 
                   /** [ Check if order already placed for this UK style ] */
-                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -1838,7 +1838,7 @@ class OrderController extends Controller
                   if($template['template_name'] == "TCL 1")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1896,7 +1896,7 @@ class OrderController extends Controller
                   else if($template['template_name'] == "TCL 2")
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -1954,7 +1954,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -2015,7 +2015,7 @@ class OrderController extends Controller
                    $count_THL1       = explode(',',$request['count_THL1']);
 
                    /** [ Check if order already placed for this CE style ] */
-                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -2107,7 +2107,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this CE style ] */
-                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                       if($is_exists)
                       {
                         /** [ Create array of already exists artworks ] */
@@ -2168,7 +2168,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this CE style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                     if($is_exists)
                     {
                       /** [ Create array of already exists artworks ] */
@@ -2232,7 +2232,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this CE style ] */
-                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->first();
+                 $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2330,7 +2330,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2389,7 +2389,7 @@ class OrderController extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2448,7 +2448,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2510,7 +2510,7 @@ class OrderController extends Controller
                  $count_THL1       = explode(',',$request['count_THL1']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2605,7 +2605,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2666,7 +2666,7 @@ class OrderController extends Controller
                 else
                 {
                   /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
@@ -2730,7 +2730,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** [ Check if order already placed for this UK style ] */
-                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->first();
+                  $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
                   if($is_exists)
                   {
                     /** [ Create array of already exists artworks ] */
