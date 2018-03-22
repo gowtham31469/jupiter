@@ -1,1469 +1,1469 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
-  <div class="top-content">
-    <div class="buyer-div hidden">
-      <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
-        <option value="">Select Buyer</option>
-        @foreach($buyers as $buyer)
-        <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-        @endforeach
-      </select>
-    </div>
-    <div class="clearfix"></div>
-  </div>
-  <div class="main-content">
-    {{-- Show select buyer image as default page --}}
-    <div class="select-buyer">
-      <img src="../../images/select-buyer.png" class="img-responsive">
-    </div>
-    <div class="sidebar style-4 orchestra-sidebar" style="display: none;">
-      <h4>Orchestra Metadata</h4>
-      <ul class="customer-select meta-data-list">
-        <li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li>
-        <li id="2" onclick="ageGroup()"><a>Age Group</a></li>
-        <li id="3" onclick="countries()"><a>Countries</a></li>
-        <li id="4" onclick="productFamily()"><a>Product Family</a></li>
-        <li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li>
-        <li id="6" onclick="compositions()"><a>Compositions</a></li>
-        <li id="7" onclick="parts()"><a>Parts</a></li>
-        <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
-        <li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li>
-      </ul>
-    </div>
-    <div class="tesco-sidebar sidebar style-4" style="display: none;">
-      <h4>Tesco Metadata</h4>
-      <ul class="customer-select meta-data-list-1">
-        <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
-        <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
-        <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
-        <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
-      </ul>
-    </div>
-    <div class="content">
-    </div>
-  </div>
-
-  {{-- Add Orchestra Garments Modal --}}
-  <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="orchestraGarmentsLabel">Add Garment</h4>
+    <div class="top-content">
+        <div class="buyer-div hidden">
+            <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
+                <option value="">Select Buyer</option>
+                    @foreach($buyers as $buyer)
+                    <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
+                    @endforeach
+              </select>
         </div>
-        {!! Form::open(['id' => 'add_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
-        <div class="modal-body">
-          <div class="form-group has-feedback">
-            {!! Form::label('garment_name', 'Garment Name', ['class' => 'form_label']) !!}
-            {!! Form::text('garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
-            <div class="help-block with-errors"></div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="main-content">
+      {{-- Show select buyer image as default page --}}
+        <div class="select-buyer">
+            <img src="../../images/select-buyer.png" class="img-responsive">
+        </div>
+          <div class="sidebar style-4 orchestra-sidebar" style="display: none;">
+            <h4>Orchestra Metadata</h4>
+            <ul class="customer-select meta-data-list">
+              <li id="1" onclick="orchestraSettings()"><a class="active">Garments</a></li>
+              <li id="2" onclick="ageGroup()"><a>Age Group</a></li>
+              <li id="3" onclick="countries()"><a>Countries</a></li>
+              <li id="4" onclick="productFamily()"><a>Product Family</a></li>
+              <li id="5" onclick="specialInstruction()"><a>Special Instructions</a></li>
+              <li id="6" onclick="compositions()"><a>Compositions</a></li>
+              <li id="7" onclick="parts()"><a>Parts</a></li>
+              <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
+              <li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+            </ul>
           </div>
+        <div class="tesco-sidebar sidebar style-4" style="display: none;">
+          <h4>Tesco Metadata</h4>
+          <ul class="customer-select meta-data-list-1">
+            <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
+            <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
+            <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
+            <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
+          </ul>
         </div>
-        <div class="modal-footer">
-          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-          {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+        <div class="content">
         </div>
-        {!! Form::close() !!}
-      </div>
     </div>
-  </div>
 
-  {{-- Edit Orchestra Garments Modal --}}
-  <div class="modal fade" id="editOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-         <h4 class="modal-title" id="myModalLabel">Edit Garment</h4>
+    {{-- Add Orchestra Garments Modal --}}
+    <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraGarmentsLabel">Add Garment</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('garment_name', 'Garment Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Orchestra Garments Modal --}}
+    <div class="modal fade" id="editOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Garment</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_orchestra_garments_id',$value = null, array('id'=>'edit_orchestra_garments_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_garment_name', 'Garment Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       {!! Form::open(['id' => 'edit_orchestra_garments_form','data-toggle' => 'validator','role' => 'form']) !!}
-       <div class="modal-body">
-         {!! Form::hidden('edit_orchestra_garments_id',$value = null, array('id'=>'edit_orchestra_garments_id','class' => 'form-control input-sm')) !!}
-         <div class="form-group has-feedback">
-           {!! Form::label('edit_garment_name', 'Garment Name', ['class' => 'form_label']) !!}
-           {!! Form::text('edit_garment_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Garment Name','required')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-       </div>
-       <div class="modal-footer">
-         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-         {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-       </div>
-       {!! Form::close() !!}
-     </div>
    </div>
- </div>
 
- {{-- Delete Orchestra Garments Modal --}}
- <div class="modal fade" id="deleteOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-         <h4 class="modal-title" id="myModalLabel">Delete Garment</h4>
+   {{-- Delete Orchestra Garments Modal --}}
+   <div class="modal fade" id="deleteOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Garment</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_garment_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra garment. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_garment_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       {!! Form::open(['id' => 'delete_orchestra_garment_form','data-toggle' => 'validator','role' => 'form']) !!}
-       <div class="modal-body">
-         <div class="form-group has-feedback">
-           <p>You are about to delete orchestra garment. Do you want to proceed?</p>
-           {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_garment_id','class' => 'form-control input-sm')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-       </div>
-       <div class="modal-footer">
-         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-         {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-       </div>
-       {!! Form::close() !!}
-     </div>
    </div>
- </div>
 
- {{-- Add Orchestra Age group Modal --}}
- <div class="modal fade" id="addOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="orchestraAgeGroupLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraAgeGroupLabel">Add Age Group</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('age_group_name', 'Age Group Name', ['class' => 'form_label']) !!}
-              {!! Form::text('age_group_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age Group Name','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Orchestra Age group Modal --}}
+    <div class="modal fade" id="addOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="orchestraAgeGroupLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraAgeGroupLabel">Add Age Group</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('age_group_name', 'Age Group Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('age_group_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age Group Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('color_name', 'Color Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('color_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        </div>
+                    </div>
+                     </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('color_name', 'Color Name', ['class' => 'form_label']) !!}
-              {!! Form::text('color_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color Name','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Orchestra age group Modal --}}
-<div class="modal fade" id="editOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Edit Age Group</h4>
-     </div>
-     {!! Form::open(['id' => 'edit_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       {!! Form::hidden('edit_orchestra_agegroup_id',$value = null, array('id'=>'edit_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
-       <div class="row">
-        <div class="col-md-6">
-         <div class="form-group has-feedback">
-          {!! Form::label('edit_age_group_name', 'Age Group Name', ['class' => 'form_label']) !!}
-          {!! Form::text('edit_age_group_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age Group Name','required')) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group has-feedback">
-          {!! Form::label('edit_color_name', 'Color Name', ['class' => 'form_label']) !!}
-          {!! Form::text('edit_color_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color Name','required')) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-   {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-   {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
- </div>
- {!! Form::close() !!}
-</div>
-</div>
-</div>
-
-{{-- Delete Orchestra age group Modal --}}
-<div class="modal fade" id="deleteOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Age Group</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra age group. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra age group Modal --}}
+     <div class="modal fade" id="editOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Age Group</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_orchestra_agegroup_id',$value = null, array('id'=>'edit_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
+                     <div class="row">
+                      <div class="col-md-6">
+                       <div class="form-group has-feedback">
+                          {!! Form::label('edit_age_group_name', 'Age Group Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_age_group_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age Group Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_color_name', 'Color Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_color_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra countries Modal --}}
-<div class="modal fade" id="addOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="orchestraCountryLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraCountryLabel">Add Country Name</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('english', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in english','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('french', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('french',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('spanish', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('spanish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('portuguese', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('portuguese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('italian', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('italian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('dutch', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('dutch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('german', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('german',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('russian', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('russian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('chinese', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('chinese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('arabic', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('arabic',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('greek', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('greek',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('turkish', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('turkish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
-    </div>
-  </div>
-</div>
-
-{{-- Edit Orchestra countries Modal --}}
-<div class="modal fade" id="editOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraCountryLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraCountryLabel">Edit Country Name</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_country_id',$value = null, array('id'=>'edit_orchestra_country_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_english', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in english','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_french', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_french',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_spanish', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_spanish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_portuguese', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_portuguese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_italian', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_italian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_dutch', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_dutch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_german', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_german',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_russian', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_russian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_chinese', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_chinese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_arabic', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_arabic',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_greek', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_greek',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_turkish', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_turkish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
-    </div>
-  </div>
-</div>
-
-{{-- Delete Orchestra country Modal --}}
-<div class="modal fade" id="deleteOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Country Name</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra country name. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_country_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+   {{-- Delete Orchestra age group Modal --}}
+   <div class="modal fade" id="deleteOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Age Group</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra age group. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra product family Modal --}}
-<div class="modal fade" id="addOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="orchestraProductFamilyLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraProductFamilyLabel">Add Product Family</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-         <div class="col-md-6"> 
-          <div class="form-group has-feedback">
-            {!! Form::label('code', 'Product Family Code', ['class' => 'form_label']) !!}
-            {!! Form::text('code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product Family Code','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
+   {{-- Add Orchestra countries Modal --}}
+    <div class="modal fade" id="addOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="orchestraCountryLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraCountryLabel">Add Country Name</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('spanish', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('spanish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('portuguese', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('portuguese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('italian', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('italian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('dutch', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('dutch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('german', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('german',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('russian', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('russian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('chinese', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('chinese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('greek', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('greek',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('turkish', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('turkish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group has-feedback">
-            {!! Form::label('english_pf', 'English', ['class' => 'form_label']) !!}
-            {!! Form::text('english_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in english','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group has-feedback">
-            {!! Form::label('french_pf', 'French', ['class' => 'form_label']) !!}
-            {!! Form::text('french_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in french','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group has-feedback">
-            {!! Form::label('arabic_pf', 'Arabic', ['class' => 'form_label']) !!}
-            {!! Form::text('arabic_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in arabic','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="modal-footer">
-      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-      {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-    </div>
-    {!! Form::close() !!}
-  </div>
-</div>
-</div>
 
-{{-- Edit Orchestra product family Modal --}}
-<div class="modal fade" id="editOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraProductFamilyLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraProductFamilyLabel">Edit Product Family</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_productfamily_id',$value = null, array('id'=>'edit_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_code', 'Product Family Code', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product Family Code','required')) !!}
-              <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra countries Modal --}}
+    <div class="modal fade" id="editOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraCountryLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraCountryLabel">Edit Country Name</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_country_id',$value = null, array('id'=>'edit_orchestra_country_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_spanish', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_spanish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_portuguese', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_portuguese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_italian', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_italian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_dutch', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_dutch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_german', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_german',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_russian', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_russian',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_chinese', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_chinese',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_greek', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_greek',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_turkish', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_turkish',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Country name in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_english_pf', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_english_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in english','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_french_pf', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_french_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_arabic_pf', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_arabic_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Delete Orchestra productfamily Modal --}}
-<div class="modal fade" id="deleteOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Product Family</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra product family. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+   {{-- Delete Orchestra country Modal --}}
+   <div class="modal fade" id="deleteOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Country Name</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra country name. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_country_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra special instructions Modal --}}
-<div class="modal fade bd-example-modal-lg" id="addOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSpecialInstructionLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraSpecialInstructionLabel">Add Special Instruction</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('english_si', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('english_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in english','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Orchestra product family Modal --}}
+    <div class="modal fade" id="addOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="orchestraProductFamilyLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraProductFamilyLabel">Add Product Family</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                       <div class="col-md-6"> 
+                        <div class="form-group has-feedback">
+                          {!! Form::label('code', 'Product Family Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product Family Code','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english_pf', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french_pf', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic_pf', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('french_si', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('french_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('spanish_si', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('spanish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('portuguese_si', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('portuguese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('italian_si', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('italian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('dutch_si', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('dutch_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('german_si', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('german_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('russian_si', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('russian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('chinese_si', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('chinese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('arabic_si', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('arabic_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('greek_si', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('greek_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('turkish_si', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('turkish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Orchestra special instructions Modal --}}
-<div class="modal fade bd-example-modal-lg" id="editOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraSpecialInstructionLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraSpecialInstructionLabel">Edit Special Instruction</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_special_instruction_id',$value = null, array('id'=>'edit_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_english_si', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_english_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in english','required')) !!}
-              <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra product family Modal --}}
+    <div class="modal fade" id="editOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraProductFamilyLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraProductFamilyLabel">Edit Product Family</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_productfamily_id',$value = null, array('id'=>'edit_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_code', 'Product Family Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product Family Code','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english_pf', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french_pf', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic_pf', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic_pf',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Product family in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_french_si', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_french_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_spanish_si', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_spanish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_portuguese_si', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_portuguese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_italian_si', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_italian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_dutch_si', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_dutch_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_german_si', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_german_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_russian_si', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_russian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_chinese_si', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_chinese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_arabic_si', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_arabic_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_greek_si', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_greek_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_turkish_si', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_turkish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Delete Orchestra special instruction Modal --}}
-<div class="modal fade" id="deleteOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Special Instruction</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra special instruction. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Delete Orchestra productfamily Modal --}}
+   <div class="modal fade" id="deleteOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Product Family</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra product family. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra compositions Modal --}}
-<div class="modal fade" id="addOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraCompositionLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraCompositionLabel">Add Composition</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('english_co', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('english_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in english','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Orchestra special instructions Modal --}}
+    <div class="modal fade bd-example-modal-lg" id="addOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSpecialInstructionLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraSpecialInstructionLabel">Add Special Instruction</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english_si', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french_si', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('spanish_si', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('spanish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('portuguese_si', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('portuguese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('italian_si', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('italian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('dutch_si', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('dutch_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('german_si', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('german_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('russian_si', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('russian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('chinese_si', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('chinese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic_si', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('greek_si', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('greek_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('turkish_si', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('turkish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('french_co', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('french_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('spanish_co', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('spanish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('portuguese_co', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('portuguese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('italian_co', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('italian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('dutch_co', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('dutch_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('german_co', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('german_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('russian_co', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('russian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('chinese_co', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('chinese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('arabic_co', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('arabic_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('greek_co', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('greek_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('turkish_co', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('turkish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Orchestra composition Modal --}}
-<div class="modal fade" id="editOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraCompositionLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraCompositionLabel">Edit Composition</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_composition_id',$value = null, array('id'=>'edit_orchestra_composition_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_english_co', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_english_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in english','required')) !!}
-              <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra special instructions Modal --}}
+    <div class="modal fade bd-example-modal-lg" id="editOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraSpecialInstructionLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraSpecialInstructionLabel">Edit Special Instruction</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_special_instruction_id',$value = null, array('id'=>'edit_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english_si', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french_si', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_spanish_si', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_spanish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_portuguese_si', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_portuguese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_italian_si', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_italian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_dutch_si', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_dutch_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_german_si', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_german_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_russian_si', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_russian_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_chinese_si', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_chinese_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic_si', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_greek_si', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_greek_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_turkish_si', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_turkish_si',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Special Instruction in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_french_co', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_french_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_spanish_co', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_spanish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_portuguese_co', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_portuguese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_italian_co', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_italian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_dutch_co', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_dutch_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_german_co', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_german_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_russian_co', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_russian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_chinese_co', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_chinese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_arabic_co', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_arabic_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_greek_co', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_greek_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_turkish_co', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_turkish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Delete Orchestra composition Modal --}}
-<div class="modal fade" id="deleteOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Composition</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra composition. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_composition_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Delete Orchestra special instruction Modal --}}
+   <div class="modal fade" id="deleteOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Special Instruction</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra special instruction. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra parts Modal --}}
-<div class="modal fade" id="addOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraPartLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraPartLabel">Add Part</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('english_pa', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Orchestra compositions Modal --}}
+    <div class="modal fade" id="addOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraCompositionLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraCompositionLabel">Add Composition</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english_co', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french_co', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('spanish_co', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('spanish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('portuguese_co', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('portuguese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('italian_co', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('italian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('dutch_co', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('dutch_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('german_co', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('german_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('russian_co', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('russian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('chinese_co', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('chinese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic_co', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('greek_co', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('greek_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('turkish_co', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('turkish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('french_pa', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('italian_pa', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('german_pa', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('russian_pa', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('greek_pa', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Orchestra Part Modal --}}
-<div class="modal fade" id="editOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraPartLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraPartLabel">Edit Part</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_part_id',$value = null, array('id'=>'edit_orchestra_part_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_english_pa', 'English', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
-              <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra composition Modal --}}
+    <div class="modal fade" id="editOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraCompositionLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraCompositionLabel">Edit Composition</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_composition_id',$value = null, array('id'=>'edit_orchestra_composition_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english_co', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french_co', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_spanish_co', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_spanish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_portuguese_co', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_portuguese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_italian_co', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_italian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_dutch_co', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_dutch_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_german_co', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_german_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_russian_co', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_russian_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_chinese_co', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_chinese_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic_co', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_greek_co', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_greek_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_turkish_co', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_turkish_co',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Composition in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_french_pa', 'French', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_italian_pa', 'Italian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_german_pa', 'German', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_russian_pa', 'Russian', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_greek_pa', 'Greek', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Delete Orchestra Part Modal --}}
-<div class="modal fade" id="deleteOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Part</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra part. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_part_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Delete Orchestra composition Modal --}}
+   <div class="modal fade" id="deleteOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Composition</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra composition. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_composition_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Orchestra size chart Modal --}}
-<div class="modal fade" id="addOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSizeChartLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraSizeChartLabel">Add Size Chart</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('age', 'Age', ['class' => 'form_label']) !!}
-              {!! Form::text('age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Orchestra parts Modal --}}
+    <div class="modal fade" id="addOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraPartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraPartLabel">Add Part</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('english_pa', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('french_pa', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('italian_pa', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('german_pa', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('russian_pa', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('greek_pa', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
-              {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
-              {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Orchestra size chart Modal --}}
-<div class="modal fade" id="editOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraSizeChartLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editOrchestraSizeChartLabel">Edit Size Chart</h4>
-      </div>
-      {!! Form::open(['id' => 'edit_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        {!! Form::hidden('edit_orchestra_size_chart_id',$value = null, array('id'=>'edit_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_age', 'Age', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
-              <div class="help-block with-errors"></div>
+    {{-- Edit Orchestra Part Modal --}}
+    <div class="modal fade" id="editOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraPartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraPartLabel">Edit Part</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_part_id',$value = null, array('id'=>'edit_orchestra_part_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_english_pa', 'English', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_english_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in english','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_french_pa', 'French', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_french_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in french','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_spanish_pa', 'Spanish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_spanish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in spanish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_portuguese_pa', 'Portuguese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_portuguese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in portuguese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_italian_pa', 'Italian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_italian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in italian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_dutch_pa', 'Dutch', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_dutch_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in dutch','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_german_pa', 'German', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_german_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in german','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_russian_pa', 'Russian', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_russian_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in russian','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_chinese_pa', 'Chinese', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_chinese_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in chinese','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_arabic_pa', 'Arabic', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_arabic_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in arabic','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_greek_pa', 'Greek', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_greek_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in greek','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_turkish_pa', 'Turkish', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_turkish_pa',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Part in turkish','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group has-feedback">
-              {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
-              {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
-              <div class="help-block with-errors"></div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Delete Orchestra Part Modal --}}
-<div class="modal fade" id="deleteOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Symbol</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete orchestra size chart. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Delete Orchestra Part Modal --}}
+   <div class="modal fade" id="deleteOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Part</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra part. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_part_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
+
+   {{-- Add Orchestra size chart Modal --}}
+    <div class="modal fade" id="addOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orchestraSizeChartLabel">Add Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('age', 'Age', ['class' => 'form_label']) !!}
+                          {!! Form::text('age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('cm', 'Centimeters', ['class' => 'form_label']) !!}
+                          {!! Form::text('cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('inch', 'Inches', ['class' => 'form_label']) !!}
+                          {!! Form::text('inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Orchestra size chart Modal --}}
+    <div class="modal fade" id="editOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraSizeChartLabel">Edit Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      {!! Form::hidden('edit_orchestra_size_chart_id',$value = null, array('id'=>'edit_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_age', 'Age', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_age',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Age','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_cm', 'Centimeters', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_cm',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Centimeters','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_inch', 'Inches', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_inch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Inches','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete Orchestra Part Modal --}}
+   <div class="modal fade" id="deleteOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Symbol</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete orchestra size chart. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
 
 <!-- care_symbols -->
 
 {{-- Add Orchestra Symbols Modal --}}
 <div class="modal fade" id="addOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSymbolsLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="orchestraSymbolsLabel">Add Symbols</h4>
-      </div>
-      {!! Form::open(['id' => 'add_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-       
-        <div class="form-group has-feedback">
-         
-         {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
-         {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
-         <div class="help-block with-errors"></div>
-       </div>
-       
-       <div class="form-group has-feedback">
-         
-         {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
-         <div class="row">
-           <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="" alt="Null"></div>
-           <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
-         </div>
-         
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         
-         {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
-         <div class="row">
-           <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="" alt="Null"></div>
-           <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
-         </div>
-         
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         
-         {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
-         
-         {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
-         <div class="help-block with-errors"></div>
-       </div>
-       
-     </div>
-     <div class="modal-footer">
-      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-      {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="orchestraSymbolsLabel">Add Symbols</h4>
+            </div>
+            {!! Form::open(['id' => 'add_orchestra_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <div class="modal-body">
+     
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
+                         {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol', ['class' => 'form_label']) !!}
+                         <div class="row">
+                         <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="" alt="Null"></div>
+                         <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         </div>
+                      
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('astms_symbol', 'Astms Symbol', ['class' => 'form_label']) !!}
+                         <div class="row">
+                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="" alt="Null"></div>
+                         <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         </div>
+                         
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                     
+                         {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                         
+                         {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                    {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                </div>
+           {!! Form::close() !!}
+        </div>
     </div>
-    {!! Form::close() !!}
-  </div>
-</div>
 </div>
 
 {{-- Edit Symbol --}}
@@ -1530,8 +1530,8 @@
            
        </div>
    </div>
- </div> --}}
- {{-- Delete Symbol Model --}}
+   </div> --}}
+{{-- Delete Symbol Model --}}
    {{-- <div class="modal fade" id="deleteOrchestraSymbolModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrchestraSymbolLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -1554,398 +1554,398 @@
               {!! Form::close() !!}
            </div>
        </div>
-     </div> --}}
+   </div> --}}
 
-     <!-- Tesco Modals -->
+<!-- Tesco Modals -->
 
-     {{-- Add Tesco Brand Modal --}}
-     <div class="modal fade" id="addTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="addTescoBrandsLabel">Add Brand</h4>
-          </div>
-          {!! Form::open(['id' => 'add_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
-          <div class="modal-body">
-            <div class="form-group has-feedback">
-              {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-              {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
-              <div class="help-block with-errors"></div>
+   {{-- Add Tesco Brand Modal --}}
+   <div class="modal fade" id="addTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoBrandsLabel">Add Brand</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
             </div>
-          </div>
-          <div class="modal-footer">
-            {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-            {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-          </div>
-          {!! Form::close() !!}
         </div>
-      </div>
     </div>
     
     {{-- Edit Tesco Brands Modal --}}
     <div class="modal fade" id="editTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-       <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-           <h4 class="modal-title" id="myModalLabel">Edit Brand</h4>
-         </div>
-         {!! Form::open(['id' => 'edit_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
-         <div class="modal-body">
-           {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
-           <div class="form-group has-feedback">
-             {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-             {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
-             <div class="help-block with-errors"></div>
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Brand</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
            </div>
-         </div>
-         <div class="modal-footer">
-           {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-           {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-         </div>
-         {!! Form::close() !!}
        </div>
-     </div>
    </div>
 
-   {{-- Delete Tesco Brands Modal --}}
+{{-- Delete Tesco Brands Modal --}}
    <div class="modal fade" id="deleteTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-       <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-           <h4 class="modal-title" id="myModalLabel">Delete Brand</h4>
-         </div>
-         {!! Form::open(['id' => 'delete_tesco_brand_form','data-toggle' => 'validator','role' => 'form']) !!}
-         <div class="modal-body">
-           <div class="form-group has-feedback">
-             <p>You are about to delete tesco brand. Do you want to proceed?</p>
-             {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_brand_id','class' => 'form-control input-sm')) !!}
-             <div class="help-block with-errors"></div>
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Brand</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_brand_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco brand. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_brand_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
            </div>
-         </div>
-         <div class="modal-footer">
-           {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-           {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-         </div>
-         {!! Form::close() !!}
        </div>
-     </div>
    </div>
 
-   {{-- Department --}}
+{{-- Department --}}
 
    {{-- Add Tesco Department Modal --}}
    <div class="modal fade" id="addTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoDepartmentLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="addTescoDepartmentLabel">Add Department</h4>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoDepartmentLabel">Add Department</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('pantone', 'Pantone', ['class' => 'form_label']) !!}
+                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('rbg', 'RBG', ['class' => 'form_label']) !!}
+                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
         </div>
-        {!! Form::open(['id' => 'add_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
-        <div class="modal-body">
-          <div class="form-group has-feedback">
-            {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
-            {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group has-feedback">
-            {!! Form::label('pantone', 'Pantone', ['class' => 'form_label']) !!}
-            {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group has-feedback">
-            {!! Form::label('rbg', 'RBG', ['class' => 'form_label']) !!}
-            {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required')) !!}
-            <div class="help-block with-errors"></div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-          {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-        </div>
-        {!! Form::close() !!}
-      </div>
     </div>
-  </div>
 
-  {{-- Edit Tesco Department Modal --}}
-  <div class="modal fade" id="editTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-         <h4 class="modal-title" id="myModalLabel">Edit Department</h4>
+    {{-- Edit Tesco Department Modal --}}
+    <div class="modal fade" id="editTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Department</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_pantone_name', 'Pantone Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_rbg_name', 'RBG Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       {!! Form::open(['id' => 'edit_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
-       <div class="modal-body">
-         {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
-         <div class="form-group has-feedback">
-           {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
-           {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-         <div class="form-group has-feedback">
-           {!! Form::label('edit_pantone_name', 'Pantone Name', ['class' => 'form_label']) !!}
-           {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-         <div class="form-group has-feedback">
-           {!! Form::label('edit_rbg_name', 'RBG Name', ['class' => 'form_label']) !!}
-           {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-         
-       </div>
-       <div class="modal-footer">
-         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-         {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-       </div>
-       {!! Form::close() !!}
-     </div>
    </div>
- </div>
 
- {{-- Delete Tesco Departments Modal --}}
- <div class="modal fade" id="deleteTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-         <h4 class="modal-title" id="myModalLabel">Delete Department</h4>
+   {{-- Delete Tesco Departments Modal --}}
+   <div class="modal fade" id="deleteTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Department</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_department_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco department. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_department_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       {!! Form::open(['id' => 'delete_tesco_department_form','data-toggle' => 'validator','role' => 'form']) !!}
-       <div class="modal-body">
-         <div class="form-group has-feedback">
-           <p>You are about to delete tesco department. Do you want to proceed?</p>
-           {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_department_id','class' => 'form-control input-sm')) !!}
-           <div class="help-block with-errors"></div>
-         </div>
-       </div>
-       <div class="modal-footer">
-         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-         {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-       </div>
-       {!! Form::close() !!}
-     </div>
    </div>
- </div>
 
- {{-- Suppliers  --}}
+{{-- Suppliers  --}}
 
- {{-- Add Tesco Supplier Modal --}}
- <div class="modal fade" id="addTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSupplierLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addTescoSupplierLabel">Add Supplier</h4>
-      </div>
-      {!! Form::open(['id' => 'add_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="form-group has-feedback">
-          {!! Form::label('supplier_name', 'supplier Name', ['class' => 'form_label']) !!}
-          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'supplier Name','required')) !!}
-          <div class="help-block with-errors"></div>
+   {{-- Add Tesco Supplier Modal --}}
+   <div class="modal fade" id="addTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSupplierLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoSupplierLabel">Add Supplier</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('supplier_name', 'supplier Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'supplier Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
         </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)')) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Tesco Supplier Modal --}}
-<div class="modal fade" id="editTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Edit Supplier</h4>
-     </div>
-     {!! Form::open(['id' => 'edit_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Edit Tesco Supplier Modal --}}
+    <div class="modal fade" id="editTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Supplier</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required')) !!}
-         <div class="help-block with-errors"></div>
-       </div>
-       
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Delete Tesco Supplier Modal --}}
-<div class="modal fade" id="deleteTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Supplier</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_tesco_supplier_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete tesco supplier. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_supplier_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+   {{-- Delete Tesco Supplier Modal --}}
+   <div class="modal fade" id="deleteTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Supplier</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_supplier_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco supplier. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_supplier_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Add Tesco Size Chart Modal --}}
-<div class="modal fade" id="addTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSizeChartLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addTescoSizeChartLabel">Add Size Chart</h4>
-      </div>
-      {!! Form::open(['id' => 'add_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div class="form-group has-feedback">
-          {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
-          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
-          <div class="help-block with-errors"></div>
+   {{-- Add Tesco Size Chart Modal --}}
+   <div class="modal fade" id="addTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="addTescoSizeChartLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoSizeChartLabel">Add Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div class="form-group has-feedback">
+                          {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
+                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('uk', 'UK', ['class' => 'form_label']) !!}
+                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('ce', 'CE', ['class' => 'form_label']) !!}
+                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
         </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('uk', 'UK', ['class' => 'form_label']) !!}
-          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('ce', 'CE', ['class' => 'form_label']) !!}
-          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit Tesco Size Chart Modal --}}
-<div class="modal fade" id="editTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Edit Size Chart</h4>
-     </div>
-     {!! Form::open(['id' => 'edit_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body"> 
-       {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
-         <div class="help-block with-errors"></div>
+    {{-- Edit Tesco Size Chart Modal --}}
+    <div class="modal fade" id="editTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body"> 
+                     {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_uk', 'UK', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_ce', 'CE', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_uk', 'UK', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_ce', 'CE', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
-         <div class="help-block with-errors"></div>
-       </div>
-       
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Delete Tesco Size Charts Modal --}}
-<div class="modal fade" id="deleteTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div class="form-group has-feedback">
-         <p>You are about to delete tesco size chart. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_size_charts_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+   {{-- Delete Tesco Size Charts Modal --}}
+   <div class="modal fade" id="deleteTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete tesco size chart. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_size_charts_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Delete', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::submit('Delete', ['class' => 'btn btn-primary btn-sm'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
 
-{{-- Show snackbar html code --}}
-<div id="snackbar"><span class="snackbar_span"></span></div>
+   {{-- Show snackbar html code --}}
+    <div id="snackbar"><span class="snackbar_span"></span></div>
 
-@endsection @else
-<script type="text/javascript">
-  window.location = "{{ url('/admin') }}";
-</script>
-@endif @section('jqueryIncludes')
-<script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
-<script src="{{ asset('js/Admin/tesco-settings.js') }}"></script>
-<script>
-  $(function() {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-  
-  $(document).ready(function() {
-    $('.select-buyer').click(function() {
-      $('.select-buyer').addClass('hidden');
-      $('.meta-data-list li a').removeClass("active");
-      $('.meta-data-list li:first a').addClass("active");
-      $('.meta-data-list-1 li a').removeClass("active");
-      $('.meta-data-list-1 li:first a').addClass("active");
+    @endsection @else
+    <script type="text/javascript">
+        window.location = "{{ url('/admin') }}";
+    </script>
+    @endif @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-settings.js') }}"></script>
+    <script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
     })
-    /* Show logo on left side */
-    $('.logo').html('Settings')
-    $('.buyer-nav-select').html($('.buyer-div').html())
-    
+       
+    $(document).ready(function() {
+        $('.select-buyer').click(function() {
+            $('.select-buyer').addClass('hidden');
+            $('.meta-data-list li a').removeClass("active");
+            $('.meta-data-list li:first a').addClass("active");
+            $('.meta-data-list-1 li a').removeClass("active");
+            $('.meta-data-list-1 li:first a').addClass("active");
+        })
+        /* Show logo on left side */
+        $('.logo').html('Settings')
+        $('.buyer-nav-select').html($('.buyer-div').html())
+         
         // Check if buyer selected or not
         /* call orchestraSettings function from orchestra-settings.js*/
         /**  [ Show orchestraSettings page based on buyer selection ] */
@@ -1953,12 +1953,12 @@
 
         }else if(localStorage.getItem("buyer") === 'orchestra')
         {
-          orchestraSettings();
-          $('.meta-data-list li a').removeClass("active");
-          $('.meta-data-list li:first a').addClass("active");
-          
-          /** Hide default image, if buyer already selected */
-          $('.select-buyer').addClass('hidden');
+            orchestraSettings();
+            $('.meta-data-list li a').removeClass("active");
+            $('.meta-data-list li:first a').addClass("active");
+            
+            /** Hide default image, if buyer already selected */
+            $('.select-buyer').addClass('hidden');
         }
         else
         {
@@ -1966,121 +1966,121 @@
           $('.meta-data-list-1 li a').removeClass("active");
           $('.meta-data-list-1 li:first a').addClass("active");
           /** Hide default image, if buyer already selected */
-          $('.select-buyer').addClass('hidden');
+            $('.select-buyer').addClass('hidden');
         }
 
         $('.buyer-select').val(localStorage.getItem("buyer_id"))
         $('.buyer-nav-select .buyer-select').selectpicker({
-          style: 'btn-default',
-          size: 4
+            style: 'btn-default',
+            size: 4
         });
         // Store selected buyer into localstorage
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-          if ($('.buyer-nav-select .buyer-select option:selected').val() != "") 
-          {
-            localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-            var buyer = $(this).find("option:selected").text().toLowerCase();
-            /* call orchestraSettings function from orchestra-settings.js*/
-            /**  [ Show orchestraSettings page based on buyer selection ] */
-            if(buyer === 'orchestra')
+            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") 
             {
-              $('.meta-data-list li a').removeClass("active");
-              $('.meta-data-list li:first a').addClass("active");
-              orchestraSettings();
+                localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                var buyer = $(this).find("option:selected").text().toLowerCase();
+                /* call orchestraSettings function from orchestra-settings.js*/
+                /**  [ Show orchestraSettings page based on buyer selection ] */
+               if(buyer === 'orchestra')
+                {
+                  $('.meta-data-list li a').removeClass("active");
+                  $('.meta-data-list li:first a').addClass("active");
+                     orchestraSettings();
 
-            }
-            else
-            {
-              $('.meta-data-list-1 li a').removeClass("active");
-              $('.meta-data-list-1 li:first a').addClass("active");
-              tescoBrands();
+                }
+                else
+                {
+                  $('.meta-data-list-1 li a').removeClass("active");
+                  $('.meta-data-list-1 li:first a').addClass("active");
+                  tescoBrands();
+                } 
             } 
-          } 
-          else 
-          {
-            localStorage.removeItem("buyer");
-            localStorage.removeItem("buyer_id");
-            location.reload()
-          }
+            else 
+            {
+                localStorage.removeItem("buyer");
+                localStorage.removeItem("buyer_id");
+                location.reload()
+            }
         });
 
-        /** To refresh modal while hidden **/
-        $('.modal').on('hidden.bs.modal', function (e) {
-          $('#add_orchestra_garments_form').trigger("reset");
-          $('#add_orchestra_agegroup_form').trigger("reset");
-          $('#add_orchestra_country_form').trigger("reset");
-          $('#add_orchestra_productfamily_form').trigger("reset");
-          $('#add_orchestra_special_instruction_form').trigger("reset");
-          $('#add_orchestra_composition_form').trigger("reset");
-          $('#add_orchestra_part_form').trigger("reset");
-          $('#add_orchestra_size_chart_form').trigger("reset");
-          $('#add_tesco_brands_form').trigger("reset");
-          $('#add_tesco_departments_form').trigger("reset");
-          $('#add_tesco_suppliers_form').trigger("reset");
-          $('#add_tesco_size_charts_form').trigger("reset");
-          $('#edit_orchestra_symbols_form').trigger("reset");
-          $('#add_orchestra_symbols_form').trigger("reset");
-        })
+      /** To refresh modal while hidden **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#add_orchestra_garments_form').trigger("reset");
+        $('#add_orchestra_agegroup_form').trigger("reset");
+        $('#add_orchestra_country_form').trigger("reset");
+        $('#add_orchestra_productfamily_form').trigger("reset");
+        $('#add_orchestra_special_instruction_form').trigger("reset");
+        $('#add_orchestra_composition_form').trigger("reset");
+        $('#add_orchestra_part_form').trigger("reset");
+        $('#add_orchestra_size_chart_form').trigger("reset");
+        $('#add_tesco_brands_form').trigger("reset");
+        $('#add_tesco_departments_form').trigger("reset");
+        $('#add_tesco_suppliers_form').trigger("reset");
+        $('#add_tesco_size_charts_form').trigger("reset");
+        $('#edit_orchestra_symbols_form').trigger("reset");
+        $('#add_orchestra_symbols_form').trigger("reset");
+       })
 
-        /** Add orchestra garment form validation **/
-        $('#add_orchestra_garments_form').validator().on('submit', function (e) {
-          if (e.isDefaultPrevented())
-          {
+      /** Add orchestra garment form validation **/
+      $('#add_orchestra_garments_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
-          }
-          else
-          {
+        }
+        else
+        {
            e.preventDefault();
            /* call addOrchestraGarments function from orchestra-settings.js*/
            addOrchestraGarments();
+        }
+      })
+
+      /** get edit orchestra garment details **/
+       $(document).on('click','.edit-orchestra-garments',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraGarmentById function from orchestra-settings.js*/
+           getOrchestraGarmentById(id);
+       });
+
+       /** submit edit orchestra garment form **/
+       $('#edit_orchestra_garments_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraGarments function from orchestra-settings.js*/
+            editOrchestraGarments();
          }
        })
 
-        /** get edit orchestra garment details **/
-        $(document).on('click','.edit-orchestra-garments',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraGarmentById function from orchestra-settings.js*/
-         getOrchestraGarmentById(id);
+       /** assign id for delete garment modal **/
+       $('#deleteOrchestraGarmentsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_garment_id').attr('value', config);
        });
 
-        /** submit edit orchestra garment form **/
-        $('#edit_orchestra_garments_form').validator().on('submit', function (e) {
+       /** submit delete orchestra garment form **/
+       $('#delete_orchestra_garment_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraGarments function from orchestra-settings.js*/
-          editOrchestraGarments();
-        }
-      })
-
-        /** assign id for delete garment modal **/
-        $('#deleteOrchestraGarmentsModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_garment_id').attr('value', config);
-       });
-
-        /** submit delete orchestra garment form **/
-        $('#delete_orchestra_garment_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
+            e.preventDefault();
+            var id   = $('#delete_orchestra_garment_id').val();
+            /* call deleteOrchestraGarment function from orchestra-settings.js*/
+            deleteOrchestraGarment(id);
          }
-         else
-         {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_garment_id').val();
-          /* call deleteOrchestraGarment function from orchestra-settings.js*/
-          deleteOrchestraGarment(id);
-        }
-      })
+       })
 
-        /** Add orchestra age group form validation **/
+       /** Add orchestra age group form validation **/
         $('#add_orchestra_agegroup_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2088,56 +2088,56 @@
           }
           else
           {
+             e.preventDefault();
+             /* call addOrchestraAgegroup function from orchestra-settings.js*/
+             addOrchestraAgegroup();
+          }
+        })
+
+       /** get edit orchestra age group details **/
+       $(document).on('click','.edit-orchestra-age-group',function(e){
+           var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call addOrchestraAgegroup function from orchestra-settings.js*/
-           addOrchestraAgegroup();
+            /* call getOrchestraAgeGroupById function from orchestra-settings.js*/
+           getOrchestraAgeGroupById(id);
+       });
+
+       /** submit edit orchestra age group form **/
+       $('#edit_orchestra_agegroup_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraAgeGroup function from orchestra-settings.js*/
+            editOrchestraAgeGroup();
          }
        })
 
-        /** get edit orchestra age group details **/
-        $(document).on('click','.edit-orchestra-age-group',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraAgeGroupById function from orchestra-settings.js*/
-         getOrchestraAgeGroupById(id);
+       /** assign id for delete age group modal **/
+       $('#deleteOrchestraAgeGroupModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_agegroup_id').attr('value', config);
        });
 
-        /** submit edit orchestra age group form **/
-        $('#edit_orchestra_agegroup_form').validator().on('submit', function (e) {
+       /** submit delete orchestra age group form **/
+       $('#delete_orchestra_agegroup_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraAgeGroup function from orchestra-settings.js*/
-          editOrchestraAgeGroup();
-        }
-      })
-
-        /** assign id for delete age group modal **/
-        $('#deleteOrchestraAgeGroupModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_agegroup_id').attr('value', config);
-       });
-
-        /** submit delete orchestra age group form **/
-        $('#delete_orchestra_agegroup_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
+            e.preventDefault();
+            var id   = $('#delete_orchestra_agegroup_id').val();
+            /* call deleteOrchestraAgeGroup function from orchestra-settings.js*/
+            deleteOrchestraAgeGroup(id);
          }
-         else
-         {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_agegroup_id').val();
-          /* call deleteOrchestraAgeGroup function from orchestra-settings.js*/
-          deleteOrchestraAgeGroup(id);
-        }
-      })
+       })
 
-        /** Add orchestra country form validation **/
+       /** Add orchestra country form validation **/
         $('#add_orchestra_country_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2145,56 +2145,56 @@
           }
           else
           {
+             e.preventDefault();
+             /* call addOrchestraCountries function from orchestra-settings.js*/
+             addOrchestraCountries();
+          }
+        })
+
+        /** get edit orchestra country details **/
+       $(document).on('click','.edit-orchestra-country',function(e){
+           var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call addOrchestraCountries function from orchestra-settings.js*/
-           addOrchestraCountries();
+           /* call getOrchestraCountryById function from orchestra-settings.js*/
+           getOrchestraCountryById(id);
+       });
+
+       /** submit edit orchestra country form **/
+       $('#edit_orchestra_country_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraCountry function from orchestra-settings.js*/
+            editOrchestraCountry();
          }
        })
 
-        /** get edit orchestra country details **/
-        $(document).on('click','.edit-orchestra-country',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraCountryById function from orchestra-settings.js*/
-         getOrchestraCountryById(id);
+       /** assign id for delete country modal **/
+       $('#deleteOrchestraCountryModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_country_id').attr('value', config);
        });
 
-        /** submit edit orchestra country form **/
-        $('#edit_orchestra_country_form').validator().on('submit', function (e) {
+       /** submit delete orchestra country form **/
+       $('#delete_orchestra_country_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraCountry function from orchestra-settings.js*/
-          editOrchestraCountry();
-        }
-      })
-
-        /** assign id for delete country modal **/
-        $('#deleteOrchestraCountryModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_country_id').attr('value', config);
-       });
-
-        /** submit delete orchestra country form **/
-        $('#delete_orchestra_country_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
+            e.preventDefault();
+            var id   = $('#delete_orchestra_country_id').val();
+            /* call deleteOrchestraCountry function from orchestra-settings.js*/
+            deleteOrchestraCountry(id);
          }
-         else
-         {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_country_id').val();
-          /* call deleteOrchestraCountry function from orchestra-settings.js*/
-          deleteOrchestraCountry(id);
-        }
-      })
+       })
 
-        /** Add orchestra productfamily form validation **/
+       /** Add orchestra productfamily form validation **/
         $('#add_orchestra_productfamily_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2202,56 +2202,56 @@
           }
           else
           {
+             e.preventDefault();
+             /* call addOrchestraProductFamily function from orchestra-settings.js*/
+             addOrchestraProductFamily();
+          }
+        })
+
+        /** get edit orchestra productfamily details **/
+       $(document).on('click','.edit-orchestra-productfamily',function(e){
+           var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call addOrchestraProductFamily function from orchestra-settings.js*/
-           addOrchestraProductFamily();
+           /* call getOrchestraProductFamilyById function from orchestra-settings.js*/
+           getOrchestraProductFamilyById(id);
+       });
+
+       /** submit edit orchestra productfamily form **/
+       $('#edit_orchestra_productfamily_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraProductFamily function from orchestra-settings.js*/
+            editOrchestraProductFamily();
          }
        })
 
-        /** get edit orchestra productfamily details **/
-        $(document).on('click','.edit-orchestra-productfamily',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraProductFamilyById function from orchestra-settings.js*/
-         getOrchestraProductFamilyById(id);
+       /** assign id for delete productfamily modal **/
+       $('#deleteOrchestraProductFamilyModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_productfamily_id').attr('value', config);
        });
 
-        /** submit edit orchestra productfamily form **/
-        $('#edit_orchestra_productfamily_form').validator().on('submit', function (e) {
+       /** submit delete orchestra productfamily form **/
+       $('#delete_orchestra_productfamily_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraProductFamily function from orchestra-settings.js*/
-          editOrchestraProductFamily();
-        }
-      })
-
-        /** assign id for delete productfamily modal **/
-        $('#deleteOrchestraProductFamilyModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_productfamily_id').attr('value', config);
-       });
-
-        /** submit delete orchestra productfamily form **/
-        $('#delete_orchestra_productfamily_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
+            e.preventDefault();
+            var id   = $('#delete_orchestra_productfamily_id').val();
+            /* call deleteOrchestraProductFamily function from orchestra-settings.js*/
+            deleteOrchestraProductFamily(id);
          }
-         else
-         {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_productfamily_id').val();
-          /* call deleteOrchestraProductFamily function from orchestra-settings.js*/
-          deleteOrchestraProductFamily(id);
-        }
-      })
+       })
 
-        /** Add orchestra special instruction form validation **/
+       /** Add orchestra special instruction form validation **/
         $('#add_orchestra_special_instruction_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2259,56 +2259,56 @@
           }
           else
           {
-           e.preventDefault();
-           /* call addOrchestraSpecialInstruction function from orchestra-settings.js*/
-           addOrchestraSpecialInstruction();
-         }
-       })
+             e.preventDefault();
+             /* call addOrchestraSpecialInstruction function from orchestra-settings.js*/
+             addOrchestraSpecialInstruction();
+          }
+        })
 
         /** get edit orchestra special instruction details **/
-        $(document).on('click','.edit-orchestra-special-instruction',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraSpecialInstructionById function from orchestra-settings.js*/
-         getOrchestraSpecialInstructionById(id);
+       $(document).on('click','.edit-orchestra-special-instruction',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraSpecialInstructionById function from orchestra-settings.js*/
+           getOrchestraSpecialInstructionById(id);
        });
 
         /** submit edit orchestra special instruction form **/
-        $('#edit_orchestra_special_instruction_form').validator().on('submit', function (e) {
+       $('#edit_orchestra_special_instruction_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraSpecialInstruction function from orchestra-settings.js*/
-          editOrchestraSpecialInstruction();
-        }
-      })
+            e.preventDefault();
+            /* call editOrchestraSpecialInstruction function from orchestra-settings.js*/
+            editOrchestraSpecialInstruction();
+         }
+       })
 
-        /** assign id for delete special instruction modal **/
-        $('#deleteOrchestraSpecialInstructionModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_special_instruction_id').attr('value', config);
+       /** assign id for delete special instruction modal **/
+       $('#deleteOrchestraSpecialInstructionModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_special_instruction_id').attr('value', config);
        });
 
-        /** submit delete orchestra special instruction form **/
-        $('#delete_orchestra_special_instruction_form').validator().on('submit', function (e) {
+       /** submit delete orchestra special instruction form **/
+       $('#delete_orchestra_special_instruction_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_special_instruction_id').val();
-          /* call deleteOrchestraSpecialInstruction function from orchestra-settings.js*/
-          deleteOrchestraSpecialInstruction(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_orchestra_special_instruction_id').val();
+            /* call deleteOrchestraSpecialInstruction function from orchestra-settings.js*/
+            deleteOrchestraSpecialInstruction(id);
+         }
+       })
 
-        /** Add orchestra composition form validation **/
+       /** Add orchestra composition form validation **/
         $('#add_orchestra_composition_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2316,56 +2316,56 @@
           }
           else
           {
-           e.preventDefault();
-           /* call addOrchestraComposition function from orchestra-settings.js*/
-           addOrchestraComposition();
-         }
-       })
+             e.preventDefault();
+             /* call addOrchestraComposition function from orchestra-settings.js*/
+             addOrchestraComposition();
+          }
+        })
 
         /** get edit orchestra composition details **/
-        $(document).on('click','.edit-orchestra-composition',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraCompositionById function from orchestra-settings.js*/
-         getOrchestraCompositionById(id);
+       $(document).on('click','.edit-orchestra-composition',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraCompositionById function from orchestra-settings.js*/
+           getOrchestraCompositionById(id);
        });
 
         /** submit edit orchestra composition form **/
-        $('#edit_orchestra_composition_form').validator().on('submit', function (e) {
+       $('#edit_orchestra_composition_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraComposition function from orchestra-settings.js*/
-          editOrchestraComposition();
-        }
-      })
+            e.preventDefault();
+            /* call editOrchestraComposition function from orchestra-settings.js*/
+            editOrchestraComposition();
+         }
+       })
 
-        /** assign id for delete composition modal **/
-        $('#deleteOrchestraCompositionModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_composition_id').attr('value', config);
+       /** assign id for delete composition modal **/
+       $('#deleteOrchestraCompositionModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_composition_id').attr('value', config);
        });
 
-        /** submit delete orchestra composition form **/
-        $('#delete_orchestra_composition_form').validator().on('submit', function (e) {
+       /** submit delete orchestra composition form **/
+       $('#delete_orchestra_composition_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_composition_id').val();
-          /* call deleteOrchestraComposition function from orchestra-settings.js*/
-          deleteOrchestraComposition(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_orchestra_composition_id').val();
+            /* call deleteOrchestraComposition function from orchestra-settings.js*/
+            deleteOrchestraComposition(id);
+         }
+       })
 
-        /** Add orchestra part form validation **/
+       /** Add orchestra part form validation **/
         $('#add_orchestra_part_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2373,56 +2373,56 @@
           }
           else
           {
-           e.preventDefault();
-           /* call addOrchestraPart function from orchestra-settings.js*/
-           addOrchestraPart();
-         }
-       })
+             e.preventDefault();
+             /* call addOrchestraPart function from orchestra-settings.js*/
+             addOrchestraPart();
+          }
+        })
 
         /** get edit orchestra part details **/
-        $(document).on('click','.edit-orchestra-part',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraPartById function from orchestra-settings.js*/
-         getOrchestraPartById(id);
+       $(document).on('click','.edit-orchestra-part',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraPartById function from orchestra-settings.js*/
+           getOrchestraPartById(id);
        });
 
         /** submit edit orchestra part form **/
-        $('#edit_orchestra_part_form').validator().on('submit', function (e) {
+       $('#edit_orchestra_part_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraPart function from orchestra-settings.js*/
-          editOrchestraPart();
-        }
-      })
+            e.preventDefault();
+            /* call editOrchestraPart function from orchestra-settings.js*/
+            editOrchestraPart();
+         }
+       })
 
-        /** assign id for delete Part modal **/
-        $('#deleteOrchestraPartModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_part_id').attr('value', config);
+       /** assign id for delete Part modal **/
+       $('#deleteOrchestraPartModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_part_id').attr('value', config);
        });
 
-        /** submit delete orchestra part form **/
-        $('#delete_orchestra_part_form').validator().on('submit', function (e) {
+       /** submit delete orchestra part form **/
+       $('#delete_orchestra_part_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_part_id').val();
-          /* call deleteOrchestraPart function from orchestra-settings.js*/
-          deleteOrchestraPart(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_orchestra_part_id').val();
+            /* call deleteOrchestraPart function from orchestra-settings.js*/
+            deleteOrchestraPart(id);
+         }
+       })
 
-        /** Add orchestra size chart form validation **/
+       /** Add orchestra size chart form validation **/
         $('#add_orchestra_size_chart_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
@@ -2430,321 +2430,321 @@
           }
           else
           {
-           e.preventDefault();
-           /* call addOrchestraSizeChart function from orchestra-settings.js*/
-           addOrchestraSizeChart();
-         }
-       })
+             e.preventDefault();
+             /* call addOrchestraSizeChart function from orchestra-settings.js*/
+             addOrchestraSizeChart();
+          }
+        })
 
         /** get edit orchestra size chart details **/
-        $(document).on('click','.edit-orchestra-size-chart',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getOrchestraSizeChartById function from orchestra-settings.js*/
-         getOrchestraSizeChartById(id);
+       $(document).on('click','.edit-orchestra-size-chart',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraSizeChartById function from orchestra-settings.js*/
+           getOrchestraSizeChartById(id);
        });
 
         /** submit edit orchestra size chart form **/
-        $('#edit_orchestra_size_chart_form').validator().on('submit', function (e) {
+       $('#edit_orchestra_size_chart_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editOrchestraSizeChart function from orchestra-settings.js*/
-          editOrchestraSizeChart();
-        }
-      })
+            e.preventDefault();
+            /* call editOrchestraSizeChart function from orchestra-settings.js*/
+            editOrchestraSizeChart();
+         }
+       })
 
-        /** assign id for delete size chart modal **/
-        $('#deleteOrchestraSizeChartModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_orchestra_size_chart_id').attr('value', config);
+       /** assign id for delete size chart modal **/
+       $('#deleteOrchestraSizeChartModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_size_chart_id').attr('value', config);
        });
 
-        /** submit delete orchestra size chart form **/
-        $('#delete_orchestra_size_chart_form').validator().on('submit', function (e) {
+       /** submit delete orchestra size chart form **/
+       $('#delete_orchestra_size_chart_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_orchestra_size_chart_id').val();
-          /* call deleteOrchestraSizeChart function from orchestra-settings.js*/
-          deleteOrchestraSizeChart(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_orchestra_size_chart_id').val();
+            /* call deleteOrchestraSizeChart function from orchestra-settings.js*/
+            deleteOrchestraSizeChart(id);
+         }
+       })
 
-        /** Add Tesco Brand form validation **/
-        $('#add_tesco_brands_form').validator().on('submit', function (e) {
+       /** Add Tesco Brand form validation **/
+       $('#add_tesco_brands_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
 
           }
           else
           {
-           e.preventDefault();
-           /* call addTescoBrands function from tesco-settings.js*/
-           addTescoBrands();
-         }
-       })
+             e.preventDefault();
+             /* call addTescoBrands function from tesco-settings.js*/
+             addTescoBrands();
+          }
+        })
 
         /** get edit orchestra garment details **/
-        $(document).on('click','.edit-tesco-brands',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getTescoBrandById function from tesco-settings.js*/
-         getTescoBrandById(id);
+       $(document).on('click','.edit-tesco-brands',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoBrandById function from tesco-settings.js*/
+           getTescoBrandById(id);
        });
 
-        /** submit edit orchestra garment form **/
-        $('#edit_tesco_brands_form').validator().on('submit', function (e) {
+       /** submit edit orchestra garment form **/
+       $('#edit_tesco_brands_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editTescoBrands function from tesco-settings.js*/
-          editTescoBrands();
-        }
-      })
+            e.preventDefault();
+            /* call editTescoBrands function from tesco-settings.js*/
+            editTescoBrands();
+         }
+       })
 
-        /** assign id for delete tesco brands modal **/
-        $('#deleteTescoBrandsModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_tesco_brand_id').attr('value', config);
+       /** assign id for delete tesco brands modal **/
+       $('#deleteTescoBrandsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_tesco_brand_id').attr('value', config);
        });
 
-        /** submit delete orchestra size chart form **/
-        $('#delete_tesco_brand_form').validator().on('submit', function (e) {
+       /** submit delete orchestra size chart form **/
+       $('#delete_tesco_brand_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_tesco_brand_id').val();
-          /* call deleteTescoBrand function from tesco-settings.js*/
-          deleteTescoBrand(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_tesco_brand_id').val();
+            /* call deleteTescoBrand function from tesco-settings.js*/
+            deleteTescoBrand(id);
+         }
+       })
 
         /** To Enable  Brand  on click **/
-        $(document).on('click', '#make_enabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeBrandEnabled function from tesco-settings.js*/
-          makeBrandEnabled(id,csrf_token)
-        });
+    $(document).on('click', '#make_enabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeBrandEnabled function from tesco-settings.js*/
+        makeBrandEnabled(id,csrf_token)
+    });
 
-        /** To disable Brand  on click **/
-        $(document).on('click', '#make_disabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeBrandDisabled function from tesco-settings.js*/
-          makeBrandDisabled(id,csrf_token)
-        });
+    /** To disable Brand  on click **/
+    $(document).on('click', '#make_disabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeBrandDisabled function from tesco-settings.js*/
+        makeBrandDisabled(id,csrf_token)
+    });
 
-        /** Add Tesco Department form validation **/
-        $('#add_tesco_departments_form').validator().on('submit', function (e) {
+    /** Add Tesco Department form validation **/
+    $('#add_tesco_departments_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
 
           }
           else
           {
-           e.preventDefault();
-           /* call addTescoDepartments function from  tesco-settings.js*/
-           addTescoDepartments();
-         }
-       })
+             e.preventDefault();
+             /* call addTescoDepartments function from  tesco-settings.js*/
+             addTescoDepartments();
+          }
+        })
         /** get edit Tesco Department details **/
         $(document).on('click','.edit-tesco-departments',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getTescoDepartmentsById function from settings.js*/
-         getTescoDepartmentsById(id);
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoDepartmentsById function from settings.js*/
+           getTescoDepartmentsById(id);
        });
         
-        /** submit edit tesco departments form **/
-        $('#edit_tesco_departments_form').validator().on('submit', function (e) {
+              /** submit edit tesco departments form **/
+              $('#edit_tesco_departments_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editTescoDepartments function from tesco-settings.js*/
-          editTescoDepartments();
-        }
-      })
+            e.preventDefault();
+            /* call editTescoDepartments function from tesco-settings.js*/
+            editTescoDepartments();
+         }
+       })
 
-        /** assign id for delete tesco department modal **/
-        $('#deleteTescoDepartmentsModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_tesco_department_id').attr('value', config);
+       /** assign id for delete tesco department modal **/
+       $('#deleteTescoDepartmentsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_tesco_department_id').attr('value', config);
        });
 
-        /** submit delete Tesco Department  form **/
-        $('#delete_tesco_department_form').validator().on('submit', function (e) {
+       /** submit delete Tesco Department  form **/
+       $('#delete_tesco_department_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_tesco_department_id').val();
-          /* call deleteTescoBrand function from tesco-settings.js*/
-          deleteTescoDepartment(id);
-        }
-      })
+            e.preventDefault();
+            var id   = $('#delete_tesco_department_id').val();
+            /* call deleteTescoBrand function from tesco-settings.js*/
+            deleteTescoDepartment(id);
+         }
+       })
 
-        /** Add Tesco Supplier form validation **/
-        $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
+       /** Add Tesco Supplier form validation **/
+       $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
           {
 
           }
           else
           {
+             e.preventDefault();
+             /* call addTescoSuppliers function from  tesco-settings.js*/
+             addTescoSuppliers();
+          }
+        })
+       
+         /** get edit Tesco Supplier details **/
+       $(document).on('click','.edit-tesco-suppliers',function(e){
+           var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call addTescoSuppliers function from  tesco-settings.js*/
-           addTescoSuppliers();
-         }
-       })
-        
-        /** get edit Tesco Supplier details **/
-        $(document).on('click','.edit-tesco-suppliers',function(e){
-         var id = $(this).closest('tr').attr('id');
-         e.preventDefault();
-         /* call getTescoBrandById function from tesco-settings.js*/
-         getTescoSuppliersById(id);
+           /* call getTescoBrandById function from tesco-settings.js*/
+           getTescoSuppliersById(id);
        });
 
-        /** submit edit Tesco Supplier form **/
-        $('#edit_tesco_suppliers_form').validator().on('submit', function (e) {
+       /** submit edit Tesco Supplier form **/
+       $('#edit_tesco_suppliers_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editTescoBrands function from tesco-settings.js*/
-          editTescoSuppliers();
-        }
-      })
+            e.preventDefault();
+            /* call editTescoBrands function from tesco-settings.js*/
+            editTescoSuppliers();
+         }
+       })
 
         /** assign id for delete tesco supplier modal **/
         $('#deleteTescoSuppliersModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_tesco_supplier_id').attr('value', config);
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_tesco_supplier_id').attr('value', config);
        });
 
-        /** submit delete Tesco supplier  form **/
-        $('#delete_tesco_supplier_form').validator().on('submit', function (e) {
+       /** submit delete Tesco supplier  form **/
+       $('#delete_tesco_supplier_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_tesco_supplier_id').val();
-          /* call deleteTescoSupplier function from tesco-settings.js*/
-          deleteTescoSupplier(id);
-        }
-      })
-        
-        /** To Enable  Supplier  on click **/
-        $(document).on('click', '#make_supplier_enabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeSupplierEnabled function from tesco-settings.js*/
-          makeSupplierEnabled(id,csrf_token)
-        });
-
-        /** To disable Supplier  on click **/
-        $(document).on('click', '#make_supplier_disabled', function(e) {
-          var id = $(this).closest('tr').attr('id');
-          var csrf_token = $('meta[name="csrf-token"]').attr('content');
-          /* call makeSupplierDisabled function from tesco-settings.js*/
-          makeSupplierDisabled(id,csrf_token)
-        });
-        /** Add Tesco Size chart form validation **/
-        $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
-          if (e.isDefaultPrevented())
-          {
-
-          }
-          else
-          {
-           e.preventDefault();
-           /* call addTescoSize charts function from  tesco-settings.js*/
-           addTescoSizeCharts();
+            e.preventDefault();
+            var id   = $('#delete_tesco_supplier_id').val();
+            /* call deleteTescoSupplier function from tesco-settings.js*/
+            deleteTescoSupplier(id);
          }
        })
-        
-        /** get edit Tesco Size chart details **/
-        $(document).on('click','.edit-tesco-sizecharts',function(e){
-         var id = $(this).closest('tr').attr('id');
+     
+ /** To Enable  Supplier  on click **/
+    $(document).on('click', '#make_supplier_enabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeSupplierEnabled function from tesco-settings.js*/
+        makeSupplierEnabled(id,csrf_token)
+    });
+
+    /** To disable Supplier  on click **/
+    $(document).on('click', '#make_supplier_disabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        /* call makeSupplierDisabled function from tesco-settings.js*/
+        makeSupplierDisabled(id,csrf_token)
+    });
+     /** Add Tesco Size chart form validation **/
+     $('#add_tesco_size_charts_form').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented())
+      {
+
+      }
+      else
+      {
          e.preventDefault();
-         /* call getTescoSizechartById function from settings.js*/
-         getTescoSizeChartsById(id);
+         /* call addTescoSize charts function from  tesco-settings.js*/
+         addTescoSizeCharts();
+      }
+    })
+       
+         /** get edit Tesco Size chart details **/
+       $(document).on('click','.edit-tesco-sizecharts',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoSizechartById function from settings.js*/
+           getTescoSizeChartsById(id);
        });
 
-        /** submit edit Tesco Size chart form **/
-        $('#edit_tesco_size_charts_form').validator().on('submit', function (e) {
+       /** submit edit Tesco Size chart form **/
+       $('#edit_tesco_size_charts_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          /* call editTescoSizecharts function from tesco-settings.js*/
-          editTescoSizeChart();
-        }
-      })
+            e.preventDefault();
+            /* call editTescoSizecharts function from tesco-settings.js*/
+            editTescoSizeChart();
+         }
+       })
 
-        /** assign id for delete tesco sizechart modal **/
-        $('#deleteTescoSizeChartsModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_size_charts_id').attr('value', config);
+          /** assign id for delete tesco sizechart modal **/
+          $('#deleteTescoSizeChartsModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_size_charts_id').attr('value', config);
        });
 
-        /** submit delete Tesco sizechart  form **/
-        $('#delete_tesco_size_charts_form').validator().on('submit', function (e) {
+       /** submit delete Tesco sizechart  form **/
+       $('#delete_tesco_size_charts_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
          }
          else
          {
-          e.preventDefault();
-          var id   = $('#delete_size_charts_id').val();
-          /* call deleteTescoSizechart function from tesco-settings.js*/
-          deleteTescoSizeChart(id);
+            e.preventDefault();
+            var id   = $('#delete_size_charts_id').val();
+            /* call deleteTescoSizechart function from tesco-settings.js*/
+            deleteTescoSizeChart(id);
+         }
+       })
+
+       /** Add orchestra symbols form validation **/
+      $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
         }
-      })
-
-        /** Add orchestra symbols form validation **/
-        $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
-          if (e.isDefaultPrevented())
-          {
-
-          }
-          else
-          {
+        else
+        {
            e.preventDefault();
            var cofreet_file = $('#cofreet_symbol')[0].files[0];
            var astms_file = $('#astms_symbol')[0].files[0];
@@ -2753,65 +2753,65 @@
            
            /* call addOrchestraSymbols function from orchestra-settings.js*/
            addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
-         }
-       })
+        }
+      })
+    });
+
+    /** Edit orchestra symbols form validation **/
+    $('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
+           var astms_file = $('#edit_astms_symbol')[0].files[0];
+           if(astms_file === undefined){
+            astms_file = "";
+           }
+           if(cofreet_file === undefined){
+            cofreet_file = "";
+           }
+           var symbol_category = $('#edit_symbol_category option:selected').val();
+           var care_instruction = $('#edit_care_instruction').val();
+           var id = $('#edit_orchestra_symbols_id').val();
+
+           /* call editOrchestraSymbols function from orchestra-settings.js*/
+           editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
+        }
       });
 
-/** Edit orchestra symbols form validation **/
-$('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
-  if (e.isDefaultPrevented())
-  {
+          /** assign id for delete Orchestra Symbol modal **/
+          $('#deleteOrchestraSymbolModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_orchestra_symbol_id').attr('value', config);
+       });
 
-  }
-  else
-  {
-   e.preventDefault();
-   var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
-   var astms_file = $('#edit_astms_symbol')[0].files[0];
-   if(astms_file === undefined){
-    astms_file = "";
-  }
-  if(cofreet_file === undefined){
-    cofreet_file = "";
-  }
-  var symbol_category = $('#edit_symbol_category option:selected').val();
-  var care_instruction = $('#edit_care_instruction').val();
-  var id = $('#edit_orchestra_symbols_id').val();
+       /** submit delete Orchestra Symbol  form **/
+       $('#delete_orchestra_symbol_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
 
-  /* call editOrchestraSymbols function from orchestra-settings.js*/
-  editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
-}
-});
-
-/** assign id for delete Orchestra Symbol modal **/
-$('#deleteOrchestraSymbolModal').on('show.bs.modal', function (e) {
- var config = $(e.relatedTarget).data('userid');
- $('#delete_orchestra_symbol_id').attr('value', config);
-});
-
-/** submit delete Orchestra Symbol  form **/
-$('#delete_orchestra_symbol_form').validator().on('submit', function (e) {
- if (e.isDefaultPrevented())
- {
-
- }
- else
- {
-  e.preventDefault();
-  var id   = $('#delete_orchestra_symbol_id').val();
-  /* call deleteOrchestraSymbol function from tesco-settings.js*/
-  deleteOrchestraSymbol(id);
-}
-})
-/** [ Make sidebar active ] */
-$('.meta-data-list li a').click(function(){
-  $('.meta-data-list li a').removeClass("active");
-  $(this).addClass("active");
-});
-$('.meta-data-list-1 li a').click(function(){
-  $('.meta-data-list-1 li a').removeClass("active");
-  $(this).addClass("active");
-});
-</script>
-
-@endsection
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_orchestra_symbol_id').val();
+            /* call deleteOrchestraSymbol function from tesco-settings.js*/
+            deleteOrchestraSymbol(id);
+         }
+       })
+      /** [ Make sidebar active ] */
+       $('.meta-data-list li a').click(function(){
+        $('.meta-data-list li a').removeClass("active");
+        $(this).addClass("active");
+      });
+        $('.meta-data-list-1 li a').click(function(){
+        $('.meta-data-list-1 li a').removeClass("active");
+        $(this).addClass("active");
+      });
+    </script>
+  
+    @endsection

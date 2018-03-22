@@ -1,272 +1,272 @@
 @extends('layouts.Admin.app')
 @if (Auth::guard("web")->user())
 @section('content')
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12 col-md-12 main">
-      <div class="top-content">
-      </div>
-      <div class="main-sub-menu">
-        <div class="action-group pull-right sub-menu-button">
-          <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-            <i class="ion-plus"></i> Add Buyer</a>
-          </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 main">
+              <div class="top-content">
+              </div>
+              <div class="main-sub-menu">
+                <div class="action-group pull-right sub-menu-button">
+                  <a href="#" data-target="#addBuyerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                    <i class="ion-plus"></i> Add Buyer</a>
+                </div>
+              </div>
+          <div class="clearfix"></div>
+                <div class="main-content">
+                    <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+                    <div class="col" id="buyer-table">
+                    <table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>Sl. No</th>
+                          <th>Buyer Name</th>
+                          <th>Buyer Email</th>
+                          <th>Buyer Phone</th>
+                          <th>Buyer Address</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach ($buyers as $value)
+                        <tr id="{{$value->id}}">
+                          <td>{{ $loop->iteration }}</td>
+                          <td>{{ $value->buyer_name }}</td>
+                          <td>{{ $value->buyer_email }}</td>
+                          <td>{{ $value->buyer_phone }}</td>
+                          <td>{{ $value->buyer_address }}</td>
+                          <td>
+                            <a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a>
+                            <a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a>
+                          </td>
+                         </tr>
+                         @endforeach
+                         </tbody>
+                     </table>
+                  </div>
+              </div>
+                </div>
+            </div>
         </div>
-        <div class="clearfix"></div>
-        <div class="main-content">
-          <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-          <div class="col" id="buyer-table">
-            <table id="buyers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Sl. No</th>
-                  <th>Buyer Name</th>
-                  <th>Buyer Email</th>
-                  <th>Buyer Phone</th>
-                  <th>Buyer Address</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($buyers as $value)
-                <tr id="{{$value->id}}">
-                  <td>{{ $loop->iteration }}</td>
-                  <td>{{ $value->buyer_name }}</td>
-                  <td>{{ $value->buyer_email }}</td>
-                  <td>{{ $value->buyer_phone }}</td>
-                  <td>{{ $value->buyer_address }}</td>
-                  <td>
-                    <a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a>
-                    <a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
 
-{{-- Snackbar html code --}}
-<div id="snackbar"><span class="snackbar_span"></span></div>
+    {{-- Snackbar html code --}}
+    <div id="snackbar"><span class="snackbar_span"></span></div>
 
-{{-- Add buyer modal --}}
-<div class="modal fade" id="addBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add Buyer</h4>
-      </div>
-      {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-      <div class="modal-body">
-        <div id="buyer_result"></div>
-        <div class="form-group has-feedback">
-          {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
-          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-          <div class="help-block with-errors"></div>
+    {{-- Add buyer modal --}}
+     <div class="modal fade" id="addBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Buyer</h4>
+                </div>
+                {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="buyer_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('buyer_email', 'Email', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                            {!! Form::email('buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                          </div>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('buyer_phone', 'Phone', ['class' => 'form_label']) !!}
+                          <div class="input-group">
+                            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
+                            {!! Form::text('buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                         </div>
+                         <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
+                          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
         </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('buyer_email', 'Email', ['class' => 'form_label']) !!}
-          <div class="input-group">
-            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-            {!! Form::email('buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-          </div>
-          <div class="help-block with-errors"></div>
-        </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('buyer_phone', 'Phone', ['class' => 'form_label']) !!}
-          <div class="input-group">
-            <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-            {!! Form::text('buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-          </div>
-          <div class="help-block with-errors"></div>
-        </div>
-        <div class="form-group has-feedback">
-          {!! Form::label('buyer_address', 'Address', ['class' => 'form_label']) !!}
-          {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-          <div class="help-block with-errors"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-      </div>
-      {!! Form::close() !!}
     </div>
-  </div>
-</div>
 
-{{-- Edit buyer modal --}}
-<div class="modal fade" id="editBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Edit Buyer</h4>
-     </div>
-     {!! Form::open(['id' => 'edit_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div id="edit_buyer_result"></div>
-       {{-- hidden id for edit functionality --}}
-       {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
-         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_buyer_email', 'Email', ['class' => 'form_label']) !!}
-         <div class="input-group">
-           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-           {!! Form::email('edit_buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
-         </div>
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_buyer_phone', 'Phone', ['class' => 'form_label']) !!}
-         <div class="input-group">
-           <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
-           {!! Form::text('edit_buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
-         </div>
-         <div class="help-block with-errors"></div>
-       </div>
-       <div class="form-group has-feedback">
-         {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
-         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
-         <div class="help-block with-errors"></div>
-       </div>
+    {{-- Edit buyer modal --}}
+    <div class="modal fade" id="editBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Buyer</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     <div id="edit_buyer_result"></div>
+                     {{-- hidden id for edit functionality --}}
+                     {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_email', 'Email', ['class' => 'form_label']) !!}
+                         <div class="input-group">
+                           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                           {!! Form::email('edit_buyer_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                         </div>
+                         <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_phone', 'Phone', ['class' => 'form_label']) !!}
+                         <div class="input-group">
+                           <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
+                           {!! Form::text('edit_buyer_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                        </div>
+                        <div class="help-block with-errors"></div>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_buyer_address', 'Address', ['class' => 'form_label']) !!}
+                         {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
 
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
    </div>
- </div>
-</div>
 
-{{-- Delete buyer modal --}}
-<div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-   <div class="modal-content">
-     <div class="modal-header">
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" id="myModalLabel">Delete Buyer</h4>
-     </div>
-     {!! Form::open(['id' => 'delete_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-     <div class="modal-body">
-       <div id="delete_buyer_result"></div>
-       <div class="form-group has-feedback">
-         <p>You are about to delete buyer. Do you want to proceed?</p>
-         {!! Form::hidden('id',$value = null, array('id'=>'delete_buyer_id','class' => 'form-control input-sm')) !!}
-         <div class="help-block with-errors"></div>
+   {{-- Delete buyer modal --}}
+   <div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Delete Buyer</h4>
+               </div>
+               {!! Form::open(['id' => 'delete_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body">
+                     <div id="delete_buyer_result"></div>
+                       <div class="form-group has-feedback">
+                         <p>You are about to delete buyer. Do you want to proceed?</p>
+                          {!! Form::hidden('id',$value = null, array('id'=>'delete_buyer_id','class' => 'form-control input-sm')) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
        </div>
-     </div>
-     <div class="modal-footer">
-       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-     </div>
-     {!! Form::close() !!}
    </div>
- </div>
-</div>
+   
+    @endsection
+    @else
+    <script type="text/javascript">
+        window.location = "{{ url('/admin') }}";
+    </script>
+    @endif
+    @section('jqueryIncludes')
+    <script src="{{ asset('js/Admin/buyers.js') }}"></script>
+   <script type="text/javascript">
+       $( document ).ready(function() {
+         /* Show logo on left side*/
+         $('.logo').html('Buyers & Merchandisers')
+         $('#buyers-list-table').DataTable();
+         $("#buyers-list-table_filter input").addClass('form-control input-sm');
+         $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
+         $('#buyers-list-table_length select').addClass('form-control input-sm');
+         $('#add_buyer_form').trigger("reset");
+         $('#edit_buyer_form').trigger('reset');
+         $('#buyer_result').hide();
+         $('#edit_buyer_result').hide();
+         $('#delete_buyer_result').hide();
+         $('.edit-buyer').tooltip('show')
+         $('.edit-buyer').tooltip('toggle')
+         $('.delete-buyer').tooltip('show')
+         $('.delete-buyer').tooltip('toggle')
+       });
 
-@endsection
-@else
-<script type="text/javascript">
-  window.location = "{{ url('/admin') }}";
-</script>
-@endif
-@section('jqueryIncludes')
-<script src="{{ asset('js/Admin/buyers.js') }}"></script>
-<script type="text/javascript">
- $( document ).ready(function() {
-   /* Show logo on left side*/
-   $('.logo').html('Buyers & Merchandisers')
-   $('#buyers-list-table').DataTable();
-   $("#buyers-list-table_filter input").addClass('form-control input-sm');
-   $("#buyers-list-table_filter input").attr('placeholder', 'Data Search');
-   $('#buyers-list-table_length select').addClass('form-control input-sm');
-   $('#add_buyer_form').trigger("reset");
-   $('#edit_buyer_form').trigger('reset');
-   $('#buyer_result').hide();
-   $('#edit_buyer_result').hide();
-   $('#delete_buyer_result').hide();
-   $('.edit-buyer').tooltip('show')
-   $('.edit-buyer').tooltip('toggle')
-   $('.delete-buyer').tooltip('show')
-   $('.delete-buyer').tooltip('toggle')
- });
+       /** Add buyer bootstrap form validation **/
+        $('#add_buyer_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
 
- /** Add buyer bootstrap form validation **/
- $('#add_buyer_form').validator().on('submit', function (e) {
-  if (e.isDefaultPrevented())
-  {
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addBuyer function from buyers.js*/
+           addBuyer();
+        }
+      })
 
-  }
-  else
-  {
-   e.preventDefault();
-   /* call addBuyer function from buyers.js*/
-   addBuyer();
- }
-})
+      /** To refresh modal while hidden **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#add_buyer_form').trigger("reset");
+        $('#buyer_result').hide();
+        $('#edit_buyer_result').hide();
+        $('#delete_buyer_result').hide();
+       })
 
- /** To refresh modal while hidden **/
- $('.modal').on('hidden.bs.modal', function (e) {
-  $('#add_buyer_form').trigger("reset");
-  $('#buyer_result').hide();
-  $('#edit_buyer_result').hide();
-  $('#delete_buyer_result').hide();
-})
+       /** Get edit buyer details on click**/
+       $(document).on('click','.edit-buyer',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getBuyer function from buyers.js*/
+           getBuyer(id);
+       });
 
- /** Get edit buyer details on click**/
- $(document).on('click','.edit-buyer',function(e){
-   var id = $(this).closest('tr').attr('id');
-   e.preventDefault();
-   /* call getBuyer function from buyers.js*/
-   getBuyer(id);
- });
+       /** Submit edit buyer form **/
+       $('#edit_buyer_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
 
- /** Submit edit buyer form **/
- $('#edit_buyer_form').validator().on('submit', function (e) {
-   if (e.isDefaultPrevented())
-   {
+         }
+         else
+         {
+            e.preventDefault();
+            /* call getBuyer function from buyers.js*/
+            editBuyer();
+         }
+       })
 
-   }
-   else
-   {
-    e.preventDefault();
-    /* call getBuyer function from buyers.js*/
-    editBuyer();
-  }
-})
+       /** assign id for delete buyer modal **/
+       $('#deleteBuyerModal').on('show.bs.modal', function (e) {
+           var config = $(e.relatedTarget).data('userid');
+           $('#delete_buyer_id').attr('value', config);
+       });
 
- /** assign id for delete buyer modal **/
- $('#deleteBuyerModal').on('show.bs.modal', function (e) {
-   var config = $(e.relatedTarget).data('userid');
-   $('#delete_buyer_id').attr('value', config);
- });
+       /** submit delete buyer form **/
+       $('#delete_buyer_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
 
- /** submit delete buyer form **/
- $('#delete_buyer_form').validator().on('submit', function (e) {
-   if (e.isDefaultPrevented())
-   {
+         }
+         else
+         {
+            e.preventDefault();
+            var id   = $('#delete_buyer_id').val();
+            /* call deleteBuyer function from buyers.js*/
+            deleteBuyer(id);
+         }
+       })
 
-   }
-   else
-   {
-    e.preventDefault();
-    var id   = $('#delete_buyer_id').val();
-    /* call deleteBuyer function from buyers.js*/
-    deleteBuyer(id);
-  }
-})
-
-</script>
-@endsection
+    </script>
+    @endsection
