@@ -889,13 +889,13 @@ function updateDeliveryDate(obj,tableID,tableName)
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
-
-    if (deliveryDate=="")
+    console.log(deliveryDate);
+    if (deliveryDate == "" || deliveryDate === '01-01-1970')
     {
         $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', 'rgb(244, 67, 54)');
     }
-   
-            $('.snackbar_span').html('');
+    else {
+                   $('.snackbar_span').html('');
             $.ajax({
             url: base_url + "/admin/tesco/update-delivery-date",
             type: "Post",
@@ -932,7 +932,10 @@ function updateDeliveryDate(obj,tableID,tableName)
             complete: function (){
                 $(".loader").hide();
             }
-        })    
+        })  
+    }
+   
+   
 }
 
 /**

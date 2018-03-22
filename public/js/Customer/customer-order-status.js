@@ -1734,10 +1734,12 @@ function updateDeliveryDate(obj,tableID,tableName)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
 
-    if (deliveryDate=="")
+    if (deliveryDate=="" || deliveryDate === '01-01-1970')
     {
         $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', 'rgb(244, 67, 54)');
     }
+    else
+    {
    
             $('.snackbar_span').html('');
             $.ajax({
@@ -1776,7 +1778,8 @@ function updateDeliveryDate(obj,tableID,tableName)
             complete: function (){
                 $(".loader").hide();
             }
-        })    
+        }) 
+    }   
 }
 
 /**
