@@ -20,6 +20,7 @@
 		font-size: 12px; 
 		font-weight: 400;
 	}
+    .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -137,7 +138,7 @@
                     <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="proforma-invoice">
                     <div class="col-md-12 text-center">
                         <h4><strong><u>Proforma Invoice</u></strong></h4>
                         <br/>
@@ -208,6 +209,7 @@
             </div>
         </div>
     </div>
+    <div id="editor"></div>
     <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -407,6 +409,9 @@
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
 <script>

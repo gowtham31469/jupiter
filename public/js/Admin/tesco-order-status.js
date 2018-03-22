@@ -1156,7 +1156,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         $('#item_details').html(tr)
                         if (pi_status=="true")
                         {
-                            $('.pi_actions').html('<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            $('.pi_actions').html('<button class="btn btn-default btn-xs" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                         }
                         else
                         {
@@ -1165,6 +1165,27 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         var logo = base_url+data.data.company_details.logo
                         $('#company-logo').attr('src',logo);
                         $('#profoma-invoice').modal("show")
+
+                        //Download Pi using JSPDF
+                        $('#downloadPi').click(function () {
+                            var myOffscreenEl = document.getElementById("proforma-invoice"),
+                                useWidth      = myOffscreenEl.style.width,
+                                useHeight     = myOffscreenEl.style.height;
+                                myOffscreenEl.style.backgroundColor = 'white';
+                                myOffscreenEl.style.color = '#000';
+
+                            html2canvas(myOffscreenEl, {
+                                width: useWidth,
+                                height: useHeight
+
+                            });
+
+                            var pdf = new jsPDF('p','pt','a4');
+                            pdf.addHTML(document.querySelector('#proforma-invoice'),function() {
+                                pdf.save('web.pdf');
+                            });
+
+                        });
                     }
                     else
                     {
