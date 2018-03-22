@@ -270,39 +270,39 @@ border: 0;
 		<div class="buyer-div hidden">
 			<select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
                 <option value="">Select Buyer</option>
-                    @foreach($buyers as $buyer)
-                    <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-                    @endforeach
-              </select>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-	<div class="main-content">
-		<div class="select-buyer">
-			<img src="../../images/select-buyer.png" class="img-responsive">
-		</div>
-	</div>
-	<div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header alert-warning">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<p class="modal-title" id="myModalLabel">SUPPLIER IS SOLELY RESPONSIBLE TO CHOOSE CORRECT AGE GROUP. IN CASE OF ANY WRONG SELECTION, <strong>ORCHESTRA/JUPITER</strong> ARE NOT LAIBLE FOR CONSEQUENCES THERE OFF.</p>
-				</div>
-			</div>
-		</div>
-	</div>
+                @foreach($buyers as $buyer)
+                <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="main-content">
+      <div class="select-buyer">
+         <img src="../../images/select-buyer.png" class="img-responsive">
+     </div>
+ </div>
+ <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+     <div class="modal-content">
+        <div class="modal-header alert-warning">
+           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+           <p class="modal-title" id="myModalLabel">SUPPLIER IS SOLELY RESPONSIBLE TO CHOOSE CORRECT AGE GROUP. IN CASE OF ANY WRONG SELECTION, <strong>ORCHESTRA/JUPITER</strong> ARE NOT LAIBLE FOR CONSEQUENCES THERE OFF.</p>
+       </div>
+   </div>
+</div>
+</div>
 
-	<div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header alert-danger">
-					<button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<p>Use this column only if needed</p>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="modal needed_modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+     <div class="modal-content">
+        <div class="modal-header alert-danger">
+           <button type="button" class="close modal_close1" data-dismiss="modal" aria-hidden="true">&times;</button>
+           <p>Use this column only if needed</p>
+       </div>
+   </div>
+</div>
+</div>
 
 <!--
 	<div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -334,70 +334,70 @@ border: 0;
 		</div>
 	</div>
 -->
-	
-	<div class="modal fade" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+<div class="modal fade" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
-                    </div>
-                    <div class="modal-body">
-						<div id="exist_artwork_div">
-							<h4>Artworks : </h4>
-							<label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
-							<ul class="list-group checked-list-box">
-							</ul>
-							<button type="button" id="new_po1" class="btn btn-primary">New PO</button>
-							<button type="button" id="map_po" class="btn btn-primary">Map PO</button>
-							<hr/>
-						</div>
-						
-						<div id="map_po_div" class="hidden">
-							<h4>Mapping to Exist PO : </h4>
-							<label style="color:red" id="select_error" class="hidden">Please Select PO</label>
-							<div class="form-group" id="selectpo">
-								<label>Select PO</label>
-								<select class="form-control">
-								  <option>1</option>
-								  <option>2</option>
-								  <option>3</option>
-								  <option>4</option>
-								  <option>5</option>
-								</select>
-                        	</div>
-							
-						</div>
-						
-						<div id="new_po_div" class="hidden">
-							<h4>New PO : </h4>
-							<label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
-							 <div class="form-group">
-                            <label>PO Number</label>
-                            <input id="new_po_no" type="text" class="form-control">
-                        	</div>
-							<div class="form-group">
-								<label for="exampleInputFile">PO File</label>
-								<input type="file" id="new_po_file">
-								<p class="help-block">Example block-level help text here.</p>
-							</div>
-							
-						</div>
-                       
-                        
-                     
-                       
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
-						<button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
-						
-						<button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
-                    </div>
-                </div>
-            </div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
         </div>
+        <div class="modal-body">
+          <div id="exist_artwork_div">
+             <h4>Artworks : </h4>
+             <label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
+             <ul class="list-group checked-list-box">
+             </ul>
+             <button type="button" id="new_po1" class="btn btn-primary">New PO</button>
+             <button type="button" id="map_po" class="btn btn-primary">Map PO</button>
+             <hr/>
+         </div>
+         
+         <div id="map_po_div" class="hidden">
+             <h4>Mapping to Exist PO : </h4>
+             <label style="color:red" id="select_error" class="hidden">Please Select PO</label>
+             <div class="form-group" id="selectpo">
+                <label>Select PO</label>
+                <select class="form-control">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+              </select>
+          </div>
+          
+      </div>
+      
+      <div id="new_po_div" class="hidden">
+         <h4>New PO : </h4>
+         <label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+         <div class="form-group">
+            <label>PO Number</label>
+            <input id="new_po_no" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputFile">PO File</label>
+            <input type="file" id="new_po_file">
+            <p class="help-block">Example block-level help text here.</p>
+        </div>
+        
     </div>
+    
+    
+    
+    
+</div>
+<div class="modal-footer">
+    <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
+    <button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
+    
+    <button type="button" id="new_pos" class="btn btn-primary hidden" >Update</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 {{-- Artwork buyer po-upload and delivery date upload modal --}}
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -453,7 +453,7 @@ border: 0;
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
-               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
             </div>
         </div>
     </div>
@@ -483,9 +483,9 @@ border: 0;
 
 {{-- Order already exists warning modal --}}
 <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div id="order-exists-msg"></div>
-    </div>
+   <div class="modal-dialog" role="document">
+       <div id="order-exists-msg"></div>
+   </div>
 </div>
 <div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
