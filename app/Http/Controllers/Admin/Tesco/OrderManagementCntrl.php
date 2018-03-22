@@ -99,7 +99,7 @@ class OrderManagementCntrl extends Controller
            }
 
            /* Fetch tesco brands,departments and suppliers details */
-           $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
+           $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=','1')->get();
            $tesco_department = DB::table('tesco_department')->select('department','id')->get();
            $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
            
@@ -115,13 +115,13 @@ class OrderManagementCntrl extends Controller
      */
     public function Orders()
     {
-      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->where('order_flag', 'newOrder')->get();
       echo json_encode($data);
     }
 

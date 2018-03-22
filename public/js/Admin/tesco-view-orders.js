@@ -2,7 +2,7 @@
 * Function for loading the template preview
 */
 function loadTemplatePreview() {
-    var template_id = $('#po_number').find(':selected').data('tempid');
+    var template_id = $('#artwork_list').find(':selected').data('tempid');
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/tesco/template-management/template-view",
@@ -233,4 +233,23 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
     }
     $(".selectpicker").selectpicker('refresh');
+}
+/**
+ * Function to load the artworks for correspinding style number
+ * @param  {string} style     Style Number of the order
+ * @param  {object} artwork_collection Collection of all orders
+ */
+function loadArtworkNames(style, artwork_collection) {
+    if(Object.keys(artwork_collection).length !== 0 && artwork_collection.constructor === Object) {
+        $('.artwork_list').removeClass('hidden');
+        var options="<option value=''>Search Artwork</option>";
+        $.each(artwork_collection[style], function(po,templs) {
+            var node = $('#jstree').jstree(true).get_node(templs);
+            options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+templs+"'>"+node.text+"</option>";
+        });
+        $('#artwork_list').html(options);
+        $('#artwork_list').selectpicker('refresh');
+    } else {
+        throw "artwork_collection_empty";
+    }
 }
