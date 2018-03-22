@@ -111,7 +111,7 @@ class OrderController extends Controller
              }
 
              /* Fetch tesco brands,departments and suppliers details */
-             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
+             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=','1')->get();
              $tesco_department = DB::table('tesco_department')->select('department','id')->get();
              $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->where('customers.id','=',Auth::guard('web_customer')->id())->get();
              
