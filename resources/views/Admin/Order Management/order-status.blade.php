@@ -185,15 +185,14 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
-                                </div>
-                                <hr/>
                             </div>
                             <div class="row" id="item_details">
 
                             </div>
                             <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
 
                                 </div>
@@ -409,9 +408,7 @@
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-
+<script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
 <script>

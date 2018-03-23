@@ -1156,7 +1156,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         $('#item_details').html(tr)
                         if (pi_status=="true")
                         {
-                            $('.pi_actions').html('<button class="btn btn-default btn-xs" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
                         }
                         else
                         {
@@ -1167,23 +1167,31 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         $('#profoma-invoice').modal("show")
 
                         //Download Pi using JSPDF
-                        $('#downloadPi').click(function () {
+                        $('.downloadPi').click(function () {
                             var myOffscreenEl = document.getElementById("proforma-invoice"),
                                 useWidth      = myOffscreenEl.style.width,
                                 useHeight     = myOffscreenEl.style.height;
                                 myOffscreenEl.style.backgroundColor = 'white';
-                                myOffscreenEl.style.color = '#000';
 
-                            html2canvas(myOffscreenEl, {
-                                width: useWidth,
-                                height: useHeight
-
+                            html2pdf(myOffscreenEl, {
+                              margin:       10,
+                              filename:     'Proforma-Invoice.pdf',
+                              image:        { type: 'jpeg', quality: 0.98 },
+                              html2canvas:  { dpi: 300, letterRendering: true },
+                              jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
                             });
 
-                            var pdf = new jsPDF('p','pt','a4');
-                            pdf.addHTML(document.querySelector('#proforma-invoice'),function() {
-                                pdf.save('web.pdf');
-                            });
+                            // html2canvas(myOffscreenEl, {
+                            //     width: useWidth,
+                            //     height: useHeight
+
+                            // });
+
+                            // var pdf = new jsPDF('p','pt','a4');
+                            // pdf.internal.scaleFactor = 1.2;
+                            // pdf.addHTML($('#proforma-invoice'),function() {
+                            //     pdf.save('web.pdf');
+                            // });
 
                         });
                     }
