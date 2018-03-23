@@ -38,49 +38,57 @@ class PrintController extends Controller
     public function printDivTesco(Request $request)
     {
 		
-		//		 // Custom Header
-		//		PDF::setHeaderCallback(function($pdf) {
-		//				 $image_file= K_PATH_IMAGES.'logo_example.jpg';
-		//				 $pdf->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-		//				// Set font
-		//				$pdf->SetFont('frankgothcnbt');
-		//				// Title
-		//				$pdf->Cell(0, 15, 'Something new right here!!!', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-		//				$html = '<span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span><br /><span color="red">red</span> <span color="green">green</span> <span color="blue">blue</span>';
-		//				$pdf->writeHTMLCell(0, 0, '', '', $html, 'LRTB', 1, 0, true, 'L', true);
-		//
-		//		});
-		//
-		//		// Custom Footer
-		//		PDF::setFooterCallback(function($pdf) {
-		//
-		//				// Position at 15 mm from bottom
-		//				$pdf->SetY(-15);
-		//				// Set font
-		//				$pdf->SetFont('frankgothcnbt');
-		//				// Page number
-		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-		//
-		//		});
-		$svgarr = explode(',_',$request->svg);
-    	$name=$request->name;
-        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
-        PDF::setPrintHeader(false);
-        PDF::setPrintFooter(false);
-        PDF::SetFont('frankgothcnbt');
-        PDF::AddPage();
-        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		$yy=12.5;
-		foreach($svgarr as $value)
-		{
-			$svg=urldecode($value);
-			PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$yy += 100;
-		}
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$name.'.pdf'));
+				 // Custom Header
+				PDF::setHeaderCallback(function($pdf) {
+						 $image_file= K_PATH_IMAGES.'logo_example.jpg';
+						 $pdf->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+						// Set font
+						$pdf->SetFont('frankgothcnbt');
+						// Title
+						$pdf->Cell(0, 15, 'Something new right here!!!', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+						$svgString = '<svg width="100" height="100">
+  							<circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+						</svg>';
+						$pdf->ImageSVG('@' . $svgString, $x=0, $y=0, $w='', $h='', $link='', $align='', $palign='', $border=1, $fitonpage=false);
+
+		
+				});
+		
+				// Custom Footer
+				PDF::setFooterCallback(function($pdf) {
+		
+						// Position at 15 mm from bottom
+						$pdf->SetY(-15);
+						// Set font
+						$pdf->SetFont('frankgothcnbt');
+						// Page number
+						$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		
+				});
+				$svgarr = explode(',_',$request->svg);
+				$name=$request->name;
+		//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+		//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+				PDF::setImageScale(1);
+		//        PDF::setPrintHeader(false);
+		//        PDF::setPrintFooter(false);
+				PDF::SetFont('frankgothcnbt');
+				PDF::AddPage();
+				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+				$yy=12.5;
+				foreach($svgarr as $value)
+				{
+
+				//	$svg=urldecode($value);
+					//PDF::Image($value, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+
+					$html = '<img style="margin-top:15px" src="'.$value.'">';
+					PDF::writeHTML($html, true, false, true, false, '');
+
+					$yy += 100;
+				}
+				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+				print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
   
   /**
