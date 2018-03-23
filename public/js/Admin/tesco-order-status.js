@@ -30,11 +30,11 @@ function tescoOrderStatus()
                var path = base_url + "/admin/tesco/order-management/order-status";
                var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
                
-               $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-primary pull-right' type='button'>Update PO</button>");
+                $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
 
-               $('.main-content').append(tescoStatusTable(newObj,path));
-               $('.top-content').html("")
-                
+                $('.main-content').append(tescoStatusTable(newObj,path));
+                $('.top-content').html("")
+                $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
                 var uniqueNames = [];
                 var zones = [];
                 for(i = 0; i< newObj.length; i++){ 
@@ -60,7 +60,8 @@ function tescoOrderStatus()
 
                 $('#po-file-upload-button').click(function () {
                     $('#po-file-upload-group').modal("show")
-                    $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control">'+options+'</select>')
+                    $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">'+options+'</select>')
+                    $('#style_num').selectpicker('refresh');
                     $('#new_po_div_status').addClass('hidden');
                     $('#new_po1_status').addClass('hidden');
                     $('#map_po_status').addClass('hidden');
@@ -723,11 +724,11 @@ function tescoStatusTable(data,path)
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
 	                {
-	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
+	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span></div></div></td>';
 	                }
 	                else
 	                {
-                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span></div></div></td>';
+                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="button" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span></div></div></td>';
 	                }
                 }
                 else if (key == "OrderDate")
@@ -889,13 +890,12 @@ function updateDeliveryDate(obj,tableID,tableName)
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
-
-    if (deliveryDate=="")
+    if (deliveryDate == "" || deliveryDate === '01-01-1970')
     {
         $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', 'rgb(244, 67, 54)');
     }
-   
-            $('.snackbar_span').html('');
+    else {
+                   $('.snackbar_span').html('');
             $.ajax({
             url: base_url + "/admin/tesco/update-delivery-date",
             type: "Post",
@@ -932,7 +932,10 @@ function updateDeliveryDate(obj,tableID,tableName)
             complete: function (){
                 $(".loader").hide();
             }
-        })    
+        })  
+    }
+   
+   
 }
 
 /**
@@ -1276,7 +1279,7 @@ function tescoRejectPI(id,table_name)
             200: function(data)
             {
                $('.snackbar_span').html('PI Rejected!');
-               $('#snackbar').css('background-color','#1abb9c');
+               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
                showSnackbar();             
