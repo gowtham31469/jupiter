@@ -2696,7 +2696,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                          svgDoc.getElementById("barcode").innerHTML = '';
                       }
                  }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
@@ -2817,7 +2817,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                          svgDoc.getElementById("barcode").innerHTML = '';
                       }
                  }
-                 var size  = $('#uk_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
                  if(size != '')
                  {
@@ -3102,7 +3102,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                           svgDoc.getElementById("barcode").innerHTML = '';
                        }
                  }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
@@ -3252,7 +3252,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                            svgDoc.getElementById("barcode").innerHTML = '';
                        }
                  }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {

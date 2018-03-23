@@ -1303,6 +1303,21 @@ function tescoRejectPI(id,table_name)
 }
 function updateArtwork(obj)
 {
+	$('#tesco_po_number').prop('disabled',false);
+	$('#order_type').prop('disabled',false);
+	$('#tesco_uk_style').prop('disabled',false);
+	$('#tesco_ce_style').prop('disabled',false);
+	$('#tesco_eqos').prop('disabled',false);
+	$('#tesco_description').prop('disabled',false);   
+	$('#tesco_season_code').prop('disabled',false);
+	$('#tesco_manufacture_date').prop('disabled',false);
+	$('#tesco_supplier').prop('disabled',false);
+	$('#tesco_brand').prop('disabled',false);
+	$('#tesco_department').prop('disabled',false);
+	$('#tesco_rfid').prop('disabled',false);
+	$('#tesco_tag_at_source').prop('disabled',false);
+	
+	$("form#create_tesco_order_status_form")[0].reset();
 	$('#po_already_error').addClass('hidden')
 	var id			=$(obj).parent().attr('data-id');
 	var table_name	=$(obj).parent().attr('data-table');
@@ -1331,7 +1346,8 @@ function updateArtwork(obj)
             {
                 if (data.order_details!=0)
                 {
-                    $('#tesco_po_number').val(data.order_details.po_number);
+					$('#tesco_po_number').val(data.order_details.po_number);
+                    $('#order_type').val(data.order_details.order_flag);
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
                     $('#tesco_eqos').val(data.order_details.eqos_site_code);
@@ -1348,6 +1364,29 @@ function updateArtwork(obj)
 					$('#tesco_department').selectpicker('val',data.order_details.tesco_department_id);
 					$('#tesco_rfid').selectpicker('val',rfid);
 					$('#tesco_tag_at_source').selectpicker('val',tag_at_source);
+					
+					
+					
+					if(data.order_details.order_flag != "newOrder")
+					{
+						if(data.order_details.order_flag == "reOrder")
+						{
+							$('#tesco_po_number').prop('disabled',true);
+						}
+						$('#order_type').prop('disabled',true);
+						$('#tesco_uk_style').prop('disabled',true);
+						$('#tesco_ce_style').prop('disabled',true);
+						$('#tesco_eqos').prop('disabled',true);
+						$('#tesco_description').prop('disabled',true);   
+						$('#tesco_season_code').prop('disabled',true);
+						$('#tesco_manufacture_date').prop('disabled',true);
+						$('#tesco_supplier').prop('disabled',true);
+						$('#tesco_brand').prop('disabled',true);
+						$('#tesco_department').prop('disabled',true);
+						$('#tesco_rfid').prop('disabled',true);
+						$('#tesco_tag_at_source').prop('disabled',true);
+					}
+					
 					
 					$('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
 					
@@ -1403,7 +1442,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.orms_tpn;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter ORMS TPND";
 							var tpn_len="13";
 							var unit_len="6";
@@ -1414,7 +1453,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.tpnd;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter TPND";
 							var tpn_len="9";
 							var unit_len="4";
@@ -1530,7 +1569,8 @@ function setEditOrderStatus()
 		var zone              =  $('#edit_zone').val()
 		var type              =  $('#edit_template_type').val()
 		var template_name     =  $('#edit_template_name').val()
-	    var edit_id           =  $('#edit_id').val()
+	    var edit_id           =  $('#edit_id').val() 
+		var order_type           =  $('#order_type').val()
 		
 		
 		
@@ -1667,13 +1707,27 @@ function setEditOrderStatus()
 
 					td_row.find('td:nth-child(6)').text($("#tesco_supplier option:selected").text());
 					td_row.find('td:nth-child(2)').text(po_number);
+					
+					if (order_type == "reOrder")
+                    {
+                        span_style = '<span title="Additional Quantity" class="batch-additional">A</span>'
+                    }
+                    if (order_type == "repeatOrder")
+                    {
+                        span_style = '<span title="Reorder" class="batch-reorder">R</span>'
+                    }
+					if (order_type == "newOrder")
+                    {
+                        span_style = ''
+                    }
+					
 					if(zone == "CE")
 					{
-						td_row.find('td:nth-child(1) a').text(ce_style);
+						td_row.find('td:nth-child(1) a').html(span_style + ce_style);
 					}
 					else
 					{
-						td_row.find('td:nth-child(1) a').text(uk_style);
+						td_row.find('td:nth-child(1) a').html(span_style + uk_style);
 					}
 
 				}
@@ -1833,7 +1887,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
@@ -1954,7 +2008,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
-                 var size  = $('#uk_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
                  if(size != '')
                  {
@@ -2239,7 +2293,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
@@ -2389,7 +2443,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#os_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {

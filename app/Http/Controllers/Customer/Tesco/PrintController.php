@@ -75,17 +75,26 @@ class PrintController extends Controller
 				PDF::SetFont('frankgothcnbt');
 				PDF::AddPage();
 				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-				$yy=12.5;
+				$i=1;
+				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
-
 				//	$svg=urldecode($value);
 					//PDF::Image($value, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-
-					$html = '<img style="margin-top:15px" src="'.$value.'">';
+					PDF::SetFillColor(255,255,255);
+					//PDF::SetAlpha(0.3);
+					if($i == 3)
+					{
+						$yy=110;
+						$i=0;
+					}
+					else
+					{
+						$yy=75;
+					}
+					$html = '<img src="'.$value.'">';
 					PDF::writeHTML($html, true, false, true, false, '');
-
-					$yy += 100;
+					$i++;
 				}
 				PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
 				print_r(url('/storage/app/template/'.$name.'.pdf'));

@@ -403,7 +403,45 @@ function contentdocument(data,name,zone)
 		if(name == "TSL3")
 		{
 		   svgDoc1 = mySVG.contentDocument;
-		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+		  var description = data.template[0].short_description;
+			var size=data.qty[0].size;
+			$.ajax({
+                     url: base_url + "/customer/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (datas) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && datas.size_chart.length != 0)
+                           {
+                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+                           }
+                           else if(datas.size_chart.length != 0)
+                           {
+                              svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc1.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (datas) {
+                        console.log(datas);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 		}
@@ -446,9 +484,47 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
-			
+			var description = data.template[0].short_description;
 			if(name == "TCL4" || name == "THL3" )
 			{
+				var size=data.qty[0].size;
+				$.ajax({
+						 url: base_url + "/customer/tesco/get-tsl-size",
+						 type: 'GET',
+						 data: {size:size,zone:zone},
+						 success: function (datas) {
+							   /** [ Dynamically change svg short description ] */
+							   if(description != '' && datas.size_chart.length != 0)
+							   {
+								  svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+							   }
+							   else if(datas.size_chart.length != 0)
+							   {
+								  svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+							   }
+							   else if(description != '')
+							   {
+								  svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+							   }
+							   else
+							   {
+								  svgDoc1.getElementById("description").innerHTML = '';
+							   }
+						 },
+						 error: function (datas) {
+							console.log(datas);
+						 },
+						 complete: function () {
+							  /** [To make top menu active] */
+							  $(function () {
+								  var url = window.location;
+								  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+								  $('.dynamic-menu a').filter(function () {
+									  return this.href == url;
+								  }).parent('li').addClass('current-page').find('a').addClass('active');
+							  });
+						 }
+					 })
 				svgDoc1.getElementById("unit_per_case").innerHTML = pieces_in_ratio;
 			}
 			else

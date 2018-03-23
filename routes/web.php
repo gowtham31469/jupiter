@@ -400,6 +400,8 @@ Route::post('admin/tesco/set-tesco-order-status', 'Admin\Tesco\OrderStatusCntrl@
 
 Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPo');
 
+Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
+
 Route::get('customer/reorder', 'Customer\HomeController@reorder');
 
 //Customer Reorder
@@ -411,6 +413,9 @@ Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@e
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
+
+Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
+
 
 
 //Customer Print Option

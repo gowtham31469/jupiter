@@ -281,6 +281,7 @@
 						<input type="hidden" id="edit_zone">
 						<input type="hidden" id="edit_template_type">
 						<input type="hidden" id="edit_id">
+						<input type="hidden" id="order_type">
 						 <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
                             <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
