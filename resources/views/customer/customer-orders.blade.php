@@ -31,7 +31,8 @@
         top: 10px;
         right: 10px;
     }
-
+#hiddenDiv{display:none}
+	
     .washing_select+.select2.select2-container--default .select2-selection--single .select2-selection__rendered,
     .cleaning_select+.select2.select2-container--default .select2-selection--single .select2-selection__rendered,
     .ironing_select+.select2.select2-container--default .select2-selection--single .select2-selection__rendered,
@@ -457,6 +458,9 @@ border: 0;
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
+<script type="text/javascript" src="http://canvg.github.io/canvg/rgbcolor.js"></script> 
+<script type="text/javascript" src="http://canvg.github.io/canvg/StackBlur.js"></script>
+<script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
 <script>
     $(document).ready(function() {
         localStorage.removeItem("hang_tag");
