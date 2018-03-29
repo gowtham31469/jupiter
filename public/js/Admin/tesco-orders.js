@@ -91,14 +91,14 @@ function tescoOrders() {
                             CEPOCollection.push(newObj[i].po_number); 
                             CEUniqueNames.push(newObj[i].ce_style_ref);
                             artwork_collection[newObj[i].ce_style_ref] = {};
-                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id;    
+                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;    
                         } else {
                             if(CEPOCollection.indexOf(newObj[i].po_number) === -1) {
                                 CEPOCollection.push(newObj[i].po_number);
-                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
                             } else {
                                 var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
-                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
                             }
                         }
 
@@ -107,20 +107,21 @@ function tescoOrders() {
                             UKPOCollection.push(newObj[i].po_number);
                             UKUniqueNames.push(newObj[i].uk_style_ref);
                             artwork_collection[newObj[i].uk_style_ref] = {};
-                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
                         } else {
                             if(UKPOCollection.indexOf(newObj[i].po_number) === -1) {
                                 UKPOCollection.push(newObj[i].po_number);
-                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id;
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
                             } else {
                                 var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
-                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
                             }
                             
                         }
                     }
                        
                 }
+                
                 var options="<option value=''>Search Style Number</option>";
                 if(CEUniqueNames.length > 0) {
                     options+="<optgroup label='CE'>";
@@ -516,7 +517,8 @@ function tescoOrders() {
                     else {
                         e.preventDefault();
                         var po_num = $('#artwork_list').val();
-                        viewOrder(po_num);  
+                        var artwork  = $('#artwork_list').find(':selected').text();
+                        viewOrder(po_num, artwork);  
                     }
                 })
 
