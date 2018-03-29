@@ -2003,7 +2003,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         $('#item_details').html(tr)
                         if (pi_status=="true")
                         {
-                            $('.pi_actions').html('<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>');
                         }
                         else
                         {
@@ -2011,7 +2011,22 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         }
                         var logo = base_url+data.data.company_details.logo
                         $('#company-logo').attr('src',logo);
-                        $('#profoma-invoice').modal("show")
+                        $('#profoma-invoice').modal("show");
+                        //Download Pi using JSPDF
+                        $('.downloadPi').click(function () {
+                            var myOffscreenEl = document.getElementById("proforma-invoice"),
+                                useWidth      = myOffscreenEl.style.width,
+                                useHeight     = myOffscreenEl.style.height;
+                                myOffscreenEl.style.backgroundColor = 'white';
+
+                            html2pdf(myOffscreenEl, {
+                              margin:       10,
+                              filename:     'Proforma-Invoice.pdf',
+                              image:        { type: 'jpeg', quality: 0.98 },
+                              html2canvas:  { dpi: 300, letterRendering: true },
+                              jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+                            });
+                        });
                     }
                     else
                     {

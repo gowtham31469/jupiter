@@ -1180,19 +1180,6 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                               html2canvas:  { dpi: 300, letterRendering: true },
                               jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
                             });
-
-                            // html2canvas(myOffscreenEl, {
-                            //     width: useWidth,
-                            //     height: useHeight
-
-                            // });
-
-                            // var pdf = new jsPDF('p','pt','a4');
-                            // pdf.internal.scaleFactor = 1.2;
-                            // pdf.addHTML($('#proforma-invoice'),function() {
-                            //     pdf.save('web.pdf');
-                            // });
-
                         });
                     }
                     else

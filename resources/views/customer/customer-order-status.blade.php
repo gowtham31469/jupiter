@@ -19,6 +19,7 @@
         font-size: 12px; 
         font-weight: 400;
     }
+    .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -136,7 +137,7 @@
                     <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="proforma-invoice">
                     <div class="col-md-12 text-center">
                         <h4><strong><u>Proforma Invoice</u></strong></h4>
                         <br/>
@@ -183,17 +184,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
-                                </div>
-                                <hr/>
                             </div>
                             <div class="row" id="item_details">
 
                             </div>
+                            
                             <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
-
                                 </div>
                             </div>
                         </div>
@@ -405,6 +405,7 @@
     @endif @section('jqueryIncludes')
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script type="text/javascript">
