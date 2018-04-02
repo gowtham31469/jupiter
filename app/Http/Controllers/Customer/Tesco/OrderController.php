@@ -55,13 +55,13 @@ class OrderController extends Controller
      */
     public function Orders()
     {
-      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
       echo json_encode($data);
     }
 
@@ -3222,53 +3222,65 @@ class OrderController extends Controller
      * @return [array]   Array of artworks
      */
     public function viewOrders(Request $request) {
+      $artwork = explode(',', $request->artwork);
       try {
         $result = '';
-        $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*', DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->first();
-        if($tesco_tcl1_orders) {
-          $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
-          $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tesco_tcl1_orders->id)->select('*')->get();
-        }
-    
-  
-        $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->first();
-        if($tesco_tcl2_orders) {
-          $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
-          $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tesco_tcl2_orders->id)->select('*')->get();
+        $data = [];
+        if (in_array("TCL 1", $artwork)) {
+              $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*', DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as type'))->first();
+            if($tesco_tcl1_orders) {
+              $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
+              $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id',$tesco_tcl1_orders->id)->select('*')->get();
+            }
         }
         
-        $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->first();
-        if($tesco_tcl4_orders) {
-          $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
-          $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tesco_tcl4_orders->id)->select('*')->get();
+        if (in_array("TCL 2", $artwork)) {
+          $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 2" as TemplateName'),DB::raw('"tesco_tcl2_orders" as type'))->first();
+          if($tesco_tcl2_orders) {
+            $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
+            $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tesco_tcl2_orders->id)->select('*')->get();
+          }
         }
         
-        
-        $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->first();
-        if($tesco_thl1_orders) {
-          $data['tesco_thl1_orders'] = $tesco_thl1_orders;
-          $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$tesco_thl1_orders->id)->select('*')->get();
+        if (in_array("TCL 4", $artwork)) {
+          $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->first();
+          if($tesco_tcl4_orders) {
+            $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
+            $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tesco_tcl4_orders->id)->select('*')->get();
+          }
         }
         
-        
-        $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->first();
-        if($tesco_thl3_orders) {
-          $data['tesco_thl3_orders'] = $tesco_thl3_orders;
-          $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$tesco_thl3_orders->id)->select('*')->get();
-        }
-        
-        
-        $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->first();
-        if($tesco_tsl1_orders) {
-          $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
-          $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$tesco_tsl1_orders->id)->select('*')->get();
+        if (in_array("THL 1", $artwork)) {
+          $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 1" as TemplateName'),DB::raw('"tesco_thl1_orders" as type'))->first();
+          if($tesco_thl1_orders) {
+            $data['tesco_thl1_orders'] = $tesco_thl1_orders;
+            $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id',$tesco_thl1_orders->id)->select('*')->get();
+          }
         }
         
         
-        $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->first();
-        if($tesco_tsl3_orders) {
-          $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
-          $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$tesco_tsl3_orders->id)->select('*')->get();
+        if (in_array("THL 3", $artwork)) {
+          $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->first();
+          if($tesco_thl3_orders) {
+            $data['tesco_thl3_orders'] = $tesco_thl3_orders;
+            $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id',$tesco_thl3_orders->id)->select('*')->get();
+          }
+        }
+        
+        if (in_array("TSL 1", $artwork)) {
+          $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 1" as TemplateName'),DB::raw('"tesco_tsl1_orders" as type'))->first();
+          if($tesco_tsl1_orders) {
+            $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
+            $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id',$tesco_tsl1_orders->id)->select('*')->get();
+          }
+        }
+        
+        if (in_array("TSL 3", $artwork)) {
+          $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number',$request->po_number)->where('order_flag','newOrder')->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->first();
+          if($tesco_tsl3_orders) {
+            $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
+            $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id',$tesco_tsl3_orders->id)->select('*')->get();
+          }
         }
 
         $result = response()->json(['error'=> false,'result' => $data],200); 
