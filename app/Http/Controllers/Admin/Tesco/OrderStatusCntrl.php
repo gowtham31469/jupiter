@@ -17,9 +17,6 @@ use Excel;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
-use App\TescoStickerOrdersSizeDetails;
-use App\TescoPolybagCartonStickerOrders;
-use App\TescoStickerOrdersCount;
 use App\Classes\TescoOrders;
 
 class OrderStatusCntrl extends Controller
