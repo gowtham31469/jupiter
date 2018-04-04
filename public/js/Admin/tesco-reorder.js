@@ -303,11 +303,11 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 			{
 				if((name == "TSL1") ||(name == "TSL3"))
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input type="text" maxlength="9" class="form-control  input-sm purchase_order_number" style="display:none" onkeyup="repeatorderpo()" value="'+po_number+'" placeholder="PO Number"><div class="help-block with-errors"></div>')
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input type="text" maxlength="9" class="form-control  input-sm purchase_order_number" style="display:none" onkeyup="repeatorderpo()" value="'+po_number+'" placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
 				}
 				else
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input maxlength="9" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"><div class="help-block with-errors"></div>')
+					$('.po_div').append('<div class="form-group has-feedback has-success"><input maxlength="9" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
 				}
 				
 			}
@@ -319,7 +319,7 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 			})
 			
 			$('.artwork_name').text(name + " Artwork");
-			$('.sample-artwork').html('<object style="display:inline;height: calc( 100vh - 250px );border: 1px solid #333;" id="reorder_svg" class="center-block" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object>');
+			$('.sample-artwork').html('<input type="hidden" id="po_number" value="'+data.template[0].po_number+'"><input type="hidden" id="uk_style" value="'+data.template[0].uk_style_ref+'"><input type="hidden" id="ce_style" value="'+data.template[0].ce_style_ref+'"><input type="hidden" id="template_name" value="'+name+'"><input type="hidden" id="zone" value="'+zone+'"><object style="display:inline;height: calc( 100vh - 250px );border: 1px solid #333;" id="reorder_svg" class="center-block" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object>');
 			contentdocument(data,name,zone)
 			
 			$('#qty_table').validator().on('submit', function (e) {
@@ -402,17 +402,56 @@ function contentdocument(data,name,zone)
 	mySVG.addEventListener("load", function () {
 		if(name == "TSL3")
 		{
-		   svgDoc1 = mySVG.contentDocument;
-		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
+		    svgDoc1 = mySVG.contentDocument;
+			var description = data.template[0].short_description;
+			var size=data.qty[0].size;
+			$.ajax({
+                     url: base_url + "/admin/tesco/get-tsl-size",
+                     type: 'GET',
+                     data: {size:size,zone:zone},
+                     success: function (datas) {
+                           /** [ Dynamically change svg short description ] */
+                           if(description != '' && datas.size_chart.length != 0)
+                           {
+                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+                           }
+                           else if(datas.size_chart.length != 0)
+                           {
+                              svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+                           }
+                           else if(description != '')
+                           {
+                              svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+                           }
+                           else
+                           {
+                              svgDoc1.getElementById("description").innerHTML = '';
+                           }
+                     },
+                     error: function (datas) {
+                        console.log(datas);
+                     },
+                     complete: function () {
+                          /** [To make top menu active] */
+                          $(function () {
+                              var url = window.location;
+                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                              $('.dynamic-menu a').filter(function () {
+                                  return this.href == url;
+                              }).parent('li').addClass('current-page').find('a').addClass('active');
+                          });
+                     }
+                 })
+			
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 		}
 		else if(name == "TSL1")
 		{
 		   svgDoc1 = mySVG.contentDocument;
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
-		   jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 		}
 		else
 		{
@@ -446,9 +485,48 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
-			
+			var description = data.template[0].short_description;
 			if(name == "TCL4" || name == "THL3" )
 			{
+				
+				var size=data.qty[0].size;
+				$.ajax({
+						 url: base_url + "/admin/tesco/get-tsl-size",
+						 type: 'GET',
+						 data: {size:size,zone:zone},
+						 success: function (datas) {
+							   /** [ Dynamically change svg short description ] */
+							   if(description != '' && datas.size_chart.length != 0)
+							   {
+								  svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+							   }
+							   else if(datas.size_chart.length != 0)
+							   {
+								  svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+							   }
+							   else if(description != '')
+							   {
+								  svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+							   }
+							   else
+							   {
+								  svgDoc1.getElementById("description").innerHTML = '';
+							   }
+						 },
+						 error: function (datas) {
+							console.log(datas);
+						 },
+						 complete: function () {
+							  /** [To make top menu active] */
+							  $(function () {
+								  var url = window.location;
+								  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+								  $('.dynamic-menu a').filter(function () {
+									  return this.href == url;
+								  }).parent('li').addClass('current-page').find('a').addClass('active');
+							  });
+						 }
+					 })
 				svgDoc1.getElementById("unit_per_case").innerHTML = pieces_in_ratio;
 			}
 			else
@@ -473,7 +551,7 @@ function contentdocument(data,name,zone)
 
 			if(name == "TSL3" || name == "THL3" )
 			{
-				jsbarcodetescoean(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+				jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 			}
 			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
 			{
@@ -621,32 +699,60 @@ function setTescoReorder(type,id)
 	{
 		var buyer = localStorage.getItem("reorder_buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
+		var po_number=$('.purchase_order_number').val();
+		var uk_style=$('#uk_style').val()
+		var ce_style=$('#ce_style').val()
+		var template_name=$('#template_name').val()
+		var zone=$('#zone').val()
+		
 		$.ajax({
-			url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",
-			type: "Post",
-			dataType: "json",
-			data: {
-				_token: csrf_token,
-				type:type,
-				id:id,
-				po:po,
-				counts:count
-			},
-			beforeSend: function () {
+			 url: base_url + "/admin/tesco/edit-check-exist-po-repeat",
+			 type: 'post',
+			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,template_name:template_name},
+			 success: function (data) {
+				if(data == "true")
+				{
+					$.ajax({
+						url: base_url + "/admin/" + buyer + "/order-management/set-tesco-repeat-order",
+						type: "Post",
+						dataType: "json",
+						data: {
+							_token: csrf_token,
+							type:type,
+							id:id,
+							po:po,
+							counts:count
+						},
+						beforeSend: function () {
 
-			},
-			success: function (data) {
-				$('.left-panel').removeClass('active');
-				$('.snackbar_span').html('Repeat Order Created Successfully ...!');
-				showSnackbar();
-			},
-			error: function (data) {
+						},
+						success: function (data) {
+							$('.left-panel').removeClass('active');
+							$('.snackbar_span').html('Repeat Order Created Successfully ...!');
+							showSnackbar();
+						},
+						error: function (data) {
 
-			},
-			complete: function () {
+						},
+						complete: function () {
 
-			}
+						}
+					})
+				}
+				else
+				{
+					$('#po_already_error').removeClass('hidden')
+				}
+			 },
+			 error: function (data) {
+				console.log(data);
+			 },
+			 complete: function () {
+
+			 }
 		})
+		
+		
 	}
 	else
 	{

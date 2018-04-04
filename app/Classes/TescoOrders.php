@@ -8,23 +8,17 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Auth;
 use App\TescoTCL1Orders;
-use App\TescoTCL1OrdersQuantity;
 use App\TescoTCL2Orders;
-use App\TescoTCL2OrdersQuantity;
 use App\TescoTCL4Orders;
-use App\TescoTCL4OrdersQuantity;
 use App\TescoTHL1Orders;
-use App\TescoTHL1OrdersQuantity;
 use App\TescoTHL3Orders;
-use App\TescoTHL3OrdersQuantity;
 use App\TescoTSL1Orders;
-use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
+use App\Classes\SubmitTescoOrdersUpdateQuery;
 /**
-   * Class to store the tesco template orders
-   * @author [Praveen] <[praveen@wizroots.com]>
-   */
+ * Class to store the tesco template orders
+ * @author [Praveen] <[praveen@wizroots.com]>
+ */
 class TescoOrders
 {
 	/**
@@ -35,7 +29,9 @@ class TescoOrders
 	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty)
 	{
 		try {
-            
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery(); 
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -60,7 +56,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTCL1Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTCL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -84,12 +104,20 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+            }
+            else
+            {
+              /** [ Invoking updateTCL1Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl1_last_id']);
+
+                return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
 	}
   /**
    * method to store the tesco TCL2 orders
@@ -99,6 +127,9 @@ class TescoOrders
   public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -123,7 +154,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL2Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTCL2Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTCL2Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -147,12 +202,20 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+            }
+            else
+            {
+              /** [ Invoking updateTCL2Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl2_last_id']);
+
+                return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
   /**
    * method to store the tesco TSL1 orders
@@ -162,6 +225,9 @@ class TescoOrders
   public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -186,7 +252,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTSL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTSL1Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTSL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -210,12 +300,21 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+              
+            }
+            else
+            {
+              /** [ Invoking updateTSL1Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl1_last_id']);
+
+              return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
   /**
    * method to store the tesco THL1 orders
@@ -225,6 +324,9 @@ class TescoOrders
   public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -249,7 +351,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTHL1Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTHL1Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTHL1Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -273,12 +399,20 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+            }
+            else
+            {
+              /** [ Invoking updateTHL1Order function using class instance ] */
+              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl1_last_id']);
+
+              return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
   /**
    * method to store the tesco TCL4 orders
@@ -288,6 +422,9 @@ class TescoOrders
   public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -312,7 +449,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTCL4Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTCL4Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTCL4Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -336,12 +497,20 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+            }
+            else
+            {
+              /** [ Invoking updateTCL4Order function using class instance ] */
+              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl4_last_id']);
+
+              return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
   /**
    * method to store the tesco TSL3 orders
@@ -351,6 +520,9 @@ class TescoOrders
   public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -375,7 +547,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
-            $result = TescoTSL3Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTSL3Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTSL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -399,12 +595,21 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+              
+            }
+            else
+            {
+              /** [ Invoking updateTSL3Order function using class instance ] */
+              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl3_last_id']);
+
+              return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
   /**
    * method to store the tesco THL3 orders
@@ -414,6 +619,9 @@ class TescoOrders
   public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty)
   {
     try {
+            /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
+            $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
+
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
             if($pi_required == 1)
             {
@@ -438,7 +646,31 @@ class TescoOrders
             /** [ Check if price is available for this template ] */
             $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
             
-            $result = TescoTHL3Orders::create([
+            /** Insert order details first time. If data already exits, update old values**/
+            if($request['is_insert'] == 'true')
+            {
+              /** [ Check if order already placed for this CE style OR UK style ] */
+              if($request['zone'] == 'UK')
+              {
+                $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+              else
+              {
+                $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
+              }
+            
+              if($is_exists)
+              {
+                $existing_id = $is_exists->id;
+                /** [ Invoking updateTHL3Order function using class instance ] */
+                $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+
+                return $is_exists;
+                
+              }
+              else
+              {
+                return TescoTHL3Orders::create([
                           'order_id'             => $order_id,
                           'zone'                 => $request['zone'],
                           'template_type'        => $request['type'],
@@ -462,11 +694,20 @@ class TescoOrders
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty
                         ]);
+              }
+              
+            }
+            else
+            {
+              /** [ Invoking updateTHL3Order function using class instance ] */
+              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl3_last_id']);
+
+              return $tesco_order;
+            }
             
         } catch (\Exception $e)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-        return $result;
   }
 }

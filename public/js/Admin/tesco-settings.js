@@ -1133,7 +1133,6 @@ function tescoSizeChart() {
               statusCode: {
                    200: function() {
                         $('.snackbar_span').html("Size Chart Added Successfully");
-                        $('#snackbar').css('background-color','#1abb9c');
                         showSnackbar();
                         $('#addTescoSizeChartsModal').modal('hide');
                         tescoSizeChart()
@@ -1238,7 +1237,6 @@ function tescoSizeChart() {
            statusCode: {
                 200: function() {
                        $('.snackbar_span').html("Size Chart Updated Successfully");
-                       $('#snackbar').css('background-color','#1abb9c');
                        showSnackbar();
                        $('#editTescoSizeChartsModal').modal('hide');
                        tescoSizeChart()
@@ -1282,7 +1280,6 @@ function tescoSizeChart() {
            statusCode: {
                 200: function() {
                      $('.snackbar_span').html('Size Chart Deleted Successfully');
-                     $('#snackbar').css('background-color','#1abb9c');
                      showSnackbar();
                      $('#deleteTescoSizeChartsModal').modal('hide');
                      tescoSizeChart();

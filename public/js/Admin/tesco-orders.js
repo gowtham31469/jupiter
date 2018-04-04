@@ -1,10 +1,59 @@
 /**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+function isNumber(evt) {
+    try {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**  
+  * Validation for numeric values with dot
+  * @param   evt 
+  * @return {Boolean} 
+  * @author <praveen>    
+  */
+ function isNumberKey(evt){
+  try{
+       var charCode = (evt.which) ? evt.which : event.keyCode
+
+       if (charCode == 46)
+       {
+           var inputValue = $("#inputfield").val()
+           if (inputValue.indexOf('.') < 1)
+           {
+               return true;
+           }
+           return false;
+       }
+       /** [ Checking key stroke values for numeric values ] */
+       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+       {
+           return false;
+       }
+       return true;
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+/**
  * This Function is used to show tesco orders page and template selection.
  * @author Praveen
  * @return View
  */
 var globalOrderType = 0;
 var barcode_checks = 0;
+
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -30,23 +79,65 @@ function tescoOrders() {
             $(".loader").show();
         },
         success: function (data) {
-            
                 var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
-                var uniqueNames = [];
+                var CEUniqueNames = [];
+                var UKUniqueNames = [];
+                var CEPOCollection = [];
+                var UKPOCollection = [];
                 var artwork_collection = {};
                 for(i = 0; i< newObj.length; i++) {
-                    if(uniqueNames.indexOf(newObj[i].po_number) === -1) {
-                        uniqueNames.push(newObj[i].po_number); 
-                        artwork_collection[newObj[i].po_number] = newObj[i].template_id;     
-                    } else {
-                        var artwork_group = artwork_collection[newObj[i].po_number];
-                        artwork_collection[newObj[i].po_number] = artwork_group+','+newObj[i].template_id;
-                    }   
+                    if(newObj[i].zone === 'CE' && newObj[i].ce_style_ref !== null) {
+                        if(CEUniqueNames.indexOf(newObj[i].ce_style_ref) === -1) {
+                            CEPOCollection.push(newObj[i].po_number); 
+                            CEUniqueNames.push(newObj[i].ce_style_ref);
+                            artwork_collection[newObj[i].ce_style_ref] = {};
+                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;    
+                        } else {
+                            if(CEPOCollection.indexOf(newObj[i].po_number) === -1) {
+                                CEPOCollection.push(newObj[i].po_number);
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                            } else {
+                                var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
+                            }
+                        }
+
+                    } else if(newObj[i].zone === 'UK' && newObj[i].uk_style_ref !== null) {
+                        if(UKUniqueNames.indexOf(newObj[i].uk_style_ref) === -1) {
+                            UKPOCollection.push(newObj[i].po_number);
+                            UKUniqueNames.push(newObj[i].uk_style_ref);
+                            artwork_collection[newObj[i].uk_style_ref] = {};
+                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                        } else {
+                            if(UKPOCollection.indexOf(newObj[i].po_number) === -1) {
+                                UKPOCollection.push(newObj[i].po_number);
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                            } else {
+                                var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
+                            }
+                            
+                        }
+                    }
+                       
                 }
-                var options="<option value=''>Search Purchase Number</option>";
-                for(i = 0; i< uniqueNames.length; i++){    
-                     options+="<option data-tempid='"+artwork_collection[uniqueNames[i]]+"'>"+uniqueNames[i]+"</option>";
+                
+                var options="<option value=''>Search Style Number</option>";
+                if(CEUniqueNames.length > 0) {
+                    options+="<optgroup label='CE'>";
+                    for(i = 0; i< CEUniqueNames.length; i++) {    
+                        options+="<option>"+CEUniqueNames[i]+"</option>";
+                    }
+                    options+="</optgroup>";
                 }
+                if(UKUniqueNames.length > 0) {
+                    options+="<optgroup label='UK'>";
+                    for(i = 0; i< UKUniqueNames.length; i++) { 
+                        options+="<option>"+UKUniqueNames[i]+"</option>";
+                    }
+                    options+="</optgroup>";
+                }
+
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -62,8 +153,13 @@ function tescoOrders() {
                                                                 <div class="pad-top">
                                                                     <form id="view_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
                                                                         <div class="form-group has-feedback">
-                                                                            <label for="order_type" class="form_label">Select PO Number</label>
-                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true" onchange=loadTemplatePreview()>`+options+`</select>
+                                                                            <label for="style_num" class="form_label">Select Style Number</label>
+                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true">`+options+`</select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <div class="form-group has-feedback artwork_list hidden">
+                                                                            <label for="order_type" class="form_label">Select Artwork</label>
+                                                                            <select class="form-control selectpicker" name="artwork_list" id="artwork_list" required data-live-search="true" onchange="loadTemplatePreview()"></select>
                                                                             <div class="help-block with-errors"></div>
                                                                         </div>
                                                                         <button class="btn btn-primary btn-block ">View Order</button>
@@ -134,6 +230,10 @@ function tescoOrders() {
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
                     $('#jstree').jstree('search', searchString);
+                });
+
+                $('body').on('change', '#po_number', function() {
+                    loadArtworkNames(this.value,artwork_collection);
                 });
 
                 /** [ Load selectpicker ] */
@@ -416,8 +516,9 @@ function tescoOrders() {
                     }
                     else {
                         e.preventDefault();
-                        var po_num = $('#po_number').val();
-                        viewOrder(po_num);  
+                        var po_num = $('#artwork_list').val();
+                        var artwork  = $('#artwork_list').find(':selected').text();
+                        viewOrder(po_num, artwork);  
                     }
                 })
 
@@ -650,7 +751,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"  data-lastid="">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -728,7 +829,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"  data-lastid="">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -800,7 +901,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback"> \
-                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count">\
+                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count" data-lastid="">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -877,7 +978,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback"> \
-                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count" maxlength="4">\
+                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count" maxlength="4" data-lastid="">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -892,7 +993,7 @@ function createOrders(parsedObj = false, oType = false) {
                         }
                      }
                     
-                      html += '<h4>Order Preview</h4><div class="row">';
+                      html += '<div class="invisible-div"></div><h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
                        html += '<div class="col-md-4">\
                                   <div class="card add-card">\
@@ -933,7 +1034,7 @@ function createOrders(parsedObj = false, oType = false) {
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
-                                     <button class="btn btn-xs btn-success save-btn" type="button"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
+                                     <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -1182,7 +1283,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -1244,7 +1345,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -1320,11 +1421,6 @@ function  uploadPurchaseOrder(formData, zone) {
                     }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  // this.tryCount++;
-                  // if (this.tryCount <= this.retryLimit) {
-                  //     $.ajax(this);
-                  //     return;
-                  // }
                  },
                  complete: function () {
                       /** [To make top menu active] */
@@ -1388,7 +1484,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -1450,7 +1546,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -2299,7 +2395,7 @@ function dynamicSVGTemplatescard(id,item)
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
-                 var size  = $('#ce_single_size_1').val();
+                 var size  = $('#uk_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
@@ -2365,7 +2461,7 @@ function dynamicSVGTemplatescard(id,item)
 }
 
 /**
- * [setTescoOrder for storing tesco manual orders]
+ * [setTescoOrder for storing tesco manual orders(Submit order)]
  * @author <praveen>
  */
 function setTescoOrder()
@@ -3001,19 +3097,17 @@ function tescoOrderCommonData()
     department        =  $("#tesco_department option:selected").val();
     brand             =  $("#tesco_brand option:selected").val();
     supplier          =  $("#tesco_supplier option:selected").val();
-    rfid              =  $("#tesco_rfid option:selected").val() === "yes"?1:0;
-    tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes"?1:0;
+    rfid              =  $("#tesco_rfid option:selected").val() === "yes" ? 1 : 0;
+    tag_at_source     =  $("#tesco_tag_at_source option:selected").val() === "yes" ? 1 : 0;
     zone              =  localStorage.getItem("zone");
     type              =  localStorage.getItem("template type");
     data              =  JSON.parse(localStorage.getItem("data"));
-
-    
 }
+
 /**
  * [storeCERatioTCL1TCL2TSL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @author <praveen>
  */
-
 function storeCERatioTCL1TCL2TSL1()
 {
     try {
@@ -3026,6 +3120,10 @@ function storeCERatioTCL1TCL2TSL1()
         var count_TCL1        = [];
         var count_TCL2        = [];
         var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
 
         /** [ Create array of ce ratio orms tpn ] */
         $('.ce_ratio_orms_tpn').each(function(i, item)
@@ -3054,7 +3152,7 @@ function storeCERatioTCL1TCL2TSL1()
         /** [ Create array of ce ratio tcl1 count ] */
         $('.count_TCL1').each(function(i, item)
         {
-            count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL1 = count_TCL1.join(',');
@@ -3062,7 +3160,7 @@ function storeCERatioTCL1TCL2TSL1()
         /** [ Create array of ce ratio tcl2 count ] */
         $('.count_TCL2').each(function(i, item)
         {
-            count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL2[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL2 = count_TCL2.join(',');
@@ -3070,7 +3168,7 @@ function storeCERatioTCL1TCL2TSL1()
         /** [ Create array of ce ratio tsl1 count ] */
         $('.count_TSL1').each(function(i, item)
         {
-            count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_TSL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TSL1 = count_TSL1.join(',');
@@ -3079,7 +3177,7 @@ function storeCERatioTCL1TCL2TSL1()
                  url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -3096,6 +3194,9 @@ function storeCERatioTCL1TCL2TSL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3103,6 +3204,7 @@ function storeCERatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3125,13 +3227,8 @@ function storeCERatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
                        
@@ -3330,10 +3427,6 @@ function storeCERatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** remove submit button */
-                       $('.submit-btn').remove();
-                       
-
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
@@ -3527,13 +3620,6 @@ function storeCERatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -3552,11 +3638,11 @@ function storeCERatioTCL1TCL2TSL1()
         console.error("Error:"+e)
     }
 }
+
 /**
- * [storeCERatioTHL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * [storeCERatioTHL1 for storing tesco CE ratio THL1 Templates manual orders]
  * @author <praveen>
  */
-
 function storeCERatioTHL1()
 {
     try {
@@ -3567,6 +3653,8 @@ function storeCERatioTHL1()
         var itf_code          = [];
         var cases_per_carton  = [];
         var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
 
         /** [ Create array of ce ratio orms tpn ] */
         $('.ce_ratio_orms_tpn').each(function(i, item)
@@ -3595,7 +3683,7 @@ function storeCERatioTHL1()
         /** [ Create array of ce ratio tcl1 count ] */
         $('.count_THL1').each(function(i, item)
         {
-            count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_THL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_THL1 = count_THL1.join(',');
@@ -3604,7 +3692,7 @@ function storeCERatioTHL1()
                  url: base_url + "/admin/tesco/set-ce-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data,thl1_last_id:thl1_last_id,is_insert:is_insert
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -3622,6 +3710,9 @@ function storeCERatioTHL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3629,6 +3720,7 @@ function storeCERatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3651,13 +3743,8 @@ function storeCERatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
-                         }
-                         else
-                         {
-                            $('.snackbar_span').html('Your order has been placed successfully');
-                            showSnackbar();
                          }
                        }
 
@@ -3724,9 +3811,6 @@ function storeCERatioTHL1()
 
                        /** Update bootstrap 1000hz validator */
                        $('#upload_single_po_form').validator('update');
-
-                       /** Disable submit order button  */
-                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -3821,13 +3905,6 @@ function storeCERatioTHL1()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -3846,11 +3923,11 @@ function storeCERatioTHL1()
         console.log("Error:"+e)
     }
 }
+
 /**
  * [storeCESingleTCL4TSL3 for storing tesco CE single TCL3 AND TSL3 Templates manual orders]
  * @author <praveen>
  */
-
 function storeCESingleTCL4TSL3()
 {
     try {
@@ -3863,6 +3940,9 @@ function storeCESingleTCL4TSL3()
         var size              = [];
         var count_TCL4        = [];
         var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
 
         /** [ Create array of ce single orms tpn ] */
         $('.ce_single_orms_tpn').each(function(i, item)
@@ -3891,7 +3971,7 @@ function storeCESingleTCL4TSL3()
         /** [ Create array of ce single tcl1 count ] */
         $('.ce_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''?0:$(item).val();
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         size = size.join(',');
@@ -3899,7 +3979,7 @@ function storeCESingleTCL4TSL3()
         /** [ Create array of ce single tcl4 count ] */
         $('.count_TCL4').each(function(i, item)
         {
-            count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL4 = count_TCL4.join(',');
@@ -3907,7 +3987,7 @@ function storeCESingleTCL4TSL3()
         /** [ Create array of ce single tsl3 count ] */
         $('.count_TSL3').each(function(i, item)
         {
-            count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TSL3 = count_TSL3.join(',');
@@ -3916,7 +3996,7 @@ function storeCESingleTCL4TSL3()
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -3932,6 +4012,9 @@ function storeCESingleTCL4TSL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3939,6 +4022,7 @@ function storeCESingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -3961,7 +4045,7 @@ function storeCESingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -4172,9 +4256,6 @@ function storeCESingleTCL4TSL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
-
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
@@ -4366,13 +4447,6 @@ function storeCESingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4391,11 +4465,11 @@ function storeCESingleTCL4TSL3()
         console.log("Error:"+e)
     }
 }
+
 /**
  * [storeCESingleTHL3 for storing tesco CE single THL3 Template manual orders]
  * @author <praveen>
  */
-
 function storeCESingleTHL3()
 {
     try {
@@ -4407,6 +4481,8 @@ function storeCESingleTHL3()
         var case_size         = [];
         var size              = [];
         var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
 
         /** [ Create array of ce single orms tpn ] */
         $('.ce_single_orms_tpn').each(function(i, item)
@@ -4435,7 +4511,7 @@ function storeCESingleTHL3()
         /** [ Create array of ce single tcl1 count ] */
         $('.ce_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''?0:$(item).val();
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         size = size.join(',');
@@ -4443,7 +4519,7 @@ function storeCESingleTHL3()
         /** [ Create array of ce single thl3 count ] */
         $('.count_THL3').each(function(i, item)
         {
-            count_THL3[i]    = $(item).val() === ''?0:$(item).val();
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_THL3 = count_THL3.join(',');
@@ -4452,7 +4528,7 @@ function storeCESingleTHL3()
                  url: base_url + "/admin/tesco/set-ce-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4469,6 +4545,9 @@ function storeCESingleTHL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4476,6 +4555,7 @@ function storeCESingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -4498,7 +4578,7 @@ function storeCESingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -4570,9 +4650,6 @@ function storeCESingleTHL3()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -4666,13 +4743,6 @@ function storeCESingleTHL3()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -4691,11 +4761,11 @@ function storeCESingleTHL3()
         console.log("Error:"+e)
     }
 }
+
 /**
  * [storeUKRatioTCL1TCL2TSL1 for storing tesco UK ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @author <praveen>
  */
-
 function storeUKRatioTCL1TCL2TSL1()
 {
     try {
@@ -4708,6 +4778,11 @@ function storeUKRatioTCL1TCL2TSL1()
         var count_TCL1        = [];
         var count_TCL2        = [];
         var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+
 
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
@@ -4736,7 +4811,7 @@ function storeUKRatioTCL1TCL2TSL1()
         /** [ Create array of uk ratio tcl1 count ] */
         $('.count_TCL1').each(function(i, item)
         {
-            count_TCL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL1 = count_TCL1.join(',');
@@ -4744,7 +4819,7 @@ function storeUKRatioTCL1TCL2TSL1()
         /** [ Create array of uk ratio tcl2 count ] */
         $('.count_TCL2').each(function(i, item)
         {
-            count_TCL2[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL2[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL2 = count_TCL2.join(',');
@@ -4752,7 +4827,7 @@ function storeUKRatioTCL1TCL2TSL1()
         /** [ Create array of uk ratio tsl1 count ] */
         $('.count_TSL1').each(function(i, item)
         {
-            count_TSL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_TSL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TSL1 = count_TSL1.join(',');
@@ -4761,7 +4836,7 @@ function storeUKRatioTCL1TCL2TSL1()
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -4777,6 +4852,9 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4784,6 +4862,7 @@ function storeUKRatioTCL1TCL2TSL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -4806,7 +4885,7 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -5012,9 +5091,6 @@ function storeUKRatioTCL1TCL2TSL1()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
-
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
@@ -5206,13 +5282,6 @@ function storeUKRatioTCL1TCL2TSL1()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -5231,11 +5300,11 @@ function storeUKRatioTCL1TCL2TSL1()
         console.log("Error:"+e)
     }
 }
+
 /**
- * [storeUKRatioTHL1 for storing tesco UK ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * [storeUKRatioTHL1 for storing tesco UK ratio THL1 Templates manual orders]
  * @author <praveen>
  */
-
 function storeUKRatioTHL1()
 {
     try {
@@ -5246,6 +5315,8 @@ function storeUKRatioTHL1()
         var itf_code          = [];
         var units_per_carton  = [];
         var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
 
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
@@ -5274,7 +5345,7 @@ function storeUKRatioTHL1()
         /** [ Create array of uk ratio thl1 count ] */
         $('.count_THL1').each(function(i, item)
         {
-            count_THL1[i]    = $(item).val() === ''?0:$(item).val();
+            count_THL1[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_THL1 = count_THL1.join(',');
@@ -5283,7 +5354,7 @@ function storeUKRatioTHL1()
                  url: base_url + "/admin/tesco/set-uk-ratio-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5300,6 +5371,9 @@ function storeUKRatioTHL1()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5307,6 +5381,7 @@ function storeUKRatioTHL1()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -5329,7 +5404,7 @@ function storeUKRatioTHL1()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -5402,9 +5477,6 @@ function storeUKRatioTHL1()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -5498,13 +5570,6 @@ function storeUKRatioTHL1()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -5523,11 +5588,11 @@ function storeUKRatioTHL1()
         console.log("Error:"+e)
     }
 }
+
 /**
  * [storeUKSingleTCL4TSL3 for storing tesco UK single TCL3 AND TSL3 Templates manual orders]
  * @author <praveen>
  */
-
 function storeUKSingleTCL4TSL3()
 {
     try {
@@ -5540,6 +5605,9 @@ function storeUKSingleTCL4TSL3()
         var size              = [];
         var count_TCL4        = [];
         var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
 
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
@@ -5568,7 +5636,7 @@ function storeUKSingleTCL4TSL3()
         /** [ Create array of uk single tcl1 count ] */
         $('.uk_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''?0:$(item).val();
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         size = size.join(',');
@@ -5576,7 +5644,7 @@ function storeUKSingleTCL4TSL3()
         /** [ Create array of uk single tcl2 count ] */
         $('.count_TCL4').each(function(i, item)
         {
-            count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TCL4 = count_TCL4.join(',');
@@ -5584,7 +5652,7 @@ function storeUKSingleTCL4TSL3()
         /** [ Create array of uk single tsl1 count ] */
         $('.count_TSL3').each(function(i, item)
         {
-            count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_TSL3 = count_TSL3.join(',');
@@ -5593,7 +5661,7 @@ function storeUKSingleTCL4TSL3()
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -5609,6 +5677,9 @@ function storeUKSingleTCL4TSL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5616,6 +5687,7 @@ function storeUKSingleTCL4TSL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -5638,7 +5710,7 @@ function storeUKSingleTCL4TSL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -5849,9 +5921,6 @@ function storeUKSingleTCL4TSL3()
                        $('#upload_combined_po_form').validator('update');
                        $('#upload_single_po_form').validator('update');
 
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
-
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
                        for (var i=1; i <= length; i++) 
@@ -6043,13 +6112,6 @@ function storeUKSingleTCL4TSL3()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -6068,11 +6130,11 @@ function storeUKSingleTCL4TSL3()
         console.log("Error:"+e)
     }
 }
+
 /**
  * [storeUKSingleTHL3 for storing tesco UK single THL3 Template manual orders]
  * @author <praveen>
  */
-
 function storeUKSingleTHL3()
 {
     try {
@@ -6084,6 +6146,8 @@ function storeUKSingleTHL3()
         var case_size         = [];
         var size              = [];
         var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
 
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
@@ -6112,7 +6176,7 @@ function storeUKSingleTHL3()
         /** [ Create array of uk single tcl1 count ] */
         $('.uk_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''?0:$(item).val();
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         size = size.join(',');
@@ -6120,7 +6184,7 @@ function storeUKSingleTHL3()
         /** [ Create array of uk single tcl2 count ] */
         $('.count_THL3').each(function(i, item)
         {
-            count_THL3[i]    = $(item).val() === ''?0:$(item).val();
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
             
         });
         count_THL3 = count_THL3.join(',');
@@ -6129,7 +6193,7 @@ function storeUKSingleTHL3()
                  url: base_url + "/admin/tesco/set-uk-single-template-orders",
                  type: 'POST',
                  data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -6146,6 +6210,9 @@ function storeUKSingleTHL3()
                        /** Show snackbar if order placed **/
                        if(length > 0)
                        {
+                         /** remove save & submit button */
+                         $('.submit-btn').remove();
+                         $('.save-btn').remove();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -6153,6 +6220,7 @@ function storeUKSingleTHL3()
                        /** [ Show order already exists alertbox] */
                        if(data.already_exists.length === 0)
                        {
+                         $('.po-modal-content').show();
                          $('#order-exists-alert').html('');
                        }
                        else
@@ -6175,7 +6243,7 @@ function storeUKSingleTHL3()
                          /** [ Show only alertbox if data already exits ] */
                          if(length === 0)
                          {
-                            $('.po-modal-content').remove();
+                            $('.po-modal-content').hide();
                             $('.close-btn').attr('data-dismiss','modal')
                          }
                          else
@@ -6248,9 +6316,6 @@ function storeUKSingleTHL3()
 
                        /** Update bootstrap 1000hz validator  */
                        $('#upload_single_po_form').validator('update');
-
-                       /** Disable submit order button */
-                       $('.submit-btn').remove();
 
                        /** @type {Date} [Delivery date Datepicker format & validation] */
                        var today = new Date(order_date);
@@ -6343,13 +6408,6 @@ function storeUKSingleTHL3()
                       $.ajax(this);
                       return;
                   }
-                  /** If data already exists */
-                  if(errorXHR.status === 409)
-                  {
-                    $('.snackbar_span').html('Order already exists for this PO number and CE,UK style numbers.');
-                    $('#snackbar').css('background-color','#F44336');
-                    showSnackbar();
-                  }
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -6368,6 +6426,7 @@ function storeUKSingleTHL3()
         console.log("Error:"+e)
     }
 }
+
 /**
 * showSnackbar function
 * @author    <praveen>
@@ -6392,7 +6451,6 @@ try{
  * 
  * @return barcode
  */
-
 function jsbarcodetesco(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
@@ -6445,12 +6503,12 @@ function jsbarcodetesco(code, id, svgDoc) {
 	
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
+
 /**
  * This Function is used to invoke Ean 13 JSBarcode.
  * 
  * @return barcode
  */
-
 function jsbarcodetescoean(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
@@ -6508,7 +6566,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
  * 
  * @return barcode
  */
-
 function openmodaltesco(modal,i)
 {
     $('#'+modal).modal("show");
@@ -6553,7 +6610,6 @@ try{
                     $('.snackbar_span').html('PO File upload successfully');
                     showSnackbar();
                     $('#poUploadModal').modal('hide');
-                    location.reload();    
                 },
                 400: function() {
                     $('.snackbar_span').html("Something went wrong !. Try again");
@@ -6601,8 +6657,7 @@ try{
                 200: function(data) {
                     $('.snackbar_span').html('PO File upload successfully');
                     showSnackbar();
-                    $('#poUploadModal').modal('hide');
-                    location.reload();    
+                    $('#poUploadModal').modal('hide');  
                 },
                 400: function() {
                     $('.snackbar_span').html("Something went wrong !. Try again");
@@ -6629,7 +6684,6 @@ try{
  * 
  * @return boolean
  */
-
 function checkjsbarcodeitf(code) {
     var return_value="";
     JsBarcode("#ean-13", code, {
@@ -6657,7 +6711,6 @@ function checkjsbarcodeitf(code) {
  * 
  * @return boolean
  */
-
 function checkjsbarcodeean(code) {
     var return_value="";
     JsBarcode("#ean-13", code, {
@@ -6678,4 +6731,1176 @@ function checkjsbarcodeean(code) {
         }
     });
     return return_value;
+}
+
+/**
+ * [saveTescoOrder for drafting tesco manual orders(Save order)]
+ * @author <praveen>
+ */
+function saveTescoOrder()
+{
+    try {
+        var zone       =  localStorage.getItem("zone");
+        var type       =  localStorage.getItem("template type");
+        var data       =  JSON.parse(localStorage.getItem("data"));
+        var po_number  =  $('#tesco_po_number').val();
+        /** [ Switch style number based on zone ] */
+        if(zone === 'UK')
+        {
+            var style  =  $('#tesco_uk_style').val();
+        }
+        else
+        {
+            var style  =  $('#tesco_ce_style').val();
+        }
+        /** Check if PO Number null or not */
+        if((po_number != '') && (po_number != 'null') && (po_number != 'Null') && (po_number != 'NULL'))
+        {
+            /** Check if Style number null or not */
+            if((style != '') && (style != 'null') && (style != 'Null') && (style != 'NULL'))
+            {
+                if(zone === "CE")
+                {
+                    if(type === "ratio")
+                    {
+                        if(data[0].template_name === 'THL 1')
+                        {
+                            /** Function to save CE ratio THL1 template */
+                            saveCERatioTHL1();
+                        }
+                        else
+                        {
+                            /** Function to save CE ratio TCL1, TCL2, TSL1 template */
+                            saveCERatioTCL1TCL2TSL1();
+                        }
+                        
+                    }
+                    else
+                    {
+                       if(data[0].template_name === 'THL 3')
+                        {
+                            /** Function to save CE single THL3 template */
+                            saveCESingleTHL3();
+                        }
+                        else
+                        {
+                            /** Function to save CE single TCL4, TSL3 template */
+                            saveCESingleTCL4TSL3();
+                        }
+                    }
+                }
+                else
+                {
+                    if(type === "ratio")
+                    {
+                        if(data[0].template_name === 'THL 1')
+                        {
+                            /** Function to save UK ratio THL1 template */
+                            saveUKRatioTHL1();
+                        }
+                        else
+                        {
+                            /** Function to save UK ratio TCL1, TCL2, TSL1 template */
+                            saveUKRatioTCL1TCL2TSL1();
+                        }
+                        
+                    }
+                    else
+                    {
+                       if(data[0].template_name === 'THL 3')
+                        {
+                            /** Function to save UK single THL3 template */
+                            saveUKSingleTHL3();
+                        }
+                        else
+                        {
+                            /** Function to save UK single TCL4, TSL3 template */
+                            saveUKSingleTCL4TSL3();
+                        }
+                    }
+                }
+            }
+            else
+            {
+               $('.snackbar_span').html('Please Enter '+zone+' Style Number !!');
+               showSnackbar();
+            }
+        }
+        else
+        {
+           $('.snackbar_span').html('Please Enter PO Number !!');
+           showSnackbar();
+        }
+        
+        
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCERatioTCL1TCL2TSL1 for storing tesco CE ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveCERatioTCL1TCL2TSL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_TCL1        = [];
+        var count_TCL2        = [];
+        var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+
+        /** [ Create array of ce ratio tcl1 count ] */
+        $('.count_TCL1').each(function(i, item)
+        {
+            count_TCL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL1 = count_TCL1.join(',');
+
+        /** [ Create array of ce ratio tcl2 count ] */
+        $('.count_TCL2').each(function(i, item)
+        {
+            count_TCL2[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL2 = count_TCL2.join(',');
+
+        /** [ Create array of ce ratio tsl1 count ] */
+        $('.count_TSL1').each(function(i, item)
+        {
+            count_TSL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL1 = count_TSL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    
+                   /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                       var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCERatioTHL1 for storing tesco CE ratio THL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveCERatioTHL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var itf_code          = [];
+        var cases_per_carton  = [];
+        var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
+
+        /** [ Create array of ce ratio orms tpn ] */
+        $('.ce_ratio_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce ratio itf barcode ] */
+        $('.ce_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of ce ratio case per carton ] */
+        $('.ce_ratio_cpc').each(function(i, item)
+        {
+            cases_per_carton[i]    = $(item).val();
+            
+        });
+        cases_per_carton = cases_per_carton.join(',');
+
+        /** [ Create array of ce ratio thl1 count ] */
+        $('.count_THL1').each(function(i, item)
+        {
+            count_THL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL1 = count_THL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,itf_code:itf_code,cases_per_carton:cases_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCESingleTCL4TSL3 for storing tesco CE single TCL4 AND TSL3 Templates manual orders]
+ * @author <praveen>
+ */
+function saveCESingleTCL4TSL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_TCL4        = [];
+        var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+
+        /** [ Create array of ce single orms tpn ] */
+        $('.ce_single_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce single ean barcode ] */
+        $('.ce_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of ce single case size ] */
+        $('.ce_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of ce single tcl1 count ] */
+        $('.ce_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of ce single tcl4 count ] */
+        $('.count_TCL4').each(function(i, item)
+        {
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL4 = count_TCL4.join(',');
+
+        /** [ Create array of ce single tsl3 count ] */
+        $('.count_TSL3').each(function(i, item)
+        {
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL3 = count_TSL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
+    }
+}
+
+/**
+ * [saveCESingleTHL3 for storing tesco CE single THL3 Template manual orders]
+ * @author <praveen>
+ */
+function saveCESingleTHL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var orms_tpn          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
+
+        /** [ Create array of ce single orms tpn ] */
+        $('.ce_single_orms_tpn').each(function(i, item)
+        {
+            orms_tpn[i]    = $(item).val();
+            
+        });
+        orms_tpn   = orms_tpn.join(',');
+
+        /** [ Create array of ce single ean barcode ] */
+        $('.ce_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of ce single case size ] */
+        $('.ce_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of ce single tcl1 count ] */
+        $('.ce_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of ce single thl3 count ] */
+        $('.count_THL3').each(function(i, item)
+        {
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL3 = count_THL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-ce-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,orms_tpn:orms_tpn,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKRatioTCL1TCL2TSL1 for storing tesco UK ratio TCL1,TCL2 AND TSL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKRatioTCL1TCL2TSL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd              = [];
+        var itf_code          = [];
+        var units_per_carton  = [];
+        var count_TCL1        = [];
+        var count_TCL2        = [];
+        var count_TSL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+
+
+        /** [ Create array of uk ratio orms tpn ] */
+        $('.uk_ratio_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk ratio itf barcode ] */
+        $('.uk_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of uk ratio units per carton ] */
+        $('.uk_ratio_upc').each(function(i, item)
+        {
+            units_per_carton[i]    = $(item).val();
+            
+        });
+        units_per_carton = units_per_carton.join(',');
+
+        /** [ Create array of uk ratio tcl1 count ] */
+        $('.count_TCL1').each(function(i, item)
+        {
+            count_TCL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL1 = count_TCL1.join(',');
+
+        /** [ Create array of uk ratio tcl2 count ] */
+        $('.count_TCL2').each(function(i, item)
+        {
+            count_TCL2[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL2 = count_TCL2.join(',');
+
+        /** [ Create array of uk ratio tsl1 count ] */
+        $('.count_TSL1').each(function(i, item)
+        {
+            count_TSL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL1 = count_TSL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_TCL1:count_TCL1,count_TCL2:count_TCL2,count_TSL1:count_TSL1,templates:data,is_insert:is_insert,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKRatioTHL1 for storing tesco UK ratio THL1 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKRatioTHL1()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd              = [];
+        var itf_code          = [];
+        var units_per_carton  = [];
+        var count_THL1        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl1_last_id      = $('#THL1_id').val();
+
+        /** [ Create array of uk ratio orms tpn ] */
+        $('.uk_ratio_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk ratio itf barcode ] */
+        $('.uk_ratio_itf').each(function(i, item)
+        {
+            itf_code[i]    = $(item).val();
+            
+        });
+        itf_code = itf_code.join(',');
+
+        /** [ Create array of uk ratio units per carton ] */
+        $('.uk_ratio_upc').each(function(i, item)
+        {
+            units_per_carton[i]    = $(item).val();
+            
+        });
+        units_per_carton = units_per_carton.join(',');
+
+        /** [ Create array of uk ratio thl1 count ] */
+        $('.count_THL1').each(function(i, item)
+        {
+            count_THL1[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL1 = count_THL1.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-ratio-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKSingleTCL4TSL3 for storing tesco UK single TCL3 AND TSL3 Templates manual orders]
+ * @author <praveen>
+ */
+function saveUKSingleTCL4TSL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_TCL4        = [];
+        var count_TSL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+
+        /** [ Create array of uk single orms tpn ] */
+        $('.uk_single_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk single ean barcode ] */
+        $('.uk_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of uk single case size ] */
+        $('.uk_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of uk single tcl1 count ] */
+        $('.uk_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of uk single tcl2 count ] */
+        $('.count_TCL4').each(function(i, item)
+        {
+            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TCL4 = count_TCL4.join(',');
+
+        /** [ Create array of uk single tsl1 count ] */
+        $('.count_TSL3').each(function(i, item)
+        {
+            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_TSL3 = count_TSL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
+}
+
+/**
+ * [saveUKSingleTHL3 for storing tesco UK single THL3 Template manual orders]
+ * @author <praveen>
+ */
+function saveUKSingleTHL3()
+{
+    try {
+        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
+        tescoOrderCommonData();
+        /** @type {Array} [ initializing empty arrays ] */
+        var tpnd          = [];
+        var ean_code          = [];
+        var case_size         = [];
+        var size              = [];
+        var count_THL3        = [];
+        var is_insert         = $('.save-btn').data('insert');
+        var thl3_last_id      = $('#THL3_id').val();
+
+        /** [ Create array of uk single orms tpn ] */
+        $('.uk_single_tpnd').each(function(i, item)
+        {
+            tpnd[i]    = $(item).val();
+            
+        });
+        tpnd   = tpnd.join(',');
+
+        /** [ Create array of uk single ean barcode ] */
+        $('.uk_single_ean').each(function(i, item)
+        {
+            ean_code[i]    = $(item).val();
+            
+        });
+        ean_code = ean_code.join(',');
+
+        /** [ Create array of uk single case size ] */
+        $('.uk_single_case_size').each(function(i, item)
+        {
+            case_size[i]    = $(item).val();
+            
+        });
+        case_size = case_size.join(',');
+
+        /** [ Create array of uk single tcl1 count ] */
+        $('.uk_single_size').each(function(i, item)
+        {
+            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        size = size.join(',');
+
+        /** [ Create array of uk single tcl2 count ] */
+        $('.count_THL3').each(function(i, item)
+        {
+            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
+            
+        });
+        count_THL3 = count_THL3.join(',');
+
+        $.ajax({
+                 url: base_url + "/admin/tesco/save-uk-single-template-orders",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    /** [ Show order already exists alertbox] */
+                   if(data.already_exists.length > 0)
+                   {
+                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                               <span aria-hidden="true">×</span>\
+                                             </button>\
+                                            <p>Order already exists for following artworks,</p>\
+                                           <ol>';
+                        $.each(data.already_exists, function (index, value) { 
+                            html_content += '<li>'+value+'</li>';
+                         });   
+                        html_content += '</ol>\
+                                        </div>';
+
+                     $('#order-exists-msg').html(html_content);
+                     $('#warningModal').modal('show');
+                    }
+                    else
+                    {
+                        $('.snackbar_span').html('Saved Successfully');
+                        showSnackbar();
+
+                        $('.save-btn').data('insert','false');
+
+                        var div_html='';
+                        /** [ store last updated id as hidden input , for updating] */
+                        $.each(data.last_insertions, function (index, value) {
+                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                        });
+                        $('.invisible-div').html(div_html);
+                    }
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                    $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.log("Error:"+e)
+    }
 }

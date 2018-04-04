@@ -20,6 +20,7 @@
 		font-size: 12px; 
 		font-weight: 400;
 	}
+    .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
@@ -137,7 +138,7 @@
                     <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="proforma-invoice">
                     <div class="col-md-12 text-center">
                         <h4><strong><u>Proforma Invoice</u></strong></h4>
                         <br/>
@@ -184,15 +185,14 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <strong>ITEM DESCRIPTION & DETAILS :</strong>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <p class="text-right"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-right"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
-                                </div>
-                                <hr/>
                             </div>
                             <div class="row" id="item_details">
 
                             </div>
                             <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
 
                                 </div>
@@ -208,6 +208,7 @@
             </div>
         </div>
     </div>
+    <div id="editor"></div>
     <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -281,6 +282,7 @@
 						<input type="hidden" id="edit_zone">
 						<input type="hidden" id="edit_template_type">
 						<input type="hidden" id="edit_id">
+						<input type="hidden" id="order_type">
 						 <div class="form-group has-feedback">
                             <label for="tesco_uk_style">PO Number.</label>
                             <input type="text" maxlength="9" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" onkeyup="dynamicSVGTemplates()">
@@ -407,6 +409,7 @@
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
 <script>
@@ -512,9 +515,18 @@
             this.on("success", function(file, response) {
                 $('.dz-remove').hide();
                 this.removeFile(file);
-                console.log(response.po_file)
-                var po_link = base_url+response.po_file
-                $('#po_link').attr("href",po_link);
+                var po_link = base_url+response.po_file;
+                var row_id  = $('#rowID').val();
+                var tab_nm  = $('#tableName').val();
+                $('#'+tab_nm+'_'+row_id+' .po-style').attr('onclick','tescoPOUpload(this,"'+row_id+'","'+response.po_file+'","'+tab_nm+'")');
+                var po_num = $('#'+tab_nm+'_'+row_id+' .tesco-po').val();
+                if(po_num != null && po_num != '' && po_num != 'undefined') {
+                    $('#'+tab_nm+'_'+row_id+' .tesco-po').val();
+                    $('#'+tab_nm+'_'+row_id).find('.po_class').html("PO Uploaded");
+                    $('#'+tab_nm+'_'+row_id).find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
+                }
+                $('#'+tab_nm+'_'+row_id).find('.tesco-po-submit').attr('onclick','tescoSetPO(this,"'+row_id+'","'+tab_nm+'","'+response.po_file+'")');
+                $('#'+tab_nm+'_'+row_id).find('.po-view').css('border-color', '#FFFFFF');
                 $('#po-file-upload').modal('hide')
                 $('#snackbar').css('background-color','#00b6ff');
                 $('.snackbar_span').html('Purchase Order File Uploaded Successfully');

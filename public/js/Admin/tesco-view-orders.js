@@ -2,7 +2,7 @@
 * Function for loading the template preview
 */
 function loadTemplatePreview() {
-    var template_id = $('#po_number').find(':selected').data('tempid');
+    var template_id = $('#artwork_list').find(':selected').data('tempid');
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/tesco/template-management/template-view",
@@ -75,7 +75,7 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber) {
+function viewOrder(pNumber,aWork) {
     try {
         $.ajax({
             url: base_url + "/admin/tesco/view-order",
@@ -83,7 +83,10 @@ function viewOrder(pNumber) {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: {'po_number':pNumber},
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            data: {'po_number':pNumber, 'artwork':aWork},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
@@ -132,7 +135,9 @@ function viewOrder(pNumber) {
                     return;
                 }
             },
-            complete: function() {}
+            complete: function() {
+                $(".loader").hide();
+            }
         })
     } catch (e) {
         console.error("Error:" + e)
@@ -147,8 +152,10 @@ function mapStoredValues(oDetails) {
     var artwork_num = oDetails.length;
     var count = 0;
     var artwork_status = '';
+    var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
+    $('.save-btn').data('insert','false');
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -205,8 +212,18 @@ function mapStoredValues(oDetails) {
         });
         count++;
         artwork_status = ele.artwork_status;
+        last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
+
     });
     if(artwork_status === 'Saved') {
+        var div_html='';
+        /** [ store last updated id as hidden input , for updating] */
+        for (var k in last_insertions){
+            if (last_insertions.hasOwnProperty(k)) {
+                 div_html += '<input id="'+k+'" name="'+k+'" type="hidden" value="'+last_insertions[k]+'">';
+            }
+        }
+        $('.invisible-div').html(div_html);
 
     } else {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
@@ -216,4 +233,81 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
     }
     $(".selectpicker").selectpicker('refresh');
+}
+/**
+ * Function to load the artworks for correspinding style number
+ * @param  {string} style     Style Number of the order
+ * @param  {object} artwork_collection Collection of all orders
+ */
+function loadArtworkNames(style, artwork_collection) {
+    if(Object.keys(artwork_collection).length !== 0 && artwork_collection.constructor === Object) {
+        $('.artwork_list').removeClass('hidden');
+        var options="<option value=''>Search Artwork</option>";
+        $.each(artwork_collection[style], function(po,templs) {
+            var awArray = templs.split(",");
+            var ratioTCL  = [];
+            var ratioTCLArtworks  = [];
+            var singleTCL = [];
+            var singleTCLArtworks = [];
+            var ratioTHL = [];
+            var ratioTHLArtworks = [];
+            var singleTHL = [];
+            var singleTHLArtworks = [];
+            for (i = 0; i < awArray.length; i++) { 
+                var templateInfo = awArray[i].split("__");
+                switch (templateInfo[1]) {
+                    case 'TCL 1':
+                        ratioTCL.push(templateInfo[1]);
+                        ratioTCLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'TCL 2':
+                        ratioTCL.push(templateInfo[1]);
+                        ratioTCLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'TCL 4':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'TSL 1':
+                        ratioTCL.push(templateInfo[1]);
+                        ratioTCLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'TSL 3':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'THL 1':
+                        ratioTHL.push(templateInfo[1]);
+                        ratioTHLArtworks.push(templateInfo[0]);
+                        break;
+                    case 'THL 3':
+                        singleTHL.push(templateInfo[1]);
+                        singleTHLArtworks.push(templateInfo[0]);
+                }
+            }
+            if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
+                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
+                
+            }
+
+            if (typeof singleTCL !== 'undefined' && singleTCL.length > 0 && typeof singleTCLArtworks !== 'undefined' && singleTCLArtworks.length > 0) {
+                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
+                
+            }
+
+            if (typeof ratioTHL !== 'undefined' && ratioTHL.length > 0 && typeof ratioTHLArtworks !== 'undefined' && ratioTHLArtworks.length > 0) {
+                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
+                
+            }
+
+            if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
+                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                
+            }
+        });
+        $('#artwork_list').html(options);
+        $('#artwork_list').selectpicker('refresh');
+    } else {
+        throw "artwork_collection_empty";
+    }
 }

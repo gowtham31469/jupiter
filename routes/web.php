@@ -53,8 +53,6 @@ Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateContro
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
-
-Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
 /** User Management **/
 Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
@@ -124,7 +122,45 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
 	//TESCO
-	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderController@tescoOrderStatus');
+	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
+
+	//TESCO VIEW ORDER
+	Route::post('customer/tesco/view-order', 'Customer\Tesco\OrderController@viewOrders');
+
+	//TESCO ORDER STATUS
+	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
+	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
+	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
+	Route::post('customer/tesco/order-management/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
+	Route::post('customer/tesco/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
+	Route::post('customer/tesco/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
+	Route::post('customer/tesco/edit-artwork', 'Customer\Tesco\OrderStatusController@editArtwork');
+	Route::get('customer/tesco/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
+	Route::post('customer/tesco/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
+	Route::post('customer/tesco/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
+	Route::post('customer/tesco/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
+	Route::post('customer/tesco/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
+	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
+	Route::post('customer/tesco/edit-check-exist-po', 'Customer\Tesco\OrderStatusController@editCheckExistPo');
+	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
+	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
+	Route::get('customer/tesco/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
+	Route::post('customer/tesco/template-view', 'Customer\Tesco\OrderController@templateView');
+	Route::post('customer/tesco/po-upload', 'Customer\Tesco\OrderController@createStickerOrders');
+    Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\OrderController@getTescoTSLSizechart');
+    Route::post('customer/tesco/set-ce-ratio-template-orders', 'Customer\Tesco\OrderController@setCERatioOrders');
+	Route::post('customer/tesco/set-ce-single-template-orders', 'Customer\Tesco\OrderController@setCESingleOrders');
+
+	Route::post('customer/tesco/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
+	Route::post('customer/tesco/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
+	Route::post('customer/tesco/upload-tesco-single-po-file', 'Customer\Tesco\OrderController@uploadSingleOrdersPO');
+	Route::post('customer/tesco/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
+
+	Route::put('customer/tesco/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
+	Route::put('customer/tesco/save-ce-single-template-orders', 'Customer\Tesco\OrderController@saveCESingleOrders');
+
+	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
+	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 });
 
 
@@ -216,6 +252,7 @@ Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
+Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
@@ -234,6 +271,11 @@ Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManag
 Route::post('admin/tesco/upload-tesco-single-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadSingleOrdersPO');
 Route::post('admin/tesco/upload-tesco-combined-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadCombinedOrdersPO');
 
+Route::put('admin/tesco/save-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCERatioOrders');
+Route::put('admin/tesco/save-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCESingleOrders');
+
+Route::put('admin/tesco/save-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKRatioOrders');
+Route::put('admin/tesco/save-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKSingleOrders');
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
@@ -357,5 +399,28 @@ Route::post('admin/tesco/update-delivery-date', 'Admin\Tesco\OrderStatusCntrl@up
 Route::post('admin/tesco/set-tesco-order-status', 'Admin\Tesco\OrderStatusCntrl@setTescoOrderStatus');
 
 Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPo');
+
+Route::post('admin/tesco/edit-check-exist-po-repeat', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPoRepeat');
+
+Route::get('customer/reorder', 'Customer\HomeController@reorder');
+
+//Customer Reorder
+
+Route::post('customer/tesco/reorder', 'Customer\Tesco\ReorderController@reOrder');
+Route::post('customer/tesco/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
+Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderController@repeatOrderArtwork');
+Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
+Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
+Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
+
+Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
+
+
+
+//Customer Print Option
+
+Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
+Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
