@@ -410,17 +410,20 @@ function contentdocument(data,name,zone)
                      type: 'GET',
                      data: {size:size,zone:zone},
                      success: function (datas) {
-                           /** [ Dynamically change svg short description ] */
+                           /** [ Dynamically change svg short description & size chart ] */
                            if(description != '' && datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase());
+                              svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
                            }
                            else if(datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+                              svgDoc1.getElementById("description").innerHTML = '';
+                              svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
+                              svgDoc1.getElementById("size").innerHTML = '';
                               svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -444,6 +447,7 @@ function contentdocument(data,name,zone)
                  })
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
+		   svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].ean_barcode;
 		}
 		else if(name == "TSL1")
 		{
@@ -451,6 +455,7 @@ function contentdocument(data,name,zone)
 		   svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 		   svgDoc1.getElementById("tpnd").innerHTML = tpnd_td;
 		   jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+		   svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].itf_barcode;
 		}
 		else
 		{
@@ -493,22 +498,25 @@ function contentdocument(data,name,zone)
 						 type: 'GET',
 						 data: {size:size,zone:zone},
 						 success: function (datas) {
-							   /** [ Dynamically change svg short description ] */
+							   /** [ Dynamically change svg short description & size chart ] */
 							   if(description != '' && datas.size_chart.length != 0)
 							   {
-								  svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+							      svgDoc1.getElementById("description").innerHTML = (description.toUpperCase());
+							      svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
 							   }
 							   else if(datas.size_chart.length != 0)
 							   {
-								  svgDoc1.getElementById("description").innerHTML = data.size_chart[0].size; 
+							      svgDoc1.getElementById("description").innerHTML = '';
+							      svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
 							   }
 							   else if(description != '')
 							   {
-								  svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+							      svgDoc1.getElementById("size").innerHTML = '';
+							      svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
 							   }
 							   else
 							   {
-								  svgDoc1.getElementById("description").innerHTML = '';
+							      svgDoc1.getElementById("description").innerHTML = '';
 							   }
 						 },
 						 error: function (datas) {
@@ -550,10 +558,12 @@ function contentdocument(data,name,zone)
 			if(name == "TSL3" || name == "THL3" )
 			{
 				jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
+				svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].ean_barcode;
 			}
 			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
 			{
 				jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
+				svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].itf_barcode;
 			}
 		}
 		
@@ -573,7 +583,8 @@ function jsbarcodetesco(code, id, svgDoc) {
 		width: 2.50,
 		height: 100,
 		fontSize: 30,
-		flat:true
+		flat:true,
+		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -631,7 +642,8 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		width: 3.45,
 		height: 125,
 		fontSize: 35,
-		flat:true
+		flat:true,
+		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),

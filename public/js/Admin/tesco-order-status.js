@@ -1866,10 +1866,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 				  if(ce_ratio_itf.length === 14)
 				  {
 					jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                    svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
 				  }
 				  else
 				  {
 					 svgDoc.getElementById("barcode").innerHTML = '';
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 				  }
               }
               else
@@ -1897,10 +1899,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 					  if(ce_single_ean.length === 13)
 					  {
 						jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
 					  }
 					  else
 					  {
 						 svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 					  }
 				 }
                  var size  = $('#os_single_size_1').val();
@@ -1911,18 +1915,23 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description ] */
+                           /** [ Dynamically change svg short description & size chart ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = '';
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
+                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -1930,8 +1939,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.log(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -1947,13 +1960,15 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -1990,10 +2005,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 				  if(uk_ratio_itf.length === 14)
 				  {
 					jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                    svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
 				  }
 				  else
 				  {
 					 svgDoc.getElementById("barcode").innerHTML = '';
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 				  }
               }
               else
@@ -2018,32 +2035,39 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 					  if(uk_single_ean.length === 13)
 					  {
 						jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
 					  }
 					  else
 					  {
 						 svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 					  }
 				 }
                  var size  = $('#os_single_size_1').val();
-                 /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
                     $.ajax({
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description ] */
+                           /** [ Dynamically change svg short description & size chart ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = '';
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
+                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2051,8 +2075,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -2068,13 +2096,15 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -2253,11 +2283,13 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                        {
                         
                         jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
 
                        }
                        else
                        { 
                          svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
                        }
                    }
                    /** [ Dynamically change svg short description ] */
@@ -2302,11 +2334,13 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 					   {
 
 						  jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                          svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
 
 					   }
 					   else
 					   { 
                           svgDoc.getElementById("barcode").innerHTML = '';
+                          svgDoc.getElementById("barcode_number").innerHTML = '';
 					   }
 			     }
                  var size  = $('#os_single_size_1').val();
@@ -2317,18 +2351,23 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description ] */
+                           /** [ Dynamically change svg short description & size chart ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = '';
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
+                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2336,8 +2375,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -2353,13 +2396,15 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -2402,11 +2447,13 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                        {
                         
                            jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                           svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
 
                        }
                        else
                        { 
                            svgDoc.getElementById("barcode").innerHTML = '';
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
                        }
                    }
                    /** [ Dynamically change svg short description ] */
@@ -2452,11 +2499,13 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
 					   {
 
 						   jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                           svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
 
 					   }
 					   else
 					   { 
                            svgDoc.getElementById("barcode").innerHTML = '';
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
 					   }
 			     }
                  var size  = $('#os_single_size_1').val();
@@ -2467,18 +2516,23 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                      url: base_url + "/admin/tesco/get-tsl-size",
                      type: 'GET',
                      data: {size:size,zone:zone},
+                     tryCount : 0,
+                     retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description ] */
+                           /** [ Dynamically change svg short description & size chart ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = '';
+                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
+                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2486,8 +2540,12 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                               svgDoc.getElementById("description").innerHTML = '';
                            }
                      },
-                     error: function (data) {
-                        console.error(data);
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                      this.tryCount++;
+                      if (this.tryCount <= this.retryLimit) {
+                          $.ajax(this);
+                          return;
+                      }
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -2503,13 +2561,15 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
+                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -2533,6 +2593,7 @@ function jsbarcodetesco(code, id, svgDoc) {
 		height: 100,
 		fontSize: 30,
 		flat:true,
+        displayValue: false,
 		valid:function(valid){
 			if(valid == false)
 			{
@@ -2596,7 +2657,8 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		width: 3.45,
 		height: 125,
 		fontSize: 35,
-		flat:true
+		flat:true,
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
