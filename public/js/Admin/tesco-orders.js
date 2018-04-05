@@ -996,7 +996,7 @@ function createOrders(parsedObj = false, oType = false) {
                       html += '<div class="invisible-div"></div><h4>Order Preview</h4><div class="row">';
                       $.each(data.templates, function(i, item){
                        html += '<div class="col-md-4">\
-                                  <div class="card add-card">\
+                                  <div class="card add-card" style="height: 250px;">\
                                     <div class="card-title">\
                                        <p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p>\
                                        <h5><b>'+item.template_name+'</b></h5>\
