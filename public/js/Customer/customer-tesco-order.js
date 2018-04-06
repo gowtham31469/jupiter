@@ -1826,20 +1826,17 @@ function dynamicSVGTemplatescard(id,item)
                      tryCount : 0,
                      retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description & size chart ] */
+                           /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = '';
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -1871,12 +1868,10 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -1997,20 +1992,17 @@ function dynamicSVGTemplatescard(id,item)
                      tryCount : 0,
                      retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description & size chart ] */
+                           /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = '';
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2042,12 +2034,10 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -2323,20 +2313,17 @@ function dynamicSVGTemplatescard(id,item)
                      tryCount : 0,
                      retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description & size chart ] */
+                           /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = '';
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2368,12 +2355,10 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }
@@ -2517,20 +2502,17 @@ function dynamicSVGTemplatescard(id,item)
                      tryCount : 0,
                      retryLimit : 2,
                      success: function (data) {
-                           /** [ Dynamically change svg short description & size chart ] */
+                           /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase());
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
                            }
                            else if(data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = '';
-                              svgDoc.getElementById("size").innerHTML = data.size_chart[0].size; 
+                              svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("size").innerHTML = '';
                               svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -2562,12 +2544,10 @@ function dynamicSVGTemplatescard(id,item)
                      /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
                      }
                      else
                      {
-                        svgDoc.getElementById("size").innerHTML = '';
                         svgDoc.getElementById("description").innerHTML = '';
                      }
                  }

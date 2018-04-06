@@ -72,7 +72,6 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 <text id="eqos" transform="matrix(1 0 0 1 109.6879 127.8833)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">1005000</text>
 <text id="supplier" transform="matrix(1 0 0 1 109.6879 140.7748)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">SCM GARMENTS PVT LTD</text>
 <text id="description" transform="matrix(1 0 0 1 110.6874 113.8823)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY</text>
-<!-- size only for single templates -->
 <!-- <text transform="matrix(1 0 0 1 214.6899 113.8826)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">3-6</text> -->
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>

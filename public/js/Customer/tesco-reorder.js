@@ -410,20 +410,17 @@ function contentdocument(data,name,zone)
                      type: 'GET',
                      data: {size:size,zone:zone},
                      success: function (datas) {
-                           /** [ Dynamically change svg short description & size chart ] */
+                           /** [ Dynamically change svg short description ] */
                            if(description != '' && datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase());
-                              svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
+                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
                            }
                            else if(datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = '';
-                              svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
+                              svgDoc1.getElementById("description").innerHTML = datas.size_chart[0].size; 
                            }
                            else if(description != '')
                            {
-                              svgDoc1.getElementById("size").innerHTML = '';
                               svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
                            }
                            else
@@ -498,26 +495,23 @@ function contentdocument(data,name,zone)
 						 type: 'GET',
 						 data: {size:size,zone:zone},
 						 success: function (datas) {
-							   /** [ Dynamically change svg short description & size chart ] */
-							   if(description != '' && datas.size_chart.length != 0)
-							   {
-							      svgDoc1.getElementById("description").innerHTML = (description.toUpperCase());
-							      svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
-							   }
-							   else if(datas.size_chart.length != 0)
-							   {
-							      svgDoc1.getElementById("description").innerHTML = '';
-							      svgDoc1.getElementById("size").innerHTML = datas.size_chart[0].size; 
-							   }
-							   else if(description != '')
-							   {
-							      svgDoc1.getElementById("size").innerHTML = '';
-							      svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
-							   }
-							   else
-							   {
-							      svgDoc1.getElementById("description").innerHTML = '';
-							   }
+							   /** [ Dynamically change svg short description ] */
+	                           if(description != '' && datas.size_chart.length != 0)
+	                           {
+	                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+	                           }
+	                           else if(datas.size_chart.length != 0)
+	                           {
+	                              svgDoc1.getElementById("description").innerHTML = datas.size_chart[0].size; 
+	                           }
+	                           else if(description != '')
+	                           {
+	                              svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+	                           }
+	                           else
+	                           {
+	                              svgDoc1.getElementById("description").innerHTML = '';
+	                           }
 						 },
 						 error: function (datas) {
 							console.log(datas);

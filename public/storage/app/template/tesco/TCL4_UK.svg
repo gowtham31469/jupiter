@@ -50,7 +50,7 @@
 <text id="ce_style" transform="matrix(1 0 0 1 109.898 101.6036)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">344-5439</text>
 <text id="eqos" transform="matrix(1 0 0 1 109.6883 127.8835)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">1005000</text>
 <text id="supplier" transform="matrix(1 0 0 1 109.6883 140.775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">SCM GARMENTS PVT LTD</text>
-<text id="description" transform="matrix(1 0 0 1 110.6878 113.8825)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY</text>
-<text transform="matrix(1 0 0 1 214.6903 113.8828)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text>
+<text id="description" transform="matrix(1 0 0 1 110.6878 113.8825)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY 3-6</text>
+<!-- <text transform="matrix(1 0 0 1 214.6903 113.8828)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text> -->
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>

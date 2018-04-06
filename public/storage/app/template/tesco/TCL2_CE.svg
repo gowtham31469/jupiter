@@ -42,7 +42,6 @@
 <text id="po_number" transform="matrix(1 0 0 1 110.3962 75.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">1658242</text>
 <text transform="matrix(1 0 0 1 7.0344 74.8329)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
 <text id="description" transform="matrix(1 0 0 1 110.6877 113.8831)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY</text>
-<!-- Size only for single templates -->
 <!-- <text transform="matrix(1 0 0 1 214.6902 113.8834)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">3-6</text> -->
 <text transform="matrix(1 0 0 1 226.301 68.1268)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
 <text id="brand" transform="matrix(1 0 0 1 259.3065 68.1268)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>

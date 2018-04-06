@@ -59,7 +59,7 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 <text id="ce_style" transform="matrix(1 0 0 1 109.8977 101.6038)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">344-5439</text>
 <text id="eqos" transform="matrix(1 0 0 1 109.688 127.8837)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">1005000</text>
 <text id="supplier" transform="matrix(1 0 0 1 109.688 140.7752)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">SCM GARMENTS PVT LTD</text>
-<text id="description" transform="matrix(1 0 0 1 110.6875 113.8827)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY</text>
-<text transform="matrix(1 0 0 1 214.69 113.8829)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text>
+<text id="description" transform="matrix(1 0 0 1 110.6875 113.8827)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY 3-6</text>
+<!-- <text transform="matrix(1 0 0 1 214.69 113.8829)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text> -->
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>
