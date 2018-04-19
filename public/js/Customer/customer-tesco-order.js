@@ -1744,6 +1744,7 @@ function dynamicSVGTemplatescard(id,item)
                     {
                         barcode_checks++;
                         $('.barcode-error').html('');
+                        svgDoc.getElementById("barcode_number").innerHTML = '';
                         /**  [ Show validation error message ] **/
                         $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                     }
@@ -1753,12 +1754,14 @@ function dynamicSVGTemplatescard(id,item)
                         $('.barcode-error').html('');
 						//svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                         jsbarcodetescotsl1(ce_ratio_itf, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                     }
 				  }
 				  else
 				  {
                      barcode_checks = 0;
                      $('.barcode-error').html('');
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1791,6 +1794,7 @@ function dynamicSVGTemplatescard(id,item)
                         {
                             barcode_checks++;
                             $('.barcode-error').html('');
+                            svgDoc.getElementById("barcode_number").innerHTML = '';
                             /**  [ Show validation error message ] **/
                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                         }
@@ -1800,12 +1804,14 @@ function dynamicSVGTemplatescard(id,item)
                             $('.barcode-error').html('');
 							//svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                             jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                            svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                         }
 					  }
 					  else
 					  {
                          barcode_checks = 0;
                          $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
@@ -1855,11 +1861,11 @@ function dynamicSVGTemplatescard(id,item)
                               }).parent('li').addClass('current-page').find('a').addClass('active');
                           });
                      }
-                 })
+                   })
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
@@ -1906,6 +1912,7 @@ function dynamicSVGTemplatescard(id,item)
                     {
                         barcode_checks++;
                         $('.barcode-error').html('');
+                        svgDoc.getElementById("barcode_number").innerHTML = '';
                         /**  [ Show validation error message ] **/
                         $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                     }
@@ -1915,6 +1922,7 @@ function dynamicSVGTemplatescard(id,item)
                         $('.barcode-error').html('');
 						//svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                         jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                     }
 					
 				  }
@@ -1922,6 +1930,7 @@ function dynamicSVGTemplatescard(id,item)
 				  {
                      barcode_checks = 0;
                      $('.barcode-error').html('');
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1951,6 +1960,7 @@ function dynamicSVGTemplatescard(id,item)
                         {
                             barcode_checks++;
                             $('.barcode-error').html('');
+                            svgDoc.getElementById("barcode_number").innerHTML = '';
                             /**  [ Show validation error message ] **/
                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                         }
@@ -1960,17 +1970,19 @@ function dynamicSVGTemplatescard(id,item)
                             $('.barcode-error').html('');
 							//svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                             jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                            svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                         }
 					  }
 					  else
 					  {
                          barcode_checks = 0;
                          $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
                  var size  = $('#uk_single_size_1').val();
-                 /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
                     $.ajax({
@@ -2015,11 +2027,11 @@ function dynamicSVGTemplatescard(id,item)
                               }).parent('li').addClass('current-page').find('a').addClass('active');
                           });
                      }
-                 })
+                   })
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
@@ -2203,6 +2215,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2212,12 +2225,14 @@ function dynamicSVGTemplatescard(id,item)
                                 $('.barcode-error').html('');
 								//svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                                 jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                             }
                        }
                        else
                        { 
                          barcode_checks = 0;
                          $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
                          svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -2266,6 +2281,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2275,12 +2291,14 @@ function dynamicSVGTemplatescard(id,item)
                                 $('.barcode-error').html('');
 								//svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                                 jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                             }
 					   }
 					   else
 					   { 
                           barcode_checks = 0;
                           $('.barcode-error').html('');
+                          svgDoc.getElementById("barcode_number").innerHTML = '';
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2330,11 +2348,11 @@ function dynamicSVGTemplatescard(id,item)
                               }).parent('li').addClass('current-page').find('a').addClass('active');
                           });
                      }
-                 })
+                   })
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
@@ -2385,6 +2403,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2394,12 +2413,14 @@ function dynamicSVGTemplatescard(id,item)
                                 $('.barcode-error').html('');
 								//svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                                 jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                             }
                        }
                        else
                        {   
                            barcode_checks = 0;
                            $('.barcode-error').html('');
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
                            svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -2449,6 +2470,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2458,12 +2480,14 @@ function dynamicSVGTemplatescard(id,item)
                                 $('.barcode-error').html('');
 								//svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                                 jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                             }
 					   }
 					   else
 					   { 
                            barcode_checks = 0;
                            $('.barcode-error').html('');
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -2513,11 +2537,11 @@ function dynamicSVGTemplatescard(id,item)
                               }).parent('li').addClass('current-page').find('a').addClass('active');
                           });
                      }
-                 })
+                   })
                  }
                  else
                  {
-                     /** [ Dynamically change svg short description ] */
+                     /** [ Dynamically change svg short description & size chart ] */
                      if(description != '')
                      {
                         svgDoc.getElementById("description").innerHTML = description.toUpperCase();
@@ -6627,7 +6651,8 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		width: 3.45,
 		height: 125,
 		fontSize: 35,
-		flat:true
+		flat:true,
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),

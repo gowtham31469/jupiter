@@ -1680,6 +1680,7 @@ function dynamicSVGTemplatescard(id,item)
                     {
                         barcode_checks++;
                         $('.barcode-error').html('');
+                        svgDoc.getElementById("barcode_number").innerHTML = '';
                         /**  [ Show validation error message ] **/
                         $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                     }
@@ -1688,6 +1689,7 @@ function dynamicSVGTemplatescard(id,item)
                         barcode_checks = 0;
                         $('.barcode-error').html('');
                         jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                     }
 				  }
 				  else
@@ -1695,6 +1697,7 @@ function dynamicSVGTemplatescard(id,item)
                      barcode_checks = 0;
                      $('.barcode-error').html('');
 					 svgDoc.getElementById("barcode").innerHTML = '';
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 				  }
               }
               else
@@ -1726,6 +1729,7 @@ function dynamicSVGTemplatescard(id,item)
                         {
                             barcode_checks++;
                             $('.barcode-error').html('');
+                            svgDoc.getElementById("barcode_number").innerHTML = '';
                             /**  [ Show validation error message ] **/
                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                         }
@@ -1734,6 +1738,7 @@ function dynamicSVGTemplatescard(id,item)
                             barcode_checks = 0;
                             $('.barcode-error').html('');
                             jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                            svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                         }
 					  }
 					  else
@@ -1741,6 +1746,7 @@ function dynamicSVGTemplatescard(id,item)
                          barcode_checks = 0;
                          $('.barcode-error').html('');
 						 svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 					  }
 				 }
                  var size  = $('#ce_single_size_1').val();
@@ -1840,6 +1846,7 @@ function dynamicSVGTemplatescard(id,item)
                     {
                         barcode_checks++;
                         $('.barcode-error').html('');
+                        svgDoc.getElementById("barcode_number").innerHTML = '';
                         /**  [ Show validation error message ] **/
                         $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                     }
@@ -1848,6 +1855,7 @@ function dynamicSVGTemplatescard(id,item)
                         barcode_checks = 0;
                         $('.barcode-error').html('');
                         jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                     }
 					
 				  }
@@ -1855,6 +1863,7 @@ function dynamicSVGTemplatescard(id,item)
 				  {
                      barcode_checks = 0;
                      $('.barcode-error').html('');
+                     svgDoc.getElementById("barcode_number").innerHTML = '';
 					 svgDoc.getElementById("barcode").innerHTML = '';
 				  }
               }
@@ -1884,6 +1893,7 @@ function dynamicSVGTemplatescard(id,item)
                         {
                             barcode_checks++;
                             $('.barcode-error').html('');
+                            svgDoc.getElementById("barcode_number").innerHTML = '';
                             /**  [ Show validation error message ] **/
                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                         }
@@ -1892,17 +1902,19 @@ function dynamicSVGTemplatescard(id,item)
                             barcode_checks = 0;
                             $('.barcode-error').html('');
                             jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                            svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                         }
 					  }
 					  else
 					  {
                          barcode_checks = 0;
                          $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
                  var size  = $('#uk_single_size_1').val();
-                 /** if size is not empty, Get equivalent uk size for entered size (single templates)*/
+                 /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
                  {
                     $.ajax({
@@ -2127,7 +2139,7 @@ function dynamicSVGTemplatescard(id,item)
 				   if(item.template_name === "TCL 1" || item.template_name === "THL 1")
                    {
 					 
-                     /** [ Dynamically change svg barcode ] */
+                       /** [ Dynamically change svg barcode ] */
                        if(ce_ratio_itf !='' && ce_ratio_itf.length === 14)
                        {
                             var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
@@ -2135,6 +2147,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2143,6 +2156,7 @@ function dynamicSVGTemplatescard(id,item)
                                 barcode_checks = 0;
                                 $('.barcode-error').html('');
                                 jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                             }
                        }
                        else
@@ -2150,6 +2164,7 @@ function dynamicSVGTemplatescard(id,item)
                          barcode_checks = 0;
                          $('.barcode-error').html('');
                          svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
                        }
                    }
                    /** [ Dynamically change svg short description ] */
@@ -2197,6 +2212,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2205,6 +2221,7 @@ function dynamicSVGTemplatescard(id,item)
                                 barcode_checks = 0;
                                 $('.barcode-error').html('');
                                 jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                             }
 					   }
 					   else
@@ -2212,6 +2229,7 @@ function dynamicSVGTemplatescard(id,item)
                           barcode_checks = 0;
                           $('.barcode-error').html('');
                           svgDoc.getElementById("barcode").innerHTML = '';
+                          svgDoc.getElementById("barcode_number").innerHTML = '';
 					   }
 			     }
                  var size  = $('#ce_single_size_1').val();
@@ -2307,7 +2325,7 @@ function dynamicSVGTemplatescard(id,item)
                    }
                    if(item.template_name === "TCL 1" || item.template_name === "THL 1")
                    {
-                     /** [ Dynamically change svg barcode ] */
+                       /** [ Dynamically change svg barcode ] */
                        if(uk_ratio_itf !='' && uk_ratio_itf.length === 14)
                        {
                             var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
@@ -2315,6 +2333,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2323,12 +2342,14 @@ function dynamicSVGTemplatescard(id,item)
                                 barcode_checks = 0;
                                 $('.barcode-error').html('');
                                 jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                             }
                        }
                        else
                        {   
                            barcode_checks = 0;
                            $('.barcode-error').html('');
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
                            svgDoc.getElementById("barcode").innerHTML = '';
                        }
                    }
@@ -2378,6 +2399,7 @@ function dynamicSVGTemplatescard(id,item)
                             {
                                 barcode_checks++;
                                 $('.barcode-error').html('');
+                                svgDoc.getElementById("barcode_number").innerHTML = '';
                                 /**  [ Show validation error message ] **/
                                 $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
                             }
@@ -2386,12 +2408,14 @@ function dynamicSVGTemplatescard(id,item)
                                 barcode_checks = 0;
                                 $('.barcode-error').html('');
                                 jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                                svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                             }
 					   }
 					   else
 					   { 
                            barcode_checks = 0;
                            $('.barcode-error').html('');
+                           svgDoc.getElementById("barcode_number").innerHTML = '';
                            svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
@@ -6458,7 +6482,8 @@ function jsbarcodetesco(code, id, svgDoc) {
 		width: 2.50,
 		height: 100,
 		fontSize: 30,
-		flat:true
+		flat:true,
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -6516,7 +6541,8 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		width: 3.45,
 		height: 125,
 		fontSize: 35,
-		flat:true
+		flat:true,
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
