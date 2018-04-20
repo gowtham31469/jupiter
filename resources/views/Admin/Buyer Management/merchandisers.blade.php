@@ -23,6 +23,8 @@
                             <th>Merchandiser Email</th>
                             <th>Merchandiser Phone</th>
                             <th>Merchandiser Address</th>
+                            <th>Buyer Name</th>
+                            <th>Status</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
@@ -34,9 +36,18 @@
                           <td>{{ $value->email }}</td>
                           <td>{{ $value->merchandiser_phone }}</td>
                           <td>{{ $value->merchandiser_address }}</td>
-                          <td>
+                          <td>{{ $value->buyer_name }}</td>
+                          @if($value->is_active === 1)
+                            <td><span class="label label-success">Active</span></td>
+                          @else
+                            <td><span class="label label-danger">Inactive</span></td>
+                          @endif
+                          @if($value->is_active === 1)
+                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
+                          @else
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
+                          @endif
                             <a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-merchandiser" title="Edit" data-placement="left"></i></a>
-                            <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-merchandiser" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteMerchandiserModal" data-placement="left"></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -98,6 +109,11 @@
                         {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                         <div class="help-block with-errors"></div>
                       </div>
+                      <div class="form-group has-feedback">
+                        {!! Form::label('merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']+ $buyers),'',array('class' => 'form-control input-sm','id'=>'merchandiser_buyer','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
                   </div>
                   <div class="modal-footer">
                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
@@ -147,6 +163,11 @@
                        {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
                        <div class="help-block with-errors"></div>
                      </div>
+                     <div class="form-group has-feedback">
+                        {!! Form::label('edit_merchandiser_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
+                        {{  Form::select('merchandiser_buyer',(['' => '-- Select Buyer --']+ $buyers),'',array('class' => 'form-control input-sm','id'=>'edit_merchandiser_buyer','required')) }}
+                        <div class="help-block with-errors"></div>
+                     </div>
                  </div>
                  <div class="modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
@@ -157,31 +178,6 @@
      </div>
  </div>
 
- {{-- Delete merchandiser modal --}}
- <div class="modal fade" id="deleteMerchandiserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title" id="myModalLabel">Delete Merchandiser</h4>
-             </div>
-             {!! Form::open(['id' => 'delete_merchandiser_form','data-toggle' => 'validator','role' => 'form']) !!}
-                 <div class="modal-body">
-                   <div id="delete_buyer_result"></div>
-                     <div class="form-group has-feedback">
-                       <p>You are about to delete buyer. Do you want to proceed?</p>
-                        {!! Form::hidden('id',$value = null, array('id'=>'delete_merchandiser_id','class' => 'form-control input-sm')) !!}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
     @endsection
     @else
     <script type="text/javascript">
@@ -202,13 +198,13 @@
          $('#edit_merchandiser_form').trigger('reset');
          $('#add_merchandiser_result').hide();
          $('#edit_merchandiser_result').hide();
-         $('#delete_merchandiser_result').hide();
          $('.edit-merchandiser').tooltip('show')
          $('.edit-merchandiser').tooltip('toggle')
-         $('.delete-merchandiser').tooltip('show')
-         $('.delete-merchandiser').tooltip('toggle')
+         $('.status').tooltip('show')
+         $('.status').tooltip('toggle')
+         
        });
-
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
         
       /** To refresh modal while hidden**/
       $('.modal').on('hidden.bs.modal', function (e) {
@@ -216,11 +212,9 @@
         $('#add_merchandiser_form').trigger('reset');
         $('#buyer_result').hide();
         $('#edit_buyer_result').hide();
-        $('#delete_buyer_result').hide();
         $('#merchandiser_result').hide();
         $('#add_merchandiser_result').hide();
         $('#edit_merchandiser_result').hide();
-        $('#delete_merchandiser_result').hide();
        })
        /** generate random password **/
        $("#generatePwd").validator().click(function(){
@@ -282,24 +276,18 @@
             editMerchandiser();
          }
        })
-       /** assign id for delete merchandiser modal **/
-       $('#deleteMerchandiserModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_merchandiser_id').attr('value', config);
+       /** To activate Merchandisers on click **/
+       $(document).on('click', '#make_active', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           /* call makeMerchandiserActive function from buyers.js*/
+           makeMerchandiserActive(id,csrf_token)
        });
-       /** submit delete merchandiser form **/
-       $('#delete_merchandiser_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
 
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_merchandiser_id').val();
-            /* call deleteMerchandiser function from buyers.js*/
-            deleteMerchandiser(id);
-         }
-       })
+       /** To deactivate Merchandisers on click **/
+       $(document).on('click', '#make_inactive', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           /* call makeMerchandiserInactive function from buyers.js*/
+           makeMerchandiserInactive(id,csrf_token)
+       });
     </script>
     @endsection

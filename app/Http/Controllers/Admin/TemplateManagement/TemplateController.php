@@ -45,7 +45,7 @@ class TemplateController extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/Template Management/dashboard',['buyers' => $buyers]);
         }
         else
@@ -66,7 +66,7 @@ class TemplateController extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/Template Management/template-list',['buyers' => $buyers]);
         }
         else

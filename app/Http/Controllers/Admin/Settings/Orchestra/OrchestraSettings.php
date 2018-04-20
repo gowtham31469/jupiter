@@ -55,7 +55,7 @@ class OrchestraSettings extends Controller
             // For getting care category 
             $category = DB::table('orchestra_care_category')->pluck('category_name','id')->all();
 
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category]);
         }
         else

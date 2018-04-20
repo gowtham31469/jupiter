@@ -75,13 +75,13 @@ class OrderController extends Controller
     public function backLabelOrders()
     {
             $data['orders'] = DB::table('orchestra_item_details')->select('id','UVC','Collection as Season','SupplierName','Description','Theme','Style_Name','Disney','Quantity')->groupBy('UVC')->get();
-            $data['buyer'] =DB::table('buyers')->select('*')->get();
+            $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             echo json_encode($data);
     } 
     public function backStickerOrders()
     {
             $data['orders'] = DB::table('orchestra_parcel_details')->select('id','UVC','BuyerPONo','SupplierName','Theme','Quantity','IsSTD as Type')->get();
-            $data['buyer'] =DB::table('buyers')->select('*')->get();
+            $data['buyer'] =DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             echo json_encode($data);
     }
     public function Orders()

@@ -88,18 +88,19 @@ Route::post('admin/tesco/customer-management/template-view', 'Admin\CustomerMana
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers-list', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
-Route::get('admin/buyer-management/get-buyers', 'Admin\BuyerManagement\BuyerManagementController@getBuyers');
 Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagement\BuyerManagementController@addJgaBuyer');
 Route::get('admin/buyer-management/get-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@getBuyerById');
 Route::put('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
-Route::delete('admin/buyer-management/delete-buyer', 'Admin\BuyerManagement\BuyerManagementController@deleteBuyerById');
+Route::put('admin/buyer-management/make-buyer-active', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerActive');
+Route::put('admin/buyer-management/make-buyer-inactive', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerInactive');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyers');
 
 Route::get('admin/buyer-management/merchandiser-list', 'Admin\BuyerManagement\BuyerManagementController@merchandiserList');
 Route::post('admin/buyer-management/add-merchandiser', 'Admin\BuyerManagement\BuyerManagementController@addMerchandiser');
 Route::get('admin/buyer-management/get-merchandiser-details', 'Admin\BuyerManagement\BuyerManagementController@getMerchandiserById');
 Route::put('admin/buyer-management/update-merchandiser-details', 'Admin\BuyerManagement\BuyerManagementController@updateMerchandiserById');
-Route::delete('admin/buyer-management/delete-merchandiser', 'Admin\BuyerManagement\BuyerManagementController@deleteMerchandiserById');
+Route::put('admin/buyer-management/make-merchandiser-active', 'Admin\BuyerManagement\BuyerManagementController@makeMerchandiserActive');
+Route::put('admin/buyer-management/make-merchandiser-inactive', 'Admin\BuyerManagement\BuyerManagementController@makeMerchandiserInactive');
 Route::get('admin/buyer-management/merchandisers', 'Admin\BuyerManagement\BuyerManagementController@merchandisers');
 
 Route::group(['middleware' => 'customer_guest'], function()
