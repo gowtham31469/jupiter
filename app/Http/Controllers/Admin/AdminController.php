@@ -46,7 +46,7 @@ class AdminController extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/order-management',['buyers' => $buyers]);
         }
         else
@@ -88,7 +88,7 @@ class AdminController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/template-management',['buyers' => $buyers]);
         }
         else

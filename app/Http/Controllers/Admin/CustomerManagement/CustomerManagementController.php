@@ -71,27 +71,12 @@ class CustomerManagementController extends Controller
     {
       try{
             $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active','customers.account_holder','customers.ifsc_code','customers.bank','customers.branch')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
+                         ->orderBy('is_active','desc')
                          ->get();
              foreach ($customers as $value) 
              {
                 /** [Checking value null or not] */
-                if($value->account_holder == "")
-                {
-                  $value->account_holder   = "N/A";
-                }
-                if($value->ifsc_code == "")
-                {
-                  $value->ifsc_code   = "N/A";
-                }
-                if($value->bank == "")
-                {
-                  $value->bank   = "N/A";
-                }
-                if($value->branch == "")
-                {
-                  $value->branch   = "N/A";
-                }
                 if($value->courier_choice == "")
                 {
                   $value->courier_choice   = "N/A";
@@ -129,7 +114,7 @@ class CustomerManagementController extends Controller
                 
 
                 $is_billing_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax')
+                         ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax','customer_bill_address.pincode')
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_billing_address','=',1)
                          ->first();
@@ -140,6 +125,7 @@ class CustomerManagementController extends Controller
                   $value->bill_email     = $is_billing_address->bill_email;
                   $value->bill_telephone = $is_billing_address->bill_telephone;
                   $value->bill_fax       = $is_billing_address->bill_fax;
+                  $value->pincode        = $is_billing_address->pincode;
                 }
                 else
                 {
@@ -148,9 +134,10 @@ class CustomerManagementController extends Controller
                   $value->bill_email     = "N/A";
                   $value->bill_telephone = "N/A";
                   $value->bill_fax       = "N/A";
+                  $value->pincode        = "N/A";
                 }
                 $is_shipping_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax')
+                         ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_shipping_address','=',1)
                          ->first();
@@ -161,6 +148,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = $is_shipping_address->ship_email;
                   $value->ship_telephone = $is_shipping_address->ship_telephone;
                   $value->ship_fax       = $is_shipping_address->ship_fax;
+                  $value->pincode       = $is_shipping_address->pincode;
                 }
                 else
                 {
@@ -169,6 +157,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = "N/A";
                   $value->ship_telephone = "N/A";
                   $value->ship_fax       = "N/A";
+                  $value->pincode       = "N/A";
                 }
                 
               }            
@@ -190,7 +179,6 @@ class CustomerManagementController extends Controller
                 $factory_code         = $request['factory_code'];
                 $company_name         = $request['company_name'];
                 $courier_choice       = $request['courier_choice'];
-                $account_no           = $request['account_no'];
                 $password             = Hash::make($request['p']);
                 $tin_number           = $request['tin_number'];
                 $gstin_number         = $request['gstin_number'];
@@ -208,11 +196,8 @@ class CustomerManagementController extends Controller
                 $billing_address      = $request['billing_address'];
                 $shipping_address     = $request['shipping_address'];
                 $buyer                = $request['buyer'];
+                $pincode              = $request['pincode'];
                 $pi_required          = $request['pi_required'];
-                $account_holder       = $request['account_holder'];
-                $ifsc_code            = $request['ifsc_code'];
-                $bank                 = $request['bank'];
-                $branch               = $request['branch'];
                 $place_of_supply      = $request['place_of_supply'];
                 $payment_term         = $request['payment_term'];
                 $po_required          = $request['po_required'];
@@ -220,6 +205,7 @@ class CustomerManagementController extends Controller
                 $forwarder            = $request['forwarder'];
                 $freight              = $request['freight'];
                 $delivery_day_count   = $request['day_count'];
+                $short_name           = $request['short_name'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -241,29 +227,26 @@ class CustomerManagementController extends Controller
                   $billing_address  = explode(',',$billing_address);
                   $shipping_address = explode(',',$shipping_address);
                   $buyers           = explode(',',$buyer);
+                  $pincode          = explode(',',$pincode);
 
                   $customer = Customer::create([
                                 'factory_code'           => $factory_code,
                                 'company_name'           => $company_name,
                                 'courier_choice'         => $courier_choice,
-                                'account_no'             => $account_no,
                                 'password'               => $password,
                                 'tin_number'             => $tin_number,
                                 'gstin_number'           => $gstin_number,
                                 'pan_number'             => $pan_number,
                                 'email'                  => $login_email,
                                 'pi_required'            => $pi_required,
-                                'account_holder'         => $account_holder,
-                                'ifsc_code'              => $ifsc_code,
-                                'bank'                   => $bank,
-                                'branch'                 => $branch,
                                 'place_of_supply'        => $place_of_supply,
                                 'payment_terms'          => $payment_term,
                                 'po_required'            => $po_required,
                                 'delivery_date_required' => $delivery_date_req,
                                 'nominated_forwarder'    => $forwarder,
                                 'freight_type'           => $freight,
-                                'delivery_day_count'     => $delivery_day_count
+                                'delivery_day_count'     => $delivery_day_count,
+                                'short_name'             => $short_name
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -291,7 +274,8 @@ class CustomerManagementController extends Controller
                             'telephone'              => $telephone[$j],
                             'fax'                    => $fax[$j],
                             'is_billing_address'     => $billing_address[$j],
-                            'is_shipping_address'    => $shipping_address[$j]
+                            'is_shipping_address'    => $shipping_address[$j],
+                            'pincode'                => $pincode[$j]
                         ]);
                         $j++;
                     }
@@ -374,7 +358,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.account_holder','customers.ifsc_code','customers.branch','customers.bank','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count','short_name')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -417,17 +401,12 @@ class CustomerManagementController extends Controller
                     $input['factory_code']           = Input::get('factory_code');
                     $input['company_name']           = Input::get('company_name');
                     $input['courier_choice']         = Input::get('courier_choice');
-                    $input['account_no']             = Input::get('account_no');
                     $input['tin_number']             = Input::get('tin_number');
                     $input['gstin_number']           = Input::get('gstin_number');
                     $input['pan_number']             = Input::get('pan_number');
                     $input['email']                  = Input::get('login_email');
                     $input['pi_required']            = Input::get('pi_required');
                     $input['password']               = Hash::make(Input::get('p'));
-                    $input['account_holder']         = Input::get('account_holder');
-                    $input['ifsc_code']              = Input::get('ifsc_code');
-                    $input['bank']                   = Input::get('bank');
-                    $input['branch']                 = Input::get('branch');
                     $input['place_of_supply']        = Input::get('place_of_supply');
                     $input['payment_term']           = Input::get('payment_term');
                     $input['po_required']            = Input::get('po_required');
@@ -435,6 +414,7 @@ class CustomerManagementController extends Controller
                     $input['forwarder']              = Input::get('forwarder');
                     $input['freight']                = Input::get('freight');
                     $input['delivery_day_count']     = Input::get('day_count');
+                    $input['short_name']             = Input::get('short_name');
 
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -448,6 +428,7 @@ class CustomerManagementController extends Controller
                     $billing_address  = Input::get('billing_address');
                     $shipping_address = Input::get('shipping_address');
                     $buyer            = Input::get('buyer');
+                    $pincode          = Input::get('pincode');
                     
 
                     $email_rules     = array('email' => 'unique:customers,email,'.$id);
@@ -472,30 +453,27 @@ class CustomerManagementController extends Controller
                       $billing_address  = explode(',',$billing_address);
                       $shipping_address = explode(',',$shipping_address);
                       $buyers           = explode(',',$buyer);
+                      $pincode          = explode(',',$pincode);
 
                       Customer::where('id',$id)
                           ->update([
                           'factory_code'           => $input['factory_code'],
                           'company_name'           => $input['company_name'],
                           'courier_choice'         => $input['courier_choice'],
-                          'account_no'             => $input['account_no'],
                           'tin_number'             => $input['tin_number'],
                           'gstin_number'           => $input['gstin_number'],
                           'pan_number'             => $input['pan_number'],
                           'email'                  => $input['email'],
                           'password'               => $input['password'],
                           'pi_required'            => $input['pi_required'],
-                          'account_holder'         => $input['account_holder'],
-                          'ifsc_code'              => $input['ifsc_code'],
-                          'bank'                   => $input['bank'],
-                          'branch'                 => $input['branch'],
                           'place_of_supply'        => $input['place_of_supply'],
                           'payment_terms'          => $input['payment_term'],
                           'po_required'            => $input['po_required'],
                           'delivery_date_required' => $input['delivery_date_required'],
                           'nominated_forwarder'    => $input['forwarder'],
                           'freight_type'           => $input['freight'],
-                          'delivery_day_count'     => $input['delivery_day_count']
+                          'delivery_day_count'     => $input['delivery_day_count'],
+                          'short_name'             => $input['short_name']
                         ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)
@@ -526,7 +504,8 @@ class CustomerManagementController extends Controller
                                 'telephone'           => $telephone[$j],
                                 'fax'                 => $fax[$j],
                                 'is_billing_address'  => $billing_address[$j],
-                                'is_shipping_address' => $shipping_address[$j]
+                                'is_shipping_address' => $shipping_address[$j],
+                                'pincode'             => $pincode[$j]
                             ]);
                             $j++;
                         }
@@ -550,39 +529,6 @@ class CustomerManagementController extends Controller
                 }
                 return $result;
           }
-          /**
-         * function to delete Customer by id.
-         * @param customer id
-         * @author <Praveen>
-         * @return boolean true or false
-         */
-        public function deleteCustomerById(Request $request)
-        {
-          try {
-                  $id        = $request['id'];
-                  $deleted = Customer::where('id', '=', $id)
-                              ->delete();
-                  CustomerBillAddress::where('customer_id', '=', $id)
-                          ->delete();
-                  CustomerContactPersons::where('customer_id', '=', $id)
-                          ->delete();
-                  CustomerBuyers::where('customer_id', '=', $id)
-                          ->delete();
-
-                  if($deleted != '')
-                  {
-                    $result = response()->json(['error'=> false,'message' =>'success'],200);
-                  }
-                  else
-                  {
-                    $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                  }
-              } catch (\Exception $e)
-              {
-                     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-              }
-              return $result;
-        }
     /**
     * Show the orchestra customers list view on pageload.
     * @author <Praveen>
@@ -593,34 +539,19 @@ class CustomerManagementController extends Controller
           try {
            $module_var = new Modules();
            $is_allowed = $module_var->permittedModules();
-           $buyers = DB::table('buyers')->pluck('buyer_name','id')->all();
+           $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
            $payment_terms = DB::table('payment_terms')->pluck('payment_terms','id')->all();
            $place_of_supply = DB::table('place_of_supply')->pluck('place_of_supply','id')->all();
            $forwarder = DB::table('nominated_forwarders')->pluck('forwarder','id')->all();
            $freight_terms = DB::table('freight_terms')->pluck('freight_terms','id')->all();
            
            $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.account_no','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active','customers.account_holder','customers.ifsc_code','customers.bank','customers.branch')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
+                         ->orderBy('is_active','desc')
                          ->get();
              foreach ($customers as $value) 
              {
                 /** [Checking value null or not] */
-                if($value->account_holder == "")
-                {
-                  $value->account_holder   = "N/A";
-                }
-                if($value->ifsc_code == "")
-                {
-                  $value->ifsc_code   = "N/A";
-                }
-                if($value->bank == "")
-                {
-                  $value->bank   = "N/A";
-                }
-                if($value->branch == "")
-                {
-                  $value->branch   = "N/A";
-                }
                 if($value->courier_choice == "")
                 {
                   $value->courier_choice   = "N/A";
@@ -658,7 +589,7 @@ class CustomerManagementController extends Controller
                 
 
                 $is_billing_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax')
+                         ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax','customer_bill_address.pincode')
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_billing_address','=',1)
                          ->first();
@@ -669,17 +600,19 @@ class CustomerManagementController extends Controller
                   $value->bill_email     = $is_billing_address->bill_email;
                   $value->bill_telephone = $is_billing_address->bill_telephone;
                   $value->bill_fax       = $is_billing_address->bill_fax;
+                  $value->pincode        = $is_billing_address->pincode;
                 }
                 else
                 {
                   $value->bill_address   = "N/A";
+                  $value->pincode        = "N/A";
                   $value->bill_country   = "N/A";
                   $value->bill_email     = "N/A";
                   $value->bill_telephone = "N/A";
                   $value->bill_fax       = "N/A";
                 }
                 $is_shipping_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax')
+                         ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
                          ->where('customer_bill_address.customer_id','=',$customer_id)
                          ->where('customer_bill_address.is_shipping_address','=',1)
                          ->first();
@@ -690,6 +623,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = $is_shipping_address->ship_email;
                   $value->ship_telephone = $is_shipping_address->ship_telephone;
                   $value->ship_fax       = $is_shipping_address->ship_fax;
+                  $value->pincode        = $is_shipping_address->pincode;
                 }
                 else
                 {
@@ -698,6 +632,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = "N/A";
                   $value->ship_telephone = "N/A";
                   $value->ship_fax       = "N/A";
+                  $value->pincode        = "N/A";
                 }
                 
               }  
@@ -733,7 +668,7 @@ class CustomerManagementController extends Controller
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
             
-            $buyers = DB::table('buyers')->select('*')->get();
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             return view('Admin/Customer Management/buyer-selection',['buyers' => $buyers]);
         } else {
              return redirect('/admin/dashboard');

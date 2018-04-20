@@ -441,7 +441,7 @@ border: 0;
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
-                                <h4 style="color: #00b6ff !important">Artwork count missing for following artworks:</h4>
+                                <h4 style="color: #00b6ff !important">Artwork quantity missing for following artworks:</h4>
                                 <ol id="body_msg" style="font-weight: bolder;">
                                     
                                 </ol>
@@ -452,14 +452,14 @@ border: 0;
                 </h5>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
-               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Confirm</button>
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">No</button>
+               <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm" id="confirm_btn">Yes</button>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Artwork count missing for all artworks modal --}}
+{{-- Artwork quantity(count) missing for all artworks modal --}}
 <div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -468,7 +468,7 @@ border: 0;
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
-                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity(count) and count must be greater than 0.</h4>
+                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity and quantity must be greater than 0.</h4>
                             </div>
                         </div>
                     </div>
@@ -487,6 +487,25 @@ border: 0;
         <div id="order-exists-msg"></div>
     </div>
 </div>
+
+{{-- Cancel Order modal --}}
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Cancel Order</h4>
+               </div>
+                   <div class="modal-body">
+                         <p>You are about to cancel this order. Do you want to proceed ?</p>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm','onclick' => 'location.reload()'] ) !!}
+                   </div>
+           </div>
+       </div>
+   </div>
 <div id="snackbar"><span class="snackbar_span"></span></div>
 	@endsection @else
 	<script type="text/javascript">

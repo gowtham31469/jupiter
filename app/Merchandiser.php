@@ -18,7 +18,7 @@ class Merchandiser extends Authenticatable
       *
       * @var array
       */
-      protected $fillable = ['email', 'password','buyer_id','customer_id','merchandiser_name','merchandiser_address','merchandiser_phone'];
+      protected $fillable = ['email', 'password','buyer_id','customer_id','merchandiser_name','merchandiser_address','merchandiser_phone','is_active','buyer_id'];
      /**
       * The attributes that should be hidden for arrays.
       *

@@ -23,7 +23,6 @@
                           <th>Factory Code</th>
                           <th>Default Contact</th>
                           <th>Courier Choice</th>
-                          <th>Bank Details</th>
                           <th>TIN No.</th>
                           <th>GSTIN No.</th>
                           <th>PAN No.</th>
@@ -50,20 +49,6 @@
                             </dl>
                           </td>
                           <td>{{ $value->courier_choice }}</td>
-                          <td>
-                            <dl>
-                              <dt>Account Holder:</dt>
-                              <dd>{{ $value->account_holder }}</dd>
-                              <dt>Account No:</dt>
-                              <dd>{{ $value->account_no }}</dd>
-                              <dt>Bank:</dt>
-                              <dd>{{ $value->bank }}</dd>
-                              <dt>IFSC:</dt>
-                              <dd>{{ $value->ifsc_code }}</dd>
-                              <dt>Branch:</dt>
-                              <dd>{{ $value->branch }}</dd>
-                            </dl>
-                          </td>
                           <td>{{ $value->tin_number }}</td>
                           <td>{{ $value->gstin_number }}</td>
                           <td>{{ $value->pan_number }}</td>
@@ -97,15 +82,12 @@
                             <td><span class="label label-danger">Inactive</span></td>
                           @endif
                           @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
+                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
                           @else
-                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
                           @endif
                                <a href="#">
                                 <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
-                               </a>
-                               <a href="#">
-                                <i class="fa fa-trash filterbtn options fa-button delete-customer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteCustomerModal" data-placement="left"></i>
                                </a>
                              </td>
                          </tr>
@@ -141,6 +123,13 @@
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
+                                  {!! Form::label('short_name', 'Short Name', ['class' => 'form_label']) !!}
+                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required')) !!}
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group has-feedback">
                                   {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
                                   {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
                                   <div class="help-block with-errors"></div>
@@ -149,7 +138,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                                 {!! Form::label('courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
-                                {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','required')) !!}
+                                {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -262,45 +251,6 @@
                               </div>
                             </div>
                           </div>
-                          <h4><strong>Bank Details</strong></h4>
-                          <hr>
-                          <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('account_holder', 'Account Holder', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('account_no', 'Account Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
-                                {!! Form::text('ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('bank', 'Bank Name', ['class' => 'form_label']) !!}
-                                {!! Form::text('bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback">
-                                {!! Form::label('branch', 'Bank Branch', ['class' => 'form_label']) !!}
-                                {!! Form::textarea('branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
                         <h4><strong>Contact Information</strong></h4>
                           <hr>
                           <div class="row">
@@ -356,6 +306,11 @@
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
+                                          {!! Form::label('pincode0', 'Pincode', ['class' => 'form_label']) !!}
+                                            {!! Form::text('pincode0',$value = '', array('class' => 'form-control input-sm pincode','placeholder' => 'Pincode','required','data-minlength' => '6','maxlength' => '6','onkeypress' => 'return isNumber(event)')) !!}
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="form-group has-feedback">
                                             {!! Form::label('country0', 'Country', ['class' => 'form_label']) !!}
                                             {!! Form::text('country0',$value = '', array('class' => 'form-control input-sm country','placeholder' => 'Country','required')) !!}
                                             <div class="help-block with-errors"></div>
@@ -370,7 +325,7 @@
                                         </div>
                                         <div class="form-group has-feedback">
                                             {!! Form::label('fax0', 'Fax', ['class' => 'form_label']) !!}
-                                            {!! Form::text('fax0',$value = '', array('class' => 'form-control input-sm fax','placeholder' => 'Fax','required','onkeypress' => 'return isNumber(event)')) !!}
+                                            {!! Form::text('fax0',$value = '', array('class' => 'form-control input-sm fax','placeholder' => 'Fax','onkeypress' => 'return isNumber(event)')) !!}
                                             <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
@@ -436,6 +391,13 @@
                   </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
+                          {!! Form::label('edit_short_name', 'Short Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group has-feedback">
                           {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
                           {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
                           <div class="help-block with-errors"></div>
@@ -444,7 +406,7 @@
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
                         {!! Form::label('edit_courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
-                        {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','required')) !!}
+                        {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                   </div>
@@ -557,47 +519,8 @@
                     </div>
                   </div>
                   </div>
-                  <h4><strong>Bank Details</strong></h4>
-                      <hr>
-                      <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('edit_account_holder', 'Account Holder', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_account_holder',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Holder','required')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('edit_account_no', 'Account Number', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_account_no',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Account Number','required','onkeypress' => 'return isNumber(event)')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('edit_ifsc_code', 'IFSC Code', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_ifsc_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'IFSC Code','required','maxlength' => '11','data-minlength' => '11')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('edit_bank', 'Bank Name', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_bank',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Name','required')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('edit_branch', 'Bank Branch', ['class' => 'form_label']) !!}
-                            {!! Form::textarea('edit_branch',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Bank Branch','required','style'=>'resize:none;','rows'=>3)) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <h4><strong>Contact Information</strong></h4>
-                      <hr>
+                  <h4><strong>Contact Information</strong></h4>
+                  <hr>
               <div class="row">
                 <div class="col-md-6 ">
                   <div id="editContact">
@@ -627,32 +550,6 @@
       </div>
   </div>
 </div>
-    
-    {{-- Delete customer modal --}}
-    <div class="modal fade" id="deleteCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title" id="myModalLabel">Delete Customer</h4>
-             </div>
-             {!! Form::open(['id' => 'delete_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
-                 <div class="modal-body">
-                   <div id="delete_buyer_result"></div>
-                     <div class="form-group has-feedback">
-                       <p>You are about to delete customer. Do you want to proceed?</p>
-                        {!! Form::hidden('id',$value = null, array('id'=>'delete_customer_id','class' => 'form-control input-sm')) !!}
-                       <div class="help-block with-errors"></div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
  <style type="text/css">
    .easy-autocomplete-container {
     z-index: 9;
@@ -687,12 +584,8 @@
       $('#buyer').selectpicker('refresh');
       $('.edit-customer').tooltip('show')
       $('.edit-customer').tooltip('toggle')
-      $('.delete-customer').tooltip('show')
-      $('.delete-customer').tooltip('toggle')
-      $('#make_inactive').tooltip('show')
-      $('#make_inactive').tooltip('toggle')
-      $('#make_active').tooltip('show')
-      $('#make_active').tooltip('toggle')
+      $('.status').tooltip('show')
+      $('.status').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
@@ -810,27 +703,6 @@
          /* call editCustomer function from customer.js*/
          editCustomer();
       }
-    })
-
-    /** assign id for delete modal **/
-    $('#deleteCustomerModal').on('show.bs.modal', function (e) {
-         var config = $(e.relatedTarget).data('userid');
-         $('#delete_customer_id').attr('value', config);
-    });
-
-    /** submit delete buyer form **/
-    $('#delete_customer_form').validator().on('submit', function (e) {
-     if (e.isDefaultPrevented())
-     {
-
-     }
-     else
-     {
-        e.preventDefault();
-        var id   = $('#delete_customer_id').val();
-        /* call deleteCustomer function from customer.js*/
-        deleteCustomer(id);
-     }
     })
 
      /** [ To hide/show PO required checkbox based on PI required checkbox begins] */

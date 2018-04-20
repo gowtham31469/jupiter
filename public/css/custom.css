@@ -550,11 +550,11 @@ span.navbar-brand.logo:hover {
 
 .search-tree {
     position: absolute;
-    left: 0;
+    /*left: 0;*/
     z-index: 1;
     top: 0;
     background: #d8d8d88a;
-    width: 96%;
+    width: 93%;
     padding: 6px;
 }
 
@@ -750,6 +750,7 @@ a:hover {
 
 .force-overflow {
     min-height: 450px;
+    margin-top: 0px;
 }
 
 .style-4::-webkit-scrollbar-track {
@@ -1356,3 +1357,16 @@ span.batch-additional {
     padding: 1px 4px;
     font-weight: bold;
     }
+/* Template deatils in preview div*/
+.table-user-information > tbody > tr {
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.table-user-information > tbody > tr:first-child {
+    border-top: 0;
+}
+
+.table-user-information > tbody > tr > td {
+    border-top: 0;
+}
+

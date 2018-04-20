@@ -24,6 +24,7 @@
                           <th>Buyer Email</th>
                           <th>Buyer Phone</th>
                           <th>Buyer Address</th>
+                          <th>Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -35,9 +36,17 @@
                           <td>{{ $value->buyer_email }}</td>
                           <td>{{ $value->buyer_phone }}</td>
                           <td>{{ $value->buyer_address }}</td>
-                          <td>
+                          @if($value->is_active === 1)
+                            <td><span class="label label-success">Active</span></td>
+                          @else
+                            <td><span class="label label-danger">Inactive</span></td>
+                          @endif
+                          @if($value->is_active === 1)
+                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
+                          @else
+                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
+                          @endif
                             <a href="#"><i class="fa fa-pencil fa-button edit-buyer filterbtn options" title="Edit" data-placement="left"></i></a>
-                            <a href="#"><i class="fa fa-trash fa-button filterbtn options delete-buyer" data-userid="{{$value->id}}" title="Delete" data-toggle="modal" data-target="#deleteBuyerModal" data-placement="left"></i></a>
                           </td>
                          </tr>
                          @endforeach
@@ -150,32 +159,6 @@
        </div>
    </div>
 
-   {{-- Delete buyer modal --}}
-   <div class="modal fade" id="deleteBuyerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Buyer</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                     <div id="delete_buyer_result"></div>
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete buyer. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_buyer_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-   
     @endsection
     @else
     <script type="text/javascript">
@@ -196,13 +179,12 @@
          $('#edit_buyer_form').trigger('reset');
          $('#buyer_result').hide();
          $('#edit_buyer_result').hide();
-         $('#delete_buyer_result').hide();
          $('.edit-buyer').tooltip('show')
          $('.edit-buyer').tooltip('toggle')
-         $('.delete-buyer').tooltip('show')
-         $('.delete-buyer').tooltip('toggle')
+         $('.status').tooltip('show')
+         $('.status').tooltip('toggle')
        });
-
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
        /** Add buyer bootstrap form validation **/
         $('#add_buyer_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -222,7 +204,6 @@
         $('#add_buyer_form').trigger("reset");
         $('#buyer_result').hide();
         $('#edit_buyer_result').hide();
-        $('#delete_buyer_result').hide();
        })
 
        /** Get edit buyer details on click**/
@@ -246,27 +227,18 @@
             editBuyer();
          }
        })
-
-       /** assign id for delete buyer modal **/
-       $('#deleteBuyerModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_buyer_id').attr('value', config);
+       /** To activate Buyers on click **/
+       $(document).on('click', '#make_active', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           /* call makeBuyerActive function from buyers.js*/
+           makeBuyerActive(id,csrf_token)
        });
 
-       /** submit delete buyer form **/
-       $('#delete_buyer_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_buyer_id').val();
-            /* call deleteBuyer function from buyers.js*/
-            deleteBuyer(id);
-         }
-       })
-
+       /** To deactivate Buyers on click **/
+       $(document).on('click', '#make_inactive', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           /* call makeBuyerInactive function from buyers.js*/
+           makeBuyerInactive(id,csrf_token)
+       });
     </script>
     @endsection

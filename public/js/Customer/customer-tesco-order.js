@@ -169,11 +169,13 @@ function tescoOrders() {
                                                                     <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
                                                                         <div class="form-group has-feedback">
                                                                             <label for="order_type" class="form_label">Select Order Type</label>
-                                                                            <select class="form-control order_type selectpicker" name="order_type" id="order_type" required="">
-                                                                                <option value="">Select Order Type</option>
-                                                                                <option value="1">PO Upload</option>
-                                                                                <option value="2">Manual Entry</option>
-                                                                            </select>
+                                                                            <div>
+                                                                                <label><input type="radio" class=" order_type" name="radio" value="1" required="" style="margin-right: 5px;">PO Upload
+                                                                                </label>
+
+                                                                                <label><input type="radio" class=" order_type" name="radio" value="2" required="" style="margin-right: 5px;"> Manual Entry
+                                                                                </label>
+                                                                              </div>
                                                                             <div class="help-block with-errors"></div>
                                                                         </div>
                                                                         <div class="form-group">
@@ -238,8 +240,8 @@ function tescoOrders() {
                 $('.selectpicker').selectpicker();
 
                 /** [ Hide/Show PO upload div, PO number search based on order type selected ] */
-                $(".order_type").change(function () {
-                    globalOrderType = ($(".order_type option:selected").val() === '1') ? 1 : 0;
+                $('input[type="radio"].order_type').click(function(){
+                    globalOrderType = ($(this).attr("value") === '1') ? 1 : 0;
                     var currentNode = $('#jstree').jstree(true).get_selected('full',true);
                     var zone        = (currentNode.length > 0) ? currentNode[0].original.zone : false;
 
@@ -396,30 +398,10 @@ function tescoOrders() {
                                     $('.templateDiv').html('');
                                     $.each(data, function (index, value) {
                                         if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                            $('.templateDiv').append('<div class="col-md-4">\
-                                                <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                                                <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                                                <label>Template Name : </label>\
-                                                <p>' + value[0].template_name + '</p>\
-                                                <label>Reference Number : </label>\
-                                                <p>' + value[0].ref_no + '</p>\
-                                                <label>Company Name : </label>\
-                                                <p>' + value[0].company_name + '</p>\
-                                                </div>\
-                                                </div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                                         } else {
-                                            $('.templateDiv').append('<div class="col-md-4">\
-                                                <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                                                <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                                                <label>Template Name : </label>\
-                                                <p>' + value[0].template_name + '</p>\
-                                                <label>Reference Number : </label>\
-                                                <p>' + value[0].ref_no + '</p>\
-                                                <label>Company Name : </label>\
-                                                <p>' + value[0].company_name + '</p>\
-                                                </div>\
-                                                </div>')
+                                            $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                                         }
                                     });
@@ -488,7 +470,7 @@ function tescoOrders() {
                             //If so, create a formdata for uploading the file.
                             //invoke uploadPurchaseOrder method with the form data.
                             //If not, go with manual upload by invoking createOrders() method.
-                            if($('#order_type').val() == 1) {
+                            if($('input[type="radio"].order_type:checked').val() == 1) {
                                 var formData = new FormData($(this)[0]);
                                 formData.append('type', localStorage.getItem("template type"));
                                 formData.append('zone', localStorage.getItem("zone"));
@@ -717,7 +699,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      </tr>\
                                      <tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Count</th>';
+                               html += '<th>Quantity</th>';
                              });
 
                              html += '</tr>\
@@ -748,7 +730,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"  data-lastid="">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -791,7 +773,7 @@ function createOrders(parsedObj = false, oType = false) {
                                       </tr>\
                                       <tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Count</th>';
+                               html += '<th>Quantity</th>';
                              });
                              html += '</tr>\
                                         </thead>\
@@ -826,7 +808,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count"  data-lastid="">\
+                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -869,7 +851,7 @@ function createOrders(parsedObj = false, oType = false) {
                              html += '<th rowspan="2">Actions</th>\
                                       </tr><tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Count</th>';
+                               html += '<th>Quantity</th>';
                              });
                              html += '</tr>\
                                         </thead>\
@@ -898,7 +880,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback"> \
-                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Count" data-lastid="">\
+                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -940,7 +922,7 @@ function createOrders(parsedObj = false, oType = false) {
                                       </tr>\
                                       <tr>';
                              $.each(data.templates, function(i, item){
-                               html += '<th>Count</th>';
+                               html += '<th>Quantity</th>';
                              });
                              html += '</tr>\
                                         </thead>\
@@ -975,7 +957,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback"> \
-                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Count" maxlength="4" data-lastid="">\
+                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -995,7 +977,7 @@ function createOrders(parsedObj = false, oType = false) {
                        html += '<div class="col-md-4">\
                                   <div class="card add-card">\
                                     <div class="card-title">\
-                                       <p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Click to view</p>\
+                                       <p class="pull-right" onclick=openmodaltesco("'+item.template_name.replace(' ', '')+'","'+i+'") style="cursor:pointer">Enlarge</p>\
                                        <h5><b>'+item.template_name+'</b></h5>\
                                     </div>\
                                     <div class="row">\
@@ -1031,9 +1013,9 @@ function createOrders(parsedObj = false, oType = false) {
                                 <div class="bottom-bar">\
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
-                                     <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save</button>\
+                                     <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger" type="button" onclick="location.reload()"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1347,7 +1329,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -1409,7 +1391,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
+                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -1548,7 +1530,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -1610,7 +1592,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Count" maxlength="4" data-lastid="">\
+                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
