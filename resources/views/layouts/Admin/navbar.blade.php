@@ -104,6 +104,9 @@
                     </ul>
                 </li>
                 <li><a class="dropdown-item logout-button profile-dropdown-admin" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
 
             </ul>
         </div>
