@@ -19,13 +19,8 @@
                       <thead>
                         <tr>
                           <th>Sl. No</th>
-                          <th>Customer Name</th>
-                          <th>Factory Code</th>
+                          <th>Name</th>
                           <th>Default Contact</th>
-                          <th>Courier Choice</th>
-                          <th>TIN No.</th>
-                          <th>GSTIN No.</th>
-                          <th>PAN No.</th>
                           <th>Billing Address</th>
                           <th>Shipping Address</th>
                           <th>Status</th>
@@ -36,8 +31,7 @@
                         @foreach ($customers as $value)
                         <tr id="{{$value->id}}">
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $value->company_name }}</td>
-                          <td>{{ $value->factory_code }}</td>
+                          <td><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
                           <td>
                             <dl>
                               <dt>Contact Person:</dt>
@@ -48,14 +42,14 @@
                               <dd>{{ $value->phone_no }}</dd>
                             </dl>
                           </td>
-                          <td>{{ $value->courier_choice }}</td>
-                          <td>{{ $value->tin_number }}</td>
-                          <td>{{ $value->gstin_number }}</td>
-                          <td>{{ $value->pan_number }}</td>
                           <td>
                             <dl>
                               <dt>Address:</dt>
-                              <dd>{{ $value->bill_address }},{{ $value->bill_country }}</dd>
+                                @if($value->bill_address != '-')
+                                  <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->pincode }}</dd>
+                                @else
+                                  <dd>-</dd>
+                                @endif
                               <dt>Email:</dt>
                               <dd>{{ $value->bill_email }}</dd>
                               <dt>Phone:</dt>
@@ -67,7 +61,11 @@
                           <td>
                             <dl>
                               <dt>Address:</dt>
-                              <dd>{{ $value->ship_address }},{{ $value->ship_country }}</dd>
+                              @if($value->ship_address != '-')
+                                <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->pincode }}</dd>
+                              @else
+                                <dd>-</dd>
+                              @endif
                               <dt>Email:</dt>
                               <dd>{{ $value->ship_email }}</dd>
                               <dt>Phone:</dt>
@@ -550,11 +548,101 @@
       </div>
   </div>
 </div>
+    {{-- view more modal --}}
+    <div class="modal fade" id="viewMoreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+                   <div class="modal-body">
+                        <div class="panel panel-info">
+                          <div class="panel-heading">
+                            <h3 class="panel-title " id="customer-name"></h3>
+                          </div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class=" col-md-12 col-lg-12 "> 
+                                <table class="table table-user-information">
+                                  <tbody>
+                                     <tr>
+                                      <td class="pull-left">Customer Short Name :</td>
+                                      <td id="short-name"></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="pull-left">Factory Code :</td>
+                                      <td id="factory-code"></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="pull-left">Email :</td>
+                                      <td id="email"></td>
+                                    </tr>
+                                    <tr>
+                                       <td class="pull-left">Buyer Name :</td>
+                                       <td id="buyer-name"></td>
+                                     </tr>
+                                    <tr>
+                                      <td class="pull-left">Courier Choice :</td>
+                                      <td id="courier-choice"></td>
+                                    </tr>
+                                     <tr>
+                                       <td class="pull-left">PAN Number :</td>
+                                       <td id="pan-number"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">GSTIN Number :</td>
+                                       <td id="gstin-number"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">TIN Number :</td>
+                                       <td id="tin-number"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Payment Terms :</td>
+                                       <td id="payment-terms"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Place Of Supply :</td>
+                                       <td id="place-of-supply"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Freight Type :</td>
+                                       <td id="freight-type"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Nominated Forwarder :</td>
+                                       <td id="nominated-forwarder"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Is Delivery Date Mandatory ?</td>
+                                       <td id="delivery-date-required"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Proforma Invoice(PI) Required ?</td>
+                                       <td id="pi-required"></td>
+                                     </tr>
+                                     <tr>
+                                       <td class="pull-left">Purchase Order(PO) Required ?</td>
+                                       <td id="po-required"></td>
+                                     </tr>
+                                   
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
  <style type="text/css">
    .easy-autocomplete-container {
     z-index: 9;
 
     }
+
  </style>
     @endsection
     @else
@@ -586,6 +674,8 @@
       $('.edit-customer').tooltip('toggle')
       $('.status').tooltip('show')
       $('.status').tooltip('toggle')
+      $('.view-more').tooltip('show')
+      $('.view-more').tooltip('toggle')
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
@@ -758,5 +848,12 @@
               } 
         });
      }); 
+     /** Get customer details on click and populate details on modal **/
+     $(document).on('click','.view-more',function(e){
+         var id = $(this).closest('tr').attr('id');
+         e.preventDefault();
+         /* call getCustomerDetails function from customer.js*/
+         getCustomerDetails(id);
+     });
     </script>
     @endsection
