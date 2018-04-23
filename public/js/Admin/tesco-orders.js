@@ -3289,7 +3289,7 @@ function storeCERatioTCL1TCL2TSL1()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -3363,7 +3363,7 @@ function storeCERatioTCL1TCL2TSL1()
                                     </div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for combined po upload modal tab */
@@ -3415,7 +3415,7 @@ function storeCERatioTCL1TCL2TSL1()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -3801,7 +3801,7 @@ function storeCERatioTHL1()
                        html +='</div>\
                                 <div class="modal-footer">\
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                 </div>\
                                </form>';
                        /** Dynamic content for single po upload modal tab */
@@ -4111,7 +4111,7 @@ function storeCESingleTCL4TSL3()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -4190,7 +4190,7 @@ function storeCESingleTCL4TSL3()
                                      </div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for combined po upload modal tab */
@@ -4243,7 +4243,7 @@ function storeCESingleTCL4TSL3()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -4640,7 +4640,7 @@ function storeCESingleTHL3()
                        html +='</div>\
                                 <div class="modal-footer">\
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                 </div>\
                                 </form>';
                        /** Dynamic content for single po upload modal tab */
@@ -4952,7 +4952,7 @@ function storeUKRatioTCL1TCL2TSL1()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -5026,7 +5026,7 @@ function storeUKRatioTCL1TCL2TSL1()
                                     </div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for combined po upload modal tab */
@@ -5078,7 +5078,7 @@ function storeUKRatioTCL1TCL2TSL1()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -5467,7 +5467,7 @@ function storeUKRatioTHL1()
                        html +='</div>\
                                 <div class="modal-footer">\
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                 </div>\
                                 </form>';
                        /** Dynamic content for single po upload modal tab */
@@ -5776,7 +5776,7 @@ function storeUKSingleTCL4TSL3()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -5855,7 +5855,7 @@ function storeUKSingleTCL4TSL3()
                                      </div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for combined po upload modal tab */
@@ -5908,7 +5908,7 @@ function storeUKSingleTCL4TSL3()
                            html +='</div>\
                                     <div class="modal-footer">\
                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                     </div>\
                                     </form>';
                            /** Dynamic content for single po upload modal tab */
@@ -6306,7 +6306,7 @@ function storeUKSingleTHL3()
                        html +='</div>\
                                 <div class="modal-footer">\
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Upload</button>\
+                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
                                 </div>\
                                 </form>';
                        /** Dynamic content for single po upload modal tab */

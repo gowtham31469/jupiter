@@ -148,32 +148,6 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
-     * function to delete garment by id.
-     * @param garment id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraGarmentsById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraGarments::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-    /**
      * Orchestra metadata age group list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -258,32 +232,6 @@ class OrchestraSettings extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-    /**
-     * function to delete age group by id.
-     * @param age group id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraAgeGroupsById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraAgeGroup::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
     /**
      * Orchestra metadata countries list show using ajax.
@@ -391,32 +339,6 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
-     * function to delete orchestra country by id.
-     * @param orchestra country id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraCountryById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraCountries::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-    /**
      * Orchestra metadata Product Family list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -503,32 +425,6 @@ class OrchestraSettings extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-    /**
-     * function to delete productfamily by id.
-     * @param productfamily id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraProductFamilyById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraProductFamily::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
     /**
      * Orchestra metadata special instructions list show using ajax.
@@ -636,32 +532,6 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
-     * function to delete special instruction by id.
-     * @param special instruction id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraSpecialInstructionById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraSpecialInstructions::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-    /**
      * Orchestra Compositions list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -765,32 +635,6 @@ class OrchestraSettings extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-    /**
-     * function to delete Composition by id.
-     * @param Composition id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraCompositionById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraCompositions::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
     /**
      * Orchestra Parts list show using ajax.
@@ -898,32 +742,6 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
-     * function to delete Part by id.
-     * @param Part id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraPartById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraParts::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-    /**
      * Orchestra Size Charts list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -1009,32 +827,6 @@ class OrchestraSettings extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-    /**
-     * function to delete Orchestra Size Chart by id.
-     * @param size chart id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraSizeChartById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = OrchestraSizeCharts::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
      /**
      * Orchestra metadata Symbols list show using ajax.
@@ -1218,35 +1010,5 @@ class OrchestraSettings extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-
-     /**
-     * function to delete Orchestra Symbol by id.
-     * @param symbol id
-     * @author <Sumanth>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteOrchestraSymbolById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('astms_symbol');
-            unlink(ltrim($old_cof, '/'));
-            $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('cofreet_symbols');
-            unlink(ltrim($old_cof, '/'));
-            $deleted = DB::table('orchestra_care_symbols')->where('id', '=', $id)->delete();
-           if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
 }

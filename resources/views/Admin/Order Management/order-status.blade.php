@@ -88,7 +88,7 @@
                     </div>
 
                     <div id="map_po_div" class="hidden">
-                        <h4>Mapping to Exist PO : </h4>
+                        <h4>Map to Existing PO : </h4>
                         <label style="color:red" id="select_error" class="hidden">Please Select PO</label>
                         <div class="form-group" id="selectpo">
                             <label>Select PO</label>
@@ -230,7 +230,7 @@
                     </div>
 
                     <div id="map_po_div_status" class="hidden">
-                        <h4>Mapping to Exist PO : </h4>
+                        <h4>Map to Existing PO : </h4>
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
                         <div class="form-group" id="selectpo_status">
                             <label>Select PO</label>

@@ -79,14 +79,12 @@ function orchestraSettings() {
                 var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
-	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-garments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraGarmentsModal" data-placement="left"></i></a></td></tr>';
+	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
 	             });
 	             orchestra_metadata += '</tbody></table></div>';
 	              $('.content').html(orchestra_metadata)
                 $('.edit-orchestra-garments').tooltip('show')
                 $('.edit-orchestra-garments').tooltip('toggle')
-                $('.delete-orchestra-garments').tooltip('show')
-                $('.delete-orchestra-garments').tooltip('toggle')
 	              $('#orchestra-garments-list-table').DataTable();
 	              $("#orchestra-garments-list-table_filter input").addClass('form-control input-sm');
 	              $("#orchestra-garments-list-table_filter input").attr('placeholder', 'Data Search');
@@ -273,56 +271,6 @@ function showSnackbar() {
    }
  }
 
- /**
-  * To delete orchestra garment
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraGarment(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-garment",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [Show response status based on HTTP status code] */
-                200: function() {
-                     $('.snackbar_span').html('Garment Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraGarmentsModal').modal('hide');
-                     orchestraSettings();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-	 console.log("Error:"+e)
-  }
-  }
-
   /**
   * To Show Orchestra age group.
   * @param id
@@ -352,14 +300,12 @@ function showSnackbar() {
                   var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_agegroups, function(i, item){
                   var index = i+1;
-                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-age-group" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraAgeGroupModal" data-placement="left" ></i></a></td></tr>';
+                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
                  $('.content').html(orchestra_metadata)
                  $('.edit-orchestra-age-group').tooltip('show')
                  $('.edit-orchestra-age-group').tooltip('toggle')
-                 $('.delete-orchestra-age-group').tooltip('show')
-                 $('.delete-orchestra-age-group').tooltip('toggle')
                   $('#orchestra-age-group-list-table').DataTable();
                   $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
@@ -529,56 +475,6 @@ function showSnackbar() {
    }
  } 
 
- /**
-  * To delete orchestra age-group
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraAgeGroup(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-agegroup",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [Show response status based on HTTP status code] */
-                200: function() {
-                     $('.snackbar_span').html('Age Group Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraAgeGroupModal').modal('hide');
-                     ageGroup();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
-
 /**
 * Function to Orchestra countries home page
 * @author <praveen>
@@ -606,7 +502,7 @@ function countries() {
                 var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.orchestra_countries, function(i, item){
                 var index = i+1;
-                orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-country filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-country" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraCountryModal" data-placement="left"></i></a></td></tr>';
+                orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-country filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                });
                orchestra_metadata += '</tbody></table></div>';
                $('.content').html(orchestra_metadata)
@@ -617,8 +513,6 @@ function countries() {
                 });
                  $('.edit-orchestra-country').tooltip('show')
                  $('.edit-orchestra-country').tooltip('toggle')
-                 $('.delete-orchestra-country').tooltip('show')
-                 $('.delete-orchestra-country').tooltip('toggle')
                 $("#orchestra-countries-list-table_filter input").addClass('form-control input-sm');
                 $("#orchestra-countries-list-table_filter input").attr('placeholder', 'Data Search');
                 $('#orchestra-countries-list-table_length select').addClass('form-control input-sm');
@@ -817,55 +711,6 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
-/**
-  * To delete orchestra country
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraCountry(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-country",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Country Name Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraCountryModal').modal('hide');
-                     countries();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
 
   /**
   * Function to show Orchestra product family home page
@@ -893,7 +738,7 @@ function countries() {
                   var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_product_family, function(i, item){
                   var index = i+1;
-                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-productfamily filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-productfamily" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraProductFamilyModal" data-placement="left" ></i></a></td></tr>';
+                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-productfamily filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
                  $('.content').html(orchestra_metadata)
@@ -903,8 +748,6 @@ function countries() {
                   });
                   $('.edit-orchestra-productfamily').tooltip('show')
                   $('.edit-orchestra-productfamily').tooltip('toggle')
-                  $('.delete-orchestra-productfamily').tooltip('show')
-                  $('.delete-orchestra-productfamily').tooltip('toggle')
                   $("#orchestra-productfamily-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-productfamily-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-productfamily-list-table_length select').addClass('form-control input-sm');
@@ -1083,56 +926,6 @@ function countries() {
    }
  }
 
- /**
-  * To delete orchestra product family
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraProductFamily(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-productfamily",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Product Family Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraProductFamilyModal').modal('hide');
-                     productFamily();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
-
   /**
     * Function to Orchestra special instructions home page
     * @author <praveen>
@@ -1160,7 +953,7 @@ function countries() {
                     var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_specialinstructions, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-special-instruction" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSpecialInstructionModal" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1170,8 +963,6 @@ function countries() {
                     });
                     $('.edit-orchestra-special-instruction').tooltip('show')
                     $('.edit-orchestra-special-instruction').tooltip('toggle')
-                    $('.delete-orchestra-special-instruction').tooltip('show')
-                    $('.delete-orchestra-special-instruction').tooltip('toggle')
                     $("#orchestra-special-instruction-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-special-instruction-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
@@ -1371,56 +1162,6 @@ function countries() {
    }
  } 
 
- /**
-  * To delete orchestra special instruction
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraSpecialInstruction(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-special-instruction",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Special Instruction Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraSpecialInstructionModal').modal('hide');
-                     specialInstruction();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
-
   /**
     * Function to Orchestra compositions home page
     * @author <praveen>
@@ -1447,7 +1188,7 @@ function countries() {
                     var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_compositions, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-composition" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraCompositionModal" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1457,8 +1198,6 @@ function countries() {
                     });
                     $('.edit-orchestra-composition').tooltip('show')
                     $('.edit-orchestra-composition').tooltip('toggle')
-                    $('.delete-orchestra-composition').tooltip('show')
-                    $('.delete-orchestra-composition').tooltip('toggle')
                     $("#orchestra-composition-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-composition-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-composition-list-table_length select').addClass('form-control input-sm');
@@ -1658,56 +1397,6 @@ function countries() {
    }
  } 
 
- /**
-  * To delete orchestra Composition
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraComposition(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-composition",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Composition Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraCompositionModal').modal('hide');
-                     compositions();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
-
   /**
     * Function to Orchestra parts home page
     * @author <praveen>
@@ -1734,7 +1423,7 @@ function countries() {
                     var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_parts, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-part" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraPartModal" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1744,8 +1433,6 @@ function countries() {
                     });
                     $('.edit-orchestra-part').tooltip('show')
                     $('.edit-orchestra-part').tooltip('toggle')
-                    $('.delete-orchestra-part').tooltip('show')
-                    $('.delete-orchestra-part').tooltip('toggle')
                     $("#orchestra-part-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-part-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-part-list-table_length select').addClass('form-control input-sm');
@@ -1945,56 +1632,6 @@ function countries() {
    }
  } 
 
- /**
-  * To delete orchestra Part
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraPart(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-part",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Part Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraPartModal').modal('hide');
-                     parts();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
-
   /**
     * Function to Orchestra size chart  home page
     * @author <praveen>
@@ -2021,7 +1658,7 @@ function countries() {
                     var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_size_charts, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-orchestra-size-chart" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteOrchestraSizeChartModal" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -2031,8 +1668,6 @@ function countries() {
                     });
                     $('.edit-orchestra-size-chart').tooltip('show')
                     $('.edit-orchestra-size-chart').tooltip('toggle')
-                    $('.delete-orchestra-size-chart').tooltip('show')
-                    $('.delete-orchestra-size-chart').tooltip('toggle')
                     $("#orchestra-size-chart-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-size-chart-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
@@ -2204,55 +1839,6 @@ function countries() {
    }
  } 
 
- /**
-  * To delete orchestra Part
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteOrchestraSizeChart(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/delete-orchestra-size-chart",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Size Chart Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraSizeChartModal').modal('hide');
-                     sizeChart();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }
   /**
   * Function to Orchestra orchestra Symbols
   * @author <praveen>
@@ -2285,8 +1871,6 @@ function orchestraSymbols() {
                    $('.content').html(orchestra_metadata)
                    $('.edit-orchestra-symbols').tooltip('show')
                    $('.edit-orchestra-symbols').tooltip('toggle')
-                   $('.delete-orchestra-symbols').tooltip('show')
-                   $('.delete-orchestra-symbols').tooltip('toggle')
                    $('#orchestra-symbols-list-table').DataTable();
                    $("#orchestra-symbols-list-table_filter input").addClass('form-control input-sm');
                    $("#orchestra-symbols-list-table_filter input").attr('placeholder', 'Data Search');
@@ -2473,55 +2057,3 @@ function readURL(input) {
             }
 
     });
-
-
-
-/**
-  * To delete orchestra symbol
-  * @param id
-  * @author <sumanth>
-  *
-  */
-  function deleteOrchestraSymbol(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/orchestra/settings/deleteOrchestraSymbol",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function() {
-                     $('.snackbar_span').html('Symbol Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteOrchestraSymbolModal').modal('hide');
-                     orchestraSymbols();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-   console.log("Error:"+e)
-  }
-  }

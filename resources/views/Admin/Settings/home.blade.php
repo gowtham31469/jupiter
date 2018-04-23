@@ -94,31 +94,6 @@
        </div>
    </div>
 
-   {{-- Delete Orchestra Garments Modal --}}
-   <div class="modal fade" id="deleteOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Garment</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_garment_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra garment. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_garment_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
    {{-- Add Orchestra Age group Modal --}}
     <div class="modal fade" id="addOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="orchestraAgeGroupLabel">
         <div class="modal-dialog" role="document">
@@ -187,31 +162,6 @@
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
-   {{-- Delete Orchestra age group Modal --}}
-   <div class="modal fade" id="deleteOrchestraAgeGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Age Group</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_agegroup_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra age group. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_agegroup_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -431,31 +381,6 @@
         </div>
     </div>
 
-   {{-- Delete Orchestra country Modal --}}
-   <div class="modal fade" id="deleteOrchestraCountryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Country Name</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_country_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra country name. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_country_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
    {{-- Add Orchestra product family Modal --}}
     <div class="modal fade" id="addOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="orchestraProductFamilyLabel">
         <div class="modal-dialog" role="document">
@@ -556,31 +481,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Delete Orchestra productfamily Modal --}}
-   <div class="modal fade" id="deleteOrchestraProductFamilyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Product Family</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_productfamily_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra product family. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_productfamily_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
 
    {{-- Add Orchestra special instructions Modal --}}
     <div class="modal fade bd-example-modal-lg" id="addOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSpecialInstructionLabel">
@@ -795,31 +695,6 @@
         </div>
     </div>
 
-    {{-- Delete Orchestra special instruction Modal --}}
-   <div class="modal fade" id="deleteOrchestraSpecialInstructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Special Instruction</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_special_instruction_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra special instruction. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_special_instruction_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
    {{-- Add Orchestra compositions Modal --}}
     <div class="modal fade" id="addOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="orchestraCompositionLabel">
         <div class="modal-dialog" role="document">
@@ -1032,31 +907,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Delete Orchestra composition Modal --}}
-   <div class="modal fade" id="deleteOrchestraCompositionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Composition</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_composition_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra composition. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_composition_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
 
    {{-- Add Orchestra parts Modal --}}
     <div class="modal fade" id="addOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraPartLabel">
@@ -1271,31 +1121,6 @@
         </div>
     </div>
 
-    {{-- Delete Orchestra Part Modal --}}
-   <div class="modal fade" id="deleteOrchestraPartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Part</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_part_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra part. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_part_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
    {{-- Add Orchestra size chart Modal --}}
     <div class="modal fade" id="addOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="orchestraSizeChartLabel">
         <div class="modal-dialog" role="document">
@@ -1382,31 +1207,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Delete Orchestra Part Modal --}}
-   <div class="modal fade" id="deleteOrchestraSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Symbol</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra size chart. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_size_chart_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
 
 <!-- care_symbols -->
 
@@ -1531,30 +1331,6 @@
        </div>
    </div>
    </div> --}}
-{{-- Delete Symbol Model --}}
-   {{-- <div class="modal fade" id="deleteOrchestraSymbolModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrchestraSymbolLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="deleteOrchestraSymbolLabel">Delete Size Chart</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_orchestra_symbol_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete orchestra symbol. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_orchestra_symbol_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div> --}}
 
 <!-- Tesco Modals -->
 
@@ -1603,31 +1379,6 @@
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
-{{-- Delete Tesco Brands Modal --}}
-   <div class="modal fade" id="deleteTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Brand</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_tesco_brand_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete tesco brand. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_brand_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1708,31 +1459,6 @@
        </div>
    </div>
 
-   {{-- Delete Tesco Departments Modal --}}
-   <div class="modal fade" id="deleteTescoDepartmentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Department</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_tesco_department_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete tesco department. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_department_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
 {{-- Suppliers  --}}
 
    {{-- Add Tesco Supplier Modal --}}
@@ -1791,31 +1517,6 @@
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                        {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
-   {{-- Delete Tesco Supplier Modal --}}
-   <div class="modal fade" id="deleteTescoSuppliersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Supplier</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_tesco_supplier_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete tesco supplier. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_tesco_supplier_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Delete', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -1888,31 +1589,6 @@
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
                        {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
-                   </div>
-              {!! Form::close() !!}
-           </div>
-       </div>
-   </div>
-
-   {{-- Delete Tesco Size Charts Modal --}}
-   <div class="modal fade" id="deleteTescoSizeChartsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Delete Size Chart</h4>
-               </div>
-               {!! Form::open(['id' => 'delete_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
-                   <div class="modal-body">
-                       <div class="form-group has-feedback">
-                         <p>You are about to delete tesco size chart. Do you want to proceed?</p>
-                          {!! Form::hidden('id',$value = null, array('id'=>'delete_size_charts_id','class' => 'form-control input-sm')) !!}
-                         <div class="help-block with-errors"></div>
-                       </div>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::submit('Delete', ['class' => 'btn btn-primary btn-sm'] ) !!}
                    </div>
               {!! Form::close() !!}
            </div>
@@ -2059,27 +1735,6 @@
          }
        })
 
-       /** assign id for delete garment modal **/
-       $('#deleteOrchestraGarmentsModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_garment_id').attr('value', config);
-       });
-
-       /** submit delete orchestra garment form **/
-       $('#delete_orchestra_garment_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_garment_id').val();
-            /* call deleteOrchestraGarment function from orchestra-settings.js*/
-            deleteOrchestraGarment(id);
-         }
-       })
-
        /** Add orchestra age group form validation **/
         $('#add_orchestra_agegroup_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2113,27 +1768,6 @@
             e.preventDefault();
             /* call editOrchestraAgeGroup function from orchestra-settings.js*/
             editOrchestraAgeGroup();
-         }
-       })
-
-       /** assign id for delete age group modal **/
-       $('#deleteOrchestraAgeGroupModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_agegroup_id').attr('value', config);
-       });
-
-       /** submit delete orchestra age group form **/
-       $('#delete_orchestra_agegroup_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_agegroup_id').val();
-            /* call deleteOrchestraAgeGroup function from orchestra-settings.js*/
-            deleteOrchestraAgeGroup(id);
          }
        })
 
@@ -2173,27 +1807,6 @@
          }
        })
 
-       /** assign id for delete country modal **/
-       $('#deleteOrchestraCountryModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_country_id').attr('value', config);
-       });
-
-       /** submit delete orchestra country form **/
-       $('#delete_orchestra_country_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_country_id').val();
-            /* call deleteOrchestraCountry function from orchestra-settings.js*/
-            deleteOrchestraCountry(id);
-         }
-       })
-
        /** Add orchestra productfamily form validation **/
         $('#add_orchestra_productfamily_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2227,27 +1840,6 @@
             e.preventDefault();
             /* call editOrchestraProductFamily function from orchestra-settings.js*/
             editOrchestraProductFamily();
-         }
-       })
-
-       /** assign id for delete productfamily modal **/
-       $('#deleteOrchestraProductFamilyModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_productfamily_id').attr('value', config);
-       });
-
-       /** submit delete orchestra productfamily form **/
-       $('#delete_orchestra_productfamily_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_productfamily_id').val();
-            /* call deleteOrchestraProductFamily function from orchestra-settings.js*/
-            deleteOrchestraProductFamily(id);
          }
        })
 
@@ -2287,27 +1879,6 @@
          }
        })
 
-       /** assign id for delete special instruction modal **/
-       $('#deleteOrchestraSpecialInstructionModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_special_instruction_id').attr('value', config);
-       });
-
-       /** submit delete orchestra special instruction form **/
-       $('#delete_orchestra_special_instruction_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_special_instruction_id').val();
-            /* call deleteOrchestraSpecialInstruction function from orchestra-settings.js*/
-            deleteOrchestraSpecialInstruction(id);
-         }
-       })
-
        /** Add orchestra composition form validation **/
         $('#add_orchestra_composition_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2341,27 +1912,6 @@
             e.preventDefault();
             /* call editOrchestraComposition function from orchestra-settings.js*/
             editOrchestraComposition();
-         }
-       })
-
-       /** assign id for delete composition modal **/
-       $('#deleteOrchestraCompositionModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_composition_id').attr('value', config);
-       });
-
-       /** submit delete orchestra composition form **/
-       $('#delete_orchestra_composition_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_composition_id').val();
-            /* call deleteOrchestraComposition function from orchestra-settings.js*/
-            deleteOrchestraComposition(id);
          }
        })
 
@@ -2401,27 +1951,6 @@
          }
        })
 
-       /** assign id for delete Part modal **/
-       $('#deleteOrchestraPartModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_part_id').attr('value', config);
-       });
-
-       /** submit delete orchestra part form **/
-       $('#delete_orchestra_part_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_part_id').val();
-            /* call deleteOrchestraPart function from orchestra-settings.js*/
-            deleteOrchestraPart(id);
-         }
-       })
-
        /** Add orchestra size chart form validation **/
         $('#add_orchestra_size_chart_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2455,27 +1984,6 @@
             e.preventDefault();
             /* call editOrchestraSizeChart function from orchestra-settings.js*/
             editOrchestraSizeChart();
-         }
-       })
-
-       /** assign id for delete size chart modal **/
-       $('#deleteOrchestraSizeChartModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_size_chart_id').attr('value', config);
-       });
-
-       /** submit delete orchestra size chart form **/
-       $('#delete_orchestra_size_chart_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_size_chart_id').val();
-            /* call deleteOrchestraSizeChart function from orchestra-settings.js*/
-            deleteOrchestraSizeChart(id);
          }
        })
 
@@ -2515,28 +2023,7 @@
          }
        })
 
-       /** assign id for delete tesco brands modal **/
-       $('#deleteTescoBrandsModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_tesco_brand_id').attr('value', config);
-       });
-
-       /** submit delete orchestra size chart form **/
-       $('#delete_tesco_brand_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_tesco_brand_id').val();
-            /* call deleteTescoBrand function from tesco-settings.js*/
-            deleteTescoBrand(id);
-         }
-       })
-
-        /** To Enable  Brand  on click **/
+    /** To Enable  Brand  on click **/
     $(document).on('click', '#make_enabled', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -2573,8 +2060,8 @@
            getTescoDepartmentsById(id);
        });
         
-              /** submit edit tesco departments form **/
-              $('#edit_tesco_departments_form').validator().on('submit', function (e) {
+       /** submit edit tesco departments form **/
+       $('#edit_tesco_departments_form').validator().on('submit', function (e) {
          if (e.isDefaultPrevented())
          {
 
@@ -2584,27 +2071,6 @@
             e.preventDefault();
             /* call editTescoDepartments function from tesco-settings.js*/
             editTescoDepartments();
-         }
-       })
-
-       /** assign id for delete tesco department modal **/
-       $('#deleteTescoDepartmentsModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_tesco_department_id').attr('value', config);
-       });
-
-       /** submit delete Tesco Department  form **/
-       $('#delete_tesco_department_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_tesco_department_id').val();
-            /* call deleteTescoBrand function from tesco-settings.js*/
-            deleteTescoDepartment(id);
          }
        })
 
@@ -2644,28 +2110,7 @@
          }
        })
 
-        /** assign id for delete tesco supplier modal **/
-        $('#deleteTescoSuppliersModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_tesco_supplier_id').attr('value', config);
-       });
-
-       /** submit delete Tesco supplier  form **/
-       $('#delete_tesco_supplier_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_tesco_supplier_id').val();
-            /* call deleteTescoSupplier function from tesco-settings.js*/
-            deleteTescoSupplier(id);
-         }
-       })
-     
- /** To Enable  Supplier  on click **/
+    /** To Enable  Supplier  on click **/
     $(document).on('click', '#make_supplier_enabled', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -2716,27 +2161,6 @@
          }
        })
 
-          /** assign id for delete tesco sizechart modal **/
-          $('#deleteTescoSizeChartsModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_size_charts_id').attr('value', config);
-       });
-
-       /** submit delete Tesco sizechart  form **/
-       $('#delete_tesco_size_charts_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_size_charts_id').val();
-            /* call deleteTescoSizechart function from tesco-settings.js*/
-            deleteTescoSizeChart(id);
-         }
-       })
-
        /** Add orchestra symbols form validation **/
       $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -2783,26 +2207,6 @@
         }
       });
 
-          /** assign id for delete Orchestra Symbol modal **/
-          $('#deleteOrchestraSymbolModal').on('show.bs.modal', function (e) {
-           var config = $(e.relatedTarget).data('userid');
-           $('#delete_orchestra_symbol_id').attr('value', config);
-       });
-
-       /** submit delete Orchestra Symbol  form **/
-       $('#delete_orchestra_symbol_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented())
-         {
-
-         }
-         else
-         {
-            e.preventDefault();
-            var id   = $('#delete_orchestra_symbol_id').val();
-            /* call deleteOrchestraSymbol function from tesco-settings.js*/
-            deleteOrchestraSymbol(id);
-         }
-       })
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
         $('.meta-data-list li a').removeClass("active");
