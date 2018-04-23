@@ -125,7 +125,7 @@ function reordertescoartworks()
 							{
 								var span='<span class="label sticker">'+index.zone+'</span>';
 							}
-								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 					}
 					
 				})
@@ -188,7 +188,7 @@ function repeatordertescoartworks()
 						{
 							var span='<span class="label sticker">'+index.zone+'</span>';
 						}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
 					}
 				})
 				
@@ -728,7 +728,7 @@ function setTescoReorder(type,id)
 					{
 						var span='<span class="label sticker">'+data[0].zone+'</span>';
 					}
-					$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+data[0].po_number+'</p></div><div class="col-md-2"><p class="name">'+data[0].TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+data[0].type+'","'+data[0].id+'","'+data[0].TemplateName.replace(' ', '')+'","'+data[0].zone+'","'+data[0].po_number+'")>Extra Quantity</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+					$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+data[0].po_number+'</p></div><div class="col-md-2"><p class="name">'+data[0].TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+data[0].type+'","'+data[0].id+'","'+data[0].TemplateName.replace(' ', '')+'","'+data[0].zone+'","'+data[0].po_number+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
 				
 				$('.snackbar_span').html('Repeat Order Created Successfully ...!');
 				showSnackbar();

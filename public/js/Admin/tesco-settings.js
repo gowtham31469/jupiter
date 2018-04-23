@@ -98,14 +98,12 @@ function tescoBrands() {
                    }
 
 
-                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-brands" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoBrandsModal" data-placement="left"></i></a></td></tr>';
+                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
 	             });
 	             tesco_metadata += '</tbody></table></div>';
 	             $('.content').html(tesco_metadata)
                 $('.edit-tesco-brands').tooltip('show')
                 $('.edit-tesco-brands').tooltip('toggle')
-                $('.delete-tesco-brands').tooltip('show')
-                $('.delete-tesco-brands').tooltip('toggle')
 	              $('#tesco-brands-list-table').DataTable();
 	              $("#tesco-brands-list-table_filter input").addClass('form-control input-sm');
 	              $("#tesco-brands-list-table_filter input").attr('placeholder', 'Data Search');
@@ -288,54 +286,6 @@ function showSnackbar() {
    }
  }
 
- /**
-  * To delete tesco brands
-  * @param id
-  * @author <Sumanth>
-  *
-  */
-  function deleteTescoBrand(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/tesco/delete-tesco-brand",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-                200: function() {
-                     $('.snackbar_span').html('Brand Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteTescoBrandsModal').modal('hide');
-                     tescoBrands();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-            },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-	 console.log("Error:"+e)
-  }
-  }
-
   /**
   * Makes a Brand Enabled.
   * @param id,csrf_token
@@ -458,14 +408,12 @@ function tescoDepartment() {
                   var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_department, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-departments" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoDepartmentsModal" data-placement="left"></i></a></td></tr>';
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
                   $('.edit-tesco-departments').tooltip('show')
                   $('.edit-tesco-departments').tooltip('toggle')
-                  $('.delete-tesco-departments').tooltip('show')
-                  $('.delete-tesco-departments').tooltip('toggle')
                     $('#tesco-departments-list-table').DataTable();
                     $("#tesco-departments-list-table_filter input").addClass('form-control input-sm');
                     $("#tesco-departments-list-table_filter input").attr('placeholder', 'Data Search');
@@ -636,54 +584,6 @@ function tescoDepartment() {
    }
  }
 
- /**
-  * To delete tesco department
-  * @param id
-  * @author <Sumanth>
-  *
-  */
-  function deleteTescoDepartment(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/tesco/delete-tesco-department",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-                200: function() {
-                     $('.snackbar_span').html('Department Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteTescoDepartmentsModal').modal('hide');
-                     tescoDepartment();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-            },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-	 console.log("Error:"+e)
-  }
-  }
-
   /**
   * Function to Tesco Supplier Settings home page
   * @author <praveen>
@@ -729,14 +629,12 @@ function tescoSuppliers() {
                      }
   
   
-                  tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-suppliers filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-suppliers" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoSuppliersModal" data-placement="left"></i></a></td></tr>';
+                  tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-suppliers filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
                    $('.edit-tesco-suppliers').tooltip('show')
                    $('.edit-tesco-suppliers').tooltip('toggle')
-                   $('.delete-tesco-suppliers').tooltip('show')
-                   $('.delete-tesco-suppliers').tooltip('toggle')
                    $('#tesco-suppliers-list-table').DataTable();
                    $("#tesco-suppliers-list-table_filter input").addClass('form-control input-sm');
                    $("#tesco-suppliers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -905,55 +803,7 @@ function tescoSuppliers() {
    }
  }
 
- /**
-  * To delete tesco supplier
-  * @param id
-  * @author <Sumanth>
-  *
-  */
-  function deleteTescoSupplier(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/tesco/delete-tesco-supplier",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-                200: function() {
-                     $('.snackbar_span').html('Supplier Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteTescoSuppliersModal').modal('hide');
-                     tescoSuppliers();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-            },
-           complete: function () {
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-	 console.log("Error:"+e)
-  }
-  }
-
-   /**
+  /**
   * Makes a Supplier Enabled.
   * @param id,csrf_token
   * @author <Sumanth>
@@ -1079,14 +929,12 @@ function tescoSizeChart() {
                  
   
   
-                  tesco_metadata += '<td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-sizecharts filterbtn options" title="Edit" data-placement="left"></i></a><a href="#"><i class="fa fa-trash fa-button filterbtn options delete-tesco-sizecharts" data-userid="'+item.id+'" title="Delete" data-toggle="modal" data-target="#deleteTescoSizeChartsModal" data-placement="left"></i></a></td></tr>';
+                  tesco_metadata += '<td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-sizecharts filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
                    $('.edit-tesco-sizecharts').tooltip('show')
                    $('.edit-tesco-sizecharts').tooltip('toggle')
-                   $('.delete-tesco-sizecharts').tooltip('show')
-                   $('.delete-tesco-sizecharts').tooltip('toggle')
                    $('#tesco-sizecharts-list-table').DataTable();
                    $("#tesco-sizecharts-list-table_filter input").addClass('form-control input-sm');
                    $("#tesco-sizecharts-list-table_filter input").attr('placeholder', 'Data Search');
@@ -1257,54 +1105,5 @@ function tescoSizeChart() {
      console.log("Error:"+e)
    }
  }
- /**
-  * To delete tesco supplier
-  * @param id
-  * @author <praveen>
-  *
-  */
-  function deleteTescoSizeChart(id)
-  {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/tesco/delete-tesco-sizecharts",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-                200: function() {
-                     $('.snackbar_span').html('Size Chart Deleted Successfully');
-                     showSnackbar();
-                     $('#deleteTescoSizeChartsModal').modal('hide');
-                     tescoSizeChart();
-                },
-                400: function() {
-                     $('.snackbar_span').html('Something went wrong');
-                     $('#snackbar').css('background-color','#F44336');
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-            },
-           complete: function () {
-                    
-                     $(".loader").hide();
-           }
-       })
-    } catch (e) {
-	 console.log("Error:"+e)
-  }
-  }
    
    

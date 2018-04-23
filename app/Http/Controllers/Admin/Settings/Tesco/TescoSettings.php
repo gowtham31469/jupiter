@@ -113,33 +113,6 @@ class TescoSettings extends Controller
         }
         return $result;
     }
-/**
-     * function to delete brand by id.
-     * @param brand id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteTescoBrandsById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = TescoBrand::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-
     /**
        * Make Brand enabled
        * @param brand id
@@ -282,34 +255,6 @@ class TescoSettings extends Controller
         }
         return $result;
     }
-    
-    /**
-     * function to delete department by id.
-     * @param department id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteTescoDepartmentsById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = TescoDepartment::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
-
     /**
      * Tesco metadata supplier list show using ajax.
      * @author <Praveen>
@@ -399,33 +344,6 @@ class TescoSettings extends Controller
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-    }
-    
-    /**
-     * function to delete supplier by id.
-     * @param supplier id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteTescoSuppliersById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = TescoSupplier::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
     }
       /**
        * Make supplier enabled
@@ -568,31 +486,5 @@ class TescoSettings extends Controller
         return $result;
     }
     
-      /**
-     * function to delete Size chart by id.
-     * @param sizechart id
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteTescosizechartsById(Request $request)
-    {
-      try {
-            $id        = $request['id'];
-            $deleted = TescoSizeChart::where('id', '=', $id)
-                        ->delete();
-            if($deleted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
-          } catch (\Exception $e)
-          {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-          return $result;
-    }
 }
 
