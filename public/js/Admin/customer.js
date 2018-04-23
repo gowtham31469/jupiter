@@ -34,10 +34,33 @@
                   $(".loader").show();
               },
               success: function (data) {
-                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Factory Code</th><th>Default Contact</th><th>Courier Choice</th><th>TIN Number</th><th>GSTIN Number</th><th>PAN Number</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th>Default Contact</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
-                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.company_name+'</td><td>'+item.factory_code+'</td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td>'+item.courier_choice+'</td><td>'+item.tin_number+'</td><td>'+item.gstin_number+'</td><td>'+item.pan_number+'</td><td><dl><dt>Address:</dt><dd>'+item.bill_address+','+item.bill_country+'</dd><dt>Email:</dt><dd>'+item.bill_email+'</dd><dt>Phone:</dt><dd>'+item.bill_telephone+'</dd><dt>Fax:</dt><dd>'+item.bill_fax+'</dd></dl></td><td><dl><dt>Address:</dt><dd>'+item.ship_address+','+item.ship_country+'</dd><dt>Email:</dt><dd>'+item.ship_email+'</dd><dt>Phone:</dt><dd>'+item.ship_telephone+'</dd><dt>Fax:</dt><dd>'+item.ship_fax+'</dd></dl></td>';
+                 table += '<tr id="'+item.id+'"><td>'+index+'</td><td><a href="#" title="view more" class="view-more" data-placement="left" data-backdrop="static" data-keyboard="false">'+item.company_name+'</a></td><td><dl><dt>Contact Person:</dt><dd>'+item.contact_person+'</dd><dt>Contact Email:</dt><dd>'+item.contact_email+'</dd><dt>Contact Phone:</dt><dd>'+item.phone_no+'</dd></dl></td><td><dl><dt>Address:</dt>';
+                 
+                   if(item.bill_address != "-")
+                   {
+                    table += '<dd>'+item.bill_address+','+item.bill_country+'-'+item.pincode+'</dd>';
+                   }
+                   else
+                   {
+                    table += '<dd>-</dd>';
+                   }
+
+                   table += '<dt>Email:</dt><dd>'+item.bill_email+'</dd><dt>Phone:</dt><dd>'+item.bill_telephone+'</dd><dt>Fax:</dt><dd>'+item.bill_fax+'</dd></dl></td><td><dl><dt>Address:</dt>';
+
+                   if(item.ship_address != "-")
+                   {
+                    table += '<dd>'+item.ship_address+','+item.ship_country+'-'+item.pincode+'</dd>';
+                   }
+                   else
+                   {
+                    table += '<dd>-</dd>';
+                   }
+
+                   table += '<dt>Email:</dt><dd>'+item.ship_email+'</dd><dt>Phone:</dt><dd>'+item.ship_telephone+'</dd><dt>Fax:</dt><dd>'+item.ship_fax+'</dd></dl></td>';
+                   
                    if(item.is_active === 1)
                    {
                     table += '<td><span class="label label-success">Active</span></td>';
@@ -66,13 +89,15 @@
                 $('.delete-customer').tooltip('toggle')
                 $('.status').tooltip('show')
                 $('.status').tooltip('toggle')
+                $('.view-more').tooltip('show')
+                $('.view-more').tooltip('toggle')
 
                 /** [ Data Tabeles scripts ] */
                 $('#customers-list-table').DataTable();
                 $("#customers-list-table_filter input").addClass('form-control');
                 $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
                 $('.dataTables_length select').addClass('form-control');
-
+                
                 /** [ Call autopopulateCountry function for auto-populating country in textbox  ] */
                 autopopulateCountry(0)
               },
@@ -1351,3 +1376,73 @@ function addCustomer()
        console.log("Error:"+e)
      }
   }
+
+  /**
+  * Get customer details for view more functionality.
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function getCustomerDetails(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/customer-management/get-customer-details",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"get",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               success: function (data) {
+                isSubmitting = false;
+                $('#customer-name').text(data.customers[0].company_name == null?'-':data.customers[0].company_name);
+                $('#short-name').text(data.customers[0].short_name == null?'-':data.customers[0].short_name);
+                $('#factory-code').text(data.customers[0].factory_code == null?'-':data.customers[0].factory_code);
+                $('#email').text(data.customers[0].email == null?'-':data.customers[0].email);
+                $('#courier-choice').text(data.customers[0].courier_choice == null?'-':data.customers[0].courier_choice);
+                $('#pan-number').text(data.customers[0].pan_number == null?'-':data.customers[0].pan_number);
+                $('#gstin-number').text(data.customers[0].gstin_number == null?'-':data.customers[0].gstin_number);
+                $('#tin-number').text(data.customers[0].tin_number == null?'-':data.customers[0].tin_number);
+                $('#payment-terms').text(data.customers[0].payment_terms == null?'-':data.customers[0].payment_terms);
+                $('#place-of-supply').text(data.customers[0].place_of_supply == null?'-':data.customers[0].place_of_supply);
+                $('#freight-type').text(data.customers[0].freight_type == null?'-':data.customers[0].freight_type);
+                $('#nominated-forwarder').text(data.customers[0].nominated_forwarder == null?'-':data.customers[0].nominated_forwarder);
+                $('#delivery-date-required').text(data.customers[0].delivery_date_required == 1?'Yes':'No');
+                $('#pi-required').text(data.customers[0].pi_required == 1?'Yes':'No');
+                $('#po-required').text(data.customers[0].po_required == 1?'Yes':'No');
+
+                /** @type {Array} [Show multiple buyers coma separated using array] */
+                var buyers_array = [];
+                $.each(data.buyers, function(i, item){
+                  buyers_array.push(item.buyer_name);
+                });
+                $('#buyer-name').text(buyers_array.length === 0?'-':buyers_array);
+                /** [ Backdrop for bootstrap modal ] */
+                 $('#viewMoreModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#viewMoreModal').modal('show');
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+               },
+               complete: function () {
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }

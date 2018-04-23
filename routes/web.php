@@ -82,7 +82,7 @@ Route::get('admin/customer-management/get-buyers-customers','Admin\CustomerManag
 Route::post('admin/customer-management/save-price-tax', 'Admin\CustomerManagement\CustomerManagementController@savePriceTax');
 Route::get('admin/customer-management/get-price-tax', 'Admin\CustomerManagement\CustomerManagementController@getPriceTax');
 Route::post('admin/tesco/customer-management/template-view', 'Admin\CustomerManagement\CustomerManagementController@templateView');
-
+Route::get('admin/customer-management/get-customer-details', 'Admin\CustomerManagement\CustomerManagementController@getCustomerDetailsById');
 
 
 /** buyer Management **/

@@ -14,7 +14,7 @@ class AddShortNameToCustomers extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('short_name')->after('id')->default('null');
+            $table->string('short_name')->after('id');
         });
     }
 

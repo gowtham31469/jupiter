@@ -79,19 +79,19 @@ class CustomerManagementController extends Controller
                 /** [Checking value null or not] */
                 if($value->courier_choice == "")
                 {
-                  $value->courier_choice   = "N/A";
+                  $value->courier_choice   = "-";
                 }
                 if($value->tin_number == "")
                 {
-                  $value->tin_number   = "N/A";
+                  $value->tin_number   = "-";
                 }
                 if($value->pan_number == "")
                 {
-                  $value->pan_number   = "N/A";
+                  $value->pan_number   = "-";
                 }
                 if($value->gstin_number == "")
                 {
-                  $value->gstin_number   = "N/A";
+                  $value->gstin_number   = "-";
                 }
                 $customer_id = $value->id;
                 $default_contact = DB::table('customer_contact_persons')
@@ -107,9 +107,9 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->contact_person = "N/A";
-                  $value->contact_email  = "N/A";
-                  $value->phone_no       = "N/A";
+                  $value->contact_person = "-";
+                  $value->contact_email  = "-";
+                  $value->phone_no       = "-";
                 }
                 
 
@@ -129,12 +129,12 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->bill_address   = "N/A";
-                  $value->bill_country   = "N/A";
-                  $value->bill_email     = "N/A";
-                  $value->bill_telephone = "N/A";
-                  $value->bill_fax       = "N/A";
-                  $value->pincode        = "N/A";
+                  $value->bill_address   = "-";
+                  $value->bill_country   = "-";
+                  $value->bill_email     = "-";
+                  $value->bill_telephone = "-";
+                  $value->bill_fax       = "-";
+                  $value->pincode        = "-";
                 }
                 $is_shipping_address = DB::table('customer_bill_address')
                          ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
@@ -152,12 +152,12 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->ship_address   = "N/A";
-                  $value->ship_country   = "N/A";
-                  $value->ship_email     = "N/A";
-                  $value->ship_telephone = "N/A";
-                  $value->ship_fax       = "N/A";
-                  $value->pincode       = "N/A";
+                  $value->ship_address   = "-";
+                  $value->ship_country   = "-";
+                  $value->ship_email     = "-";
+                  $value->ship_telephone = "-";
+                  $value->ship_fax       = "-";
+                  $value->pincode        = "-";
                 }
                 
               }            
@@ -554,19 +554,19 @@ class CustomerManagementController extends Controller
                 /** [Checking value null or not] */
                 if($value->courier_choice == "")
                 {
-                  $value->courier_choice   = "N/A";
+                  $value->courier_choice   = "-";
                 }
                 if($value->tin_number == "")
                 {
-                  $value->tin_number   = "N/A";
+                  $value->tin_number   = "-";
                 }
                 if($value->pan_number == "")
                 {
-                  $value->pan_number   = "N/A";
+                  $value->pan_number   = "-";
                 }
                 if($value->gstin_number == "")
                 {
-                  $value->gstin_number   = "N/A";
+                  $value->gstin_number   = "-";
                 }
                 $customer_id = $value->id;
                 $default_contact = DB::table('customer_contact_persons')
@@ -582,9 +582,9 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->contact_person = "N/A";
-                  $value->contact_email  = "N/A";
-                  $value->phone_no       = "N/A";
+                  $value->contact_person = "-";
+                  $value->contact_email  = "-";
+                  $value->phone_no       = "-";
                 }
                 
 
@@ -604,12 +604,12 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->bill_address   = "N/A";
-                  $value->pincode        = "N/A";
-                  $value->bill_country   = "N/A";
-                  $value->bill_email     = "N/A";
-                  $value->bill_telephone = "N/A";
-                  $value->bill_fax       = "N/A";
+                  $value->bill_address   = "-";
+                  $value->pincode        = "-";
+                  $value->bill_country   = "-";
+                  $value->bill_email     = "-";
+                  $value->bill_telephone = "-";
+                  $value->bill_fax       = "-";
                 }
                 $is_shipping_address = DB::table('customer_bill_address')
                          ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
@@ -627,12 +627,12 @@ class CustomerManagementController extends Controller
                 }
                 else
                 {
-                  $value->ship_address   = "N/A";
-                  $value->ship_country   = "N/A";
-                  $value->ship_email     = "N/A";
-                  $value->ship_telephone = "N/A";
-                  $value->ship_fax       = "N/A";
-                  $value->pincode        = "N/A";
+                  $value->ship_address   = "-";
+                  $value->ship_country   = "-";
+                  $value->ship_email     = "-";
+                  $value->ship_telephone = "-";
+                  $value->ship_fax       = "-";
+                  $value->pincode        = "-";
                 }
                 
               }  
@@ -764,6 +764,38 @@ class CustomerManagementController extends Controller
                                 ->get();
          
          return json_encode($treeviewData);
+    }
+    /**
+     * Get the customer details by identifier(View more functionality).
+     * @param customer id
+     * @return The customer by identifier.
+     * @author <Praveen>
+     */
+    public function getCustomerDetailsById(Request $request)
+    {
+      try {
+            $id = $request['id'];
+            $customer = DB::table('customers')
+                     ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.po_required','customers.delivery_date_required','nominated_forwarders.forwarder','freight_terms.freight_terms','delivery_day_count','short_name','payment_terms.payment_terms','place_of_supply.place_of_supply')
+                     ->leftjoin('payment_terms','customers.payment_terms','payment_terms.id')
+                     ->leftjoin('place_of_supply','customers.place_of_supply','place_of_supply.id')
+                     ->leftjoin('freight_terms','customers.freight_type','freight_terms.id')
+                     ->leftjoin('nominated_forwarders','customers.nominated_forwarder','nominated_forwarders.id')
+                     ->where('customers.id','=',$id)
+                     ->get();
+            
+              $buyers = DB::table('customer_buyers')
+                     ->select('buyers.buyer_name')
+                     ->leftjoin('customers','customer_buyers.customer_id','customers.id')
+                     ->leftjoin('buyers','buyers.id','customer_buyers.buyer_id')
+                     ->where('customer_buyers.customer_id','=',$id)
+                     ->get();
+            
+            return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers]);
+          } catch (\Exception $e)
+          {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
     }
 
 }
