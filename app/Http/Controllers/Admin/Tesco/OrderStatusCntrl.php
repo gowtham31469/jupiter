@@ -286,6 +286,7 @@ class OrderStatusCntrl extends Controller
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
                             ->where('tesco_tcl1_orders.is_order_count_empty',0)
+                            ->where('tesco_tcl1_orders.purchase_order_no',null)
                             ->select('tesco_tcl1_orders.*',DB::raw('"TCL 1" as TemplateName'),DB::raw('"tesco_tcl1_orders" as tableName'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)

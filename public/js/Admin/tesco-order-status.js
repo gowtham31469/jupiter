@@ -117,8 +117,7 @@ function tescoOrderStatus()
                                         var unique_po = []
                                         var old_po = "" 
                                         $(newObj).each(function (index1, value1) {
-                                            
-                                            
+                                                                                        
                                             if (value1.po_number != "" && value1.   purchase_order_no != null)
                                             {
                                                 if (old_po!=value1.purchase_order_no)
@@ -146,7 +145,6 @@ function tescoOrderStatus()
                                                         icon: 'glyphicon glyphicon-unchecked'
                                                     }
                                                 };
-
                                             $widget.css('cursor', 'pointer')
                                             $widget.append($checkbox);
 
@@ -724,11 +722,13 @@ function tescoStatusTable(data,path)
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
 	                {
-	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span></div></div></td>';
+	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
 	                }
 	                else
 	                {
-                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'"><span class="input-group-btn"><button type="button" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span></div></div></td>';
+                		tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" value="'+value[key]+'" readonly></div></div></td>';
+
+                        // <span class="input-group-btn"><button type="button" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")>Save</button></span>
 	                }
                 }
                 else if (key == "OrderDate")
@@ -972,13 +972,14 @@ function tescoSetPO(obj,id,tableName,po_file)
                $('#snackbar').css('background-color','#00b6ff');
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $(obj).closest('tr').find('.tesco-po').val(po_number);
-               
+               $(obj).closest('tr').find('.po-span').addClass('hidden');
+               $(obj).closest('tr').find('.tesco-po').attr('readonly', true);
+
                if ($(obj).closest('tr').find('.po_class').text() =="PO Pending" && po_file!="null")
                {
                  $(obj).closest('tr').find('.po_class').html("PO Uploaded")
-                 $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
+                 $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');                 
                }
-
                showSnackbar();
                if (po_number==""){
                  $(obj).closest('tr').find('.tesco-po').attr('disabled');
