@@ -46,7 +46,8 @@ class TemplateController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Template Management/dashboard',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Template Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
         else
         {
@@ -67,7 +68,8 @@ class TemplateController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Template Management/template-list',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Template Management/template-list',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
         else
         {

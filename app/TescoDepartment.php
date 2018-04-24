@@ -18,5 +18,5 @@ class TescoDepartment extends Model
       *
       * @var array
       */
-      protected $fillable = ['department','pantone','rbg'];
+      protected $fillable = ['department','pantone','rbg','is_enabled'];
 }

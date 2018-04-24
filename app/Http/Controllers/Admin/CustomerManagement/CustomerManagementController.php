@@ -669,7 +669,8 @@ class CustomerManagementController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Customer Management/buyer-selection',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Customer Management/buyer-selection',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         } else {
              return redirect('/admin/dashboard');
         }

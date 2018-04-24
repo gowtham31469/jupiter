@@ -2,8 +2,8 @@
  * Method to pull and render the template hierarchy of a buyer
  */
 function price_template_list() {
-    var buyer = localStorage.getItem("pricing_buyer");
-    var buyer_id = localStorage.getItem("pricing_buyer_id");
+    var buyer = localStorage.getItem("buyer");
+    var buyer_id = localStorage.getItem("buyer_id");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url:base_url + "/admin/customer-management/get-buyers-customers",
@@ -164,7 +164,7 @@ function savePricing() {
 
     var customer_id = localStorage.getItem("customer_id");
     var template_id = localStorage.getItem("template_id");
-    var buyer_id    = localStorage.getItem("pricing_buyer_id");
+    var buyer_id    = localStorage.getItem("buyer_id");
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url:base_url + "/admin/customer-management/save-price-tax",
@@ -201,7 +201,7 @@ function savePricing() {
 function getSavedPriceTax() {
     var customer_id = localStorage.getItem("customer_id");
     var template_id = localStorage.getItem("template_id");
-    var buyer_id    = localStorage.getItem("pricing_buyer_id");
+    var buyer_id    = localStorage.getItem("buyer_id");
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url:base_url + "/admin/customer-management/get-price-tax",

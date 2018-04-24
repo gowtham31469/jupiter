@@ -275,11 +275,12 @@ border: 0;
                     @endforeach
               </select>
 		</div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
 		<div class="clearfix"></div>
 	</div>
 	<div class="main-content">
 		<div class="select-buyer">
-			<img src="../../images/select-buyer.png" class="img-responsive">
+			
 		</div>
 	</div>
 	<div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -634,17 +635,26 @@ border: 0;
 				localStorage.removeItem(arr[i]);
 			}
 
-			$('.select-buyer').click(function() {
+			    $('.select-buyer').click(function() {
 				$('.select-buyer').addClass('hidden');
 			})
-
+            /** [If only 1 buyer , auto select that buyer] */
+            var buyer_count = $('#invisible__count_id').val();
+            if(buyer_count <= 1) 
+            {
+                $('.buyer-select option:first').remove();
+                localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
+            }    
 			/** Show logo in navbar */
 			$('.logo').html('Orders')
 			$('.buyer-nav-select').html($('.buyer-div').html())
 
 			/** [ Show create order page based on buyer selection ] */
 			if (localStorage.getItem("buyer") === null) {
-
+                $(document).ready(function() {
+                   $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+                })
 			} else if (localStorage.getItem("buyer") === 'orchestra') {
 				orders();
 			} else {
@@ -660,39 +670,21 @@ border: 0;
 
 			/** [ Show dynamic sub modules in navbar ] */
 			$('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-				if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
+				if ($('.buyer-nav-select .buyer-select option:selected').val() != "") 
+                {
 					localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
 					localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
 					var csrf_token = $('meta[name="csrf-token"]').attr('content');
 					var buyer = $(this).find("option:selected").text().toLowerCase();
-					$.ajax({
-						url: base_url + "/admin/order-management/order_sub_modules",
-						type: "Post",
-						dataType: "json",
-						data: {
-							_token: csrf_token,
-							buyer: buyer
-						},
-						beforeSend: function() {
-
-						},
-						success: function(data) {
-							/**  [ Show orders page based on buyer selection ] **/
-							if (buyer === 'orchestra') {
-								orders();
-							} else {
-								tescoOrders();
-							}
-						},
-						error: function(data) {
-
-						},
-						complete: function() {
-//							$(".loader").hide();
-//							$(".loader").css('margin-top', '0%');
-						}
-					})
-				} else {
+                    if (buyer === 'orchestra') 
+                    {
+                        orders();
+                    } else {
+                        tescoOrders();
+                    }
+				} 
+                else 
+                {
 					localStorage.removeItem("buyer");
 					localStorage.removeItem("buyer_id");
 					location.reload()

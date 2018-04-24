@@ -280,7 +280,6 @@ border: 0;
 </div>
     <div class="main-content">
         <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
     </div>
 <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -495,7 +494,9 @@ border: 0;
          $('.buyer-nav-select').html($('.buyer-div').html())
          /** [ Show create order page based on buyer selection ] */
         if (localStorage.getItem("buyer") === null) {
-
+            $(document).ready(function() {
+             $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+            })
         } else if (localStorage.getItem("buyer") === 'orchestra') {
             orders();
         } else {

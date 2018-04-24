@@ -18,6 +18,7 @@ use App\OrchestraSpecialInstructions;
 use App\OrchestraCompositions;
 use App\OrchestraParts;
 use App\OrchestraSizeCharts;
+use App\OrchestraCareSymbols;
 
 /**
  * Orchestra Age Group controller
@@ -56,7 +57,8 @@ class OrchestraSettings extends Controller
             $category = DB::table('orchestra_care_category')->pluck('category_name','id')->all();
 
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category]);
+            $buyer_count = count($buyers);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count]);
         }
         else
         {
@@ -71,7 +73,7 @@ class OrchestraSettings extends Controller
     public function orchestraGarments()
     {
       try {
-            $orchestra_garments = DB::table('orchestra_garments')->select('id','garment_name')->get();
+            $orchestra_garments = DB::table('orchestra_garments')->select('id','garment_name','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_garments' => $orchestra_garments]);
           } catch (\Exception $e)
           {
@@ -148,6 +150,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make Garment enabled
+       * @param Garment id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeGarmentEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraGarments::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Garment disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeGarmentDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraGarments::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra metadata age group list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -155,7 +204,7 @@ class OrchestraSettings extends Controller
     public function orchestraAgeGroup()
     {
       try {
-            $orchestra_agegroups = DB::table('orchestra_age_group')->select('id','age_group_name','color')->get();
+            $orchestra_agegroups = DB::table('orchestra_age_group')->select('id','age_group_name','color','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_agegroups' => $orchestra_agegroups]);
           } catch (\Exception $e)
           {
@@ -234,6 +283,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make AgeGroup enabled
+       * @param AgeGroup id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeAgeGroupEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraAgeGroup::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make AgeGroup disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeAgeGroupDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraAgeGroup::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra metadata countries list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -241,7 +337,7 @@ class OrchestraSettings extends Controller
     public function orchestraCountries()
     {
       try {
-            $orchestra_countries = DB::table('orchestra_countries')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            $orchestra_countries = DB::table('orchestra_countries')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_countries' => $orchestra_countries]);
           } catch (\Exception $e)
           {
@@ -339,6 +435,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make Country enabled
+       * @param Country id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCountryEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCountries::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Country disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCountryDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCountries::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra metadata Product Family list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -346,7 +489,7 @@ class OrchestraSettings extends Controller
     public function orchestraProductFamily()
     {
       try {
-            $orchestra_product_family = DB::table('orchestra_product_family')->select('id','french','arabic','english','code')->get();
+            $orchestra_product_family = DB::table('orchestra_product_family')->select('id','french','arabic','english','code','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_product_family' => $orchestra_product_family]);
           } catch (\Exception $e)
           {
@@ -427,6 +570,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make ProductFamily enabled
+       * @param ProductFamily id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeProductFamilyEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraProductFamily::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make ProductFamily disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeProductFamilyDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraProductFamily::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra metadata special instructions list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -434,7 +624,7 @@ class OrchestraSettings extends Controller
     public function orchestraSpecialInstructions()
     {
       try {
-            $orchestra_specialinstructions = DB::table('orchestra_care_instruction')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            $orchestra_specialinstructions = DB::table('orchestra_care_instruction')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_specialinstructions' => $orchestra_specialinstructions]);
           } catch (\Exception $e)
           {
@@ -532,6 +722,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make SpecialInstruction enabled
+       * @param SpecialInstruction id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSpecialInstructionEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraSpecialInstructions::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make SpecialInstruction disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSpecialInstructionDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraSpecialInstructions::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra Compositions list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -539,7 +776,7 @@ class OrchestraSettings extends Controller
     public function orchestraCompositions()
     {
       try {
-            $orchestra_compositions = DB::table('orchestra_compositions')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            $orchestra_compositions = DB::table('orchestra_compositions')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_compositions' => $orchestra_compositions]);
           } catch (\Exception $e)
           {
@@ -637,6 +874,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make Composition enabled
+       * @param Composition id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCompositionEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCompositions::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Composition disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCompositionDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCompositions::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra Parts list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -644,7 +928,7 @@ class OrchestraSettings extends Controller
     public function orchestraParts()
     {
       try {
-            $orchestra_parts = DB::table('orchestra_parts')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english')->get();
+            $orchestra_parts = DB::table('orchestra_parts')->select('id','french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_parts' => $orchestra_parts]);
           } catch (\Exception $e)
           {
@@ -742,6 +1026,53 @@ class OrchestraSettings extends Controller
         return $result;
     }
     /**
+       * Make Part enabled
+       * @param Part id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makePartEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraParts::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Part disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makePartDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraParts::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+    /**
      * Orchestra Size Charts list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -749,7 +1080,7 @@ class OrchestraSettings extends Controller
     public function orchestraSizeCharts()
     {
       try {
-            $orchestra_size_chart = DB::table('orchestra_size_chart')->select('id','age','cm','in')->get();
+            $orchestra_size_chart = DB::table('orchestra_size_chart')->select('id','age','cm','in','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_size_charts' => $orchestra_size_chart]);
           } catch (\Exception $e)
           {
@@ -828,6 +1159,53 @@ class OrchestraSettings extends Controller
         }
         return $result;
     }
+    /**
+       * Make SizeChart enabled
+       * @param SizeChart id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSizeChartEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraSizeCharts::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make SizeChart disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSizeChartDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraSizeCharts::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
      /**
      * Orchestra metadata Symbols list show using ajax.
      * @author <Praveen>
@@ -836,7 +1214,7 @@ class OrchestraSettings extends Controller
     public function orchestraSymbols()
     {
       try {
-            $orchestra_care_symbols = DB::table('orchestra_care_symbols')->select('*')->get();
+            $orchestra_care_symbols = DB::table('orchestra_care_symbols')->select('*')->orderBy('is_enabled','desc')->get();
        
             return response()->json(['error'=>'false','message' =>'success', 'orchestra_care_symbols' => $orchestra_care_symbols]);
           } catch (\Exception $e)
@@ -1011,4 +1389,51 @@ class OrchestraSettings extends Controller
         }
         return $result;
     }
+    /**
+       * Make Symbol enabled
+       * @param Symbol id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSymbolEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCareSymbols::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Symbol disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSymbolDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              OrchestraCareSymbols::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
 }

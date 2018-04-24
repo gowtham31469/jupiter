@@ -6,7 +6,7 @@
 function reOrder()
 {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/reorder",
@@ -51,7 +51,7 @@ function reorderartworks()
 {
 	
 	var uvc=$('#uvc_number').val();
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	if(uvc != "Select UVC Number")
 	{
@@ -117,7 +117,7 @@ function reorderartworks()
 
 function extraQuantity(type,id)
 {
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/extra-quantity",

@@ -17,7 +17,7 @@ use App\TescoSizeChart;
 
 class TescoSettings extends Controller
 {
-     /**
+   /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,7 +35,7 @@ class TescoSettings extends Controller
     public function tescoBrands()
     {
       try {
-            $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->get();
+            $tesco_brand = DB::table('tesco_brand')->select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
           {
@@ -113,7 +113,7 @@ class TescoSettings extends Controller
         }
         return $result;
     }
-    /**
+     /**
        * Make Brand enabled
        * @param brand id
        * @author <Praveen>
@@ -138,7 +138,7 @@ class TescoSettings extends Controller
             return $result;
         }
       /**
-       * Make Brand diabled
+       * Make Brand disabled
        * @author <Praveen>
        * @return boolean true or false
        */
@@ -162,7 +162,7 @@ class TescoSettings extends Controller
         }
 
             
-    /**
+   /**
      * Tesco metadata Department list show using ajax.
      * @author <Praveen>
      * @return \Illuminate\Http\Response
@@ -170,7 +170,7 @@ class TescoSettings extends Controller
     public function tescoDepartments()
     {
       try {
-            $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg')->get();
+            $tesco_department = DB::table('tesco_department')->select('id','department','pantone','rbg','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_department' => $tesco_department]);
           } catch (\Exception $e)
           {
@@ -208,7 +208,7 @@ class TescoSettings extends Controller
         return $result;
     }
 
-/**
+   /**
      * Get Tesco Departments details by ID for editing.
      * @param Tesco Department id
      * @author <Praveen>
@@ -225,7 +225,7 @@ class TescoSettings extends Controller
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
-    /**
+   /**
     * Update departments by id.
     * @param department id
     * @author <Praveen>
@@ -255,6 +255,53 @@ class TescoSettings extends Controller
         }
         return $result;
     }
+     /**
+       * Make Department enabled
+       * @param Department id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeDepartmentEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoDepartment::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Department disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeDepartmentDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoDepartment::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
     /**
      * Tesco metadata supplier list show using ajax.
      * @author <Praveen>
@@ -263,7 +310,7 @@ class TescoSettings extends Controller
     public function tescoSuppliers()
     {
       try {
-            $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code','is_enabled')->get();
+            $tesco_suppliers = DB::table('tesco_suppliers')->select('id','supplier_name','supplier_code','is_enabled')->orderBy('is_enabled','desc')->get();
             return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
           } catch (\Exception $e)
           {
@@ -271,7 +318,7 @@ class TescoSettings extends Controller
           }
     }
 
-        /**
+   /**
      * Add Tesco Suppliers.
      * @param \Illuminate\Http\Request
      * @author <Praveen>
@@ -317,7 +364,7 @@ class TescoSettings extends Controller
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
-    /**
+   /**
     * Update suppliers by id.
     * @param supplier id
     * @author <Praveen>
@@ -345,32 +392,32 @@ class TescoSettings extends Controller
         }
         return $result;
     }
-      /**
-       * Make supplier enabled
-       * @param supplier id
-       * @author <Praveen>
-       * @return boolean true or false
-       */
-      public function makeSupplierEnabled(Request $request)
-      {
-        try {
-              $id      = $request['id'];
-              
-              TescoSupplier::where('id',$id)
-               ->update([
-                 'is_enabled'  => 1
-              ]);
+   /**
+     * Make supplier enabled
+     * @param supplier id
+     * @author <Praveen>
+     * @return boolean true or false
+     */
+    public function makeSupplierEnabled(Request $request)
+    {
+      try {
+            $id      = $request['id'];
+            
+            TescoSupplier::where('id',$id)
+             ->update([
+               'is_enabled'  => 1
+            ]);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
-            } 
-            catch (\Exception $e)
-            {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-            }
-            return $result;
-        }
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          } 
+          catch (\Exception $e)
+          {
+                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+      }
       /**
-       * Make Supplier diabled
+       * Make Supplier disabled
        * @author <Praveen>
        * @return boolean true or false
        */
@@ -391,25 +438,25 @@ class TescoSettings extends Controller
                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
-        }
+     }
 
-         /**
-     * Tesco metadata Size Chart list show using ajax.
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function tescoSizeChart()
-    {
-      try {
-            $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce')->get();
-            return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
-          } catch (\Exception $e)
-          {
-                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-          }
-    }
+     /**
+       * Tesco metadata Size Chart list show using ajax.
+       * @author <Praveen>
+       * @return \Illuminate\Http\Response
+       */
+      public function tescoSizeChart()
+      {
+        try {
+              $tesco_size_chart = DB::table('tesco_size_chart')->select('id','po_size','uk','ce','is_enabled')->orderBy('is_enabled','desc')->get();
+              return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
+            } catch (\Exception $e)
+            {
+                   return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+      }
 
-       /**
+   /**
      * Add Tesco Size chart.
      * @param \Illuminate\Http\Request
      * @author <Praveen>
@@ -438,7 +485,7 @@ class TescoSettings extends Controller
         }
         return $result;
     }
- /**
+   /**
      * Get Tesco size chart details by ID for editing.
      * @param Tesco size chart id
      * @author <Praveen>
@@ -455,7 +502,7 @@ class TescoSettings extends Controller
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
-    /**
+   /**
     * Update size chart by id.
     * @param sizechart id
     * @author <Praveen>
@@ -485,6 +532,53 @@ class TescoSettings extends Controller
         }
         return $result;
     }
+    /**
+       * Make SizeChart enabled
+       * @param SizeChart id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSizeChartEnabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoSizeChart::where('id',$id)
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make SizeChart disabled
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeSizeChartDisabled(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              TescoSizeChart::where('id',$id)
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
     
 }
 

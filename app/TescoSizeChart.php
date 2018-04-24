@@ -18,5 +18,5 @@ class TescoSizeChart extends Model
       *
       * @var array
       */
-      protected $fillable = ['po_size','ce','uk'];
+      protected $fillable = ['po_size','ce','uk','is_enabled'];
 }

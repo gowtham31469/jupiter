@@ -36,7 +36,6 @@
 
     <div class="main-content">
         <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
     </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

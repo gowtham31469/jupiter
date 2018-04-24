@@ -3,8 +3,8 @@ $(document).ready(function() {
       var buyer_count = $('#invisible__count_id').val();
       if(buyer_count <= 1) {
         $('.buyer-select option:first').remove();
-        localStorage.setItem("pricing_buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
-        localStorage.setItem("pricing_buyer_id", $('.buyer-select').find("option:selected").val());
+        localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
+        localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
         orderStatus();
       }
 
@@ -13,12 +13,14 @@ $(document).ready(function() {
       })
 
       $('.buyer-nav-select').html($('.buyer-div').html())
-      if (localStorage.getItem("pricing_buyer") === null) {
-        $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+      if (localStorage.getItem("buyer") === null) {
+        $(document).ready(function() {
+           $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+        })
       } else {
         orderStatus();
       }
-      $('.buyer-select').val(localStorage.getItem("pricing_buyer_id"));
+      $('.buyer-select').val(localStorage.getItem("buyer_id"));
       $('.buyer-select').selectpicker({
         style: 'btn-default',
         size: 4
@@ -26,12 +28,12 @@ $(document).ready(function() {
 
       $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
         if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-            localStorage.setItem("pricing_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("pricing_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+            localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
             orderStatus();
         } else {
-            localStorage.removeItem("pricing_buyer");
-            localStorage.removeItem("pricing_buyer_id");
+            localStorage.removeItem("buyer");
+            localStorage.removeItem("buyer_id");
             location.reload()
         }
       });
@@ -39,7 +41,7 @@ $(document).ready(function() {
 
 function orderStatus() {
     $('.main-content').html('<div class="loader"></div>');
-    var buyer = localStorage.getItem("pricing_buyer");
+    var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/customer/" + buyer + "/order-status",
@@ -1898,7 +1900,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("pricing_buyer_id");
+    var buyer_id = localStorage.getItem("buyer_id");
     var tr = "";
     $.ajax({
         url: base_url + "/customer/tesco/order-management/show-tesco-pi",
@@ -2063,7 +2065,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
 function tescoApprovePI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("pricing_buyer_id");
+    var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
         url: base_url + "/customer/tesco/approve-tesco-pi",
         type: "Post",
@@ -2120,7 +2122,7 @@ function tescoApprovePI(id,table_name)
 function tescoRejectPI(id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    var buyer_id = localStorage.getItem("pricing_buyer_id");
+    var buyer_id = localStorage.getItem("buyer_id");
     $.ajax({
         url: base_url + "/customer/tesco/reject-tesco-pi",
         type: "Post",
