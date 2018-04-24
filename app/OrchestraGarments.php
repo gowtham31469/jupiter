@@ -19,5 +19,5 @@ class OrchestraGarments extends Model
       *
       * @var array
       */
-      protected $fillable = ['garment_name'];
+      protected $fillable = ['garment_name','is_enabled'];
 }

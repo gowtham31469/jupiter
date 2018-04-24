@@ -1734,7 +1734,21 @@
             editOrchestraGarments();
          }
        })
+       /** To Enable  Garment  on click **/
+       $(document).on('click', '#make_garment_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeGarmentEnabled function from orchestra-settings.js*/
+           makeGarmentEnabled(id,csrf_token)
+       });
 
+       /** To disable Garment  on click **/
+       $(document).on('click', '#make_garment_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeGarmentDisabled function from orchestra-settings.js*/
+           makeGarmentDisabled(id,csrf_token)
+       });
        /** Add orchestra age group form validation **/
         $('#add_orchestra_agegroup_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1770,7 +1784,21 @@
             editOrchestraAgeGroup();
          }
        })
+       /** To Enable  age group  on click **/
+       $(document).on('click', '#make_age_group_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeAgeGroupEnabled function from orchestra-settings.js*/
+           makeAgeGroupEnabled(id,csrf_token)
+       });
 
+       /** To disable age group  on click **/
+       $(document).on('click', '#make_age_group_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeAgeGroupDisabled function from orchestra-settings.js*/
+           makeAgeGroupDisabled(id,csrf_token)
+       });
        /** Add orchestra country form validation **/
         $('#add_orchestra_country_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1806,7 +1834,21 @@
             editOrchestraCountry();
          }
        })
+       /** To Enable  country  on click **/
+       $(document).on('click', '#make_country_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeCountryEnabled function from orchestra-settings.js*/
+           makeCountryEnabled(id,csrf_token)
+       });
 
+       /** To disable country  on click **/
+       $(document).on('click', '#make_country_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeCountryDisabled function from orchestra-settings.js*/
+           makeCountryDisabled(id,csrf_token)
+       });
        /** Add orchestra productfamily form validation **/
         $('#add_orchestra_productfamily_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1842,7 +1884,21 @@
             editOrchestraProductFamily();
          }
        })
+       /** To Enable  productfamily  on click **/
+       $(document).on('click', '#make_productfamily_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeProductFamilyEnabled function from orchestra-settings.js*/
+           makeProductFamilyEnabled(id,csrf_token)
+       });
 
+       /** To disable productfamily  on click **/
+       $(document).on('click', '#make_productfamily_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeProductFamilyDisabled function from orchestra-settings.js*/
+           makeProductFamilyDisabled(id,csrf_token)
+       });
        /** Add orchestra special instruction form validation **/
         $('#add_orchestra_special_instruction_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1878,7 +1934,21 @@
             editOrchestraSpecialInstruction();
          }
        })
+       /** To Enable  special instruction  on click **/
+       $(document).on('click', '#make_special_instruction_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSpecialInstructionEnabled function from orchestra-settings.js*/
+           makeSpecialInstructionEnabled(id,csrf_token)
+       });
 
+       /** To disable special instruction  on click **/
+       $(document).on('click', '#make_special_instruction_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSpecialInstructionDisabled function from orchestra-settings.js*/
+           makeSpecialInstructionDisabled(id,csrf_token)
+       });
        /** Add orchestra composition form validation **/
         $('#add_orchestra_composition_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1914,7 +1984,21 @@
             editOrchestraComposition();
          }
        })
+       /** To Enable  composition  on click **/
+       $(document).on('click', '#make_composition_list_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeCompositionEnabled function from orchestra-settings.js*/
+           makeCompositionEnabled(id,csrf_token)
+       });
 
+       /** To disable composition  on click **/
+       $(document).on('click', '#make_composition_list_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeCompositionDisabled function from orchestra-settings.js*/
+           makeCompositionDisabled(id,csrf_token)
+       });
        /** Add orchestra part form validation **/
         $('#add_orchestra_part_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1950,7 +2034,21 @@
             editOrchestraPart();
          }
        })
+       /** To Enable  part  on click **/
+       $(document).on('click', '#make_part_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makePartEnabled function from orchestra-settings.js*/
+           makePartEnabled(id,csrf_token)
+       });
 
+       /** To disable part  on click **/
+       $(document).on('click', '#make_part_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makePartDisabled function from orchestra-settings.js*/
+           makePartDisabled(id,csrf_token)
+       });
        /** Add orchestra size chart form validation **/
         $('#add_orchestra_size_chart_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -1986,7 +2084,82 @@
             editOrchestraSizeChart();
          }
        })
+       /** To Enable  size chart  on click **/
+       $(document).on('click', '#make_size_chart_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeOrchestraSizeChartEnabled function from orchestra-settings.js*/
+           makeOrchestraSizeChartEnabled(id,csrf_token)
+       });
 
+       /** To disable size chart  on click **/
+       $(document).on('click', '#make_size_chart_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeOrchestraSizeChartDisabled function from orchestra-settings.js*/
+           makeOrchestraSizeChartDisabled(id,csrf_token)
+       });
+          /** Add orchestra symbols form validation **/
+         $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
+           if (e.isDefaultPrevented())
+           {
+
+           }
+           else
+           {
+              e.preventDefault();
+              var cofreet_file = $('#cofreet_symbol')[0].files[0];
+              var astms_file = $('#astms_symbol')[0].files[0];
+              var symbol_category = $('#symbol_category option:selected').val();
+              var care_instruction = $('#care_instruction').val();
+              
+              /* call addOrchestraSymbols function from orchestra-settings.js*/
+              addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
+           }
+         })
+       });
+
+       /** Edit orchestra symbols form validation **/
+       $('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
+           if (e.isDefaultPrevented())
+           {
+
+           }
+           else
+           {
+              e.preventDefault();
+              var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
+              var astms_file = $('#edit_astms_symbol')[0].files[0];
+              if(astms_file === undefined){
+               astms_file = "";
+              }
+              if(cofreet_file === undefined){
+               cofreet_file = "";
+              }
+              var symbol_category = $('#edit_symbol_category option:selected').val();
+              var care_instruction = $('#edit_care_instruction').val();
+              var id = $('#edit_orchestra_symbols_id').val();
+
+              /* call editOrchestraSymbols function from orchestra-settings.js*/
+              editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
+           }
+         });
+       /** To Enable  symbols  on click **/
+       $(document).on('click', '#make_symbols_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSymbolEnabled function from orchestra-settings.js*/
+           makeSymbolEnabled(id,csrf_token)
+       });
+
+       /** To disable symbols  on click **/
+       $(document).on('click', '#make_symbols_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSymbolDisabled function from orchestra-settings.js*/
+           makeSymbolDisabled(id,csrf_token)
+       });
+       
        /** Add Tesco Brand form validation **/
        $('#add_tesco_brands_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2024,7 +2197,7 @@
        })
 
     /** To Enable  Brand  on click **/
-    $(document).on('click', '#make_enabled', function(e) {
+    $(document).on('click', '#make_brand_enabled', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         /* call makeBrandEnabled function from tesco-settings.js*/
@@ -2032,7 +2205,7 @@
     });
 
     /** To disable Brand  on click **/
-    $(document).on('click', '#make_disabled', function(e) {
+    $(document).on('click', '#make_brand_disabled', function(e) {
         var id = $(this).closest('tr').attr('id');
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
         /* call makeBrandDisabled function from tesco-settings.js*/
@@ -2073,7 +2246,21 @@
             editTescoDepartments();
          }
        })
+       /** To Enable  Department  on click **/
+       $(document).on('click', '#make_department_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeDepartmentEnabled function from tesco-settings.js*/
+           makeDepartmentEnabled(id,csrf_token)
+       });
 
+       /** To disable Department  on click **/
+       $(document).on('click', '#make_department_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeDepartmentDisabled function from tesco-settings.js*/
+           makeDepartmentDisabled(id,csrf_token)
+       });
        /** Add Tesco Supplier form validation **/
        $('#add_tesco_suppliers_form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented())
@@ -2160,52 +2347,21 @@
             editTescoSizeChart();
          }
        })
+       /** To Enable  SizeChart  on click **/
+       $(document).on('click', '#make_sizechart_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSizeChartEnabled function from tesco-settings.js*/
+           makeSizeChartEnabled(id,csrf_token)
+       });
 
-       /** Add orchestra symbols form validation **/
-      $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented())
-        {
-
-        }
-        else
-        {
-           e.preventDefault();
-           var cofreet_file = $('#cofreet_symbol')[0].files[0];
-           var astms_file = $('#astms_symbol')[0].files[0];
-           var symbol_category = $('#symbol_category option:selected').val();
-           var care_instruction = $('#care_instruction').val();
-           
-           /* call addOrchestraSymbols function from orchestra-settings.js*/
-           addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);
-        }
-      })
-    });
-
-    /** Edit orchestra symbols form validation **/
-    $('#edit_orchestra_symbols_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented())
-        {
-
-        }
-        else
-        {
-           e.preventDefault();
-           var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
-           var astms_file = $('#edit_astms_symbol')[0].files[0];
-           if(astms_file === undefined){
-            astms_file = "";
-           }
-           if(cofreet_file === undefined){
-            cofreet_file = "";
-           }
-           var symbol_category = $('#edit_symbol_category option:selected').val();
-           var care_instruction = $('#edit_care_instruction').val();
-           var id = $('#edit_orchestra_symbols_id').val();
-
-           /* call editOrchestraSymbols function from orchestra-settings.js*/
-           editOrchestraSymbols(id, cofreet_file, astms_file, symbol_category, care_instruction);
-        }
-      });
+       /** To disable SizeChart  on click **/
+       $(document).on('click', '#make_sizechart_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeSizeChartDisabled function from tesco-settings.js*/
+           makeSizeChartDisabled(id,csrf_token)
+       });
 
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){

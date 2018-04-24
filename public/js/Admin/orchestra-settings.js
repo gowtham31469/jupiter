@@ -76,15 +76,34 @@ function orchestraSettings() {
             $(".loader").show();
         },
         success: function (data) {
-                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Garment Name</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraGarmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Garment</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Garments</h3></div><table id="orchestra-garments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Garment Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
 	             $.each(data.orchestra_garments, function(i, item){
 	              var index = i+1;
-	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+	              orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.garment_name+'</td>';
+                if(item.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                }
+                if(item.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_garment_disabled" data-placement="left"></i></a>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_garment_enabled" data-placement="left"></i></a>';
+                }
+                orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-garments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
 	             });
 	             orchestra_metadata += '</tbody></table></div>';
 	              $('.content').html(orchestra_metadata)
                 $('.edit-orchestra-garments').tooltip('show')
                 $('.edit-orchestra-garments').tooltip('toggle')
+                $('.status').tooltip('show')
+                $('.status').tooltip('toggle')
 	              $('#orchestra-garments-list-table').DataTable();
 	              $("#orchestra-garments-list-table_filter input").addClass('form-control input-sm');
 	              $("#orchestra-garments-list-table_filter input").attr('placeholder', 'Data Search');
@@ -270,7 +289,101 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
  }
+   /**
+   * Makes a Garment Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeGarmentEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-garment-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Garment is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 orchestraSettings();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a Garment Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeGarmentDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-garment-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Garment is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 orchestraSettings();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
   * To Show Orchestra age group.
   * @param id
@@ -297,19 +410,38 @@ function showSnackbar() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age Group Name</th><th>Color</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraAgeGroupModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Age Group</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Age Groups</h3></div><table id="orchestra-age-group-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age Group Name</th><th>Color</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_agegroups, function(i, item){
                   var index = i+1;
-                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age_group_name+'</td><td>'+item.color+'</td>';
+                  if(item.is_enabled === 1)
+                  {
+                   orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                  }
+                  else
+                  {
+                   orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                  }
+                  if(item.is_enabled === 1)
+                  {
+                   orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_age_group_disabled" data-placement="left"></i></a>';
+                  }
+                  else
+                  {
+                   orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_age_group_enabled" data-placement="left"></i></a>';
+                  }
+                  orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-age-group filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
                  $('.content').html(orchestra_metadata)
                  $('.edit-orchestra-age-group').tooltip('show')
                  $('.edit-orchestra-age-group').tooltip('toggle')
-                  $('#orchestra-age-group-list-table').DataTable();
-                  $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
-                  $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
-                  $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
+                 $('.status').tooltip('show')
+                 $('.status').tooltip('toggle')
+                 $('#orchestra-age-group-list-table').DataTable();
+                 $("#orchestra-age-group-list-table_filter input").addClass('form-control input-sm');
+                 $("#orchestra-age-group-list-table_filter input").attr('placeholder', 'Data Search');
+                 $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
             this.tryCount++;
@@ -474,7 +606,101 @@ function showSnackbar() {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a AgeGroup Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeAgeGroupEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-agegroup-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('AgeGroup is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 ageGroup();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a AgeGroup Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeAgeGroupDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-agegroup-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('AgeGroup is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 ageGroup();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 /**
 * Function to Orchestra countries home page
 * @author <praveen>
@@ -499,10 +725,27 @@ function countries() {
             $(".loader").show();
         },
         success: function (data) {
-                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCountryModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Country Name</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Countries</h3></div><table id="orchestra-countries-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                $.each(data.orchestra_countries, function(i, item){
                 var index = i+1;
-                orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-country filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
+                if(item.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                }
+                if(item.is_enabled === 1)
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_country_disabled" data-placement="left"></i></a>';
+                }
+                else
+                {
+                 orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_country_enabled" data-placement="left"></i></a>';
+                }
+               orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-country filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                });
                orchestra_metadata += '</tbody></table></div>';
                $('.content').html(orchestra_metadata)
@@ -511,8 +754,10 @@ function countries() {
                 $('#orchestra-countries-list-table').DataTable({
                   'scrollX':true
                 });
-                 $('.edit-orchestra-country').tooltip('show')
-                 $('.edit-orchestra-country').tooltip('toggle')
+                $('.edit-orchestra-country').tooltip('show')
+                $('.edit-orchestra-country').tooltip('toggle')
+                $('.status').tooltip('show')
+                $('.status').tooltip('toggle')
                 $("#orchestra-countries-list-table_filter input").addClass('form-control input-sm');
                 $("#orchestra-countries-list-table_filter input").attr('placeholder', 'Data Search');
                 $('#orchestra-countries-list-table_length select').addClass('form-control input-sm');
@@ -711,7 +956,101 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a Country Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeCountryEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-country-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Country is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 countries();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a Country Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeCountryDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-country-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Country is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 countries();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
   * Function to show Orchestra product family home page
   * @author <praveen>
@@ -735,10 +1074,27 @@ function countries() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Actions</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraProductFamilyModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Product Family</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Product Families</h3></div><table id="orchestra-productfamily-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Product Family Code</th><th>English</th><th>French</th><th>Arabic</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                  $.each(data.orchestra_product_family, function(i, item){
-                  var index = i+1;
-                  orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-productfamily filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.code+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.arabic+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_productfamily_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_productfamily_enabled" data-placement="left"></i></a>';
+                    }
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-productfamily filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                  });
                  orchestra_metadata += '</tbody></table></div>';
                  $('.content').html(orchestra_metadata)
@@ -748,6 +1104,8 @@ function countries() {
                   });
                   $('.edit-orchestra-productfamily').tooltip('show')
                   $('.edit-orchestra-productfamily').tooltip('toggle')
+                  $('.status').tooltip('show')
+                  $('.status').tooltip('toggle')
                   $("#orchestra-productfamily-list-table_filter input").addClass('form-control input-sm');
                   $("#orchestra-productfamily-list-table_filter input").attr('placeholder', 'Data Search');
                   $('#orchestra-productfamily-list-table_length select').addClass('form-control input-sm');
@@ -925,7 +1283,101 @@ function countries() {
      console.log("Error:"+e)
    }
  }
+   /**
+   * Makes a ProductFamily Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeProductFamilyEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-productfamily-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Product Family is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 productFamily();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a ProductFamily Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeProductFamilyDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-productfamily-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Product Family is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 productFamily();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
     * Function to Orchestra special instructions home page
     * @author <praveen>
@@ -950,19 +1402,39 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSpecialInstructionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Special Instruction</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Special Instructions</h3></div><table id="orchestra-special-instruction-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_specialinstructions, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_special_instruction_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_special_instruction_enabled" data-placement="left"></i></a>';
+                    }
+
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-special-instruction filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
-                   orchestra_metadata += '</tbody></table></div>';
-                   $('.content').html(orchestra_metadata)
+                    orchestra_metadata += '</tbody></table></div>';
+                    $('.content').html(orchestra_metadata)
                    
                     $('#orchestra-special-instruction-list-table').DataTable({
                       'scrollX':true
                     });
                     $('.edit-orchestra-special-instruction').tooltip('show')
                     $('.edit-orchestra-special-instruction').tooltip('toggle')
+                    $('.status').tooltip('show')
+                    $('.status').tooltip('toggle')
                     $("#orchestra-special-instruction-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-special-instruction-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-special-instruction-list-table_length select').addClass('form-control input-sm');
@@ -1154,14 +1626,108 @@ function countries() {
               }
            },
            complete: function () {
-                     $(".loader").hide();
+              $(".loader").hide();
            }
        })
    } catch (e) {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a SpecialInstruction Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeSpecialInstructionEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-special-instruction-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Special Instruction is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 specialInstruction();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a SpecialInstruction Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeSpecialInstructionDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-special-instruction-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Special Instruction is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 specialInstruction();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
     * Function to Orchestra compositions home page
     * @author <praveen>
@@ -1185,10 +1751,28 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraCompositionModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Composition</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Compositions</h3></div><table id="orchestra-composition-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_compositions, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_composition_list_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_composition_list_enabled" data-placement="left"></i></a>';
+                    }
+
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-composition filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1198,6 +1782,8 @@ function countries() {
                     });
                     $('.edit-orchestra-composition').tooltip('show')
                     $('.edit-orchestra-composition').tooltip('toggle')
+                    $('.status').tooltip('show')
+                    $('.status').tooltip('toggle')
                     $("#orchestra-composition-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-composition-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-composition-list-table_length select').addClass('form-control input-sm');
@@ -1389,14 +1975,108 @@ function countries() {
               }
            },
            complete: function () {
-                     $(".loader").hide();
+               $(".loader").hide();
            }
        })
    } catch (e) {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a Composition Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeCompositionEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-composition-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Composition is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 compositions();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a Composition Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeCompositionDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-composition-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Composition is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 compositions();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
     * Function to Orchestra parts home page
     * @author <praveen>
@@ -1420,10 +2100,28 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraPartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Part</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Parts</h3></div><table id="orchestra-part-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>English</th><th>French</th><th>Spanish</th><th>Portuguese</th><th>Italian</th><th>Dutch</th><th>German</th><th>Russian</th><th>Chinese</th><th>Arabic</th><th>Greek</th><th>Turkish</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_parts, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.english+'</td><td>'+item.french+'</td><td>'+item.spanish+'</td><td>'+item.portuguese+'</td><td>'+item.italian+'</td><td>'+item.dutch+'</td><td>'+item.german+'</td><td>'+item.russian+'</td><td>'+item.chinese+'</td><td>'+item.arabic+'</td><td>'+item.greek+'</td><td>'+item.turkish+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_part_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_part_enabled" data-placement="left"></i></a>';
+                    }
+
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-part filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1433,6 +2131,8 @@ function countries() {
                     });
                     $('.edit-orchestra-part').tooltip('show')
                     $('.edit-orchestra-part').tooltip('toggle')
+                    $('.status').tooltip('show')
+                    $('.status').tooltip('toggle')
                     $("#orchestra-part-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-part-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-part-list-table_length select').addClass('form-control input-sm');
@@ -1631,7 +2331,101 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a Part Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makePartEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-part-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Part is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 parts();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a Part Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makePartDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-part-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Part is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 parts();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
     * Function to Orchestra size chart  home page
     * @author <praveen>
@@ -1655,10 +2449,27 @@ function countries() {
                 $(".loader").show();
             },
             success: function (data) {
-                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Actions</th></tr></thead><tbody>';
+                    var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Charts</h3></div><table id="orchestra-size-chart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Age</th><th>Centimeter(cm)</th><th>Inches(inch)</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_size_charts, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.age+'</td><td>'+item.cm+'</td><td>'+item.in+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_size_chart_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_size_chart_enabled" data-placement="left"></i></a>';
+                    }
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-orchestra-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
@@ -1668,6 +2479,8 @@ function countries() {
                     });
                     $('.edit-orchestra-size-chart').tooltip('show')
                     $('.edit-orchestra-size-chart').tooltip('toggle')
+                    $('.status').tooltip('show')
+                    $('.status').tooltip('toggle')
                     $("#orchestra-size-chart-list-table_filter input").addClass('form-control input-sm');
                     $("#orchestra-size-chart-list-table_filter input").attr('placeholder', 'Data Search');
                     $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
@@ -1838,7 +2651,101 @@ function countries() {
      console.log("Error:"+e)
    }
  } 
+   /**
+   * Makes a SizeChart Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeOrchestraSizeChartEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-size-chart-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Size Chart is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 sizeChart();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a SizeChart Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeOrchestraSizeChartDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/Orchestra/make-size-chart-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Size Chart is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 sizeChart();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
   * Function to Orchestra orchestra Symbols
   * @author <praveen>
@@ -1862,15 +2769,34 @@ function orchestraSymbols() {
               $(".loader").show();
           },
           success: function (data) {
-                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th></tr></thead><tbody>';
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraSymbolsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Symbol</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Symbols</h3></div><table id="orchestra-symbols-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Cofreet Symbols</th><th>Astms Symbol</th><th>Care Instruction</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.orchestra_care_symbols, function(i, item){
                     var index = i+1;
-                    orchestra_metadata += '<tr data-category="'+item.category_id+'" id="'+item.id+'"><td>'+index+'</td><td class="td_cofreet_symbols"><img width="30px" src="'+item.cofreet_symbols+'"></td><td class="td_astms_symbol"><img width="30px" src="'+item.astms_symbol+'"></td><td class="td_care_instruction">'+item.care_instruction+'</td></tr>';
+                    orchestra_metadata += '<tr data-category="'+item.category_id+'" id="'+item.id+'"><td>'+index+'</td><td class="td_cofreet_symbols"><img width="30px" src="'+item.cofreet_symbols+'"></td><td class="td_astms_symbol"><img width="30px" src="'+item.astms_symbol+'"></td><td class="td_care_instruction">'+item.care_instruction+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_symbols_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_symbols_enabled" data-placement="left"></i></a>';
+                    }
+                    orchestra_metadata += '</td></tr>';
                    });
                    orchestra_metadata += '</tbody></table></div>';
                    $('.content').html(orchestra_metadata)
                    $('.edit-orchestra-symbols').tooltip('show')
                    $('.edit-orchestra-symbols').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
                    $('#orchestra-symbols-list-table').DataTable();
                    $("#orchestra-symbols-list-table_filter input").addClass('form-control input-sm');
                    $("#orchestra-symbols-list-table_filter input").attr('placeholder', 'Data Search');
@@ -2005,7 +2931,101 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
   }
 }
 
-// 
+  /**
+  * Makes a Symbol Enabled.
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeSymbolEnabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/Orchestra/make-symbol-enabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                       isSubmitting = false; 
+                       $('.snackbar_span').html('Symbol is enabled ');
+                       showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                orchestraSymbols();
+                $(".loader").hide();
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
+
+/**
+ * Makes a Symbol Diabled
+ * @param id,csrf_token
+ * @author <praveen>
+ */
+ function makeSymbolDisabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/Orchestra/make-symbol-disabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                        isSubmitting = false;
+                        $('.snackbar_span').html('Symbol is disabled ');
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                orchestraSymbols();
+                $(".loader").hide();
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  } 
 
 // edit-orchestra-symbols
 /**

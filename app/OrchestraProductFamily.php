@@ -18,5 +18,5 @@ class OrchestraProductFamily extends Model
       *
       * @var array
       */
-      protected $fillable = ['french','arabic','english','code'];
+      protected $fillable = ['french','arabic','english','code','is_enabled'];
 }

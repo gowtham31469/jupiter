@@ -18,5 +18,5 @@ class OrchestraAgeGroup extends Model
       *
       * @var array
       */
-      protected $fillable = ['age_group_name','color'];
+      protected $fillable = ['age_group_name','color','is_enabled'];
 }
