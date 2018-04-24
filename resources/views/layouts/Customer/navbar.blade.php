@@ -31,19 +31,20 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#">Profile</a></li>
-                                    <li>
-                                        <a href="{{ url('/customer/logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                    Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ url('/customer/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
                                 </ul>
                             </li>
+                            <li>
+                                <a class="dropdown-toggle profile-dropdown-admin" href="{{ url('/customer/logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                            Logout
+                                </a>
+
+                                <form id="logout-form" action="{{ url('/customer/logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </li>
+                        </ul>
                     </ul>
                 </div>
             </div>

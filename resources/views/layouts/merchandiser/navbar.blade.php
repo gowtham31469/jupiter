@@ -23,14 +23,14 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li><a href="#">Profile</a></li>
-
-                       <li> <a class="dropdown-item" href="{{ url('/merchandiser/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                    </ul>    
+                       <li> <a class="dropdown-toggle profile-dropdown-admin" href="{{ url('/merchandiser/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ url('/merchandiser/logout') }}" method="POST" style="display: none;">
 
                             {{ csrf_field() }}
 
                         </form>
-                    </ul>
+                    
                 </li>
 
             </ul>
