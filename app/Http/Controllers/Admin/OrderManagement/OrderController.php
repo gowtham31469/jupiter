@@ -47,7 +47,8 @@ class OrderController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Order Management/dashboard',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
         else
         {
@@ -75,7 +76,8 @@ class OrderController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Order Management/orders',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
         else
         {
@@ -105,7 +107,8 @@ class OrderController extends Controller
             $tesco_department = DB::table('tesco_department')->select('department','id')->get();
             $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Order Management/order-status',['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/order-status',['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'buyer_count' => $buyer_count]);
         }
         else
         {
@@ -133,7 +136,8 @@ class OrderController extends Controller
             });
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
-            return view('Admin/Order Management/reorder',['buyers' => $buyers]);
+            $buyer_count = count($buyers);
+            return view('Admin/Order Management/reorder',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
         else
         {

@@ -37,6 +37,7 @@ class HomeController extends Controller
                           ->select('buyers.*')
                           ->join('customer_buyers','customer_buyers.buyer_id','buyers.id')
                           ->where('customer_buyers.customer_id',$customer_id)
+                          ->where('buyers.is_active',1)
                           ->get();
             $buyer_count = count($buyers);
             return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);

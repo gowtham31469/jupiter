@@ -1,5 +1,5 @@
 function template_list() {
-    var buyer = localStorage.getItem("template_buyer");
+    var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/" + buyer + "/template-management/template-list",

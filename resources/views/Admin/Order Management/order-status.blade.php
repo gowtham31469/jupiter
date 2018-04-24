@@ -32,12 +32,13 @@
                     @endforeach
               </select>
         </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
 
     <div class="main-content">
         <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
+            
         </div>
     </div>
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -422,56 +423,45 @@
     $(document).ready(function() {
         $('.logo').html('Order Status');
         $('.select-buyer').click(function() {
-            $('.select-buyer').addClass('hidden');
+        $('.select-buyer').addClass('hidden');
         })
+        /** [If only 1 buyer , auto select that buyer] */
+        var buyer_count = $('#invisible__count_id').val();
+        if(buyer_count <= 1) 
+        {
+            $('.buyer-select option:first').remove();
+            localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
+            localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
+        }
         $('.buyer-nav-select').html($('.buyer-div').html())
-        if (localStorage.getItem("status_buyer") === null) {
-
-        } else if (localStorage.getItem("status_buyer") === 'orchestra') {
+        if (localStorage.getItem("buyer") === null) {
+            $(document).ready(function() {
+               $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+            })
+        } else if (localStorage.getItem("buyer") === 'orchestra') {
             orderStatus();
         } else {
             tescoOrderStatus();
         }
-        $('.buyer-select').val(localStorage.getItem("status_buyer_id"))
+        $('.buyer-select').val(localStorage.getItem("buyer_id"))
         $('.buyer-nav-select .buyer-select').selectpicker({
             style: 'btn-default',
             size: 4
         });
         $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
             if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-                localStorage.setItem("status_buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-                localStorage.setItem("status_buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
+                localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
+                localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
                 var buyer = $(this).find("option:selected").text().toLowerCase();
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: base_url + "/admin/order-management/order_sub_modules",
-                    type: "Post",
-                    dataType: "json",
-                    data: {
-                        _token: csrf_token,
-                        buyer: buyer
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(data) {
-                        if (buyer === 'orchestra') {
-                            orderStatus();
-                        } else {
-                            tescoOrderStatus();
-                        }
-                    },
-                    error: function(data) {
-
-                    },
-                    complete: function() {
-                        $(".loader").hide();
-                        $(".loader").css('margin-top', '0%');
-                    }
-                })
+                if (buyer === 'orchestra') {
+                    orderStatus();
+                } else {
+                    tescoOrderStatus();
+                }
             } else {
-                localStorage.removeItem("status_buyer");
-                localStorage.removeItem("status_buyer_id");
+                localStorage.removeItem("buyer");
+                localStorage.removeItem("buyer_id");
                 location.reload()
             }
         });

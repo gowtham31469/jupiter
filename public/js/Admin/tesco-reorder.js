@@ -6,7 +6,7 @@
 function reOrderTesco()
 {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/reorder",
@@ -93,7 +93,7 @@ function reOrderTesco()
 function reordertescoartworks()
 {
 	var uvc=$('#uvc_number').val();
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	if(uvc != "Select Style Number")
 	{
@@ -155,7 +155,7 @@ function reordertescoartworks()
 function repeatordertescoartworks()
 {
 	var uvc=$('#style_number').val();
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	if(uvc != "Select Style Number")
 	{
@@ -217,7 +217,7 @@ function repeatordertescoartworks()
 
 function extraQuantityTesco(type,id,name,zone,po_number)
 {
-	var buyer = localStorage.getItem("reorder_buyer");
+	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/extra-quantity",
@@ -703,7 +703,7 @@ function setTescoReorder(type,id)
 	
 	if(item == "Repeat Order")
 	{
-		var buyer = localStorage.getItem("reorder_buyer");
+		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		var po_number=$('.purchase_order_number').val();
 		var uk_style=$('#uk_style').val()
@@ -762,7 +762,7 @@ function setTescoReorder(type,id)
 	}
 	else
 	{
-		var buyer = localStorage.getItem("reorder_buyer");
+		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/set-tesco-reorder",

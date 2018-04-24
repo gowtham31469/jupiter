@@ -9,12 +9,12 @@
                     @endforeach
               </select>
         </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
     <div class="main-content">
       {{-- Show select buyer image as default page --}}
         <div class="select-buyer">
-            <img src="../../images/select-buyer.png" class="img-responsive">
         </div>
           <div class="sidebar style-4 orchestra-sidebar" style="display: none;">
             <h4>Orchestra Metadata</h4>
@@ -1611,13 +1611,21 @@
     })
        
     $(document).ready(function() {
-        $('.select-buyer').click(function() {
+            $('.select-buyer').click(function() {
             $('.select-buyer').addClass('hidden');
             $('.meta-data-list li a').removeClass("active");
             $('.meta-data-list li:first a').addClass("active");
             $('.meta-data-list-1 li a').removeClass("active");
             $('.meta-data-list-1 li:first a').addClass("active");
         })
+        /** [If only 1 buyer , auto select that buyer] */
+        var buyer_count = $('#invisible__count_id').val();
+        if(buyer_count <= 1) 
+        {
+            $('.buyer-select option:first').remove();
+            localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
+            localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
+        }
         /* Show logo on left side */
         $('.logo').html('Settings')
         $('.buyer-nav-select').html($('.buyer-div').html())
@@ -1626,7 +1634,9 @@
         /* call orchestraSettings function from orchestra-settings.js*/
         /**  [ Show orchestraSettings page based on buyer selection ] */
         if (localStorage.getItem("buyer") === null) {
-
+          $(document).ready(function() {
+             $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+          })
         }else if(localStorage.getItem("buyer") === 'orchestra')
         {
             orchestraSettings();
