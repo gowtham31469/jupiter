@@ -80,30 +80,32 @@ function tescoBrands() {
 	             $.each(data.tesco_brands, function(i, item){
 	              var index = i+1;
 	              tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.brand+'</td>';
-                if(item.is_enabled === 1)
-                   {
-                    tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
-                   }
-                   else
-                   {
-                    tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
-                   }
-                   if(item.is_enabled === 1)
-                   {
-                    tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Disabled" id="make_disabled" data-placement="left"></i></a>';
-                   }
-                   else
-                   {
-                    tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Enabled" id="make_enabled" data-placement="left"></i></a>';
-                   }
+                 if(item.is_enabled === 1)
+                 {
+                  tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                 }
+                 else
+                 {
+                  tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                 }
+                 if(item.is_enabled === 1)
+                 {
+                  tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_brand_disabled" data-placement="left"></i></a>';
+                 }
+                 else
+                 {
+                  tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_brand_enabled" data-placement="left"></i></a>';
+                 }
 
 
                 tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-brands filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
 	             });
 	             tesco_metadata += '</tbody></table></div>';
-	             $('.content').html(tesco_metadata)
+	              $('.content').html(tesco_metadata)
                 $('.edit-tesco-brands').tooltip('show')
                 $('.edit-tesco-brands').tooltip('toggle')
+                $('.status').tooltip('show')
+                $('.status').tooltip('toggle')
 	              $('#tesco-brands-list-table').DataTable();
 	              $("#tesco-brands-list-table_filter input").addClass('form-control input-sm');
 	              $("#tesco-brands-list-table_filter input").attr('placeholder', 'Data Search');
@@ -405,19 +407,40 @@ function tescoDepartment() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_department, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td>';
+                    if(item.is_enabled === 1)
+                    {
+                     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_department_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_department_enabled" data-placement="left"></i></a>';
+                    }
+
+
+                    tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-departments filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
-                  $('.edit-tesco-departments').tooltip('show')
-                  $('.edit-tesco-departments').tooltip('toggle')
-                    $('#tesco-departments-list-table').DataTable();
-                    $("#tesco-departments-list-table_filter input").addClass('form-control input-sm');
-                    $("#tesco-departments-list-table_filter input").attr('placeholder', 'Data Search');
-                    $('#tesco-departments-list-table_length select').addClass('form-control input-sm');
+                   $('.edit-tesco-departments').tooltip('show')
+                   $('.edit-tesco-departments').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
+                   $('#tesco-departments-list-table').DataTable();
+                   $("#tesco-departments-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-departments-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-departments-list-table_length select').addClass('form-control input-sm');
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
@@ -583,7 +606,101 @@ function tescoDepartment() {
      console.log("Error:"+e)
    }
  }
+   /**
+   * Makes a Department Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeDepartmentEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-departments-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Department is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoDepartment();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
 
+ /**
+  * Makes a Department Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeDepartmentDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-departments-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Department is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoDepartment();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
   /**
   * Function to Tesco Supplier Settings home page
   * @author <praveen>
@@ -621,11 +738,11 @@ function tescoSuppliers() {
                      }
                      if(item.is_enabled === 1)
                      {
-                      tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button" aria-hidden="true" title="Make Disabled" id="make_supplier_disabled" data-placement="left"></i></a>';
+                      tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_supplier_disabled" data-placement="left"></i></a>';
                      }
                      else
                      {
-                      tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button" aria-hidden="true" title="Make Enabled" id="make_supplier_enabled" data-placement="left"></i></a>';
+                      tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_supplier_enabled" data-placement="left"></i></a>';
                      }
   
   
@@ -635,6 +752,8 @@ function tescoSuppliers() {
                    $('.content').html(tesco_metadata)
                    $('.edit-tesco-suppliers').tooltip('show')
                    $('.edit-tesco-suppliers').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
                    $('#tesco-suppliers-list-table').DataTable();
                    $("#tesco-suppliers-list-table_filter input").addClass('form-control input-sm');
                    $("#tesco-suppliers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -922,19 +1041,36 @@ function tescoSizeChart() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSizeChartsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add SizeChart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">SizeCharts</h3></div><table id="tesco-sizecharts-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>PO Size</th><th>UK</th><th>CE</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSizeChartsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add SizeChart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">SizeCharts</h3></div><table id="tesco-sizecharts-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>PO Size</th><th>UK</th><th>CE</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_sizecharts, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.po_size+'</td><td>'+item.uk+'<td>'+item.ce+'</td>';
-                 
+                    if(item.is_enabled === 1)
+                    {
+                     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === 1)
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_sizechart_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_sizechart_enabled" data-placement="left"></i></a>';
+                    }
   
   
-                  tesco_metadata += '<td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-sizecharts filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                   tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-sizecharts filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
                    $('.edit-tesco-sizecharts').tooltip('show')
                    $('.edit-tesco-sizecharts').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
                    $('#tesco-sizecharts-list-table').DataTable();
                    $("#tesco-sizecharts-list-table_filter input").addClass('form-control input-sm');
                    $("#tesco-sizecharts-list-table_filter input").attr('placeholder', 'Data Search');
@@ -1105,5 +1241,100 @@ function tescoSizeChart() {
      console.log("Error:"+e)
    }
  }
+   /**
+   * Makes a SizeChart Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeSizeChartEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-sizechart-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Size Chart is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoSizeChart();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
+
+ /**
+  * Makes a SizeChart Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeSizeChartDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-sizechart-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Size Chart is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoSizeChart();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
    
    

@@ -18,5 +18,5 @@ class OrchestraSizeCharts extends Model
       *
       * @var array
       */
-      protected $fillable = ['age','cm','in'];
+      protected $fillable = ['age','cm','in','is_enabled'];
 }

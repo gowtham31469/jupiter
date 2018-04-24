@@ -18,5 +18,5 @@ class OrchestraParts extends Model
       *
       * @var array
       */
-      protected $fillable = ['french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english'];
+      protected $fillable = ['french','spanish','portuguese','italian','dutch','german','russian','chinese','arabic','greek','turkish','english','is_enabled'];
 }
