@@ -1017,6 +1017,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
+                                     <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -3203,6 +3204,7 @@ function storeCERatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3719,6 +3721,7 @@ function storeCERatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4021,6 +4024,7 @@ function storeCESingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4554,6 +4558,7 @@ function storeCESingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4861,6 +4866,7 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5380,6 +5386,7 @@ function storeUKRatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5686,6 +5693,7 @@ function storeUKSingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -6219,6 +6227,7 @@ function storeUKSingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
