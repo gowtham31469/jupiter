@@ -1014,6 +1014,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
+                                     <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -3275,6 +3276,13 @@ function storeCERatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3791,6 +3799,13 @@ function storeCERatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4093,6 +4108,13 @@ function storeCESingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4621,6 +4643,13 @@ function storeCESingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4924,6 +4953,13 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5438,6 +5474,13 @@ function storeUKRatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5739,6 +5782,13 @@ function storeUKSingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -6267,6 +6317,13 @@ function storeUKSingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -8335,5 +8392,63 @@ function loadArtworkNames(style, artwork_collection) {
         $('#artwork_list').selectpicker('refresh');
     } else {
         throw "artwork_collection_empty";
+    }
+}
+/**
+ * [Approve tesco orders]
+ * @author <praveen>
+ */
+function approveTescoOrder()
+{
+    try {
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+        var thl1_last_id      = $('#THL1_id').val();
+        var thl3_last_id      = $('#THL3_id').val();
+
+        $.ajax({
+                 url: base_url + "/customer/tesco/approve-tesco-order",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id,thl1_last_id:thl1_last_id,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Order Approved Successfully');
+                    showSnackbar();
+
+                    $('.approve-btn').remove();
+                   
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
     }
 }
