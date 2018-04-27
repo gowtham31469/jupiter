@@ -995,7 +995,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                                  </div>\
                                                  <div class="modal-footer">\
-                                                   <button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button>\
+                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button>\
                                                  <div id="hiddenDiv" style="display:none" ><canvas id="hiddenCanvas"></canvas><a id="hiddenPng" /></div><div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
                                                    </div>\
@@ -3277,6 +3277,7 @@ function storeCERatioTCL1TCL2TSL1()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -3800,6 +3801,7 @@ function storeCERatioTHL1()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -4109,6 +4111,7 @@ function storeCESingleTCL4TSL3()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -4644,6 +4647,7 @@ function storeCESingleTHL3()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -4954,6 +4958,7 @@ function storeUKRatioTCL1TCL2TSL1()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -5475,6 +5480,7 @@ function storeUKRatioTHL1()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -5783,6 +5789,7 @@ function storeUKSingleTCL4TSL3()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
@@ -6318,6 +6325,7 @@ function storeUKSingleTHL3()
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
                          $('.approve-btn').show();
+                         $('.print-btn').show();
                          var div_html='';
                          /** [ store last updated id as hidden input , for approve order functionality] */
                          $.each(data.last_insertions, function (index, value) {
