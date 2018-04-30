@@ -231,6 +231,14 @@ function mapStoredValues(oDetails) {
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
+        if(artwork_status === 'Order Placed')
+        {
+            $('.approve-btn').show();
+        }
+        else 
+        {
+            $('.approve-btn').hide();
+        }
     }
     $(".selectpicker").selectpicker('refresh');
 }
