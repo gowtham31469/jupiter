@@ -7992,6 +7992,7 @@ function approveTescoOrder()
         var tsl3_last_id      = $('#TSL3_id').val();
         var thl1_last_id      = $('#THL1_id').val();
         var thl3_last_id      = $('#THL3_id').val();
+        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
                  url: base_url + "/admin/tesco/approve-tesco-order",
