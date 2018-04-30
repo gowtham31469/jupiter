@@ -231,6 +231,7 @@ function mapStoredValues(oDetails) {
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
+        $('.print-btn').show();
         if(artwork_status === 'Order Placed')
         {
             $('.approve-btn').show();

@@ -8321,6 +8321,15 @@ function mapStoredValues(oDetails) {
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
+        $('.print-btn').show();
+        if(artwork_status === 'Order Placed')
+        {
+            $('.approve-btn').show();
+        }
+        else 
+        {
+            $('.approve-btn').hide();
+        }
     }
     $(".selectpicker").selectpicker('refresh');
 }
@@ -8416,7 +8425,8 @@ function approveTescoOrder()
         var tsl3_last_id      = $('#TSL3_id').val();
         var thl1_last_id      = $('#THL1_id').val();
         var thl3_last_id      = $('#THL3_id').val();
-
+        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
+        
         $.ajax({
                  url: base_url + "/customer/tesco/approve-tesco-order",
                  type: 'PUT',
