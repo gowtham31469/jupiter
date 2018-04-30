@@ -995,7 +995,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                                  </div>\
                                                  <div class="modal-footer">\
-                                                   <button type="button" class="btn btn-primary" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Print</button>\
+                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Download</button>\
                                                  <div id="hiddenDiv" style="display:none" ><canvas id="hiddenCanvas"></canvas><a id="hiddenPng" /></div><div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
                                                    </div>\
@@ -1014,6 +1014,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="modal-footer">\
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
+                                     <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
                                         <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
@@ -3275,6 +3276,14 @@ function storeCERatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -3791,6 +3800,14 @@ function storeCERatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4093,6 +4110,14 @@ function storeCESingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4621,6 +4646,14 @@ function storeCESingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -4924,6 +4957,14 @@ function storeUKRatioTCL1TCL2TSL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5438,6 +5479,14 @@ function storeUKRatioTHL1()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -5739,6 +5788,14 @@ function storeUKSingleTCL4TSL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -6267,6 +6324,14 @@ function storeUKSingleTHL3()
                          /** remove save & submit button */
                          $('.submit-btn').remove();
                          $('.save-btn').remove();
+                         $('.approve-btn').show();
+                         $('.print-btn').show();
+                         var div_html='';
+                         /** [ store last updated id as hidden input , for approve order functionality] */
+                         $.each(data.last_insertions, function (index, value) {
+                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+                         });
+                         $('.invisible-div').html(div_html);
                          $('.snackbar_span').html('Your order has been placed successfully');
                          showSnackbar();
                        }
@@ -8047,30 +8112,10 @@ function loadTemplatePreview() {
                 $('.templateDiv').html('');
                 $.each(data, function (index, value) {
                     if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                        $('.templateDiv').append('<div class="col-md-4">\
-                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                            <label>Template Name : </label>\
-                            <p>' + value[0].template_name + '</p>\
-                            <label>Reference Number : </label>\
-                            <p>' + value[0].ref_no + '</p>\
-                            <label>Company Name : </label>\
-                            <p>' + value[0].company_name + '</p>\
-                            </div>\
-                            </div>')
+                        $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     } else {
-                        $('.templateDiv').append('<div class="col-md-4">\
-                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                            <label>Template Name : </label>\
-                            <p>' + value[0].template_name + '</p>\
-                            <label>Reference Number : </label>\
-                            <p>' + value[0].ref_no + '</p>\
-                            <label>Company Name : </label>\
-                            <p>' + value[0].company_name + '</p>\
-                            </div>\
-                            </div>')
+                        $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     }
                 });
@@ -8240,7 +8285,7 @@ function mapStoredValues(oDetails) {
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
 
     });
-    if(artwork_status === 'Saved') {
+    
         var div_html='';
         /** [ store last updated id as hidden input , for updating] */
         for (var k in last_insertions){
@@ -8250,12 +8295,21 @@ function mapStoredValues(oDetails) {
         }
         $('.invisible-div').html(div_html);
 
-    } else {
+    if(artwork_status != 'Saved') {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
         $('.selectpicker').prop('disabled', true);
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
+        $('.print-btn').show();
+        if(artwork_status === 'Order Placed')
+        {
+            $('.approve-btn').show();
+        }
+        else 
+        {
+            $('.approve-btn').hide();
+        }
     }
     $(".selectpicker").selectpicker('refresh');
 }
@@ -8335,5 +8389,64 @@ function loadArtworkNames(style, artwork_collection) {
         $('#artwork_list').selectpicker('refresh');
     } else {
         throw "artwork_collection_empty";
+    }
+}
+/**
+ * [Approve tesco orders]
+ * @author <praveen>
+ */
+function approveTescoOrder()
+{
+    try {
+        var tcl1_last_id      = $('#TCL1_id').val();
+        var tcl2_last_id      = $('#TCL2_id').val();
+        var tsl1_last_id      = $('#TSL1_id').val();
+        var tcl4_last_id      = $('#TCL4_id').val();
+        var tsl3_last_id      = $('#TSL3_id').val();
+        var thl1_last_id      = $('#THL1_id').val();
+        var thl3_last_id      = $('#THL3_id').val();
+        var csrf_token        =  $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+                 url: base_url + "/customer/tesco/approve-tesco-order",
+                 type: 'PUT',
+                 data: {
+                     _token: csrf_token,tcl1_last_id:tcl1_last_id,tcl2_last_id:tcl2_last_id,tsl1_last_id:tsl1_last_id,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id,thl1_last_id:thl1_last_id,thl3_last_id:thl3_last_id
+                 },
+                 tryCount : 0,
+                 retryLimit : 2,
+                 dataType:"json",
+                 beforeSend: function () {
+                     $(".loader").show();
+                 },
+                 success: function (data) {
+                    $('.snackbar_span').html('Order Approved Successfully');
+                    showSnackbar();
+
+                    $('.approve-btn').remove();
+                   
+                 },
+                 error: function(errorXHR, errorStatus, errorThrown) {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.ajax(this);
+                      return;
+                  }
+                 },
+                 complete: function () {
+                      $(".loader").hide();
+                      /** [To make top menu active] */
+                      $(function () {
+                          var url = window.location;
+                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                          $('.dynamic-menu a').filter(function () {
+                              return this.href == url;
+                          }).parent('li').addClass('current-page').find('a').addClass('active');
+                      });
+                 }
+             })
+    } catch(e) {
+        /** [error statements] */
+        console.error("Error:"+e)
     }
 }

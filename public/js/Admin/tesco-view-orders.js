@@ -22,30 +22,10 @@ function loadTemplatePreview() {
                 $('.templateDiv').html('');
                 $.each(data, function (index, value) {
                     if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                        $('.templateDiv').append('<div class="col-md-4">\
-                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                            <label>Template Name : </label>\
-                            <p>' + value[0].template_name + '</p>\
-                            <label>Reference Number : </label>\
-                            <p>' + value[0].ref_no + '</p>\
-                            <label>Company Name : </label>\
-                            <p>' + value[0].company_name + '</p>\
-                            </div>\
-                            </div>')
+                        $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     } else {
-                        $('.templateDiv').append('<div class="col-md-4">\
-                            <object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>\
-                            <div style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;">\
-                            <label>Template Name : </label>\
-                            <p>' + value[0].template_name + '</p>\
-                            <label>Reference Number : </label>\
-                            <p>' + value[0].ref_no + '</p>\
-                            <label>Company Name : </label>\
-                            <p>' + value[0].company_name + '</p>\
-                            </div>\
-                            </div>')
+                        $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     }
                 });
@@ -215,7 +195,7 @@ function mapStoredValues(oDetails) {
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
 
     });
-    if(artwork_status === 'Saved') {
+    
         var div_html='';
         /** [ store last updated id as hidden input , for updating] */
         for (var k in last_insertions){
@@ -224,13 +204,22 @@ function mapStoredValues(oDetails) {
             }
         }
         $('.invisible-div').html(div_html);
-
-    } else {
+        
+    if(artwork_status != 'Saved') {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
         $('.selectpicker').prop('disabled', true);
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
+        $('.print-btn').show();
+        if(artwork_status === 'Order Placed')
+        {
+            $('.approve-btn').show();
+        }
+        else 
+        {
+            $('.approve-btn').hide();
+        }
     }
     $(".selectpicker").selectpicker('refresh');
 }
