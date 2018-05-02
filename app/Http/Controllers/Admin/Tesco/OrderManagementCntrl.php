@@ -2701,8 +2701,6 @@ class OrderManagementCntrl extends Controller
              /** [ Creating new object for TescoPOUploadTemplatesSwitch() class ] */
              $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
               $po_file = $request['po_file'];
-              $path = $po_file->getRealPath();
-              $filename = $po_file->getClientOriginalName();
               $destination_path='/storage/app/public/po-files/';
               $path='storage/app/public/po-files/';
               $Orname = $po_file->getClientOriginalName();

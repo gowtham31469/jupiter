@@ -28,8 +28,6 @@ class TescoSinglePOUpload
 	public function uploadTCL1PO($template_id,$po_number,$po_file,$delivery_date)
 	{
 		try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -59,8 +57,6 @@ class TescoSinglePOUpload
   public function uploadTCL2PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -90,8 +86,6 @@ class TescoSinglePOUpload
   public function uploadTSL1PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -121,8 +115,6 @@ class TescoSinglePOUpload
   public function uploadTCL4PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -152,8 +144,6 @@ class TescoSinglePOUpload
   public function uploadTSL3PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -183,8 +173,6 @@ class TescoSinglePOUpload
   public function uploadTHL1PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
@@ -214,8 +202,6 @@ class TescoSinglePOUpload
   public function uploadTHL3PO($template_id,$po_number,$po_file,$delivery_date)
   {
     try {
-            $path = $po_file->getRealPath();
-            $filename = $po_file->getClientOriginalName();
             $destination_path='/storage/app/public/po-files/';
             $path='storage/app/public/po-files/';
             $Orname = $po_file->getClientOriginalName();
