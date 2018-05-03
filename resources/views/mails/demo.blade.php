@@ -37,7 +37,7 @@
                                                       </td>
                                                       <td>
                                                          <div style="font-family: &quot;Lucida Grande&quot;, &quot;Lucida Sans&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, Verdana, sans-serif, serif, EmojiFont; font-size: 14px; line-height: 2em;">
-                                                            <a href="https://bugtracker.zoho.com/portal/wizroots#bugkey/1030659000000168005/IU-88" target="_blank" rel="noopener noreferrer" style="color:#000">{{ $reporter }}</a>
+                                                            <a href="#" style="color:#000">{{ $reporter }}</a>
                                                          </div>
                                                       </td>
                                                    </tr>
