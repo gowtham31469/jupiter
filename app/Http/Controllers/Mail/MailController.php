@@ -35,7 +35,7 @@ class MailController extends Controller
     	    
     	}
 
-    	Mail::send('mails.demo', ['feedback' => $feedback,'reporter' => $feedback_email], function ($message) use ($feedback_email,$attachments)
+    	Mail::send('mails.feedback-template', ['feedback' => $feedback,'reporter' => $feedback_email], function ($message) use ($feedback_email,$attachments)
     	{
     	    $message->from($feedback_email);
     	    $message->subject('Jupiter Garments Accessories - Portal Feedback Email');

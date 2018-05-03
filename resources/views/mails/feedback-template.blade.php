@@ -37,7 +37,7 @@
                                                       </td>
                                                       <td>
                                                          <div style="font-family: &quot;Lucida Grande&quot;, &quot;Lucida Sans&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, Verdana, sans-serif, serif, EmojiFont; font-size: 14px; line-height: 2em;">
-                                                            <a href="#" style="color:#000">{{ $reporter }}</a>
+                                                            {{ $reporter }}
                                                          </div>
                                                       </td>
                                                    </tr>
