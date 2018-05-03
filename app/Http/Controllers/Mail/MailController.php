@@ -26,7 +26,7 @@ class MailController extends Controller
     	    	$destination_path='/storage/app/public/screenshots/';
 		    	$path='storage/app/public/screenshots/';
 		    	$Orname = $file->getClientOriginalName();
-		    	$filename= time().'_'.preg_replace('/\s+/', '-', $Orname);
+		    	$filename= time().'-'.preg_replace('/\s+/', '-', $Orname);
 		    	$file->move($path,$filename);
 		    	$destination_path_insert=$destination_path.$filename;
 		    	
