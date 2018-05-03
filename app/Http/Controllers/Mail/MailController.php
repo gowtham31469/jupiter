@@ -16,10 +16,10 @@ class MailController extends Controller
     {
     	$feedback_email = $request['feedback_email'];
     	$feedback       = $request['feedback'];
+    	$attachments    = []; // empty array for all files to be attached.
 
-    	if( $request->hasFile('image'))
+    	if( $request->hasFile('image')) // Check if attachments attached or not.
     	{
-    		$attachments = []; // array of all files to be attached 
     	    $files       = $request->file('image');
     	    foreach ($files as $file) 
     	    {
@@ -30,14 +30,15 @@ class MailController extends Controller
 		    	$file->move($path,$filename);
 		    	$destination_path_insert=$destination_path.$filename;
 		    	
-			    array_push($attachments,$destination_path_insert); // array of all files to be attached 
+			    array_push($attachments,$destination_path_insert); // array of all files to be attached.
     	    }
     	    
     	}
-    	Mail::send('mails.demo', ['feedback' => $feedback], function ($message) use ($feedback_email,$attachments)
+
+    	Mail::send('mails.demo', ['feedback' => $feedback,'reporter' => $feedback_email], function ($message) use ($feedback_email,$attachments)
     	{
     	    $message->from($feedback_email);
-    	    $message->subject('Feedback Report Email');
+    	    $message->subject('Jupiter Garments Accessories - Portal Feedback Email');
     	    foreach ($attachments as $key => $value) {
     	    	$message->attach(public_path($value));
     	    }
