@@ -1275,6 +1275,10 @@ try{
                    </tr>';
          $('#table_row').append(html);
 
+         /** [ show tooltip ] */
+         $('.delete-row').tooltip('show')
+         $('.delete-row').tooltip('toggle')
+
          /** [ Refresh boostrap form-validator ]  */
          $('#create_tesco_order_form').validator('update'); 
 
@@ -1336,6 +1340,10 @@ try{
                    </td>\
                    </tr>';
          $('#table_row').append(html);
+
+         /** [ show tooltip ] */
+         $('.delete-row').tooltip('show')
+         $('.delete-row').tooltip('toggle')
 
          /** [ Refresh boostrap form-validator ]  */
          $('#create_tesco_order_form').validator('update'); 
@@ -1475,6 +1483,10 @@ try{
                </tr>';
      $('#table_row').append(html);
 
+     /** [ show tooltip ] */
+     $('.delete-row').tooltip('show')
+     $('.delete-row').tooltip('toggle')
+
      /** [ Refresh boostrap form-validator ]  */
      $('#create_tesco_order_form').validator('update'); 
 
@@ -1536,6 +1548,10 @@ try{
                </tr>';
      $('#table_row').append(html);
 
+     /** [ show tooltip ] */
+     $('.delete-row').tooltip('show')
+     $('.delete-row').tooltip('toggle')
+     
      /** [ Refresh boostrap form-validator ]  */
      $('#create_tesco_order_form').validator('update'); 
 
