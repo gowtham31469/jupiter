@@ -6745,63 +6745,51 @@ function jsbarcodetescoean(code, id, svgDoc) {
  * 
  * @return barcode 
  */
+
+
 function jsbarcodetescotsl1(code, id, svgDoc) {
-	JsBarcode("#ean-13", code, {
-		format: "ITF14",
-		width: 2.7475,
-		height: 159,
-		fontSize: 30,
-		flat:true,
-		displayValue: false
-	});
-	var svg = document.getElementById('svgdiv').querySelector('svg'),
-		canvas = document.createElement('canvas'),
-		body = document.getElementsByTagName('body')[0],
-		canvasTmp,
-		svg_xml,
-		ctx,
-		img;
-	// if our "svg" doesn't have 'xmlns' attribute we must add it
-	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '30px');
-	svg.setAttribute('font-family', 'frankgothcnbt');
-	
-//	svg.setAttribute('width', '150.12px');
-//	svg.setAttribute('height', '100.04px');
-	svg.setAttribute('width', '391.035px');
-	svg.setAttribute('height', '178.02px');
-	
-
-	canvas.id = 'canvas';
-	canvas.width = svg.getBoundingClientRect().width;
-	canvas.height = svg.getBoundingClientRect().height;
-
-	body.appendChild(canvas);
-	canvasTmp = document.getElementById('canvas');
-
-	/* Time to play ;) */
-
-	// https://developer.mozilla.org/en/XMLSerializer
-	svg_xml = (new XMLSerializer()).serializeToString(svg);
-	ctx = canvasTmp.getContext('2d');
-
-	// JavaScript (HTML) image
-	img = new Image();
-
-	img.onload = function () {
-		ctx.drawImage(img, 0, 0);
-	};
+	   JsBarcode("#ean-13", code, {
+        format: "ITF14",
+        width: 2.50,
+        height: 100,
+        fontSize: 30,
+        flat:true,
+        displayValue: false
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '30px');
+    svg.setAttribute('font-family', 'frankgothcnbt');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+    /* Time to play ;) */
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+    // JavaScript (HTML) image
+    img = new Image();
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
     
     // img.src - contains base64 URI from svg
-	// https://developer.mozilla.org/en/DOM/window.btoa
-	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
-
-	
-
-	//remove temporary canvas
-	canvasTmp.remove();
-	
-	svgDoc.getElementById(id).innerHTML = svg_xml;
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+    
+    //remove temporary canvas
+    canvasTmp.remove();
+    
+    svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 /**
  * This Function is used to invoke JSBarcode.
