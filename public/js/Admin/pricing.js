@@ -191,6 +191,7 @@ function savePricing() {
         },
         complete: function () {
             $(".loader").hide();
+            $('.snackbar_span').html('Saved Successfully');
             showSnackbar();
         }
     });

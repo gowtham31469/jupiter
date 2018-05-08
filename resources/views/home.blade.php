@@ -18,6 +18,7 @@
     <div class="container">
         <div class="col-md-8 col-md-offset-2">
             <div class="main-menu">
+                <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 <!--
                 <div class="case-wrapper" title="Item" draggable="false">
                     <a href="/admin/user-management">

@@ -48,10 +48,8 @@
         @yield('content')
         </div>
     </div>
-    <script>
-    var base_url = "<?php echo  url('/') ?>";
-    </script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script> 
@@ -78,99 +76,191 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
-    @yield('jqueryIncludes')
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script>
-        $('.logout-button').click(function() 
-        {
-            localStorage.clear();
-        });
-        
-        $(document).ready(function() {
-            $('#buyer-select').selectpicker({
-               style: 'btn-default',
-               size: 4
-            });
-   
-            $('#example').DataTable();
-            $("#example_filter input").addClass('form-control input-sm');
-            $("#example_filter input").attr('placeholder', 'Data Search');
-            $('#datatable-example-2_length select').addClass('form-control input-sm');
+<script>
+    var base_url = "<?php echo  url('/') ?>";
 
-        });
-        $(function () {
-        var url = window.location;
-        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-        $('.dynamic-menu a').filter(function () {
-            return this.href == url;
-        }).parent('li').addClass('current-page').find('a').addClass('active');
+     $(document).ready(function() {
+        $('#send_feedback').trigger("reset");
+     });
+     /** Send feedback bootstrap form validation **/
+      $('#send_feedback').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented())
+      {
+
+      }
+      else
+      {
+         e.preventDefault();
+         var csrf_token     = $('meta[name="csrf-token"]').attr('content');
+         var form_data      = new FormData($(this)[0]);
+
+         form_data.append('_token', csrf_token);
+         /* call sendFeedback function*/
+         sendFeedback(form_data);
+      }
+    })
+    /**
+      * Send feedback function.
+      * author <praveen>
+      */
+     function sendFeedback(form_data)
+     {
+        try{
+            $.ajax({
+                     url: base_url + "/feedback-mail/send",
+                     type: "POST",
+                     data: form_data,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
+                     tryCount : 0,
+                     retryLimit : 2,
+                     beforeSend: function () {
+                         $('#sendFeedbackModal').modal('hide');
+                         $(".loader").show();
+                     },
+                     statusCode: {
+                         /** [ Show response status based on HTTP status code ] */
+                         200: function() {
+                                 $('.snackbar_span').html('Feedback Sent Successfully');
+                                 showSnackbar();
+                         },
+                         400: function() {
+                                 console.log('error')
+                         }
+                     },
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                       this.tryCount++;
+                       if (this.tryCount <= this.retryLimit) {
+                           $.ajax(this);
+                           return;
+                       }
+                     },
+                     complete: function () {
+                         $(".loader").hide();
+                     }
+                 });
+             
+         } catch (e) {
+         console.log("Error:"+e)
+       }
+      }
+      /** To refresh modal while hidden **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#send_feedback').trigger("reset");
+       })
+       /**
+         * showSnackbar function
+         * @author    <praveen>
+         */
+       function showSnackbar() {
+         try{
+           /** [ Get the snackbar DIV ] */
+           var x = document.getElementById("snackbar")
+
+           /** [ Add the "show" class to DIV ] */
+           x.className = "show";
+
+           /** [  After 3 seconds, remove the show class from DIV ] */
+           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+           } catch (e) {
+            console.log("Error:"+e)
+          }
+       }
+</script>
+@yield('jqueryIncludes')
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script>
+    $('.logout-button').click(function() 
+    {
+        localStorage.clear();
     });
-
-        var myDoughnutChart = new Chart(myChart, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
-            }]
+    
+    $(document).ready(function() {
+        $('#buyer-select').selectpicker({
+           style: 'btn-default',
+           size: 4
         });
-        var myDoughnutChart = new Chart(myChart1, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
 
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
+        $('#example').DataTable();
+        $("#example_filter input").addClass('form-control input-sm');
+        $("#example_filter input").attr('placeholder', 'Data Search');
+        $('#datatable-example-2_length select').addClass('form-control input-sm');
 
-            }]
-        });
-        var myDoughnutChart = new Chart(myChart2, {
-            type: 'doughnut',
-            data: data = {
-                datasets: [{
-                    data: [1600, 2230],
-                    backgroundColor: [
-                        '#facc55', '#5ac0c0', '#e74c3c'
-                    ],
-                }],
+    });
+    $(function () {
+    var url = window.location;
+    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+    $('.dynamic-menu a').filter(function () {
+        return this.href == url;
+    }).parent('li').addClass('current-page').find('a').addClass('active');
+});
 
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Orchestra',
-                    'Enrich',
-                ]
-            },
-            options: [{
+    var myDoughnutChart = new Chart(myChart, {
+        type: 'doughnut',
+        data: data = {
+            datasets: [{
+                data: [1600, 2230],
+                backgroundColor: [
+                    '#facc55', '#5ac0c0', '#e74c3c'
+                ],
+            }],
 
-            }]
-        });
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Orchestra',
+                'Enrich',
+            ]
+        },
+        options: [{
+        }]
+    });
+    var myDoughnutChart = new Chart(myChart1, {
+        type: 'doughnut',
+        data: data = {
+            datasets: [{
+                data: [1600, 2230],
+                backgroundColor: [
+                    '#facc55', '#5ac0c0', '#e74c3c'
+                ],
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Orchestra',
+                'Enrich',
+            ]
+        },
+        options: [{
+
+        }]
+    });
+    var myDoughnutChart = new Chart(myChart2, {
+        type: 'doughnut',
+        data: data = {
+            datasets: [{
+                data: [1600, 2230],
+                backgroundColor: [
+                    '#facc55', '#5ac0c0', '#e74c3c'
+                ],
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Orchestra',
+                'Enrich',
+            ]
+        },
+        options: [{
+
+        }]
+    });
 //         $('.buyer-select').select2({
 //            placeholder: "Buyer Listing",
 //            allowClear: true
 //        });
-        
-        
-    </script>
+    
+    
+</script>
 </body>
 </html>
