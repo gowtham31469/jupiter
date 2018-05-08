@@ -1829,7 +1829,7 @@ class OrderManagementCntrl extends Controller
 		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		//
 		//		});
-		
+		$svgarr = explode(',_',$request->svg);
     $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -1840,7 +1840,14 @@ class OrderManagementCntrl extends Controller
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage();
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		
+		$yy=12.5;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$yy += 100;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
@@ -1853,7 +1860,8 @@ class OrderManagementCntrl extends Controller
   
     public function printDivTescoSmall(Request $request)
     {
-    $name=$request->name;
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -1863,7 +1871,13 @@ class OrderManagementCntrl extends Controller
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage();
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        $yy=12.5;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$yy += 100;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
