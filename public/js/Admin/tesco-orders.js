@@ -6820,8 +6820,12 @@ function openmodaltesco(modal,i)
 	//var mySVG = document.getElementById(id);
 	var svgDoc;
 	//mySVG.addEventListener("load", function () {
-		svgDoc = mySVG.contentDocument;
+	
+	$('#'+modal).on('shown.bs.modal', function(){
+    	svgDoc = mySVG.contentDocument;
 		dynamicSVGTemplatescard("tesco_svg_modal"+i,data[i]);  
+	});
+	
 	//}, false);
 	
 }
