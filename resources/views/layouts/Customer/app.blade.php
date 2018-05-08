@@ -40,10 +40,7 @@
         @yield('content')
         </div>
     </div>
-    <script>
-    var base_url = "<?php echo  url('/') ?>";
-    </script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
@@ -68,6 +65,98 @@
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
+<script>
+    var base_url = "<?php echo  url('/') ?>";
+
+     $(document).ready(function() {
+        $('#send_feedback').trigger("reset");
+     });
+     /** Send feedback bootstrap form validation **/
+      $('#send_feedback').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented())
+      {
+
+      }
+      else
+      {
+         e.preventDefault();
+         var csrf_token     = $('meta[name="csrf-token"]').attr('content');
+         var form_data      = new FormData($(this)[0]);
+
+         form_data.append('_token', csrf_token);
+         /* call sendFeedback function*/
+         sendFeedback(form_data);
+      }
+    })
+    /**
+      * Send feedback function.
+      * author <praveen>
+      */
+     function sendFeedback(form_data)
+     {
+        try{
+            $.ajax({
+                     url: base_url + "/feedback-mail/send",
+                     type: "POST",
+                     data: form_data,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
+                     tryCount : 0,
+                     retryLimit : 2,
+                     beforeSend: function () {
+                         $('#sendFeedbackModal').modal('hide');
+                         $(".loader").show();
+                     },
+                     statusCode: {
+                         /** [ Show response status based on HTTP status code ] */
+                         200: function() {
+                                 $('.snackbar_span').html('Feedback Sent Successfully');
+                                 showSnackbar();
+                         },
+                         400: function() {
+                                 console.log('error')
+                         }
+                     },
+                     error: function(errorXHR, errorStatus, errorThrown) {
+                       this.tryCount++;
+                       if (this.tryCount <= this.retryLimit) {
+                           $.ajax(this);
+                           return;
+                       }
+                     },
+                     complete: function () {
+                         $(".loader").hide();
+                     }
+                 });
+             
+         } catch (e) {
+         console.log("Error:"+e)
+       }
+      }
+      /** To refresh modal while hidden **/
+      $('.modal').on('hidden.bs.modal', function (e) {
+        $('#send_feedback').trigger("reset");
+       })
+       /**
+         * showSnackbar function
+         * @author    <praveen>
+         */
+       function showSnackbar() {
+         try{
+           /** [ Get the snackbar DIV ] */
+           var x = document.getElementById("snackbar")
+
+           /** [ Add the "show" class to DIV ] */
+           x.className = "show";
+
+           /** [  After 3 seconds, remove the show class from DIV ] */
+           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+           } catch (e) {
+            console.log("Error:"+e)
+          }
+       }
+</script>
     @yield('jqueryIncludes')
 <script>
 $('.logout-button').click(function() 

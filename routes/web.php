@@ -445,3 +445,6 @@ Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@pr
 Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
+
+// Email related routes
+Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');

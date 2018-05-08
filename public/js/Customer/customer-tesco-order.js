@@ -729,15 +729,15 @@ function createOrders(parsedObj = false, oType = false) {
 
                               $.each(data.templates, function(i, item){
                                html += '<td>\
-                                            <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
-                                                <div class="help-block with-errors"></div>\
+                                            <div class="form-group has-feedback quantity-feedback">\
+                                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                             </div>\
                                         </td>';
                              });
                               html += '<td></td>\
                                         </tr>\
                                         </tbody>\
+                                        <div style="display: none;color:#F44336" class="quantity-feedback-err-msg pull-right">Please enter atleast one artwork quantity(&gt;0).</div>\
                                         </table>\
                                         </div>\
                                         <hr>\
@@ -807,15 +807,15 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>';
                               $.each(data.templates, function(i, item){
                                html += '<td>\
-                                            <div class="form-group has-feedback">\
-                                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
-                                                <div class="help-block with-errors"></div>\
+                                            <div class="form-group has-feedback quantity-feedback">\
+                                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                             </div>\
                                         </td>';
                              });
                               html += '<td></td>\
                                        </tr>\
                                        </tbody>\
+                                       <div style="display: none;color:#F44336" class="quantity-feedback-err-msg pull-right">Please enter atleast one artwork quantity(&gt;0).</div>\
                                        </table>\
                                        </div>\
                                        <hr></div>';
@@ -879,15 +879,15 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>';
                               $.each(data.templates, function(i, item){
                                html += '<td>\
-                                        <div class="form-group has-feedback"> \
-                                        <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
-                                        <div class="help-block with-errors"></div>\
+                                        <div class="form-group has-feedback quantity-feedback"> \
+                                        <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
                                         </div>\
                                         </td>';
                              });
                               html += '<td></td>\
                                        </tr>\
                                        </tbody>\
+                                       <div style="display: none;color:#F44336" class="quantity-feedback-err-msg pull-right">Please enter atleast one artwork quantity(&gt;0).</div>\
                                        </table>\
                                        </div>\
                                        <hr></div>';
@@ -956,15 +956,15 @@ function createOrders(parsedObj = false, oType = false) {
                                                 </td>';
                               $.each(data.templates, function(i, item){
                                html += '<td>\
-                                        <div class="form-group has-feedback"> \
-                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
-                                        <div class="help-block with-errors"></div>\
+                                        <div class="form-group has-feedback quantity-feedback"> \
+                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                                         </div>\
                                         </td>';
                              });
                               html += '<td></td>\
                                        </tr>\
                                        </tbody>\
+                                       <div style="display: none;color:#F44336" class="quantity-feedback-err-msg pull-right">Please enter atleast one artwork quantity(&gt;0).</div>\
                                        </table>\
                                        </div>\
                                        <hr></div>';
@@ -1057,6 +1057,24 @@ function createOrders(parsedObj = false, oType = false) {
                             }
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
+
+                        /** [Toggle all Quantity value 0 error msg] */
+                        $(".quantity-field").keyup(function () {
+                            if($(this).val() != '' && $(this).val() > 0)
+                            {
+                                /** All quantity value fields empty - hide custom validation message and functionality */
+                                $('.quantity-feedback').removeClass('has-error has-danger');
+                                $('.quantity-feedback-err-msg').css('display','none');
+                                $('.quantity-field').prop('required',false)
+                            }
+                            else
+                            {
+                                /** All quantity value fields empty - Show custom validation message and functionality  */
+                                $('.quantity-feedback').addClass('has-error has-danger');
+                                $('.quantity-feedback-err-msg').css('display','block');
+                                $('.quantity-field').prop('required',true)
+                            }
+                        });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -1329,9 +1347,8 @@ try{
                         </td>';
              $.each(data, function(i, item){
                html += '<td>\
-                            <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
-                                <div class="help-block with-errors"></div>\
+                            <div class="form-group has-feedback quantity-feedback">\
+                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             </div>\
                         </td>';
              });
@@ -1340,6 +1357,10 @@ try{
                    </td>\
                    </tr>';
          $('#table_row').append(html);
+
+         /** [ show tooltip ] */
+         $('.delete-row').tooltip('show')
+         $('.delete-row').tooltip('toggle')
 
          /** [ Refresh boostrap form-validator ]  */
          $('#create_tesco_order_form').validator('update'); 
@@ -1391,9 +1412,8 @@ try{
                         </td>';
              $.each(data, function(i, item){
                html += '<td>\
-                            <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
-                                <div class="help-block with-errors"></div>\
+                            <div class="form-group has-feedback quantity-feedback">\
+                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             </div>\
                         </td>';
              });
@@ -1403,6 +1423,10 @@ try{
                    </td>\
                    </tr>';
          $('#table_row').append(html);
+
+         /** [ show tooltip ] */
+         $('.delete-row').tooltip('show')
+         $('.delete-row').tooltip('toggle')
 
          /** [ Refresh boostrap form-validator ]  */
          $('#create_tesco_order_form').validator('update'); 
@@ -1530,9 +1554,8 @@ try{
                     </td>';
          $.each(data, function(i, item){
            html += '<td>\
-                        <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
-                            <div class="help-block with-errors"></div>\
+                        <div class="form-group has-feedback quantity-feedback">\
+                            <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                         </div>\
                     </td>';
          });
@@ -1542,6 +1565,10 @@ try{
                </td>\
                </tr>';
      $('#table_row').append(html);
+
+     /** [ show tooltip ] */
+     $('.delete-row').tooltip('show')
+     $('.delete-row').tooltip('toggle')
 
      /** [ Refresh boostrap form-validator ]  */
      $('#create_tesco_order_form').validator('update'); 
@@ -1592,9 +1619,8 @@ try{
                     </td>';
          $.each(data, function(i, item){
            html += '<td>\
-                        <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
-                            <div class="help-block with-errors"></div>\
+                        <div class="form-group has-feedback quantity-feedback">\
+                            <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                         </div>\
                     </td>';
          });
@@ -1604,6 +1630,10 @@ try{
                </td>\
                </tr>';
      $('#table_row').append(html);
+
+     /** [ show tooltip ] */
+     $('.delete-row').tooltip('show')
+     $('.delete-row').tooltip('toggle')
 
      /** [ Refresh boostrap form-validator ]  */
      $('#create_tesco_order_form').validator('update'); 
@@ -2590,15 +2620,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                             $('#countMissingModal').modal({
-                                 backdrop: 'static',
-                                 keyboard: false
-                             })
-                             $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if (empty_count > 0)
                             {
@@ -2681,15 +2712,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                             $('#countMissingModal').modal({
-                                 backdrop: 'static',
-                                 keyboard: false
-                             })
-                             $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if(empty_count > 0)
                             {
@@ -2742,15 +2774,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                            $('#countMissingModal').modal({
-                                backdrop: 'static',
-                                keyboard: false
-                            })
-                            $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if (empty_count > 0)
                             {
@@ -2821,15 +2854,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                             $('#countMissingModal').modal({
-                                 backdrop: 'static',
-                                 keyboard: false
-                             })
-                             $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
 
                             if(empty_count > 0)
@@ -2885,15 +2919,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                            $('#countMissingModal').modal({
-                                backdrop: 'static',
-                                keyboard: false
-                            })
-                            $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if (empty_count > 0)
                             {
@@ -2977,15 +3012,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                            $('#countMissingModal').modal({
-                                backdrop: 'static',
-                                keyboard: false
-                            })
-                            $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if(empty_count > 0)
                             {
@@ -3039,15 +3075,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                            $('#countMissingModal').modal({
-                                backdrop: 'static',
-                                keyboard: false
-                            })
-                            $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
                             if (empty_count > 0)
                             {
@@ -3118,15 +3155,16 @@ function setTescoOrder()
                         /** [ Check if count of empty quantity in the array is equal to array length ] */
                         if(empty_count === l)
                         {
-                            /** [ Backdrop for bootstrap modal ] */
-                             $('#countMissingModal').modal({
-                                 backdrop: 'static',
-                                 keyboard: false
-                             })
-                             $('#countMissingModal').modal('show');
+                            /** All quantity value fields empty - Show custom validation message and functionality  */
+                            $('.quantity-feedback').addClass('has-error has-danger');
+                            $('.quantity-feedback-err-msg').css('display','block');
+                            $('.quantity-field').prop('required',true) 
                         }
                         else 
                         {
+                            /** All quantity value fields empty - hide custom validation message and functionality */
+                             $('.quantity-feedback-err-msg').css('display','none');
+                             $('.quantity-field').prop('required',false) 
                             /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
 
                             if(empty_count > 0)
