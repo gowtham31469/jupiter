@@ -154,7 +154,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	Route::post('customer/tesco/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
 	Route::post('customer/tesco/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
-	Route::post('customer/tesco/upload-tesco-single-po-file', 'Customer\Tesco\OrderController@uploadSingleOrdersPO');
 	Route::post('customer/tesco/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
 
 	Route::put('customer/tesco/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
@@ -270,7 +269,6 @@ Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManag
 
 Route::post('admin/tesco/set-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioOrders');
 Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleOrders');
-Route::post('admin/tesco/upload-tesco-single-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadSingleOrdersPO');
 Route::post('admin/tesco/upload-tesco-combined-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadCombinedOrdersPO');
 
 Route::put('admin/tesco/save-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCERatioOrders');

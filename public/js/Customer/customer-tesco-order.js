@@ -3304,440 +3304,8 @@ function storeCERatioTCL1TCL2TSL1()
                  },
                  success: function (data) {
 
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-                       
-                       /** [ Show single po upload tab ,if order placed for single artwork] */
-                       if(length === 1)
-                       {
-                         $('#combined_tab').hide();
-                         /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                               <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                           var i = 1;
-                           $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="form-check form-group has-feedback">\
-                                                <label class="form-check-label">\
-                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label>\
-                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="single_delivery_date">Delivery Date</label>\
-                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                        <div class="input-group-addon"> \
-                                                          <span class="glyphicon glyphicon-th"></span >\
-                                                        </div >\
-                                                    </div >\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                    <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       else
-                       {
-                           /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error1"></div>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <br> <strong>Select Artworks :</strong>';
-                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>';
-                           });
-                           html += '</div>\
-                                        <hr>\
-                                        <div class="row">\
-                                            <div class="col-md-12">\
-                                                <div class="col-md-6">\
-                                                    <div class="form-group has-feedback">\
-                                                        <label for="po_number" class="form_label">PO Number</label>\
-                                                        <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
-                                                        <div class="help-block with-errors"></div>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="col-md-6">\
-                                                    <div class="form-group has-feedback">\
-                                                        <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-                                                        <div class="help-block with-errors"></div>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="col-md-6">';
-                          /** [ Delivery Date mandatory or not for particular customer] */
-                           if(data.delivery_date_required === 1)
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon">\
-                                               <span class="glyphicon glyphicon-th"></span >\
-                                            </div >\
-                                        </div >\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           else
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
-                                            </div>\
-                                        </div>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           html += '        </div>\
-                                          </div>\
-                                       </div>\
-                                    </div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for combined po upload modal tab */
-                           $('#combined').html(html);
-
-                           /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error"></div>';
-                           var i = 1;
-                           $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="form-check form-group has-feedback">\
-                                                <label class="form-check-label">\
-                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label>\
-                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="single_delivery_date">Delivery Date</label>\
-                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                        <div class="input-group-addon"> \
-                                                          <span class="glyphicon glyphicon-th"></span >\
-                                                        </div >\
-                                                    </div >\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                        </div>\
-                                    </div><hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap validator */
-                       $('#upload_combined_po_form').validator('update');
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-                       $('#datePicker3').datepicker({
-                            autoclose: true,
-                            startDate: today,
-                            format: 'yyyy-mm-dd',
-                        })
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox1:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               var checkbox_clicked = 0;
-                               /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Hide validation error, if atleast 2 artwork selected ] */
-                                if(checkbox_clicked === 2)
-                                {
-                                    $('.template-error1').html('');
-                                }
-                           }
-                           else
-                           {
-                                /** [ Clear all input fields values] */
-                                $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
-                                /* [ remove validation error from input field ] */
-                                $('#upload_combined_po_form').validator('validate');
-                           }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    $('.template-error1').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
-
-                        /** [ bootstrap validator for upload combined po form ] **/
-                        $('#upload_combined_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                 /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 2 artwork not selected ] */
-                                if(checkbox_clicked < 2)
-                                {
-                                    $('.template-error').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error1').html('<span style="color:#F44336">Please select atleast 2 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error1').html('');
-                                    var formData = new FormData();
-                                    var delivery_date = $('#combined_delivery_date').val();
-                                    var po_number = $('#po_number').val();
-                                    var po_file = $('#po_file').prop('files')[0];
-                                    /** [ Create array of Templates selected ] */ 
-                                    $('.template-checkbox1').each(function(i, item) 
-                                    { 
-                                        i += 1;
-                                        if ($(this).is(':checked')) 
-                                        { 
-                                          formData.append('template_id_'+i,$(this).val());
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        } 
-                                    }); 
-                                   
-                                   formData.append('delivery_date',delivery_date);
-                                   formData.append('po_number',po_number);
-                                   formData.append('po_file',po_file);
-
-                                   uploadCombinedPO(formData);
-                                }
-                            }
-
-                        })
-
-                        /** Clear combined tab validation errors */
-                        $('#single_tab').on('click',function(){
-                           $('.template-error1').html('');
-                        });
-
-                        /** Clear single tab validation errors */
-                        $('#combined_tab').on('click',function(){
-                           $('.template-error').html('');
-                        });
+                    /** Call  afterOrderSubmitted() */
+                    afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -3827,210 +3395,8 @@ function storeCERatioTHL1()
                  },
                  success: function (data) {
 
-                       $('#combined_tab').hide();
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                             <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                       var i = 1;
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group  has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon"> \
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                </div>\
-                                <hr>';
-                        i++;
-                       });
-                       html +='</div>\
-                                <div class="modal-footer">\
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                </div>\
-                               </form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
-
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator */
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-
-                        })
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4138,444 +3504,8 @@ function storeCESingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** [ Show single po upload tab ,if order placed for single artwork] */
-                       if(length === 1)
-                       {
-                         $('#combined_tab').hide()
-                         /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid">\
-                                <div class="template-error"></div>';
-                           var i = 1;
-                          $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon">\
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                   </div>\
-                                   <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       else
-                       {
-                           /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error1"></div>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <br> <strong>Select Artworks :</strong>';
-                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>';
-                           });
-                           html += '</div>\
-                                    <hr>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label> \
-                                                     <span class="control-fileupload">\
-                                                       <label for="file">Choose a file :</label> \
-                                                        <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf">\
-                                                     </span>\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">';
-                          /** [ Delivery Date mandatory or not for particular customer] */
-                           if(data.delivery_date_required === 1)
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon">\
-                                              <span class="glyphicon glyphicon-th"></span >\
-                                            </div >\
-                                        </div >\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           else
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon"> \
-                                              <span class="glyphicon glyphicon-th"></span>\
-                                            </div>\
-                                        </div>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           html += '     </div>\
-                                        </div>\
-                                       </div>\
-                                     </div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for combined po upload modal tab */
-                           $('#combined').html(html);
-
-                           /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                                    <div class="container-fluid">\
-                                        <div class="template-error"></div>';
-                           var i = 1;
-                          $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon">\
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                  </div>\
-                                  <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator */
-                       $('#upload_combined_po_form').validator('update');
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-                       $('#datePicker3').datepicker({
-                            autoclose: true,
-                            startDate: today,
-                            format: 'yyyy-mm-dd',
-                        })
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox1:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               var checkbox_clicked = 0;
-                               /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Hide validation error, if atleast 2 artwork selected ] */
-                                if(checkbox_clicked === 2)
-                                {
-                                    $('.template-error1').html('');
-                                }
-                           }
-                           else
-                           {
-                                /** [ Clear all input fields values] */
-                                $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
-                                /* [ remove validation error from input field ] */
-                                $('#upload_combined_po_form').validator('validate');
-                           }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    $('.template-error1').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
-
-                        /** [ bootstrap validator for upload combined po form ] **/
-                        $('#upload_combined_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                 /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 2 artwork not selected ] */
-                                if(checkbox_clicked < 2)
-                                {
-                                    $('.template-error').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error1').html('<span style="color:#F44336">Please select atleast 2 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error1').html('');
-                                    var formData = new FormData();
-                                    var delivery_date = $('#combined_delivery_date').val();
-                                    var po_number = $('#po_number').val();
-                                    var po_file = $('#po_file').prop('files')[0];
-                                    /** [ Create array of Templates selected ] */ 
-                                    $('.template-checkbox1').each(function(i, item) 
-                                    { 
-                                        i += 1;
-                                        if ($(this).is(':checked')) 
-                                        { 
-                                          formData.append('template_id_'+i,$(this).val());
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        } 
-                                    }); 
-                                   
-                                   formData.append('delivery_date',delivery_date);
-                                   formData.append('po_number',po_number);
-                                   formData.append('po_file',po_file);
-
-                                   uploadCombinedPO(formData);
-                                }
-                            }
-                        })
-
-                        /** Clear combined tab validation errors */
-                        $('#single_tab').on('click',function(){
-                           $('.template-error1').html('');
-                        });
-
-                        /** Clear single tab validation errors */
-                        $('#combined_tab').on('click',function(){
-                           $('.template-error').html('');
-                        });
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4673,209 +3603,8 @@ function storeCESingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       $('#combined_tab').hide();
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-                       
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                             <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                       var i = 1;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row">\
-                                <div class="col-md-12">\
-                                    <div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_number" class="form_label">PO Number</label>\
-                                            <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_file">Purchase Order File</label>\
-                                            <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="single_delivery_date">Delivery Date</label>\
-                                            <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                <div class="input-group-addon"> \
-                                                  <span class="glyphicon glyphicon-th"> </span >\
-                                              </div >\
-                                          </div >\
-                                          <div class="help-block with-errors"></div>\
-                                      </div>\
-                                  </div>\
-                              </div>\
-                            </div>\
-                            <hr>';
-                       i++;
-                       });
-                       html +='</div>\
-                                <div class="modal-footer">\
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                </div>\
-                                </form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
-
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator  */
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4985,439 +3714,8 @@ function storeUKRatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** [ Show single po upload tab ,if order placed for single artwork] */
-                       if(length === 1)
-                       {
-                         $('#combined_tab').hide();
-                         /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                               <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                           var i = 1;
-                           $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="form-check form-group has-feedback">\
-                                                <label class="form-check-label">\
-                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label>\
-                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="single_delivery_date">Delivery Date</label>\
-                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                        <div class="input-group-addon"> \
-                                                          <span class="glyphicon glyphicon-th"></span >\
-                                                        </div >\
-                                                    </div >\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                    <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       else
-                       {
-                           /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error1"></div>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <br> <strong>Select Artworks :</strong>';
-                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>';
-                           });
-                           html += '</div>\
-                                        <hr>\
-                                        <div class="row">\
-                                            <div class="col-md-12">\
-                                                <div class="col-md-6">\
-                                                    <div class="form-group has-feedback">\
-                                                        <label for="po_number" class="form_label">PO Number</label>\
-                                                        <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
-                                                        <div class="help-block with-errors"></div>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="col-md-6">\
-                                                    <div class="form-group has-feedback">\
-                                                        <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-                                                        <div class="help-block with-errors"></div>\
-                                                    </div>\
-                                                </div>\
-                                                <div class="col-md-6">';
-                          /** [ Delivery Date mandatory or not for particular customer] */
-                           if(data.delivery_date_required === 1)
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon">\
-                                               <span class="glyphicon glyphicon-th"></span >\
-                                            </div >\
-                                        </div >\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           else
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
-                                            </div>\
-                                        </div>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           html += '        </div>\
-                                          </div>\
-                                       </div>\
-                                    </div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for combined po upload modal tab */
-                           $('#combined').html(html);
-
-                           /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error"></div>';
-                           var i = 1;
-                           $.each(data.last_insertions, function (index, value) { 
-                            html+= '<div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="form-check form-group has-feedback">\
-                                                <label class="form-check-label">\
-                                                    <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label>\
-                                                    <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="single_delivery_date">Delivery Date</label>\
-                                                    <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                        <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                        <div class="input-group-addon"> \
-                                                          <span class="glyphicon glyphicon-th"></span >\
-                                                        </div >\
-                                                    </div >\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                        </div>\
-                                    </div><hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator  */
-                       $('#upload_combined_po_form').validator('update');
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-                       $('#datePicker3').datepicker({
-                            autoclose: true,
-                            startDate: today,
-                            format: 'yyyy-mm-dd',
-                       })
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox1:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               var checkbox_clicked = 0;
-                               /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Hide validation error, if atleast 2 artwork selected ] */
-                                if(checkbox_clicked === 2)
-                                {
-                                    $('.template-error1').html('');
-                                }
-                           }
-                           else
-                           {
-                                /** [ Clear all input fields values] */
-                                $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
-                                /* [ remove validation error from input field ] */
-                                $('#upload_combined_po_form').validator('validate');
-                           }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    $('.template-error1').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
-
-                        /** [ bootstrap validator for upload combined po form ] **/
-                        $('#upload_combined_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                 /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 2 artwork not selected ] */
-                                if(checkbox_clicked < 2)
-                                {
-                                    $('.template-error').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error1').html('<span style="color:#F44336">Please select atleast 2 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error1').html('');
-                                    var formData = new FormData();
-                                    var delivery_date = $('#combined_delivery_date').val();
-                                    var po_number = $('#po_number').val();
-                                    var po_file = $('#po_file').prop('files')[0];
-                                    /** [ Create array of Templates selected ] */ 
-                                    $('.template-checkbox1').each(function(i, item) 
-                                    { 
-                                        i += 1;
-                                        if ($(this).is(':checked')) 
-                                        { 
-                                          formData.append('template_id_'+i,$(this).val());
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        } 
-                                    }); 
-                                   
-                                   formData.append('delivery_date',delivery_date);
-                                   formData.append('po_number',po_number);
-                                   formData.append('po_file',po_file);
-
-                                   uploadCombinedPO(formData);
-                                }
-                            }
-                        })
-
-                        /** Clear combined tab validation errors */
-                        $('#single_tab').on('click',function(){
-                           $('.template-error1').html('');
-                        });
-
-                        /** Clear single tab validation errors */
-                        $('#combined_tab').on('click',function(){
-                           $('.template-error').html('');
-                        });
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -5506,209 +3804,8 @@ function storeUKRatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       $('#combined_tab').hide();
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                             <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                       var i = 1;
-                       $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group  has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon"> \
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                </div>\
-                                <hr>';
-                        i++;
-                       });
-                       html +='</div>\
-                                <div class="modal-footer">\
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                </div>\
-                                </form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
-
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator  */
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -5816,444 +3913,8 @@ function storeUKSingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** [ Show single po upload tab ,if order placed for single artwork] */
-                       if(length === 1)
-                       {
-                         $('#combined_tab').hide()
-                         /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data"><div class="container-fluid">\
-                                <div class="template-error"></div>';
-                           var i = 1;
-                          $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon">\
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                   </div>\
-                                   <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       else
-                       {
-                           /** Buyer Po upload modal for combined po upload modal */
-                           var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-                                <div class="container-fluid">\
-                                    <div class="template-error1"></div>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <br> <strong>Select Artworks :</strong>';
-                           $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>';
-                           });
-                           html += '</div>\
-                                    <hr>\
-                                    <div class="row">\
-                                        <div class="col-md-12">\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_number" class="form_label">PO Number</label>\
-                                                    <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="po_file">Purchase Order File</label> \
-                                                     <span class="control-fileupload">\
-                                                       <label for="file">Choose a file :</label> \
-                                                        <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf">\
-                                                     </span>\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                            </div>\
-                                            <div class="col-md-6">';
-                          /** [ Delivery Date mandatory or not for particular customer] */
-                           if(data.delivery_date_required === 1)
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon">\
-                                              <span class="glyphicon glyphicon-th"></span >\
-                                            </div >\
-                                        </div >\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           else
-                           {
-                             html +='<div class="form-group has-feedback">\
-                                        <label for="combined_delivery_date">Delivery Date</label>\
-                                        <div class="input-group date" data-provide="datepicker" id="datePicker3">\
-                                            <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                            <div class="input-group-addon"> \
-                                              <span class="glyphicon glyphicon-th"></span>\
-                                            </div>\
-                                        </div>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    </div>';
-                           }
-                           html += '     </div>\
-                                        </div>\
-                                       </div>\
-                                     </div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for combined po upload modal tab */
-                           $('#combined').html(html);
-
-                           /** Buyer Po upload modal for single po upload modal */
-                           var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                                    <div class="container-fluid">\
-                                        <div class="template-error"></div>';
-                           var i = 1;
-                          $.each(data.last_insertions, function (index, value) { 
-                           html+= '<div class="row">\
-                                    <div class="col-md-12">\
-                                        <div class="form-check form-group has-feedback">\
-                                            <label class="form-check-label">\
-                                                <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_number" class="form_label">PO Number</label>\
-                                                <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="po_file">Purchase Order File</label>\
-                                                <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-md-6">\
-                                            <div class="form-group has-feedback">\
-                                                <label for="single_delivery_date">Delivery Date</label>\
-                                                <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                    <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                    <div class="input-group-addon">\
-                                                      <span class="glyphicon glyphicon-th"> </span >\
-                                                    </div >\
-                                                </div >\
-                                                <div class="help-block with-errors"></div>\
-                                            </div>\
-                                        </div>\
-                                    </div>\
-                                  </div>\
-                                  <hr>';
-                           i++;
-                           });
-                           html +='</div>\
-                                    <div class="modal-footer">\
-                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                        <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                    </div>\
-                                    </form>';
-                           /** Dynamic content for single po upload modal tab */
-                           $('#single').html(html);
-                       }
-                       
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator  */
-                       $('#upload_combined_po_form').validator('update');
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-                       $('#datePicker3').datepicker({
-                            autoclose: true,
-                            startDate: today,
-                            format: 'yyyy-mm-dd',
-                        })
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-
-                        /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox1:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               var checkbox_clicked = 0;
-                               /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Hide validation error, if atleast 2 artwork selected ] */
-                                if(checkbox_clicked === 2)
-                                {
-                                    $('.template-error1').html('');
-                                }
-                           }
-                           else
-                           {
-                                /** [ Clear all input fields values] */
-                                $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
-                                /* [ remove validation error from input field ] */
-                                $('#upload_combined_po_form').validator('validate');
-                           }
-                        });
-
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    $('.template-error1').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
-
-                        /** [ bootstrap validator for upload combined po form ] **/
-                        $('#upload_combined_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                 /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox1').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 2 artwork not selected ] */
-                                if(checkbox_clicked < 2)
-                                {
-                                    $('.template-error').html('');
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error1').html('<span style="color:#F44336">Please select atleast 2 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error1').html('');
-                                    var formData = new FormData();
-                                    var delivery_date = $('#combined_delivery_date').val();
-                                    var po_number = $('#po_number').val();
-                                    var po_file = $('#po_file').prop('files')[0];
-                                    /** [ Create array of Templates selected ] */ 
-                                    $('.template-checkbox1').each(function(i, item) 
-                                    { 
-                                        i += 1;
-                                        if ($(this).is(':checked')) 
-                                        { 
-                                          formData.append('template_id_'+i,$(this).val());
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        } 
-                                    }); 
-                                   
-                                   formData.append('delivery_date',delivery_date);
-                                   formData.append('po_number',po_number);
-                                   formData.append('po_file',po_file);
-
-                                   uploadCombinedPO(formData);
-                                }
-                            }
-                        })
-
-                        /** Clear combined tab validation errors */
-                        $('#single_tab').on('click',function(){
-                           $('.template-error1').html('');
-                        });
-
-                        /** Clear single tab validation errors */
-                        $('#combined_tab').on('click',function(){
-                           $('.template-error').html('');
-                        });
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6351,208 +4012,8 @@ function storeUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                       $('#combined_tab').hide();
-                       var order_date = data.ordered_date.date;
-                       delivery_date_req = data.delivery_date_required;
-                       var length = Object.keys(data.last_insertions).length;
-                       
-                       /** Show snackbar if order placed **/
-                       if(length > 0)
-                       {
-                         /** remove save & submit button */
-                         $('.submit-btn').remove();
-                         $('.save-btn').remove();
-                         $('.approve-btn').show();
-                         $('.print-btn').show();
-                         var div_html='';
-                         /** [ store last updated id as hidden input , for approve order functionality] */
-                         $.each(data.last_insertions, function (index, value) {
-                             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                         });
-                         $('.invisible-div').html(div_html);
-                         $('.snackbar_span').html('Your order has been placed successfully');
-                         showSnackbar();
-                       }
-
-                       /** [ Show order already exists alertbox] */
-                       if(data.already_exists.length === 0)
-                       {
-                         $('.po-modal-content').show();
-                         $('#order-exists-alert').html('');
-                       }
-                       else
-                       {
-                           var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                                <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                                 <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-                                                   <span aria-hidden="true">×</span>\
-                                                 </button>\
-                                                <p>Order already exists for following artworks,</p>\
-                                               <ol>';
-                            $.each(data.already_exists, function (index, value) { 
-                                html_content += '<li>'+value+'</li>';
-                             });   
-                            html_content += '</ol>\
-                                            </div>';
-
-                         $('#order-exists-alert').html(html_content);
-
-                         /** [ Show only alertbox if data already exits ] */
-                         if(length === 0)
-                         {
-                            $('.po-modal-content').hide();
-                            $('.close-btn').attr('data-dismiss','modal')
-                         }
-                       }
-
-                       /** Buyer Po upload modal for single po upload modal */
-                       var html = '<form id="upload_single_po_form" data-toggle="validator" role="form" enctype="multipart/form-data">\
-                             <div class="container-fluid">\
-                               <div class="template-error"></div>';
-                       var i = 1;
-                      $.each(data.last_insertions, function (index, value) { 
-                       html+= '<div class="row">\
-                                <div class="col-md-12">\
-                                    <div class="form-check form-group has-feedback">\
-                                        <label class="form-check-label">\
-                                            <input class="form-check-input template-checkbox" type="checkbox" value="'+value+'" name="template_id_'+i+'" id="artwork_'+i+'" data-name="'+index.replace(' ','')+'" style="margin-right: 10px;">'+ index+'</label>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_number" class="form_label">PO Number</label>\
-                                            <input class="form-control input-sm po-number" placeholder="PO Number" name="po_number_'+i+'" value="" id="artwork_'+i+'" type="text" disabled="">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_file">Purchase Order File</label>\
-                                            <input type="file" id="artwork_'+i+'" name="po_file_'+i+'" class="po-file-upload form-control center-block" disabled="" accept="application/pdf">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="single_delivery_date">Delivery Date</label>\
-                                            <div class="input-group date" data-provide="datepicker" id="delivery_date_'+i+'">\
-                                                <input value="" id="artwork_'+i+'" name="delivery_date_'+i+'" type="text" class="form-control center-block single_delivery_date" placeholder="Select Delivery Date" disabled="">\
-                                                <div class="input-group-addon"> \
-                                                  <span class="glyphicon glyphicon-th"> </span >\
-                                              </div >\
-                                          </div >\
-                                          <div class="help-block with-errors"></div>\
-                                      </div>\
-                                  </div>\
-                              </div>\
-                            </div>\
-                            <hr>';
-                       i++;
-                       });
-                       html +='</div>\
-                                <div class="modal-footer">\
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                                    <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                                </div>\
-                                </form>';
-                       /** Dynamic content for single po upload modal tab */
-                       $('#single').html(html);
-
-                       /** [ Backdrop for bootstrap modal ] */
-                         $('#poUploadModal').modal({
-                              backdrop: 'static',
-                              keyboard: false
-                         })
-
-                       $('#poUploadModal').modal('show');
-
-                       /** Update bootstrap 1000hz validator  */
-                       $('#upload_single_po_form').validator('update');
-
-                       /** @type {Date} [Delivery date Datepicker format & validation] */
-                       var today = new Date(order_date);
-                       for (var i=1; i <= length; i++) 
-                       {
-                           $('#delivery_date_'+i).datepicker({
-                             autoclose: true,
-                             startDate: today,
-                             format: 'yyyy-mm-dd',
-                            })
-                       }
-
-                       /* [ Toggle required field validation in for fields [single po upload form validation] ] */
-                        $('.template-checkbox:checkbox').on('change',function(){
-                           var th = $(this), id = th.prop('id');
-                           if(th.is(':checked'))
-                           {
-                               $('input[id="'  + id + '"]').prop('disabled',false) 
-                               $('.template-error').html('');
-                               /* [ Check if delivery date is mandatory for this customer [ Dynamically swap mandatory validation ] ] */
-                               if(delivery_date_req === 1)
-                               {
-                                 $('input[id="'  + id + '"]').prop('required',true)
-                               }
-                               else
-                               {
-                                 $('input:not(.single_delivery_date)[id="'  + id + '"]').prop('required',true)
-                               }
-                            }
-                            else
-                            {
-                                /** [ Make all input fields disabled, except checkboxes ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').prop('disabled',true) 
-                                /** [ Make all input fields empty ] */
-                                $('input:not(.template-checkbox)[id="'  + id + '"]').val("");
-                                /* [ remove required from input field ] */
-                                $('input[id="'  + id + '"]').prop('required',false) 
-                                /* [ remove validation error from input field ] */
-                                $('#upload_single_po_form').validator('validate');
-                            }
-                        });
-                       /** [ bootstrap validator for upload single po form ] **/
-                        $('#upload_single_po_form').validator().on('submit', function (e) {
-                            if (e.isDefaultPrevented()) 
-                            {
-                                
-                            }
-                            else 
-                            {
-                                e.preventDefault();
-                                var checkbox_clicked = 0;
-                                /** [ Get count of checkboxes checked ] */
-                                $('.template-checkbox').each(function(i, item)
-                                {
-                                  if ($(this).is(':checked'))
-                                    {
-                                      checkbox_clicked++;
-                                    }
-                                    
-                                });
-                                /** [ Show validation error, if atleast 1 artwork not selected ] */
-                                if(checkbox_clicked === 0)
-                                {
-                                    /**  [ Show validation error message ] **/
-                                    $('.template-error').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-                                }
-                                else
-                                {
-                                    $('.template-error').html('')
-                                    var formData = new FormData($(this)[0]);
-                                    var templates = [];
-                                    /** [ Append templates selected to formdata ] */
-                                    $('.template-checkbox').each(function(i, item)
-                                    {
-                                        i += 1;
-                                        if ($(this).is(':checked'))
-                                        {
-                                          formData.append('template_'+i,$(this).data('name'));
-                                        }
-                                    });
-                                    
-                                    uploadSinglePO(formData);
-                                }
-                            }
-                        })
+                       /** Call  afterOrderSubmitted() */
+                       afterOrderSubmitted(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -6597,6 +4058,241 @@ try{
    console.log("Error:"+e)
  }
 }
+
+/**
+ * After submitting the order callback function.
+ * @author    <praveen>
+ */
+ function afterOrderSubmitted(data)
+ {
+    var order_date = data.ordered_date.date;
+    delivery_date_req = data.delivery_date_required;
+    var length = Object.keys(data.last_insertions).length;
+    
+    /** Show snackbar if order placed **/
+    if(length > 0)
+    {
+      /** remove save & submit button */
+      $('.submit-btn').remove();
+      $('.save-btn').remove();
+      $('.approve-btn').show();
+      $('.print-btn').show();
+      var div_html='';
+      /** [ store last updated id as hidden input , for approve order functionality] */
+      $.each(data.last_insertions, function (index, value) {
+          div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+      });
+      $('.invisible-div').html(div_html);
+      $('.snackbar_span').html('Your order has been placed successfully');
+      showSnackbar();
+
+      /** Buyer Po upload modal for combined po upload modal */
+        var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
+             <div class="container-fluid">\
+                 <div class="template-error1"></div>\
+                 <div class="row">\
+                     <div class="col-md-12">\
+                         <br> <strong>Select Artworks :</strong>';
+        $.each(data.last_insertions, function (index, value) { 
+        html+= '<div class="form-check form-group has-feedback">\
+                     <label class="form-check-label">\
+                         <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+                     <div class="help-block with-errors"></div>\
+                 </div>';
+        });
+        html += '</div>\
+                     <hr>\
+                     <div class="row">\
+                         <div class="col-md-12">\
+                             <div class="col-md-6">\
+                                 <div class="form-group has-feedback">\
+                                     <label for="po_number" class="form_label">PO Number</label>\
+                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                     <div class="help-block with-errors"></div>\
+                                 </div>\
+                             </div>\
+                             <div class="col-md-6">\
+                                 <div class="form-group has-feedback">\
+                                     <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
+                                     <div class="help-block with-errors"></div>\
+                                 </div>\
+                             </div>\
+                             <div class="col-md-6">';
+       /** [ Delivery Date mandatory or not for particular customer] */
+        if(data.delivery_date_required === 1)
+        {
+          html +='<div class="form-group has-feedback">\
+                     <label for="combined_delivery_date">Delivery Date</label>\
+                     <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                         <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                         <div class="input-group-addon">\
+                            <span class="glyphicon glyphicon-th"></span >\
+                         </div >\
+                     </div >\
+                     <div class="help-block with-errors"></div>\
+                 </div>\
+                 </div>';
+        }
+        else
+        {
+          html +='<div class="form-group has-feedback">\
+                     <label for="combined_delivery_date">Delivery Date</label>\
+                     <div class="input-group date" data-provide="datepicker" id="datePicker3">\
+                         <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                         <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
+                         </div>\
+                     </div>\
+                     <div class="help-block with-errors"></div>\
+                 </div>\
+                 </div>';
+        }
+        html += '        </div>\
+                       </div>\
+                    </div>\
+                 </div>\
+                 <div class="modal-footer">\
+                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
+                     <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
+                 </div>\
+                 </form>';
+        /** Dynamic content for po upload modal tab */
+        $('#po-upload-modal-content').html(html);
+    }
+
+    /** [ Show order already exists alertbox] */
+    if(data.already_exists.length === 0)
+    {
+      $('.po-modal-content').show();
+      $('#order-exists-alert').html('');
+    }
+    else
+    {
+        var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                              <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                <span aria-hidden="true">×</span>\
+                              </button>\
+                             <p>Order already exists for following artworks,</p>\
+                            <ol>';
+         $.each(data.already_exists, function (index, value) { 
+             html_content += '<li>'+value+'</li>';
+          });   
+         html_content += '</ol>\
+                         </div>';
+
+      $('#order-exists-alert').html(html_content);
+
+      /** [ Show only alertbox if data already exits ] */
+      if(length === 0)
+      {
+         $('.po-modal-content').hide();
+         $('.close-btn').attr('data-dismiss','modal')
+      }
+    }
+
+    /** [ Backdrop for bootstrap modal ] */
+      $('#poUploadModal').modal({
+           backdrop: 'static',
+           keyboard: false
+      })
+    $('#poUploadModal').modal('show');
+
+    /** Update bootstrap validator */
+    $('#upload_combined_po_form').validator('update');
+
+    /** @type {Date} [Delivery date Datepicker format & validation] */
+    var today = new Date(order_date);
+    $('#datePicker3').datepicker({
+         autoclose: true,
+         startDate: today,
+         format: 'yyyy-mm-dd',
+     })
+
+     /* [ Toggle required field validation in for fields ] */
+     $('.template-checkbox1:checkbox').on('change',function(){
+        var th = $(this), id = th.prop('id');
+        if(th.is(':checked'))
+        {
+            var checkbox_clicked = 0;
+            /** [ Get count of checkboxes checked ] */
+             $('.template-checkbox1').each(function(i, item)
+             {
+               if ($(this).is(':checked'))
+                 {
+                   checkbox_clicked++;
+                 }
+                 
+             });
+             /** [ Hide validation error, if atleast 1 artwork selected ] */
+             if(checkbox_clicked === 1)
+             {
+                 $('.template-error1').html('');
+             }
+        }
+        else
+        {
+             /** [ Clear all input fields values] */
+             $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
+             /* [ remove validation error from input field ] */
+             $('#upload_combined_po_form').validator('validate');
+        }
+     });
+
+     /** [ bootstrap validator for upload combined po form ] **/
+     $('#upload_combined_po_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented()) 
+         {
+             
+         }
+         else 
+         {
+             e.preventDefault();
+             var checkbox_clicked = 0;
+              /** [ Get count of checkboxes checked ] */
+             $('.template-checkbox1').each(function(i, item)
+             {
+               if ($(this).is(':checked'))
+                 {
+                   checkbox_clicked++;
+                 }
+                 
+             });
+             /** [ Show validation error, if atleast 1 artwork not selected ] */
+             if(checkbox_clicked < 1)
+             {
+                 /**  [ Show validation error message ] **/
+                 $('.template-error1').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
+             }
+             else
+             {
+                 $('.template-error1').html('');
+                 var templateName = [];
+                 var formData = new FormData();
+                 var delivery_date = $('#combined_delivery_date').val();
+                 var po_number = $('#po_number').val();
+                 var po_file = $('#po_file').prop('files')[0];
+                 /** [ Create array of Templates selected ] */ 
+                 $('.template-checkbox1').each(function(i, item) 
+                 { 
+                     i += 1;
+                     if ($(this).is(':checked')) 
+                     { 
+                       formData.append('template_id_'+i,$(this).val());
+                       formData.append('template_'+i,$(this).data('name'));
+                       templateName.push($(this).data('name'));
+                     } 
+                 }); 
+                
+                formData.append('delivery_date',delivery_date);
+                formData.append('po_number',po_number);
+                formData.append('po_file',po_file);
+
+                uploadCombinedPO(formData,templateName);
+             }
+         }
+
+     })
+ }
 
 /**
  * This Function is used to invoke JSBarcode.
@@ -6811,57 +4507,10 @@ function openmodaltesco(modal,i)
 }
 
 /**
-* Function for uploading single po files
-* @author    <praveen>
-*/
-function uploadSinglePO(formdata) {
-try{
-    $.ajax({
-             url: base_url + "/customer/tesco/upload-tesco-single-po-file",
-             type: 'POST',
-             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              },
-             data: formdata,
-             tryCount : 0,
-             retryLimit : 2,
-             dataType:'JSON',
-             async: true,
-             cache: false,
-             contentType: false,
-             processData: false,
-             statusCode:
-             {
-                200: function(data) {
-                    $('.snackbar_span').html('PO File upload successfully');
-                    showSnackbar();
-                    $('#poUploadModal').modal('hide');
-                },
-                400: function() {
-                    $('.snackbar_span').html("Something went wrong !. Try again");
-                    showSnackbar();
-                }
-             },
-             error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-             },
-             complete: function () {
-             }
-         })
-  } catch (e) {
-   console.log("Error:"+e)
- }
-}
-
-/**
 * Function for uploading combined po files
 * @author    <praveen>
 */
-function uploadCombinedPO(formdata) {
+function uploadCombinedPO(formdata,templateName) {
 try{
 
     $.ajax({
@@ -6881,9 +4530,17 @@ try{
              statusCode:
              {
                 200: function(data) {
-                    $('.snackbar_span').html('PO File upload successfully');
-                    showSnackbar();
-                    $('#poUploadModal').modal('hide');  
+                    /** [ Disable already uploaded templates checkbox] */
+                    $.each(templateName, function (index, value) { 
+                        $('input[type="checkbox"]#'+value).prop('checked',false)
+                        $('input[type="checkbox"]#'+value).prop('disabled',true)
+                    });
+                    /** [ Show success alert] */
+                    $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert").slideUp(500);
+                    });
+                    /** Reset po upload form**/
+                    $('#upload_combined_po_form').trigger('reset'); 
                 },
                 400: function() {
                     $('.snackbar_span').html("Something went wrong !. Try again");
@@ -7147,39 +4804,8 @@ function saveCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7268,39 +4894,8 @@ function saveCERatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7408,39 +5003,8 @@ function saveCESingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7538,39 +5102,8 @@ function saveCESingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7680,39 +5213,8 @@ function saveUKRatioTCL1TCL2TSL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7801,39 +5303,8 @@ function saveUKRatioTHL1()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -7941,39 +5412,8 @@ function saveUKSingleTCL4TSL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -8071,39 +5511,8 @@ function saveUKSingleTHL3()
                      $(".loader").show();
                  },
                  success: function (data) {
-                    /** [ Show order already exists alertbox] */
-                   if(data.already_exists.length > 0)
-                   {
-                      var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-                                            <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
-                                             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
-                                               <span aria-hidden="true">×</span>\
-                                             </button>\
-                                            <p>Order already exists for following artworks,</p>\
-                                           <ol>';
-                        $.each(data.already_exists, function (index, value) { 
-                            html_content += '<li>'+value+'</li>';
-                         });   
-                        html_content += '</ol>\
-                                        </div>';
-
-                     $('#order-exists-msg').html(html_content);
-                     $('#warningModal').modal('show');
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html('Saved Successfully');
-                        showSnackbar();
-
-                        $('.save-btn').data('insert','false');
-
-                        var div_html='';
-                        /** [ store last updated id as hidden input , for updating] */
-                        $.each(data.last_insertions, function (index, value) {
-                            div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-                        });
-                        $('.invisible-div').html(div_html);
-                    }
+                   /** Call  afterOrderSaved() */
+                    afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -8432,6 +5841,46 @@ function loadArtworkNames(style, artwork_collection) {
     } else {
         throw "artwork_collection_empty";
     }
+}
+/**
+ * After order drafted/Saved callback function
+ * @author <praveen>
+ */
+function afterOrderSaved(data)
+{
+    /** [ Show order already exists alertbox] */
+    if(data.already_exists.length > 0)
+    {
+        var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                              <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">\
+                                <span aria-hidden="true">×</span>\
+                              </button>\
+                             <p>Order already exists for following artworks,</p>\
+                            <ol>';
+         $.each(data.already_exists, function (index, value) { 
+             html_content += '<li>'+value+'</li>';
+          });   
+         html_content += '</ol>\
+                         </div>';
+
+      $('#order-exists-msg').html(html_content);
+      $('#warningModal').modal('show');
+     }
+     else
+     {
+         $('.snackbar_span').html('Saved Successfully');
+         showSnackbar();
+
+         $('.save-btn').data('insert','false');
+
+         var div_html='';
+         /** [ store last updated id as hidden input , for updating] */
+         $.each(data.last_insertions, function (index, value) {
+             div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
+         });
+         $('.invisible-div').html(div_html);
+     }
 }
 /**
  * [Approve tesco orders]
