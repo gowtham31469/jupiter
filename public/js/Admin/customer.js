@@ -85,8 +85,6 @@
                 /** [ Toggle bootstrap tooltip ] */
                 $('.edit-customer').tooltip('show')
                 $('.edit-customer').tooltip('toggle')
-                $('.delete-customer').tooltip('show')
-                $('.delete-customer').tooltip('toggle')
                 $('.status').tooltip('show')
                 $('.status').tooltip('toggle')
                 $('.view-more').tooltip('show')
