@@ -701,36 +701,46 @@ class CustomerManagementController extends Controller
             'customer_id' => 'bail|required',
             'template_id' => 'bail|required',
             'custom_name' => 'bail|required',
-            'price'       => 'bail|required|numeric',
-            'tax'         => 'bail|required|numeric'
+            'price'       => 'bail|required'
         ]);
 
         if ($validator->fails()) {
              return response()->json(['error' => true,'error' => $validator], 409);
         }
+        parse_str($request->price, $pricearray);        
         $isExists = DB::table('price_taxation')->where([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id])->pluck('id');
+        $price_taxation_id = '';
         if($isExists->count()) {
+          $price_taxation_id = $isExists[0];
           DB::table('price_taxation')
-              ->where('id',$isExists[0])
+              ->where('id', $price_taxation_id)
               ->update([
                   'custom_name' => $request->custom_name,
-                  'price'       => $request->price,
-                  'tax'         => $request->tax
+                  'moq' => $request->moq
                 ]) ;
         } else {
-            DB::table('price_taxation')->insert([
+            $price_taxation_id = DB::table('price_taxation')->insertGetId([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id,
             'custom_name' => $request->custom_name,
-            'price'       => $request->price,
-            'tax'         => $request->tax
+            'moq'         => $request->moq
           ]);
         }
 
+        DB::table('price_range')->where('price_taxation_id', '=', $price_taxation_id)->delete();
+        $count = count($pricearray);
+        for ($i=1; $i <= ($count/3); $i++) { 
+          DB::table('price_range')->insert([
+            'price_taxation_id' => $price_taxation_id,
+            'volume_from'    => $pricearray['volume_from_'.$i],
+            'volume_to' => $pricearray['volume_to_'.$i],
+            'price' => $pricearray['price_'.$i]
+          ]);
+        }
         return response()->json(['message' => 'success'], 200);
 
     }
@@ -742,7 +752,9 @@ class CustomerManagementController extends Controller
      */
     public function getPriceTax(Request $request) {
 
-        $price_list = DB::table('price_taxation')->where([
+        $price_list = DB::table('price_taxation')
+                      ->join('price_range', 'price_range.price_taxation_id','price_taxation.id')
+                      ->where([
                           'customer_id' => $request->customer_id,
                           'buyer_id'    => $request->buyer_id,
                           'template_id' => $request->template_id
