@@ -334,7 +334,7 @@
                                           </div>
                                           <div class="help-block with-errors"></div>
                                         </div>
-                                        <div class="form-check form-group has-feedback">
+                                        <div class="form-check form-group has-feedback" style="margin-top: 25px;">
                                           <label class="form-check-label">
                                             <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address0">
                                             Make as default billing address
