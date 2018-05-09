@@ -1,6 +1,6 @@
 @extends('layouts.Customer.app')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid wallpaper" style="height:100vh">
         <div class="row">
             <div class="login-section">
                 <div class="container">

@@ -154,7 +154,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	Route::post('customer/tesco/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
 	Route::post('customer/tesco/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
-	Route::post('customer/tesco/upload-tesco-single-po-file', 'Customer\Tesco\OrderController@uploadSingleOrdersPO');
 	Route::post('customer/tesco/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
 
 	Route::put('customer/tesco/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
@@ -270,7 +269,6 @@ Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManag
 
 Route::post('admin/tesco/set-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKRatioOrders');
 Route::post('admin/tesco/set-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setUKSingleOrders');
-Route::post('admin/tesco/upload-tesco-single-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadSingleOrdersPO');
 Route::post('admin/tesco/upload-tesco-combined-po-file', 'Admin\Tesco\OrderManagementCntrl@uploadCombinedOrdersPO');
 
 Route::put('admin/tesco/save-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveCERatioOrders');
@@ -448,3 +446,10 @@ Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintControl
 
 // Email related routes
 Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');
+
+/** admin role Management **/
+Route::get('admin/admin-role-management', 'Admin\AdminRoleManagement\AdminRoleManagementController@index');
+Route::get('admin/admin-role-management/admin-list', 'Admin\AdminRoleManagement\AdminRoleManagementController@adminList');
+Route::post('admin/admin-role-management/add-new-admin', 'Admin\AdminRoleManagement\AdminRoleManagementController@addNewAdmin');
+Route::put('admin/admin-role-management/make-admin-active', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminActive');
+Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminInactive');

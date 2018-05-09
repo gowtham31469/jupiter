@@ -27,7 +27,6 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
-use App\Classes\TescoCombinedPOUpload;
 use App\Classes\TescoPOUploadTemplatesSwitch;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
@@ -1829,7 +1828,7 @@ class OrderManagementCntrl extends Controller
 		//				$pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		//
 		//		});
-		
+		$svgarr = explode(',_',$request->svg);
     $name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -1840,7 +1839,14 @@ class OrderManagementCntrl extends Controller
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage();
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+		
+		$yy=12.5;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$yy += 100;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
@@ -1853,7 +1859,8 @@ class OrderManagementCntrl extends Controller
   
     public function printDivTescoSmall(Request $request)
     {
-    $name=$request->name;
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
@@ -1863,7 +1870,13 @@ class OrderManagementCntrl extends Controller
         PDF::SetFont('frankgothcnbt');
         PDF::AddPage();
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+        $yy=12.5;
+		foreach($svgarr as $value)
+		{
+			$svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$yy += 100;
+		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
@@ -2655,41 +2668,6 @@ class OrderManagementCntrl extends Controller
 		    echo true;
     }
     /**
-     * Function to upload single buyer po file for tesco
-     * @author <Praveen>
-     * @return boolean true or false
-     */
-    public function uploadSingleOrdersPO(Request $request)
-    {
-      
-       try {
-             /** [ Creating new object for TescoPOUploadTemplatesSwitch() class ] */
-             $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
-             if($request['template_1'])
-             {
-                $response = $tesco_po_obj->singlePOUploadTemplate1Switch($request['template_1'],$request);
-             }
-             if ($request['template_2']) {
-                $response = $tesco_po_obj->singlePOUploadTemplate2Switch($request['template_2'],$request);
-             }
-             if ($request['template_3']) {
-                $response = $tesco_po_obj->singlePOUploadTemplate3Switch($request['template_3'],$request);
-             }
-             if (($response != '') || ($response != "Invalid Template")) 
-             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
-             }
-             else
-             {
-              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-             }
-           
-       } catch (\Exception $e) {
-           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-       return $result;
-    }
-    /**
      * Function to upload combined buyer po file for tesco
      * @author <Praveen>
      * @return boolean true or false
@@ -2699,7 +2677,7 @@ class OrderManagementCntrl extends Controller
       
        try {
              /** [ Creating new object for TescoPOUploadTemplatesSwitch() class ] */
-             $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
+              $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
               $po_file = $request['po_file'];
               $destination_path='/storage/app/public/po-files/';
               $path='storage/app/public/po-files/';
