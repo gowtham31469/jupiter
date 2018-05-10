@@ -127,8 +127,13 @@ function tescoOrderStatus()
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
                                             }
-                                            $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
+											else
+											{
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
+											}
+                                            
                                         });
                                         $('.list-group.checked-list-box .list-group-item').each(function () {
 
