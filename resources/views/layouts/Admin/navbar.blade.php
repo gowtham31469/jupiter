@@ -21,6 +21,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
+                
                 <li class="dropdown buyer-nav-select"></li>
                 <li><a class="notification" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href="#"><i class="fa fa-bell fa-1x" aria-hidden="true"></i></a>
                   <ul class="dropdown-menu notify-drop">
@@ -89,6 +90,7 @@
             </div>
           </ul>
                 </li>
+                 <li><a class="notification" href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
                 <li class="dropdown">
                     <!-- <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a> -->
 
@@ -97,14 +99,16 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li><a href="#">Profile</a></li>
                         <li><a href="#">Change Password</a></li>
-                        <li><a href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Send Feedback</a></li>
                        <!--  <li><a class="dropdown-item logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form> -->
                     </ul>
                 </li>
+               
+                
                 <li><a class="dropdown-toggle profile-dropdown-admin" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
