@@ -446,3 +446,10 @@ Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintControl
 
 // Email related routes
 Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');
+
+/** admin role Management **/
+Route::get('admin/admin-role-management', 'Admin\AdminRoleManagement\AdminRoleManagementController@index');
+Route::get('admin/admin-role-management/admin-list', 'Admin\AdminRoleManagement\AdminRoleManagementController@adminList');
+Route::post('admin/admin-role-management/add-new-admin', 'Admin\AdminRoleManagement\AdminRoleManagementController@addNewAdmin');
+Route::put('admin/admin-role-management/make-admin-active', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminActive');
+Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminInactive');

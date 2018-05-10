@@ -25,13 +25,13 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown buyer-nav-select"></li>
+                        <li><a class="notification" href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
                         <!-- Authentication Links -->
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::guard('web_customer')->user()->company_name[0] }}</span> {{ Auth::guard('web_customer')->user()->company_name }}<span class="caret"></span></a>
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#">Profile</a></li>
-                                    <li><a href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Send Feedback</a></li>
                                 </ul>
                             </li>
                             <li>
