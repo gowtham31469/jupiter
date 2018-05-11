@@ -168,6 +168,10 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
 	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
+	/** Merchandiser profile related routes */
+	Route::get('merchandiser/get-profile-details', 'Merchandiser\MerchandiserProfileController@getMerchandiserDetailsById');
+	Route::put('merchandiser/update-merchandiser-profile-details', 'Merchandiser\MerchandiserProfileController@updateMerchandiserById');
+	Route::put('merchandiser/update-merchandiser-password', 'Merchandiser\MerchandiserProfileController@updateMerchandiserPassword');
 
 });
 

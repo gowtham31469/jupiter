@@ -84,6 +84,9 @@
 
 	     $(document).ready(function() {
 	        $('#send_feedback').trigger("reset");
+	        $('#change_merchandiser_password').trigger("reset");
+	        $('#edit_merchandiser_result').hide();
+			$('#change_password_result').hide();
 	     });
 	     /** Send feedback bootstrap form validation **/
 	      $('#send_feedback').validator().on('submit', function (e) {
@@ -151,6 +154,9 @@
 	      /** To refresh modal while hidden **/
 	      $('.modal').on('hidden.bs.modal', function (e) {
 	        $('#send_feedback').trigger("reset");
+	        $('#change_merchandiser_password').trigger("reset");
+	        $('#edit_merchandiser_result').hide();
+			$('#change_password_result').hide();
 	       })
 	       /**
 	         * showSnackbar function
@@ -170,6 +176,231 @@
 	            console.log("Error:"+e)
 	          }
 	       }
+	     /**
+	       * Validation for numeric values
+	       * @param  evt  
+	       * @return {Boolean} 
+	       * @author <praveen>
+	       */
+	      function isNumber(evt) {
+	       try{
+	           evt = (evt) ? evt : window.event;
+	           var charCode = (evt.which) ? evt.which : evt.keyCode;
+	           if (charCode > 31 && (charCode < 48 || charCode > 57))
+	           {
+	               return false;
+	           }
+	             return true;
+	         } catch (e) {
+	          console.log("Error:"+e)
+	        }
+	       }
+	        /**
+	          * Get merchandiser profile details function.
+	          * author <praveen>
+	          */
+	         function getMerchandiserProfile(id)
+	         {
+	            try{
+	                $.ajax({
+	                         url: base_url + "/merchandiser/get-profile-details",
+	                         type: "GET",
+	                         data: {id:id},
+	                         tryCount : 0,
+	                         retryLimit : 2,
+	                         beforeSend: function () {
+	                             $(".loader").show();
+	                         },
+	                         success: function(data){
+
+	                              /** [Populate values in form inputs] */
+	                              $('#merchandiser_profile_id').val(id);
+	                              $('#merchandiser_profile_name').val(data.merchandiser[0].name);
+	                              $('#merchandiser_profile_email').val(data.merchandiser[0].email);
+	                              $('#merchandiser_profile_phone').val(data.merchandiser[0].phone);
+	                              $('#merchandiser_profile_address').val(data.merchandiser[0].address);
+	                              $('#merchandiser_buyer').val(data.merchandiser[0].buyer_id);
+
+	                              /** [ Backdrop for bootstrap modal ] */
+	                              $('#editMerchandiserModal').modal({
+	                                   backdrop: 'static',
+	                                   keyboard: false
+	                              })
+
+	                              /** [ Validate admin_profile_form form using bootstrap validator ] */
+	                              $('#merchandiser_profile_form').validator('validate');
+	                              $('#editMerchandiserModal').modal('show');
+	                          },
+	                         error: function(errorXHR, errorStatus, errorThrown) {
+	                           this.tryCount++;
+	                           if (this.tryCount <= this.retryLimit) {
+	                               $.ajax(this);
+	                               return;
+	                           }
+	                         },
+	                         complete: function () {
+	                             $(".loader").hide();
+	                         }
+	                     });
+	                 
+	             } catch (e) {
+	             console.log("Error:"+e)
+	           }
+	          }
+	           /**Update admin profile bootstrap form validation **/
+	            $('#merchandiser_profile_form').validator().on('submit', function (e) {
+	            if (e.isDefaultPrevented())
+	            {
+
+	            }
+	            else
+	            {
+	               e.preventDefault();
+	               
+	               /* call editMerchandiser function*/
+	               editMerchandiser();
+	            }
+	          })
+	          /**
+			    * Function to update merchandiser details
+			    * @author <praveen>
+			    */
+			   function editMerchandiser()
+			   {
+			    try{
+			         var id         = $('#merchandiser_profile_id').val();
+			         var name       = $('#merchandiser_profile_name').val();
+			         var phone      = $('#merchandiser_profile_phone').val();
+			         var email      = $('#merchandiser_profile_email').val();
+			         var address    = $('#merchandiser_profile_address').val();
+			         var buyer      = $('#merchandiser_buyer').val();
+
+			         var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			         $.ajax({
+			             url:base_url + "/merchandiser/update-merchandiser-profile-details",
+			             dataType:"json",
+			             tryCount : 0,
+			             retryLimit : 2,
+			             beforeSend: function () {
+			               $(".loader").show();
+			             },
+			             method:"put",
+			             data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address,buyer:buyer},
+			             statusCode: {
+
+			                  /** [Show response status based on HTTP status code] */
+			                  200: function() {
+			                       $('.snackbar_span').html('Profile Updated Successfully');
+			                       showSnackbar();
+			                       $('#editMerchandiserModal').modal('hide');
+			                  },
+			                  409: function() {
+			                       $('#edit_merchandiser_result').removeAttr('style');
+			                       $('#edit_merchandiser_result').html('Email already registered.')
+			                       $("#edit_merchandiser_result").addClass("alert alert-warning");
+			                  }
+			             },
+			             error: function(errorXHR, errorStatus, errorThrown) {
+			                this.tryCount++;
+			                if (this.tryCount <= this.retryLimit) {
+			                    $.ajax(this);
+			                    return;
+			                }
+			             },
+			             complete: function () {
+			                     /** [ To make top menu active ] */
+			                      $(function () {
+			                          var url = window.location;
+			                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+			                          $('.dynamic-menu a').filter(function () {
+			                              return this.href == url;
+			                          }).parent('li').addClass('current-page').find('a').addClass('active');
+			                      });
+			                       $(".loader").hide();
+			             }
+			         })
+			     } catch (e) {
+			     console.log("Error:"+e)
+			   }
+			   }
+			    /**Change merchandiser password bootstrap form validation **/
+			     $('#change_merchandiser_password').validator().on('submit', function (e) {
+			     if (e.isDefaultPrevented())
+			     {
+
+			     }
+			     else
+			     {
+			        e.preventDefault();
+			        
+			        /* call updateMerchandiserPassword function*/
+			        updateMerchandiserPassword();
+			     }
+			   })
+			   /**
+			     * Function to update merchandiser password
+			     * @author <praveen>
+			     */
+			    function updateMerchandiserPassword()
+			    {
+			     try{
+			          var id               = $('#merchandiser_id').val();
+			          var current_password = $('#current_password').val();
+			          var new_password     = $('#new_password').val();
+
+			          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			          $.ajax({
+			              url:base_url + "/merchandiser/update-merchandiser-password",
+			              dataType:"json",
+			              tryCount : 0,
+			              retryLimit : 2,
+			              beforeSend: function () {
+			                $(".loader").show();
+			              },
+			              method:"put",
+			              data:{_token:csrf_token,id:id,np:new_password,cp:current_password},
+			              statusCode: {
+
+			                   /** [Show response status based on HTTP status code] */
+			                   200: function() {
+			                        $('.snackbar_span').html('Password Changed Successfully');
+			                        showSnackbar();
+			                        $('#changePasswordModal').modal('hide');
+			                   },
+			                   400: function() {
+			                        $('#change_password_result').removeAttr('style');
+			                        $('#change_password_result').html('Your current password does not matches with the password you provided. Please try again.')
+			                        $("#change_password_result").addClass("alert alert-warning");
+			                   },
+			                   409: function() {
+			                        $('#change_password_result').removeAttr('style');
+			                        $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
+			                        $("#change_password_result").addClass("alert alert-warning");
+			                   }
+			              },
+			              error: function(errorXHR, errorStatus, errorThrown) {
+			                 this.tryCount++;
+			                 if (this.tryCount <= this.retryLimit) {
+			                     $.ajax(this);
+			                     return;
+			                 }
+			              },
+			              complete: function () {
+			                      /** [ To make top menu active ] */
+			                       $(function () {
+			                           var url = window.location;
+			                           $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+			                           $('.dynamic-menu a').filter(function () {
+			                               return this.href == url;
+			                           }).parent('li').addClass('current-page').find('a').addClass('active');
+			                       });
+			                        $(".loader").hide();
+			              }
+			          })
+			      } catch (e) {
+			      console.log("Error:"+e)
+			    }
+			    }
 	</script>
 	@yield('jqueryIncludes')
 </body>

@@ -57,7 +57,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/admin-profile.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
@@ -287,7 +286,7 @@
 
                       /** [Show response status based on HTTP status code] */
                       200: function() {
-                           $('.snackbar_span').html('Admin Profile Updated Successfully');
+                           $('.snackbar_span').html('Profile Updated Successfully');
                            showSnackbar();
                            $('#editAdminModal').modal('hide');
                       },
@@ -360,7 +359,7 @@
 
                   /** [Show response status based on HTTP status code] */
                   200: function() {
-                       $('.snackbar_span').html('Admin Password Changed Successfully');
+                       $('.snackbar_span').html('Password Changed Successfully');
                        showSnackbar();
                        $('#changePasswordModal').modal('hide');
                   },
