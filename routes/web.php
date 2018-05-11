@@ -54,19 +54,6 @@ Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateContro
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
-/** User Management **/
-Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
-Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
-Route::get('admin/user-management/get-user-roles', 'Admin\UserManagement\UserManagementController@getUserRoles');
-Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserManagementController@addJgaUser');
-Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserManagementController@getUserById');
-Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
-Route::delete('admin/user-management/delete-user', 'Admin\UserManagement\UserManagementController@deleteUserById');
-Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserManagementController@addUserRole');
-Route::get('admin/user-management/get-user-role-details', 'Admin\UserManagement\UserManagementController@getUserRoleById');
-Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserManagementController@updateUserRoleById');
-Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
 /** customer Management **/
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
 Route::post('admin/customer-management/customers-list', 'Admin\CustomerManagement\CustomerManagementController@customersList');
@@ -453,3 +440,6 @@ Route::get('admin/admin-role-management/admin-list', 'Admin\AdminRoleManagement\
 Route::post('admin/admin-role-management/add-new-admin', 'Admin\AdminRoleManagement\AdminRoleManagementController@addNewAdmin');
 Route::put('admin/admin-role-management/make-admin-active', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminActive');
 Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminInactive');
+
+/** Admin profile related routes */
+Route::get('admin/get-profile-details', 'Admin\AdminProfile\AdminProfileController@getAdminDetailsById');
