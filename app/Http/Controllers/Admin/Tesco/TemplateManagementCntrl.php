@@ -91,5 +91,28 @@ class TemplateManagementCntrl extends Controller
          
          return json_encode($view);
     }
+    /**
+     * Method to store the taxation from template module
+     * @param  Request $request template and tax
+     * @return JSON   json success
+     */
+    public function saveTax(Request $request) {
+        try {
+            $template_id = $request['template_id'];
+            $taxation    = $request['tax'];
+            DB::table('tesco_template')
+                        ->where('id',$template_id)
+                        ->update([
+                           'tax' => $taxation
+                        ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    }
 }
 

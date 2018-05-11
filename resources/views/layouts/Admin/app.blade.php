@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -57,7 +57,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
     <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/admin-profile.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
@@ -81,323 +80,325 @@
     var base_url = "<?php echo  url('/') ?>";
 
      $(document).ready(function() {
-        $('#send_feedback').trigger("reset");
-        $('#admin_profile_result').hide();
-        $('#change_admin_password').trigger("reset");
-        $('#change_password_result').hide();
-     });
-     /** Send feedback bootstrap form validation **/
-      $('#send_feedback').validator().on('submit', function (e) {
-      if (e.isDefaultPrevented())
-      {
+    $('#send_feedback').trigger("reset");
+    $('#admin_profile_result').hide();
+    $('#change_admin_password').trigger("reset");
+    $('#change_password_result').hide();
+});
+/** Send feedback bootstrap form validation **/
+$('#send_feedback').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
 
-      }
-      else
-      {
-         e.preventDefault();
-         var csrf_token     = $('meta[name="csrf-token"]').attr('content');
-         var form_data      = new FormData($(this)[0]);
+    } else {
+        e.preventDefault();
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var form_data = new FormData($(this)[0]);
 
-         form_data.append('_token', csrf_token);
-         /* call sendFeedback function*/
-         sendFeedback(form_data);
-      }
-    })
-    /**
-      * Send feedback function.
-      * author <praveen>
-      */
-     function sendFeedback(form_data)
-     {
-        try{
-            $.ajax({
-                     url: base_url + "/feedback-mail/send",
-                     type: "POST",
-                     data: form_data,
-                     cache: false,
-                     contentType: false,
-                     processData: false,
-                     tryCount : 0,
-                     retryLimit : 2,
-                     beforeSend: function () {
-                         $('#sendFeedbackModal').modal('hide');
-                         $(".loader").show();
-                     },
-                     statusCode: {
-                         /** [ Show response status based on HTTP status code ] */
-                         200: function() {
-                                 $('.snackbar_span').html('Feedback Sent Successfully');
-                                 showSnackbar();
-                         },
-                         400: function() {
-                                 console.log('error')
-                         }
-                     },
-                     error: function(errorXHR, errorStatus, errorThrown) {
-                       this.tryCount++;
-                       if (this.tryCount <= this.retryLimit) {
-                           $.ajax(this);
-                           return;
-                       }
-                     },
-                     complete: function () {
-                         $(".loader").hide();
-                     }
-                 });
-             
-         } catch (e) {
-         console.log("Error:"+e)
-       }
-      }
-      /** To refresh modal while hidden **/
-      $('.modal').on('hidden.bs.modal', function (e) {
-          $('#send_feedback').trigger("reset");
-          $('#admin_profile_result').hide();
-          $('#change_admin_password').trigger("reset");
-          $('#change_password_result').hide();
-       })
-       /**
-         * showSnackbar function
-         * @author    <praveen>
-         */
-       function showSnackbar() {
-         try{
-           /** [ Get the snackbar DIV ] */
-           var x = document.getElementById("snackbar")
-
-           /** [ Add the "show" class to DIV ] */
-           x.className = "show";
-
-           /** [  After 3 seconds, remove the show class from DIV ] */
-           setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-           } catch (e) {
-            console.log("Error:"+e)
-          }
-       }
-    /**
-      * Validation for numeric values
-      * @param  evt  
-      * @return {Boolean} 
-      * @author <praveen>
-      */
-     function isNumber(evt) {
-      try{
-          evt = (evt) ? evt : window.event;
-          var charCode = (evt.which) ? evt.which : evt.keyCode;
-          if (charCode > 31 && (charCode < 48 || charCode > 57))
-          {
-              return false;
-          }
-            return true;
-        } catch (e) {
-         console.log("Error:"+e)
-       }
-      }
-       /**
-         * Get admin profile details function.
-         * author <praveen>
-         */
-        function getAdminProfile(id)
-        {
-           try{
-               $.ajax({
-                        url: base_url + "/admin/get-profile-details",
-                        type: "GET",
-                        data: {id:id},
-                        tryCount : 0,
-                        retryLimit : 2,
-                        beforeSend: function () {
-                            $(".loader").show();
-                        },
-                        success: function(data){
-
-                             /** [Populate values in form inputs] */
-                             $('#admin_profile_id').val(id);
-                             $('#admin_profile_name').val(data.admin[0].name);
-                             $('#admin_profile_email').val(data.admin[0].email);
-                             $('#admin_profile_phone').val(data.admin[0].phone);
-                             $('#admin_profile_address').val(data.admin[0].address);
-
-                             /** [ Backdrop for bootstrap modal ] */
-                             $('#editAdminModal').modal({
-                                  backdrop: 'static',
-                                  keyboard: false
-                             })
-
-                             /** [ Validate admin_profile_form form using bootstrap validator ] */
-                             $('#admin_profile_form').validator('validate');
-                             $('#editAdminModal').modal('show');
-                         },
-                        error: function(errorXHR, errorStatus, errorThrown) {
-                          this.tryCount++;
-                          if (this.tryCount <= this.retryLimit) {
-                              $.ajax(this);
-                              return;
-                          }
-                        },
-                        complete: function () {
-                            $(".loader").hide();
-                        }
-                    });
-                
-            } catch (e) {
-            console.log("Error:"+e)
-          }
-         }
-
-       /**Update admin profile bootstrap form validation **/
-        $('#admin_profile_form').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented())
-        {
-
-        }
-        else
-        {
-           e.preventDefault();
-           
-           /* call editAdmin function*/
-           editAdmin();
-        }
-      })
-      /**
-        * Function to update admin details
-        * @author <praveen>
-        */
-       function editAdmin()
-       {
-        try{
-             var id         = $('#admin_profile_id').val();
-             var name       = $('#admin_profile_name').val();
-             var phone      = $('#admin_profile_phone').val();
-             var email      = $('#admin_profile_email').val();
-             var address    = $('#admin_profile_address').val();
-
-             var csrf_token = $('meta[name="csrf-token"]').attr('content');
-             $.ajax({
-                 url:base_url + "/admin/update-admin-profile-details",
-                 dataType:"json",
-                 tryCount : 0,
-                 retryLimit : 2,
-                 beforeSend: function () {
-                   $(".loader").show();
-                 },
-                 method:"put",
-                 data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
-                 statusCode: {
-
-                      /** [Show response status based on HTTP status code] */
-                      200: function() {
-                           $('.snackbar_span').html('Admin Profile Updated Successfully');
-                           showSnackbar();
-                           $('#editAdminModal').modal('hide');
-                      },
-                      409: function() {
-                           $('#admin_profile_result').removeAttr('style');
-                           $('#admin_profile_result').html('Email already registered.')
-                           $("#admin_profile_result").addClass("alert alert-warning");
-                      }
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
-                 },
-                 complete: function () {
-                         /** [ To make top menu active ] */
-                          $(function () {
-                              var url = window.location;
-                              $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                              $('.dynamic-menu a').filter(function () {
-                                  return this.href == url;
-                              }).parent('li').addClass('current-page').find('a').addClass('active');
-                          });
-                           $(".loader").hide();
-                 }
-             })
-         } catch (e) {
-         console.log("Error:"+e)
-       }
-       }
-   /**Change admin password bootstrap form validation **/
-    $('#change_admin_password').validator().on('submit', function (e) {
-    if (e.isDefaultPrevented())
-    {
-
+        form_data.append('_token', csrf_token);
+        /* call sendFeedback function*/
+        sendFeedback(form_data);
     }
-    else
-    {
-       e.preventDefault();
-       
-       /* call updateAdminPassword function*/
-       updateAdminPassword();
-    }
-  })
-  /**
-    * Function to update admin password
-    * @author <praveen>
-    */
-   function updateAdminPassword()
-   {
-    try{
-         var id               = $('#admin_id').val();
-         var current_password = $('#current_password').val();
-         var new_password     = $('#new_password').val();
-
-         var csrf_token = $('meta[name="csrf-token"]').attr('content');
-         $.ajax({
-             url:base_url + "/admin/update-admin-password",
-             dataType:"json",
-             tryCount : 0,
-             retryLimit : 2,
-             beforeSend: function () {
-               $(".loader").show();
-             },
-             method:"put",
-             data:{_token:csrf_token,id:id,np:new_password,cp:current_password},
-             statusCode: {
-
-                  /** [Show response status based on HTTP status code] */
-                  200: function() {
-                       $('.snackbar_span').html('Admin Password Changed Successfully');
-                       showSnackbar();
-                       $('#changePasswordModal').modal('hide');
-                  },
-                  400: function() {
-                       $('#change_password_result').removeAttr('style');
-                       $('#change_password_result').html('Your current password does not matches with the password you provided. Please try again.')
-                       $("#change_password_result").addClass("alert alert-warning");
-                  },
-                  409: function() {
-                       $('#change_password_result').removeAttr('style');
-                       $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
-                       $("#change_password_result").addClass("alert alert-warning");
-                  }
-             },
-             error: function(errorXHR, errorStatus, errorThrown) {
+})
+/**
+ * Send feedback function.
+ * author <praveen>
+ */
+function sendFeedback(form_data) {
+    try {
+        $.ajax({
+            url: base_url + "/feedback-mail/send",
+            type: "POST",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $('#sendFeedbackModal').modal('hide');
+                $(".loader").show();
+            },
+            statusCode: {
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                    $('.snackbar_span').html('Feedback Sent Successfully');
+                    showSnackbar();
+                },
+                400: function() {
+                    console.log('error')
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
                 this.tryCount++;
                 if (this.tryCount <= this.retryLimit) {
                     $.ajax(this);
                     return;
                 }
-             },
-             complete: function () {
-                     /** [ To make top menu active ] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                       $(".loader").hide();
-             }
-         })
-     } catch (e) {
-     console.log("Error:"+e)
-   }
-   }
+            },
+            complete: function() {
+                $(".loader").hide();
+            }
+        });
+
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/** To refresh modal while hidden **/
+$('.modal').on('hidden.bs.modal', function(e) {
+    $('#send_feedback').trigger("reset");
+    $('#admin_profile_result').hide();
+    $('#change_admin_password').trigger("reset");
+    $('#change_password_result').hide();
+})
+/**
+ * showSnackbar function
+ * @author    <praveen>
+ */
+function showSnackbar() {
+    try {
+        /** [ Get the snackbar DIV ] */
+        var x = document.getElementById("snackbar")
+
+        /** [ Add the "show" class to DIV ] */
+        x.className = "show";
+
+        /** [  After 3 seconds, remove the show class from DIV ] */
+        setTimeout(function() {
+            x.className = x.className.replace("show", "");
+        }, 3000);
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/**
+ * Validation for numeric values
+ * @param  evt  
+ * @return {Boolean} 
+ * @author <praveen>
+ */
+function isNumber(evt) {
+    try {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/**
+ * Get admin profile details function.
+ * author <praveen>
+ */
+function getAdminProfile(id) {
+    try {
+        $.ajax({
+            url: base_url + "/admin/get-profile-details",
+            type: "GET",
+            data: {
+                id: id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            success: function(data) {
+
+                /** [Populate values in form inputs] */
+                $('#admin_profile_id').val(id);
+                $('#admin_profile_name').val(data.admin[0].name);
+                $('#admin_profile_email').val(data.admin[0].email);
+                $('#admin_profile_phone').val(data.admin[0].phone);
+                $('#admin_profile_address').val(data.admin[0].address);
+
+                /** [ Backdrop for bootstrap modal ] */
+                $('#editAdminModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                })
+
+                /** [ Validate admin_profile_form form using bootstrap validator ] */
+                $('#admin_profile_form').validator('validate');
+                $('#editAdminModal').modal('show');
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                $(".loader").hide();
+            }
+        });
+
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**Update admin profile bootstrap form validation **/
+$('#admin_profile_form').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
+
+    } else {
+        e.preventDefault();
+
+        /* call editAdmin function*/
+        editAdmin();
+    }
+})
+/**
+ * Function to update admin details
+ * @author <praveen>
+ */
+function editAdmin() {              
+    try {
+        var id      = $('#admin_profile_id').val();
+        var name    = $('#admin_profile_name').val();
+        var phone   = $('#admin_profile_phone').val();
+        var email   = $('#admin_profile_email').val();
+        var address = $('#admin_profile_address').val();
+
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/update-admin-profile-details",
+            dataType: "json",
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            method: "put",
+            data: {
+                _token: csrf_token,
+                id: id,
+                name: name,
+                email: email,
+                phone: phone,
+                address: address
+            },
+            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
+                200: function() {
+                    $('.snackbar_span').html('Profile Updated Successfully');
+                    showSnackbar();
+                    $('#editAdminModal').modal('hide');
+                },
+                409: function() {
+                    $('#admin_profile_result').removeAttr('style');
+                    $('#admin_profile_result').html('Email already registered.')
+                    $("#admin_profile_result").addClass("alert alert-warning");
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                /** [ To make top menu active ] */
+                $(function() {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function() {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/**Change admin password bootstrap form validation **/
+$('#change_admin_password').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
+
+    } else {
+        e.preventDefault();
+
+        /* call updateAdminPassword function*/
+        updateAdminPassword();
+    }
+})
+/**
+ * Function to update admin password
+ * @author <praveen>
+ */
+function updateAdminPassword() {
+    try {
+        var id               = $('#admin_id').val();
+        var current_password = $('#current_password').val();
+        var new_password     = $('#new_password').val();
+
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/admin/update-admin-password",
+            dataType: "json",
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            method: "put",
+            data: {
+                _token: csrf_token,
+                id: id,
+                np: new_password,
+                cp: current_password
+            },
+            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
+                200: function() {
+                    $('.snackbar_span').html('Password Changed Successfully');
+                    showSnackbar();
+                    $('#changePasswordModal').modal('hide');
+                },
+                400: function() {
+                    $('#change_password_result').removeAttr('style');
+                    $('#change_password_result').html('Your current password does not matches with the password you provided. Please try again.')
+                    $("#change_password_result").addClass("alert alert-warning");
+                },
+                409: function() {
+                    $('#change_password_result').removeAttr('style');
+                    $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
+                    $("#change_password_result").addClass("alert alert-warning");
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                /** [ To make top menu active ] */
+                $(function() {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function() {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
 </script>
 @yield('jqueryIncludes')
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

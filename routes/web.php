@@ -149,6 +149,9 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
 	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 	Route::put('customer/tesco/approve-tesco-order', 'Customer\Tesco\OrderController@approveTescoOrder');
+    
+    /** customer profile related routes */
+    Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
 });
 
 
@@ -168,6 +171,10 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
 	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
+	/** Merchandiser profile related routes */
+	Route::get('merchandiser/get-profile-details', 'Merchandiser\MerchandiserProfileController@getMerchandiserDetailsById');
+	Route::put('merchandiser/update-merchandiser-profile-details', 'Merchandiser\MerchandiserProfileController@updateMerchandiserById');
+	Route::put('merchandiser/update-merchandiser-password', 'Merchandiser\MerchandiserProfileController@updateMerchandiserPassword');
 
 });
 
@@ -241,6 +248,7 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
+Route::post('admin/tesco/template-management/save-taxation', 'Admin\Tesco\TemplateManagementCntrl@saveTax');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');

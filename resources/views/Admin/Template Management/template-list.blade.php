@@ -91,6 +91,7 @@
             </div>
         </div>
     </div>
+    <div id="snackbar"><span class="snackbar_span"></span></div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";

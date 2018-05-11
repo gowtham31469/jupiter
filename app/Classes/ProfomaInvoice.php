@@ -161,11 +161,10 @@ class ProfomaInvoice
                                           ->select('company.*')
                                           ->first();
                                          
-        if ($data['company_details']->id == 1)
-        {
+        if ($data['company_details']->id == 1) {
           $data['company_details']->pi_number = "JGA00".$pi_id;
         }
-        else{
+        else {
          $data['company_details']->pi_number = "SP00".$pi_id;
         }
         $data['company_details']->rev_number = 0;
@@ -200,11 +199,22 @@ class ProfomaInvoice
         $data['item_details']    = DB::table($table_name)
                                             ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
+                                            ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
                                             ->where('price_taxation.buyer_id',$buyer_id)
+                                            ->where('tesco_template.item_id',$request->template_id)
                                             ->where($table_name.'_quanty.'.$qnty_id,$id)
-                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name')
+                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name', 'tesco_template.tax')
                                             ->get();
+        $data['price_list']     = DB::table('price_taxation')
+                                  ->join('price_range','price_range.price_taxation_id','price_taxation.id')
+                                  ->where('price_taxation.template_id','=',$request->template_id)
+                                  ->where('price_taxation.customer_id',$customer_details->id)
+                                  ->where('price_taxation.buyer_id',$buyer_id)
+                                  ->orderBy('price_range.volume_to')
+                                  ->select('price_range.volume_from', 'price_range.volume_to','price_range.price')
+                                  ->get();
+
         return $data;
        
     }  
@@ -271,6 +281,11 @@ class ProfomaInvoice
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
                                     ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'))
                                     ->get();
+        $data['price_list'] = array();
+        foreach ($data['item_details'] as $key => $value) {
+          array_push($data['price_list'], ['volume_to' => $value->quantity, 'price' => $value->unit_price]);
+          
+        }
         return $data;
 
     }

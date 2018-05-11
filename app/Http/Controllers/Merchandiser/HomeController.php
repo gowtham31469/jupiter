@@ -44,7 +44,8 @@ class HomeController extends Controller
                           ->groupBy('orchestra_item_details.UVC')
                           ->groupBy('orchestra_wash_care_label_orders.id')
                           ->get();
-             return view('merchandiser.home',['orders' => $orders]);
+              $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+             return view('merchandiser.home',['orders' => $orders,'buyers' => $buyers]);
         } catch (\Exception $e)
           {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -177,7 +178,8 @@ class HomeController extends Controller
 	                          ->groupBy('orchestra_item_details.UVC')
 	                          ->groupBy('orchestra_wash_care_label_orders.id')
 	                          ->get();
-	             return view('merchandiser.past-orders',['orders' => $orders]);
+               $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+	             return view('merchandiser.past-orders',['orders' => $orders,'buyers' => $buyers]);
 	        } catch (\Exception $e)
 	          {
 	             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

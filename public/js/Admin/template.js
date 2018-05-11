@@ -109,10 +109,10 @@ function template_list() {
                                 $('.viewDiv').html('');
                                 $.each(data, function (index, value) {
                                     if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" value="'+value[0].tax+'" name="tax_'+value[0].id+'" step="0.01" id="tax_'+value[0].id+'" style="width: 80px;"> <span class="input-group-btn"><button class="btn btn-secondary btn-sm" type="button" id="'+value[0].id+'" onclick="saveTescoTax(this.id)">Save</button></span></div></td></tr></tbody></table></div></div>')
 
                                     } else {
-                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
+                                        $('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" value="'+value[0].tax+'" name="tax_'+value[0].id+'" id="tax_'+value[0].id+'" step="0.01" style="width: 80px;"><span class="input-group-btn"><button class="btn btn-secondary btn-sm" type="button" id="'+value[0].id+'" onclick="saveTescoTax(this.id)">Save</button></span></div></td></tr></tbody></table></div></div>')
 
                                     }
                                 });
@@ -235,4 +235,48 @@ function template_list() {
             $(".loader").css('margin-top', '0%');
         }
     })
+}
+
+function saveTescoTax(temp_id) {
+    var tax = $('#tax_'+temp_id).val();
+    var buyer = localStorage.getItem("buyer");
+    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: base_url + "/admin/" + buyer + "/template-management/save-taxation",
+        type: "POST",
+        dataType: "json",
+        data: {
+            template_id: temp_id,
+            tax : tax,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        success: function (data) {
+            $('.snackbar_span').html('Saved Successfully');
+            showSnackbar();
+        },
+        error: function (data) {
+             $('.snackbar_span').html('Unable to save. Try again!!');
+            showSnackbar();
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    });
+}
+
+/**
+ * To show the snackbar
+ */
+function showSnackbar() {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    // Add the "show" class to DIV
+    x.className = "show";
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
