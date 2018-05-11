@@ -167,6 +167,47 @@
             console.log("Error:"+e)
           }
        }
+       /**
+         * Get admin profile details function.
+         * author <praveen>
+         */
+        function getAdminProfile(id)
+        {
+           try{
+               $.ajax({
+                        url: base_url + "/admin/get-profile-details",
+                        type: "GET",
+                        data: {id:id},
+                        tryCount : 0,
+                        retryLimit : 2,
+                        beforeSend: function () {
+                            $(".loader").show();
+                        },
+                        statusCode: {
+                            /** [ Show response status based on HTTP status code ] */
+                            200: function() {
+                                    console.log(data)
+                            },
+                            400: function() {
+                                    console.log('error')
+                            }
+                        },
+                        error: function(errorXHR, errorStatus, errorThrown) {
+                          this.tryCount++;
+                          if (this.tryCount <= this.retryLimit) {
+                              $.ajax(this);
+                              return;
+                          }
+                        },
+                        complete: function () {
+                            $(".loader").hide();
+                        }
+                    });
+                
+            } catch (e) {
+            console.log("Error:"+e)
+          }
+         }
 </script>
 @yield('jqueryIncludes')
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

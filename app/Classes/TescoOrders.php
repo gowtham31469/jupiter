@@ -53,8 +53,8 @@ class TescoOrders
             {
               $order_id = "SP_TCL100".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -151,8 +151,8 @@ class TescoOrders
             {
               $order_id = "SP_TCL200".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -249,8 +249,8 @@ class TescoOrders
             {
               $order_id = "SP_TSL100".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -348,8 +348,8 @@ class TescoOrders
             {
               $order_id = "SP_THL100".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -446,8 +446,8 @@ class TescoOrders
             {
               $order_id = "SP_TCL400".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -544,8 +544,8 @@ class TescoOrders
             {
               $order_id = "SP_TSL300".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -643,8 +643,8 @@ class TescoOrders
             {
               $order_id = "SP_THL300".($max_id+1);
             }
-            /** [ Check if price is available for this template ] */
-            $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // /** [ Check if price is available for this template ] */
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
             
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
