@@ -30,7 +30,7 @@
 <text id="supplier" transform="matrix(1 0 0 1 109.6882 140.7756)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">SCM GARMENTS PVT LTD</text>
 <text transform="matrix(1 0 0 1 7.4744 219.8337)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">MANUFACTURED DATE: </text>
 <text transform="matrix(1 0 0 1 116.4164 220.1171)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="manufactured_date">FEBRUARY,2018</text>
-<text transform="matrix(1 0 0 1 199.8831 168.0102)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">No of Ration in One Carton:</text>
+<text transform="matrix(1 0 0 1 199.8831 168.0102)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">No of Ratios in One Carton:</text>
 <text transform="matrix(1 0 0 1 199.8831 185.0102)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">No of Pieces in One Ratio:</text>
 <text transform="matrix(1 0 0 1 320.1737 185.0102)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="pieces_in_ratio">9</text>
 <text transform="matrix(1 0 0 1 200.8831 198.0102)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Box</text>
