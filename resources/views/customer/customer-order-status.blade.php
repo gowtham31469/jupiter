@@ -19,6 +19,15 @@
         font-size: 12px; 
         font-weight: 400;
     }
+	.check-list
+	{
+		position: relative;
+		display: block;
+		padding: 10px 15px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">

@@ -1116,6 +1116,7 @@ function printDivTesco(data,name) {
 	    if(name == "TSL1-sticker" || name == "TSL3-sticker")
 		{
 			var svgarr=[];
+			var ajax_count=0;
 			$('#table_row tr').each(function(key, val) { 
 				var svgRoot = svgDoc.documentElement;
 				
@@ -1136,20 +1137,112 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
+					var size = $(this).find('.ce_single_size').val();
+
+			var description = $('#tesco_description').val()
+			if ((name == "TSL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/customer/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+
+							var svg = str;
+							var canvas = document.getElementById('hiddenCanvas');
+							var ctx = canvas.getContext('2d');
+							canvg(canvas, svg);
+
+							var theImage = canvas.toDataURL('image/png');
+
+							svgarr.push(theImage)
+							//						 console.log(svgRoot)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+
+					var svg = str;
+					var canvas = document.getElementById('hiddenCanvas');
+					var ctx = canvas.getContext('2d');
+					canvg(canvas, svg);
+
+					var theImage = canvas.toDataURL('image/png');
+
+					svgarr.push(theImage)
+
+				}
+			}
+			else
+			{
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
-				svgarr.push(svg)
+				
+				var svg = str;
+				var canvas = document.getElementById('hiddenCanvas');
+				var ctx = canvas.getContext('2d');
+				canvg(canvas, svg);
+
+				var theImage = canvas.toDataURL('image/png');
+				
+				svgarr.push(theImage)
+			}
+			ajax_count++;
+				
+				
 			})
-			var svg_fin = svgarr.join(',_');
+			if (ajax_count == document.getElementById("table_row").rows.length) {
+			//				console.log("hai")
+			//				console.log(svgarr)
+				var svg_fin = svgarr.join(',_');
+
+
+				PopupTescoSmall(svg_fin,name);
+			}
 			
-			
-			PopupTescoSmall(svg_fin,name);
 		}
 		else
 		{
 			var svgarr=[];
+			var ajax_count=0;
 			$('#table_row tr').each(function(key, val) { 
 				var svgRoot = svgDoc.documentElement;
 				if((name == "TCL1-sticker" && zone=="CE") ||(name == "TCL2-sticker" && zone=="CE") || (name == "TSL1-sticker" && zone=="CE") || (name == "THL1-sticker" && zone=="CE"))
@@ -1176,6 +1269,85 @@ function printDivTesco(data,name) {
 					
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
+				var size = $(this).find('.ce_single_size').val();
+
+			var description = $('#tesco_description').val()
+			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/customer/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
+							
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				
+
+				var svg = str;
+				var canvas = document.getElementById('hiddenCanvas');
+				var ctx = canvas.getContext('2d');
+				canvg(canvas, svg);
+
+				var theImage = canvas.toDataURL('image/png');
+				
+				svgarr.push(theImage)
+							//						 console.log(svgRoot)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				
+
+				var svg = str;
+				var canvas = document.getElementById('hiddenCanvas');
+				var ctx = canvas.getContext('2d');
+				canvg(canvas, svg);
+
+				var theImage = canvas.toDataURL('image/png');
+				
+				svgarr.push(theImage)
+
+				}
+			}
+			else
+			{
 				
 				var s = new XMLSerializer();
 				var d = svgRoot;
@@ -1190,10 +1362,21 @@ function printDivTesco(data,name) {
 				var theImage = canvas.toDataURL('image/png');
 				
 				svgarr.push(theImage)
+			}
+
+
+
+
+			ajax_count++;
 			})
+			if (ajax_count == document.getElementById("table_row").rows.length) {
+			//				console.log("hai")
+			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name);
+		}
+			
 		}
 	
 		
