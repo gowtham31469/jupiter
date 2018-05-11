@@ -116,6 +116,7 @@ function tescoOrderStatus()
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
                                         var old_po = "" 
+										var new_po_div_status=0;
                                         $(newObj).each(function (index1, value1) {
                                                                                         
                                             if (value1.po_number != "" && value1.   purchase_order_no != null)
@@ -132,9 +133,11 @@ function tescoOrderStatus()
 											else
 											{
 												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
+												new_po_div_status++;
 											}
                                             
                                         });
+										
                                         $('.list-group.checked-list-box .list-group-item').each(function () {
 
                                             // Settings
@@ -505,6 +508,11 @@ function tescoOrderStatus()
                                             }
 
                                     });
+										
+									if(newObj.length == new_po_div_status)
+									{
+										$('#new_po_div_status').addClass('hidden')
+									}
 
                                     },
                                     400: function()

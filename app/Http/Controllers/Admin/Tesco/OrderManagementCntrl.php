@@ -1846,6 +1846,7 @@ class OrderManagementCntrl extends Controller
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
+			
 			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
 			if($i == 3)
 			{
@@ -1880,14 +1881,27 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-        PDF::AddPage();
+        PDF::AddPage('P', 'A4');
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        $yy=12.5;
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+        $i=0;
+		$yy=12.5;
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
 			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$yy += 100;
+			if($i == 3)
+			{
+				$yy=112.5;
+				$i = 0;
+			}
+			else
+			{
+				$yy += 100;
+			}
+			//print_r($yy);
+			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));

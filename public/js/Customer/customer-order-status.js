@@ -236,6 +236,7 @@ function orderStatus() {
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
                                         var old_po = "" 
+										var new_po_div_status=0;
                                         $(newObj).each(function (index1, value1) {
                                             
                                             
@@ -248,8 +249,14 @@ function orderStatus() {
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
+												  $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
                                             }
-                                            $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
+											else
+											{
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
+												new_po_div_status++;
+											}
+                                          
                                         });
                                         $('.list-group.checked-list-box .list-group-item').each(function () {
 
@@ -622,6 +629,10 @@ function orderStatus() {
                                             }
 
                                     });
+									if(newObj.length == new_po_div_status)
+									{
+										$('#new_po_div_status').addClass('hidden')
+									}
 
                                     },
                                     400: function()
