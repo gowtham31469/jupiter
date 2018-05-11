@@ -48,7 +48,7 @@ function price_template_list() {
             $(".loader").show();
         },
         success: function (data) {
-            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:calc(100vh - 60px); border-left:1px solid #ddd;"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="viewDiv"></div></div> </div>')
+            $('.template-block').html('<div class="col-md-4"><div class="search-tree"><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class=" js-card style-4"  style="height:calc(100vh - 60px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1" style="margin-top:42px"> </div></div></div><div class="col-md-8"><div class="preview-tag" style="height:100%; border-left:1px solid #ddd;"><div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="viewDiv"></div></div> </div>')
 
             $('#tree1').jstree({
                 'core': {
@@ -140,7 +140,7 @@ function price_template_list() {
  * Method to show the pricing details on a template click
  */
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="col-md-4"><div class="form-group has-feedback"><label for="custom_name" class="form_label text-left">Custom Name</label><input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name" ></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="price" class="form_label text-left">Price (in ₹ per unit)</label><input class="form-control input-sm " min="0" placeholder="Price in INR/ Unit" required type="number" id="price" step="0.01"></div></div><div class="col-md-4"><div class="form-group has-feedback"><label for="taxation" class="form_label text-left">Tax</label><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" id="tax" min="0" step="0.01"><div class="input-group-addon">%</div></div></div></div><button type="submit" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="form-group row has-feedback"> <label for="custom_name" class="col-sm-3 col-md-offset-1 col-form-label text-left">Name in Invoice</label><div class="col-md-8"> <input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name"> </div></div><div class="form-group row has-feedback"> <label for="moq" class="col-sm-3 col-md-offset-1 col-form-label text-left">MOQ</label> <div class="col-md-8"> <input type="number" class="form-control input-sm" id="moq" oninput="baseMOQ()" placeholder="Minimum Order Quantity"> </div></div> <div class="col-md-offset-1"><button type="button" onclick="addVolume(this,event)" data-id="1" style="margin-bottom: 10px;" class="btn btn-default pull-left add-volume"><i class="fa fa-plus" aria-hidden="true"></i> Add Volume</button></div><div class="col-md-offset-1"><table class="table table-bordered text-center"> <thead> <tr> <th>Line No.</th> <th>Volume Begin</th> <th>Volume End</th> <th>Price</th> <th>Actions</th> </tr></thead> <tbody id="table_row"> <tr> <td class="slno">1</td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="volume_from_1" name="volume_from_1" placeholder="Volume From"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="volume_to_1" name="volume_to_1" placeholder="Volume To"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="price_1" name="price_1" placeholder="Price in INR" step="0.01"> <div class="help-block with-errors"></div></div></td><td></td></tr></tbody></table></div><button type="submit" style="margin-bottom:20px;" class="btn btn-primary pull-right">Save</button></form></div>');
 
     $('#priceForm').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -158,6 +158,112 @@ function showPricing() {
 }
 
 /**
+ * method to get the MOQ as the initial volume from data
+ * @return {[type]} [description]
+ */
+function baseMOQ() {
+    $('#volume_from_1').val($('#moq').val());
+}
+/**
+ *  addCESingle function for adding dynamic table row for CE single templates 
+ * @author <praveen>
+ * 
+ */
+function addVolume(rem,e) {
+try{
+     e.preventDefault(); 
+     /** [ Get template details from localstorage ] */
+     var data = JSON.parse(localStorage.getItem("data"));
+     var a = [] 
+     /** [ Get data-id of add button ] */
+     var id = $(rem).attr("data-id"); 
+     var val = parseInt(id) + 1; 
+     var html = '<tr>\
+                    <td class="slno">'+val+'</td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm" id="volume_from_'+val+'" name="volume_from_'+val+'" required="" placeholder="Volume From">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm"  id="volume_to_'+val+'" name="volume_to_'+val+'" required="" placeholder="Volume To">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>\
+                    <td>\
+                        <div class="form-group has-feedback">\
+                            <input type="text" class="form-control input-sm"  id="price_'+val+'" name="price_'+val+'" required="" placeholder="Price in INR" step="0.01">\
+                            <div class="help-block with-errors"></div>\
+                        </div>\
+                    </td>';
+
+      html += '<td>\
+                 <a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRow(this,event)"></i>\
+                 </a>\
+               </td>\
+               </tr>';
+     $('#table_row').append(html);
+
+     /** [ show tooltip ] */
+     $('.delete-row').tooltip('show')
+     $('.delete-row').tooltip('toggle')
+
+     /** [ Refresh boostrap form-validator ]  */
+     $('#priceForm').validator('update'); 
+
+      /** [ Update data-id of add button ] */
+     $(rem).attr("data-id", val); 
+
+     /** [ Call setSerialNumber function ] */
+     setSerialNumber()
+   } catch (e) {
+    /** [error statements] */
+   console.log("Error:"+e)
+ }
+}
+
+/**
+  * Removes row from order quantity table
+  *
+  * @author <praveen>
+  */
+function removeRow(rem,event) {
+try{
+    
+     event.preventDefault();
+     /** [ Remove Row from table ] */
+     $(rem).parent().parent().parent().remove();
+
+     /** [ Refresh boostrap form-validator ]  */
+     $('#create_tesco_order_form').validator('update');
+
+     /** [ Call setSerialNumber function ] */
+     setSerialNumber()
+
+  } catch (e) {
+    /** [ error statements ] */
+   console.log("Error:"+e)
+ }
+}
+/**
+  * Generate dynamic serial number for quantity table
+  *
+  * @author <praveen>
+  */
+function setSerialNumber()
+{
+    var j = 1; 
+
+    /** [ Dynamically generate slno ] */
+    $('#table_row tr').each(function(key, val) { 
+       $(this).find(".slno").text(j)
+       j++; 
+    })
+}
+
+/**
  * AJAX function to save the price and tax details of a template to the db
  */
 function savePricing() {
@@ -166,6 +272,7 @@ function savePricing() {
     var template_id = localStorage.getItem("template_id");
     var buyer_id    = localStorage.getItem("buyer_id");
     var csrf_token  = $('meta[name="csrf-token"]').attr('content');
+    var pricestring = $("#priceForm").serialize();
     $.ajax({
         url:base_url + "/admin/customer-management/save-price-tax",
         type:"POST",
@@ -176,8 +283,8 @@ function savePricing() {
             buyer_id:buyer_id,
             template_id:template_id,
             custom_name:$('#name').val(),
-            price:$('#price').val(),
-            tax:$('#tax').val()
+            moq:$('#moq').val(),
+            price:pricestring
 
         },
         beforeSend: function () {
@@ -191,6 +298,7 @@ function savePricing() {
         },
         complete: function () {
             $(".loader").hide();
+            $('.snackbar_span').html('Saved Successfully');
             showSnackbar();
         }
     });
@@ -221,10 +329,16 @@ function getSavedPriceTax() {
                 console.log('Internal server error in /admin/customer-management/get-price-tax API');
             }, 
             200: function(data) {
+                var leng = Object.keys(data.price_list).length;
                 $.each(data.price_list, function(i,val) {
                     $('#name').val(val.custom_name);
-                    $('#price').val(val.price);
-                    $('#tax').val(val.tax);
+                    $('#moq').val(val.moq);
+                    $('#volume_from_'+(i+1)).val(val.volume_from);
+                    $('#volume_to_'+(i+1)).val(val.volume_to);
+                    $('#price_'+(i+1)).val(val.price);
+                    if(i < leng-1) {
+                        $('.add-volume').trigger('click');
+                    }
                 }) 
             }
         },

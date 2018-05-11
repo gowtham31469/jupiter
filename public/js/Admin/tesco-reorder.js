@@ -112,22 +112,22 @@ function reordertescoartworks()
 			},
 			success: function (data) {
 				var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
-				
+				var i=1;
 				$(newObj).each(function(key,index){
 					
 					if(index.is_order_count_empty == 0)
 					{
 						   if(index.zone == "CE")
 							{
-								var span='<span class="label labels">'+index.zone+'</span>';
+								var span='<span class="label labels">'+index.zone+'</span><span id="list-li-reorder'+i+'"></span>';
 							}
 							else
 							{
-								var span='<span class="label sticker">'+index.zone+'</span>';
+								var span='<span class="label sticker">'+index.zone+'</span><span id="list-li-reorder'+i+'"></span>';
 							}
-								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-reorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+					i++;
 					}
-					
 				})
 				
 			},
@@ -176,19 +176,20 @@ function repeatordertescoartworks()
 				var newObj = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
 				
 				
-				
+				var i=1;
 				$(newObj).each(function(key,index){
 					if(index.is_order_count_empty == 0)
 					{
 						if(index.zone == "CE")
 						{
-							var span='<span class="label labels">'+index.zone+'</span>';
+							var span='<span class="label labels">'+index.zone+'</span><span id="list-li-repeatorder'+i+'"></span>';
 						}
 						else
 						{
-							var span='<span class="label sticker">'+index.zone+'</span>';
+							var span='<span class="label sticker">'+index.zone+'</span><span id="list-li-repeatorder'+i+'"></span>';
 						}
-						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+						$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+index.po_number+'</p></div><div class="col-md-2"><p class="name">'+index.TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+index.type+'","'+index.id+'","'+index.TemplateName.replace(' ', '')+'","'+index.zone+'","'+index.po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_repeat ul').show('slow')
+						i++;
 					}
 				})
 				
@@ -215,7 +216,7 @@ function repeatordertescoartworks()
  * @return View
  */
 
-function extraQuantityTesco(type,id,name,zone,po_number)
+function extraQuantityTesco(type,id,name,zone,po_number,liid)
 {
 	var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -327,7 +328,7 @@ function extraQuantityTesco(type,id,name,zone,po_number)
 
 				} else {
 					e.preventDefault();
-					setTescoReorder(type,id)
+					setTescoReorder(type,id,liid)
 				}
 			})
 
@@ -689,18 +690,20 @@ function jsbarcodetescoean(code, id, svgDoc) {
  * 
  * @return view
  */
-function setTescoReorder(type,id)
+function setTescoReorder(type,id,liid)
 {
+	
 	var item = $('.nav-item.active').find('a').text();
 	var po=$('.purchase_order_number').val();
 	var count=[];
+	var val_count=0;
 	 $('.tot_qty_table').each(function(i, item)
         {
             count[i]    = $(item).val();
-            
+		 	val_count	+= parseInt($(item).val());
         });
         count = count.join(',');
-	
+		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: 15px;margin-top: 5px;">'+val_count+'</span><img src="http://atlas-content-cdn.pixelsquid.com/stock-images/check-mark-z074ln3-600.jpg" alt="Tag" style="position: absolute;margin-left: 60px;margin-top: -2px;">');
 	if(item == "Repeat Order")
 	{
 		var buyer = localStorage.getItem("buyer");

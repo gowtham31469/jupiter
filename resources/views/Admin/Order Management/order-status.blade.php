@@ -20,6 +20,15 @@
 		font-size: 12px; 
 		font-weight: 400;
 	}
+	.check-list
+	{
+		position: relative;
+		display: block;
+		padding: 10px 15px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
@@ -251,7 +260,7 @@
                         <label style='color:red' id='new_po_error_status' class='hidden'>Please Enter PO Number</label>
                         <div class="form-group">
                             <label>PO Number</label>
-                            <input id="new_po_no_status" type="text" class="form-control">
+                            <input id="new_po_no_status" style="width: 40%;" type="text" class="form-control">
                         </div>
                         <div class="form-group">
                             <label style='color:red' id='new_po_file_error_status' class='hidden'>Please upload Po File</label>
@@ -271,7 +280,7 @@
         </div>
     </div>
     <div class="left-panel col-md-12" style="display: none;">
-        <div class="loader"></div>
+        <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="div-max">
             
 				<form method="POST" id="create_tesco_order_status_form" data-toggle="validator" role="form" novalidate="true">

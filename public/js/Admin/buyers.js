@@ -275,62 +275,6 @@
    }
  }
 
- /**
-  * Function for delete buyer
-  * @param id
-  * @author <praveen>
-  */
- function deleteBuyer(id)
- {
-  try{
-       var csrf_token = $('meta[name="csrf-token"]').attr('content');
-       $.ajax({
-           url:base_url + "/admin/buyer-management/delete-buyer",
-           dataType:"json",
-           beforeSend: function () {
-             $(".loader").show();
-           },
-           method:"delete",
-           data:{_token:csrf_token,id:id},
-           tryCount : 0,
-           retryLimit : 2,
-           statusCode: {
-
-                /** [Show response status based on HTTP status code] */
-                200: function() {
-                     $('.snackbar_span').html('Buyer deleted Successfully');
-                     showSnackbar();
-                     $('#deleteBuyerModal').modal('hide');
-                     buyers();
-                },
-                400: function() {
-                     $('.snackbar_span').html("Something went wrong!!");
-                     showSnackbar();
-                }
-           },
-           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-           },
-           complete: function () {
-                   /** [ To make top menu active ] */
-                    $(function () {
-                        var url = window.location;
-                        $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                        $('.dynamic-menu a').filter(function () {
-                            return this.href == url;
-                        }).parent('li').addClass('current-page').find('a').addClass('active');
-                    });
-                    $(".loader").hide();
-           }
-       })
-   } catch (e) {
-     console.log("Error:"+e)
-   }
- }
 
  /**
    * Function for merchandiser page
@@ -610,63 +554,6 @@
    }
    }
 
-   /**
-    * To delete merchandiser
-    * @param id
-    * @author <praveen>
-    *
-    */
-   function deleteMerchandiser(id)
-   {
-    try{
-           var csrf_token = $('meta[name="csrf-token"]').attr('content');
-           $.ajax({
-               url:base_url + "/admin/buyer-management/delete-merchandiser",
-               dataType:"json",
-               tryCount : 0,
-               retryLimit : 2,
-               beforeSend: function () {
-                 $(".loader").show();
-               },
-               method:"delete",
-               data:{_token:csrf_token,id:id},
-               statusCode: {
-
-                    /** [Show response status based on HTTP status code] */
-                    200: function() {
-                         $('.snackbar_span').html('Merchandiser deleted Successfully');
-                         showSnackbar();
-                         $('#deleteMerchandiserModal').modal('hide');
-                         merchandiser();
-                    },
-                    400: function() {
-                         $('.snackbar_span').html('Something went wrong');
-                         showSnackbar();
-                    }
-               },
-               error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-               },
-               complete: function () {
-                     /** [ To make top menu active ] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                     $(".loader").hide();
-               }
-           })
-     } catch (e) {
-     console.log("Error:"+e)
-   }
-   }
 
  /**
   * Validation for numeric values

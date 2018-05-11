@@ -279,6 +279,7 @@ border: 0;
     <div class="clearfix"></div>
 </div>
     <div class="main-content">
+        <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
         <div class="select-buyer">
         </div>
     </div>
@@ -371,21 +372,12 @@ border: 0;
                 <h4 class="modal-title" id="gridSystemModalLabel">Customer Purchase Order Upload</h4>
             </div>
             <div class="modal-body">
-                <div class="tabbable">{{-- Only required for left/right tabs --}}
-                    <ul class="nav nav-tabs">
-                        <li class="active" id='single_tab'>
-                            <a href="#single" data-toggle="tab">Single PO Upload</a>
-                        </li>
-                        <li id='combined_tab'>
-                            <a href="#combined" data-toggle="tab">Combined PO Upload</a>
-                        </li>
-                    </ul>
-                    {{-- <p>Note : If you don't want to upload PO at this point, click upload later button. Later you can upload PO on the order status page.</p> --}}
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="single"></div>
-                        <div class="tab-pane" id="combined"></div>
-                    </div>
+                <div class="alert alert-success" id="success-alert">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>Success! </strong>
+                    PO uploaded successfully.
                 </div>
+                <div id="po-upload-modal-content"></div>
             </div>
         </div>
     </div>
@@ -422,27 +414,6 @@ border: 0;
     </div>
 </div>
 
-{{-- Artwork quantity(count) missing for all artworks modal --}}
-<div class="modal fade" id="countMissingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h5>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="alert-message alert-message-warning" style="background-color: #f2f5fc;border-color: #f0ad4e;padding: 20px;border-left: 3px solid #b4d1f0">
-                                <h4 style="color: #00b6ff !important">Please enter atleast one artwork quantity and quantity must be greater than 0.</h4>
-                            </div>
-                        </div>
-                    </div>
-                </h5>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
 {{-- Order already exists warning modal --}}
 <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -487,6 +458,7 @@ border: 0;
         localStorage.removeItem("wash_composition");
         localStorage.removeItem("deletemain");
         localStorage.removeItem("deletewash");
+        $("#success-alert").hide();
         $('.select-buyer').click(function(){
             $('.select-buyer').addClass('hidden');
         })
