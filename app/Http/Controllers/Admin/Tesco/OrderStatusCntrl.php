@@ -204,6 +204,7 @@ class OrderStatusCntrl extends Controller
                     foreach ($data['price_list'] as $i => $val) {
                         if($value->quantity <= $val->volume_to) {
                             $unit_cost = $val->price;
+                            break;
                         }
                     }
                     $total_qnty+= $value->quantity;
