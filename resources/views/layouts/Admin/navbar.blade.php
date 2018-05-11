@@ -98,7 +98,7 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li><a href="#" onclick="getAdminProfile({{ Auth::user()->id }})">Profile</a></li>
-                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
                        <!--  <li><a class="dropdown-item logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
@@ -119,7 +119,8 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
-
+{{-- Snackbar html code --}}
+    <div id="snackbar"><span class="snackbar_span"></span></div>
 {{-- Send Feedback modal --}}
      <div class="modal fade" id="sendFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-sm" role="document">
@@ -157,5 +158,89 @@
             </div>
         </div>
     </div>
-
-
+ 
+  {{-- Edit admin profile modal --}}
+  <div class="modal fade" id="editAdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title" id="myModalLabel">Edit Admin Profile</h4>
+             </div>
+             {!! Form::open(['id' => 'admin_profile_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 <div class="modal-body">
+                  {{-- hidden id for edit functionality --}}
+                   {!! Form::hidden('admin_profile_id',$value = null, array('id'=>'admin_profile_id','class' => 'form-control input-sm')) !!}
+                   <div id="admin_profile_result"></div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('admin_profile_name', 'Name', ['class' => 'form_label']) !!}
+                       {!! Form::text('admin_profile_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('admin_profile_email', 'Email', ['class' => 'form_label']) !!}
+                       <div class="input-group">
+                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                       </div>
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('admin_profile_phone', 'Phone', ['class' => 'form_label']) !!}
+                       <div class="input-group">
+                         <span class="input-group-addon input-sm" id="basic-addon1">+91</span>
+                         {!! Form::text('admin_profile_phone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Phone','data-minlength' => '10','maxlength' => '10','required','onkeypress' => 'return isNumber(event)')) !!}
+                      </div>
+                      <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('admin_profile_address', 'Address', ['class' => 'form_label']) !!}
+                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
+{{-- Change password modal --}}
+     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                </div>
+                {!! Form::open(['id' => 'change_admin_password','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                    <div id="change_password_result"></div>
+                    {{-- hidden id for edit functionality --}}
+                     {!! Form::hidden('admin_id',$value = Auth::user()->id, array('id'=>'admin_id','class' => 'form-control input-sm')) !!}
+                     <div class="form-group has-feedback">
+                       {!! Form::label('current_password', 'Current Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('current_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Current Password','required', 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('new_password', 'New Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'New Password','required', 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('confirm_new_password', 'Confirm New Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('confirm_new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Confirm New Password','required','data-match' => '#new_password', 'data-match-error' => "Whoops, these don't match", 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Change Password', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>

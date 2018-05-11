@@ -443,3 +443,5 @@ Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleMa
 
 /** Admin profile related routes */
 Route::get('admin/get-profile-details', 'Admin\AdminProfile\AdminProfileController@getAdminDetailsById');
+Route::put('admin/update-admin-profile-details', 'Admin\AdminProfile\AdminProfileController@updateAdminById');
+Route::put('admin/update-admin-password', 'Admin\AdminProfile\AdminProfileController@updateAdminPassword');
