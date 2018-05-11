@@ -203,7 +203,7 @@ class ProfomaInvoice
                                             ->where('price_taxation.customer_id',$customer_details->id)
                                             ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where($table_name.'_quanty.'.$qnty_id,$id)
-                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name','price_taxation.price as unit_price','price_taxation.tax')
+                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name')
                                             ->get();
         return $data;
        

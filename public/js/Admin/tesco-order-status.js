@@ -1084,7 +1084,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
             {
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
-                    $('.snackbar_span').html('Something went wrong');
+                    $('.snackbar_span').html("Customer Profile isn't complete");
                     $('#snackbar').css('background-color','#F44336');
                     showSnackbar();
                }
