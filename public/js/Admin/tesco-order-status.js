@@ -1131,6 +1131,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             $.each(data.data.price_list, function(i, val){
                                 if(value.quantity <= val.volume_to) {
                                     unit_price = val.price;
+                                     return false; 
                                 }
                             });
                             if(unit_price === 0){
