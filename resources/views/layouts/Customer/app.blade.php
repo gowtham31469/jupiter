@@ -69,175 +69,174 @@
     var base_url = "<?php echo  url('/') ?>";
 
      $(document).ready(function() {
-        $('#send_feedback').trigger("reset");
-        $('#change_customer_password').trigger("reset");
-        $('#change_password_result').hide();
-     });
-     /** Send feedback bootstrap form validation **/
-      $('#send_feedback').validator().on('submit', function (e) {
-      if (e.isDefaultPrevented())
-      {
-
-      }
-      else
-      {
-         e.preventDefault();
-         var csrf_token     = $('meta[name="csrf-token"]').attr('content');
-         var form_data      = new FormData($(this)[0]);
-
-         form_data.append('_token', csrf_token);
-         /* call sendFeedback function*/
-         sendFeedback(form_data);
-      }
-    })
-    /**
-      * Send feedback function.
-      * author <praveen>
-      */
-     function sendFeedback(form_data)
-     {
-        try{
-            $.ajax({
-                     url: base_url + "/feedback-mail/send",
-                     type: "POST",
-                     data: form_data,
-                     cache: false,
-                     contentType: false,
-                     processData: false,
-                     tryCount : 0,
-                     retryLimit : 2,
-                     beforeSend: function () {
-                         $('#sendFeedbackModal').modal('hide');
-                         $(".loader").show();
-                     },
-                     statusCode: {
-                         /** [ Show response status based on HTTP status code ] */
-                         200: function() {
-                                 $('.snackbar_span').html('Feedback Sent Successfully');
-                                 showSnackbar();
-                         },
-                         400: function() {
-                                 console.log('error')
-                         }
-                     },
-                     error: function(errorXHR, errorStatus, errorThrown) {
-                       this.tryCount++;
-                       if (this.tryCount <= this.retryLimit) {
-                           $.ajax(this);
-                           return;
-                       }
-                     },
-                     complete: function () {
-                         $(".loader").hide();
-                     }
-                 });
-             
-         } catch (e) {
-         console.log("Error:"+e)
-       }
-      }
-  /** To refresh modal while hidden **/
-  $('.modal').on('hidden.bs.modal', function (e) {
     $('#send_feedback').trigger("reset");
     $('#change_customer_password').trigger("reset");
     $('#change_password_result').hide();
-   })
-   /**
-     * showSnackbar function
-     * @author    <praveen>
-     */
-     function showSnackbar() {
-       try{
-         /** [ Get the snackbar DIV ] */
-         var x = document.getElementById("snackbar")
+});
+/** Send feedback bootstrap form validation **/
+$('#send_feedback').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
 
-         /** [ Add the "show" class to DIV ] */
-         x.className = "show";
+    } else {
+        e.preventDefault();
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var form_data = new FormData($(this)[0]);
 
-         /** [  After 3 seconds, remove the show class from DIV ] */
-         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-         } catch (e) {
-          console.log("Error:"+e)
-        }
-     }
-   /**Change customer password bootstrap form validation **/
-      $('#change_customer_password').validator().on('submit', function (e) {
-      if (e.isDefaultPrevented())
-      {
-
-      }
-      else
-      {
-         e.preventDefault();
-         
-         /* call updateCustomerPassword function*/
-         updateCustomerPassword();
-      }
-    })
-  /**
-    * Function to update customer password
-    * @author <praveen>
-    */
-   function updateCustomerPassword()
-   {
-    try{
-         var id               = $('#customer_id').val();
-         var current_password = $('#current_password').val();
-         var new_password     = $('#new_password').val();
-
-         var csrf_token = $('meta[name="csrf-token"]').attr('content');
-         $.ajax({
-             url:base_url + "/customer/update-customer-password",
-             dataType:"json",
-             tryCount : 0,
-             retryLimit : 2,
-             beforeSend: function () {
-               $(".loader").show();
-             },
-             method:"put",
-             data:{_token:csrf_token,id:id,np:new_password,cp:current_password},
-             statusCode: {
-
-                  /** [Show response status based on HTTP status code] */
-                  200: function() {
-                       $('.snackbar_span').html('Password Changed Successfully');
-                       showSnackbar();
-                       $('#changePasswordModal').modal('hide');
-                  },
-                  400: function() {
-                       $('#change_password_result').removeAttr('style');
-                       $('#change_password_result').html('Your current password does not matches with the password you provided. Please try again.')
-                       $("#change_password_result").addClass("alert alert-warning");
-                  },
-                  409: function() {
-                       $('#change_password_result').removeAttr('style');
-                       $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
-                       $("#change_password_result").addClass("alert alert-warning");
-                  }
-             },
-             error: function(errorXHR, errorStatus, errorThrown) {
+        form_data.append('_token', csrf_token);
+        /* call sendFeedback function*/
+        sendFeedback(form_data);
+    }
+})
+/**
+ * Send feedback function.
+ * author <praveen>
+ */
+function sendFeedback(form_data) {
+    try {
+        $.ajax({
+            url: base_url + "/feedback-mail/send",
+            type: "POST",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $('#sendFeedbackModal').modal('hide');
+                $(".loader").show();
+            },
+            statusCode: {
+                /** [ Show response status based on HTTP status code ] */
+                200: function() {
+                    $('.snackbar_span').html('Feedback Sent Successfully');
+                    showSnackbar();
+                },
+                400: function() {
+                    console.log('error')
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
                 this.tryCount++;
                 if (this.tryCount <= this.retryLimit) {
                     $.ajax(this);
                     return;
                 }
-             },
-             complete: function () {
-                     /** [ To make top menu active ] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                       $(".loader").hide();
-             }
-         })
-     } catch (e) {
-     console.log("Error:"+e)
-   }
-   }
+            },
+            complete: function() {
+                $(".loader").hide();
+            }
+        });
+
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/** To refresh modal while hidden **/
+$('.modal').on('hidden.bs.modal', function(e) {
+    $('#send_feedback').trigger("reset");
+    $('#change_customer_password').trigger("reset");
+    $('#change_password_result').hide();
+})
+/**
+ * showSnackbar function
+ * @author    <praveen>
+ */
+function showSnackbar() {
+    try {
+        /** [ Get the snackbar DIV ] */
+        var x = document.getElementById("snackbar")
+
+        /** [ Add the "show" class to DIV ] */
+        x.className = "show";
+
+        /** [  After 3 seconds, remove the show class from DIV ] */
+        setTimeout(function() {
+            x.className = x.className.replace("show", "");
+        }, 3000);
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/**Change customer password bootstrap form validation **/
+$('#change_customer_password').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
+
+    } else {
+        e.preventDefault();
+
+        /* call updateCustomerPassword function*/
+        updateCustomerPassword();
+    }
+})
+/**
+ * Function to update customer password
+ * @author <praveen>
+ */
+function updateCustomerPassword() {
+    try {
+        var id               = $('#customer_id').val();
+        var current_password = $('#current_password').val();
+        var new_password     = $('#new_password').val();
+
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/customer/update-customer-password",
+            dataType: "json",
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            method: "put",
+            data: {
+                _token: csrf_token,
+                id: id,
+                np: new_password,
+                cp: current_password
+            },
+            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
+                200: function() {
+                    $('.snackbar_span').html('Password Changed Successfully');
+                    showSnackbar();
+                    $('#changePasswordModal').modal('hide');
+                },
+                400: function() {
+                    $('#change_password_result').removeAttr('style');
+                    $('#change_password_result').html('Your current password does not matches with the password you provided. Please try again.')
+                    $("#change_password_result").addClass("alert alert-warning");
+                },
+                409: function() {
+                    $('#change_password_result').removeAttr('style');
+                    $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
+                    $("#change_password_result").addClass("alert alert-warning");
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                /** [ To make top menu active ] */
+                $(function() {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function() {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
 </script>
     @yield('jqueryIncludes')
 <script>
