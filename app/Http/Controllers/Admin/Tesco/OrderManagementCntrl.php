@@ -1846,6 +1846,7 @@ class OrderManagementCntrl extends Controller
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
+			
 			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
 			if($i == 3)
 			{

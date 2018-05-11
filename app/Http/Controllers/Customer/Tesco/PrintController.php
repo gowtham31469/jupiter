@@ -202,14 +202,21 @@ class PrintController extends Controller
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
+					$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
-					
+
 					PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
 					PDF::AddPage();
 					PDF::setPage($j, true);
 					$yy=80;
 					$j++;
-					PDF::Image($value, 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					
+					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+					 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+
+					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					
+					//PDF::Image($value, 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					$i++;
 					
 				}
@@ -399,6 +406,7 @@ class PrintController extends Controller
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
+			$svg=urldecode($value);
 			PDF::SetFillColor(255,255,255);
 
 			PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
@@ -406,7 +414,11 @@ class PrintController extends Controller
 			PDF::setPage($j, true);
 			$yy=80;
 			$j++;
-				PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+			
+			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+				//PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 
 		}

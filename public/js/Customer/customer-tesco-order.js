@@ -1163,18 +1163,25 @@ function printDivTesco(data,name) {
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
+//							var s = new XMLSerializer();
+//							var d = svgRoot;
+//							var str = s.serializeToString(d);
+//
+//							var svg = str;
+//							var canvas = document.getElementById('hiddenCanvas');
+//							var ctx = canvas.getContext('2d');
+//							canvg(canvas, svg);
+//
+//							var theImage = canvas.toDataURL('image/png');
+//
+//							svgarr.push(theImage)
+							
 							var s = new XMLSerializer();
 							var d = svgRoot;
 							var str = s.serializeToString(d);
 
-							var svg = str;
-							var canvas = document.getElementById('hiddenCanvas');
-							var ctx = canvas.getContext('2d');
-							canvg(canvas, svg);
-
-							var theImage = canvas.toDataURL('image/png');
-
-							svgarr.push(theImage)
+							svgarr.push(str)
+							
 							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
@@ -1195,35 +1202,47 @@ function printDivTesco(data,name) {
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
 					}
+//					var s = new XMLSerializer();
+//					var d = svgRoot;
+//					var str = s.serializeToString(d);
+//
+//					var svg = str;
+//					var canvas = document.getElementById('hiddenCanvas');
+//					var ctx = canvas.getContext('2d');
+//					canvg(canvas, svg);
+//
+//					var theImage = canvas.toDataURL('image/png');
+//
+//					svgarr.push(theImage)
+					
 					var s = new XMLSerializer();
 					var d = svgRoot;
 					var str = s.serializeToString(d);
 
-					var svg = str;
-					var canvas = document.getElementById('hiddenCanvas');
-					var ctx = canvas.getContext('2d');
-					canvg(canvas, svg);
-
-					var theImage = canvas.toDataURL('image/png');
-
-					svgarr.push(theImage)
+					svgarr.push(str)
 
 				}
 			}
 			else
 			{
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+				
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				
-				var svg = str;
-				var canvas = document.getElementById('hiddenCanvas');
-				var ctx = canvas.getContext('2d');
-				canvg(canvas, svg);
 
-				var theImage = canvas.toDataURL('image/png');
-				
-				svgarr.push(theImage)
+				svgarr.push(str)
 			}
 			ajax_count++;
 				
@@ -1296,19 +1315,26 @@ function printDivTesco(data,name) {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
 							
-				var s = new XMLSerializer();
-				var d = svgRoot;
-				var str = s.serializeToString(d);
-				
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+							
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
 
-				var svg = str;
-				var canvas = document.getElementById('hiddenCanvas');
-				var ctx = canvas.getContext('2d');
-				canvg(canvas, svg);
-
-				var theImage = canvas.toDataURL('image/png');
-				
-				svgarr.push(theImage)
+							svgarr.push(str)
+							
 							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
@@ -1330,38 +1356,50 @@ function printDivTesco(data,name) {
 						svgDoc.getElementById("description").innerHTML = '';
 					}
 					
-				var s = new XMLSerializer();
-				var d = svgRoot;
-				var str = s.serializeToString(d);
-				
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+					
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
 
-				var svg = str;
-				var canvas = document.getElementById('hiddenCanvas');
-				var ctx = canvas.getContext('2d');
-				canvg(canvas, svg);
-
-				var theImage = canvas.toDataURL('image/png');
-				
-				svgarr.push(theImage)
+					svgarr.push(str)
 
 				}
 			}
 			else
 			{
 				
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+				
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				
 
-				var svg = str;
-				var canvas = document.getElementById('hiddenCanvas');
-				var ctx = canvas.getContext('2d');
-				canvg(canvas, svg);
-
-				var theImage = canvas.toDataURL('image/png');
-				
-				svgarr.push(theImage)
+				svgarr.push(str)
 			}
 
 
