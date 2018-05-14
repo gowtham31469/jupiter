@@ -16,6 +16,18 @@ function isNumber(evt) {
     }
 }
 
+/**
+ * Make any string as camelCase
+ * @param  {[type]} str [description]
+ * @return {[type]}     [description]
+ */
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+    return index == 0 ? match.toLowerCase() : match.toUpperCase();
+  });
+}
+
 /**  
   * Validation for numeric values with dot
   * @param   evt 
@@ -91,14 +103,14 @@ function tescoOrders() {
                             CEPOCollection.push(newObj[i].po_number); 
                             CEUniqueNames.push(newObj[i].ce_style_ref);
                             artwork_collection[newObj[i].ce_style_ref] = {};
-                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;    
+                            artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);  
                         } else {
                             if(CEPOCollection.indexOf(newObj[i].po_number) === -1) {
                                 CEPOCollection.push(newObj[i].po_number);
-                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
                             } else {
                                 var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
-                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
+                                artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
                             }
                         }
 
@@ -107,14 +119,14 @@ function tescoOrders() {
                             UKPOCollection.push(newObj[i].po_number);
                             UKUniqueNames.push(newObj[i].uk_style_ref);
                             artwork_collection[newObj[i].uk_style_ref] = {};
-                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                            artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
                         } else {
                             if(UKPOCollection.indexOf(newObj[i].po_number) === -1) {
                                 UKPOCollection.push(newObj[i].po_number);
-                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName;
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
                             } else {
                                 var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
-                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName;
+                                artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group+','+newObj[i].template_id+'__'+newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
                             }
                             
                         }
@@ -233,7 +245,7 @@ function tescoOrders() {
                 });
 
                 $('body').on('change', '#po_number', function() {
-                    loadArtworkNames(this.value,artwork_collection);
+                    loadArtworkNames(artwork_collection[this.value]);
                 });
 
                 /** [ Load selectpicker ] */
@@ -6069,11 +6081,11 @@ function mapStoredValues(oDetails) {
  * @param  {string} style     Style Number of the order
  * @param  {object} artwork_collection Collection of all orders
  */
-function loadArtworkNames(style, artwork_collection) {
-    if(Object.keys(artwork_collection).length !== 0 && artwork_collection.constructor === Object) {
+function loadArtworkNames(artwork_collection_style) {
+    if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
         var options="<option value=''>Search Artwork</option>";
-        $.each(artwork_collection[style], function(po,templs) {
+        $.each(artwork_collection_style, function(po,templs) {
             var awArray = templs.split(",");
             var ratioTCL  = [];
             var ratioTCLArtworks  = [];
@@ -6083,55 +6095,63 @@ function loadArtworkNames(style, artwork_collection) {
             var ratioTHLArtworks = [];
             var singleTHL = [];
             var singleTHLArtworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus;
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
                     case 'TCL 1':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TCL 2':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TCL 4':
                         singleTCL.push(templateInfo[1]);
                         singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
                         break;
                     case 'TSL 1':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TSL 3':
                         singleTCL.push(templateInfo[1]);
                         singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
                         break;
                     case 'THL 1':
                         ratioTHL.push(templateInfo[1]);
                         ratioTHLArtworks.push(templateInfo[0]);
+                        ratioTHLStatus = templateInfo[2];
                         break;
                     case 'THL 3':
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
+                        singleTHLStatus = templateInfo[2];
                 }
             }
             if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
-                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTCLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
                 
             }
 
             if (typeof singleTCL !== 'undefined' && singleTCL.length > 0 && typeof singleTCLArtworks !== 'undefined' && singleTCLArtworks.length > 0) {
-                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
                 
             }
 
             if (typeof ratioTHL !== 'undefined' && ratioTHL.length > 0 && typeof ratioTHLArtworks !== 'undefined' && ratioTHLArtworks.length > 0) {
-                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTHLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
                 
             }
 
             if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
-                options+="<option value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
                 
             }
         });
