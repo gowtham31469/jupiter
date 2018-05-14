@@ -1137,7 +1137,7 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
-				if((name == "TCL4-sticker" || name== "TSL3-sticker" || name== "THL3-sticker"))
+				if((name== "TSL3-sticker"))
 				{
 					if(zone == "CE")
 					{
@@ -1326,7 +1326,7 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
-				if((name == "TCL4-sticker" || name== "THL3-sticker"))
+				if((name== "THL3-sticker"))
 				{
 					
 					if(zone == "CE")
@@ -1340,7 +1340,7 @@ function printDivTesco(data,name) {
 					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 				}
-				else if((name == "TCL1-sticker") ||(name == "TCL2-sticker")  || (name == "THL1-sticker"))
+				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
 				{
 					if(zone == "CE")
 					{
