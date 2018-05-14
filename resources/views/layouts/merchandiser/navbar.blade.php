@@ -65,7 +65,7 @@
                      <div class="help-block with-errors"></div>
                    </div>
                     <div class="form-group has-feedback">
-                        {!! Form::label('image[]', 'Attach Screenshot', ['class' => 'form_label']) !!}
+                        {!! Form::label('image[]', 'Attach Screenshots', ['class' => 'form_label']) !!}
                         {!! Form::file('image[]', array('multiple'=>true,'accept'=>'image/*','class'=>'form-control TheFiles'))  !!}
                         <div class="help-block with-errors"></div>
                     </div>
