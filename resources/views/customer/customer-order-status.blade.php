@@ -19,6 +19,15 @@
         font-size: 12px; 
         font-weight: 400;
     }
+	.check-list
+	{
+		position: relative;
+		display: block;
+		padding: 10px 15px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
     .html2canvas-container { width: 3000px !important; height: 3000px !important; }
 </style>
 <div class="col-sm-12 col-md-12 main">
@@ -207,7 +216,7 @@
         </div>
     </div>
     <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

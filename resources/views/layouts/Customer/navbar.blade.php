@@ -25,13 +25,14 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown buyer-nav-select"></li>
+                        <li><a class="notification" href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
                         <!-- Authentication Links -->
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::guard('web_customer')->user()->company_name[0] }}</span> {{ Auth::guard('web_customer')->user()->company_name }}<span class="caret"></span></a>
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#">Profile</a></li>
-                                    <li><a href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Send Feedback</a></li>
+                                    <li><a href="#" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -74,7 +75,7 @@
                      <div class="help-block with-errors"></div>
                    </div>
                     <div class="form-group has-feedback">
-                        {!! Form::label('image[]', 'Attach Screenshot', ['class' => 'form_label']) !!}
+                        {!! Form::label('image[]', 'Attach Screenshots', ['class' => 'form_label']) !!}
                         {!! Form::file('image[]', array('multiple'=>true,'accept'=>'image/*','class'=>'form-control TheFiles'))  !!}
                         <div class="help-block with-errors"></div>
                     </div>
@@ -87,3 +88,42 @@
         </div>
     </div>
 </div>
+{{-- Snackbar html code --}}
+ <div id="snackbar"><span class="snackbar_span"></span></div>
+{{-- Change password modal --}}
+     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+                </div>
+                {!! Form::open(['id' => 'change_customer_password','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                    <div id="change_password_result"></div>
+                    {{-- hidden id for edit functionality --}}
+                     {!! Form::hidden('customer_id',$value = Auth::guard("web_customer")->user()->id, array('id'=>'merchandiser_id','class' => 'form-control input-sm')) !!}
+                     <div class="form-group has-feedback">
+                       {!! Form::label('current_password', 'Current Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('current_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Current Password','required', 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('new_password', 'New Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'New Password','required', 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                     <div class="form-group has-feedback">
+                       {!! Form::label('confirm_new_password', 'Confirm New Password', ['class' => 'form_label']) !!}
+                       {!! Form::text('confirm_new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Confirm New Password','required','data-match' => '#new_password', 'data-match-error' => "Whoops, these don't match", 'data-minlength' => 6)) !!}
+                       <div class="help-block with-errors"></div>
+                     </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Change Password', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>

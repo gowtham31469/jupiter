@@ -236,6 +236,7 @@ function orderStatus() {
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
                                         var old_po = "" 
+										var new_po_div_status=0;
                                         $(newObj).each(function (index1, value1) {
                                             
                                             
@@ -248,8 +249,14 @@ function orderStatus() {
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
+												  $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
                                             }
-                                            $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
+											else
+											{
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
+												new_po_div_status++;
+											}
+                                          
                                         });
                                         $('.list-group.checked-list-box .list-group-item').each(function () {
 
@@ -622,6 +629,10 @@ function orderStatus() {
                                             }
 
                                     });
+									if(newObj.length == new_po_div_status)
+									{
+										$('#new_po_div_status').addClass('hidden')
+									}
 
                                     },
                                     400: function()
@@ -1926,13 +1937,12 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
             {
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
-                    $('.snackbar_span').html('Something went wrong');
+                    $('.snackbar_span').html("Customer Profile isn't complete");
                     $('#snackbar').css('background-color','#F44336');
                     showSnackbar();
                }
                else
                {
-                    console.log(data.data.bank_details.pi_date)
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
@@ -1966,69 +1976,86 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     }        
                      
                
-                    if (data.data.item_details.length!=0)
+                    if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
                     {
-
+                        var noPrice = 0;
                         tax = data.data.item_details[0].tax;
                         $.each(data.data.item_details, function (index, value)
                         {
+                            var unit_price = 0;
+                            $.each(data.data.price_list, function(i, val){
+                                if(value.quantity <= val.volume_to) {
+                                    unit_price = val.price;
+                                     return false; 
+                                }
+                            });
+                            if(unit_price === 0){
+                                noPrice++;
+                            }
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+(value.quantity*value.unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+value.unit_price+'</td><td>'+(value.quantity*value.unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
-                            
-                            
                             totalqnty+=value.quantity;
-                            subtotal+=value.quantity*value.unit_price;
-
+                            subtotal+=value.quantity * unit_price;
                         });
-                        var taxamnt= subtotal*(tax/100);
-                        var billamnt = subtotal+taxamnt;
-                        tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
-                        if (data.data.bank_details.place_of_supply==1)
-                        {
-                           tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
-                        }
-                        else if (data.data.bank_details.place_of_supply==2)
-                        {
-                            tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
-                        }
-                        else
-                        {
-                            tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
-                        }
-                        $('#item_details').html(tr)
-                        if (pi_status=="true")
-                        {
-                            $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>');
-                        }
-                        else
-                        {
-                            $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=tescoApprovePI("'+id+'","'+tableName+'","tesco")>Approve</button><button class="btn btn-danger btn-xs" onclick=tescoRejectPI("'+id+'","'+tableName+'","tesco")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-                        }
-                        var logo = base_url+data.data.company_details.logo
-                        $('#company-logo').attr('src',logo);
-                        $('#profoma-invoice').modal("show");
-                        //Download Pi using JSPDF
-                        $('.downloadPi').click(function () {
-                            var myOffscreenEl = document.getElementById("proforma-invoice"),
-                                useWidth      = myOffscreenEl.style.width,
-                                useHeight     = myOffscreenEl.style.height;
-                                myOffscreenEl.style.backgroundColor = 'white';
 
-                            html2pdf(myOffscreenEl, {
-                              margin:       10,
-                              filename:     'Proforma-Invoice.pdf',
-                              image:        { type: 'jpeg', quality: 0.98 },
-                              html2canvas:  { dpi: 300, letterRendering: true },
-                              jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+                        if(noPrice < 1) {
+                            var taxamnt = subtotal*(tax/100);
+                            var billamnt = subtotal+taxamnt;
+                            tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
+                            if (data.data.bank_details.place_of_supply==1)
+                            {
+                               tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                            }
+                            else if (data.data.bank_details.place_of_supply==2)
+                            {
+                                tr += '<h4> IGST : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+' </p></div><hr /></div>'
+                            }
+                            else
+                            {
+                                tr += '<h4> Taxes : '+tax+'% (<span>'+taxamnt.toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹'+billamnt.toFixed(2)+' </h4><p style="text-transform: capitalize">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'
+                            }
+                            $('#item_details').html(tr)
+                            if (pi_status=="true")
+                            {
+                                $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" >Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            }
+                            else
+                            {
+                                $('.pi_actions').html('<button class="btn btn-success btn-xs" onclick=tescoApprovePI("'+template_id+'","'+id+'","'+tableName+'","tesco")>Approve</button><button class="btn btn-danger btn-xs" onclick=tescoRejectPI("'+id+'","'+tableName+'","tesco")>Reject</button><button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                            }
+                            var logo = base_url+data.data.company_details.logo
+                            $('#company-logo').attr('src',logo);
+                            $('#profoma-invoice').modal("show")
+
+                            //Download Pi using JSPDF
+                            $('.downloadPi').click(function () {
+                                var myOffscreenEl = document.getElementById("proforma-invoice"),
+                                    useWidth      = myOffscreenEl.style.width,
+                                    useHeight     = myOffscreenEl.style.height;
+                                    myOffscreenEl.style.backgroundColor = 'white';
+
+                                html2pdf(myOffscreenEl, {
+                                  margin:       10,
+                                  filename:     'Proforma-Invoice.pdf',
+                                  image:        { type: 'jpeg', quality: 0.98 },
+                                  html2canvas:  { dpi: 300, letterRendering: true },
+                                  jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+                                });
                             });
-                        });
+
+                        } else {
+                            $('.snackbar_span').html('Price Details are Missing !!');
+                            $('#snackbar').css('background-color','#F44336');
+                            showSnackbar();
+                        }
+                        
                     }
                     else
                     {
@@ -2062,7 +2089,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
  * @param  {[type]} table_name [description]
  * @return {[type]}            [description]
  */
-function tescoApprovePI(id,table_name)
+function tescoApprovePI(template_id,id,table_name)
 {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var buyer_id = localStorage.getItem("buyer_id");
@@ -2074,7 +2101,8 @@ function tescoApprovePI(id,table_name)
             _token: csrf_token,
             table_name: table_name,
             buyer_id:buyer_id,
-            id:id
+            id:id,
+            template_id:template_id
         },
         beforeSend: function () {
             $(".loader").show();
@@ -2323,7 +2351,8 @@ function updateArtwork(obj)
                             tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" maxlength="'+tpn_len+'" name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="'+tpn_th+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="'+unit_len+'" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input disabled onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required=""  placeholder="Quantity" maxlength="4" type="text"><div class="help-block with-errors"></div></div></td></tr>';
                         i++;
                     })
-                     $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><button disabled type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'") data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
+                     // <button disabled type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'") data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
+                     $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
                     
                     $('#edit_template_name').val(TemplateName)
                     $('#edit_zone').val(data.order_details.zone)

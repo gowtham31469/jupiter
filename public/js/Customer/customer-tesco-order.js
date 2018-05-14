@@ -995,7 +995,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                                  </div>\
                                                  <div class="modal-footer">\
-                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'")>Download</button>\
+                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'") style="display:none;">Download</button>\
                                                  <div id="hiddenDiv" style="display:none" ><canvas id="hiddenCanvas"></canvas><a id="hiddenPng" /></div><div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
                                                    </div>\
@@ -1016,7 +1016,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1116,6 +1116,7 @@ function printDivTesco(data,name) {
 	    if(name == "TSL1-sticker" || name == "TSL3-sticker")
 		{
 			var svgarr=[];
+			var ajax_count=0;
 			$('#table_row tr').each(function(key, val) { 
 				var svgRoot = svgDoc.documentElement;
 				
@@ -1136,20 +1137,169 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
+				if((name == "TCL4-sticker" || name== "TSL3-sticker" || name== "THL3-sticker"))
+				{
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				}
+				else
+				{
+					alert()
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+				}
+				
+			if(zone == "CE")
+			{
+				var size = $(this).find('.ce_single_size').val();
+			}
+			else
+			{
+				var size = $(this).find('.uk_single_size').val();
+			}
+			
+					
+
+			var description = $('#tesco_description').val()
+			if ((name == "TSL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/customer/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
+//							var s = new XMLSerializer();
+//							var d = svgRoot;
+//							var str = s.serializeToString(d);
+//
+//							var svg = str;
+//							var canvas = document.getElementById('hiddenCanvas');
+//							var ctx = canvas.getContext('2d');
+//							canvg(canvas, svg);
+//
+//							var theImage = canvas.toDataURL('image/png');
+//
+//							svgarr.push(theImage)
+							
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+
+							svgarr.push(str)
+							
+							//						 console.log(svgRoot)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+//					var s = new XMLSerializer();
+//					var d = svgRoot;
+//					var str = s.serializeToString(d);
+//
+//					var svg = str;
+//					var canvas = document.getElementById('hiddenCanvas');
+//					var ctx = canvas.getContext('2d');
+//					canvg(canvas, svg);
+//
+//					var theImage = canvas.toDataURL('image/png');
+//
+//					svgarr.push(theImage)
+					
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+
+					svgarr.push(str)
+
+				}
+			}
+			else
+			{
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+				
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				var svg = encodeURI(str)
-				svgarr.push(svg)
+
+				svgarr.push(str)
+			}
+			ajax_count++;
+				
+				
 			})
-			var svg_fin = svgarr.join(',_');
+			if (ajax_count == document.getElementById("table_row").rows.length) {
+			//				console.log("hai")
+			//				console.log(svgarr)
+				var svg_fin = svgarr.join(',_');
+
+
+				PopupTescoSmall(svg_fin,name);
+			}
 			
-			
-			PopupTescoSmall(svg_fin,name);
 		}
 		else
 		{
 			var svgarr=[];
+			var ajax_count=0;
 			$('#table_row tr').each(function(key, val) { 
 				var svgRoot = svgDoc.documentElement;
 				if((name == "TCL1-sticker" && zone=="CE") ||(name == "TCL2-sticker" && zone=="CE") || (name == "TSL1-sticker" && zone=="CE") || (name == "THL1-sticker" && zone=="CE"))
@@ -1177,23 +1327,170 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
+				if((name == "TCL4-sticker" || name== "THL3-sticker"))
+				{
+					
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				}
+				else if((name == "TCL1-sticker") ||(name == "TCL2-sticker")  || (name == "THL1-sticker"))
+				{
+					alert();
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+				}
+				
+				if(zone == "CE")
+			{
+				var size = $(this).find('.ce_single_size').val();
+			}
+			else
+			{
+				var size = $(this).find('.uk_single_size').val();
+			}
+
+			var description = $('#tesco_description').val()
+			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/customer/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+							/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+							} else if (description != '') {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+							}
+							
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+							
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+
+							svgarr.push(str)
+							
+							//						 console.log(svgRoot)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+					
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+
+					svgarr.push(str)
+
+				}
+			}
+			else
+			{
+				
+//				var s = new XMLSerializer();
+//				var d = svgRoot;
+//				var str = s.serializeToString(d);
+//				
+//
+//				var svg = str;
+//				var canvas = document.getElementById('hiddenCanvas');
+//				var ctx = canvas.getContext('2d');
+//				canvg(canvas, svg);
+//
+//				var theImage = canvas.toDataURL('image/png');
+//				
+//				svgarr.push(theImage)
+				
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
-				
 
-				var svg = str;
-				var canvas = document.getElementById('hiddenCanvas');
-				var ctx = canvas.getContext('2d');
-				canvg(canvas, svg);
+				svgarr.push(str)
+			}
 
-				var theImage = canvas.toDataURL('image/png');
-				
-				svgarr.push(theImage)
+
+
+
+			ajax_count++;
 			})
+			if (ajax_count == document.getElementById("table_row").rows.length) {
+			//				console.log("hai")
+			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name);
+		}
+			
 		}
 	
 		
@@ -4077,6 +4374,8 @@ try{
       $('.save-btn').remove();
       $('.approve-btn').show();
       $('.print-btn').show();
+      $('.cancel-btn').removeAttr('data-target');
+      $('.cancel-btn').attr('onClick','location.reload()');
       var div_html='';
       /** [ store last updated id as hidden input , for approve order functionality] */
       $.each(data.last_insertions, function (index, value) {

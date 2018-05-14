@@ -54,19 +54,6 @@ Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateContro
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
 Route::post('/admin/template-management/base64_to_jpeg', 'Admin\TemplateManagement\TemplateController@base64ToJpeg');
-/** User Management **/
-Route::get('admin/user-management', 'Admin\UserManagement\UserManagementController@index');
-Route::get('admin/user-management/users', 'Admin\UserManagement\UserManagementController@users');
-Route::get('admin/user-management/get-user-roles', 'Admin\UserManagement\UserManagementController@getUserRoles');
-Route::get('admin/user-management/roles', 'Admin\UserManagement\UserManagementController@roles');
-Route::post('admin/user-management/add-jga-user', 'Admin\UserManagement\UserManagementController@addJgaUser');
-Route::get('admin/user-management/get-user-details', 'Admin\UserManagement\UserManagementController@getUserById');
-Route::put('admin/user-management/update-user-details', 'Admin\UserManagement\UserManagementController@updateUserById');
-Route::delete('admin/user-management/delete-user', 'Admin\UserManagement\UserManagementController@deleteUserById');
-Route::post('admin/user-management/add-user-role', 'Admin\UserManagement\UserManagementController@addUserRole');
-Route::get('admin/user-management/get-user-role-details', 'Admin\UserManagement\UserManagementController@getUserRoleById');
-Route::put('admin/user-management/update-user-role', 'Admin\UserManagement\UserManagementController@updateUserRoleById');
-Route::delete('admin/user-management/delete-user-role', 'Admin\UserManagement\UserManagementController@deleteUserRoleById');
 /** customer Management **/
 Route::get('admin/customer-management', 'Admin\CustomerManagement\CustomerManagementController@index');
 Route::post('admin/customer-management/customers-list', 'Admin\CustomerManagement\CustomerManagementController@customersList');
@@ -162,6 +149,9 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
 	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 	Route::put('customer/tesco/approve-tesco-order', 'Customer\Tesco\OrderController@approveTescoOrder');
+    
+    /** customer profile related routes */
+    Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
 });
 
 
@@ -181,6 +171,10 @@ Route::group(['middleware' => 'merchandiser_auth'], function()
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/merchandiser/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
 	Route::get('/merchandiser/past-orders', 'Merchandiser\HomeController@pastOrders');
+	/** Merchandiser profile related routes */
+	Route::get('merchandiser/get-profile-details', 'Merchandiser\MerchandiserProfileController@getMerchandiserDetailsById');
+	Route::put('merchandiser/update-merchandiser-profile-details', 'Merchandiser\MerchandiserProfileController@updateMerchandiserById');
+	Route::put('merchandiser/update-merchandiser-password', 'Merchandiser\MerchandiserProfileController@updateMerchandiserPassword');
 
 });
 
@@ -254,6 +248,7 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
+Route::post('admin/tesco/template-management/save-taxation', 'Admin\Tesco\TemplateManagementCntrl@saveTax');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
@@ -446,3 +441,15 @@ Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintControl
 
 // Email related routes
 Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');
+
+/** admin role Management **/
+Route::get('admin/admin-role-management', 'Admin\AdminRoleManagement\AdminRoleManagementController@index');
+Route::get('admin/admin-role-management/admin-list', 'Admin\AdminRoleManagement\AdminRoleManagementController@adminList');
+Route::post('admin/admin-role-management/add-new-admin', 'Admin\AdminRoleManagement\AdminRoleManagementController@addNewAdmin');
+Route::put('admin/admin-role-management/make-admin-active', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminActive');
+Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleManagement\AdminRoleManagementController@makeAdminInactive');
+
+/** Admin profile related routes */
+Route::get('admin/get-profile-details', 'Admin\AdminProfile\AdminProfileController@getAdminDetailsById');
+Route::put('admin/update-admin-profile-details', 'Admin\AdminProfile\AdminProfileController@updateAdminById');
+Route::put('admin/update-admin-password', 'Admin\AdminProfile\AdminProfileController@updateAdminPassword');

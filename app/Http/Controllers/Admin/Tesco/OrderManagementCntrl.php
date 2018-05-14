@@ -219,7 +219,7 @@ class OrderManagementCntrl extends Controller
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
-          $name = str_replace(" ", "_", $file->getClientOriginalName());
+          $name = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $file->getClientOriginalName());
           $path = $file->move('storage/app/TESCO/purchaseOrder/UK', time().'_'.$name);
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
@@ -301,17 +301,17 @@ class OrderManagementCntrl extends Controller
           if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
             //Move the orms file
             $orms = $request->file('ce_orms_purchase_order');
-            $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
+            $orms_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $orms->getClientOriginalName());
             $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
             //Move the retek file
             $retek = $request->file('ce_retek_purchase_order');
-            $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
+            $retek_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $retek->getClientOriginalName());
             $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
 
             //Parse ORMS File
             if(!$this->parseORMS($orms_path)) {
-              return response()->json(['error' => 'Unrecognized ORMS file'], 400);
+              return response()->json(['error' => 'Unrecognized ORMS file', 'path' => $orms_path], 400);
             }
             list($orms_no, $retek_no)  = $this->parseORMS($orms_path);
             $orms_data['order_number'] = trim($orms_no);
@@ -1837,15 +1837,28 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-        PDF::AddPage();
+        PDF::AddPage('P', 'A4');
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
 		$yy=12.5;
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
+			
 			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$yy += 100;
+			if($i == 3)
+			{
+				$yy=112.5;
+				$i = 0;
+			}
+			else
+			{
+				$yy += 100;
+			}
+			//print_r($yy);
+			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -1868,14 +1881,27 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
-        PDF::AddPage();
+        PDF::AddPage('P', 'A4');
         //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-        $yy=12.5;
+		// set auto page breaks
+		PDF::SetAutoPageBreak(TRUE);
+        $i=0;
+		$yy=12.5;
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
 			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			$yy += 100;
+			if($i == 3)
+			{
+				$yy=112.5;
+				$i = 0;
+			}
+			else
+			{
+				$yy += 100;
+			}
+			//print_r($yy);
+			 $i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
