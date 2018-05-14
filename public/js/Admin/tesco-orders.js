@@ -1006,7 +1006,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1236,9 +1236,7 @@ function printDivTesco(data, name) {
 	} else {
 		var svgarr = [];
 		var ajax_count = 0;
-		alert(document.getElementById("table_row").rows.length)
 		$('#table_row tr').each(function (key, val) {
-			alert();
 			var svgRoot = svgDoc.documentElement;
 			if ((name == "TCL1-sticker" && zone == "CE") || (name == "TCL2-sticker" && zone == "CE") || (name == "TSL1-sticker" && zone == "CE") || (name == "THL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.ce_ratio_cpc').val();
@@ -1275,7 +1273,7 @@ function printDivTesco(data, name) {
 				}
 				else if((name == "TCL1-sticker") ||(name == "TCL2-sticker")  || (name == "THL1-sticker"))
 				{
-					alert();
+					
 					if(zone == "CE")
 					{
 						var barcode_change = $(this).find('.ce_ratio_itf').val()
@@ -4082,8 +4080,6 @@ function afterOrderSubmitted(data) {
 		$('.save-btn').remove();
 		$('.approve-btn').show();
 		$('.print-btn').show();
-		$('.cancel-btn').removeAttr('data-target');
-		$('.cancel-btn').attr('onClick','location.reload()');
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve order functionality] */
 		$.each(data.last_insertions, function (index, value) {
