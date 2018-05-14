@@ -89,10 +89,12 @@ function tescoOrders() {
 							CEUniqueNames.push(newObj[i].ce_style_ref);
 							artwork_collection[newObj[i].ce_style_ref] = {};
 							artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
+							artwork_collection[newObj[i].ce_style_ref]['status'] = newObj[i].artwork_status;
 						} else {
 							if (CEPOCollection.indexOf(newObj[i].po_number) === -1) {
 								CEPOCollection.push(newObj[i].po_number);
 								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
+								artwork_collection[newObj[i].ce_style_ref]['status'] = newObj[i].artwork_status;
 							} else {
 								var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
 								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName;
@@ -105,10 +107,13 @@ function tescoOrders() {
 							UKUniqueNames.push(newObj[i].uk_style_ref);
 							artwork_collection[newObj[i].uk_style_ref] = {};
 							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
+							artwork_collection[newObj[i].uk_style_ref]['status'] = newObj[i].artwork_status;
 						} else {
 							if (UKPOCollection.indexOf(newObj[i].po_number) === -1) {
 								UKPOCollection.push(newObj[i].po_number);
 								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
+							    artwork_collection[newObj[i].uk_style_ref]['status'] = newObj[i].artwork_status;
+
 							} else {
 								var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
 								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName;
@@ -232,7 +237,7 @@ function tescoOrders() {
 				});
 
 				$('body').on('change', '#po_number', function () {
-					loadArtworkNames(this.value, artwork_collection);
+					loadArtworkNames(artwork_collection[this.value]);
 				});
 
 				/** [ Load selectpicker ] */

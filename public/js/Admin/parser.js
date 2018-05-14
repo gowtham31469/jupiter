@@ -455,7 +455,7 @@ function renderParsedValues(parsedObj) {
      } else {
         $('#tesco_uk_style').val(parsedObj.styleNumber);
      }
-    $('#tesco_eqos').val(parsedObj.supplierCode);
+   // $('#tesco_eqos').val(parsedObj.supplierCode);
     $('#tesco_season_code').val(parsedObj.seasonCode);
     $('#tesco_description').val(parsedObj.shortDescription);
 
