@@ -209,15 +209,22 @@ class OrderStatusController extends Controller
                 ]);
                 foreach ($data['item_details'] as $key => $value)
                 {
+                    $unit_cost = 0;
+                    foreach ($data['price_list'] as $i => $val) {
+                        if($value->quantity <= $val->volume_to) {
+                            $unit_cost = $val->price;
+                            break;
+                        }
+                    }
                     $total_qnty+= $value->quantity;
-                    $sub_total += $value->quantity *$value->unit_price;
+                    $sub_total += $value->quantity *$unit_cost;
                     ProfomaInvoiceItemDetails::create([
                         'pi_id'     => $pi_details->id,
                         'material'  => $value->material_name,
                         'size'      => $value->size,
                         'style'     => $value->style,
                         'quantity'  => $value->quantity,
-                        'unit_cost' => $value->unit_price
+                        'unit_cost' => $unit_cost
                     ]);
                 }
                 PI::where('id',$pi_details->id)
