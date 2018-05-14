@@ -1225,9 +1225,45 @@ function printDivTesco(data, name) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.uk_ratio_upc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
+			}		
+			if((name== "THL3-sticker"))
+				{
+					
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				}
+				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
+				{
+					
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+				}
+			
+			if(zone == "CE")
+			{
+				var size = $(this).find('.ce_single_size').val();
 			}
-
-			var size = $(this).find('.ce_single_size').val();
+			else
+			{
+				var size = $(this).find('.uk_single_size').val();
+			}
 
 			var description = $('#tesco_description').val()
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
