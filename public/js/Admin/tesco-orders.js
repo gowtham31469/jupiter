@@ -16,6 +16,18 @@ function isNumber(evt) {
 	}
 }
 
+/**
+ * Make any string as camelCase
+ * @param  {[type]} str [description]
+ * @return {[type]}     [description]
+ */
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+    return index == 0 ? match.toLowerCase() : match.toUpperCase();
+  });
+}
+
 /**  
  * Validation for numeric values with dot
  * @param   evt 
@@ -88,16 +100,14 @@ function tescoOrders() {
 							CEPOCollection.push(newObj[i].po_number);
 							CEUniqueNames.push(newObj[i].ce_style_ref);
 							artwork_collection[newObj[i].ce_style_ref] = {};
-							artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
-							artwork_collection[newObj[i].ce_style_ref]['status'] = newObj[i].artwork_status;
+							artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 						} else {
 							if (CEPOCollection.indexOf(newObj[i].po_number) === -1) {
 								CEPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
-								artwork_collection[newObj[i].ce_style_ref]['status'] = newObj[i].artwork_status;
+								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
 							} else {
 								var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName;
+								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
 							}
 						}
 
@@ -106,17 +116,15 @@ function tescoOrders() {
 							UKPOCollection.push(newObj[i].po_number);
 							UKUniqueNames.push(newObj[i].uk_style_ref);
 							artwork_collection[newObj[i].uk_style_ref] = {};
-							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
-							artwork_collection[newObj[i].uk_style_ref]['status'] = newObj[i].artwork_status;
+							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
 						} else {
 							if (UKPOCollection.indexOf(newObj[i].po_number) === -1) {
 								UKPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName;
-							    artwork_collection[newObj[i].uk_style_ref]['status'] = newObj[i].artwork_status;
+								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
 
 							} else {
 								var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName;
+								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
 							}
 
 						}
@@ -1115,47 +1123,10 @@ function printDivTesco(data, name) {
 			} else if ((name == "TSL1-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 			}
-			
-			if((name == "TSL3-sticker"))
-				{
-					
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_single_ean').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_single_ean').val()
-					}
-					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-				}
-				else 
-				{
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_ratio_itf').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_ratio_itf').val()
-					}
-					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-					
-				}
 
-			if(zone == "CE")
-			{
-				var size = $(this).find('.ce_single_size').val();
-			}
-			else
-			{
-				var size = $(this).find('.uk_single_size').val();
-			}
 			
 			
-			
+			var size = $(this).find('.ce_single_size').val();
 
 			var description = $('#tesco_description').val()
 			if ((name == "TSL3-sticker")) {
@@ -1254,9 +1225,7 @@ function printDivTesco(data, name) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.uk_ratio_upc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
-			}
-
-			
+			}		
 			if((name== "THL3-sticker"))
 				{
 					
@@ -1295,7 +1264,6 @@ function printDivTesco(data, name) {
 			{
 				var size = $(this).find('.uk_single_size').val();
 			}
-			
 
 			var description = $('#tesco_description').val()
 			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
@@ -4344,10 +4312,10 @@ function jsbarcodetesco(code, id, svgDoc) {
 function jsbarcodetescoean(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
-		format: "ITF14",
-		width: 2.7475,
-		height: 159,
-		fontSize: 30,
+		format: "ean13",
+		width: 3.45,
+		height: 125,
+		fontSize: 35,
 		flat: true,
 		displayValue: false
 	});
@@ -4360,11 +4328,8 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
-	
-	svg.setAttribute('width', '391.035px');
-	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;

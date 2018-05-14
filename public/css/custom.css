@@ -1373,3 +1373,16 @@ span.batch-additional {
     border-top: 0;
 }
 
+.saved {
+    color: #f0ad4e !important;
+}
+
+.orderPlaced {
+    color: #5bc0de !important;
+}
+
+.orderApproved {
+    color: #5cb85c !important;
+}
+
+
