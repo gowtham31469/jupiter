@@ -21,16 +21,30 @@ use App\Classes\SaveTescoOrdersUpdateQuery;
  */
 class SaveTescoOrders
 {
-	/**
-	 * method to save the tesco TCL1 orders
-	 * @param  [type] $request, $template_id
-	 * @return tesco order table id (inserted_id)
-	 */
-	public function saveTCL1Order($request,$template_id)
-	{
-		try {
+  /**
+   * method to save the tesco TCL1 orders
+   * @param  [type] $request, $template_id
+   * @return tesco order table id (inserted_id)
+   */
+  public function saveTCL1Order($request,$template_id)
+  {
+    try {
            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
-           $tesco_order_obj = new SaveTescoOrdersUpdateQuery();  
+           $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
+
+           if($request['supplier'] != '')
+           {
+             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             if($customer_ids)
+             {
+               $customer_id = $customer_ids->customer_id;
+             }
+             else
+             {
+               $customer_id = '';
+             }
+           }
+           
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
@@ -68,7 +82,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -93,7 +108,7 @@ class SaveTescoOrders
         {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
-	}
+  }
   /**
    * method to save the tesco TCL2 orders
    * @param  [type] $request, $template_id
@@ -104,6 +119,19 @@ class SaveTescoOrders
     try {
           /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
            $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
+
+           if($request['supplier'] != '')
+           {
+             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             if($customer_ids)
+             {
+               $customer_id = $customer_ids->customer_id;
+             }
+             else
+             {
+               $customer_id = '';
+             }
+           }
 
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
@@ -142,7 +170,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -177,6 +206,19 @@ class SaveTescoOrders
     try {
            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
            $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
+
+           if($request['supplier'] != '')
+           {
+             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             if($customer_ids)
+             {
+               $customer_id = $customer_ids->customer_id;
+             }
+             else
+             {
+               $customer_id = '';
+             }
+           }
 
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
@@ -215,7 +257,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -251,6 +294,19 @@ class SaveTescoOrders
     try {
            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
            $tesco_order_obj = new SaveTescoOrdersUpdateQuery(); 
+
+           if($request['supplier'] != '')
+           {
+             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             if($customer_ids)
+             {
+               $customer_id = $customer_ids->customer_id;
+             }
+             else
+             {
+               $customer_id = '';
+             }
+           }
 
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
@@ -289,7 +345,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -324,6 +381,19 @@ class SaveTescoOrders
     try {
            /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
            $tesco_order_obj = new SaveTescoOrdersUpdateQuery();  
+
+           if($request['supplier'] != '')
+           {
+             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             if($customer_ids)
+             {
+               $customer_id = $customer_ids->customer_id;
+             }
+             else
+             {
+               $customer_id = '';
+             }
+           }
 
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
@@ -362,7 +432,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -397,6 +468,19 @@ class SaveTescoOrders
     try {
             /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
             $tesco_order_obj = new SaveTescoOrdersUpdateQuery();
+
+            if($request['supplier'] != '')
+             {
+               $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+               if($customer_ids)
+               {
+                 $customer_id = $customer_ids->customer_id;
+               }
+               else
+               {
+                 $customer_id = '';
+               }
+             }
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -435,7 +519,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
@@ -470,6 +555,19 @@ class SaveTescoOrders
     try {
             /** [ Creating new object for SaveTescoOrdersUpdateQuery() class ] */
             $tesco_order_obj = new SaveTescoOrdersUpdateQuery();
+
+            if($request['supplier'] != '')
+             {
+               $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+               if($customer_ids)
+               {
+                 $customer_id = $customer_ids->customer_id;
+               }
+               else
+               {
+                 $customer_id = '';
+               }
+             }
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -508,7 +606,8 @@ class SaveTescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",

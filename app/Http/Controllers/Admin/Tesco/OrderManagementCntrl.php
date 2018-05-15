@@ -652,24 +652,12 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
  
-            $customer_details = DB::table("customers")
-                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
-                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
-                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
-            if($customer_details)
-            {
-              $delivery_date_req= $customer_details->delivery_date_required;
-              $pi_required      = $customer_details->pi_required;
-              $day_count        = $customer_details->delivery_day_count;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
-            else
-            {
-              $delivery_date_req= 0;
-              $pi_required      = 0;
-              $day_count        = 0;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
+            $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first(); 
+            $customer_details = DB::table("customers")->where('id','=',$customer_id->customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+            $delivery_date_req= $customer_details->delivery_date_required; 
+            $pi_required      = $customer_details->pi_required; 
+            $day_count        = $customer_details->delivery_day_count; 
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             
             foreach ($templates as $template) 
             {
@@ -703,7 +691,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                       /** [ Invoking createTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -771,7 +759,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -840,7 +828,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                         /** [ Invoking createTSL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -912,7 +900,7 @@ class OrderManagementCntrl extends Controller
                   else
                   {
                      /** [ Invoking createTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
 
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -989,24 +977,12 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")
-                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
-                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
-                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
-            if($customer_details)
-            {
-              $delivery_date_req= $customer_details->delivery_date_required;
-              $pi_required      = $customer_details->pi_required;
-              $day_count        = $customer_details->delivery_day_count;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
-            else
-            {
-              $delivery_date_req= 0;
-              $pi_required      = 0;
-              $day_count        = 0;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
+            $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first(); 
+            $customer_details = DB::table("customers")->where('id','=',$customer_id->customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+            $delivery_date_req= $customer_details->delivery_date_required; 
+            $pi_required      = $customer_details->pi_required; 
+            $day_count        = $customer_details->delivery_day_count; 
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
 
             foreach ($templates as $template) 
             {
@@ -1038,7 +1014,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1109,7 +1085,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1183,7 +1159,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTHL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1260,24 +1236,12 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")
-                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
-                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
-                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
-            if($customer_details)
-            {
-              $delivery_date_req= $customer_details->delivery_date_required;
-              $pi_required      = $customer_details->pi_required;
-              $day_count        = $customer_details->delivery_day_count;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
-            else
-            {
-              $delivery_date_req= 0;
-              $pi_required      = 0;
-              $day_count        = 0;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
+            $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first(); 
+            $customer_details = DB::table("customers")->where('id','=',$customer_id->customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first();  
+            $delivery_date_req= $customer_details->delivery_date_required; 
+            $pi_required      = $customer_details->pi_required; 
+            $day_count        = $customer_details->delivery_day_count; 
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
 
             foreach ($templates as $template) 
             {
@@ -1310,7 +1274,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTCL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1379,7 +1343,7 @@ class OrderManagementCntrl extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1448,7 +1412,7 @@ class OrderManagementCntrl extends Controller
                   else
                   {
                      /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -1520,7 +1484,7 @@ class OrderManagementCntrl extends Controller
                   else
                   {
                        /** [ Invoking createTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty);
+                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                        
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1596,24 +1560,12 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")
-                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
-                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
-                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
-            if($customer_details)
-            {
-              $delivery_date_req= $customer_details->delivery_date_required;
-              $pi_required      = $customer_details->pi_required;
-              $day_count        = $customer_details->delivery_day_count;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
-            else
-            {
-              $delivery_date_req= 0;
-              $pi_required      = 0;
-              $day_count        = 0;
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
+            $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first(); 
+            $customer_details = DB::table("customers")->where('id','=',$customer_id->customer_id)->select('pi_required','delivery_date_required','delivery_day_count')->first(); 
+            $delivery_date_req= $customer_details->delivery_date_required; 
+            $pi_required      = $customer_details->pi_required; 
+            $day_count        = $customer_details->delivery_day_count; 
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             
             foreach ($templates as $template) 
             {
@@ -1645,7 +1597,7 @@ class OrderManagementCntrl extends Controller
                       else
                       {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1716,7 +1668,7 @@ class OrderManagementCntrl extends Controller
                       else
                       {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1790,7 +1742,7 @@ class OrderManagementCntrl extends Controller
                   else
                   {
                        /** [ Invoking createTHL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty);
+                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id->customer_id);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -3297,7 +3249,7 @@ class OrderManagementCntrl extends Controller
                   else
                   {
                     /** [ Invoking saveTHL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id);
+                     return $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
