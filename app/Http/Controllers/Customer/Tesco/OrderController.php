@@ -164,11 +164,24 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
-            $delivery_date_req= $customer_details->delivery_date_required;
-            $pi_required      = $customer_details->pi_required;
-            $day_count        = $customer_details->delivery_day_count;
-            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            $customer_details = DB::table("customers")
+                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
+                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
+                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
+            if($customer_details)
+            {
+              $delivery_date_req= $customer_details->delivery_date_required;
+              $pi_required      = $customer_details->pi_required;
+              $day_count        = $customer_details->delivery_day_count;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
+            else
+            {
+              $delivery_date_req= 0;
+              $pi_required      = 0;
+              $day_count        = 0;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -487,11 +500,24 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
-            $delivery_date_req= $customer_details->delivery_date_required;
-            $pi_required      = $customer_details->pi_required;
-            $day_count        = $customer_details->delivery_day_count;
-            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            $customer_details = DB::table("customers")
+                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
+                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
+                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
+            if($customer_details)
+            {
+              $delivery_date_req= $customer_details->delivery_date_required;
+              $pi_required      = $customer_details->pi_required;
+              $day_count        = $customer_details->delivery_day_count;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
+            else
+            {
+              $delivery_date_req= 0;
+              $pi_required      = 0;
+              $day_count        = 0;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
 
             foreach ($templates as $template) 
             {
@@ -745,11 +771,24 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
-            $delivery_date_req= $customer_details->delivery_date_required;
-            $pi_required      = $customer_details->pi_required;
-            $day_count        = $customer_details->delivery_day_count;
-            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            $customer_details = DB::table("customers")
+                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
+                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
+                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
+            if($customer_details)
+            {
+              $delivery_date_req= $customer_details->delivery_date_required;
+              $pi_required      = $customer_details->pi_required;
+              $day_count        = $customer_details->delivery_day_count;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
+            else
+            {
+              $delivery_date_req= 0;
+              $pi_required      = 0;
+              $day_count        = 0;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
 
             foreach ($templates as $template) 
             {
@@ -1068,11 +1107,24 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_details = DB::table("customers")->where('id','=',$request['supplier'])->select('pi_required','delivery_date_required','delivery_day_count')->first();
-            $delivery_date_req= $customer_details->delivery_date_required;
-            $pi_required      = $customer_details->pi_required;
-            $day_count        = $customer_details->delivery_day_count;
-            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            $customer_details = DB::table("customers")
+                                 ->join('customer_metadata','customer_metadata.customer_id','customers.id')
+                                 ->where('customer_metadata.customer_metadata_id','=',$request['supplier'])
+                                 ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count')->first();
+            if($customer_details)
+            {
+              $delivery_date_req= $customer_details->delivery_date_required;
+              $pi_required      = $customer_details->pi_required;
+              $day_count        = $customer_details->delivery_day_count;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
+            else
+            {
+              $delivery_date_req= 0;
+              $pi_required      = 0;
+              $day_count        = 0;
+              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            }
             
             foreach ($templates as $template) 
             {

@@ -19,6 +19,7 @@ use App\PaymentTerms;
 use App\PlaceOfSupply;
 use App\FreightTerms;
 use App\NominatedForwarder;
+use App\CustomerMetadata;
 /**
  * Customer management controller
  * @author <Praveen>
@@ -63,7 +64,7 @@ class CustomerManagementController extends Controller
          }
    }
    /**
-    * Show the orchestra customers list view on ajax.
+    * Show the customers list view on ajax.
     * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
@@ -74,6 +75,12 @@ class CustomerManagementController extends Controller
                          ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
                          ->orderBy('is_active','desc')
                          ->get();
+            $already_linked_customers = CustomerMetadata::pluck('customer_metadata_id')->all();
+            $tesco_customers_dropdown = DB::table('tesco_suppliers')
+                               ->where('is_enabled','=',1)
+                               ->whereNotIn('tesco_suppliers.id',$already_linked_customers)
+                               ->pluck('supplier_name','id')
+                               ->all();
              foreach ($customers as $value) 
              {
                 /** [Checking value null or not] */
@@ -161,7 +168,7 @@ class CustomerManagementController extends Controller
                 }
                 
               }            
-            return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers]);
+            return response()->json(['error'=>'false','message' =>'success', 'customers' => $customers,'tesco_customers_dropdown' => $tesco_customers_dropdown]);
           } catch (\Exception $e)
           {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -206,6 +213,7 @@ class CustomerManagementController extends Controller
                 $freight              = $request['freight'];
                 $delivery_day_count   = $request['day_count'];
                 $short_name           = $request['short_name'];
+                $customers            = $request['customers'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -228,6 +236,7 @@ class CustomerManagementController extends Controller
                   $shipping_address = explode(',',$shipping_address);
                   $buyers           = explode(',',$buyer);
                   $pincode          = explode(',',$pincode);
+                  $customers        = explode(',',$customers);
 
                   $customer = Customer::create([
                                 'factory_code'           => $factory_code,
@@ -284,6 +293,13 @@ class CustomerManagementController extends Controller
                         CustomerBuyers::create([
                             'customer_id'     => $insert_Id,
                             'buyer_id'        => $buyer
+                        ]);
+                    }
+                    foreach($customers as $customer)
+                    {
+                        CustomerMetadata::create([
+                            'customer_id'           => $insert_Id,
+                            'customer_metadata_id'  => $customer
                         ]);
                     }
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -382,7 +398,21 @@ class CustomerManagementController extends Controller
                          ->select('customer_bill_address.*')
                          ->where('customer_bill_address.customer_id','=',$id)
                          ->get();
-                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'contacts' => $contacts,'address' => $address,'buyers' => $buyers]);
+                $customer_metadata = DB::table('customer_metadata')
+                         ->where('customer_metadata.customer_id','=',$id)
+                         ->pluck('customer_metadata.customer_metadata_id')
+                         ->all();
+                /** [ Fetch already linked customers where id's not in customer_metadata arrays.] */
+                $already_linked_customers = CustomerMetadata::whereNotIn('customer_metadata_id',$customer_metadata)->pluck('customer_metadata_id')->all();
+
+                /**  [Fetch all tesco_suppliers from metadata where id's not in already_linked_customers array] */
+                $tesco_customers = DB::table('tesco_suppliers')
+                                   ->where('is_enabled','=',1)
+                                   ->whereNotIn('tesco_suppliers.id',$already_linked_customers)
+                                   ->pluck('supplier_name','id')
+                                   ->all();
+                
+                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'contacts' => $contacts,'address' => $address,'buyers' => $buyers, 'customer_metadata' => $customer_metadata,'tesco_customers' => $tesco_customers]);
               } catch (\Exception $e)
               {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -429,6 +459,7 @@ class CustomerManagementController extends Controller
                     $shipping_address = Input::get('shipping_address');
                     $buyer            = Input::get('buyer');
                     $pincode          = Input::get('pincode');
+                    $customers        = Input::get('customers');
                     
 
                     $email_rules     = array('email' => 'unique:customers,email,'.$id);
@@ -454,6 +485,7 @@ class CustomerManagementController extends Controller
                       $shipping_address = explode(',',$shipping_address);
                       $buyers           = explode(',',$buyer);
                       $pincode          = explode(',',$pincode);
+                      $customers        = explode(',',$customers);
 
                       Customer::where('id',$id)
                           ->update([
@@ -519,6 +551,16 @@ class CustomerManagementController extends Controller
                                 'buyer_id'        => $buyer
                             ]);
                         }
+                        /** Delete existing data before updating **/
+                        CustomerMetadata::where('customer_id', '=', $id)
+                            ->delete();
+                        foreach($customers as $customer)
+                        {
+                            CustomerMetadata::create([
+                                'customer_id'          => $id,
+                                'customer_metadata_id' => $customer
+                            ]);
+                        }
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
                     }
@@ -530,125 +572,131 @@ class CustomerManagementController extends Controller
                 return $result;
           }
     /**
-    * Show the orchestra customers list view on pageload.
+    * Show the customers list view on pageload.
     * @author <Praveen>
     * @return \Illuminate\Http\Response
     */
     public function customers()
     {
           try {
-           $module_var = new Modules();
-           $is_allowed = $module_var->permittedModules();
-           $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
-           $payment_terms = DB::table('payment_terms')->pluck('payment_terms','id')->all();
-           $place_of_supply = DB::table('place_of_supply')->pluck('place_of_supply','id')->all();
-           $forwarder = DB::table('nominated_forwarders')->pluck('forwarder','id')->all();
-           $freight_terms = DB::table('freight_terms')->pluck('freight_terms','id')->all();
-           
-           $customers = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
-                         ->orderBy('is_active','desc')
-                         ->get();
-             foreach ($customers as $value) 
-             {
-                /** [Checking value null or not] */
-                if($value->courier_choice == "")
-                {
-                  $value->courier_choice   = "-";
-                }
-                if($value->tin_number == "")
-                {
-                  $value->tin_number   = "-";
-                }
-                if($value->pan_number == "")
-                {
-                  $value->pan_number   = "-";
-                }
-                if($value->gstin_number == "")
-                {
-                  $value->gstin_number   = "-";
-                }
-                $customer_id = $value->id;
-                $default_contact = DB::table('customer_contact_persons')
-                         ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
-                         ->where('customer_contact_persons.customer_id','=',$customer_id)
-                         ->where('customer_contact_persons.default_contact_person','=',1)
-                         ->first();
-                if($default_contact)
-                {
-                  $value->contact_person = $default_contact->contact_person;
-                  $value->contact_email  = $default_contact->contact_email;
-                  $value->phone_no       = $default_contact->phone_no;
-                }
-                else
-                {
-                  $value->contact_person = "-";
-                  $value->contact_email  = "-";
-                  $value->phone_no       = "-";
-                }
-                
+                 $module_var      = new Modules();
+                 $is_allowed      = $module_var->permittedModules();
+                 $buyers          = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+                 $payment_terms   = DB::table('payment_terms')->pluck('payment_terms','id')->all();
+                 $place_of_supply = DB::table('place_of_supply')->pluck('place_of_supply','id')->all();
+                 $forwarder       = DB::table('nominated_forwarders')->pluck('forwarder','id')->all();
+                 $freight_terms   = DB::table('freight_terms')->pluck('freight_terms','id')->all();
+                 $already_linked_customers = CustomerMetadata::pluck('customer_metadata_id')->all();
+                 $tesco_customers = DB::table('tesco_suppliers')
+                                    ->where('is_enabled','=',1)
+                                    ->whereNotIn('tesco_suppliers.id',$already_linked_customers)
+                                    ->pluck('supplier_name','id')
+                                    ->all();
+                 // $tesco_customers = DB::table('tesco_suppliers')->where('is_enabled','=',1)->pluck('supplier_name','id')->all();
+                 $customers       = DB::table('customers')
+                                   ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
+                                   ->orderBy('is_active','desc')
+                                   ->get();
+                   foreach ($customers as $value) 
+                   {
+                      /** [Checking value null or not] */
+                      if($value->courier_choice == "")
+                      {
+                        $value->courier_choice   = "-";
+                      }
+                      if($value->tin_number == "")
+                      {
+                        $value->tin_number   = "-";
+                      }
+                      if($value->pan_number == "")
+                      {
+                        $value->pan_number   = "-";
+                      }
+                      if($value->gstin_number == "")
+                      {
+                        $value->gstin_number   = "-";
+                      }
+                      $customer_id = $value->id;
+                      $default_contact = DB::table('customer_contact_persons')
+                               ->select('customer_contact_persons.contact_person_name as contact_person','customer_contact_persons.contact_person_email as contact_email','customer_contact_persons.contact_person_phone as phone_no')
+                               ->where('customer_contact_persons.customer_id','=',$customer_id)
+                               ->where('customer_contact_persons.default_contact_person','=',1)
+                               ->first();
+                      if($default_contact)
+                      {
+                        $value->contact_person = $default_contact->contact_person;
+                        $value->contact_email  = $default_contact->contact_email;
+                        $value->phone_no       = $default_contact->phone_no;
+                      }
+                      else
+                      {
+                        $value->contact_person = "-";
+                        $value->contact_email  = "-";
+                        $value->phone_no       = "-";
+                      }
+                      
 
-                $is_billing_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax','customer_bill_address.pincode')
-                         ->where('customer_bill_address.customer_id','=',$customer_id)
-                         ->where('customer_bill_address.is_billing_address','=',1)
-                         ->first();
-                if($is_billing_address)
-                {
-                  $value->bill_address   = $is_billing_address->bill_address;
-                  $value->bill_country   = $is_billing_address->bill_country;
-                  $value->bill_email     = $is_billing_address->bill_email;
-                  $value->bill_telephone = $is_billing_address->bill_telephone;
-                  $value->bill_fax       = $is_billing_address->bill_fax;
-                  $value->pincode        = $is_billing_address->pincode;
-                }
-                else
-                {
-                  $value->bill_address   = "-";
-                  $value->pincode        = "-";
-                  $value->bill_country   = "-";
-                  $value->bill_email     = "-";
-                  $value->bill_telephone = "-";
-                  $value->bill_fax       = "-";
-                }
-                $is_shipping_address = DB::table('customer_bill_address')
-                         ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
-                         ->where('customer_bill_address.customer_id','=',$customer_id)
-                         ->where('customer_bill_address.is_shipping_address','=',1)
-                         ->first();
-                if($is_shipping_address)
-                {
-                  $value->ship_address   = $is_shipping_address->ship_address;
-                  $value->ship_country   = $is_shipping_address->ship_country;
-                  $value->ship_email     = $is_shipping_address->ship_email;
-                  $value->ship_telephone = $is_shipping_address->ship_telephone;
-                  $value->ship_fax       = $is_shipping_address->ship_fax;
-                  $value->pincode        = $is_shipping_address->pincode;
-                }
-                else
-                {
-                  $value->ship_address   = "-";
-                  $value->ship_country   = "-";
-                  $value->ship_email     = "-";
-                  $value->ship_telephone = "-";
-                  $value->ship_fax       = "-";
-                  $value->pincode        = "-";
-                }
-                
-              }  
-           if($is_allowed)
-           {
-               $get_main_module = $module_var->getMainModules();
-               $get_sub_module = $module_var->getSubModules(4);
-               View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
-                   return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
-               });
-               return view('Admin/Customer Management/customers-list')->with(['customers' => $customers,'buyers' => $buyers,'payment_terms' => $payment_terms,'place_of_supply' => $place_of_supply,'freight' => $freight_terms,'forwarder' => $forwarder]);
-           }
-           else
-           {
-                return redirect('/admin/dashboard');
-           }
+                      $is_billing_address = DB::table('customer_bill_address')
+                               ->select('customer_bill_address.address as bill_address','customer_bill_address.country as bill_country','customer_bill_address.email as bill_email','customer_bill_address.telephone as bill_telephone','customer_bill_address.fax as bill_fax','customer_bill_address.pincode')
+                               ->where('customer_bill_address.customer_id','=',$customer_id)
+                               ->where('customer_bill_address.is_billing_address','=',1)
+                               ->first();
+                      if($is_billing_address)
+                      {
+                        $value->bill_address   = $is_billing_address->bill_address;
+                        $value->bill_country   = $is_billing_address->bill_country;
+                        $value->bill_email     = $is_billing_address->bill_email;
+                        $value->bill_telephone = $is_billing_address->bill_telephone;
+                        $value->bill_fax       = $is_billing_address->bill_fax;
+                        $value->pincode        = $is_billing_address->pincode;
+                      }
+                      else
+                      {
+                        $value->bill_address   = "-";
+                        $value->pincode        = "-";
+                        $value->bill_country   = "-";
+                        $value->bill_email     = "-";
+                        $value->bill_telephone = "-";
+                        $value->bill_fax       = "-";
+                      }
+                      $is_shipping_address = DB::table('customer_bill_address')
+                               ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
+                               ->where('customer_bill_address.customer_id','=',$customer_id)
+                               ->where('customer_bill_address.is_shipping_address','=',1)
+                               ->first();
+                      if($is_shipping_address)
+                      {
+                        $value->ship_address   = $is_shipping_address->ship_address;
+                        $value->ship_country   = $is_shipping_address->ship_country;
+                        $value->ship_email     = $is_shipping_address->ship_email;
+                        $value->ship_telephone = $is_shipping_address->ship_telephone;
+                        $value->ship_fax       = $is_shipping_address->ship_fax;
+                        $value->pincode        = $is_shipping_address->pincode;
+                      }
+                      else
+                      {
+                        $value->ship_address   = "-";
+                        $value->ship_country   = "-";
+                        $value->ship_email     = "-";
+                        $value->ship_telephone = "-";
+                        $value->ship_fax       = "-";
+                        $value->pincode        = "-";
+                      }
+                      
+                    }  
+                 if($is_allowed)
+                 {
+                     $get_main_module = $module_var->getMainModules();
+                     $get_sub_module = $module_var->getSubModules(4);
+                     View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                         return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+                     });
+                     return view('Admin/Customer Management/customers-list')->with(['customers' => $customers, 'buyers' => $buyers, 'payment_terms' => $payment_terms, 'place_of_supply' => $place_of_supply, 'freight' => $freight_terms, 'forwarder' => $forwarder, 'tesco_customers' => $tesco_customers]);
+                 }
+                 else
+                 {
+                      return redirect('/admin/dashboard');
+                 }
          } catch (\Exception $e)
          {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
