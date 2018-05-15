@@ -655,7 +655,7 @@ function createOrders(parsedObj = false, oType = false) {
 
                        /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
-                        html += '<option value="'+ item.id +'">'+ item.company_name + '</option>';
+                        html += '<option value="'+ item.id +'">'+ item.supplier_name + '</option>';
                         });  
 
                      html +='</select>\
