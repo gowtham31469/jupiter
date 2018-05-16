@@ -25,7 +25,7 @@ class SubmitTescoOrdersUpdateQuery
 	 * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
 	 * @return number of rows updated.
 	 */
-	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
 	{
 		try {
               $result = TescoTCL1Orders::where('id',$existing_id)
@@ -42,7 +42,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -64,7 +65,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
             $result = TescoTCL2Orders::where('id',$existing_id)
@@ -81,7 +82,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -104,7 +106,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
             $result = TescoTSL1Orders::where('id',$existing_id)
@@ -121,7 +123,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -144,7 +147,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
               $result = TescoTHL1Orders::where('id',$existing_id)
@@ -161,7 +164,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -184,7 +188,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
               $result = TescoTCL4Orders::where('id',$existing_id)
@@ -201,7 +205,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -224,7 +229,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
               $result = TescoTSL3Orders::where('id',$existing_id)
@@ -241,7 +246,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -264,7 +270,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id)
+  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
   {
     try {
               $result = TescoTHL3Orders::where('id',$existing_id)
@@ -281,7 +287,8 @@ class SubmitTescoOrdersUpdateQuery
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",

@@ -41,10 +41,14 @@ class SaveTescoOrders
              }
              else
              {
-               $customer_id = '';
+               $customer_id = NULL;
              }
            }
-           
+           else
+           {
+             $customer_id = NULL;
+           }
+
            /** Insert order details first time. If data already exits, update old values**/
            if($request['is_insert'] == 'true')
            {
@@ -57,12 +61,12 @@ class SaveTescoOrders
               {
                 $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','=','Saved')->where('po_number','=',$request['po_number'])->first();
               }
-            
+
               if($is_exists)
               {
                 $order_id = $is_exists->id;
                 /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$customer_id);
 
                 return $is_exists;
                 
@@ -99,7 +103,7 @@ class SaveTescoOrders
            else
            {
               /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$request['tcl1_last_id'],$template_id);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$request['tcl1_last_id'],$template_id,$customer_id);
                 return $tesco_order;
            }
             
@@ -129,8 +133,12 @@ class SaveTescoOrders
              }
              else
              {
-               $customer_id = '';
+               $customer_id = NULL;
              }
+           }
+           else
+           {
+             $customer_id = NULL;
            }
 
            /** Insert order details first time. If data already exits, update old values**/
@@ -150,7 +158,7 @@ class SaveTescoOrders
               {
                 $order_id = $is_exists->id;
                 /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id);
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$customer_id);
 
                 return $is_exists;
                 
@@ -187,7 +195,7 @@ class SaveTescoOrders
            else
            {
               /** [ Invoking updateTCL2Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$request['tcl2_last_id'],$template_id);
+              $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$request['tcl2_last_id'],$template_id,$customer_id);
                 return $tesco_order;
            }
             
@@ -216,8 +224,12 @@ class SaveTescoOrders
              }
              else
              {
-               $customer_id = '';
+               $customer_id = NULL;
              }
+           }
+           else
+           {
+             $customer_id = NULL;
            }
 
            /** Insert order details first time. If data already exits, update old values**/
@@ -237,7 +249,7 @@ class SaveTescoOrders
               {
                 $order_id = $is_exists->id;
                 /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$customer_id);
 
                 return $is_exists;
                 
@@ -275,7 +287,7 @@ class SaveTescoOrders
            else
            {
               /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$request['tsl1_last_id'],$template_id);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$request['tsl1_last_id'],$template_id,$customer_id);
                 return $tesco_order;
            }
             
@@ -304,8 +316,12 @@ class SaveTescoOrders
              }
              else
              {
-               $customer_id = '';
+               $customer_id = NULL;
              }
+           }
+           else
+           {
+             $customer_id = NULL;
            }
 
            /** Insert order details first time. If data already exits, update old values**/
@@ -325,7 +341,7 @@ class SaveTescoOrders
               {
                 $order_id = $is_exists->id;
                 /** [ Invoking updateTHL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id);
+                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$customer_id);
 
                 return $is_exists;
                 
@@ -362,7 +378,7 @@ class SaveTescoOrders
             else
             {
               /** [ Invoking updateTHL1Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$request['thl1_last_id'],$template_id);
+              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$request['thl1_last_id'],$template_id,$customer_id);
                 return $tesco_order;
             }
             
@@ -391,8 +407,12 @@ class SaveTescoOrders
              }
              else
              {
-               $customer_id = '';
+               $customer_id = NULL;
              }
+           }
+           else
+           {
+             $customer_id = NULL;
            }
 
            /** Insert order details first time. If data already exits, update old values**/
@@ -412,7 +432,7 @@ class SaveTescoOrders
                 {
                   $order_id = $is_exists->id;
                   /** [ Invoking updateTCL4Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id);
+                  $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$customer_id);
 
                   return $is_exists;
                   
@@ -449,7 +469,7 @@ class SaveTescoOrders
            else
            {
               /** [ Invoking updateTCL4Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$request['tcl4_last_id'],$template_id);
+              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$request['tcl4_last_id'],$template_id,$customer_id);
                 return $tesco_order;
            }
             
@@ -478,8 +498,12 @@ class SaveTescoOrders
                }
                else
                {
-                 $customer_id = '';
+                 $customer_id = NULL;
                }
+             }
+             else
+             {
+               $customer_id = NULL;
              }
 
             /** Insert order details first time. If data already exits, update old values**/
@@ -499,7 +523,7 @@ class SaveTescoOrders
                 {
                   $order_id = $is_exists->id;
                   /** [ Invoking updateTSL3Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id);
+                  $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$customer_id);
 
                   return $is_exists;
                   
@@ -536,7 +560,7 @@ class SaveTescoOrders
             else
             {
               /** [ Invoking updateTSL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$request['tsl3_last_id'],$template_id);
+              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$request['tsl3_last_id'],$template_id,$customer_id);
                 return $tesco_order;
             }
             
@@ -565,8 +589,12 @@ class SaveTescoOrders
                }
                else
                {
-                 $customer_id = '';
+                 $customer_id = NULL;
                }
+             }
+             else
+             {
+               $customer_id = NULL;
              }
 
             /** Insert order details first time. If data already exits, update old values**/
@@ -586,7 +614,7 @@ class SaveTescoOrders
                 {
                   $order_id = $is_exists->id;
                   /** [ Invoking updateTHL3Order function using class instance ] */
-                  $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id);
+                  $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$customer_id);
 
                   return $is_exists;
                   
@@ -624,7 +652,7 @@ class SaveTescoOrders
             else
             {
               /** [ Invoking updateTHL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$request['thl3_last_id'],$template_id);
+              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$request['thl3_last_id'],$template_id,$customer_id);
               return $tesco_order;
             }
             
