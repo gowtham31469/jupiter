@@ -1407,7 +1407,7 @@ function updateArtwork(obj)
 					var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
 					var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
 				
-					$('#tesco_supplier').selectpicker('val',data.order_details.tesco_supplier_id);
+					$('#tesco_supplier').selectpicker('val',data.order_details.tesco_metadata_supplier_id);
 					$('#tesco_brand').selectpicker('val',data.order_details.tesco_brand_id);
 					$('#tesco_department').selectpicker('val',data.order_details.tesco_department_id);
 					$('#tesco_rfid').selectpicker('val',rfid);

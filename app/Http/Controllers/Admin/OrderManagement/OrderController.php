@@ -105,7 +105,7 @@ class OrderController extends Controller
             });
             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->get();
             $tesco_department = DB::table('tesco_department')->select('department','id')->get();
-            $tesco_suppliers = DB::table('customers')->select('company_name','id')->where('is_active','=','1')->get();
+            $tesco_suppliers = DB::table('tesco_suppliers')->select('supplier_name','id')->where('is_enabled','=',1)->get();
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
             return view('Admin/Order Management/order-status',['buyers' => $buyers,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'buyer_count' => $buyer_count]);

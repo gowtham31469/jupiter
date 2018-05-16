@@ -5995,7 +5995,7 @@ function mapStoredValues(oDetails) {
             $('#tesco_manufacture_date').val(ele.manufacture_date);
             $('#tesco_department').val(ele.tesco_department_id);
             $('#tesco_brand').val(ele.tesco_brand_id);
-            $('#tesco_supplier').val(ele.tesco_supplier_id);
+            $('#tesco_supplier').val(ele.tesco_metadata_supplier_id);
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
 

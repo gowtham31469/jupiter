@@ -486,7 +486,7 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("ce_style").innerHTML = data.template[0].ce_style_ref;
 			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
-			svgDoc1.getElementById("supplier").innerHTML = data.template[0].company_name;
+			svgDoc1.getElementById("supplier").innerHTML = data.template[0].supplier_name;
 			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
 			var description = data.template[0].short_description;
 			if(name == "TCL4" || name == "THL3" )

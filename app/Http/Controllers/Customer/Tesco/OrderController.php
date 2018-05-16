@@ -3045,7 +3045,7 @@ class OrderController extends Controller
       $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
     
       $data['template']=DB::table($type)->join('tesco_brand','tesco_brand.id','=',$type.'.tesco_brand_id')
-          ->join('tesco_department','tesco_department.id','=',$type.'.tesco_department_id')->join('customers','customers.id','=',$type.'.tesco_supplier_id')->where($type.'.id',$id)->select($type.'.*','customers.company_name','tesco_brand.brand','tesco_department.department')->get();
+          ->join('tesco_department','tesco_department.id','=',$type.'.tesco_department_id')->join('tesco_suppliers','tesco_suppliers.id','=',$type.'.tesco_metadata_supplier_id')->where($type.'.id',$id)->select($type.'.*','tesco_suppliers.supplier_name','tesco_brand.brand','tesco_department.department')->get();
     
       $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();
      
