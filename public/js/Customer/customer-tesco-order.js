@@ -655,7 +655,7 @@ function createOrders(parsedObj = false, oType = false) {
 
                        /** [ Show dynamic supplier selectbox ] */
                        $.each(data.tesco_suppliers, function(index, item) {
-                        html += '<option value="'+ item.id +'">'+ item.company_name + '</option>';
+                        html += '<option value="'+ item.id +'">'+ item.supplier_name + '</option>';
                         });  
 
                      html +='</select>\
@@ -1028,7 +1028,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1303,7 +1303,7 @@ function printDivTesco(data,name) {
 				var svg_fin = svgarr.join(',_');
 
 
-				PopupTescoSmall(svg_fin,name);
+				PopupTescoSmall(svg_fin,name,zone);
 			}
 			
 		}
@@ -1498,7 +1498,7 @@ function printDivTesco(data,name) {
 			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
-			PopupTesco(svg_fin,name);
+			PopupTesco(svg_fin,name,zone);
 		}
 			
 		}
@@ -1512,10 +1512,21 @@ function printDivTesco(data,name) {
  * @return Pdf
  */
 
-function PopupTesco(data,name) {
+function PopupTesco(data,name,zone) {
 	
 
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
 	
+	
+	var tesco_description = $('#tesco_description').val();
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -1524,7 +1535,11 @@ function PopupTesco(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name:name
+			name:name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description
 		},
         tryCount : 0,
         retryLimit : 2,
@@ -1564,9 +1579,20 @@ function PopupTesco(data,name) {
  * @return Pdf
  */
 
-function PopupTescoSmall(data,name) {
+function PopupTescoSmall(data,name,zone) {
+	
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
 	
 	
+	var tesco_description = $('#tesco_description').val();
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
@@ -1577,7 +1603,11 @@ function PopupTescoSmall(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name:name
+			name:name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description
 		},
         tryCount : 0,
         retryLimit : 2,
@@ -4384,6 +4414,8 @@ try{
       $('.save-btn').remove();
       $('.approve-btn').show();
       $('.print-btn').show();
+      $('.cancel-btn').removeAttr('data-target'); 
+      $('.cancel-btn').attr('onClick','location.reload()');
       var div_html='';
       /** [ store last updated id as hidden input , for approve order functionality] */
       $.each(data.last_insertions, function (index, value) {
@@ -4735,10 +4767,10 @@ function jsbarcodetescotsl1(code, id, svgDoc) {
 function jsbarcodetescoean(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
-		format: "ean13",
-		width: 3.45,
-		height: 125,
-		fontSize: 35,
+	    format: "ean13",
+		width: 3.9260,
+		height: 159,
+		fontSize: 30,
 		flat:true,
         displayValue: false
 	});
@@ -4751,8 +4783,11 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
+	
+	svg.setAttribute('width', '391.075px');
+	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -5984,6 +6019,7 @@ function mapStoredValues(oDetails) {
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
     $('.save-btn').data('insert','false');
+
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -5995,7 +6031,7 @@ function mapStoredValues(oDetails) {
             $('#tesco_manufacture_date').val(ele.manufacture_date);
             $('#tesco_department').val(ele.tesco_department_id);
             $('#tesco_brand').val(ele.tesco_brand_id);
-            $('#tesco_supplier').val(ele.tesco_supplier_id);
+            $('#tesco_supplier').val(ele.tesco_metadata_supplier_id);
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
 
@@ -6060,6 +6096,9 @@ function mapStoredValues(oDetails) {
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         $('.print-btn').show();
+        /** Remove cancel button data-target if order status is not saved */
+        $('.cancel-btn').removeAttr('data-target'); 
+        $('.cancel-btn').attr('onClick','location.reload()');
         if(artwork_status === 'Order Placed')
         {
             $('.approve-btn').show();

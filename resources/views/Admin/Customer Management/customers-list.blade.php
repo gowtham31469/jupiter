@@ -178,6 +178,13 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
+                          <div class="col-md-6 customers-metadata" style="display: none;">
+                            <div class="form-group has-feedback">
+                              {!! Form::label('customers_metadata', 'Select Customer From Metadata', ['class' => 'form_label']) !!}
+                                {{ Form::select('customers_metadata',$tesco_customers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'customers_metadata')) }}
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                               {!! Form::label('payment_terms', 'Select Payment Terms', ['class' => 'form_label']) !!}
@@ -446,6 +453,13 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+                  <div class="col-md-6 edit-customers-metadata" style="display:none;">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('edit_customers_metadata', 'Select Customer From Metadata', ['class' => 'form_label']) !!}
+                        {{ Form::select('edit_customers_metadata',(['' => 'Choose one of the following...']),'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_customers_metadata')) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
                       {!! Form::label('edit_payment_terms', 'Select Payment Terms', ['class' => 'form_label']) !!}
@@ -664,12 +678,14 @@
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
-      $('#payment_terms').selectpicker('refresh');
-      $('#edit_payment_terms').selectpicker('refresh');
-      $('#place_of_supply').selectpicker('refresh');
-      $('#edit_place_of_supply').selectpicker('refresh');
-      $('#edit_buyer').selectpicker('refresh');
-      $('#buyer').selectpicker('refresh');
+      $('#payment_terms').val('0').selectpicker('refresh');
+      $('#edit_payment_terms').val('0').selectpicker('refresh');
+      $('#place_of_supply').val('0').selectpicker('refresh');
+      $('#edit_place_of_supply').val('0').selectpicker('refresh');
+      $('#edit_buyer').val('0').selectpicker('refresh');
+      $('#buyer').val('0').selectpicker('refresh');
+      $('#edit_customers_metadata').val('0').selectpicker('refresh');
+      $('#customers_metadata').val('0').selectpicker('refresh');
       $('.edit-customer').tooltip('show')
       $('.edit-customer').tooltip('toggle')
       $('.status').tooltip('show')
@@ -679,6 +695,7 @@
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
+      $('#customers_metadata').prop('required',false)
     });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
@@ -699,13 +716,16 @@
     $('.modal').on('hidden.bs.modal', function (e) {
       $('#add_customer_form').trigger('reset');
       $('#customer_result').hide();
-      $('#edit_buyer').selectpicker('refresh');
-      $('#buyer').selectpicker('refresh');
-      $('#payment_terms').selectpicker('refresh');
-      $('#edit_payment_terms').selectpicker('refresh');
-      $('#place_of_supply').selectpicker('refresh');
-      $('#edit_place_of_supply').selectpicker('refresh');
+      $('#edit_buyer').val('0').selectpicker('refresh');
+      $('#buyer').val('0').selectpicker('refresh');
+      $('#payment_terms').val('0').selectpicker('refresh');
+      $('#edit_payment_terms').val('0').selectpicker('refresh');
+      $('#place_of_supply').val('0').selectpicker('refresh');
+      $('#edit_place_of_supply').val('0').selectpicker('refresh');
       $('.forwarder_div').hide();
+      $('#edit_customers_metadata').val('0').selectpicker('refresh');
+      $('#customers_metadata').val('0').selectpicker('refresh');
+      $('#customers_metadata').prop('required',false)
      })
 
     /** Generate random password for customer **/
@@ -832,20 +852,61 @@
           $('#freight').change(function(){
               if($('#freight option:selected').text() === "Nominated Forwarded") {
                   $('.forwarder_div').show(); 
-                  $('#forwarder').prop('required',true)
+                  $('#forwarder').prop('required',true);
               } else {
                   $('.forwarder_div').hide(); 
-                  $('#forwarder').prop('required',false)
+                  $('#forwarder').prop('required',false);
               } 
         });
           $('#edit_freight').change(function(){
               if($('#edit_freight option:selected').text() === "Nominated Forwarded") {
                   $('.edit_forwarder_div').show(); 
-                  $('#edit_forwarder').prop('required',true)
+                  $('#edit_forwarder').prop('required',true);
               } else {
                   $('.edit_forwarder_div').hide(); 
-                  $('#edit_forwarder').prop('required',false)
+                  $('#edit_forwarder').prop('required',false);
               } 
+        });
+        var buyers = [];
+        var customers;
+        /** [ To toggle suppliers dropdown mandatory field validation( Based on buyer select) ] */
+        $('#buyer').change(function(){
+          /** [Push selected buyers into a array] */
+          $.each($("#buyer option:selected"), function(){
+            buyers.push($(this).text());
+          });
+          /** [Check if array contains "tesco", then hide/show tesco suppliers dropdown] */
+          if(jQuery.inArray("Tesco", buyers) !== -1)
+          {
+              $('.customers-metadata').show();
+              $('#customers_metadata').prop('required',true);
+          } 
+          else 
+          {
+              $('.customers-metadata').hide();
+              $('#customers_metadata').val('0').selectpicker('refresh');
+              $('#customers_metadata').prop('required',false);
+          } 
+          buyers = [];
+        });
+        $('#edit_buyer').change(function(){
+          /** [Push selected buyers into a array] */
+          $.each($("#edit_buyer option:selected"), function(){
+            buyers.push($(this).text());
+          });
+           /** [Check if array contains "tesco", then hide/show tesco suppliers dropdown] */
+          if(jQuery.inArray("Tesco", buyers) !== -1)
+          {
+              $('.edit-customers-metadata').show();
+              $('#edit_customers_metadata').prop('required',true);
+          } 
+          else 
+          {
+              $('.edit-customers-metadata').hide();
+              $('#edit_customers_metadata').val('0').selectpicker('refresh');
+              $('#edit_customers_metadata').prop('required',false);
+          } 
+          buyers = [];
         });
      }); 
      /** Get customer details on click and populate details on modal **/

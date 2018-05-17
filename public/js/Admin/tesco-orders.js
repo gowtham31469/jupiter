@@ -651,7 +651,7 @@ function createOrders(parsedObj = false, oType = false) {
 
 				/** [ Show dynamic supplier selectbox ] */
 				$.each(data.tesco_suppliers, function (index, item) {
-					html += '<option value="' + item.id + '">' + item.company_name + '</option>';
+					html += '<option value="' + item.id + '">' + item.supplier_name + '</option>';
 				});
 
 				html += '</select>\
@@ -1014,7 +1014,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -1903,7 +1903,7 @@ function dynamicSVGTemplatescard(id, item) {
 					} else {
 						barcode_checks = 0;
 						$('.barcode-error').html('');
-						jsbarcodetescotsl1(ce_ratio_itf, 'barcode', svgDoc)
+						jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
 						svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
 					}
 				} else {
@@ -4048,6 +4048,8 @@ function afterOrderSubmitted(data) {
 		$('.save-btn').remove();
 		$('.approve-btn').show();
 		$('.print-btn').show();
+		$('.cancel-btn').removeAttr('data-target'); 
+        $('.cancel-btn').attr('onClick','location.reload()');
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve order functionality] */
 		$.each(data.last_insertions, function (index, value) {
@@ -4310,14 +4312,19 @@ function jsbarcodetesco(code, id, svgDoc) {
  * @return barcode
  */
 function jsbarcodetescoean(code, id, svgDoc) {
-
+//		format: "ean13",
+//		width: 3.45,
+//		height: 125,
+//		fontSize: 35,
+//		flat: true,
+//		displayValue: false
 	JsBarcode("#ean-13", code, {
-		format: "ean13",
-		width: 3.45,
-		height: 125,
-		fontSize: 35,
-		flat: true,
-		displayValue: false
+	    format: "ean13",
+		width: 3.9260,
+		height: 159,
+		fontSize: 30,
+		flat:true,
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -4330,6 +4337,9 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
+	
+	svg.setAttribute('width', '391.075px');
+	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;

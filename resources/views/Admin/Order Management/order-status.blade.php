@@ -358,7 +358,7 @@
                         <label for="tesco_supplier">Supplier</label> 
                         <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">
                             <option value="">Select Supplier</option> @foreach($tesco_suppliers as $suppliers)
-                                <option title="{{$suppliers->company_name}}" value="{{$suppliers->id}}">{{$suppliers->company_name}}
+                                <option title="{{$suppliers->supplier_name}}" value="{{$suppliers->id}}">{{$suppliers->supplier_name}}
                                 </option>
                             @endforeach
                         </select>
