@@ -212,6 +212,9 @@ function mapStoredValues(oDetails) {
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         $('.print-btn').show();
+        /** Remove cancel button data-target if order status is not saved */
+        $('.cancel-btn').removeAttr('data-target'); 
+        $('.cancel-btn').attr('onClick','location.reload()');
         if(artwork_status === 'Order Placed')
         {
             $('.approve-btn').show();
