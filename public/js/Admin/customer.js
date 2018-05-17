@@ -15,12 +15,16 @@
           $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 
           /** Refresh bootstrap selectpicker **/
-          $('#payment_terms').selectpicker('refresh');
-          $('#edit_payment_terms').selectpicker('refresh');
-          $('#place_of_supply').selectpicker('refresh');
-          $('#edit_place_of_supply').selectpicker('refresh');
-          $('#edit_buyer').selectpicker('refresh');
-          $('#buyer').selectpicker('refresh');
+          $('#payment_terms').val('0').selectpicker('refresh');
+          $('#edit_payment_terms').val('0').selectpicker('refresh');
+          $('#place_of_supply').val('0').selectpicker('refresh');
+          $('#edit_place_of_supply').val('0').selectpicker('refresh');
+          $('#edit_buyer').val('0').selectpicker('refresh');
+          $('#buyer').val('0').selectpicker('refresh');
+          $('#edit_customers_metadata').val('0').selectpicker('refresh');
+          $('#customers_metadata').val('0').selectpicker('refresh');
+          $('#customers_metadata').prop('required',false);
+
           var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
           var csrf_token = $('meta[name="csrf-token"]').attr('content');
           $.ajax({
@@ -98,6 +102,14 @@
                 
                 /** [ Call autopopulateCountry function for auto-populating country in textbox  ] */
                 autopopulateCountry(0)
+
+                var htmlContent = '';
+                /** [ tesco_customers multi selectpicker value populating ] */
+                $.each(data.tesco_customers_dropdown, function (key, item) {
+                   htmlContent += '<option value="' + key + '">' + item + '</option>';
+                   $('#customers_metadata').selectpicker('refresh');
+                });
+                $('#customers_metadata').html(htmlContent);
               },
               error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -171,8 +183,9 @@ function addCustomer()
         var shipping_address= [];
         var pincode         = [];
 
-        var buyers = [];
-        
+        var buyers             = [];
+        var customers_metadata = [];
+
         /** [ Create array of contact person for multiple contact details ] */
         $('.contact_person').each(function(i, item)
         {
@@ -281,6 +294,11 @@ function addCustomer()
           buyers.push($(this).val());
         });
 
+        /** [ Create array of multi selected customers from metadata ] */
+        $.each($("#customers_metadata option:selected"), function(){
+          customers_metadata.push($(this).val());
+        });
+
         /** [ Joining array values using some delimiters ] */
         contact_person   = contact_person.join(',');
         contact_phone    = contact_phone.join(',');
@@ -295,11 +313,12 @@ function addCustomer()
         shipping_address = shipping_address.join(',');
         buyer            = buyers.join(',');
         pincode          = pincode.join(',');
+        customers        = customers_metadata.join(',');
 
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode,customers:customers},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -765,6 +784,7 @@ function addCustomer()
           $('#editContact').html('');
           $('#editbilladdress').html('');
           $('#edit_password').val('');
+          $('.edit-customers-metadata').hide();
          $.ajax({
              url:base_url + "/admin/customer-management/get-customers",
              dataType:"json",
@@ -839,15 +859,15 @@ function addCustomer()
                     $('#edit_password').prop('required',true)
                     $('#edit_password').attr('minlength',6)
                    }
-                     /** [ Delivery date mandatory checkbox  checked or not  ] */
-                     if(data.customers[0].delivery_date_required === 1)
-                      {
-                        $('#edit_delivery_date_required').prop('checked', true);
-                      }
-                      else
-                      {
-                        $('#edit_delivery_date_required').prop('checked', false);
-                      }
+                   /** [ Delivery date mandatory checkbox  checked or not  ] */
+                   if(data.customers[0].delivery_date_required === 1)
+                    {
+                      $('#edit_delivery_date_required').prop('checked', true);
+                    }
+                    else
+                    {
+                      $('#edit_delivery_date_required').prop('checked', false);
+                    }
                  /** Hide and show forwarder div based on freight type */
                  if(data.customers[0].freight_type === 3)
                   {
@@ -891,12 +911,44 @@ function addCustomer()
                       {
                         $('#edit_shipping_address'+ key).prop('checked', false);
                       }
-
+                      var buyers_array = [];
                       /** [ Buyers multi selectpicker value populating ] */
                       $.each(data.buyers, function (key, item) {
-                       $('#edit_buyer option[value=' + item.buyer_id + ']').prop('selected', true);
-                       $('#edit_buyer').selectpicker('refresh');
+                         $('#edit_buyer option[value=' + item.buyer_id + ']').prop('selected', true);
+                         $('#edit_buyer').selectpicker('refresh');
+
+                         /** [Push selected buyers into a array] */
+                         $.each($("#edit_buyer option:selected"), function(){
+                           buyers_array.push($(this).text());
+                         });
+                         /** [Check if array contains "tesco", then hide/show tesco suppliers dropdown] */
+                         if(jQuery.inArray("Tesco", buyers_array) !== -1)
+                         {
+                             $('.edit-customers-metadata').show();
+                             $('#edit_customers_metadata').prop('required',true);
+                         } 
+                         else 
+                         {
+                             $('.edit-customers-metadata').hide();
+                             $('#edit_customers_metadata').val('0').selectpicker('refresh');
+                             $('#edit_customers_metadata').prop('required',false);
+                         } 
+                         buyers = [];
                       });
+
+                      var html = '';
+                      /** [ tesco_customers multi selectpicker value populating ] */
+                      $.each(data.tesco_customers, function (key, item) {
+                         html += '<option value="' + key + '">' + item + '</option>';
+                      });
+                      $('#edit_customers_metadata').selectpicker('refresh');
+                      $('#edit_customers_metadata').html(html);
+
+                      /** [ customers metadata multi selectpicker value populating ] */
+                      $.each(data.customer_metadata, function (key, item) {
+                         $('#edit_customers_metadata option[value=' + item + ']').prop('selected', true);
+                      });
+                     $('#edit_customers_metadata').selectpicker('refresh');
                      
                      /** [ Create dynamic add address button ] */
                      var j = 1;
@@ -1183,6 +1235,7 @@ function addCustomer()
           var shipping_address = [];
           var buyers          = [];
           var pincode         = [];
+          var customers_metadata = [];
           /** [ Create array of contact person for multiple contact details ] */
           $('.edit_contact_person').each(function(i, item)
           {
@@ -1293,6 +1346,11 @@ function addCustomer()
             buyers.push($(this).val());
           });
 
+          /** [ Create array of multi selected customers from metadata ] */
+          $.each($("#edit_customers_metadata option:selected"), function(){
+            customers_metadata.push($(this).val());
+          });
+
           /** [ Joining array values using some delimiters ] */          
           contact_person   = contact_person.join(',');
           contact_phone    = contact_phone.join(',');
@@ -1307,11 +1365,12 @@ function addCustomer()
           shipping_address = shipping_address.join(',');
           buyer            = buyers.join(',');
           pincode          = pincode.join(',');
+          customers        = customers_metadata.join(',');
 
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode,customers:customers},
               tryCount : 0,
               retryLimit : 2,
               beforeSend: function () {

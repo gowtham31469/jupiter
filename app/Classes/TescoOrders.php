@@ -26,7 +26,7 @@ class TescoOrders
 	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty)
+	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
 	{
 		try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -54,7 +54,7 @@ class TescoOrders
               $order_id = "SP_TCL100".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -73,7 +73,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -93,7 +93,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -109,7 +110,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl1_last_id']);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl1_last_id'],$customer_id);
 
                 return $tesco_order;
             }
@@ -124,7 +125,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -152,7 +153,7 @@ class TescoOrders
               $order_id = "SP_TCL200".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -171,7 +172,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -191,7 +192,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -207,7 +209,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl2_last_id']);
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl2_last_id'],$customer_id);
 
                 return $tesco_order;
             }
@@ -222,7 +224,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -250,7 +252,7 @@ class TescoOrders
               $order_id = "SP_TSL100".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -269,7 +271,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -289,7 +291,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -306,7 +309,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl1_last_id']);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl1_last_id'],$customer_id);
 
               return $tesco_order;
             }
@@ -321,7 +324,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -349,7 +352,7 @@ class TescoOrders
               $order_id = "SP_THL100".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -368,7 +371,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTHL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -388,7 +391,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -404,7 +408,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTHL1Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl1_last_id']);
+              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl1_last_id'],$customer_id);
 
               return $tesco_order;
             }
@@ -419,7 +423,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -447,7 +451,7 @@ class TescoOrders
               $order_id = "SP_TCL400".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -466,7 +470,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL4Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -486,7 +490,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -502,7 +507,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTCL4Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl4_last_id']);
+              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl4_last_id'],$customer_id);
 
               return $tesco_order;
             }
@@ -517,7 +522,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -545,7 +550,7 @@ class TescoOrders
               $order_id = "SP_TSL300".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -564,7 +569,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTSL3Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -584,7 +589,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -601,7 +607,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTSL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl3_last_id']);
+              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl3_last_id'],$customer_id);
 
               return $tesco_order;
             }
@@ -616,7 +622,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty)
+  public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -644,7 +650,7 @@ class TescoOrders
               $order_id = "SP_THL300".($max_id+1);
             }
             // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$request['supplier'])->first();
+            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
             
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -663,7 +669,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTHL3Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id);
+                $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
 
                 return $is_exists;
                 
@@ -683,7 +689,8 @@ class TescoOrders
                           'manufacture_date'     => $request['manufacture_date'],
                           'tesco_department_id'  => $request['department'],
                           'tesco_brand_id'       => $request['brand'],
-                          'tesco_supplier_id'    => $request['supplier'],
+                          'tesco_supplier_id'    => $customer_id,
+                          'tesco_metadata_supplier_id' => $request['supplier'],
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
@@ -700,7 +707,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTHL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl3_last_id']);
+              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl3_last_id'],$customer_id);
 
               return $tesco_order;
             }

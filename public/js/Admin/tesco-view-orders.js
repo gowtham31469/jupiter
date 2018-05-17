@@ -147,7 +147,7 @@ function mapStoredValues(oDetails) {
             $('#tesco_manufacture_date').val(ele.manufacture_date);
             $('#tesco_department').val(ele.tesco_department_id);
             $('#tesco_brand').val(ele.tesco_brand_id);
-            $('#tesco_supplier').val(ele.tesco_supplier_id);
+            $('#tesco_supplier').val(ele.tesco_metadata_supplier_id);
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
 
@@ -212,6 +212,9 @@ function mapStoredValues(oDetails) {
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         $('.print-btn').show();
+        /** Remove cancel button data-target if order status is not saved */
+        $('.cancel-btn').removeAttr('data-target'); 
+        $('.cancel-btn').attr('onClick','location.reload()');
         if(artwork_status === 'Order Placed')
         {
             $('.approve-btn').show();
@@ -232,7 +235,6 @@ function loadArtworkNames(artwork_collection_style) {
     if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
         var options="<option value=''>Search Artwork</option>";
-        console.log(artwork_collection_style)
         $.each(artwork_collection_style, function(po,templs) {
             var awArray = templs.split(",");
             var ratioTCL  = [];
@@ -243,55 +245,63 @@ function loadArtworkNames(artwork_collection_style) {
             var ratioTHLArtworks = [];
             var singleTHL = [];
             var singleTHLArtworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus;
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
                     case 'TCL 1':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TCL 2':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TCL 4':
                         singleTCL.push(templateInfo[1]);
                         singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
                         break;
                     case 'TSL 1':
                         ratioTCL.push(templateInfo[1]);
                         ratioTCLArtworks.push(templateInfo[0]);
+                        ratioTCLStatus = templateInfo[2];
                         break;
                     case 'TSL 3':
                         singleTCL.push(templateInfo[1]);
                         singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
                         break;
                     case 'THL 1':
                         ratioTHL.push(templateInfo[1]);
                         ratioTHLArtworks.push(templateInfo[0]);
+                        ratioTHLStatus = templateInfo[2];
                         break;
                     case 'THL 3':
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
+                        singleTHLStatus = templateInfo[2];
                 }
             }
             if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-record' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTCLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
                 
             }
 
             if (typeof singleTCL !== 'undefined' && singleTCL.length > 0 && typeof singleTCLArtworks !== 'undefined' && singleTCLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-record' value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
                 
             }
 
             if (typeof ratioTHL !== 'undefined' && ratioTHL.length > 0 && typeof ratioTHLArtworks !== 'undefined' && ratioTHLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-record' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTHLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
                 
             }
 
             if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-record' value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
                 
             }
         });
