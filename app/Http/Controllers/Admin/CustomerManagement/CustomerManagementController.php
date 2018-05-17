@@ -486,33 +486,20 @@ class CustomerManagementController extends Controller
                       $pincode          = explode(',',$pincode);
                       $customers        = explode(',',$customers);
 
+                      /** Check if password empty or not */
                       if(Input::get('p') != '')
                       {
-                        $input['password']  = Hash::make(Input::get('p'));
-                        Customer::where('id',$id)
-                            ->update([
-                            'factory_code'           => $input['factory_code'],
-                            'company_name'           => $input['company_name'],
-                            'courier_choice'         => $input['courier_choice'],
-                            'tin_number'             => $input['tin_number'],
-                            'gstin_number'           => $input['gstin_number'],
-                            'pan_number'             => $input['pan_number'],
-                            'email'                  => $input['email'],
-                            'password'               => $input['password'],
-                            'pi_required'            => $input['pi_required'],
-                            'place_of_supply'        => $input['place_of_supply'],
-                            'payment_terms'          => $input['payment_term'],
-                            'po_required'            => $input['po_required'],
-                            'delivery_date_required' => $input['delivery_date_required'],
-                            'nominated_forwarder'    => $input['forwarder'],
-                            'freight_type'           => $input['freight'],
-                            'delivery_day_count'     => $input['delivery_day_count'],
-                            'short_name'             => $input['short_name']
-                          ]);
+                        $password  = Hash::make(Input::get('p'));
                       }
                       else
                       {
-                        Customer::where('id',$id)
+                        $customer_password = DB::table('customers')
+                                             ->select('customers.password')
+                                             ->where('customers.id','=',$id)
+                                             ->first();
+                        $password = $customer_password->password;
+                      }
+                      Customer::where('id',$id)
                             ->update([
                             'factory_code'           => $input['factory_code'],
                             'company_name'           => $input['company_name'],
@@ -521,6 +508,7 @@ class CustomerManagementController extends Controller
                             'gstin_number'           => $input['gstin_number'],
                             'pan_number'             => $input['pan_number'],
                             'email'                  => $input['email'],
+                            'password'               => $password,
                             'pi_required'            => $input['pi_required'],
                             'place_of_supply'        => $input['place_of_supply'],
                             'payment_terms'          => $input['payment_term'],
@@ -531,8 +519,6 @@ class CustomerManagementController extends Controller
                             'delivery_day_count'     => $input['delivery_day_count'],
                             'short_name'             => $input['short_name']
                           ]);
-                      }
-                      
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
