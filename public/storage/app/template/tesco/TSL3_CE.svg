@@ -22,7 +22,7 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 </image>
 -->
     <g width="391" height="178" transform="matrix(0.2356 0 0 0.207 11 7.8346)" id="barcode"></g>
-<text transform="matrix(1 0 0 1 13.0003 55.0014)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:12px;" id="barcode_number">5057545998991</text>
+<text transform="matrix(1 0 0 1 27.0003 55.0014)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:8.5px;" id="barcode_number">5057545998991</text>
 <text transform="matrix(1.0002 0 0 1 14 78.7482)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:7px;">ORMS TPN: </text>
 <text transform="matrix(0.9434 0 0 1 47.9995 78.8986)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:7px;" id="tpnd">7418529678528</text>
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 20.6108 56.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:45px;opacity: 0.1;" id="watermark"></text>

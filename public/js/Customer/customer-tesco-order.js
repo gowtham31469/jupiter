@@ -1291,7 +1291,7 @@ function printDivTesco(data,name) {
 				var svg_fin = svgarr.join(',_');
 
 
-				PopupTescoSmall(svg_fin,name);
+				PopupTescoSmall(svg_fin,name,zone);
 			}
 			
 		}
@@ -1486,7 +1486,7 @@ function printDivTesco(data,name) {
 			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
-			PopupTesco(svg_fin,name);
+			PopupTesco(svg_fin,name,zone);
 		}
 			
 		}
@@ -1500,10 +1500,21 @@ function printDivTesco(data,name) {
  * @return Pdf
  */
 
-function PopupTesco(data,name) {
+function PopupTesco(data,name,zone) {
 	
 
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
 	
+	
+	var tesco_description = $('#tesco_description').val();
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -1512,7 +1523,11 @@ function PopupTesco(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name:name
+			name:name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description
 		},
         tryCount : 0,
         retryLimit : 2,
@@ -1552,9 +1567,20 @@ function PopupTesco(data,name) {
  * @return Pdf
  */
 
-function PopupTescoSmall(data,name) {
+function PopupTescoSmall(data,name,zone) {
+	
+	var tesco_po_number = $('#tesco_po_number').val();
+	if(zone == "CE")
+	{
+		var style = $('#tesco_ce_style').val();
+	}
+	else
+	{
+		var style = $('#tesco_uk_style').val();
+	}
 	
 	
+	var tesco_description = $('#tesco_description').val();
 	//var success = false;
 	var url = "";
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
@@ -1565,7 +1591,11 @@ function PopupTescoSmall(data,name) {
 		data: {
 			_token: csrf_token,
 			svg: data,
-			name:name
+			name:name,
+			zone:zone,
+			style:style,
+			tesco_po_number:tesco_po_number,
+			tesco_description:tesco_description
 		},
         tryCount : 0,
         retryLimit : 2,
@@ -4724,9 +4754,9 @@ function jsbarcodetescoean(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
 		format: "ean13",
-		width: 3.45,
-		height: 125,
-		fontSize: 35,
+		width: 2.7475,
+		height: 159,
+		fontSize: 30,
 		flat:true,
         displayValue: false
 	});
@@ -4739,8 +4769,11 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
+	
+	svg.setAttribute('width', '391.035px');
+	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;

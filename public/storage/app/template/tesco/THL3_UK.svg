@@ -23,7 +23,7 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 </image>
 -->
     <g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 149.0012)" id="barcode"></g>
-<text transform="matrix(1 0 0 1 65.9998 204)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10.5px;" id="barcode_number">05057545816134</text>
+<text transform="matrix(1 0 0 1 65.9998 204)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:10.5px;" id="barcode_number">05057545816134</text>
 <text transform="matrix(1 0 0 1 7.0935 57.2278)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:18px;">TPND: </text>
 <text transform="matrix(1 0 0 1 7.0935 74.3259)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:18px;">PO No: </text>
 <text id="tpnd" transform="matrix(1 0 0 1 110.0921 57.5111)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:18px;">036130002</text>
