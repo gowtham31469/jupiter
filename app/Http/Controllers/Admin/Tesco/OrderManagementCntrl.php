@@ -3944,4 +3944,44 @@ class OrderManagementCntrl extends Controller
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
+    /**
+     * Function to get tesco template minimum order quantity value based on customer selected.
+     * @author <Praveen>
+     * @param [array] $[templates] [<templates ids>], [string] $[supplier] [<supplier id>],[string] $[buyer_id] [<buyer id>]
+     * @return equivalent moq value array
+     */
+    public function getTescoTemplateMoq(Request $request)
+    {
+       try {
+             $templates = explode(',',$request['templates']);
+             $supplier  = $request['supplier'];
+             $buyer_id  = $request['buyer_id'];
+
+             /**  [Get parent customer id from tesco_suppliers metadata id] */
+             $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             $moq_array = array();
+             foreach ($templates as $template_id) 
+             {
+                $moq = DB::table('price_taxation')
+                         ->select('moq')
+                         ->where('template_id','=',$template_id)
+                         ->where('customer_id','=',$customer_id->customer_id)
+                         ->where('buyer_id','=',$buyer_id)
+                         ->first();
+                if($moq)
+                {
+                  $moq_value = $moq->moq;
+                }
+                else
+                {
+                  $moq_value = 0;
+                }
+                array_push($moq_array,$moq_value);
+             }
+           
+           return response()->json(['error'=> false,'message' =>'success','moq' => $moq_array]);
+       } catch (\Exception $e) {
+           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+    }
 }

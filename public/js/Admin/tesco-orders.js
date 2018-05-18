@@ -1062,13 +1062,45 @@ function createOrders(parsedObj = false, oType = false) {
 						/** hide quantity missing error msgs */
 						$('.quantity-feedback').removeClass('has-error has-danger');
 						$('.quantity-feedback-err-msg').css('display', 'none');
-						$('.quantity-field').prop('required', false)
+						$('.quantity-field').prop('required', false);
 					} else {
 						/** All quantity value fields empty - Show custom validation message and functionality  */
 						$('.quantity-feedback').addClass('has-error has-danger');
 						$('.quantity-feedback-err-msg').css('display', 'block');
-						$('.quantity-field').prop('required', true)
+						$('.quantity-field').prop('required', true);
 					}
+				});
+				$( "#tesco_supplier" ).change(function() {
+				  /** [ Get template ids & buyer id from localstorage ] */
+		          var templates = localStorage.getItem("templates");
+		          var buyer_id  = localStorage.getItem("buyer_id");
+		          var supplier = $('#tesco_supplier option:selected').val();
+		          
+				  $.ajax({
+					url: base_url + "/admin/tesco/get-moq-value",
+					type: 'GET',
+					async: false,
+					data: {
+						templates:templates,
+						supplier:supplier,
+						buyer_id:buyer_id
+					},
+					tryCount: 0,
+					retryLimit: 2,
+					success: function (data) {
+						console.log(data)
+					},
+					error: function (errorXHR, errorStatus, errorThrown) {
+						this.tryCount++;
+						if (this.tryCount <= this.retryLimit) {
+							$.ajax(this);
+							return;
+						}
+					},
+					complete: function () {
+
+					}
+				})
 				});
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
@@ -2538,7 +2570,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL1.length;
 					for (var i = 0; i < l; i++) {
@@ -2600,7 +2632,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
 					var empty_count = 0;
@@ -2666,7 +2698,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL3.length;
 					for (var i = 0; i < l; i++) {
@@ -2722,7 +2754,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL4.concat(count_TSL3);
 					var empty_count = 0;
@@ -2786,7 +2818,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL1.length;
 					for (var i = 0; i < l; i++) {
@@ -2849,7 +2881,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
 					var empty_count = 0;
@@ -2916,7 +2948,7 @@ function setTescoOrder() {
 					});
 
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL3.length;
 					for (var i = 0; i < l; i++) {
@@ -2972,7 +3004,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of atrworks, for validation ] */
+					/** [ Create single array of artworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL4.concat(count_TSL3);
 					var empty_count = 0;
