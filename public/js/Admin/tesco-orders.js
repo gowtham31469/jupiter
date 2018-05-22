@@ -4253,8 +4253,8 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
 		format: "ITF14",
-		width: 2.7475,
-		height: 159,
+		width: 3.28148,
+		height: 179,
 		fontSize: 30,
 		flat: true,
 		displayValue: false
@@ -4271,7 +4271,7 @@ function jsbarcodetesco(code, id, svgDoc) {
 	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
 
-	svg.setAttribute('width', '391.035px');
+	svg.setAttribute('width', '491.035px');
 	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
