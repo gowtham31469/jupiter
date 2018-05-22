@@ -72,7 +72,6 @@ function tescoOrders() {
 	localStorage.removeItem("zone");
 	localStorage.removeItem("template type");
 	localStorage.removeItem("data");
-	localStorage.removeItem("moq");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	try {
 		/** [ ajax call to load tesco order page ] **/
@@ -737,8 +736,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" max="9999" placeholder="Enter Quantity"  data-lastid="" min="0" >\
-                                                <div class="help-block with-errors"></div>\
+                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\ 
                                             </div>\
                                         </td>';
 						});
@@ -814,8 +812,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" max="9999" placeholder="Enter Quantity"  data-lastid="" min="0">\
-                                                <div class="help-block with-errors"></div>\
+                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                             </div>\
                                         </td>';
 						});
@@ -884,8 +881,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" max="9999" placeholder="Enter Quantity" data-lastid="" min="0">\
-                                        <div class="help-block with-errors"></div>\
+                                        <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\ 
                                         </div>\
                                         </td>';
 						});
@@ -959,8 +955,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" max="9999" data-lastid="" min="0">\
-                                        <div class="help-block with-errors"></div>\
+                                        <input type="text" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                                         </div>\
                                         </td>';
 						});
@@ -1063,10 +1058,7 @@ function createOrders(parsedObj = false, oType = false) {
 
 				/** [Toggle all Quantity value 0 error msg] */
 				$(".quantity-field").keyup(function () {
-					/**[Get the minimum value of the field] */
-					var moq = $(this).attr('min');
-
-					if ($(this).val() > moq) {
+					if ($(this).val() != '' && $(this).val() > 0) {
 						/** hide quantity missing error msgs */
 						$('.quantity-feedback').removeClass('has-error has-danger');
 						$('.quantity-feedback-err-msg').css('display', 'none');
@@ -1078,44 +1070,44 @@ function createOrders(parsedObj = false, oType = false) {
 						$('.quantity-field').prop('required', true);
 					}
 				});
-				$( "#tesco_supplier" ).change(function() {
-				  /** [ Get template ids & buyer id from localstorage ] */
-		          var templates = localStorage.getItem("templates");
-		          var buyer_id  = localStorage.getItem("buyer_id");
-		          var supplier = $('#tesco_supplier option:selected').val();
+				// $( "#tesco_supplier" ).change(function() {
+				//   /** [ Get template ids & buyer id from localstorage ] */
+		  //         var templates = localStorage.getItem("templates");
+		  //         var buyer_id  = localStorage.getItem("buyer_id");
+		  //         var supplier = $('#tesco_supplier option:selected').val();
 		          
-				  $.ajax({
-					url: base_url + "/admin/tesco/get-moq-value",
-					type: 'GET',
-					async: false,
-					data: {
-						templates:templates,
-						supplier:supplier,
-						buyer_id:buyer_id
-					},
-					tryCount: 0,
-					retryLimit: 2,
-					success: function (data) {
-						/** [ add moq values into local storage ] */
-						localStorage.setItem("moq", JSON.stringify(data.moq));
-						$('.quantity-field').each(function (i, item) {
-							$(this).attr("min",data.moq[i]); 
-							$(this).attr("data-min-error","MOQ should be greater than "+data.moq[i]); 
-							$(this).val(data.moq[i]);
-						});
-					},
-					error: function (errorXHR, errorStatus, errorThrown) {
-						this.tryCount++;
-						if (this.tryCount <= this.retryLimit) {
-							$.ajax(this);
-							return;
-						}
-					},
-					complete: function () {
+				//   $.ajax({
+				// 	url: base_url + "/admin/tesco/get-moq-value",
+				// 	type: 'GET',
+				// 	async: false,
+				// 	data: {
+				// 		templates:templates,
+				// 		supplier:supplier,
+				// 		buyer_id:buyer_id
+				// 	},
+				// 	tryCount: 0,
+				// 	retryLimit: 2,
+				// 	success: function (data) {
+				// 		/** [ add moq values into local storage ] */
+				// 		localStorage.setItem("moq", JSON.stringify(data.moq));
+				// 		$('.quantity-field').each(function (i, item) {
+				// 			$(this).attr("min",data.moq[i]); 
+				// 			$(this).attr("data-min-error","MOQ should be greater than "+data.moq[i]); 
+				// 			$(this).val(data.moq[i]);
+				// 		});
+				// 	},
+				// 	error: function (errorXHR, errorStatus, errorThrown) {
+				// 		this.tryCount++;
+				// 		if (this.tryCount <= this.retryLimit) {
+				// 			$.ajax(this);
+				// 			return;
+				// 		}
+				// 	},
+				// 	complete: function () {
 
-					}
-				})
-				});
+				// 	}
+				// })
+				// });
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -1517,7 +1509,6 @@ function addUKSingle(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		var moq  = JSON.parse(localStorage.getItem("moq"));
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
@@ -1551,8 +1542,7 @@ function addUKSingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max="9999" data-lastid="" min="'+ moq[i] +'" data-min-error = "MOQ should be greater than '+ moq[i]+'" value="'+ moq[i]+'">\
-                                <div class="help-block with-errors"></div>\
+                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
                             </div>\
                         </td>';
 		});
@@ -1590,7 +1580,6 @@ function addUKRatio(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		var moq  = JSON.parse(localStorage.getItem("moq"));
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
@@ -1618,8 +1607,7 @@ function addUKRatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max="9999" data-lastid="" min="'+ moq[i] +'" data-min-error = "MOQ should be greater than '+ moq[i]+'" value="'+ moq[i]+'">\
-                                <div class="help-block with-errors"></div>\
+                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
                             </div>\
                         </td>';
 		});
@@ -1726,7 +1714,6 @@ function addCESingle(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		var moq  = JSON.parse(localStorage.getItem("moq"));
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
@@ -1760,8 +1747,7 @@ function addCESingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max="9999" data-lastid="" min="'+ moq[i] +'" data-min-error = "MOQ should be greater than '+ moq[i]+'" value="'+ moq[i]+'">\
-                            <div class="help-block with-errors"></div>\
+                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                         </div>\
                     </td>';
 		});
@@ -1799,7 +1785,6 @@ function addCERatio(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		var moq  = JSON.parse(localStorage.getItem("moq"));
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
@@ -1827,8 +1812,7 @@ function addCERatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max="9999" data-lastid="" min="'+ moq[i] +'" data-min-error = "MOQ should be greater than '+ moq[i]+'" value="'+ moq[i]+'">\
-                            <div class="help-block with-errors"></div>\
+                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
                         </div>\
                     </td>';
 		});
