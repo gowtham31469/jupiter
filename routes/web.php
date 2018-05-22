@@ -255,6 +255,7 @@ Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@ge
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createStickerOrders');
 Route::post('admin/tesco/view-order', 'Admin\Tesco\OrderManagementCntrl@viewOrders');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
+Route::get('admin/tesco/get-moq-value', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateMoq');
 
 Route::post('admin/tesco/print-div-tesco', 'Admin\Tesco\OrderManagementCntrl@printDivTesco');
 Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@printDivTescoSmall');
