@@ -736,7 +736,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\ 
+                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
                                             </div>\
                                         </td>';
 						});
@@ -881,7 +881,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\ 
+                                        <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
                                         </div>\
                                         </td>';
 						});
@@ -1542,7 +1542,7 @@ function addUKSingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
+                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             </div>\
                         </td>';
 		});
@@ -1607,7 +1607,7 @@ function addUKRatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
+                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                             </div>\
                         </td>';
 		});
@@ -1812,7 +1812,7 @@ function addCERatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\ 
+                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
                         </div>\
                     </td>';
 		});
