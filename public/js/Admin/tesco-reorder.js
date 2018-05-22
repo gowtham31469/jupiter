@@ -577,10 +577,10 @@ function contentdocument(data,name,zone)
 function jsbarcodetesco(code, id, svgDoc) {
 	JsBarcode("#ean-13", code, {
 		format: "ITF14",
-		width: 2.50,
-		height: 100,
+		width: 2.7475,
+		height: 159,
 		fontSize: 30,
-		flat:true,
+		flat: true,
 		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -594,6 +594,9 @@ function jsbarcodetesco(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '391.035px');
+	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
@@ -635,12 +638,12 @@ function jsbarcodetesco(code, id, svgDoc) {
 function jsbarcodetescoean(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
-		format: "ean13",
-		width: 3.45,
-		height: 125,
-		fontSize: 35,
+	    format: "ean13",
+		width: 3.9260,
+		height: 159,
+		fontSize: 30,
 		flat:true,
-		displayValue: false
+        displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -653,6 +656,9 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
+	
+	svg.setAttribute('width', '391.075px');
+	svg.setAttribute('height', '178.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
