@@ -1062,52 +1062,14 @@ function createOrders(parsedObj = false, oType = false) {
 						/** hide quantity missing error msgs */
 						$('.quantity-feedback').removeClass('has-error has-danger');
 						$('.quantity-feedback-err-msg').css('display', 'none');
-						$('.quantity-field').prop('required', false);
+						$('.quantity-field').prop('required', false)
 					} else {
 						/** All quantity value fields empty - Show custom validation message and functionality  */
 						$('.quantity-feedback').addClass('has-error has-danger');
 						$('.quantity-feedback-err-msg').css('display', 'block');
-						$('.quantity-field').prop('required', true);
+						$('.quantity-field').prop('required', true)
 					}
 				});
-				// $( "#tesco_supplier" ).change(function() {
-				//   /** [ Get template ids & buyer id from localstorage ] */
-		  //         var templates = localStorage.getItem("templates");
-		  //         var buyer_id  = localStorage.getItem("buyer_id");
-		  //         var supplier = $('#tesco_supplier option:selected').val();
-		          
-				//   $.ajax({
-				// 	url: base_url + "/admin/tesco/get-moq-value",
-				// 	type: 'GET',
-				// 	async: false,
-				// 	data: {
-				// 		templates:templates,
-				// 		supplier:supplier,
-				// 		buyer_id:buyer_id
-				// 	},
-				// 	tryCount: 0,
-				// 	retryLimit: 2,
-				// 	success: function (data) {
-				// 		/** [ add moq values into local storage ] */
-				// 		localStorage.setItem("moq", JSON.stringify(data.moq));
-				// 		$('.quantity-field').each(function (i, item) {
-				// 			$(this).attr("min",data.moq[i]); 
-				// 			$(this).attr("data-min-error","MOQ should be greater than "+data.moq[i]); 
-				// 			$(this).val(data.moq[i]);
-				// 		});
-				// 	},
-				// 	error: function (errorXHR, errorStatus, errorThrown) {
-				// 		this.tryCount++;
-				// 		if (this.tryCount <= this.retryLimit) {
-				// 			$.ajax(this);
-				// 			return;
-				// 		}
-				// 	},
-				// 	complete: function () {
-
-				// 	}
-				// })
-				// });
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -1551,7 +1513,7 @@ function addUKSingle(rem, e) {
                    </td>\
                    </tr>';
 		$('#table_row').append(html);
-		
+
 		/** [ show tooltip ] */
 		$('.delete-row').tooltip('show')
 		$('.delete-row').tooltip('toggle')
@@ -1564,20 +1526,6 @@ function addUKSingle(rem, e) {
 
 		/** [ Call setSerialNumber function ] */
 		setSerialNumber()
-		/** [Toggle all Quantity value 0 error msg] */
-		$(".quantity-field").keyup(function () {
-			if ($(this).val() != '' && $(this).val() > 0) {
-				/** hide quantity missing error msgs */
-				$('.quantity-feedback').removeClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'none');
-				$('.quantity-field').prop('required', false);
-			} else {
-				/** All quantity value fields empty - Show custom validation message and functionality  */
-				$('.quantity-feedback').addClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'block');
-				$('.quantity-field').prop('required', true);
-			}
-		});
 
 	} catch (e) {
 		/** [error statements] */
@@ -1631,7 +1579,7 @@ function addUKRatio(rem, e) {
                    </td>\
                    </tr>';
 		$('#table_row').append(html);
-		
+
 		/** [ show tooltip ] */
 		$('.delete-row').tooltip('show')
 		$('.delete-row').tooltip('toggle')
@@ -1644,20 +1592,6 @@ function addUKRatio(rem, e) {
 
 		/** [ Call setSerialNumber function ] */
 		setSerialNumber()
-		/** [Toggle all Quantity value 0 error msg] */
-		$(".quantity-field").keyup(function () {
-			if ($(this).val() != '' && $(this).val() > 0) {
-				/** hide quantity missing error msgs */
-				$('.quantity-feedback').removeClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'none');
-				$('.quantity-field').prop('required', false);
-			} else {
-				/** All quantity value fields empty - Show custom validation message and functionality  */
-				$('.quantity-feedback').addClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'block');
-				$('.quantity-field').prop('required', true);
-			}
-		});
 
 	} catch (e) {
 		/** [error statements] */
@@ -1785,7 +1719,7 @@ function addCESingle(rem, e) {
                </td>\
                </tr>';
 		$('#table_row').append(html);
-		
+
 		/** [ show tooltip ] */
 		$('.delete-row').tooltip('show')
 		$('.delete-row').tooltip('toggle')
@@ -1798,20 +1732,6 @@ function addCESingle(rem, e) {
 
 		/** [ Call setSerialNumber function ] */
 		setSerialNumber()
-		/** [Toggle all Quantity value 0 error msg] */
-		$(".quantity-field").keyup(function () {
-			if ($(this).val() != '' && $(this).val() > 0) {
-				/** hide quantity missing error msgs */
-				$('.quantity-feedback').removeClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'none');
-				$('.quantity-field').prop('required', false);
-			} else {
-				/** All quantity value fields empty - Show custom validation message and functionality  */
-				$('.quantity-feedback').addClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'block');
-				$('.quantity-field').prop('required', true);
-			}
-		});
 	} catch (e) {
 		/** [error statements] */
 		console.log("Error:" + e)
@@ -1864,7 +1784,7 @@ function addCERatio(rem, e) {
                </td>\
                </tr>';
 		$('#table_row').append(html);
-		
+
 		/** [ show tooltip ] */
 		$('.delete-row').tooltip('show')
 		$('.delete-row').tooltip('toggle')
@@ -1877,20 +1797,6 @@ function addCERatio(rem, e) {
 
 		/** [ Call setSerialNumber function ] */
 		setSerialNumber()
-		/** [Toggle all Quantity value 0 error msg] */
-		$(".quantity-field").keyup(function () {
-			if ($(this).val() != '' && $(this).val() > 0) {
-				/** hide quantity missing error msgs */
-				$('.quantity-feedback').removeClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'none');
-				$('.quantity-field').prop('required', false);
-			} else {
-				/** All quantity value fields empty - Show custom validation message and functionality  */
-				$('.quantity-feedback').addClass('has-error has-danger');
-				$('.quantity-feedback-err-msg').css('display', 'block');
-				$('.quantity-field').prop('required', true);
-			}
-		});
 	} catch (e) {
 		/** [error statements] */
 		console.log("Error:" + e)
@@ -2632,7 +2538,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL1.length;
 					for (var i = 0; i < l; i++) {
@@ -2694,7 +2600,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
 					var empty_count = 0;
@@ -2760,7 +2666,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL3.length;
 					for (var i = 0; i < l; i++) {
@@ -2816,7 +2722,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL4.concat(count_TSL3);
 					var empty_count = 0;
@@ -2880,7 +2786,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL1.length;
 					for (var i = 0; i < l; i++) {
@@ -2943,7 +2849,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL1.concat(count_TCL2).concat(count_TSL1);
 					var empty_count = 0;
@@ -3010,7 +2916,7 @@ function setTescoOrder() {
 					});
 
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var empty_count = 0;
 					var l = count_THL3.length;
 					for (var i = 0; i < l; i++) {
@@ -3066,7 +2972,7 @@ function setTescoOrder() {
 
 					});
 
-					/** [ Create single array of artworks, for validation ] */
+					/** [ Create single array of atrworks, for validation ] */
 					var templates_array = [];
 					templates_array = count_TCL4.concat(count_TSL3);
 					var empty_count = 0;
@@ -4347,8 +4253,8 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
 		format: "ITF14",
-		width: 3.28148,
-		height: 179,
+		width: 5.90148,
+		height: 343,
 		fontSize: 30,
 		flat: true,
 		displayValue: false
@@ -4365,8 +4271,8 @@ function jsbarcodetesco(code, id, svgDoc) {
 	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
 
-	svg.setAttribute('width', '491.035px');
-	svg.setAttribute('height', '178.02px');
+	svg.setAttribute('width', '425.07px');
+	svg.setAttribute('height', '405.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
