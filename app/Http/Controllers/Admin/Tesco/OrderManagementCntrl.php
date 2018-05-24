@@ -725,7 +725,15 @@ class OrderManagementCntrl extends Controller
                            $i++;
                          }
                          
-                         $templates_inserted = array('TCL 1' => $tesco_order_id);
+                         /** [ tesco order id, that has artwork count > 0] */
+                         if($is_order_count_empty != 1)
+                         { 
+                          $templates_inserted = array('TCL 1' => $tesco_order_id);
+                         }
+                         else
+                         {
+                          $templates_inserted = [];
+                         }
                        }
                        else
                        {
@@ -743,7 +751,15 @@ class OrderManagementCntrl extends Controller
                               ]);
                            $i++;
                          }
-                         $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
+                         /** [ tesco order id, that has artwork count > 0] */
+                         if($is_order_count_empty != 1)
+                         { 
+                          $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
+                         }
+                         else
+                         {
+                          $templates_inserted = [];
+                         }
                        }
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -793,7 +809,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 2' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 2' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -812,7 +836,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -862,7 +894,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TSL 1' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TSL 1' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -881,7 +921,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -934,7 +982,15 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       $templates_inserted = array('THL 1' => $tesco_order_id);
+                       /** [ tesco order id, that has artwork count > 0] */
+                       if($is_order_count_empty != 1)
+                       { 
+                        $templates_inserted = array('THL 1' => $tesco_order_id);
+                       }
+                       else
+                       {
+                        $templates_inserted = [];
+                       }
                      }
                      else
                      {
@@ -953,7 +1009,15 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       $templates_inserted = array('THL 1' => $request['thl1_last_id']);
+                       /** [ tesco order id, that has artwork count > 0] */
+                       if($is_order_count_empty != 1)
+                       { 
+                        $templates_inserted = array('THL 1' => $request['thl1_last_id']);
+                       }
+                       else
+                       {
+                        $templates_inserted = [];
+                       }
                      }
 
                      /** [ Return array of inserted id ] */
@@ -1061,7 +1125,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 4' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 4' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1081,7 +1153,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1132,7 +1212,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TSL 3' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TSL 3' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1152,7 +1240,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1206,7 +1302,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 3' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 3' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1226,7 +1330,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 3' => $request['thl3_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          
                          /** [ Return array of inserted id ] */
@@ -1333,7 +1445,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 1' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 1' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1352,7 +1472,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1402,7 +1530,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 2' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 2' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1421,7 +1557,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1471,7 +1615,15 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       $templates_inserted = array('TSL 1' => $tesco_order_id);
+                       /** [ tesco order id, that has artwork count > 0] */
+                       if($is_order_count_empty != 1)
+                       { 
+                        $templates_inserted = array('TSL 1' => $tesco_order_id);
+                       }
+                       else
+                       {
+                        $templates_inserted = [];
+                       }
                      }
                      else
                      {
@@ -1490,7 +1642,15 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
+                       /** [ tesco order id, that has artwork count > 0] */
+                       if($is_order_count_empty != 1)
+                       { 
+                        $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
+                       }
+                       else
+                       {
+                        $templates_inserted = [];
+                       }
                      }
                      
                      /** [ Return array of inserted id ] */
@@ -1543,7 +1703,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 1' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 1' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
                          else
                          {
@@ -1562,7 +1730,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 1' => $request['thl1_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 1' => $request['thl1_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1670,7 +1846,15 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             $templates_inserted = array('TCL 4' => $tesco_order_id);
+                             /** [ tesco order id, that has artwork count > 0] */
+                             if($is_order_count_empty != 1)
+                             { 
+                              $templates_inserted = array('TCL 4' => $tesco_order_id);
+                             }
+                             else
+                             {
+                              $templates_inserted = [];
+                             }
                          }
                          else
                          {
@@ -1690,7 +1874,15 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
+                             /** [ tesco order id, that has artwork count > 0] */
+                             if($is_order_count_empty != 1)
+                             { 
+                              $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
+                             }
+                             else
+                             {
+                              $templates_inserted = [];
+                             }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1741,7 +1933,15 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             $templates_inserted = array('TSL 3' => $tesco_order_id);
+                             /** [ tesco order id, that has artwork count > 0] */
+                             if($is_order_count_empty != 1)
+                             { 
+                              $templates_inserted = array('TSL 3' => $tesco_order_id);
+                             }
+                             else
+                             {
+                              $templates_inserted = [];
+                             }
                          }
                          else
                          {
@@ -1761,7 +1961,15 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
+                            /** [ tesco order id, that has artwork count > 0] */
+                             if($is_order_count_empty != 1)
+                             { 
+                              $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
+                             }
+                             else
+                             {
+                              $templates_inserted = [];
+                             }
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1815,7 +2023,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 3' => $tesco_order_id);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 3' => $tesco_order_id);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                        }
                        else
                        {
@@ -1835,7 +2051,15 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
+                           /** [ tesco order id, that has artwork count > 0] */
+                           if($is_order_count_empty != 1)
+                           { 
+                            $templates_inserted = array('THL 3' => $request['thl3_last_id']);
+                           }
+                           else
+                           {
+                            $templates_inserted = [];
+                           }
                        }
 
                        /** [ Return array of inserted id ] */
