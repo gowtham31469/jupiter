@@ -54,8 +54,6 @@
                               <dd>{{ $value->bill_email }}</dd>
                               <dt>Phone:</dt>
                               <dd>{{ $value->bill_telephone }}</dd>
-                              <dt>Fax:</dt>
-                              <dd>{{ $value->bill_fax }}</dd>
                             </dl>
                           </td>
                           <td>
