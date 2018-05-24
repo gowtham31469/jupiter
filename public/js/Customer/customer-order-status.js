@@ -249,12 +249,13 @@ function orderStatus() {
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-												  $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
+												new_po_div_status++;
                                             }
 											else
 											{
-												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="check-list">'+value1.TemplateName+'</li>')
-												new_po_div_status++;
+												
+												  $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
 											}
                                           
                                         });
@@ -632,6 +633,8 @@ function orderStatus() {
 									if(newObj.length == new_po_div_status)
 									{
 										$('#new_po_div_status').addClass('hidden')
+										$('#new_po1_status').addClass('hidden')
+										$('#map_po_status').addClass('hidden')
 									}
 
                                     },
