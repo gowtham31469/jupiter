@@ -26,8 +26,8 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 </image>
 -->
     
-     <g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 149.0012)" id="barcode"></g>
-<text transform="matrix(1 0 0 1 63.9998 204.0003)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:10.5px;" id="barcode_number">05057545816134</text>
+     <g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 128.001)" id="barcode"></g>
+<text transform="matrix(1 0 0 1 63.9998 204.0003)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:11px;" id="barcode_number">05057545816134</text>
 <text id="tpnd" transform="matrix(1 0 0 1 110.3364 56.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">2005100171875</text>
 <text id="po_number" transform="matrix(1 0 0 1 109.3364 73.0928)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">1658242</text>
 <text transform="matrix(1 0 0 1 226.4017 54.8571)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Pieces per shroud: </text>
@@ -47,7 +47,7 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 <text transform="matrix(1 0 0 1 7.0916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
 <text transform="matrix(1 0 0 1 60.5916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:43;"> </text>
 <text transform="matrix(1 0 0 1 106.3916 87.9775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text transform="matrix(1 0 0 1 47.8128 100.9361)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;"> (VPN/OPTION ID): </text>
+<text transform="matrix(1 0 0 1 47.8128 100.9361)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">(VPN/OPTION ID): </text>
 <text transform="matrix(1 0 0 1 7.1485 100.6665)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">CE Style Ref</text>
 <text transform="matrix(1 0 0 1 7.0916 113.8261)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Short Description:</text>
 <text transform="matrix(1 0 0 1 81.3916 113.8261)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:5;"> </text>
