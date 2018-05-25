@@ -1159,7 +1159,7 @@ function printDivTesco(data,name) {
 					{
 						var barcode_change = $(this).find('.uk_single_ean').val()
 					}
-					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+					jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 				}
 				else
@@ -1172,7 +1172,7 @@ function printDivTesco(data,name) {
 					{
 						var barcode_change = $(this).find('.uk_ratio_itf').val()
 					}
-					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 					
 				}
@@ -2103,7 +2103,7 @@ function dynamicSVGTemplatescard(id,item)
                         barcode_checks = 0;
                         $('.barcode-error').html('');
 						//svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
-                        jsbarcodetescotsl1(ce_ratio_itf, 'barcode', svgDoc)
+                        jsbarcodetescotsl(ce_ratio_itf, 'barcode', svgDoc)
                         svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
                     }
 				  }
@@ -2153,7 +2153,7 @@ function dynamicSVGTemplatescard(id,item)
                             barcode_checks = 0;
                             $('.barcode-error').html('');
 							//svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
-                            jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+                            jsbarcodetescotslean(ce_single_ean, 'barcode', svgDoc)
                             svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
                         }
 					  }
@@ -2271,7 +2271,7 @@ function dynamicSVGTemplatescard(id,item)
                         barcode_checks = 0;
                         $('.barcode-error').html('');
 						//svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
-                        jsbarcodetesco(uk_ratio_itf, 'barcode', svgDoc)
+                        jsbarcodetescotsl(uk_ratio_itf, 'barcode', svgDoc)
                         svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
                     }
 					
@@ -2319,7 +2319,7 @@ function dynamicSVGTemplatescard(id,item)
                             barcode_checks = 0;
                             $('.barcode-error').html('');
 							//svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
-                            jsbarcodetescoean(uk_single_ean, 'barcode', svgDoc)
+                            jsbarcodetescotslean(uk_single_ean, 'barcode', svgDoc)
                             svgDoc.getElementById("barcode_number").innerHTML = uk_single_ean;
                         }
 					  }
@@ -4642,10 +4642,10 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	JsBarcode("#ean-13", code, {
 		format: "ITF14",
-		width: 2.7475,
-		height: 159,
+		width: 3.28148,
+		height: 202,
 		fontSize: 30,
-		flat:true,
+		flat: true,
 		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
@@ -4659,9 +4659,9 @@ function jsbarcodetesco(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '30px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
-	
-	svg.setAttribute('width', '391.035px');
-	svg.setAttribute('height', '178.02px');
+
+	svg.setAttribute('width', '408.900px');
+	svg.setAttribute('height', '328.02px');
 	
 	
 
@@ -4696,80 +4696,22 @@ function jsbarcodetesco(code, id, svgDoc) {
 	
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
-/**
- * This Function is used to invoke JSBarcode.
- * 
- * @return barcode 
- */
-function jsbarcodetescotsl1(code, id, svgDoc) {
-	JsBarcode("#ean-13", code, {
-		format: "ITF14",
-		width: 2.7475,
-		height: 159,
-		fontSize: 30,
-		flat:true,
-		displayValue: false
-	});
-	var svg = document.getElementById('svgdiv').querySelector('svg'),
-		canvas = document.createElement('canvas'),
-		body = document.getElementsByTagName('body')[0],
-		canvasTmp,
-		svg_xml,
-		ctx,
-		img;
-	// if our "svg" doesn't have 'xmlns' attribute we must add it
-	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '30px');
-	svg.setAttribute('font-family', 'frankgothcnbt');
-	
-	svg.setAttribute('width', '391.12px');
-	svg.setAttribute('height', '178.04px');
-	
-	
-
-	canvas.id = 'canvas';
-	canvas.width = svg.getBoundingClientRect().width;
-	canvas.height = svg.getBoundingClientRect().height;
-
-	body.appendChild(canvas);
-	canvasTmp = document.getElementById('canvas');
-
-	/* Time to play ;) */
-
-	// https://developer.mozilla.org/en/XMLSerializer
-	svg_xml = (new XMLSerializer()).serializeToString(svg);
-	ctx = canvasTmp.getContext('2d');
-
-	// JavaScript (HTML) image
-	img = new Image();
-
-	img.onload = function () {
-		ctx.drawImage(img, 0, 0);
-	};
-    
-    // img.src - contains base64 URI from svg
-	// https://developer.mozilla.org/en/DOM/window.btoa
-	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
-
-	
-
-	//remove temporary canvas
-	canvasTmp.remove();
-	
-	svgDoc.getElementById(id).innerHTML = svg_xml;
-}
-
 /**
  * This Function is used to invoke Ean 13 JSBarcode.
  * 
  * @return barcode
  */
-function jsbarcodetescoean(code, id, svgDoc) {
-
+function jsbarcodetescotslean(code, id, svgDoc) {
+//		format: "ean13",
+//		width: 3.45,
+//		height: 125,
+//		fontSize: 35,
+//		flat: true,
+//		displayValue: false
 	JsBarcode("#ean-13", code, {
 	    format: "ean13",
 		width: 3.9260,
-		height: 159,
+		height: 167,
 		fontSize: 30,
 		flat:true,
         displayValue: false
@@ -4783,11 +4725,127 @@ function jsbarcodetescoean(code, id, svgDoc) {
 		img;
 	// if our "svg" doesn't have 'xmlns' attribute we must add it
 	//    svg.setAttribute('width', '188.931023622px');
-	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
 	
-	svg.setAttribute('width', '391.075px');
-	svg.setAttribute('height', '178.02px');
+	svg.setAttribute('width', '419.075px');
+	svg.setAttribute('height', '275.02px');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode 
+ */
+
+
+function jsbarcodetescotsl(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ITF14",
+		width: 3.28148,
+		height: 199,
+		fontSize: 30,
+		flat: true,
+		displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '30px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+
+	svg.setAttribute('width', '415.100px');
+	svg.setAttribute('height', '328.02px');
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+	/* Time to play ;) */
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+	// JavaScript (HTML) image
+	img = new Image();
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// img.src - contains base64 URI from svg
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke Ean 13 JSBarcode.
+ * 
+ * @return barcode
+ */
+function jsbarcodetescoean(code, id, svgDoc) {
+
+	JsBarcode("#ean-13", code, {
+	    format: "ean13",
+		width: 3.9260,
+		height: 170,
+		fontSize: 30,
+		flat:true,
+        displayValue: false
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '50px');
+	svg.setAttribute('font-family', 'frankgothcnbt');
+	
+	svg.setAttribute('width', '412.25px');
+	svg.setAttribute('height', '378.02px');
 
 	canvas.id = 'canvas';
 	canvas.width = svg.getBoundingClientRect().width;
