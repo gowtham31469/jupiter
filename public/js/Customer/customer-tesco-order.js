@@ -1707,6 +1707,23 @@ try{
 
          /** [ Call setSerialNumber function ] */
          setSerialNumber()
+         /** [Toggle all Quantity value 0 error msg] */
+         $(".quantity-field").keyup(function () {
+             if($(this).val() != '' && $(this).val() > 0)
+             {
+                 /** All quantity value fields empty - hide custom validation message and functionality */
+                 $('.quantity-feedback').removeClass('has-error has-danger');
+                 $('.quantity-feedback-err-msg').css('display','none');
+                 $('.quantity-field').prop('required',false)
+             }
+             else
+             {
+                 /** All quantity value fields empty - Show custom validation message and functionality  */
+                 $('.quantity-feedback').addClass('has-error has-danger');
+                 $('.quantity-feedback-err-msg').css('display','block');
+                 $('.quantity-field').prop('required',true)
+             }
+         });
          
    } catch (e) {
     /** [error statements] */
@@ -1773,6 +1790,23 @@ try{
 
          /** [ Call setSerialNumber function ] */
          setSerialNumber()
+         /** [Toggle all Quantity value 0 error msg] */
+         $(".quantity-field").keyup(function () {
+             if($(this).val() != '' && $(this).val() > 0)
+             {
+                 /** All quantity value fields empty - hide custom validation message and functionality */
+                 $('.quantity-feedback').removeClass('has-error has-danger');
+                 $('.quantity-feedback-err-msg').css('display','none');
+                 $('.quantity-field').prop('required',false)
+             }
+             else
+             {
+                 /** All quantity value fields empty - Show custom validation message and functionality  */
+                 $('.quantity-feedback').addClass('has-error has-danger');
+                 $('.quantity-feedback-err-msg').css('display','block');
+                 $('.quantity-field').prop('required',true)
+             }
+         });
          
    } catch (e) {
     /** [error statements] */
@@ -1915,6 +1949,23 @@ try{
 
      /** [ Call setSerialNumber function ] */
      setSerialNumber()
+     /** [Toggle all Quantity value 0 error msg] */
+     $(".quantity-field").keyup(function () {
+         if($(this).val() != '' && $(this).val() > 0)
+         {
+             /** All quantity value fields empty - hide custom validation message and functionality */
+             $('.quantity-feedback').removeClass('has-error has-danger');
+             $('.quantity-feedback-err-msg').css('display','none');
+             $('.quantity-field').prop('required',false)
+         }
+         else
+         {
+             /** All quantity value fields empty - Show custom validation message and functionality  */
+             $('.quantity-feedback').addClass('has-error has-danger');
+             $('.quantity-feedback-err-msg').css('display','block');
+             $('.quantity-field').prop('required',true)
+         }
+     });
    } catch (e) {
     /** [error statements] */
    console.log("Error:"+e)
@@ -1980,6 +2031,23 @@ try{
 
      /** [ Call setSerialNumber function ] */
      setSerialNumber()
+     /** [Toggle all Quantity value 0 error msg] */
+     $(".quantity-field").keyup(function () {
+         if($(this).val() != '' && $(this).val() > 0)
+         {
+             /** All quantity value fields empty - hide custom validation message and functionality */
+             $('.quantity-feedback').removeClass('has-error has-danger');
+             $('.quantity-feedback-err-msg').css('display','none');
+             $('.quantity-field').prop('required',false)
+         }
+         else
+         {
+             /** All quantity value fields empty - Show custom validation message and functionality  */
+             $('.quantity-feedback').addClass('has-error has-danger');
+             $('.quantity-feedback-err-msg').css('display','block');
+             $('.quantity-field').prop('required',true)
+         }
+     });
    } catch (e) {
     /** [error statements] */
    console.log("Error:"+e)
