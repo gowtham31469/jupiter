@@ -225,7 +225,7 @@ class PrintController extends Controller
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+					 exec("/usr/bin/convert '/srv/www/htdocs/orders/public/storage/app/template/demo_'".$j."'.svg' '/srv/www/htdocs/orders/public/storage/app/template/demo_'".$j."'.png'");
 
 					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					
