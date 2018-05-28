@@ -11,17 +11,17 @@
 <text id="tpnd" transform="matrix(1 0 0 1 110.337 57.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">2005100171875</text>
 <text id="po_number" transform="matrix(1 0 0 1 109.337 75.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">1648217</text>
 <text transform="matrix(1 0 0 1 6.9752 74.8329)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
-<text transform="matrix(1 0 0 1 226.3004 68.1279)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
-<text id="brand" transform="matrix(1 0 0 1 259.3059 68.1279)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>
-<text id="rfid" transform="matrix(1 0 0 1 305.7582 80.6286)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
-<text id="tag_at_source" transform="matrix(1 0 0 1 305.3608 94.6289)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO </text>
+<text transform="matrix(1 0 0 1 226.3004 67.1279)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
+<text id="brand" transform="matrix(1 0 0 1 259.3059 67.1279)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>
+<text id="rfid" transform="matrix(1 0 0 1 305.7582 79.6286)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 305.3608 93.6289)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO </text>
 <g>
-	<text transform="matrix(1 0 0 1 226.3008 81.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
-	<text transform="matrix(1 0 0 1 250.3008 81.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
+	<text transform="matrix(1 0 0 1 226.3008 80.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
+	<text transform="matrix(1 0 0 1 250.3008 80.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
 </g>
-<text transform="matrix(1.0159 0 0 1 226.3018 94.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
-<text transform="matrix(1 0 0 1 226.7361 55.2247)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
-<text transform="matrix(0.7943 0 0 1 259.3066 54.8586)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="department">KIDSWEAR / BABY TODDLER</text>
+<text transform="matrix(1.0159 0 0 1 226.3018 93.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
+<text transform="matrix(1 0 0 1 226.7361 54.2247)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
+<text transform="matrix(0.7943 0 0 1 259.3066 53.8586)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="department">KIDSWEAR / BABY TODDLER</text>
 <text transform="matrix(1 0 0 1 7.4634 219.8333)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">MANUFACTURED DATE: </text>
 <text transform="matrix(1 0 0 1 116.4054 220.1175)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="manufactured_date">FEBRUARY,2018</text>
 <text transform="matrix(1.0159 0 0 1 220.2939 168.009)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Cases Per Carton:</text>
