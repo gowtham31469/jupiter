@@ -76,7 +76,7 @@
                           {!! Form::label('email', 'Email', ['class' => 'form_label']) !!}
                           <div class="input-group">
                             <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                            {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                            {!! Form::email('email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                           </div>
                           <div class="help-block with-errors"></div>
                         </div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('address', 'Address', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                          {!! Form::textarea('address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>

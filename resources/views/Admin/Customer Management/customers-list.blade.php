@@ -20,6 +20,7 @@
                         <tr>
                           <th>Sl. No</th>
                           <th>Name</th>
+                          <th></th>
                           <th>Default Contact</th>
                           <th>Billing Address</th>
                           <th>Shipping Address</th>
@@ -29,64 +30,52 @@
                       </thead>
                       <tbody>
                         @foreach ($customers as $value)
-                        <tr id="{{$value->id}}">
-                          <td>{{ $loop->iteration }}</td>
-                          <td><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
-                          <td>
-                            <dl>
-                              <dt>Contact Person:</dt>
-                              <dd>{{ $value->contact_person }}</dd>
-                              <dt>Contact Email:</dt>
-                              <dd>{{ $value->contact_email }}</dd>
-                              <dt>Contact Phone:</dt>
-                              <dd>{{ $value->phone_no }}</dd>
-                            </dl>
-                          </td>
-                          <td>
-                            <dl>
-                              <dt>Address:</dt>
-                                @if($value->bill_address != '-')
+                          <tr id="{{$value->id}}">
+                            <td rowspan="3">{{ $loop->iteration }}</td>
+                            <td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left"  data-backdrop="static" data-keyboard="false">{{ $value->company_name }}</a></td>
+                            <td><i class="fa fa-user" aria-hidden="true"></i></td>
+                            <td>{{ $value->contact_person }}</td>
+                            <td >
+                              @if($value->bill_address != '-')
                                   <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->pincode }}</dd>
                                 @else
                                   <dd>-</dd>
                                 @endif
-                              <dt>Email:</dt>
-                              <dd>{{ $value->bill_email }}</dd>
-                              <dt>Phone:</dt>
-                              <dd>{{ $value->bill_telephone }}</dd>
-                            </dl>
-                          </td>
-                          <td>
-                            <dl>
-                              <dt>Address:</dt>
+                            </td>
+                            <td >
                               @if($value->ship_address != '-')
                                 <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->pincode }}</dd>
                               @else
                                 <dd>-</dd>
                               @endif
-                              <dt>Email:</dt>
-                              <dd>{{ $value->ship_email }}</dd>
-                              <dt>Phone:</dt>
-                              <dd>{{ $value->ship_telephone }}</dd>
-                              <dt>Fax:</dt>
-                              <dd>{{ $value->ship_fax }}</dd>
-                            </dl>
-                          </td>
-                          @if($value->is_active === 1)
-                            <td><span class="label label-success">Active</span></td>
-                          @else
-                            <td><span class="label label-danger">Inactive</span></td>
-                          @endif
-                          @if($value->is_active === 1)
-                            <td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
-                          @else
-                            <td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
-                          @endif
-                               <a href="#">
-                                <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
-                               </a>
-                             </td>
-                         </tr>
+                            </td>
+                            @if($value->is_active === 1)
+                              <td rowspan="3"><span class="label label-success">Active</span></td>
+                            @else
+                              <td rowspan="3"><span class="label label-danger">Inactive</span></td>
+                            @endif
+                            @if($value->is_active === 1)
+                              <td rowspan="3"><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
+                            @else
+                              <td rowspan="3"><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
+                            @endif
+                                 <a href="#">
+                                  <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
+                                 </a>
+                               </td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-envelope" aria-hidden="true"></i></td>
+                            <td>{{ $value->contact_email }}</td>
+                            <td>{{ $value->bill_email }}</td>
+                            <td>{{ $value->ship_email }}</td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-phone" aria-hidden="true"></i></td>
+                            <td>{{ $value->phone_no }}</td>
+                            <td>{{ $value->bill_telephone }}</td>
+                            <td>{{ $value->ship_telephone }}</td>
+                          </tr>
                          @endforeach
                          </tbody>
                      </table>
@@ -164,7 +153,7 @@
                               {!! Form::label('login_email', 'Email', ['class' => 'form_label']) !!}
                               <div class="input-group">
                                 <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                {!! Form::email('login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
+                                {!! Form::email('login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                               </div>
                               <div class="help-block with-errors"></div>
                             </div>
@@ -279,7 +268,7 @@
                                           {!! Form::label('contact_email0', 'Contact Email', ['class' => 'form_label']) !!}
                                           <div class="input-group">
                                             <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                            {!! Form::email('contact_email0',$value = '', array('class' => 'form-control input-sm contact_email','placeholder' => 'Contact Email','required')) !!}
+                                            {!! Form::email('contact_email0',$value = '', array('class' => 'form-control input-sm contact_email','placeholder' => 'Contact Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                                           </div>
                                           <div class="help-block with-errors"></div>
                                         </div>
@@ -305,7 +294,7 @@
                                       <div id="billaddress0" class="panel">
                                         <div class="form-group has-feedback">
                                           {!! Form::label('address0', 'Address', ['class' => 'form_label']) !!}
-                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                                          {!! Form::textarea('address0',$value = '', array('class' => 'form-control address','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-group has-feedback">
@@ -335,7 +324,7 @@
                                           {!! Form::label('address_email0', 'Email', ['class' => 'form_label']) !!}
                                           <div class="input-group">
                                             <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                                            {!! Form::email('address_email0',$value = '', array('class' => 'form-control input-sm address_email','placeholder' => 'Email','required')) !!}
+                                            {!! Form::email('address_email0',$value = '', array('class' => 'form-control input-sm address_email','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                                           </div>
                                           <div class="help-block with-errors"></div>
                                         </div>
@@ -439,7 +428,7 @@
                       {!! Form::label('edit_login_email', 'Email', ['class' => 'form_label']) !!}
                       <div class="input-group">
                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                        {!! Form::email('edit_login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required')) !!}
+                        {!! Form::email('edit_login_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'example@gmail.com','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                       </div>
                       <div class="help-block with-errors"></div>
                     </div>
@@ -654,7 +643,9 @@
     z-index: 9;
 
     }
-
+    table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
+    border-right-width: 1px;
+}
  </style>
     @endsection
     @else

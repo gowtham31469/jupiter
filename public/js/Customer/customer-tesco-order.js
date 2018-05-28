@@ -6184,7 +6184,7 @@ function mapStoredValues(oDetails) {
                     var zone = ele.zone.toLowerCase();
                     $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
                     if(zone === 'ce') {
-                        $('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd);
+                        $('#'+zone+'_ratio_orms_tpn_'+index).val(j.orms_tpn);
                         $('#'+zone+'_ratio_cpc_'+index).val(j.cases_per_carton);
                     } else {
                         $('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd);

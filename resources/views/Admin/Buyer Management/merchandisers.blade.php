@@ -83,7 +83,7 @@
                         {!! Form::label('merchandiser_email', 'Email', ['class' => 'form_label']) !!}
                         <div class="input-group">
                           <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                          {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                          {!! Form::email('merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                         </div>
                         <div class="help-block with-errors"></div>
                       </div>
@@ -106,7 +106,7 @@
                       </div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                        {!! Form::textarea('merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
@@ -146,7 +146,7 @@
                        {!! Form::label('edit_merchandiser_email', 'Email', ['class' => 'form_label']) !!}
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                         {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                         {!! Form::email('edit_merchandiser_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                        </div>
                        <div class="help-block with-errors"></div>
                      </div>
@@ -160,7 +160,7 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                       {!! Form::textarea('edit_merchandiser_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
