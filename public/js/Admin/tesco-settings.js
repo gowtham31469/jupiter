@@ -410,7 +410,9 @@ function tescoDepartment() {
                   var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoDepartmentsModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Department</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Departments</h3></div><table id="tesco-departments-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Department Name</th><th>Pantone</th><th>RBG</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_department, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+item.pantone+'</td><td>'+item.rbg+'</td>';
+                    var pantone = item.pantone === null?'-':item.pantone;
+                    var rbg = item.rbg === null?'-':item.rbg;
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.department+'</td><td>'+pantone+'</td><td>'+rbg+'</td>';
                     if(item.is_enabled === 1)
                     {
                      tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';

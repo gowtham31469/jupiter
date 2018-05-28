@@ -128,7 +128,7 @@ class PrintController extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Style: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: 03.05.2018</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.date("d.m.Y").'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Description: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Rev.no:</text>
@@ -142,7 +142,7 @@ class PrintController extends Controller
 		
 				// Custom Footer
 				PDF::setFooterCallback(function($pdf) {
-		
+		$tesco_po_number=$this->tesco_po_number;
 						// Position at 15 mm from bottom
 						$pdf->SetY(-50);
 					    $pdf->SetX(9.5);
@@ -189,7 +189,7 @@ class PrintController extends Controller
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: </text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. :460-00060</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Approved by: </text>
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
@@ -225,10 +225,12 @@ class PrintController extends Controller
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+					 exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 
-					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
-					
+//					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+
 					//PDF::Image($value, 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					$i++;
 					
@@ -335,7 +337,7 @@ class PrintController extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Style: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: 03.05.2018</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.date("d.m.Y").'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 40x30mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Description: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Rev.no:</text>
@@ -349,7 +351,7 @@ class PrintController extends Controller
 		
 				// Custom Footer
 				PDF::setFooterCallback(function($pdf) {
-		
+		$tesco_po_number=$this->tesco_po_number;
 						// Position at 15 mm from bottom
 						$pdf->SetY(-50);
 					    $pdf->SetX(9.5);
@@ -396,7 +398,7 @@ class PrintController extends Controller
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: </text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. :460-00060</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Approved by: </text>
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
@@ -442,9 +444,14 @@ class PrintController extends Controller
 			$yy=80;
 			$j++;
 			 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+			// exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
 			
-			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+			
+			//PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 				//PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 
