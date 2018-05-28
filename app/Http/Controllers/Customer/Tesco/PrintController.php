@@ -225,10 +225,12 @@ class PrintController extends Controller
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					 exec("/usr/bin/convert '/srv/www/htdocs/orders/public/storage/app/template/demo_'".$j."'.svg' '/srv/www/htdocs/orders/public/storage/app/template/demo_'".$j."'.png'");
+					 exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 
-					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
-					
+//					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+
 					//PDF::Image($value, 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					$i++;
 					
@@ -442,9 +444,14 @@ class PrintController extends Controller
 			$yy=80;
 			$j++;
 			 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+			// exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
 			
-			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+			
+			//PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 				//PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 
