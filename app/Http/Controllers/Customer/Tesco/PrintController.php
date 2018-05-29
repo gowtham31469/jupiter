@@ -225,7 +225,7 @@ class PrintController extends Controller
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					 $out = shell_exec("php --version");
+					 $out = shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 					 return $out;
 //					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
