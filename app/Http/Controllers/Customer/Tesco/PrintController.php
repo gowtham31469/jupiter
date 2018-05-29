@@ -208,7 +208,7 @@ class PrintController extends Controller
 				$name=$request->name;
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
-				PDF::AddPage();
+				//PDF::AddPage();
 				$i=1;
 				$yy=0;
 				$j=1;
@@ -221,7 +221,7 @@ class PrintController extends Controller
 					PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
 					PDF::AddPage();
 					PDF::setPage($j, true);
-					$yy=80;
+					$yy=70;
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
