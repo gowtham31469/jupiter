@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
+use File;
 /**
  * Buyer management controller
  * @author <Praveen>
@@ -81,6 +82,28 @@ class BuyerManagementController extends Controller
                 $email     = $request['email'];
                 $phone     = $request['phone'];
                 $address   = $request['address'];
+
+                $image = $request->file('image');
+                $image_rules = array(
+                    'image' => 'required|image|file|max:2048',
+                );
+                $imageValidator = Validator::make($request->all() ,$image_rules);
+
+                if($imageValidator->fails())
+                {
+                    return response()->json(['error'=> true,'message' =>'Invalid file'],422);
+                }
+                else
+                {
+                  $image = $request['image'];
+                  $destination_path='/storage/app/public/buyer-logo/';
+                  $path='storage/app/public/buyer-logo/';
+                  $Orname = $image->getClientOriginalName();
+                  $filename= time().'_'.preg_replace('/\s+/', '-', $Orname);
+                  $image->move($path,$filename);
+                  $destination_path_insert=$destination_path.$filename;
+                }
+                
                 $email_exists = Buyer::where('buyer_email',$email)->select('id')->get();
                 if(count($email_exists) > 0)
                 {
@@ -93,7 +116,8 @@ class BuyerManagementController extends Controller
                                 'buyer_email'      => $email,
                                 'buyer_phone'      => $phone,
                                 'buyer_address'    => $address,
-                                'is_active'        => 0
+                                'is_active'        => 0,
+                                'logo'             => $destination_path_insert
                               ]);
                     if($inserted != '')
                     {
@@ -121,7 +145,7 @@ class BuyerManagementController extends Controller
       {
         try {
               $id = $request['id'];
-              $buyer = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone','is_active')->where('buyers.id',$id)->get();
+              $buyer = DB::table('buyers')->select('id','buyer_name','buyer_address','buyer_email','buyer_phone','is_active','logo')->where('buyers.id',$id)->get();
               return response()->json(['error'=>'false','message' =>'success', 'buyer' => $buyer]);
             } catch (\Exception $e)
             {
@@ -143,6 +167,43 @@ class BuyerManagementController extends Controller
               $input['name']      = Input::get('name');
               $input['address']   = Input::get('address');
               $input['phone']     = Input::get('phone');
+
+              if($request->hasFile('edit_image'))
+              {
+                  $image = $request->file('edit_image');
+                  $image_rules = array(
+                      'edit_image' => 'required|image|file|max:2048',
+                  );
+                  $imageValidator = Validator::make($request->all() ,$image_rules);
+
+                if($imageValidator->fails())
+                {
+                   return response()->json(['error'=> true,'message' =>'Invalid file'],422);
+                }
+                else
+                {
+                   //delete old file
+                   $buyer = Buyer::select('id','logo')->where('id','=',$id)->get();
+                   $files = $buyer{0}->logo;
+                   $files = substr($files,1);
+                   File::delete($files);
+
+                   $image = $request['edit_image'];
+                   $destination_path='/storage/app/public/buyer-logo/';
+                   $path='storage/app/public/buyer-logo/';
+                   $Orname = $image->getClientOriginalName();
+                   $filename= time().'_'.preg_replace('/\s+/', '-', $Orname);
+                   $image->move($path,$filename);
+                   $destination_path_insert=$destination_path.$filename;
+                }
+               }
+               else
+               {
+                   $destination_path_insert = $request->imgName;
+               }
+               
+               
+
               $email_rules = array('email' => 'unique:buyers,buyer_email,'.$id);
               $emailValidator = Validator::make($input ,$email_rules);
 
@@ -157,7 +218,8 @@ class BuyerManagementController extends Controller
                      'buyer_name'          => $input['name'],
                      'buyer_email'         => $input['email'],
                      'buyer_phone'         => $input['phone'],
-                     'buyer_address'       => $input['address']
+                     'buyer_address'       => $input['address'],
+                     'logo'                => $destination_path_insert
                   ]);
 
               $result = response()->json(['error'=> false,'message' =>'Success'],200);

@@ -95,11 +95,22 @@
          var phone      = $('#buyer_phone').val();
          var address    = $('#buyer_address').val();
          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+         var image      = $('#image')[0].files[0];
+         var form_data = new FormData();
 
+          form_data.append('name', name);
+          form_data.append('email', email);
+          form_data.append('phone', phone);
+          form_data.append('address', address);
+          form_data.append('image', image);
+          form_data.append('_token', csrf_token);
          $.ajax({
              url: base_url + "/admin/buyer-management/add-jga-buyer",
-             method: 'POST',
-             data: {_token:csrf_token,name:name,email:email,phone:phone,address:address},
+             type: "POST",
+             data: form_data,
+             cache: false,
+             contentType: false,
+             processData: false,
              tryCount : 0,
              retryLimit : 2,
              beforeSend: function () {
@@ -120,6 +131,11 @@
                   409: function() {
                        $('#buyer_result').removeAttr('style');
                        $('#buyer_result').html('Email already registered.')
+                       $("#buyer_result").addClass("alert alert-warning");
+                  },
+                  422: function() {
+                       $('#buyer_result').removeAttr('style');
+                       $('#buyer_result').html('Only images are accepted & image size must be less than 2 MB.')
                        $("#buyer_result").addClass("alert alert-warning");
                   }
              },
@@ -153,6 +169,7 @@
    * @author <praveen>
    *
    */
+  var imgName = '';
   function getBuyer(id)
   {
     try{
@@ -171,6 +188,7 @@
                $(".loader").show();
              },
              success: function(data){
+                 imgName = data.buyer[0].logo;
                  /** [Populate values in form inputs] */
                  isSubmitting = false;
                  $('#buyer_edit_id').val(id);
@@ -178,6 +196,8 @@
                  $('#edit_buyer_email').val(data.buyer[0].buyer_email);
                  $('#edit_buyer_phone').val(data.buyer[0].buyer_phone);
                  $('#edit_buyer_address').val(data.buyer[0].buyer_address);
+                 $('#image_name').attr('src', data.buyer[0].logo);
+                 $('#image_name').css({"height": "100px","width": "140px","margin-top": "16px"});
 
                  /** [ Backdrop for bootstrap modal ] */
                  $('#editBuyerModal').modal({
@@ -186,7 +206,7 @@
                  })
 
                  /** [ Validate edit_buyer_form form using bootstrap validator ] */
-                 $('#edit_buyer_form').validator('validate');
+                 $('#edit_buyer_form').validator('update');
                  $('#editBuyerModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
@@ -226,16 +246,29 @@
        var email      = $('#edit_buyer_email').val();
        var address    = $('#edit_buyer_address').val();
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       var edit_image = $('#edit_image')[0].files[0];
+       var form_data  = new FormData();
+
+        form_data.append('name', name);
+        form_data.append('email', email);
+        form_data.append('phone', phone);
+        form_data.append('address', address);
+        form_data.append('edit_image', edit_image);
+        form_data.append('_token', csrf_token);
+        form_data.append('id', id);
+        form_data.append('imgName', imgName);
        $.ajax({
            url:base_url + "/admin/buyer-management/update-buyer-details",
-           dataType:"json",
+           type: "POST",
+           data: form_data,
+           cache: false,
+           contentType: false,
+           processData: false,
+           tryCount : 0,
+           retryLimit : 2,
            beforeSend: function () {
              $(".loader").show();
            },
-           method:"put",
-           data:{_token:csrf_token,id:id,name:name,email:email,phone:phone,address:address},
-           tryCount : 0,
-           retryLimit : 2,
            statusCode: {
 
                 /** [Show response status based on HTTP status code] */
@@ -248,6 +281,11 @@
                 409: function() {
                      $('#edit_buyer_result').removeAttr('style');
                      $('#edit_buyer_result').html('Email already registered.')
+                     $("#edit_buyer_result").addClass("alert alert-warning");
+                },
+                422: function() {
+                     $('#edit_buyer_result').removeAttr('style');
+                     $('#edit_buyer_result').html('Only images are accepted & image size must be less than 2 MB.')
                      $("#edit_buyer_result").addClass("alert alert-warning");
                 }
            },

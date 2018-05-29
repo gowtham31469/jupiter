@@ -77,7 +77,7 @@ Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementContr
 Route::get('admin/buyer-management/buyers-list', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
 Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagement\BuyerManagementController@addJgaBuyer');
 Route::get('admin/buyer-management/get-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@getBuyerById');
-Route::put('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
+Route::post('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
 Route::put('admin/buyer-management/make-buyer-active', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerActive');
 Route::put('admin/buyer-management/make-buyer-inactive', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerInactive');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyers');
