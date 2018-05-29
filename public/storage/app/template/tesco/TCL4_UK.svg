@@ -21,17 +21,17 @@
 <text transform="matrix(1 0 0 1 239.6783 198.8301)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
 <text transform="matrix(1 0 0 1 278.6783 199.8301)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
 <text transform="matrix(1 0 0 1 267.6783 198.2669)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">of</text>
-<text transform="matrix(1 0 0 1 226.3014 68.128)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
-<text id="brand" transform="matrix(1 0 0 1 259.3069 68.128)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>
-<text id="rfid" transform="matrix(1 0 0 1 305.7592 80.6287)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
-<text id="tag_at_source" transform="matrix(1 0 0 1 305.3617 94.6291)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO </text>
+<text transform="matrix(1 0 0 1 226.3014 66.128)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
+<text id="brand" transform="matrix(1 0 0 1 259.3069 66.128)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>
+<text id="rfid" transform="matrix(1 0 0 1 305.7592 78.6287)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 305.3617 92.6291)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO </text>
 <g>
-	<text transform="matrix(1 0 0 1 226.3018 81.1277)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
-	<text transform="matrix(1 0 0 1 250.3018 81.1277)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
+	<text transform="matrix(1 0 0 1 226.3018 79.1277)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
+	<text transform="matrix(1 0 0 1 250.3018 79.1277)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
 </g>
-<text transform="matrix(1.0159 0 0 1 226.3027 94.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
-<text transform="matrix(1 0 0 1 226.7371 55.2249)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
-<text transform="matrix(0.7943 0 0 1 259.3076 54.8591)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="department">KIDSWEAR / BABY TODDLER</text>
+<text transform="matrix(1.0159 0 0 1 226.3027 92.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
+<text transform="matrix(1 0 0 1 226.7371 53.2249)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
+<text transform="matrix(0.7943 0 0 1 259.3076 52.8591)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="department">KIDSWEAR / BABY TODDLER</text>
 <text transform="matrix(1 0 0 1 7.0919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
 <text transform="matrix(1 0 0 1 60.5919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:43;"> </text>
 <text transform="matrix(1 0 0 1 106.3919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
