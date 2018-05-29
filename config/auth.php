@@ -47,7 +47,7 @@ return [
         ],
          'web_customer' => [
             'driver' => 'session',
-            'provider' => 'customers',
+            'provider' => 'customer_profile',
         ],
          'web_merchandiser' => [
             'driver' => 'session',
