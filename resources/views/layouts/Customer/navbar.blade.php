@@ -65,7 +65,7 @@
                      {!! Form::label('feedback_email', 'Your Email', ['class' => 'form_label']) !!}
                      <div class="input-group">
                        <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                       {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                       {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                      </div>
                      <div class="help-block with-errors"></div>
                    </div>

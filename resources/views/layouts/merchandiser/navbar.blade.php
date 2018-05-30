@@ -55,7 +55,7 @@
                      {!! Form::label('feedback_email', 'Your Email', ['class' => 'form_label']) !!}
                      <div class="input-group">
                        <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                       {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                       {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                      </div>
                      <div class="help-block with-errors"></div>
                    </div>
@@ -102,7 +102,7 @@
                       {!! Form::label('merchandiser_profile_email', 'Email', ['class' => 'form_label']) !!}
                       <div class="input-group">
                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                        {!! Form::email('merchandiser_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                        {!! Form::email('merchandiser_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                       </div>
                       <div class="help-block with-errors"></div>
                     </div>
@@ -116,7 +116,7 @@
                     </div>
                     <div class="form-group has-feedback">
                       {!! Form::label('merchandiser_profile_address', 'Address', ['class' => 'form_label']) !!}
-                      {!! Form::textarea('merchandiser_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                      {!! Form::textarea('merchandiser_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">

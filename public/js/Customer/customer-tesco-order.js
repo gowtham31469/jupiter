@@ -6235,7 +6235,7 @@ function mapStoredValues(oDetails) {
         }
     }
 	/** [ Refresh boostrap form-validator ]  */
-	$('#create_tesco_order_form').validator('update');
+	$('#create_tesco_order_form').validator('validate');
     $(".selectpicker").selectpicker('refresh');
 }
 
