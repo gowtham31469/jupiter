@@ -70,7 +70,15 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Add Buyer</h4>
                 </div>
-                {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 @foreach($errors->all() as $error)
+                    <p class="alert alert-danger">{{ $error }}</p>
+                @endforeach
+                @if(session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                {!! Form::open(['id' => 'add_buyer_form','data-toggle' => 'validator','role' => 'form','enctype' => 'multipart/form-data']) !!}
                     <div class="modal-body">
                       <div id="buyer_result"></div>
                         <div class="form-group has-feedback">
@@ -99,6 +107,11 @@
                           {!! Form::textarea('buyer_address',$value = '', array('class' => 'form-control ','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
+                         <div class="form-group has-feedback">
+                             <label for="image">Buyer Logo</label> <span class="control-fileupload"><input type="file" id="image" name="image" class="po-file-upload form-control center-block" required="" accept="image/*" onchange="loadFile(event)"> </span>
+                             <img id="output"/>
+                             <div class="help-block with-errors"></div>
+                         </div>
                     </div>
                     <div class="modal-footer">
                         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
@@ -148,7 +161,15 @@
                          {!! Form::textarea('edit_buyer_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
-
+                       <div class="form-group has-feedback">
+                         {!! Form::label('image_name', 'Buyer Logo Preview :', ['class' => 'control-label']) !!}
+                         <img id="image_name"/>
+                       </div>
+                       <div class="form-group has-feedback">
+                         {!! Form::label('edit_image', 'Change Logo', ['class' => 'control-label']) !!}
+                         {!! Form::file('edit_image',['onchange' => 'loadEditFile(event)','accept' => 'image/*']) !!}
+                         <div class="help-block with-errors"></div>
+                       </div>
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
@@ -183,6 +204,9 @@
          $('.edit-buyer').tooltip('toggle')
          $('.status').tooltip('show')
          $('.status').tooltip('toggle')
+         $('#output').attr('src', '');
+         $('#output').attr('style', '');
+         $("#edit_image").val(null);
        });
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        /** Add buyer bootstrap form validation **/
@@ -204,6 +228,9 @@
         $('#add_buyer_form').trigger("reset");
         $('#buyer_result').hide();
         $('#edit_buyer_result').hide();
+        $('#output').attr('src', '');
+        $('#output').attr('style', '');
+        $("#edit_image").val(null);
        })
 
        /** Get edit buyer details on click**/
@@ -240,5 +267,18 @@
            /* call makeBuyerInactive function from buyers.js*/
            makeBuyerInactive(id,csrf_token)
        });
+    </script>
+    <script>
+      // preview buyer logo
+      var loadFile = function(event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        $('#output').css({"height": "100px","width": "140px","margin-top": "16px"});
+      };
+      var loadEditFile = function(event) {
+        var output = document.getElementById('image_name');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        $('#image_name').css({"height": "100px","width": "140px","margin-top": "16px"});
+      };
     </script>
     @endsection

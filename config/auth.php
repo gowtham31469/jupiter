@@ -47,7 +47,7 @@ return [
         ],
          'web_customer' => [
             'driver' => 'session',
-            'provider' => 'customer_profile',
+            'provider' => 'customers',
         ],
          'web_merchandiser' => [
             'driver' => 'session',
@@ -85,7 +85,7 @@ return [
 
        'customers' => [
             'driver' => 'eloquent',  //We are using eloquent model
-            'model' => App\Customer::class,
+            'model' => App\CustomerProfile::class,
         ],
 
         'merchandisers' => [
