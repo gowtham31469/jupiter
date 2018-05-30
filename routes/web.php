@@ -63,7 +63,7 @@ Route::put('admin/customer-management/make-customer-inactive', 'Admin\CustomerMa
 Route::get('admin/customer-management/get-customers', 'Admin\CustomerManagement\CustomerManagementController@getCustomerById');
 Route::put('admin/customer-management/update-customer', 'Admin\CustomerManagement\CustomerManagementController@updateCustomer');
 Route::delete('admin/customer-management/delete-customer', 'Admin\CustomerManagement\CustomerManagementController@deleteCustomerById');
-Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
+Route::get('admin/customer-management/company', 'Admin\CustomerManagement\CustomerManagementController@customers');
 Route::get('admin/customer-management/pricing-taxation','Admin\CustomerManagement\CustomerManagementController@custumerPriceList');
 Route::get('admin/customer-management/get-buyers-customers','Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
 Route::post('admin/customer-management/save-price-tax', 'Admin\CustomerManagement\CustomerManagementController@savePriceTax');
@@ -71,6 +71,16 @@ Route::get('admin/customer-management/get-price-tax', 'Admin\CustomerManagement\
 Route::post('admin/tesco/customer-management/template-view', 'Admin\CustomerManagement\CustomerManagementController@templateView');
 Route::get('admin/customer-management/get-customer-details', 'Admin\CustomerManagement\CustomerManagementController@getCustomerDetailsById');
 
+Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customerProfile');
+
+
+Route::put('admin/customer-management/make-customer-profile-active', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerProfileActive');
+Route::put('admin/customer-management/make-customer-profile-inactive', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerProfileInactive');
+Route::get('admin/customer-management/get-customers-profile', 'Admin\CustomerManagement\CustomerManagementController@getCustomerProfileById');
+
+Route::put('admin/customer-management/update-customerProfile', 'Admin\CustomerManagement\CustomerManagementController@updateCustomerProfile');
+
+Route::post('admin/customer-management/add-customerProfile', 'Admin\CustomerManagement\CustomerManagementController@addCustomerProfile');
 
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
