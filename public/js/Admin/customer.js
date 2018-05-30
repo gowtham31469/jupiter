@@ -90,7 +90,7 @@
                 $('.view-more').tooltip('toggle')
 
                 /** [ Data Tabeles scripts ] */
-                $('#customers-list-table').DataTable();
+                $('#customers-list-table').DataTable({rowGroup:[3]});
                 $("#customers-list-table_filter input").addClass('form-control');
                 $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
                 $('.dataTables_length select').addClass('form-control');
