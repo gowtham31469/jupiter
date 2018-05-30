@@ -3,51 +3,72 @@
 <g>
 	<rect y="0" style="fill:#FFFFFF;" width="360" height="226.8"/>
 </g>
-<text transform="matrix(1.0157 0 0 1 257.9307 33.4342)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;" id="season_code">GOW-</text>
-<text transform="matrix(1 0 0 1 6.9752 58.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS TPND: </text>
-<text id="tpnd" transform="matrix(1 0 0 1 110.337 57.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">036075536</text>
-<text id="po_number" transform="matrix(1 0 0 1 109.337 75.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">GOW-12345</text>
-<text transform="matrix(1 0 0 1 6.9752 74.8329)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
-<text transform="matrix(1 0 0 1 226.3004 67.1279)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
-<text id="brand" transform="matrix(1 0 0 1 259.3059 67.1279)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">F&amp;F</text>
-<text id="rfid" transform="matrix(1 0 0 1 305.7582 79.6286)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">YES</text>
-<text id="tag_at_source" transform="matrix(1 0 0 1 305.3608 93.6289)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
 <g>
-	<text transform="matrix(1 0 0 1 226.3008 80.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
-	<text transform="matrix(1 0 0 1 250.3008 80.1276)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
+	<text transform="matrix(1 0 0 1 26.2101 33.2706)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">R</text>
+	<text transform="matrix(1 0 0 1 43.1101 33.2706)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">A</text>
+	<text transform="matrix(1 0 0 1 57.8101 33.2706)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">TIO</text>
 </g>
-<text transform="matrix(1.0159 0 0 1 226.3018 93.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
-<text transform="matrix(1 0 0 1 226.7361 54.2247)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
-<text transform="matrix(0.7943 0 0 1 259.3066 53.8586)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="department">LADIESWEAR</text>
-<text transform="matrix(1 0 0 1 7.4634 219.8333)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">MANUFACTURED DATE: </text>
-<text transform="matrix(1 0 0 1 116.4054 220.1175)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="manufactured_date">DECEMBER,12345</text>
-<text transform="matrix(1.0159 0 0 1 220.2939 168.009)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Cases Per Carton:</text>
-<text transform="matrix(1.0159 0 0 1 220.04 183.1886)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Units Per Case:</text>
-<text transform="matrix(1.0159 0 0 1 295.04 183.1886)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="unit_per_case">2</text>
-<text transform="matrix(1 0 0 1 220.7511 198.2153)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Box</text>
-<text transform="matrix(1 0 0 1 239.6783 198.8301)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
-<text transform="matrix(1 0 0 1 278.6783 199.8301)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
-<text transform="matrix(1 0 0 1 267.6783 198.2669)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">of</text>
-<text transform="matrix(1.0157 0 0 1 26.7905 33.4357)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">B/D (REPLEN)</text>
-<text transform="matrix(1 0 0 1 7.0919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
-<text transform="matrix(1 0 0 1 60.5919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:43;"> </text>
-<text transform="matrix(1 0 0 1 106.3919 87.9774)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text transform="matrix(1 0 0 1 47.8131 100.936)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;"> (VPN/OPTION ID): </text>
-<text transform="matrix(1 0 0 1 7.1488 100.6664)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">CE Style Ref</text>
-<text transform="matrix(1 0 0 1 7.0919 113.826)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Short Description:</text>
-<text transform="matrix(1 0 0 1 81.3919 113.826)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:5;"> </text>
-<text transform="matrix(1 0 0 1 90.1919 113.826)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text transform="matrix(1 0 0 1 7.2051 127.79)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">EQOS Code:</text>
-<text transform="matrix(1 0 0 1 56.0051 127.79)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:21;"> </text>
-<text transform="matrix(1 0 0 1 79.8051 127.79)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text transform="matrix(1 0 0 1 7.0919 140.674)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Supplier Name:</text>
-<text transform="matrix(1 0 0 1 68.9919 140.674)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:18;"> </text>
-<text transform="matrix(1 0 0 1 89.9919 140.674)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
-<text id="uk_style" transform="matrix(1 0 0 1 110.3398 87.9233)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GOW-12345</text>
-<text id="ce_style" transform="matrix(1 0 0 1 109.898 101.6036)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GOW-12345</text>
-<text id="eqos" transform="matrix(1 0 0 1 109.6883 127.8835)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GOW-12345</text>
-<text id="supplier" transform="matrix(1 0 0 1 109.6883 140.775)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">S.P.APPARELS.LTD</text>
-<text id="description" transform="matrix(1 0 0 1 110.6878 113.8825)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GOW-12345 3-6</text>
-<!-- <text transform="matrix(1 0 0 1 214.6903 113.8828)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="size">3-6</text> -->
+<text transform="matrix(0.9824 0 0 1 207.4434 176.0099)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">No of Pieces in Ratio:</text>
+<text transform="matrix(1 0 0 1 207.6777 191.0099)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Box</text>
+<text transform="matrix(0.9824 0 0 1 306.6689 176.0099)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="pieces_in_ratio">1</text>
+<text transform="matrix(1.0186 0 0 1 257.8419 33.272)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;" id="season_code">GO-N</text>
+<!--
+<image style="overflow:visible;enable-background:new    ;" width="391" height="178" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAACyCAYAAACp3gPUAAAACXBIWXMAAC4jAAAuIwF4pT92AAAC
+HElEQVR42u3VMRGAMADAwBQldcLhBGlIQVoHmFDA8C8hS0Z1VjMAeFyjuqtdCwBex6YBAF/mAIA5
+AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAJgDAOYAgDkAYA4AmAMA5gCA
+OQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAgDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYA
+gDkAYA4AmAMAmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQCAOQBgDgCY
+AwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwCYAwDmAIA5AGAOAJgDAOYAgDkAYA4A
+mAMA5gCAOQBgDgCYAwDmAIA5AGAOEgBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBg
+DgCYAwDmAADmAIA5AGAOAJgDAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAGAOAJgDAOYA
+gDkAYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAAOYAgDkAYA4AmAMA5gCAOQBgDgCYAwDm
+AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
+5gAA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAL xAL 9A8PS2KaBAAAAAElFTkSuQmCC" transform="matrix(0.3625 0 0 0.2548 30 149.0012)">
+</image>
+-->
+    
+<!--BarCode-->
+    <g width="391" height="178" transform="matrix(0.3625 0 0 0.2548 30 129.001)" id="barcode"><svg xmlns="http://www.w3.org/2000/svg" id="ean-13" width="408.900px" height="328.02px" x="0px" y="0px" viewBox="0 0 463 222" version="1.1" font-size="30px" font-family="frankgothcnbt" style="transform: translate(0px, 0px);"><rect x="0" y="0" width="463" height="222" style="fill:#ffffff;"/><g transform="translate(10, 10)" style="fill:#000000;"><rect x="0" y="0" width="3.28148" height="202"/><rect x="6.56296" y="0" width="3.28148" height="202"/><rect x="13.125919999999999" y="0" width="9.84444" height="202"/><rect x="26.25184" y="0" width="3.28148" height="202"/><rect x="39.37776" y="0" width="3.28148" height="202"/><rect x="45.94072" y="0" width="3.28148" height="202"/><rect x="52.50368" y="0" width="9.84444" height="202"/><rect x="72.19256" y="0" width="9.84444" height="202"/><rect x="85.31848" y="0" width="9.84444" height="202"/><rect x="98.4444" y="0" width="3.28148" height="202"/><rect x="111.57032000000001" y="0" width="3.28148" height="202"/><rect x="118.13328" y="0" width="3.28148" height="202"/><rect x="131.25920000000002" y="0" width="9.84444" height="202"/><rect x="144.38512000000003" y="0" width="3.28148" height="202"/><rect x="157.51104" y="0" width="9.84444" height="202"/><rect x="177.19992000000002" y="0" width="3.28148" height="202"/><rect x="183.76288000000002" y="0" width="3.28148" height="202"/><rect x="190.32584000000003" y="0" width="3.28148" height="202"/><rect x="203.45176000000004" y="0" width="3.28148" height="202"/><rect x="210.01472" y="0" width="3.28148" height="202"/><rect x="216.57768000000002" y="0" width="9.84444" height="202"/><rect x="236.26656000000003" y="0" width="9.84444" height="202"/><rect x="249.39248000000003" y="0" width="3.28148" height="202"/><rect x="255.95544000000004" y="0" width="9.84444" height="202"/><rect x="269.08136" y="0" width="3.28148" height="202"/><rect x="282.20727999999997" y="0" width="9.84444" height="202"/><rect x="301.89616" y="0" width="3.28148" height="202"/><rect x="308.45912" y="0" width="9.84444" height="202"/><rect x="321.58504000000005" y="0" width="3.28148" height="202"/><rect x="334.71096000000006" y="0" width="3.28148" height="202"/><rect x="341.27392000000003" y="0" width="3.28148" height="202"/><rect x="347.83688" y="0" width="9.84444" height="202"/><rect x="367.52576" y="0" width="9.84444" height="202"/><rect x="387.21464" y="0" width="9.84444" height="202"/><rect x="400.34056000000004" y="0" width="3.28148" height="202"/><rect x="406.90352" y="0" width="3.28148" height="202"/><rect x="413.46648000000005" y="0" width="3.28148" height="202"/><rect x="426.5924" y="0" width="9.84444" height="202"/><rect x="439.71832" y="0" width="3.28148" height="202"/></g></svg></g>
+<text transform="matrix(1 0 0 1 226.6045 191.6242)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
+<text transform="matrix(1 0 0 1 267.6045 191.6242)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">_____</text>
+<text transform="matrix(1 0 0 1 256.6045 191.0617)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">of</text>
+<text transform="matrix(1 0 0 1 66 204.0012)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:10.5px;" id="barcode_number">12345678901231</text>
+<text transform="matrix(1 0 0 1 6.9752 57.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS TPND: </text>
+<text id="tpnd" transform="matrix(1 0 0 1 110.337 56.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">0476565656122</text>
+<text id="po_number" transform="matrix(1 0 0 1 110.337 74.0918)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">GO-NEW</text>
+<text transform="matrix(1 0 0 1 6.9752 73.8329)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:15px;">ORMS PO No: </text>
+<text transform="matrix(1 0 0 1 226.301 67.1268)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
+<text id="brand" transform="matrix(1 0 0 1 259.3065 67.1268)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">F&amp;F</text>
+<text id="rfid" transform="matrix(1 0 0 1 305.7588 79.6275)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">YES</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 305.3614 93.6278)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">YES</text>
+<g>
+	<text transform="matrix(1 0 0 1 226.3014 80.1265)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
+	<text transform="matrix(1 0 0 1 250.3014 80.1265)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
+</g>
+<text transform="matrix(1.0159 0 0 1 226.3023 93.126)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
+<text transform="matrix(1 0 0 1 226.7367 54.2236)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
+<text transform="matrix(0.7943 0 0 1 259.3072 53.8575)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="department">LADIESWEAR</text>
+<text transform="matrix(1 0 0 1 7.4746 219.8343)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">MANUFACTURED DATE: </text>
+<text transform="matrix(1 0 0 1 116.4166 220.1177)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;" id="manufactured_date">DECEMBER,2018</text>
+<text transform="matrix(1 0 0 1 7.0915 87.9772)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
+<text transform="matrix(1 0 0 1 60.5915 87.9772)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:43;"> </text>
+<text transform="matrix(1 0 0 1 106.3915 87.9772)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 47.8127 100.9358)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;"> (VPN/OPTION ID): </text>
+<text transform="matrix(1 0 0 1 7.1484 100.6662)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;">CE Style Ref</text>
+<text transform="matrix(1 0 0 1 7.0915 113.8258)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Short Description:</text>
+<text transform="matrix(1 0 0 1 81.3915 113.8258)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:5;"> </text>
+<text transform="matrix(1 0 0 1 90.1915 113.8258)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 7.2047 127.7898)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">EQOS Code:</text>
+<text transform="matrix(1 0 0 1 56.0047 127.7898)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:21;"> </text>
+<text transform="matrix(1 0 0 1 79.8047 127.7898)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text transform="matrix(1 0 0 1 7.0915 140.6738)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Supplier Name:</text>
+<text transform="matrix(1 0 0 1 68.9915 140.6738)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px; letter-spacing:18;"> </text>
+<text transform="matrix(1 0 0 1 89.9915 140.6738)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;"> </text>
+<text id="uk_style" transform="matrix(1 0 0 1 110.3394 87.9231)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GO-NEW</text>
+<text id="ce_style" transform="matrix(1 0 0 1 109.8976 101.6034)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GO-NEW</text>
+<text id="eqos" transform="matrix(1 0 0 1 109.6879 127.8833)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GO-NEW</text>
+<text id="supplier" transform="matrix(1 0 0 1 109.6879 140.7748)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">S.P.APPARELS.LTD</text>
+<text id="description" transform="matrix(1 0 0 1 110.6874 113.8823)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">GO-NEW</text>
+<!-- <text transform="matrix(1 0 0 1 214.6899 113.8826)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">3-6</text> -->
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark">JGA</text>
 </svg>

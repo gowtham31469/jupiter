@@ -63,7 +63,7 @@ Route::put('admin/customer-management/make-customer-inactive', 'Admin\CustomerMa
 Route::get('admin/customer-management/get-customers', 'Admin\CustomerManagement\CustomerManagementController@getCustomerById');
 Route::put('admin/customer-management/update-customer', 'Admin\CustomerManagement\CustomerManagementController@updateCustomer');
 Route::delete('admin/customer-management/delete-customer', 'Admin\CustomerManagement\CustomerManagementController@deleteCustomerById');
-Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customers');
+Route::get('admin/customer-management/company', 'Admin\CustomerManagement\CustomerManagementController@customers');
 Route::get('admin/customer-management/pricing-taxation','Admin\CustomerManagement\CustomerManagementController@custumerPriceList');
 Route::get('admin/customer-management/get-buyers-customers','Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
 Route::post('admin/customer-management/save-price-tax', 'Admin\CustomerManagement\CustomerManagementController@savePriceTax');
@@ -71,13 +71,23 @@ Route::get('admin/customer-management/get-price-tax', 'Admin\CustomerManagement\
 Route::post('admin/tesco/customer-management/template-view', 'Admin\CustomerManagement\CustomerManagementController@templateView');
 Route::get('admin/customer-management/get-customer-details', 'Admin\CustomerManagement\CustomerManagementController@getCustomerDetailsById');
 
+Route::get('admin/customer-management/customers', 'Admin\CustomerManagement\CustomerManagementController@customerProfile');
+
+
+Route::put('admin/customer-management/make-customer-profile-active', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerProfileActive');
+Route::put('admin/customer-management/make-customer-profile-inactive', 'Admin\CustomerManagement\CustomerManagementController@makeCustomerProfileInactive');
+Route::get('admin/customer-management/get-customers-profile', 'Admin\CustomerManagement\CustomerManagementController@getCustomerProfileById');
+
+Route::put('admin/customer-management/update-customerProfile', 'Admin\CustomerManagement\CustomerManagementController@updateCustomerProfile');
+
+Route::post('admin/customer-management/add-customerProfile', 'Admin\CustomerManagement\CustomerManagementController@addCustomerProfile');
 
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers-list', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
 Route::post('admin/buyer-management/add-jga-buyer', 'Admin\BuyerManagement\BuyerManagementController@addJgaBuyer');
 Route::get('admin/buyer-management/get-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@getBuyerById');
-Route::put('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
+Route::post('admin/buyer-management/update-buyer-details', 'Admin\BuyerManagement\BuyerManagementController@updateBuyerById');
 Route::put('admin/buyer-management/make-buyer-active', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerActive');
 Route::put('admin/buyer-management/make-buyer-inactive', 'Admin\BuyerManagement\BuyerManagementController@makeBuyerInactive');
 Route::get('admin/buyer-management/buyers', 'Admin\BuyerManagement\BuyerManagementController@buyers');

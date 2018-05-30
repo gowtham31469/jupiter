@@ -208,7 +208,7 @@ class PrintController extends Controller
 				$name=$request->name;
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
-				PDF::AddPage();
+				//PDF::AddPage();
 				$i=1;
 				$yy=0;
 				$j=1;
@@ -221,14 +221,16 @@ class PrintController extends Controller
 					PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
 					PDF::AddPage();
 					PDF::setPage($j, true);
-					$yy=80;
+					$yy=70;
 					$j++;
 					
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+					 $out = shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+					 //return $out;
+//					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
 
-					 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
-					
 					//PDF::Image($value, 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 					$i++;
 					
@@ -442,9 +444,14 @@ class PrintController extends Controller
 			$yy=80;
 			$j++;
 			 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-			 exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
+			// exec("/usr/bin/convert ".public_path('/storage/app/template/demo_'.$j.'.svg')." ".public_path('/storage/app/template/demo_'.$j.'.png')."");
 			
-			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+			
+			//PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 				//PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 

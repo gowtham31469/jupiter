@@ -224,6 +224,8 @@ function mapStoredValues(oDetails) {
             $('.approve-btn').hide();
         }
     }
+	/** [ Refresh boostrap form-validator ]  */
+	$('#create_tesco_order_form').validator('update');
     $(".selectpicker").selectpicker('refresh');
 }
 /**
