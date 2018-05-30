@@ -52,7 +52,8 @@
             $('.buyer-nav-select').html($('.buyer-div').html())
             if (localStorage.getItem("buyer") === null) {
                 $(document).ready(function() {
-                   $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+                   // $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+                   $("#buyerSelectionModalCenter").modal("show");
                 })
             } else {
                 price_template_list();
