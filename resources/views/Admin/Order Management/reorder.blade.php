@@ -327,7 +327,7 @@
 		$('.left-panel').removeClass('active');
 	})
 	/* Show logo on left side */
-	$('.logo').html('ReOrder');
+	$('.logo').html('Orders');
 
 	/** [ Make buyers card active ] */
 	$('div.buyers-card').click(function(){

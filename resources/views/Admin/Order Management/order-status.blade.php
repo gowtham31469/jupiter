@@ -530,7 +530,7 @@
     })
     $(document).ready(function() {
        /* Show logo on left side */
-       $('.logo').html('Customers');
+       $('.logo').html('Orders');
 
        /** [ Make buyers card active ] */
        $('div.buyers-card').click(function(){
