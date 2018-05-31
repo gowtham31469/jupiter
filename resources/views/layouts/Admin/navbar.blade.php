@@ -22,7 +22,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 
-                <li class="dropdown buyer-nav-select"></li>
+                <li class="dropdown buyer-nav-menu"></li>
                 <li><a class="notification" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href="#"><i class="fa fa-bell fa-1x" aria-hidden="true"></i></a>
                   <ul class="dropdown-menu notify-drop">
             <div class="notify-drop-title">
@@ -245,102 +245,4 @@
         </div>
     </div>
 
-<!-- Modal -->
-<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
-         <div class="modal-content buyer-selection-modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Buyer</h4>
-                 </div>
-                 <div class="modal-body buyer-selection-modal-body">
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527597565_orchestra.png" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527596898_Tesco-logo.jpg" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527685850_gerber.jpeg" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527597565_orchestra.png" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527596898_Tesco-logo.jpg" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                  <div class="card buyers-card elevation-2dp">
-                    <img src="http://localhost:8000/storage/app/public/buyer-logo/1527685850_gerber.jpeg" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                  </div>
-                 </div>
-                 <div class="modal-footer buyer-selection-modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
-<style type="text/css">
-    .buyer-selection-modal-dialog {
-          width: 100%;
-          height: calc(100% - 20px);
-          padding: 0;
-          margin:0;
-          overflow-y: initial !important
-    }
 
-    .buyer-selection-modal-content {    
-          height: calc(100% - 20px);
-          border-radius: 0;
-          color:white;
-          overflow:auto;
-          margin: 15px 15px 15px 15px;
-    }
-
-    .buyer-selection-modal-footer {
-      border-radius: 0;
-      bottom:0px;
-      position:absolute;
-      width:100%;
-    }
-    .buyer-selection-modal-body{
-        max-height: calc(100vh - 157px);
-        overflow-y: auto;
-    }
-    /* 2, 3, 4, 6, 8, or 16 */
-
-.elevation-2dp {
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-}
-
-.buyers-card {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    font-size: 16px;
-    font-weight: 400;
-    min-height: 150px;
-    overflow: hidden;
-    width: 283px;
-    z-index: 1;
-    position: relative;
-    background: #fff;
-    border-radius: 2px;
-    box-sizing: border-box;
-    margin: 0 20px 40px;
-    float: left;
-    height: 150px;
-}
-.buyer-modal-title
-{
-    font-weight: bold;
-    font-size: 16px;
-    color: black;
-}
-</style>
