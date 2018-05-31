@@ -28,11 +28,11 @@
                         <li><a class="notification" href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
                         <!-- Authentication Links -->
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::guard('web_customer')->user()->company_name[0] }}</span> {{ Auth::guard('web_customer')->user()->company_name }}<span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::guard('web_customer')->user()->name[0] }}</span> {{ Auth::guard('web_customer')->user()->name }}<span class="caret"></span></a>
 
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Profile</a></li>
-                                    <li><a href="#" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
+                                    <li><a  onclick="getCustomerProfile({{ Auth::guard("web_customer")->user()->id }})">Profile</a></li>
+                                    <li><a  data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -127,3 +127,51 @@
             </div>
         </div>
     </div>
+
+{{-- Edit customer modal  --}}
+<div class="modal fade bd-example-modal-lg" id="editCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+      </div>
+      {!! Form::open(['id' => 'edit_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
+      {!! Form::hidden('customer_edit_id',$value = null, array('id'=>'customer_edit_id','class' => 'form-control input-sm')) !!}
+          <div class="modal-body">
+          <div id="customer_edit_result"></div>
+            <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group has-feedback">
+                          {!! Form::label('customer_title', 'Title', ['class' => 'form_label']) !!}
+                          {!! Form::text('customer_title',$value = '', array('class' => 'form-control input-sm','id' => 'customer_title','placeholder' => 'Title','required')) !!}
+                          <div class="help-block with-errors"></div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group has-feedback">
+                          {!! Form::label('customer_name', 'Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Name','required')) !!}
+                          <div class="help-block with-errors"></div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                      {!! Form::label('customer_email', 'Email', ['class' => 'form_label']) !!}
+                      <div class="input-group">
+                        <span class="input-group-addon input-sm" id="basic-addon1">@</span>
+                        {!! Form::email('customer_email',$value = '', array('class' => 'form-control input-sm ','id' => 'customer_email','placeholder' => 'example@gmail.com','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                      </div>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  </div>
+           </div>
+              <div class="modal-footer">
+                  {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                  {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+              </div>
+             {!! Form::close() !!}
+      </div>
+  </div>
+</div>

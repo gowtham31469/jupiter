@@ -668,9 +668,9 @@ class CustomerManagementController extends Controller
                     $id               = $request['id'];
                     $buyer            = Input::get('buyer');
                     $input['customer_name']= Input::get('customer_name');
-					$input['customer_email']= Input::get('customer_email');
-				    $input['customer_role']		= Input::get('customer_role');
-					$input['customer_company']= Input::get('customer_company');
+					          $input['customer_email']= Input::get('customer_email');
+				            $input['customer_role']		= Input::get('customer_role');
+					          $input['customer_company']= Input::get('customer_company');
 						
                     $email_rules     = array('email' => 'unique:customers,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);

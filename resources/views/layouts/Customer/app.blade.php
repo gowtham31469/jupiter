@@ -138,6 +138,7 @@ $('.modal').on('hidden.bs.modal', function(e) {
     $('#send_feedback').trigger("reset");
     $('#change_customer_password').trigger("reset");
     $('#change_password_result').hide();
+    $('#customer_edit_result').hide();
 })
 /**
  * showSnackbar function
@@ -213,6 +214,153 @@ function updateCustomerPassword() {
                     $('#change_password_result').removeAttr('style');
                     $('#change_password_result').html('New Password cannot be same as your current password. Please choose a different password.')
                     $("#change_password_result").addClass("alert alert-warning");
+                }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                /** [ To make top menu active ] */
+                $(function() {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function() {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**
+ * Validation for numeric values
+ * @param  evt  
+ * @return {Boolean} 
+ * @author <praveen>
+ */
+function isNumber(evt) {
+    try {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+/**
+ * Get customer profile details function.
+ * author <praveen>
+ */
+function getCustomerProfile(id) {
+    try {
+        $.ajax({
+            url: base_url + "/customer/get-profile-details",
+            type: "GET",
+            data: {
+                id: id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            success: function(data) {
+
+                /** [Populate values in form inputs] */
+                $('#customer_edit_id').val(id);
+                $('#customer_name').val(data.customer[0].name);
+                $('#customer_email').val(data.customer[0].email);
+                $('#customer_title').val(data.customer[0].title);
+
+                /** [ Backdrop for bootstrap modal ] */
+                $('#editCustomerModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                })
+
+                /** [ Validate edit_customer_form form using bootstrap validator ] */
+                $('#edit_customer_form').validator('validate');
+                $('#editCustomerModal').modal('show');
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function() {
+                $(".loader").hide();
+            }
+        });
+
+    } catch (e) {
+        console.log("Error:" + e)
+    }
+}
+
+/**Update customer profile bootstrap form validation **/
+$('#edit_customer_form').validator().on('submit', function(e) {
+    if (e.isDefaultPrevented()) {
+
+    } else {
+        e.preventDefault();
+
+        /* call editCustomer function*/
+        editCustomer();
+    }
+})
+/**
+ * Function to update customer details
+ * @author <praveen>
+ */
+function editCustomer() {              
+    try {
+        var id      = $('#customer_edit_id').val();
+        var name    = $('#customer_name').val();
+        var email   = $('#customer_email').val();
+        var title   = $('#customer_title').val();
+
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: base_url + "/customer/update-customer-profile-details",
+            dataType: "json",
+            tryCount: 0,
+            retryLimit: 2,
+            beforeSend: function() {
+                $(".loader").show();
+            },
+            method: "put",
+            data: {
+                _token: csrf_token,
+                id: id,
+                name: name,
+                email: email,
+                title: title
+            },
+            statusCode: {
+
+                /** [Show response status based on HTTP status code] */
+                200: function() {
+                    $('.snackbar_span').html('Profile Updated Successfully');
+                    showSnackbar();
+                    $('#editCustomerModal').modal('hide');
+                },
+                409: function() {
+                    $('#customer_edit_result').removeAttr('style');
+                    $('#customer_edit_result').html('Email already registered.')
+                    $("#customer_edit_result").addClass("alert alert-warning");
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
