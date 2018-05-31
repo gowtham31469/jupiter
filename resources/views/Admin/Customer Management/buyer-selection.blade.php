@@ -165,7 +165,7 @@
                 $('div.buyers-card').addClass("active");
                 localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+                $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
             }   
             
             /** add buyer selection menu into navbar */
@@ -180,7 +180,7 @@
             } 
             else 
             {
-                $('.selected-buyer').text(localStorage.getItem("buyer"));
+                $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
                 price_template_list();
             }
 
@@ -192,7 +192,7 @@
                     $('#hidden-buyer-div').hide();
                     localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                     localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
                     $('#buyerSelectionModalCenter').modal('hide');
                     price_template_list();
                 } else {
@@ -213,7 +213,7 @@
               } 
               else 
               {
-                  $('.selected-buyer').text(localStorage.getItem("buyer"));
+                  $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
                   price_template_list();
               }
              })

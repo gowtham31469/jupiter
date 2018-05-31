@@ -29,7 +29,7 @@ $(document).ready(function() {
            $('div.buyers-card').addClass("active");
            localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
            localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-           $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+           $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
        }   
        
        /** add buyer selection menu into navbar */
@@ -44,7 +44,7 @@ $(document).ready(function() {
        } 
        else 
        {
-           $('.selected-buyer').text(localStorage.getItem("buyer"));
+           $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
            var buyer = localStorage.getItem("buyer");
            // if (buyer === 'orchestra') {
            //     orderStatus();
@@ -61,7 +61,7 @@ $(document).ready(function() {
                $('#hidden-buyer-div').hide();
                localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-               $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
                $('#buyerSelectionModalCenter').modal('hide');
                var buyer = localStorage.getItem("buyer");
                // if (buyer === 'orchestra') {
@@ -87,7 +87,7 @@ $(document).ready(function() {
          } 
          else 
          {
-             $('.selected-buyer').text(localStorage.getItem("buyer"));
+             $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
              var buyer = localStorage.getItem("buyer");
              // if (buyer === 'orchestra') {
              //     orderStatus();

@@ -1743,7 +1743,7 @@
            $('div.buyers-card').addClass("active");
            localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
            localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-           $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+           $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
        }   
        
        /** add buyer selection menu into navbar */
@@ -1758,7 +1758,7 @@
        } 
        else 
        {
-           $('.selected-buyer').text(localStorage.getItem("buyer"));
+           $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
            var buyer = localStorage.getItem("buyer");
             /* call orchestraSettings function from orchestra-settings.js*/
             /**  [ Show orchestraSettings page based on buyer selection ] */
@@ -1785,7 +1785,7 @@
                $('#hidden-buyer-div').hide();
                localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-               $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
                $('#buyerSelectionModalCenter').modal('hide');
                var buyer = localStorage.getItem("buyer");
                 /* call orchestraSettings function from orchestra-settings.js*/
@@ -1821,7 +1821,7 @@
          } 
          else 
          {
-             $('.selected-buyer').text(localStorage.getItem("buyer"));
+             $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
              var buyer = localStorage.getItem("buyer");
                 /* call orchestraSettings function from orchestra-settings.js*/
                 /**  [ Show orchestraSettings page based on buyer selection ] */

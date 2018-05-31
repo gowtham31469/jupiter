@@ -737,7 +737,7 @@ border: 0;
                 $('div.buyers-card').addClass("active");
                 localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                 localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+                $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
             }   
             
             /** add buyer selection menu into navbar */
@@ -752,7 +752,7 @@ border: 0;
             } 
             else 
             {
-                $('.selected-buyer').text(localStorage.getItem("buyer"));
+                $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
                 var buyer = localStorage.getItem("buyer");
                 if (buyer === 'orchestra') 
                 {
@@ -770,7 +770,7 @@ border: 0;
                     $('#hidden-buyer-div').hide();
                     localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
                     localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text($('.buyers-card.active-buyer.active').data("name"))
+                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
                     $('#buyerSelectionModalCenter').modal('hide');
                     var buyer = localStorage.getItem("buyer");
                     if (buyer === 'orchestra') 
@@ -797,7 +797,7 @@ border: 0;
               } 
               else 
               {
-                  $('.selected-buyer').text(localStorage.getItem("buyer"));
+                  $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
                   var buyer = localStorage.getItem("buyer");
                     if (buyer === 'orchestra') 
                     {
