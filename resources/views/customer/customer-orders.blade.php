@@ -470,6 +470,9 @@ border: 0;
 @endif @section('jqueryIncludes')      
 <script src="{{ asset('js/Customer/customer-tesco-order.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
+<script>
+  var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
+</script>
 <script type="text/javascript" src="http://canvg.github.io/canvg/rgbcolor.js"></script> 
 <script type="text/javascript" src="http://canvg.github.io/canvg/StackBlur.js"></script>
 <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 

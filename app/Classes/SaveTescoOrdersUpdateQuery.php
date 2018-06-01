@@ -52,7 +52,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
         } catch (\Exception $e)
@@ -93,7 +94,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
         } catch (\Exception $e)
@@ -134,7 +136,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
         } catch (\Exception $e)
@@ -175,7 +178,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
         } catch (\Exception $e)
@@ -216,7 +220,8 @@ class SaveTescoOrdersUpdateQuery
                             'template_id'          => $template_id,
                             'pi_status'            => "",
                             'po_status'            => "",
-                            'is_order_count_empty' => ""
+                            'is_order_count_empty' => "",
+                            'order_placed_by'      => $request['created_by']
                           ]);
             
         } catch (\Exception $e)
@@ -257,7 +262,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
         } catch (\Exception $e)
@@ -298,7 +304,8 @@ class SaveTescoOrdersUpdateQuery
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => ""
+                          'is_order_count_empty' => "",
+                          'order_placed_by'      => $request['created_by']
                         ]);
             
             
