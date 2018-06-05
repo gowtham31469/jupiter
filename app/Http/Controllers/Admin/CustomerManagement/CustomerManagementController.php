@@ -214,6 +214,7 @@ class CustomerManagementController extends Controller
                 $delivery_day_count   = $request['day_count'];
                 $short_name           = $request['short_name'];
                 $customers            = $request['customers'];
+                $sap_code             = $request['sap_code'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -255,7 +256,8 @@ class CustomerManagementController extends Controller
                                 'nominated_forwarder'    => $forwarder,
                                 'freight_type'           => $freight,
                                 'delivery_day_count'     => $delivery_day_count,
-                                'short_name'             => $short_name
+                                'short_name'             => $short_name,
+                                'sap_code'               => $sap_code
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -422,7 +424,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count','short_name')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count','short_name','customers.sap_code')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -517,6 +519,7 @@ class CustomerManagementController extends Controller
                     $input['freight']                = Input::get('freight');
                     $input['delivery_day_count']     = Input::get('day_count');
                     $input['short_name']             = Input::get('short_name');
+                    $input['sap_code']               = Input::get('sap_code');
 
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -590,7 +593,8 @@ class CustomerManagementController extends Controller
                             'nominated_forwarder'    => $input['forwarder'],
                             'freight_type'           => $input['freight'],
                             'delivery_day_count'     => $input['delivery_day_count'],
-                            'short_name'             => $input['short_name']
+                            'short_name'             => $input['short_name'],
+                            'sap_code'               => $input['sap_code']
                           ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)

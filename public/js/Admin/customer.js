@@ -154,6 +154,7 @@ function addCustomer()
         var freight             =  $("#freight option:selected").val();
         var day_count           =  $('#day_count').val();
         var short_name          =  $('#short_name').val();
+        var sap_code            =  $('#sap_code').val();
 
         if($('#freight option:selected').text() === "Nominated Forwarded")
         {
@@ -313,7 +314,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode,customers:customers},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -809,6 +810,7 @@ function addCustomer()
                   $('#edit_forwarder').val(data.customers[0].nominated_forwarder);
                   $('#edit_day_count').val(data.customers[0].delivery_day_count);
                   $('#edit_short_name').val(data.customers[0].short_name);
+                  $('#edit_sap_code').val(data.customers[0].sap_code);
                   
                   /** [ Refresh  bootstrap selectpicker ] */
                   $('#edit_place_of_supply').selectpicker('refresh');
@@ -1214,7 +1216,8 @@ function addCustomer()
           var delivery_date_req   =  $('#edit_delivery_date_required').is(':checked')?1:0;
           var freight             =  $("#edit_freight option:selected").val();
           var day_count           =  $('#edit_day_count').val();
-          var short_name           =  $('#edit_short_name').val();
+          var short_name          =  $('#edit_short_name').val();
+          var sap_code            =  $('#edit_sap_code').val();
 
           var contact_person  = [];
           var contact_phone   = [];
@@ -1365,7 +1368,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode,customers:customers},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
               tryCount : 0,
               retryLimit : 2,
               beforeSend: function () {

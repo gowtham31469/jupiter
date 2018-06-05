@@ -129,6 +129,13 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
+                                {!! Form::label('sap_code', 'SAP Customer Code', ['class' => 'form_label']) !!}
+                                {!! Form::text('sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
                                 {!! Form::label('tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                                 {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
                                 <div class="help-block with-errors"></div>
@@ -404,6 +411,13 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
+                        {!! Form::label('edit_sap_code', 'SAP Customer Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('edit_sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
                         {!! Form::label('edit_tin_number', 'TIN Number', ['class' => 'form_label']) !!}
                         {!! Form::text('edit_tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
                         <div class="help-block with-errors"></div>
@@ -665,8 +679,6 @@
       $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-      /* Refresh auto populate country functionality */
-      autopopulateCountry(0)
       $('#payment_terms').val('0').selectpicker('refresh');
       $('#edit_payment_terms').val('0').selectpicker('refresh');
       $('#place_of_supply').val('0').selectpicker('refresh');
@@ -685,6 +697,8 @@
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
       $('#customers_metadata').prop('required',false)
+      /* Refresh auto populate country functionality */
+      autopopulateCountry(0)
     });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
