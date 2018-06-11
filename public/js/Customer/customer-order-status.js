@@ -1,43 +1,90 @@
 /* Customer Order Management Script*/
 $(document).ready(function() {
-      var buyer_count = $('#invisible__count_id').val();
-      if(buyer_count <= 1) {
-        $('.buyer-select option:first').remove();
-        localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
-        localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
-        orderStatus();
-      }
+       /** [ Make buyers card active ] */
+       $('div.buyers-card').click(function(){
+         $('div.buyers-card').removeClass("active");
+         $(this).addClass("active");
+         $('#hidden-buyer-div').hide();
+       });
 
-      $('.select-buyer').click(function() {
-        $('.select-buyer').addClass('hidden');
-      })
+       /** [ Show already selected(active) buyer on clicking buyer menu] */
+       $('.buyer-nav-menu').on('click', function() {
+           if (localStorage.getItem("buyer") === null) 
+           {
+              $("#buyerSelectionModalCenter").modal("show");
+              
+           } 
+           else 
+           {
+               $('#'+localStorage.getItem("buyer")).addClass('active');
+               $("#buyerSelectionModalCenter").modal("show");
+           }
+       });
 
-      $('.buyer-nav-select').html($('.buyer-div').html())
-      if (localStorage.getItem("buyer") === null) {
-        $(document).ready(function() {
-           $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
+       /** [If only 1 buyer , auto select that buyer] */
+       var buyer_count = $('#invisible__count_id').val();
+       if(buyer_count <= 1) 
+       {
+           $('#hidden-buyer-div').hide();
+           $('div.buyers-card').addClass("active");
+           localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+           localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+           $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+       }   
+       
+       /** add buyer selection menu into navbar */
+       $('.buyer-nav-menu').html($('.buyer-nav-div').html());
+
+       /** Load selected buyer from local-storage on pageload */
+       if (localStorage.getItem("buyer") === null) 
+       {
+           $(document).ready(function() {
+              $("#buyerSelectionModalCenter").modal("show");
+           })
+       } 
+       else 
+       {
+           $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
+           var buyer = localStorage.getItem("buyer");
+           orderStatus();
+       }
+
+       /** [ Select buyer on clicking proceed button] */
+       $('.proceed-btn').on('click', function() {
+           
+           if ($('.buyers-card.active-buyer.active').length != 0) 
+           {
+               $('#hidden-buyer-div').hide();
+               localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+               $('#buyerSelectionModalCenter').modal('hide');
+               var buyer = localStorage.getItem("buyer");
+               orderStatus();
+           } else {
+               localStorage.removeItem("buyer");
+               localStorage.removeItem("buyer_id");
+               $('#hidden-buyer-div').show();
+           }
+       });
+
+       /** To refresh modal while hidden **/
+       $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
+         $('div.buyers-card').removeClass("active");
+         if (localStorage.getItem("buyer") === null) 
+         {
+             $(document).ready(function() {
+                $("#buyerSelectionModalCenter").modal("show");
+             })
+         } 
+         else 
+         {
+             $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
+             var buyer = localStorage.getItem("buyer");
+             orderStatus();
+         }
         })
-      } else {
-        orderStatus();
-      }
-      $('.buyer-select').val(localStorage.getItem("buyer_id"));
-      $('.buyer-select').selectpicker({
-        style: 'btn-default',
-        size: 4
-      });
-
-      $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-        if ($('.buyer-nav-select .buyer-select option:selected').val() != "") {
-            localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-            orderStatus();
-        } else {
-            localStorage.removeItem("buyer");
-            localStorage.removeItem("buyer_id");
-            location.reload()
-        }
-      });
-});
+    });
 
 function orderStatus() {
     $('.main-content').html('<div class="loader"></div>');

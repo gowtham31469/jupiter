@@ -32,14 +32,10 @@
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-div hidden">
-            <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
-                <option value="">Select Buyer</option>
-                    @foreach($buyers as $buyer)
-                    <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-                    @endforeach
-              </select>
+        <div class="buyer-nav-div">
+           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
+        {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
 
@@ -406,6 +402,34 @@
     </div>
     {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
+<!-- Buyer selection Modal -->
+<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
+         <div class="modal-content buyer-selection-modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Buyer</h4>
+                 </div>
+                 <div class="modal-body buyer-selection-modal-body">
+                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+                      <strong>Warning!</strong> Select a buyer to proceed.
+                    </div>
+                    @foreach($buyers as $buyer)
+                     <a class="buyer-card-link" style="cursor: pointer;">
+                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$buyer->buyer_name}}"  data-value ="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
+                           <img src="{{$buyer->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
+                         </div>
+                     </a>
+                    @endforeach
+                 </div>
+                 <div class="modal-footer buyer-selection-modal-footer">
+                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
+                 </div>
+            {!! Form::close() !!}
+         </div>
+     </div>
+ </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/customer') }}";
