@@ -137,6 +137,11 @@
 				 
 				  $('#customer_role').selectpicker('refresh');
                   $('#customer_company').selectpicker('refresh');
+				 $('#customer_buyer').html('');
+				 $(data.company_buyers).each(function(key,value){
+									$('#customer_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
+				 });
+				 $('#customer_buyer').selectpicker('refresh');
 				 
 				  var buyers_array = [];
                       /** [ Buyers multi selectpicker value populating ] */
@@ -229,9 +234,9 @@ var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
                         $('#editCustomerModal').modal('hide');
                    },
                    409: function() {
-                        $('#customer_upadte_result').removeAttr('style');
-                        $('#customer_upadte_result').html('Email already registered.')
-                        $("#customer_upadte_result").addClass("alert alert-warning");
+                        $('#customer_edit_result').removeAttr('style');
+                        $('#customer_edit_result').html('Email already registered.')
+                        $("#customer_edit_result").addClass("alert alert-warning");
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
@@ -242,7 +247,15 @@ var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
                   }
                },
               complete: function () {
-                 location.reload()
+                  /** [ To make top menu active ] */
+				  $(function () {
+					  var url = window.location;
+					  $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+					  $('.dynamic-menu a').filter(function () {
+						  return this.href == url;
+					  }).parent('li').addClass('current-page').find('a').addClass('active');
+				  });
+				  $(".loader").hide();
               }
           })
       } catch (e) {
@@ -268,18 +281,18 @@ function addCustomer()
         
           var buyers          = [];
           /** [ Create array of multi selected buyers ] */
-          $.each($("#customer_buyer option:selected"), function(){
+          $.each($("#customer_add_buyer option:selected"), function(){
             buyers.push($(this).val());
           });
 
 
           /** [ Joining array values using some delimiters ] */   
-          buyer            = buyers.join(',');
+          buyer = buyers.join(',');
 
         $.ajax({
             url: base_url + "/admin/customer-management/add-customerProfile",
             method: 'POST',
-           {_token:csrf_token,id:id,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company},
+            data: {_token:csrf_token,password:password,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {

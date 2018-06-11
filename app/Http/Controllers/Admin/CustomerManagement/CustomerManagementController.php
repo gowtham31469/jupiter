@@ -315,6 +315,57 @@ class CustomerManagementController extends Controller
                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
+      } 
+	/**
+     * Add Customers to jga.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addCustomerProfile(Request $request)
+      {
+        try {
+               
+                $password             = Hash::make($request['password']);
+                $customer_email       = $request['customer_email'];
+                $buyer                = $request['buyer'];
+                $customer_name        = $request['customer_name'];
+                $customer_role        = $request['customer_role'];
+                $customer_company     = $request['customer_company'];
+
+                $email_exists =  DB::table('customer_profile')->where('email',$customer_email)->select('id')->get();
+                if(count($email_exists) > 0)
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                }
+                else
+                {
+                 
+                  $buyers           = explode(',',$buyer);
+
+                  $customer = DB::table('customer_profile')->insertGetId([
+                                'password'               => $password,
+                                'email'                  => $customer_email,
+                                'name'             => $customer_name,
+                                'role_id'          => $customer_role,
+                                'company_id'       => $customer_company
+                              ]);
+                  $insert_Id = $customer; 
+                    foreach($buyers as $buyer)
+                    {
+                        DB::table('customer_profile_buyer')->insert([
+                            'customer_profile_id'     => $insert_Id,
+                            'buyer_id'        => $buyer
+                        ]);
+                    }
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
+                  }
+
+            } catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
       }
       /**
        * Make customer active
@@ -484,8 +535,14 @@ class CustomerManagementController extends Controller
                          ->select('customer_profile_buyer.buyer_id')
                          ->where('customer_profile_buyer.customer_profile_id','=',$id)
                          ->get();
+			  
+			   $company_buyers = DB::table('customer_buyers')
+								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+								 ->select('customer_buyers.*','buyers.buyer_name')
+								 ->where('customer_buyers.customer_id','=',$id)
+								 ->get();
                 
-                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers]);
+                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
               } catch (\Exception $e)
               {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -672,7 +729,7 @@ class CustomerManagementController extends Controller
 				    $input['customer_role']		= Input::get('customer_role');
 					$input['customer_company']= Input::get('customer_company');
 						
-                    $email_rules     = array('email' => 'unique:customers,email,'.$id);
+                    $email_rules     = array('customer_email' => 'unique:customer_profile,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);
 
                     if($emailValidator->fails())
@@ -846,6 +903,26 @@ class CustomerManagementController extends Controller
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
     }
+	/**
+    * Show the company buyers list.
+    * @author <Gowtham>
+    * @return \Illuminate\Http\Response
+    */
+	public function customerCompanyBuyer(Request $request)
+	{
+		 try {
+                $customer_list = DB::table('customer_buyers')
+					  ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+                      ->where('customer_buyers.customer_id',$request->customer_add_company)
+                      ->select('customer_buyers.*','buyers.buyer_name')
+                      ->get();
+			 	return response()->json(['customer_list' => $customer_list]);
+			 
+         } catch (\Exception $e)
+         {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+	}
 	
 	/**
     * Show the customers list view on pageload.

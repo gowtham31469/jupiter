@@ -82,6 +82,8 @@ Route::put('admin/customer-management/update-customerProfile', 'Admin\CustomerMa
 
 Route::post('admin/customer-management/add-customerProfile', 'Admin\CustomerManagement\CustomerManagementController@addCustomerProfile');
 
+Route::post('admin/customer-management/customer-company-buyer', 'Admin\CustomerManagement\CustomerManagementController@customerCompanyBuyer');
+
 /** buyer Management **/
 Route::get('admin/buyer-management', 'Admin\BuyerManagement\BuyerManagementController@index');
 Route::get('admin/buyer-management/buyers-list', 'Admin\BuyerManagement\BuyerManagementController@buyerList');
@@ -121,6 +123,20 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	//TESCO
 	Route::get('customer/tesco/create-order', 'Customer\Tesco\OrderController@createOrder');
+	
+	Route::get('customer/customers', 'Customer\CustomerController@customers');
+	
+	
+Route::put('customer/customer-management/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
+Route::put('customer/customer-management/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
+Route::get('customer/customer-management/get-customers-profile', 'Customer\CustomerController@getCustomerProfileById');
+
+Route::put('customer/customer-management/update-customerProfile', 'Customer\CustomerController@updateCustomerProfile');
+
+Route::post('customer/customer-management/add-customerProfile', 'Customer\CustomerController@addCustomerProfile');
+
+Route::post('customer/customer-management/customer-company-buyer', 'Customer\CustomerController@customerCompanyBuyer');
+	
 
 	//TESCO VIEW ORDER
 	Route::post('customer/tesco/view-order', 'Customer\Tesco\OrderController@viewOrders');

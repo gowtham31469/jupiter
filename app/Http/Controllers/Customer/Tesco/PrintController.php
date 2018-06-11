@@ -449,7 +449,7 @@ PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
 			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 720 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 
 					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
-PDF::writeHTMLCell(127, 80, 15,$yy, $html, 1, 1, 1, true, 'J', true);
+PDF::writeHTMLCell(40, 30, 15,$yy, $html, 1, 1, 1, true, 'J', true);
 			
 			//PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 				//PDF::Image($value, 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);

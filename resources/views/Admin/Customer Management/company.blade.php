@@ -36,14 +36,14 @@
 							  <td>{{$value->company_name}}</td>
 							  <td>{{$value->role_name}}</td>
 							   @if($value->status === 1)
-                              <td rowspan="3"><span class="label label-success">Active</span></td>
+                              <td><span class="label label-success">Active</span></td>
                             @else
-                              <td rowspan="3"><span class="label label-danger">Inactive</span></td>
+                              <td><span class="label label-danger">Inactive</span></td>
                             @endif
                             @if($value->status === 1)
-                              <td rowspan="3"><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
+                              <td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Inactive" id="make_inactive" data-placement="left"></i></a>
                             @else
-                              <td rowspan="3"><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
+                              <td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Active" id="make_active" data-placement="left"></i></a>
                             @endif
                                  <a href="#">
                                   <i class="fa fa-pencil filterbtn options edit-customer fa-button" title="Edit" data-placement="left"></i>
@@ -67,7 +67,7 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Add Company</h4>
+                  <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
               </div>
               {!! Form::open(['id' => 'add_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
                   <div class="modal-body">
@@ -90,7 +90,14 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
-				  <div class="col-md-6">
+						<div class="col-md-6 edit_forwarder_div">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_add_company', 'Select Company', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+				  <div class="col-md-6 customer_add_buyer_div" style="display:none;">
                     <div class="form-group has-feedback">
                       {!! Form::label('customer_add_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
                         {{ Form::select('customer_add_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'customer_add_buyer','required')) }}
@@ -104,13 +111,7 @@
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                    <div class="col-md-6 edit_forwarder_div">
-                      <div class="form-group has-feedback">
-                        {!! Form::label('customer_add_company', 'Select Company', ['class' => 'form_label']) !!}
-                          {{ Form::select('customer_add_company',(['' => '-- Select Company --']+ $company),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_company','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
-                    </div>
+                    
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                               {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
@@ -138,7 +139,7 @@
   <div class="modal-content">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Edit Company</h4>
+          <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
       </div>
       {!! Form::open(['id' => 'edit_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
       {!! Form::hidden('customer_edit_id',$value = null, array('id'=>'customer_edit_id','class' => 'form-control input-sm')) !!}
@@ -162,7 +163,14 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
-				  <div class="col-md-6">
+				 <div class="col-md-6 edit_forwarder_div">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_company', 'Select Company', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_company',(['' => '-- Select Company --']+ $company),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_company','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+				  <div class="col-md-6 customer_buyer_div">
                     <div class="form-group has-feedback">
                       {!! Form::label('customer_buyer', 'Select Buyer', ['class' => 'form_label']) !!}
                         {{ Form::select('customer_buyer',$buyers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'customer_buyer','required')) }}
@@ -176,13 +184,7 @@
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                    <div class="col-md-6 edit_forwarder_div">
-                      <div class="form-group has-feedback">
-                        {!! Form::label('customer_company', 'Select Company', ['class' => 'form_label']) !!}
-                          {{ Form::select('customer_company',(['' => '-- Select Company --']+ $company),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_company','required')) }}
-                        <div class="help-block with-errors"></div>
-                      </div>
-                    </div>
+                   
                   </div>
            </div>
               <div class="modal-footer">
@@ -301,6 +303,99 @@
          editCustomer();
       }
     })
+		 $('#customer_add_company').change(function(){
+			  if($("#customer_add_company option:selected").text() == "-- Select Company --")
+			  {
+				  $('.customer_add_buyer_div').hide();
+				  $('#customer_add_buyer').val('0').selectpicker('refresh');
+				  $('#customer_add_buyer').prop('required',false);
+			  } 
+			  else 
+			  {
+				  $('#customer_add_buyer').html('')
+				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
+				    var customer_add_company =  $('#customer_add_company').val();
+					$.ajax({
+						url: base_url + "/admin/customer-management/customer-company-buyer",
+						method: 'POST',
+						data: {_token:csrf_token,customer_add_company:customer_add_company},
+						tryCount : 0,
+						retryLimit : 2,
+						beforeSend: function () {
+						},
+						statusCode: {
+
+							 /** [ Show response status based on HTTP status code ] */
+							 200: function(data) {
+								 $(data.customer_list).each(function(key,value){
+									$('#customer_add_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
+								 });
+								 $('#customer_add_buyer').selectpicker('refresh');
+							 }
+						},
+						error: function(errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						 },
+						complete: function () {
+
+						}
+					})
+				  
+				  $('.customer_add_buyer_div').show();
+				  $('#customer_add_buyer').prop('required',true);
+			  } 
+        });
+		
+		 $('#customer_company').change(function(){
+			  if($("#customer_company option:selected").text() == "-- Select Company --")
+			  {
+				  $('.customer_buyer_div').hide();
+				  $('#customer_buyer').val('0').selectpicker('refresh');
+				  $('#customer_buyer').prop('required',false);
+			  } 
+			  else 
+			  {
+				  $('#customer_buyer').html('')
+				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
+				    var customer_add_company =  $('#customer_company').val();
+					$.ajax({
+						url: base_url + "/admin/customer-management/customer-company-buyer",
+						method: 'POST',
+						data: {_token:csrf_token,customer_add_company:customer_add_company},
+						tryCount : 0,
+						retryLimit : 2,
+						beforeSend: function () {
+						},
+						statusCode: {
+
+							 /** [ Show response status based on HTTP status code ] */
+							 200: function(data) {
+								 $(data.customer_list).each(function(key,value){
+									$('#customer_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
+								 });
+								 $('#customer_buyer').selectpicker('refresh');
+							 }
+						},
+						error: function(errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						 },
+						complete: function () {
+
+						}
+					})
+				  
+				  $('.customer_buyer_div').show();
+				  $('#customer_buyer').prop('required',true);
+			  } 
+        });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     </script>
     @endsection

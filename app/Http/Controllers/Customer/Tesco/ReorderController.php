@@ -54,15 +54,35 @@ class ReorderController extends Controller
      */
   	public function reOrder(Request $request)
     {
-		$customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_supplier_id',$customer_id)->select('*')->get();
+		$customer_id = Auth::guard('web_customer')->id();
+		
+		
+	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
+	  if($customer_role_id->role_id == 1)
+	  {
+		  $customer_id = Auth::guard('web_customer')->user()->id;
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
 		echo json_encode($data);
+	  }
+	  else
+	  {
+		  $customer_id = Auth::guard('web_customer')->user()->id;
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		echo json_encode($data);
+	  }
+		
     }
 	/**
      * This Function is used to list all the artwork for particular style number.
