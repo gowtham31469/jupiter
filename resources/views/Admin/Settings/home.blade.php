@@ -1,13 +1,8 @@
 @extends('layouts.Admin.app') @if (Auth::guard("web")->user()) @section('content')
 <div class="col-sm-12 col-md-12 main">
     <div class="top-content">
-        <div class="buyer-div hidden">
-            <select class="js-example-responsive buyer-select show-tick show-menu-arrow" data-live-search="true">
-                <option value="">Select Buyer</option>
-                    @foreach($buyers as $buyer)
-                    <option title="Selected Buyer : {{$buyer->buyer_name}}" value="{{$buyer->id}}">{{$buyer->buyer_name}}</option>
-                    @endforeach
-              </select>
+        <div class="buyer-nav-div">
+           <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
         </div>
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
@@ -1597,7 +1592,34 @@
 
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
-
+    <!-- Buyer selection Modal -->
+    <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="modal-dialog buyer-selection-modal-dialog" role="document">
+             <div class="modal-content buyer-selection-modal-content">
+                    <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Buyer</h4>
+                     </div>
+                     <div class="modal-body buyer-selection-modal-body">
+                        <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
+                          <strong>Warning!</strong> Select a buyer to proceed.
+                        </div>
+                        @foreach($buyers as $buyer)
+                         <a class="buyer-card-link" style="cursor: pointer;">
+                             <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$buyer->buyer_name}}"  data-value ="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
+                               <img src="{{$buyer->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
+                             </div>
+                         </a>
+                        @endforeach
+                     </div>
+                     <div class="modal-footer buyer-selection-modal-footer">
+                         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                         {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
+                     </div>
+                {!! Form::close() !!}
+             </div>
+         </div>
+     </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -1611,62 +1633,83 @@
     })
        
     $(document).ready(function() {
-            $('.select-buyer').click(function() {
-            $('.select-buyer').addClass('hidden');
-            $('.meta-data-list li a').removeClass("active");
-            $('.meta-data-list li:first a').addClass("active");
-            $('.meta-data-list-1 li a').removeClass("active");
-            $('.meta-data-list-1 li:first a').addClass("active");
-        })
-        /** [If only 1 buyer , auto select that buyer] */
-        var buyer_count = $('#invisible__count_id').val();
-        if(buyer_count <= 1) 
-        {
-            $('.buyer-select option:first').remove();
-            localStorage.setItem("buyer", $('.buyer-select').find("option:selected").text().toLowerCase());
-            localStorage.setItem("buyer_id", $('.buyer-select').find("option:selected").val());
-        }
         /* Show logo on left side */
         $('.logo').html('Settings')
-        $('.buyer-nav-select').html($('.buyer-div').html())
-         
-        // Check if buyer selected or not
-        /* call orchestraSettings function from orchestra-settings.js*/
-        /**  [ Show orchestraSettings page based on buyer selection ] */
-        if (localStorage.getItem("buyer") === null) {
-          $(document).ready(function() {
-             $('.select-buyer').html('<img src="../../images/select-buyer.png" class="img-responsive">');
-          })
-        }else if(localStorage.getItem("buyer") === 'orchestra')
-        {
-            orchestraSettings();
-            $('.meta-data-list li a').removeClass("active");
-            $('.meta-data-list li:first a').addClass("active");
-            
-            /** Hide default image, if buyer already selected */
-            $('.select-buyer').addClass('hidden');
-        }
-        else
-        {
-          tescoBrands();
-          $('.meta-data-list-1 li a').removeClass("active");
-          $('.meta-data-list-1 li:first a').addClass("active");
-          /** Hide default image, if buyer already selected */
-            $('.select-buyer').addClass('hidden');
-        }
 
-        $('.buyer-select').val(localStorage.getItem("buyer_id"))
-        $('.buyer-nav-select .buyer-select').selectpicker({
-            style: 'btn-default',
-            size: 4
-        });
-        // Store selected buyer into localstorage
-        $('.buyer-select.bootstrap-select').on('changed.bs.select', function() {
-            if ($('.buyer-nav-select .buyer-select option:selected').val() != "") 
+       /** [ Make buyers card active ] */
+       $('div.buyers-card').click(function(){
+         $('div.buyers-card').removeClass("active");
+         $(this).addClass("active");
+         $('#hidden-buyer-div').hide();
+       });
+
+       /** [ Show already selected(active) buyer on clicking buyer menu] */
+       $('.buyer-nav-menu').on('click', function() {
+           if (localStorage.getItem("buyer") === null) 
+           {
+              $("#buyerSelectionModalCenter").modal("show");
+              
+           } 
+           else 
+           {
+               $('#'+localStorage.getItem("buyer")).addClass('active');
+               $("#buyerSelectionModalCenter").modal("show");
+           }
+       });
+
+       /** [If only 1 buyer , auto select that buyer] */
+       var buyer_count = $('#invisible__count_id').val();
+       if(buyer_count <= 1) 
+       {
+           $('#hidden-buyer-div').hide();
+           $('div.buyers-card').addClass("active");
+           localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+           localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+           $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+       }   
+       
+       /** add buyer selection menu into navbar */
+       $('.buyer-nav-menu').html($('.buyer-nav-div').html());
+
+       /** Load selected buyer from local-storage on pageload */
+       if (localStorage.getItem("buyer") === null) 
+       {
+           $(document).ready(function() {
+              $("#buyerSelectionModalCenter").modal("show");
+           })
+       } 
+       else 
+       {
+           $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
+           var buyer = localStorage.getItem("buyer");
+            /* call orchestraSettings function from orchestra-settings.js*/
+            /**  [ Show orchestraSettings page based on buyer selection ] */
+           if(buyer === 'orchestra')
             {
-                localStorage.setItem("buyer", $('.buyer-nav-select .buyer-select').find("option:selected").text().toLowerCase());
-                localStorage.setItem("buyer_id", $('.buyer-nav-select .buyer-select').find("option:selected").val());
-                var buyer = $(this).find("option:selected").text().toLowerCase();
+              $('.meta-data-list li a').removeClass("active");
+              $('.meta-data-list li:first a').addClass("active");
+                 orchestraSettings();
+
+            }
+            else
+            {
+              $('.meta-data-list-1 li a').removeClass("active");
+              $('.meta-data-list-1 li:first a').addClass("active");
+              tescoBrands();
+            } 
+       }
+
+       /** [ Select buyer on clicking proceed button] */
+       $('.proceed-btn').on('click', function() {
+           
+           if ($('.buyers-card.active-buyer.active').length != 0) 
+           {
+               $('#hidden-buyer-div').hide();
+               localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+               $('#buyerSelectionModalCenter').modal('hide');
+               var buyer = localStorage.getItem("buyer");
                 /* call orchestraSettings function from orchestra-settings.js*/
                 /**  [ Show orchestraSettings page based on buyer selection ] */
                if(buyer === 'orchestra')
@@ -1682,15 +1725,43 @@
                   $('.meta-data-list-1 li:first a').addClass("active");
                   tescoBrands();
                 } 
-            } 
-            else 
-            {
-                localStorage.removeItem("buyer");
-                localStorage.removeItem("buyer_id");
-                location.reload()
-            }
-        });
+           } else {
+               localStorage.removeItem("buyer");
+               localStorage.removeItem("buyer_id");
+               $('#hidden-buyer-div').show();
+           }
+       });
 
+       /** To refresh modal while hidden **/
+       $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
+         $('div.buyers-card').removeClass("active");
+         if (localStorage.getItem("buyer") === null) 
+         {
+             $(document).ready(function() {
+                $("#buyerSelectionModalCenter").modal("show");
+             })
+         } 
+         else 
+         {
+             $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
+             var buyer = localStorage.getItem("buyer");
+                /* call orchestraSettings function from orchestra-settings.js*/
+                /**  [ Show orchestraSettings page based on buyer selection ] */
+               if(buyer === 'orchestra')
+                {
+                  $('.meta-data-list li a').removeClass("active");
+                  $('.meta-data-list li:first a').addClass("active");
+                     orchestraSettings();
+
+                }
+                else
+                {
+                  $('.meta-data-list-1 li a').removeClass("active");
+                  $('.meta-data-list-1 li:first a').addClass("active");
+                  tescoBrands();
+                } 
+         }
+        }) 
       /** To refresh modal while hidden **/
       $('.modal').on('hidden.bs.modal', function (e) {
         $('#add_orchestra_garments_form').trigger("reset");

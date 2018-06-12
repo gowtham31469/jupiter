@@ -22,7 +22,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 
-                <li class="dropdown buyer-nav-select"></li>
+                <li class="dropdown buyer-nav-menu"></li>
                 <li><a class="notification" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href="#"><i class="fa fa-bell fa-1x" aria-hidden="true"></i></a>
                   <ul class="dropdown-menu notify-drop">
             <div class="notify-drop-title">
@@ -90,15 +90,15 @@
             </div>
           </ul>
                 </li>
-                 <li><a class="notification" href="#" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
+                 <li><a class="notification" style="cursor: pointer;" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
                 <li class="dropdown">
                     <!-- <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a> -->
 
                     <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome {{ Auth::user()->name }}   <span class="caret"></span></a>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#" onclick="getAdminProfile({{ Auth::user()->id }})">Profile</a></li>
-                        <li><a href="#" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
+                        <li><a style="cursor: pointer;" onclick="getAdminProfile({{ Auth::user()->id }})">Profile</a></li>
+                        <li><a style="cursor: pointer;" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
                        <!--  <li><a class="dropdown-item logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
@@ -135,7 +135,7 @@
                          {!! Form::label('feedback_email', 'Your Email', ['class' => 'form_label']) !!}
                          <div class="input-group">
                            <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                           {!! Form::email('feedback_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                          </div>
                          <div class="help-block with-errors"></div>
                        </div>
@@ -181,7 +181,7 @@
                        {!! Form::label('admin_profile_email', 'Email', ['class' => 'form_label']) !!}
                        <div class="input-group">
                          <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required')) !!}
+                         {!! Form::email('admin_profile_email',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Email','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                        </div>
                        <div class="help-block with-errors"></div>
                      </div>
@@ -195,7 +195,7 @@
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('admin_profile_address', 'Address', ['class' => 'form_label']) !!}
-                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3)) !!}
+                       {!! Form::textarea('admin_profile_address',$value = '', array('class' => 'form-control','placeholder' => 'Address','required','style'=>'resize:none;','rows'=>3,'onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                  </div>
@@ -244,3 +244,5 @@
             </div>
         </div>
     </div>
+
+

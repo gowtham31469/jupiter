@@ -54,13 +54,31 @@ class OrderController extends Controller
      */
     public function Orders()
     {
-      $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
-      $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+	    $customer_id = Auth::guard('web_customer')->id();
+		
+		
+	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
+	  if($customer_role_id->role_id == 1)
+	  {
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_flag', 'newOrder')->get();
+	  }
+	  else
+	  {
+		  $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*',DB::raw('"TCL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*',DB::raw('"TCL 2" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*',DB::raw('"TCL 4" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*',DB::raw('"THL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw('"THL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw('"TSL 1" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw('"TSL 3" as TemplateName'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->get();
+	  }
+      
       echo json_encode($data);
     }
 

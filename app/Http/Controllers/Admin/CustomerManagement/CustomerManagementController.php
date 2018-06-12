@@ -214,6 +214,7 @@ class CustomerManagementController extends Controller
                 $delivery_day_count   = $request['day_count'];
                 $short_name           = $request['short_name'];
                 $customers            = $request['customers'];
+                $sap_code             = $request['sap_code'];
 
                 $email_exists = Customer::where('email',$login_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -255,7 +256,8 @@ class CustomerManagementController extends Controller
                                 'nominated_forwarder'    => $forwarder,
                                 'freight_type'           => $freight,
                                 'delivery_day_count'     => $delivery_day_count,
-                                'short_name'             => $short_name
+                                'short_name'             => $short_name,
+                                'sap_code'               => $sap_code
                               ]);
                   $insert_Id = $customer->id; 
                   if($insert_Id != '')
@@ -315,6 +317,57 @@ class CustomerManagementController extends Controller
                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
+      } 
+	/**
+     * Add Customers to jga.
+     * @param \Illuminate\Http\Request
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function addCustomerProfile(Request $request)
+      {
+        try {
+               
+                $password             = Hash::make($request['password']);
+                $customer_email       = $request['customer_email'];
+                $buyer                = $request['buyer'];
+                $customer_name        = $request['customer_name'];
+                $customer_role        = $request['customer_role'];
+                $customer_company     = $request['customer_company'];
+
+                $email_exists =  DB::table('customer_profile')->where('email',$customer_email)->select('id')->get();
+                if(count($email_exists) > 0)
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                }
+                else
+                {
+                 
+                  $buyers           = explode(',',$buyer);
+
+                  $customer = DB::table('customer_profile')->insertGetId([
+                                'password'               => $password,
+                                'email'                  => $customer_email,
+                                'name'             => $customer_name,
+                                'role_id'          => $customer_role,
+                                'company_id'       => $customer_company
+                              ]);
+                  $insert_Id = $customer; 
+                    foreach($buyers as $buyer)
+                    {
+                        DB::table('customer_profile_buyer')->insert([
+                            'customer_profile_id'     => $insert_Id,
+                            'buyer_id'        => $buyer
+                        ]);
+                    }
+                    $result = response()->json(['error'=> false,'message' =>'success'],200);
+                  }
+
+            } catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
       }
       /**
        * Make customer active
@@ -363,6 +416,54 @@ class CustomerManagementController extends Controller
             }
             return $result;
         }
+	
+	/**
+       * Make customer active
+       * @param customer id
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCustomerProfileActive(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              DB::table('customer_profile')->where('id',$id)
+               ->update([
+                 'status'  => 1
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make customer in-active
+       * @author <Praveen>
+       * @return boolean true or false
+       */
+      public function makeCustomerProfileInactive(Request $request)
+      {
+        try {
+              $id      = $request['id'];
+              
+              DB::table('customer_profile')->where('id',$id)
+               ->update([
+                 'status'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
         /**
          * Gets the customer by identifier.
          * @param customer id
@@ -374,7 +475,7 @@ class CustomerManagementController extends Controller
           try {
                 $id = $request['id'];
                 $customer = DB::table('customers')
-                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count','short_name')
+                         ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.password','customers.pi_required','customers.payment_terms','customers.place_of_supply','customers.po_required','customers.delivery_date_required','nominated_forwarder','freight_type','delivery_day_count','short_name','customers.sap_code')
                          ->where('customers.id','=',$id)
                          ->get();
                 /** Checking password already exists or not **/
@@ -417,6 +518,37 @@ class CustomerManagementController extends Controller
               {
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
+        }  
+		/**
+         * Gets the customer by identifier.
+         * @param customer id
+         * @return The customer by identifier.
+         * @author <Praveen>
+         */
+        public function getCustomerProfileById(Request $request)
+        {
+          try {
+                $id = $request['id'];
+                $customer = DB::table('customer_profile')
+                            ->select('*')
+                            ->where('customer_profile.id','=',$id)
+                            ->get();
+			   $buyers = DB::table('customer_profile_buyer')
+                         ->select('customer_profile_buyer.buyer_id')
+                         ->where('customer_profile_buyer.customer_profile_id','=',$id)
+                         ->get();
+			  
+			   $company_buyers = DB::table('customer_buyers')
+								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+								 ->select('customer_buyers.*','buyers.buyer_name')
+								 ->where('customer_buyers.customer_id','=',$id)
+								 ->get();
+                
+                return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
+              } catch (\Exception $e)
+              {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              }
         }
         /**
          * Update Customer by id.
@@ -444,6 +576,7 @@ class CustomerManagementController extends Controller
                     $input['freight']                = Input::get('freight');
                     $input['delivery_day_count']     = Input::get('day_count');
                     $input['short_name']             = Input::get('short_name');
+                    $input['sap_code']               = Input::get('sap_code');
 
                     $contact_person   = Input::get('contact_person');
                     $contact_phone    = Input::get('contact_phone');
@@ -517,7 +650,8 @@ class CustomerManagementController extends Controller
                             'nominated_forwarder'    => $input['forwarder'],
                             'freight_type'           => $input['freight'],
                             'delivery_day_count'     => $input['delivery_day_count'],
-                            'short_name'             => $input['short_name']
+                            'short_name'             => $input['short_name'],
+                            'sap_code'               => $input['sap_code']
                           ]);
                       /** Delete existing data before updating **/
                       CustomerContactPersons::where('customer_id', '=', $id)
@@ -573,6 +707,65 @@ class CustomerManagementController extends Controller
                                 'customer_metadata_id' => $customer
                             ]);
                         }
+                        $result = response()->json(['error'=> false,'message' =>'success'],200);
+                      
+                    }
+
+                } catch (\Exception $e)
+                {
+                       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+                }
+                return $result;
+          }
+		/**
+         * Update Customer by id.
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return boolean true or false
+         */
+        public function updateCustomerProfile(Request $request)
+          {
+            try {
+                    $id               = $request['id'];
+                    $buyer            = Input::get('buyer');
+                    $input['customer_name']= Input::get('customer_name');
+					          $input['customer_email']= Input::get('customer_email');
+				            $input['customer_role']		= Input::get('customer_role');
+					          $input['customer_company']= Input::get('customer_company');
+						
+                    $email_rules     = array('customer_email' => 'unique:customer_profile,email,'.$id);
+                    $emailValidator  = Validator::make($input,$email_rules);
+
+                    if($emailValidator->fails())
+                    {
+                        return response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                    }
+                    else
+                    {
+                     
+						
+						
+                      $buyers           = explode(',',$buyer);
+                       DB::table('customer_profile')->where('id',$id)
+                            ->update([
+                            'name'            => $input['customer_name'],
+                            'email'           => $input['customer_email'],
+                            'role_id'         => $input['customer_role'],
+                            'company_id'      => $input['customer_company']
+                          ]);
+                    
+                        
+                        /** Delete existing data before updating **/
+                        DB::table('customer_profile_buyer')->where('customer_profile_id', '=', $id)
+                            ->delete();
+                        foreach($buyers as $buyer)
+                        {
+                             DB::table('customer_profile_buyer')->insert([
+                                'customer_profile_id'     => $id,
+                                'buyer_id'        => $buyer
+                            ]);
+                        }
+                       
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
                     }
@@ -714,6 +907,70 @@ class CustomerManagementController extends Controller
                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }
     }
+	/**
+    * Show the company buyers list.
+    * @author <Gowtham>
+    * @return \Illuminate\Http\Response
+    */
+	public function customerCompanyBuyer(Request $request)
+	{
+		 try {
+                $customer_list = DB::table('customer_buyers')
+					  ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+                      ->where('customer_buyers.customer_id',$request->customer_add_company)
+                      ->select('customer_buyers.*','buyers.buyer_name')
+                      ->get();
+			 	return response()->json(['customer_list' => $customer_list]);
+			 
+         } catch (\Exception $e)
+         {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+	}
+	
+	/**
+    * Show the customers list view on pageload.
+    * @author <Praveen>
+    * @return \Illuminate\Http\Response
+    */
+    public function customerProfile()
+    {
+          try {
+                 $module_var      = new Modules();
+                 $is_allowed      = $module_var->permittedModules();
+                 $buyers          = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+			  
+			     $roles          = DB::table('roles')->pluck('role_name','id')->all();
+                
+                 $company = DB::table('customers')
+                                    ->where('is_active','=',1)
+                                    ->pluck('company_name','id')
+                                    ->all();
+                 // $tesco_customers = DB::table('tesco_suppliers')->where('is_enabled','=',1)->pluck('supplier_name','id')->all();
+                 $customers       =  DB::table('customer_profile')
+					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
+					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
+                                     ->select('customer_profile.*','roles.role_name','customers.company_name')
+                                     ->get();  
+                 if($is_allowed)
+                 {
+                     $get_main_module = $module_var->getMainModules();
+                     $get_sub_module = $module_var->getSubModules(4);
+                     View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+                         return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+                     });
+                     return view('Admin/Customer Management/company')->with(['company' => $company, 'buyers' => $buyers,'customers' => $customers,'roles' => $roles]);
+                 }
+                 else
+                 {
+                      return redirect('/admin/dashboard');
+                 }
+         } catch (\Exception $e)
+         {
+                return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+         }
+    }
+	
     /**
      * Method to load the buyer templates in custumer module
      * @return [type] [description]

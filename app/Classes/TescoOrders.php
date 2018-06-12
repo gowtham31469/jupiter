@@ -103,7 +103,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
             }
@@ -202,7 +203,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
             }
@@ -301,7 +303,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
               
@@ -401,7 +404,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
             }
@@ -500,7 +504,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
             }
@@ -599,7 +604,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
               
@@ -699,7 +705,8 @@ class TescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
-                          'is_order_count_empty' => $is_order_count_empty
+                          'is_order_count_empty' => $is_order_count_empty,
+                          'order_placed_by'      => $request['created_by']
                         ]);
               }
               

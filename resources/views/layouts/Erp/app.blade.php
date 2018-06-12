@@ -11,7 +11,7 @@
     <title>JGA</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ asset('bootstrap-3.3.7-dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('DataTables/DataTables-1.10.16/css/dataTables.bootstrap.min.css') }}">
     <link href="{{ asset('font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
      <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Erp/custom.css') }}">
@@ -33,8 +33,8 @@
     var base_url = "<?php echo  url('/') ?>";
     </script>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.0/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script>
     <script src="http://cdn.jsdelivr.net/bootstrap.datatables/0.1/js/datatables.js"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
     @yield('jqueryIncludes')

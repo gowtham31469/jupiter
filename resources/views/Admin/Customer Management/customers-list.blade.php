@@ -8,7 +8,7 @@
               </div>
                 <div class="main-sub-menu">
                   <div class="action-group pull-right sub-menu-button">
-                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a>
+                    <a href="#" data-target="#addCustomerModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Company</a>
                   </div>
                 </div>
                <div class="clearfix"></div>
@@ -93,7 +93,7 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+                  <h4 class="modal-title" id="myModalLabel">Add Company</h4>
               </div>
               {!! Form::open(['id' => 'add_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
                   <div class="modal-body">
@@ -124,6 +124,13 @@
                             <div class="form-group has-feedback">
                                 {!! Form::label('courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
                                 {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                                {!! Form::label('sap_code', 'SAP Customer Code', ['class' => 'form_label']) !!}
+                                {!! Form::text('sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -367,7 +374,7 @@
   <div class="modal-content">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+          <h4 class="modal-title" id="myModalLabel">Edit Company</h4>
       </div>
       {!! Form::open(['id' => 'edit_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
       {!! Form::hidden('customer_edit_id',$value = null, array('id'=>'customer_edit_id','class' => 'form-control input-sm')) !!}
@@ -399,6 +406,13 @@
                     <div class="form-group has-feedback">
                         {!! Form::label('edit_courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
                         {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('edit_sap_code', 'SAP Customer Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('edit_sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                   </div>
@@ -665,8 +679,6 @@
       $('#customers-list-table').DataTable();
       $("#customers-list-table_filter input").addClass('form-control');
       $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
-      /* Refresh auto populate country functionality */
-      autopopulateCountry(0)
       $('#payment_terms').val('0').selectpicker('refresh');
       $('#edit_payment_terms').val('0').selectpicker('refresh');
       $('#place_of_supply').val('0').selectpicker('refresh');
@@ -685,6 +697,8 @@
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
       $('#customers_metadata').prop('required',false)
+      /* Refresh auto populate country functionality */
+      autopopulateCountry(0)
     });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
 

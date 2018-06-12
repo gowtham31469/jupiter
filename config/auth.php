@@ -85,7 +85,7 @@ return [
 
        'customers' => [
             'driver' => 'eloquent',  //We are using eloquent model
-            'model' => App\Customer::class,
+            'model' => App\CustomerProfile::class,
         ],
 
         'merchandisers' => [
