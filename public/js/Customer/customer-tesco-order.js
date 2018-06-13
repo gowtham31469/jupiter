@@ -1134,19 +1134,19 @@ function printDivTesco(data,name) {
 				
 				if((name == "TSL1-sticker" && zone=="CE"))
 				{
-					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_ratio_orms_tpn').val();
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_ratio_orms_tpn').val();
 				}
 				else if((name == "TSL3-sticker" && zone=="CE"))
 				{
-					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.ce_single_orms_tpn').val();
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_single_orms_tpn').val();
 				}
 				else if((name == "TSL3-sticker" && zone=="UK"))
 				{
-					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_single_tpnd').val();
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_single_tpnd').val();
 				}
 				else if((name == "TSL1-sticker" && zone=="UK"))
 				{
-					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_ratio_tpnd').val();
 				}
 				
 				if((name== "TSL3-sticker"))
@@ -2146,7 +2146,7 @@ function dynamicSVGTemplatescard(id,item)
                  /** [ Dynamically change svg CE ratio tpnd number ] */
                  if(tpnd != '')
                  {
-                     svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                     svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+tpnd;
                  }
                  else
                  {
@@ -2194,7 +2194,7 @@ function dynamicSVGTemplatescard(id,item)
                  /** [ Dynamically change svg CE single tpnd number ] */
                  if(orms_tpn != '')
                  {
-                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                      svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+orms_tpn;
                  }
                  else
                  {
@@ -2307,7 +2307,7 @@ function dynamicSVGTemplatescard(id,item)
                   /** [ Dynamically change svg UK ratio tpnd number ] */
                   if(tpnd != '')
                   {
-                      svgDoc.getElementById("tpnd").innerHTML = tpnd;
+                      svgDoc.getElementById("tpnd").innerHTML = "TPND: "+tpnd;
                   }
                   else
                   {
@@ -2361,7 +2361,7 @@ function dynamicSVGTemplatescard(id,item)
                  /** [ Dynamically change svg UK single tpnd number ] */
                  if(orms_tpn != '')
                  {
-                      svgDoc.getElementById("tpnd").innerHTML = orms_tpn;
+                      svgDoc.getElementById("tpnd").innerHTML = "TPND: "+orms_tpn;
                  }
                  else
                  {
