@@ -40,21 +40,41 @@ class PrintController extends Controller
 		
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;
-		  
+		  if($request->name == "TCL1-sticker")
+		  {
+			  $this->template_desc = "RATIO STICKER";
+		  }
+		  else if($request->name == "TCL2-sticker")
+	      {
+			   $this->template_desc = "RATIO BD STICKER"; 
+		  }
+		  else if($request->name == "TCL4-sticker")
+	      {
+			   $this->template_desc =  "SINGLES BD STICKER";
+		  }
+		  else if($request->name == "THL1-sticker")
+	      {
+			    $this->template_desc = "RATIO STICKER";
+		  }
+		  else if($request->name == "THL3-sticker")
+	      {
+			   $this->template_desc = "SINGLES RATIO BD STICKER";
+		  }
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
 		  
 				 // Custom Header
 		PDF::setHeaderCallback(function($pdf) {
+			$pdf->SetY(0);
 		$name=str_replace("-sticker", "", $this->template_name);
 		$zone=$this->template_zone;
 			$tesco_po_number=$this->tesco_po_number;
 			$style=$this->style;
-			$tesco_description=$this->tesco_description;
+			$tesco_description=$this->template_desc;
 			
 						 $image_file= K_PATH_IMAGES.'logo_example.jpg';
-					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="70.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
 <title>Qt Svg Document</title>
 <desc>Generated with Qt</desc>
 <defs>
@@ -118,7 +138,7 @@ class PrintController extends Controller
 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
 </g>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
-    <image xlink:href="/var/www/html/jupiter/public/images/logo.png" x="174" y="66" height="65px" width="116px" style=""/>
+    <image xlink:href="/var/www/html/jupiter/public/images/jupiter.jpg" x="174" y="66" height="65px" width="116px" style=""/>
 </svg>
 <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
@@ -245,7 +265,14 @@ class PrintController extends Controller
     {
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;
-		  
+		  if($request->name == "TSL1-sticker")
+		  {
+			  $this->template_desc = "RATIO POLYBAG STICKER";
+		  }
+		  else if($request->name == "TSL3-sticker")
+	      {
+			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
+		  }
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
@@ -256,10 +283,10 @@ class PrintController extends Controller
 		$zone=$this->template_zone;
 			$tesco_po_number=$this->tesco_po_number;
 			$style=$this->style;
-			$tesco_description=$this->tesco_description;
+			$tesco_description=$this->template_desc;
 			
 						 $image_file= K_PATH_IMAGES.'logo_example.jpg';
-					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="70.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
 <title>Qt Svg Document</title>
 <desc>Generated with Qt</desc>
 <defs>
@@ -323,7 +350,7 @@ class PrintController extends Controller
 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
 </g>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
-    <image xlink:href="/var/www/html/jupiter/public/images/logo.png" x="174" y="66" height="65px" width="116px" style=""/>
+    <image xlink:href="/var/www/html/jupiter/public/images/jupiter.jpg" x="174" y="66" height="65px" width="116px" style=""/>
 </svg>
 <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
@@ -422,13 +449,12 @@ class PrintController extends Controller
 		{
 			$svg=urldecode($value);
 			PDF::SetFillColor(255,255,255);
-
 			PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
 			PDF::AddPage();
 			PDF::setPage($j, true);
 			$yy=80;
 			$j++;
-			 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
 			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
 			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
