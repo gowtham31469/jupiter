@@ -229,25 +229,38 @@ class PrintController extends Controller
 		        $svg=urldecode($request->svg);
 				PDF::setImageScale(1);
 				PDF::SetFont('frankgothcnbt');
-				//PDF::AddPage();
-				$i=1;
-				$yy=0;
+				PDF::AddPage();
+				$i=0;
+				$yy=60;
 				$j=1;
 				PDF::SetXY(10, 50);
 				foreach($svgarr as $value)
 				{
 					$svg=urldecode($value);
 					PDF::SetFillColor(255,255,255);
-
-					PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
-					PDF::AddPage();
-					PDF::setPage($j, true);
-					$yy=80;
+					if($i == 2)
+					{
+						$yy=60;
+						PDF::AddPage();
+						$i = 0;
+					}
+					else if($i == 0)
+					{
+						$yy=60;
+					}
+					else
+					{
+						$yy += 100;
+					}
 					$j++;
-					PDF::RoundedRect(15, $yy, 127, 80, 0, 'Black');
+					PDF::RoundedRect(15, $yy, 127, 80, 0, '1111');
 					 file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-					shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 600 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
-				 PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 640 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
+				// PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 127, 80, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+					
+					$html = '<img src="'.public_path('/storage/app/template/demo_'.$j.'.png').'">';
+					PDF::writeHTMLCell(127, 80, 15, $yy+1, $html, '', 0, 0, false, 'L', false);
+				
 					$i++;
 					
 				}
@@ -441,7 +454,8 @@ class PrintController extends Controller
         $svg=urldecode($request->svg);
         PDF::setImageScale(1);
         PDF::SetFont('frankgothcnbt');	
-		$i=1;
+		PDF::AddPage();
+		$i=0;
 		$yy=0;
 		$j=1;
 		PDF::SetXY(10, 50);
@@ -449,14 +463,30 @@ class PrintController extends Controller
 		{
 			$svg=urldecode($value);
 			PDF::SetFillColor(255,255,255);
-			PDF::SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
-			PDF::AddPage();
-			PDF::setPage($j, true);
-			$yy=80;
+			if($i == 3 || $i == 6 || $i == 9 || $i == 15 || $i == 18)
+			{
+				$xx=15;
+				$yy+=50;
+			}
+			else if($i == 0)
+			{
+				$yy=50;
+				$xx=15;
+			}
+			else if($i == 12)
+			{
+				PDF::AddPage();
+				$xx=15;
+				$yy=50;
+			}
+			else 
+			{
+				$xx+=70;
+			}
 			$j++;
 			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
 			shell_exec("inkscape -z -e ".public_path('/storage/app/template/demo_'.$j.'.png')." -w 1024 -h 653 ".public_path('/storage/app/template/demo_'.$j.'.svg')."");
-			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), 15, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
+			PDF::Image(public_path('/storage/app/template/demo_'.$j.'.png'), $xx, $yy, 40, 30, 'png', '', '', true, 300, '', false, false, 1, false, false, false);
 			$i++;
 
 		}
