@@ -6,10 +6,10 @@
 <g>
 	<rect y="0" style="fill:#FFFFFF;" width="360" height="226.8"/>
 </g>
-<text transform="matrix(1.0281 0 0 1 25.9824 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">B/D (R</text>
-<text transform="matrix(1.0281 0 0 1 100.6206 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px; letter-spacing:-1;">A</text>
-<text transform="matrix(1.0281 0 0 1 114.7051 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">TIO)</text>
-<text id="season_code" transform="matrix(1.0153 0 0 1 254.9785 33.4333)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28px;">AW18</text>
+<text transform="matrix(1.0281 0 0 1 25.9824 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px;">B/D (R</text>
+<text transform="matrix(1.0281 0 0 1 100.6206 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px; letter-spacing:-1;">A</text>
+<text transform="matrix(1.0281 0 0 1 114.7051 33.2707)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px;">TIO)</text>
+<text id="season_code" transform="matrix(1.0153 0 0 1 254.9785 33.4333)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:28.5px;">AW18</text>
 <text transform="matrix(1 0 0 1 7.2107 57.2292)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:18px;">TPND: </text>
 <text transform="matrix(1 0 0 1 7.2107 74.9704)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:18px;">PO No: </text>
 <text transform="matrix(1 0 0 1 7.0913 87.9778)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">UK Style Ref:</text>
@@ -43,16 +43,16 @@
 <text transform="matrix(1 0 0 1 249.8102 198.0618)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">of</text>
 <text id="description" transform="matrix(1 0 0 1 110.6869 113.8829)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">TROPICAL DENIM PINNY</text>
 <!-- <text transform="matrix(1 0 0 1 214.69 113.8832)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">3-6</text> -->
-<text transform="matrix(1 0 0 1 226.3008 66.1274)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Brand: </text>
-<text id="brand" transform="matrix(1 0 0 1 259.3063 66.1274)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">F&amp;F KIDS</text>
-<text id="rfid" transform="matrix(1 0 0 1 305.7586 78.6281)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO</text>
-<text id="tag_at_source" transform="matrix(1 0 0 1 305.3612 92.6284)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">NO </text>
+<text transform="matrix(1 0 0 1 226.3008 66.1274)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Brand: </text>
+<text id="brand" transform="matrix(1 0 0 1 259.3063 66.1274)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">F&amp;F KIDS</text>
+<text id="rfid" transform="matrix(1 0 0 1 305.7586 78.6281)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">NO</text>
+<text id="tag_at_source" transform="matrix(1 0 0 1 305.3612 92.6284)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">NO </text>
 <g>
-	<text transform="matrix(1 0 0 1 226.3012 79.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">RFID </text>
-	<text transform="matrix(1 0 0 1 250.3012 79.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Compliant:</text>
+	<text transform="matrix(1 0 0 1 226.3012 79.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">RFID </text>
+	<text transform="matrix(1 0 0 1 250.3012 79.1271)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Compliant:</text>
 </g>
-<text transform="matrix(1.0159 0 0 1 226.3022 92.1266)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Tag At Source:</text>
-<text transform="matrix(1 0 0 1 226.7365 53.2242)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;">Dept:</text>
+<text transform="matrix(1.0159 0 0 1 226.3022 92.1266)" style="fill:#010101; font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Tag At Source:</text>
+<text transform="matrix(1 0 0 1 226.7365 53.2242)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:11px;">Dept:</text>
 <text transform="matrix(0.7943 0 0 1 259.307 52.858)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:10px;" id="department">KIDSWEAR / BABY TODDLER</text>
 <text xmlns="http://www.w3.org/2000/svg" transform="matrix(1 0 0 1 76.6108 162.606)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:140px;opacity: 0.1;" id="watermark"></text>
 </svg>
