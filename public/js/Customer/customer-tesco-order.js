@@ -1042,7 +1042,6 @@ function createOrders(parsedObj = false, oType = false) {
                             autoclose: true,
                             minViewMode: 1,
                             format: 'MM,yyyy',
-                            startDate: today,
                         })
                       /** [ bootstrap validator for create tesco order form ] **/
                         $('#create_tesco_order_form').validator().on('submit', function (e) {
