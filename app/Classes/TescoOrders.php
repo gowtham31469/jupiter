@@ -33,26 +33,15 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery(); 
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL1Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_TCL100".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_TCL100".($max_id+1);
-            }
+
+            $order_id = $company_id->company_id == 1?"JGA_TCL100".($max_id+1):"SP_TCL100".($max_id+1);
+            
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -133,26 +122,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL2Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_TCL200".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_TCL200".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_TCL200".($max_id+1):"SP_TCL200".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -233,26 +209,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL1Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_TSL100".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_TSL100".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_TSL100".($max_id+1):"SP_TSL100".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -334,26 +297,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL1Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_THL100".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_THL100".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_THL100".($max_id+1):"SP_THL100".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -434,26 +384,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
            /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL4Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_TCL400".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_TCL400".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_TCL400".($max_id+1):"SP_TCL400".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -534,26 +471,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL3Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_TSL300".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_TSL300".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_TSL300".($max_id+1):"SP_TSL300".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
@@ -635,26 +559,13 @@ class TescoOrders
             $tesco_order_obj = new SubmitTescoOrdersUpdateQuery();
 
             /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
-            if($pi_required == 1)
-            {
-              $pi_status = "PI Approval Pending";
-            }
-            else
-            {
-              $pi_status = "";
-            }
+            $pi_status = $pi_required == 1?"PI Approval Pending":"";
+
             /** [ Get company id for template ] */
             $company_id = DB::table('tesco_item_master')->select('company_id')->where('id','=',$template_id)->first();
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL3Orders::max('id');
-            if($company_id->company_id == 1)
-            {
-              $order_id = "JGA_THL300".($max_id+1);
-            }
-            else
-            {
-              $order_id = "SP_THL300".($max_id+1);
-            }
+            $order_id = $company_id->company_id == 1?"JGA_THL300".($max_id+1):"SP_THL300".($max_id+1);
             // /** [ Check if price is available for this template ] */
             // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
             
