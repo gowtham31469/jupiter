@@ -213,14 +213,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TCL1)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                   $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTCL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -255,14 +248,7 @@ class OrderController extends Controller
                          }
                          
                          /** [ tesco order id, that has artwork count > 0] */
-                         if($is_order_count_empty != 1)
-                         { 
-                          $templates_inserted = array('TCL 1' => $tesco_order_id);
-                         }
-                         else
-                         {
-                          $templates_inserted = [];
-                         }
+                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
                        }
                        else
                        {
@@ -281,14 +267,7 @@ class OrderController extends Controller
                            $i++;
                          }
                          /** [ tesco order id, that has artwork count > 0] */
-                         if($is_order_count_empty != 1)
-                         { 
-                          $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
-                         }
-                         else
-                         {
-                          $templates_inserted = [];
-                         }
+                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
                        }
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
@@ -298,14 +277,7 @@ class OrderController extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TCL2)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                  $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTCL2Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -339,14 +311,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 2' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -366,14 +331,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -383,14 +341,7 @@ class OrderController extends Controller
                 else
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TSL1)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                    $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTSL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -424,14 +375,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TSL 1' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -451,14 +395,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -471,14 +408,7 @@ class OrderController extends Controller
                  $count_THL1       = explode(',',$request['count_THL1']);
 
                  /** check all entries of array equal to FALSE(ie. 0) */
-                  if (array_filter($count_THL1)) 
-                  {
-                      $is_order_count_empty = 0;
-                  }
-                  else
-                  {
-                      $is_order_count_empty = 1;
-                  }
+                  $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this CE style ] */
                   $is_exists = TescoTHL1Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -512,14 +442,7 @@ class OrderController extends Controller
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       if($is_order_count_empty != 1)
-                       { 
-                        $templates_inserted = array('THL 1' => $tesco_order_id);
-                       }
-                       else
-                       {
-                        $templates_inserted = [];
-                       }
+                       $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
                      }
                      else
                      {
@@ -539,14 +462,7 @@ class OrderController extends Controller
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       if($is_order_count_empty != 1)
-                       { 
-                        $templates_inserted = array('THL 1' => $request['thl1_last_id']);
-                       }
-                       else
-                       {
-                        $templates_inserted = [];
-                       }
+                       $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
                      }
 
                      /** [ Return array of inserted id ] */
@@ -614,14 +530,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TCL4)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                   $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTCL4Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -656,14 +565,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 4' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -684,14 +586,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -701,14 +596,7 @@ class OrderController extends Controller
                 else
                 {
                    /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TSL3)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                    $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTSL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -743,14 +631,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TSL 3' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -771,14 +652,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -791,14 +665,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_THL3)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                  $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                     /** [ Check if order already placed for this CE style ] */
                     $is_exists = TescoTHL3Orders::select('id')->Where('ce_style_ref','=',$request['ce_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -833,14 +700,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 3' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -861,14 +721,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 3' => $request['thl3_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
                          }
                          
                          /** [ Return array of inserted id ] */
@@ -935,14 +788,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 1")
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TCL1)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                    $is_order_count_empty = array_filter($count_TCL1) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
                     $is_exists = TescoTCL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -976,14 +822,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 1' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -1003,14 +842,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1020,14 +852,7 @@ class OrderController extends Controller
                 else if($template['template_name'] == "TCL 2")
                 {
                     /** check all entries of array equal to FALSE(ie. 0) */
-                    if (array_filter($count_TCL2)) 
-                    {
-                        $is_order_count_empty = 0;
-                    }
-                    else
-                    {
-                        $is_order_count_empty = 1;
-                    }
+                    $is_order_count_empty = array_filter($count_TCL2) != NULL?0:1;
 
                     /** [ Check if order already placed for this UK style ] */
                     $is_exists = TescoTCL2Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1061,14 +886,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 2' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -1088,14 +906,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1105,14 +916,7 @@ class OrderController extends Controller
                 else
                 {
                   /** check all entries of array equal to FALSE(ie. 0) */
-                  if (array_filter($count_TSL1)) 
-                  {
-                      $is_order_count_empty = 0;
-                  }
-                  else
-                  {
-                      $is_order_count_empty = 1;
-                  }
+                  $is_order_count_empty = array_filter($count_TSL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
                   $is_exists = TescoTSL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1146,14 +950,7 @@ class OrderController extends Controller
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       if($is_order_count_empty != 1)
-                       { 
-                        $templates_inserted = array('TSL 1' => $tesco_order_id);
-                       }
-                       else
-                       {
-                        $templates_inserted = [];
-                       }
+                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
                      }
                      else
                      {
@@ -1173,14 +970,7 @@ class OrderController extends Controller
                        }
 
                        /** [ tesco order id, that has artwork count > 0] */
-                       if($is_order_count_empty != 1)
-                       { 
-                        $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
-                       }
-                       else
-                       {
-                        $templates_inserted = [];
-                       }
+                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
                      }
                      
                      /** [ Return array of inserted id ] */
@@ -1193,14 +983,7 @@ class OrderController extends Controller
                  $count_THL1       = explode(',',$request['count_THL1']);
 
                  /** check all entries of array equal to FALSE(ie. 0) */
-                  if (array_filter($count_THL1)) 
-                  {
-                      $is_order_count_empty = 0;
-                  }
-                  else
-                  {
-                      $is_order_count_empty = 1;
-                  }
+                  $is_order_count_empty = array_filter($count_THL1) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
                   $is_exists = TescoTHL1Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1234,14 +1017,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 1' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -1261,14 +1037,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 1' => $request['thl1_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1335,14 +1104,7 @@ class OrderController extends Controller
                 if($template['template_name'] == "TCL 4")
                 {
                      /** check all entries of array equal to FALSE(ie. 0) */
-                      if (array_filter($count_TCL4)) 
-                      {
-                          $is_order_count_empty = 0;
-                      }
-                      else
-                      {
-                          $is_order_count_empty = 1;
-                      }
+                      $is_order_count_empty = array_filter($count_TCL4) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
                       $is_exists = TescoTCL4Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1377,14 +1139,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             if($is_order_count_empty != 1)
-                             { 
-                              $templates_inserted = array('TCL 4' => $tesco_order_id);
-                             }
-                             else
-                             {
-                              $templates_inserted = [];
-                             }
+                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -1405,14 +1160,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             if($is_order_count_empty != 1)
-                             { 
-                              $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
-                             }
-                             else
-                             {
-                              $templates_inserted = [];
-                             }
+                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1422,14 +1170,7 @@ class OrderController extends Controller
                 else
                 {
                       /** check all entries of array equal to FALSE(ie. 0) */
-                      if (array_filter($count_TSL3)) 
-                      {
-                          $is_order_count_empty = 0;
-                      }
-                      else
-                      {
-                          $is_order_count_empty = 1;
-                      }
+                      $is_order_count_empty = array_filter($count_TSL3) != NULL?0:1;
 
                       /** [ Check if order already placed for this UK style ] */
                       $is_exists = TescoTSL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1464,14 +1205,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             if($is_order_count_empty != 1)
-                             { 
-                              $templates_inserted = array('TSL 3' => $tesco_order_id);
-                             }
-                             else
-                             {
-                              $templates_inserted = [];
-                             }
+                             $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
                          }
                          else
                          {
@@ -1492,14 +1226,7 @@ class OrderController extends Controller
                              }
 
                              /** [ tesco order id, that has artwork count > 0] */
-                             if($is_order_count_empty != 1)
-                             { 
-                              $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
-                             }
-                             else
-                             {
-                              $templates_inserted = [];
-                             }
+                             $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
                          }
 
                          /** [ Return array of inserted id ] */
@@ -1512,14 +1239,7 @@ class OrderController extends Controller
                  $count_THL3       = explode(',',$request['count_THL3']);
 
                  /** check all entries of array equal to FALSE(ie. 0) */
-                  if (array_filter($count_THL3)) 
-                  {
-                      $is_order_count_empty = 0;
-                  }
-                  else
-                  {
-                      $is_order_count_empty = 1;
-                  }
+                   $is_order_count_empty = array_filter($count_THL3) != NULL?0:1;
 
                   /** [ Check if order already placed for this UK style ] */
                    $is_exists = TescoTHL3Orders::select('id')->where('uk_style_ref','=',$request['uk_style'])->where('order_status','<>','Saved')->where('po_number','=',$request['po_number'])->first();
@@ -1554,14 +1274,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 3' => $tesco_order_id);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
                        }
                        else
                        {
@@ -1582,14 +1295,7 @@ class OrderController extends Controller
                            }
 
                            /** [ tesco order id, that has artwork count > 0] */
-                           if($is_order_count_empty != 1)
-                           { 
-                            $templates_inserted = array('THL 3' => $request['thl3_last_id']);
-                           }
-                           else
-                           {
-                            $templates_inserted = [];
-                           }
+                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
                        }
 
                        /** [ Return array of inserted id ] */
