@@ -541,7 +541,7 @@ class CustomerManagementController extends Controller
         			   $company_buyers = DB::table('customer_buyers')
         								    ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
         								    ->select('customer_buyers.*','buyers.buyer_name')
-        								    ->where('customer_buyers.customer_id','=',$id)
+        								    ->where('customer_buyers.customer_id','=',$customer{0}->company_id)
         								    ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
