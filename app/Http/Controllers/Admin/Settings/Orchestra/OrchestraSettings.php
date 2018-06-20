@@ -92,14 +92,8 @@ class OrchestraSettings extends Controller
             $inserted = OrchestraGarments::create([
                         'garment_name' => $request['name']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -224,14 +218,7 @@ class OrchestraSettings extends Controller
                         'age_group_name' => $request['name'],
                         'color'          => $request['color']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -367,14 +354,7 @@ class OrchestraSettings extends Controller
                         'greek'      => $request['greek'],
                         'turkish'    => $request['turkish']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -511,14 +491,7 @@ class OrchestraSettings extends Controller
                         'french'     => $request['french'],
                         'arabic'     => $request['arabic']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -654,14 +627,7 @@ class OrchestraSettings extends Controller
                         'greek'      => $request['greek'],
                         'turkish'    => $request['turkish']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -806,14 +772,7 @@ class OrchestraSettings extends Controller
                         'greek'      => $request['greek'],
                         'turkish'    => $request['turkish']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -958,14 +917,7 @@ class OrchestraSettings extends Controller
                         'greek'      => $request['greek'],
                         'turkish'    => $request['turkish']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -1101,14 +1053,7 @@ class OrchestraSettings extends Controller
                         'cm'     => $request['cm'],
                         'in'     => $request['in']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -1276,14 +1221,7 @@ class OrchestraSettings extends Controller
                 'care_instruction'=>  $request->care_instruction
             ]);
 
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {

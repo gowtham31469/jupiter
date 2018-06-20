@@ -119,14 +119,8 @@ class BuyerManagementController extends Controller
                                 'is_active'        => 0,
                                 'logo'             => $destination_path_insert
                               ]);
-                    if($inserted != '')
-                    {
-                      $result = response()->json(['error'=> false,'message' =>'success'],200);
-                    }
-                    else
-                    {
-                      $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                    }
+                    
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
 
             } catch (\Exception $e)
@@ -281,14 +275,8 @@ class BuyerManagementController extends Controller
                                 'is_active'              => 0,
                                 'buyer_id'               => $merchandiser_buyer,
                               ]);
-                    if($inserted != '')
-                    {
-                      $result = response()->json(['error'=> false,'message' =>'success'],200);
-                    }
-                    else
-                    {
-                      $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                    }
+                    
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
 
             } catch (\Exception $e)
@@ -429,7 +417,7 @@ class BuyerManagementController extends Controller
               } 
               catch (\Exception $e)
               {
-                     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
               return $result;
         }
@@ -453,7 +441,7 @@ class BuyerManagementController extends Controller
               } 
               catch (\Exception $e)
               {
-                     $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
               }
               return $result;
         }
@@ -477,7 +465,7 @@ class BuyerManagementController extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
       }
@@ -501,7 +489,7 @@ class BuyerManagementController extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
       }

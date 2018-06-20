@@ -123,16 +123,16 @@ class CustomerController extends Controller
                             ->select('*')
                             ->where('customer_profile.id','=',$id)
                             ->get();
-			   $buyers = DB::table('customer_profile_buyer')
-                         ->select('customer_profile_buyer.buyer_id')
-                         ->where('customer_profile_buyer.customer_profile_id','=',$id)
-                         ->get();
-			  
-			   $company_buyers = DB::table('customer_buyers')
-								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
-								 ->select('customer_buyers.*','buyers.buyer_name')
-								 ->where('customer_buyers.customer_id','=',$id)
-								 ->get();
+        			   $buyers = DB::table('customer_profile_buyer')
+                                 ->select('customer_profile_buyer.buyer_id')
+                                 ->where('customer_profile_buyer.customer_profile_id','=',$id)
+                                 ->get();
+        			  
+        			   $company_buyers = DB::table('customer_buyers')
+        								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+        								 ->select('customer_buyers.*','buyers.buyer_name')
+        								 ->where('customer_buyers.customer_id','=',$id)
+        								 ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
               } catch (\Exception $e)
@@ -165,10 +165,7 @@ class CustomerController extends Controller
                     }
                     else
                     {
-                     
-						
-						
-                      $buyers           = explode(',',$buyer);
+                       $buyers           = explode(',',$buyer);
                        DB::table('customer_profile')->where('id',$id)
                             ->update([
                             'name'            => $input['customer_name'],
@@ -176,7 +173,6 @@ class CustomerController extends Controller
                             'role_id'         => $input['customer_role'],
                             'company_id'      => $input['customer_company']
                           ]);
-                    
                         
                         /** Delete existing data before updating **/
                         DB::table('customer_profile_buyer')->where('customer_profile_id', '=', $id)
@@ -190,7 +186,6 @@ class CustomerController extends Controller
                         }
                        
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
-                      
                     }
 
                 } catch (\Exception $e)
@@ -223,7 +218,6 @@ class CustomerController extends Controller
                 }
                 else
                 {
-                 
                   $buyers           = explode(',',$buyer);
 
                   $customer = DB::table('customer_profile')->insertGetId([

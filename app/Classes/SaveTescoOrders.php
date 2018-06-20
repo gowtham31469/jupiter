@@ -35,14 +35,7 @@ class SaveTescoOrders
            if($request['supplier'] != '')
            {
              $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             if($customer_ids)
-             {
-               $customer_id = $customer_ids->customer_id;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
+             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
            }
            else
            {
@@ -128,14 +121,7 @@ class SaveTescoOrders
            if($request['supplier'] != '')
            {
              $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             if($customer_ids)
-             {
-               $customer_id = $customer_ids->customer_id;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
+             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
            }
            else
            {
@@ -220,14 +206,7 @@ class SaveTescoOrders
            if($request['supplier'] != '')
            {
              $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             if($customer_ids)
-             {
-               $customer_id = $customer_ids->customer_id;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
+             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
            }
            else
            {
@@ -313,14 +292,7 @@ class SaveTescoOrders
            if($request['supplier'] != '')
            {
              $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             if($customer_ids)
-             {
-               $customer_id = $customer_ids->customer_id;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
+             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
            }
            else
            {
@@ -405,14 +377,7 @@ class SaveTescoOrders
            if($request['supplier'] != '')
            {
              $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-             if($customer_ids)
-             {
-               $customer_id = $customer_ids->customer_id;
-             }
-             else
-             {
-               $customer_id = NULL;
-             }
+             $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
            }
            else
            {
@@ -497,14 +462,7 @@ class SaveTescoOrders
             if($request['supplier'] != '')
              {
                $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-               if($customer_ids)
-               {
-                 $customer_id = $customer_ids->customer_id;
-               }
-               else
-               {
-                 $customer_id = NULL;
-               }
+               $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
              }
              else
              {
@@ -589,14 +547,7 @@ class SaveTescoOrders
             if($request['supplier'] != '')
              {
                $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-               if($customer_ids)
-               {
-                 $customer_id = $customer_ids->customer_id;
-               }
-               else
-               {
-                 $customer_id = NULL;
-               }
+               $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
              }
              else
              {

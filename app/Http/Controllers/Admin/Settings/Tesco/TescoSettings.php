@@ -39,7 +39,7 @@ class TescoSettings extends Controller
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
           {
-                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
 
@@ -55,14 +55,7 @@ class TescoSettings extends Controller
             $inserted = TescoBrand::create([
                         'brand' => $request['name']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -109,7 +102,7 @@ class TescoSettings extends Controller
         
         } catch (\Exception $e)
         {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
     }
@@ -133,7 +126,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -156,7 +149,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -174,7 +167,7 @@ class TescoSettings extends Controller
             return response()->json(['error'=>'false','message' =>'success', 'tesco_department' => $tesco_department]);
           } catch (\Exception $e)
           {
-                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
 
@@ -192,14 +185,7 @@ class TescoSettings extends Controller
                         'pantone' => $request['pantone'],
                         'rbg' => $request['rbg']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -251,7 +237,7 @@ class TescoSettings extends Controller
         
         } catch (\Exception $e)
         {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
     }
@@ -275,7 +261,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -298,7 +284,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -314,7 +300,7 @@ class TescoSettings extends Controller
             return response()->json(['error'=>'false','message' =>'success', 'tesco_suppliers' => $tesco_suppliers]);
           } catch (\Exception $e)
           {
-                 return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
 
@@ -331,14 +317,7 @@ class TescoSettings extends Controller
                         'supplier_name' => $request['supplier_name'],
                         'supplier_code' => $request['supplier_code']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -388,7 +367,7 @@ class TescoSettings extends Controller
         
         } catch (\Exception $e)
         {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
     }
@@ -412,7 +391,7 @@ class TescoSettings extends Controller
           } 
           catch (\Exception $e)
           {
-                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
           return $result;
       }
@@ -435,7 +414,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
      }
@@ -452,7 +431,7 @@ class TescoSettings extends Controller
               return response()->json(['error'=>'false','message' =>'success', 'tesco_sizecharts' => $tesco_size_chart]);
             } catch (\Exception $e)
             {
-                   return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
       }
 
@@ -470,14 +449,7 @@ class TescoSettings extends Controller
                         'uk' => $request['uk'],
                         'ce' => $request['ce']
                       ]);
-            if($inserted != '')
-            {
-              $result = response()->json(['error'=> false,'message' =>'success'],200);
-            }
-            else
-            {
-              $result = response()->json(['error'=> true,'message' =>'Error'],400);
-            }
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
 
         } catch (\Exception $e)
         {
@@ -528,7 +500,7 @@ class TescoSettings extends Controller
         
         } catch (\Exception $e)
         {
-               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
     }
@@ -552,7 +524,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -575,7 +547,7 @@ class TescoSettings extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
       }

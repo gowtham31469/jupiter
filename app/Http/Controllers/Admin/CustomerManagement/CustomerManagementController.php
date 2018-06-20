@@ -314,7 +314,7 @@ class CustomerManagementController extends Controller
 
             } catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
       } 
@@ -365,7 +365,7 @@ class CustomerManagementController extends Controller
 
             } catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
       }
@@ -389,7 +389,7 @@ class CustomerManagementController extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -412,7 +412,7 @@ class CustomerManagementController extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -460,7 +460,7 @@ class CustomerManagementController extends Controller
             } 
             catch (\Exception $e)
             {
-                   $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
             return $result;
         }
@@ -533,16 +533,16 @@ class CustomerManagementController extends Controller
                             ->select('*')
                             ->where('customer_profile.id','=',$id)
                             ->get();
-			   $buyers = DB::table('customer_profile_buyer')
-                         ->select('customer_profile_buyer.buyer_id')
-                         ->where('customer_profile_buyer.customer_profile_id','=',$id)
-                         ->get();
-			  
-			   $company_buyers = DB::table('customer_buyers')
-								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
-								 ->select('customer_buyers.*','buyers.buyer_name')
-								 ->where('customer_buyers.customer_id','=',$id)
-								 ->get();
+        			   $buyers = DB::table('customer_profile_buyer')
+                            ->select('customer_profile_buyer.buyer_id')
+                            ->where('customer_profile_buyer.customer_profile_id','=',$id)
+                            ->get();
+        			  
+        			   $company_buyers = DB::table('customer_buyers')
+        								    ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+        								    ->select('customer_buyers.*','buyers.buyer_name')
+        								    ->where('customer_buyers.customer_id','=',$customer{0}->company_id)
+        								    ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
               } catch (\Exception $e)
@@ -742,9 +742,6 @@ class CustomerManagementController extends Controller
                     }
                     else
                     {
-                     
-						
-						
                       $buyers           = explode(',',$buyer);
                        DB::table('customer_profile')->where('id',$id)
                             ->update([
@@ -753,7 +750,6 @@ class CustomerManagementController extends Controller
                             'role_id'         => $input['customer_role'],
                             'company_id'      => $input['customer_company']
                           ]);
-                    
                         
                         /** Delete existing data before updating **/
                         DB::table('customer_profile_buyer')->where('customer_profile_id', '=', $id)
@@ -916,7 +912,7 @@ class CustomerManagementController extends Controller
 	{
 		 try {
                 $customer_list = DB::table('customer_buyers')
-					  ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+					            ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
                       ->where('customer_buyers.customer_id',$request->customer_add_company)
                       ->select('customer_buyers.*','buyers.buyer_name')
                       ->get();
@@ -940,7 +936,7 @@ class CustomerManagementController extends Controller
                  $is_allowed      = $module_var->permittedModules();
                  $buyers          = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
 			  
-			     $roles          = DB::table('roles')->pluck('role_name','id')->all();
+			           $roles = DB::table('roles')->pluck('role_name','id')->all();
                 
                  $company = DB::table('customers')
                                     ->where('is_active','=',1)
