@@ -33,9 +33,9 @@ class CustomerController extends Controller
     {
           try {
                  $customer_id = Auth::guard('web_customer')->user()->id;
-                 $buyers          = DB::table('customer_buyers')
-								  ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
-								  ->where('customer_buyers.customer_id',$customer_id)
+                 $buyers          = DB::table('customer_profile_buyer')
+								  ->join('buyers', 'buyers.id', 'customer_profile_buyer.buyer_id')
+								  ->where('customer_profile_buyer.customer_profile_id',$customer_id)
 								  ->pluck('buyers.buyer_name','buyers.id')->all();
 			  
 			     $roles          = DB::table('roles')->where('id','=',2)->pluck('role_name','id')->all();
@@ -128,10 +128,10 @@ class CustomerController extends Controller
                                  ->where('customer_profile_buyer.customer_profile_id','=',$id)
                                  ->get();
         			  
-        			   $company_buyers = DB::table('customer_buyers')
-        								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
-        								 ->select('customer_buyers.*','buyers.buyer_name')
-        								 ->where('customer_buyers.customer_id','=',$id)
+        			   $company_buyers = DB::table('customer_profile_buyer')
+        								 ->join('buyers', 'buyers.id', 'customer_profile_buyer.buyer_id')
+        								 ->select('customer_profile_buyer.*','buyers.buyer_name')
+        								 ->where('customer_profile_buyer.customer_profile_id','=',$id)
         								 ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
@@ -252,10 +252,10 @@ class CustomerController extends Controller
 		public function customerCompanyBuyer(Request $request)
 		{
 			 try {
-					$customer_list = DB::table('customer_buyers')
-						  ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
-						  ->where('customer_buyers.customer_id',$request->customer_add_company)
-						  ->select('customer_buyers.*','buyers.buyer_name')
+					$customer_list = DB::table('customer_profile_buyer')
+						  ->join('buyers', 'buyers.id', 'customer_profile_buyer.buyer_id')
+						  ->where('customer_profile_buyer.customer_profile_id',$request->customer_add_company)
+						  ->select('customer_profile_buyer.*','buyers.buyer_name')
 						  ->get();
 					return response()->json(['customer_list' => $customer_list]);
 
