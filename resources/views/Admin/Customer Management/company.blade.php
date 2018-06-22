@@ -73,6 +73,15 @@
                   <div class="modal-body">
                   <div id="customer_result"></div>
                     <div class="row">
+						
+					<div class="col-md-6">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_add_title', 'Select Title', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_add_title',(['' => '-- Select Title --','Mr' => 'Mr','Mrs' => 'Mrs']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_title','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+						
                           <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_add_name', 'Customer Name', ['class' => 'form_label']) !!}
@@ -146,6 +155,14 @@
           <div class="modal-body">
           <div id="customer_edit_result"></div>
             <div class="row">
+				<div class="col-md-6">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_title', 'Select Title', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_title',(['' => '-- Select Title --','Mr' => 'Mr','Mrs' => 'Mrs']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_title','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+				
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_name', 'Customer Name', ['class' => 'form_label']) !!}
@@ -180,7 +197,7 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                         {!! Form::label('customer_role', 'Select Role', ['class' => 'form_label']) !!}
-                          {{ Form::select('customer_role',(['' => '-- Select Role --']+ $roles),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_role','required')) }}
+                          {{ Form::select('customer_role',(['' => '-- Select Role --']+ $roles),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_role','required','disabled')) }}
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
@@ -313,6 +330,7 @@
 			  else 
 			  {
 				  $('#customer_add_buyer').html('')
+				  $("#customer_add_role option[value='1']").show();
 				    var csrf_token           =  $('meta[name="csrf-token"]').attr('content');
 				    var customer_add_company =  $('#customer_add_company').val();
 					$.ajax({
@@ -327,10 +345,15 @@
 
 							 /** [ Show response status based on HTTP status code ] */
 							 200: function(data) {
+								if(data.role.length != 0)
+								{
+									$("#customer_add_role option[value='1']").hide();
+								}
 								 $(data.customer_list).each(function(key,value){
 									$('#customer_add_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
 								 });
 								 $('#customer_add_buyer').selectpicker('refresh');
+								 $('#customer_add_role').selectpicker('refresh');
 							 }
 						},
 						error: function(errorXHR, errorStatus, errorThrown) {

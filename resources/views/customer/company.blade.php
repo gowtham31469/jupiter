@@ -71,6 +71,13 @@
                   <div class="modal-body">
                   <div id="customer_result"></div>
                     <div class="row">
+	<div class="col-md-6">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_add_title', 'Select Title', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_add_title',(['' => '-- Select Title --','Mr' => 'Mr','Mrs' => 'Mrs']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_add_title','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
                           <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('customer_add_name', 'Customer Name', ['class' => 'form_label']) !!}
@@ -132,31 +139,38 @@
               </div>
             </div>
 {{-- Edit customer modal  --}}
-<div class="modal fade bd-example-modal-lg" id="editCustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade bd-example-modal-lg" id="editCustomerModals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
       </div>
-      {!! Form::open(['id' => 'edit_customer_form','data-toggle' => 'validator','role' => 'form']) !!}
+      {!! Form::open(['id' => 'edit_customer_forms','data-toggle' => 'validator','role' => 'form']) !!}
       {!! Form::hidden('customer_edit_id',$value = null, array('id'=>'customer_edit_id','class' => 'form-control input-sm')) !!}
           <div class="modal-body">
           <div id="customer_edit_result"></div>
             <div class="row">
+				<div class="col-md-6">
+                      <div class="form-group has-feedback">
+                        {!! Form::label('customer_edit_title', 'Select Title', ['class' => 'form_label']) !!}
+                          {{ Form::select('customer_edit_title',(['' => '-- Select Title --','Mr' => 'Mr','Mrs' => 'Mrs']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'customer_edit_title','required')) }}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
-                          {!! Form::label('customer_name', 'Customer Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('customer_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_name','placeholder' => 'Customer Name','required')) !!}
+                          {!! Form::label('customer_edit_name', 'Customer Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('customer_edit_name',$value = '', array('class' => 'form-control input-sm','id' => 'customer_edit_name','placeholder' => 'Customer Name','required')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
-                      {!! Form::label('customer_email', 'Email', ['class' => 'form_label']) !!}
+                      {!! Form::label('customer_edit_email', 'Email', ['class' => 'form_label']) !!}
                       <div class="input-group">
                         <span class="input-group-addon input-sm" id="basic-addon1">@</span>
-                        {!! Form::email('customer_email',$value = '', array('class' => 'form-control input-sm ','id' => 'customer_email','placeholder' => 'example@gmail.com','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
+                        {!! Form::email('customer_edit_email',$value = '', array('class' => 'form-control input-sm ','id' => 'customer_edit_email','placeholder' => 'example@gmail.com','required','onkeyup' => '$(this).val($(this).val().toLowerCase());')) !!}
                       </div>
                       <div class="help-block with-errors"></div>
                     </div>
@@ -289,7 +303,7 @@
      });
 
     /** submit edit customer form and check validation **/
-    $('#edit_customer_form').validator().on('submit', function (e) {
+    $('#edit_customer_forms').validator().on('submit', function (e) {
       if (e.isDefaultPrevented())
       {
 

@@ -49,6 +49,7 @@ class CustomerController extends Controller
 					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
 					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
 					 				 ->where('company_id',$customer_id)
+					 				->where('role_id','!=','1')
                                      ->select('customer_profile.*','roles.role_name','customers.company_name')
                                      ->get();  
                 
@@ -131,7 +132,7 @@ class CustomerController extends Controller
         			   $company_buyers = DB::table('customer_buyers')
         								 ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
         								 ->select('customer_buyers.*','buyers.buyer_name')
-        								 ->where('customer_buyers.customer_id','=',$id)
+        								 ->where('customer_buyers.customer_id','=',$customer{0}->company_id)
         								 ->get();
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
@@ -155,7 +156,7 @@ class CustomerController extends Controller
 					$input['customer_email']= Input::get('customer_email');
 				    $input['customer_role']		= Input::get('customer_role');
 					$input['customer_company']= Input::get('customer_company');
-						
+					$input['customer_title']= Input::get('customer_title');	
                     $email_rules     = array('customer_email' => 'unique:customer_profile,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);
 
@@ -171,6 +172,7 @@ class CustomerController extends Controller
                             'name'            => $input['customer_name'],
                             'email'           => $input['customer_email'],
                             'role_id'         => $input['customer_role'],
+							'title'      	  => $input['customer_title'],
                             'company_id'      => $input['customer_company']
                           ]);
                         
@@ -210,6 +212,7 @@ class CustomerController extends Controller
                 $customer_name        = $request['customer_name'];
                 $customer_role        = $request['customer_role'];
                 $customer_company     = $request['customer_company'];
+			    $customer_title       = $request['customer_title'];
 
                 $email_exists =  DB::table('customer_profile')->where('email',$customer_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -225,6 +228,7 @@ class CustomerController extends Controller
                                 'email'                  => $customer_email,
                                 'name'             => $customer_name,
                                 'role_id'          => $customer_role,
+                                'title'      		 => $customer_title,
                                 'company_id'       => $customer_company
                               ]);
                   $insert_Id = $customer; 
@@ -257,7 +261,12 @@ class CustomerController extends Controller
 						  ->where('customer_buyers.customer_id',$request->customer_add_company)
 						  ->select('customer_buyers.*','buyers.buyer_name')
 						  ->get();
-					return response()->json(['customer_list' => $customer_list]);
+				 	$role = DB::table('customer_profile')
+						  ->where('customer_profile.company_id',$request->customer_add_company)
+					 	  ->where('customer_profile.role_id','1')
+						  ->select('customer_profile.*')
+						  ->get();
+					return response()->json(['customer_list' => $customer_list,'role' => $role]);
 
 			 } catch (\Exception $e)
 			 {
