@@ -190,7 +190,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
             if($customer_ids)
@@ -235,7 +235,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking createTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                       $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -298,7 +298,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -362,7 +362,7 @@ class OrderController extends Controller
                     else
                     {
                         /** [ Invoking createTSL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -429,7 +429,7 @@ class OrderController extends Controller
                   else
                   {
                      /** [ Invoking createTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                     $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
 
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -507,7 +507,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
             if($customer_ids)
@@ -551,7 +551,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -617,7 +617,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -686,7 +686,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTHL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -764,7 +764,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
             if($customer_ids)
@@ -809,7 +809,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL1Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -873,7 +873,7 @@ class OrderController extends Controller
                     else
                     {
                          /** [ Invoking createTCL2Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -937,7 +937,7 @@ class OrderController extends Controller
                   else
                   {
                      /** [ Invoking createTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                     $tesco_order     = $tesco_order_obj->createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -1004,7 +1004,7 @@ class OrderController extends Controller
                   else
                   {
                        /** [ Invoking createTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                       $tesco_order     = $tesco_order_obj->createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                        
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1081,7 +1081,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
             if($customer_ids)
@@ -1125,7 +1125,7 @@ class OrderController extends Controller
                       else
                       {
                          /** [ Invoking createTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1191,7 +1191,7 @@ class OrderController extends Controller
                       else
                       {
                          /** [ Invoking createTSL3Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                         $tesco_order     = $tesco_order_obj->createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                          
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1260,7 +1260,7 @@ class OrderController extends Controller
                   else
                   {
                        /** [ Invoking createTHL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id);
+                       $tesco_order     = $tesco_order_obj->createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1383,7 +1383,7 @@ class OrderController extends Controller
               $templates        = $request['templates'];
               $last_insertions  = [];
               $already_exists   = [];
-
+              $created_by       = $request['created_by'];
               foreach ($templates as $template) 
               {
                 $template_id      = $template['id'];
@@ -1405,7 +1405,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking saveTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id,$created_by);
 
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1463,7 +1463,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking saveTCL2Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1521,7 +1521,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking saveTSL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1582,7 +1582,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking createTHL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1653,7 +1653,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1674,7 +1674,7 @@ class OrderController extends Controller
                       else
                       {
                         /** [ Invoking saveTCL4Order function using class instance ] */
-                         $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id);
+                         $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id,$created_by);
 
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          if($request['is_insert'] == 'true')
@@ -1735,7 +1735,7 @@ class OrderController extends Controller
                     else
                     {
                       /** [ Invoking saveTSL3Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1799,7 +1799,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTHL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -1875,7 +1875,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1897,7 +1897,7 @@ class OrderController extends Controller
                   else
                   {
                      /** [ Invoking saveTCL1Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTCL1Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -1956,7 +1956,7 @@ class OrderController extends Controller
                   else
                   {
                       /** [ Invoking saveTCL2Order function using class instance ] */
-                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id);
+                       $tesco_order     = $tesco_order_obj->saveTCL2Order($request,$template_id,$created_by);
                        
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -2015,7 +2015,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTSL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTSL1Order($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -2077,7 +2077,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTHL1Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTHL1Order($request,$template_id,$created_by);
                      
                        /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                        if($request['is_insert'] == 'true')
@@ -2151,7 +2151,7 @@ class OrderController extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
-
+            $created_by       = $request['created_by'];
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -2172,7 +2172,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTCL4Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTCL4Order($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -2233,7 +2233,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTSL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTSL3Order($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')
@@ -2297,7 +2297,7 @@ class OrderController extends Controller
                   else
                   {
                     /** [ Invoking saveTHL3Order function using class instance ] */
-                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id);
+                     $tesco_order     = $tesco_order_obj->saveTHL3Order($request,$template_id,$created_by);
                      
                      /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                      if($request['is_insert'] == 'true')

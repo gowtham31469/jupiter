@@ -26,7 +26,7 @@ class TescoOrders
 	 * @param  [type] $request, $template_id
 	 * @return tesco order table id (inserted_id)
 	 */
-	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+	public function createTCL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
 	{
 		try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -62,7 +62,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -93,14 +93,14 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
             }
             else
             {
               /** [ Invoking updateTCL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl1_last_id'],$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl1_last_id'],$customer_id,$created_by);
 
                 return $tesco_order;
             }
@@ -115,7 +115,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTCL2Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -149,7 +149,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -180,14 +180,14 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
             }
             else
             {
               /** [ Invoking updateTCL2Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl2_last_id'],$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl2_last_id'],$customer_id,$created_by);
 
                 return $tesco_order;
             }
@@ -202,7 +202,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTSL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -236,7 +236,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -267,7 +267,7 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
               
@@ -275,7 +275,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTSL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl1_last_id'],$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl1_last_id'],$customer_id,$created_by);
 
               return $tesco_order;
             }
@@ -290,7 +290,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTHL1Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -324,7 +324,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTHL1Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -355,14 +355,14 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
             }
             else
             {
               /** [ Invoking updateTHL1Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl1_last_id'],$customer_id);
+              $tesco_order  = $tesco_order_obj->updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl1_last_id'],$customer_id,$created_by);
 
               return $tesco_order;
             }
@@ -377,7 +377,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTCL4Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -411,7 +411,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTCL4Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -442,14 +442,14 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
             }
             else
             {
               /** [ Invoking updateTCL4Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl4_last_id'],$customer_id);
+              $tesco_order  = $tesco_order_obj->updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tcl4_last_id'],$customer_id,$created_by);
 
               return $tesco_order;
             }
@@ -464,7 +464,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTSL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -498,7 +498,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTSL3Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -529,7 +529,7 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
               
@@ -537,7 +537,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTSL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl3_last_id'],$customer_id);
+              $tesco_order  = $tesco_order_obj->updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['tsl3_last_id'],$customer_id,$created_by);
 
               return $tesco_order;
             }
@@ -552,7 +552,7 @@ class TescoOrders
    * @param  [type] $request, $template_id
    * @return tesco order table id (inserted_id)
    */
-  public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id)
+  public function createTHL3Order($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by)
   {
     try {
             /** [ Creating new object for SubmitTescoOrdersUpdateQuery() class ] */
@@ -586,7 +586,7 @@ class TescoOrders
               {
                 $existing_id = $is_exists->id;
                 /** [ Invoking updateTHL3Order function using class instance ] */
-                $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id);
+                $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by);
 
                 return $is_exists;
                 
@@ -617,7 +617,7 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
               }
               
@@ -625,7 +625,7 @@ class TescoOrders
             else
             {
               /** [ Invoking updateTHL3Order function using class instance ] */
-              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl3_last_id'],$customer_id);
+              $tesco_order  = $tesco_order_obj->updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$request['thl3_last_id'],$customer_id,$created_by);
 
               return $tesco_order;
             }

@@ -404,13 +404,22 @@ class TescoSettings extends Controller
       {
         try {
               $id      = $request['id'];
-              
-              TescoSupplier::where('id',$id)
-               ->update([
-                 'is_enabled'  => 0
-              ]);
+              /** Check if this supplier linked with tesco company  **/
+              $company_id = DB::table('customer_metadata')->select('id')->where('customer_metadata_id','=',$id)->first();
+              if($company_id)
+              {
+                $result = response()->json(['error'=> false,'message' =>'Linked to company'],409);
+              }
+              else
+              {
+                TescoSupplier::where('id',$id)
+                 ->update([
+                   'is_enabled'  => 0
+                ]);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+              
             } 
             catch (\Exception $e)
             {

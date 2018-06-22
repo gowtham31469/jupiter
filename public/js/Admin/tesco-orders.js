@@ -3152,8 +3152,6 @@ function tescoOrderCommonData() {
 	zone = localStorage.getItem("zone");
 	type = localStorage.getItem("template type");
 	data = JSON.parse(localStorage.getItem("data"));
-	/** @type {Number} [created by = 0 , if order placed by admin] */
-	created_by = 0;
 }
 
 /**
@@ -3247,8 +3245,7 @@ function storeCERatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id,
-				created_by:created_by
+				tsl1_last_id: tsl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3354,8 +3351,7 @@ function storeCERatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				thl1_last_id: thl1_last_id,
-				is_insert: is_insert,
-				created_by:created_by
+				is_insert: is_insert
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3482,8 +3478,7 @@ function storeCESingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id,
-				created_by:created_by
+				tsl3_last_id: tsl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3598,8 +3593,7 @@ function storeCESingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id,
-				created_by:created_by
+				thl3_last_id: thl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3728,8 +3722,7 @@ function storeUKRatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id,
-				created_by:created_by
+				tsl1_last_id: tsl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3835,8 +3828,7 @@ function storeUKRatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id,
-				created_by:created_by
+				thl1_last_id: thl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -3962,8 +3954,7 @@ function storeUKSingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id,
-				created_by:created_by
+				tsl3_last_id: tsl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4078,8 +4069,7 @@ function storeUKSingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id,
-				created_by:created_by
+				thl3_last_id: thl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4889,8 +4879,7 @@ function saveCERatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id,
-				created_by:created_by
+				tsl1_last_id: tsl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4997,8 +4986,7 @@ function saveCERatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id,
-				created_by:created_by
+				thl1_last_id: thl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5124,8 +5112,7 @@ function saveCESingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id,
-				created_by:created_by
+				tsl3_last_id: tsl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5240,8 +5227,7 @@ function saveCESingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id,
-				created_by:created_by
+				thl3_last_id: thl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5370,8 +5356,7 @@ function saveUKRatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id,
-				created_by:created_by
+				tsl1_last_id: tsl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5477,8 +5462,7 @@ function saveUKRatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id,
-				created_by:created_by
+				thl1_last_id: thl1_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5604,8 +5588,7 @@ function saveUKSingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id,
-				created_by:created_by
+				tsl3_last_id: tsl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5720,8 +5703,7 @@ function saveUKSingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id,
-				created_by:created_by
+				thl3_last_id: thl3_last_id
 			},
 			tryCount: 0,
 			retryLimit: 2,
