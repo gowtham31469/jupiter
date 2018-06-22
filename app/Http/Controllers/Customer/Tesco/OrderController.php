@@ -115,7 +115,11 @@ class OrderController extends Controller
       {
          try {
              $templates = explode(',',$request['template_id']);
-
+             $id = Auth::guard('web_customer')->id();
+             $customer = DB::table('customer_profile')
+                          ->select('*')
+                          ->where('customer_profile.id','=',$id)
+                          ->first();
              /* Fetch all template details by id */
              foreach ($templates as $value) 
              {
@@ -130,7 +134,12 @@ class OrderController extends Controller
              /* Fetch tesco brands,departments and suppliers details */
              $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=',1)->get();
              $tesco_department = DB::table('tesco_department')->select('department','id')->where('is_enabled','=',1)->get();
-             $tesco_suppliers = DB::table('tesco_suppliers')->select('tesco_suppliers.supplier_name','tesco_suppliers.id')->where('is_enabled','=',1)->join('customer_metadata','customer_metadata.customer_metadata_id','tesco_suppliers.id')->where('customer_metadata.customer_id','=',Auth::guard('web_customer')->id())->get();
+             $tesco_suppliers = DB::table('tesco_suppliers')
+                                      ->select('tesco_suppliers.supplier_name','tesco_suppliers.id')
+                                      ->where('is_enabled','=',1)
+                                      ->join('customer_metadata','customer_metadata.customer_metadata_id','tesco_suppliers.id')
+                                      ->where('customer_metadata.customer_id','=',$customer->company_id)
+                                      ->get();
              
              return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
          } catch (\Exception $e) {
