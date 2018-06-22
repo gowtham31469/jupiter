@@ -1,4 +1,4 @@
-/* Customer management script
+/* Company management script(in Customer management module)
  * @author <praveen>
  */
 /**
@@ -38,7 +38,7 @@
                   $(".loader").show();
               },
               success: function (data) {
-                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Customer Name</th><th></th><th>Default Contact</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                var table = '<div class="col" id="customer-table"><table id="customers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Id</th><th>Company Name</th><th></th><th>Default Contact</th><th>Billing Address</th><th>Shipping Address</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                 $.each(data.customers, function(i, item){
                  var index = i+1;
                  table += '<tr id="'+item.id+'"><td rowspan="3">'+index+'</td><td rowspan="3"><a href="#" title="view more" class="view-more" data-placement="left" data-backdrop="static" data-keyboard="false">'+item.company_name+'</a></td><td><i class="fa fa-user" aria-hidden="true"></i></td><td>'+item.contact_person+'</td>';
@@ -324,7 +324,7 @@ function addCustomer()
  
                  /** [ Show response status based on HTTP status code ] */
                  200: function() {
-                      $('.snackbar_span').html('Customer Added Successfully');
+                      $('.snackbar_span').html('Company Added Successfully');
                       showSnackbar();
                       $('#addCustomerModal').modal('hide');
                       customersListView();
@@ -677,7 +677,7 @@ function addCustomer()
                     /** [ Show response status based on HTTP status code ] */
                     200: function() {
                         isSubmitting = false; 
-                        $('.snackbar_span').html('Customer is active now ');
+                        $('.snackbar_span').html('Company is active now ');
                         showSnackbar();
                     }
                },
@@ -734,9 +734,14 @@ function addCustomer()
                     /** [ Show response status based on HTTP status code ] */
                     200: function() {
                          isSubmitting = false;
-                         $('.snackbar_span').html('Customer is inactive now ');
+                         $('.snackbar_span').html('Company is inactive now ');
                          showSnackbar();
-                    }
+                    },
+                   208: function() {
+                        isSubmitting = false;
+                        $('.snackbar_span').html("This action can't be completed because some customers linked to this comapany.");
+                        showSnackbar();
+                   }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -1378,7 +1383,7 @@ function addCustomer()
 
                    /** [ Show response status based on HTTP status code ] */
                    200: function() {
-                        $('.snackbar_span').html('Customer Updated Successfully');
+                        $('.snackbar_span').html('Company Updated Successfully');
                         showSnackbar();
                         $('#editCustomerModal').modal('hide');
                         customersListView();
