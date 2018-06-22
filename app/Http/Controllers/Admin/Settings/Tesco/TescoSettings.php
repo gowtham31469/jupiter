@@ -405,7 +405,11 @@ class TescoSettings extends Controller
         try {
               $id      = $request['id'];
               /** Check if this supplier linked with tesco company  **/
-              $company_id = DB::table('customer_metadata')->select('id')->where('customer_metadata_id','=',$id)->first();
+              $company_id = DB::table('customer_metadata')->select('customer_metadata.id')
+                            ->join('customers','customers.id','customer_metadata.customer_id')
+                            ->where('customer_metadata.customer_metadata_id','=',$id)
+                            ->where('customers.is_active','=',1)
+                            ->first();
               if($company_id)
               {
                 $result = response()->json(['error'=> false,'message' =>'Linked to company'],208);

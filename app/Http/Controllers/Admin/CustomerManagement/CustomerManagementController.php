@@ -406,7 +406,7 @@ class CustomerManagementController extends Controller
               $id      = $request['id'];
               
               /** Check if this company linked with customer **/
-              $custumer_id = DB::table('customer_profile')->select('id')->where('company_id','=',$id)->first();
+              $custumer_id = DB::table('customer_profile')->select('id')->where('company_id','=',$id)->where('status','=',1)->first();
               if($custumer_id)
               {
                 $result = response()->json(['error'=> false,'message' =>'Some customers linked to this company.'],208);

@@ -674,7 +674,8 @@ class OrderManagementCntrl extends Controller
             }
             
             /** [Get comapanies super admin id as created by customer id] */
-            $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $created_by = $customer_profile_id->id;
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -992,7 +993,8 @@ class OrderManagementCntrl extends Controller
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
             /** [Get comapanies super admin id as created by customer id] */
-            $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $created_by = $customer_profile_id->id;
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1250,7 +1252,8 @@ class OrderManagementCntrl extends Controller
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
             /** [Get comapanies super admin id as created by customer id] */
-            $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $created_by = $customer_profile_id->id;
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -1568,7 +1571,8 @@ class OrderManagementCntrl extends Controller
               $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             }
             /** [Get comapanies super admin id as created by customer id] */
-            $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $created_by = $customer_profile_id->id;
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
@@ -2826,7 +2830,8 @@ class OrderManagementCntrl extends Controller
               {
                 $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
                 /** [Get comapanies super admin id as created by customer id] */
-                $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+                $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+                $created_by = $customer_profile_id->id;
               }
               else
               {
@@ -3108,7 +3113,8 @@ class OrderManagementCntrl extends Controller
             {
               $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $created_by = $customer_profile_id->id;
             }
             else
             {
@@ -3342,7 +3348,8 @@ class OrderManagementCntrl extends Controller
             {
               $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $created_by = $customer_profile_id->id;
             }
             else
             {
@@ -3630,13 +3637,14 @@ class OrderManagementCntrl extends Controller
             {
               $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $created_by = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $created_by = $customer_profile_id->id;
             }
             else
             {
               $created_by = 0;
             }
-            
+
             foreach ($templates as $template) 
             {
               $template_id      = $template['id'];
