@@ -587,6 +587,7 @@ class OrderManagementCntrl extends Controller
         }
       }
       if(count($ratio_arr) > 0) {
+		  print_r($ratio_arr);
         return $ratio_arr;
       } else {
         return false;

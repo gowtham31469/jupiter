@@ -137,7 +137,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                                 {!! Form::label('tin_number', 'TIN Number', ['class' => 'form_label']) !!}
-                                {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
+                                {!! Form::text('tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '11','data-minlength' => '11')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -419,7 +419,7 @@
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
                         {!! Form::label('edit_tin_number', 'TIN Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('edit_tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '9','data-minlength' => '9')) !!}
+                        {!! Form::text('edit_tin_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TIN Number','required','maxlength' => '11','data-minlength' => '11')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                   </div>
