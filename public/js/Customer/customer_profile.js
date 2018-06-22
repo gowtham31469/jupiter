@@ -130,19 +130,20 @@
                  isSubmitting = false;
                  $('#customer_edit_id').val(id);
 				 
-				  $('#customer_name').val(data.customers[0].name);
-                  $('#customer_email').val(data.customers[0].email);
+				  $('#customer_edit_name').val(data.customers[0].name);
+                  $('#customer_edit_email').val(data.customers[0].email);
                   $('#customer_role').val(data.customers[0].role_id);
-                  $('#customer_company').val(data.customers[0].company_id);
+                  $('#customer_company').val(data.customers[0].company_id); $('#customer_edit_title').val(data.customers[0].title);
 				 
 				  $('#customer_company').prop('disabled',true)
 				  $('#customer_role').prop('disabled',true)
 				 
 				  $('#customer_role').selectpicker('refresh');
                   $('#customer_company').selectpicker('refresh');
+				 $('#customer_edit_title').selectpicker('refresh');
 				 $('#customer_buyer').html('');
 				 $(data.company_buyers).each(function(key,value){
-									$('#customer_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
+					$('#customer_buyer').append('<option value='+value.buyer_id+'>'+value.buyer_name+'</option>')
 				 });
 				 $('#customer_buyer').selectpicker('refresh');
 				 
@@ -161,12 +162,12 @@
                       });
 				 
                  /** [ Backdrop for bootstrap modal ] */
-                 $('#editCustomerModal').modal({
+                 $('#editCustomerModals').modal({
                       backdrop: 'static',
                       keyboard: false
                  })
-                 $('#edit_customer_form').validator('update');
-                 $('#editCustomerModal').modal('show');
+                 $('#edit_customer_forms').validator('update');
+                 $('#editCustomerModals').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
                 this.tryCount++;
@@ -176,7 +177,7 @@
                 }
              },
              complete: function () {
-              $('#edit_customer_form').validator('validate');
+              $('#edit_customer_forms').validator('validate');
               /** [ To make top menu active ] */
               $(function () {
                   var url = window.location;
@@ -204,10 +205,11 @@
     try{
          
           var id                  =  $('#customer_edit_id').val();
-          var customer_name       =  $('#customer_name').val();
-          var customer_email      =  $('#customer_email').val();
+          var customer_name       =  $('#customer_edit_name').val();
+          var customer_email      =  $('#customer_edit_email').val();
           var customer_role       =  $('#customer_role').val();
           var customer_company    =  $('#customer_company').val();
+		 var customer_title    =  $('#customer_edit_title').val();
         
           var buyers          = [];
           /** [ Create array of multi selected buyers ] */
@@ -222,7 +224,7 @@ var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
           $.ajax({
               url: base_url + "/customer/customer-management/update-customerProfile",
               method: 'PUT',
-              data: {_token:csrf_token,id:id,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company},
+              data: {_token:csrf_token,id:id,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company,customer_title:customer_title},
               tryCount : 0,
               retryLimit : 2,
               beforeSend: function () {
@@ -234,7 +236,8 @@ var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
                    200: function() {
                         $('.snackbar_span').html('Customer Updated Successfully');
                         showSnackbar();
-                        $('#editCustomerModal').modal('hide');
+                        $('#editCustomerModals').modal('hide');
+					    location.reload();
                    },
                    409: function() {
                         $('#customer_edit_result').removeAttr('style');
@@ -278,6 +281,8 @@ function addCustomer()
           var customer_email      =  $('#customer_add_email').val();
           var customer_role       =  $('#customer_add_role').val();
           var customer_company    =  $('#customer_add_company').val();
+	      var customer_title      =  $('#customer_add_title').val();
+	  
 	  
         var password            =  $('#password').val();
         var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
@@ -295,7 +300,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/customer/customer-management/add-customerProfile",
             method: 'POST',
-            data: {_token:csrf_token,password:password,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company},
+            data: {_token:csrf_token,password:password,buyer:buyer,customer_name:customer_name,customer_email:customer_email,customer_role:customer_role,customer_company:customer_company,customer_title:customer_title},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -308,7 +313,7 @@ function addCustomer()
                       $('.snackbar_span').html('Customer Added Successfully');
                       showSnackbar();
                       $('#addCustomerModal').modal('hide');
-                      customersListView();
+                      location.reload();
                  },
                  400: function() {
                       $('.snackbar_span').html('Something went wrong');

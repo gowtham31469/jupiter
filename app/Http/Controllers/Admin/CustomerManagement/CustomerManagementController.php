@@ -333,7 +333,8 @@ class CustomerManagementController extends Controller
                 $buyer                = $request['buyer'];
                 $customer_name        = $request['customer_name'];
                 $customer_role        = $request['customer_role'];
-                $customer_company     = $request['customer_company'];
+                $customer_company     = $request['customer_company']; 
+			    $customer_title       = $request['customer_title'];
 
                 $email_exists =  DB::table('customer_profile')->where('email',$customer_email)->select('id')->get();
                 if(count($email_exists) > 0)
@@ -350,6 +351,7 @@ class CustomerManagementController extends Controller
                                 'email'                  => $customer_email,
                                 'name'             => $customer_name,
                                 'role_id'          => $customer_role,
+                                'title'      		 => $customer_title,
                                 'company_id'       => $customer_company
                               ]);
                   $insert_Id = $customer; 
@@ -729,9 +731,10 @@ class CustomerManagementController extends Controller
                     $id               = $request['id'];
                     $buyer            = Input::get('buyer');
                     $input['customer_name']= Input::get('customer_name');
-					          $input['customer_email']= Input::get('customer_email');
-				            $input['customer_role']		= Input::get('customer_role');
-					          $input['customer_company']= Input::get('customer_company');
+					$input['customer_email']= Input::get('customer_email');
+				    $input['customer_role']		= Input::get('customer_role');
+					$input['customer_company']= Input::get('customer_company');
+				    $input['customer_title']= Input::get('customer_title');
 						
                     $email_rules     = array('customer_email' => 'unique:customer_profile,email,'.$id);
                     $emailValidator  = Validator::make($input,$email_rules);
@@ -748,6 +751,7 @@ class CustomerManagementController extends Controller
                             'name'            => $input['customer_name'],
                             'email'           => $input['customer_email'],
                             'role_id'         => $input['customer_role'],
+                            'title'      	  => $input['customer_title'],
                             'company_id'      => $input['customer_company']
                           ]);
                         
@@ -916,7 +920,12 @@ class CustomerManagementController extends Controller
                       ->where('customer_buyers.customer_id',$request->customer_add_company)
                       ->select('customer_buyers.*','buyers.buyer_name')
                       ->get();
-			 	return response()->json(['customer_list' => $customer_list]);
+			 	$role = DB::table('customer_profile')
+						  ->where('customer_profile.company_id',$request->customer_add_company)
+					 	  ->where('customer_profile.role_id','1')
+						  ->select('customer_profile.*')
+						  ->get();
+			 	return response()->json(['customer_list' => $customer_list,'role' => $role]);
 			 
          } catch (\Exception $e)
          {
