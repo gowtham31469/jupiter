@@ -19,7 +19,7 @@
                       <thead>
                         <tr>
                           <th>Sl. No</th>
-                          <th>Name</th>
+                          <th>Company Name</th>
                           <th></th>
                           <th>Default Contact</th>
                           <th>Billing Address</th>
@@ -578,7 +578,7 @@
                                 <table class="table table-user-information">
                                   <tbody>
                                      <tr>
-                                      <td class="pull-left">Customer Short Name :</td>
+                                      <td class="pull-left">Company Short Name :</td>
                                       <td id="short-name"></td>
                                     </tr>
                                     <tr>

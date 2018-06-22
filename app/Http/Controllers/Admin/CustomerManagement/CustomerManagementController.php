@@ -405,12 +405,22 @@ class CustomerManagementController extends Controller
         try {
               $id      = $request['id'];
               
-              Customer::where('id',$id)
-               ->update([
-                 'is_active'  => 0
-              ]);
+              /** Check if this company linked with customer **/
+              $custumer_id = DB::table('customer_profile')->select('id')->where('company_id','=',$id)->first();
+              if($custumer_id)
+              {
+                $result = response()->json(['error'=> false,'message' =>'Some customers linked to this company.'],208);
+              }
+              else
+              {
+                Customer::where('id',$id)
+                 ->update([
+                   'is_active'  => 0
+                ]);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+              
             } 
             catch (\Exception $e)
             {

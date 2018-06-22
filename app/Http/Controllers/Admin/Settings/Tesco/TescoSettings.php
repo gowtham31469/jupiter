@@ -408,7 +408,7 @@ class TescoSettings extends Controller
               $company_id = DB::table('customer_metadata')->select('id')->where('customer_metadata_id','=',$id)->first();
               if($company_id)
               {
-                $result = response()->json(['error'=> false,'message' =>'Linked to company'],409);
+                $result = response()->json(['error'=> false,'message' =>'Linked to company'],208);
               }
               else
               {
