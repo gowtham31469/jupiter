@@ -2055,6 +2055,11 @@ function dynamicSVGTemplatescard(id, item) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
+							var str =	(description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								if(str.length >= 27)
+								{
+									//alert(str.length);
+								}
 								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
