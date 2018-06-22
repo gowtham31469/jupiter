@@ -25,7 +25,7 @@ class SubmitTescoOrdersUpdateQuery
 	 * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
 	 * @return number of rows updated.
 	 */
-	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
 	{
 		try {
               $result = TescoTCL1Orders::where('id',$existing_id)
@@ -53,7 +53,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
         } catch (\Exception $e)
         {
@@ -66,7 +66,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
             $result = TescoTCL2Orders::where('id',$existing_id)
@@ -94,7 +94,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
         } catch (\Exception $e)
@@ -108,7 +108,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
             $result = TescoTSL1Orders::where('id',$existing_id)
@@ -136,7 +136,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
         } catch (\Exception $e)
@@ -150,7 +150,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
               $result = TescoTHL1Orders::where('id',$existing_id)
@@ -178,7 +178,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
         } catch (\Exception $e)
@@ -192,7 +192,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
               $result = TescoTCL4Orders::where('id',$existing_id)
@@ -220,7 +220,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
         } catch (\Exception $e)
@@ -234,7 +234,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
               $result = TescoTSL3Orders::where('id',$existing_id)
@@ -262,7 +262,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
         } catch (\Exception $e)
@@ -276,7 +276,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id)
+  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
   {
     try {
               $result = TescoTHL3Orders::where('id',$existing_id)
@@ -304,7 +304,7 @@ class SubmitTescoOrdersUpdateQuery
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $request['created_by']
+                          'order_placed_by'      => $created_by
                         ]);
             
             

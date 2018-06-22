@@ -916,7 +916,7 @@ function tescoSuppliers() {
               }
             },
            complete: function () {
-                     $(".loader").hide();
+               $(".loader").hide();
            }
        })
    } catch (e) {
@@ -1000,6 +1000,11 @@ function tescoSuppliers() {
                    200: function() {
                         isSubmitting = false;
                         $('.snackbar_span').html('Supplier is disabled ');
+                        showSnackbar();
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("This action can't be completed because supplier is linked to some company ");
+                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                    }
               },
