@@ -2136,7 +2136,34 @@ function dynamicSVGTemplatescard(id,item)
                  /** [ Dynamically change svg short description ] */
                  if(description != '')
                  {
-                    svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                    if(description.length > 24)
+					{
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if(description.indexOf(" ") == "-1")
+							{
+								svgDoc.getElementById("description").innerHTML = description.substr(0,24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							}
+							else
+							{
+								svgDoc.getElementById("description").innerHTML = description.substr(0,description.substr(0,24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0,24).lastIndexOf(" ")).toUpperCase();
+							}
+							
+						}
+						else
+						{
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0,24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+					}
+					else
+					{
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+					}
                  }
                  else
                  {
@@ -2246,19 +2273,62 @@ function dynamicSVGTemplatescard(id,item)
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                             var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
                            }
                            else if(data.size_chart.length != 0)
                            {
                               svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+							   svgDoc.getElementById("description1").innerHTML = '';
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                              if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
                            }
                            else
                            {
                               svgDoc.getElementById("description").innerHTML = '';
+							   svgDoc.getElementById("description1").innerHTML = '';
                            }
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
@@ -2315,7 +2385,34 @@ function dynamicSVGTemplatescard(id,item)
                   /** [ Dynamically change svg short description ] */
                   if(description != '')
                   {
-                      svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                      if(description.length > 24)
+					{
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if(description.indexOf(" ") == "-1")
+							{
+								svgDoc.getElementById("description").innerHTML = description.substr(0,24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							}
+							else
+							{
+								svgDoc.getElementById("description").innerHTML = description.substr(0,description.substr(0,24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0,24).lastIndexOf(" ")).toUpperCase();
+							}
+							
+						}
+						else
+						{
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0,24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+					}
+					else
+					{
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+					}
                   }
                   else
                   {
@@ -2412,19 +2509,62 @@ function dynamicSVGTemplatescard(id,item)
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && data.size_chart.length != 0)
                            {
-                              svgDoc.getElementById("description").innerHTML = (description.toUpperCase())+' '+data.size_chart[0].size;
+                             	var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
                            }
                            else if(data.size_chart.length != 0)
                            {
                               svgDoc.getElementById("description").innerHTML = data.size_chart[0].size; 
+							   svgDoc.getElementById("description1").innerHTML = '';
                            }
                            else if(description != '')
                            {
-                              svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+                              if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
                            }
                            else
                            {
                               svgDoc.getElementById("description").innerHTML = '';
+							   svgDoc.getElementById("description1").innerHTML = '';
                            }
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
