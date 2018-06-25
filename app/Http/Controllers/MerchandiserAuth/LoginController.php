@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 use View;
 use DB;
+use App\Merchandiser;
 
 class LoginController extends Controller
 {
@@ -66,7 +67,7 @@ class LoginController extends Controller
         // Customization: Validate if user status is active (1)
         $email = $request->get($this->username());
         // Customization: It's assumed that email field should be an unique field 
-        $user = CustomerProfile::where($this->username(), $email)->first();
+        $user = Merchandiser::where($this->username(), $email)->first();
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
@@ -74,7 +75,7 @@ class LoginController extends Controller
         // Customization: If user status is inactive (0) return failed_status error.
         if($user)
         {
-            if ($user->status === 0) 
+            if ($user->is_active === 0) 
             {
                 return $this->sendFailedLoginResponse($request, 'Your account has not been activated yet.');
             }
@@ -95,7 +96,7 @@ class LoginController extends Controller
     {
         $credentials = $request->only($this->username(), 'password');
         // Customization: validate if user status is active (1)
-        $credentials['status'] = 1;
+        $credentials['is_active'] = 1;
         return $credentials;
     }
     /**
