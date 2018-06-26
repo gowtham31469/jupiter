@@ -22,10 +22,10 @@ function isNumber(evt) {
  * @return {[type]}     [description]
  */
 function camelize(str) {
-  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-    return index == 0 ? match.toLowerCase() : match.toUpperCase();
-  });
+	return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+		if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+		return index == 0 ? match.toLowerCase() : match.toUpperCase();
+	});
 }
 
 /**  
@@ -104,10 +104,10 @@ function tescoOrders() {
 						} else {
 							if (CEPOCollection.indexOf(newObj[i].po_number) === -1) {
 								CEPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
+								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 							} else {
 								var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
+								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 							}
 						}
 
@@ -116,15 +116,15 @@ function tescoOrders() {
 							UKPOCollection.push(newObj[i].po_number);
 							UKUniqueNames.push(newObj[i].uk_style_ref);
 							artwork_collection[newObj[i].uk_style_ref] = {};
-							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
+							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 						} else {
 							if (UKPOCollection.indexOf(newObj[i].po_number) === -1) {
 								UKPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
+								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 
 							} else {
 								var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName+ '__' + camelize(newObj[i].artwork_status);
+								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
 							}
 
 						}
@@ -1109,56 +1109,44 @@ function printDivTesco(data, name) {
 	var name = name + "-sticker";
 	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 		var svgarr = [];
-		var ajax_count=0;
+		var ajax_count = 0;
 		$('#table_row tr').each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 
 			if ((name == "TSL1-sticker" && zone == "CE")) {
-				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_ratio_orms_tpn').val();
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
-				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_single_orms_tpn').val();
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
-				svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_single_tpnd').val();
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
 			} else if ((name == "TSL1-sticker" && zone == "UK")) {
-				svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_ratio_tpnd').val();
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
 			}
 
-			
-			
-			if((name== "TSL3-sticker"))
-				{
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_single_ean').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_single_ean').val()
-					}
-					jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+
+			if ((name == "TSL3-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_single_ean').val()
+				} else {
+					var barcode_change = $(this).find('.uk_single_ean').val()
 				}
-				else
-				{
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_ratio_itf').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_ratio_itf').val()
-					}
-					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-					
+				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
 				}
-				
-			if(zone == "CE")
-			{
-				var size = $(this).find('.ce_single_size').val();
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
 			}
-			else
-			{
+
+			if (zone == "CE") {
+				var size = $(this).find('.ce_single_size').val();
+			} else {
 				var size = $(this).find('.uk_single_size').val();
 			}
 
@@ -1218,9 +1206,7 @@ function printDivTesco(data, name) {
 					svgarr.push(svg)
 
 				}
-			}
-			else
-			{
+			} else {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
@@ -1229,7 +1215,7 @@ function printDivTesco(data, name) {
 			}
 			ajax_count++;
 		})
-		
+
 		if (ajax_count == document.getElementById("table_row").rows.length) {
 			//				console.log("hai")
 			//				console.log(svgarr)
@@ -1237,7 +1223,7 @@ function printDivTesco(data, name) {
 			PopupTescoSmall(svg_fin, name);
 		}
 
-		
+
 	} else {
 		var svgarr = [];
 		var ajax_count = 0;
@@ -1259,43 +1245,31 @@ function printDivTesco(data, name) {
 				svgDoc.getElementById("pieces_in_ratio").innerHTML = $(this).find('.uk_ratio_upc').val();
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
-			}		
-			if((name== "THL3-sticker"))
-				{
-					
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_single_ean').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_single_ean').val()
-					}
-					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-				}
-				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
-				{
-					
-					if(zone == "CE")
-					{
-						var barcode_change = $(this).find('.ce_ratio_itf').val()
-					}
-					else
-					{
-						var barcode_change = $(this).find('.uk_ratio_itf').val()
-					}
-					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
-					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-					
-				}
-			
-			if(zone == "CE")
-			{
-				var size = $(this).find('.ce_single_size').val();
 			}
-			else
-			{
+			if ((name == "THL3-sticker")) {
+
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_single_ean').val()
+				} else {
+					var barcode_change = $(this).find('.uk_single_ean').val()
+				}
+				jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
+				}
+				jsbarcodetesco(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			}
+
+			if (zone == "CE") {
+				var size = $(this).find('.ce_single_size').val();
+			} else {
 				var size = $(this).find('.uk_single_size').val();
 			}
 
@@ -1354,9 +1328,7 @@ function printDivTesco(data, name) {
 					svgarr.push(str)
 
 				}
-			}
-			else
-			{
+			} else {
 				var s = new XMLSerializer();
 				var d = svgRoot;
 				var str = s.serializeToString(d);
@@ -1969,13 +1941,33 @@ function dynamicSVGTemplatescard(id, item) {
 
 				/** [ Dynamically change svg short description ] */
 				if (description != '') {
-					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+					}
+
 				} else {
 					svgDoc.getElementById("description").innerHTML = '';
 				}
 				/** [ Dynamically change svg CE ratio tpnd number ] */
 				if (tpnd != '') {
-					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+tpnd;
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + tpnd;
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
@@ -2011,7 +2003,7 @@ function dynamicSVGTemplatescard(id, item) {
 
 				/** [ Dynamically change svg CE single tpnd number ] */
 				if (orms_tpn != '') {
-					svgDoc.getElementById("tpnd").innerHTML =  "ORMS TPN: "+orms_tpn;
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + orms_tpn;
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
@@ -2055,18 +2047,56 @@ function dynamicSVGTemplatescard(id, item) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-							var str =	(description.toUpperCase()) + ' ' + data.size_chart[0].size;
-								if(str.length >= 27)
-								{
-									//alert(str.length);
+								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
 								}
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+								svgDoc.getElementById("description1").innerHTML = '';
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
+								svgDoc.getElementById("description1").innerHTML = '';
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
@@ -2089,8 +2119,28 @@ function dynamicSVGTemplatescard(id, item) {
 					})
 				} else {
 					/** [ Dynamically change svg short description ] */
+					//dsf efsf dsf fdsfs fdsffdsf f fds  fsdf 
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
 					}
@@ -2105,13 +2155,32 @@ function dynamicSVGTemplatescard(id, item) {
 
 				/** [ Dynamically change svg UK ratio tpnd number ] */
 				if (tpnd != '') {
-					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+tpnd;
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + tpnd;
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
 				/** [ Dynamically change svg short description ] */
 				if (description != '') {
-					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+					}
 				} else {
 					svgDoc.getElementById("description").innerHTML = '';
 				}
@@ -2144,7 +2213,7 @@ function dynamicSVGTemplatescard(id, item) {
 				var uk_single_ean = $('#uk_single_ean_1').val();
 				/** [ Dynamically change svg UK single tpnd number ] */
 				if (orms_tpn != '') {
-					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+orms_tpn;
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + orms_tpn;
 				} else {
 					svgDoc.getElementById("tpnd").innerHTML = '';
 				}
@@ -2187,13 +2256,56 @@ function dynamicSVGTemplatescard(id, item) {
 						success: function (data) {
 							/** [ Dynamically change svg short description ] */
 							if (description != '' && data.size_chart.length != 0) {
-								svgDoc.getElementById("description").innerHTML = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+								svgDoc.getElementById("description1").innerHTML = "";
 							} else if (description != '') {
-								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
+								svgDoc.getElementById("description1").innerHTML = '';
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
@@ -2217,7 +2329,26 @@ function dynamicSVGTemplatescard(id, item) {
 				} else {
 					/** [ Dynamically change svg short description ] */
 					if (description != '') {
-						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
 					}
@@ -4143,8 +4274,8 @@ function afterOrderSubmitted(data) {
 		$('.save-btn').remove();
 		$('.approve-btn').show();
 		$('.print-btn').show();
-		$('.cancel-btn').removeAttr('data-target'); 
-        $('.cancel-btn').attr('onClick','location.reload()');
+		$('.cancel-btn').removeAttr('data-target');
+		$('.cancel-btn').attr('onClick', 'location.reload()');
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve order functionality] */
 		$.each(data.last_insertions, function (index, value) {
@@ -4407,19 +4538,19 @@ function jsbarcodetesco(code, id, svgDoc) {
  * @return barcode
  */
 function jsbarcodetescoean(code, id, svgDoc) {
-//		format: "ean13",
-//		width: 3.45,
-//		height: 125,
-//		fontSize: 35,
-//		flat: true,
-//		displayValue: false
+	//		format: "ean13",
+	//		width: 3.45,
+	//		height: 125,
+	//		fontSize: 35,
+	//		flat: true,
+	//		displayValue: false
 	JsBarcode("#ean-13", code, {
-	    format: "ean13",
+		format: "ean13",
 		width: 3.9260,
 		height: 170,
 		fontSize: 30,
-		flat:true,
-        displayValue: false
+		flat: true,
+		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -4432,7 +4563,7 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
-	
+
 	svg.setAttribute('width', '412.25px');
 	svg.setAttribute('height', '378.02px');
 
@@ -4472,19 +4603,19 @@ function jsbarcodetescoean(code, id, svgDoc) {
  * @return barcode
  */
 function jsbarcodetescotslean(code, id, svgDoc) {
-//		format: "ean13",
-//		width: 3.45,
-//		height: 125,
-//		fontSize: 35,
-//		flat: true,
-//		displayValue: false
+	//		format: "ean13",
+	//		width: 3.45,
+	//		height: 125,
+	//		fontSize: 35,
+	//		flat: true,
+	//		displayValue: false
 	JsBarcode("#ean-13", code, {
-	    format: "ean13",
+		format: "ean13",
 		width: 3.9260,
 		height: 167,
 		fontSize: 30,
-		flat:true,
-        displayValue: false
+		flat: true,
+		displayValue: false
 	});
 	var svg = document.getElementById('svgdiv').querySelector('svg'),
 		canvas = document.createElement('canvas'),
@@ -4497,7 +4628,7 @@ function jsbarcodetescotslean(code, id, svgDoc) {
 	//    svg.setAttribute('width', '188.931023622px');
 	svg.setAttribute('font-size', '50px');
 	svg.setAttribute('font-family', 'frankgothcnbt');
-	
+
 	svg.setAttribute('width', '419.075px');
 	svg.setAttribute('height', '275.02px');
 
