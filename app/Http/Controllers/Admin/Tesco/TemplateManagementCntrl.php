@@ -81,7 +81,7 @@ class TemplateManagementCntrl extends Controller
          foreach($exp_temp as $exp)
          {
             $treeviewData= DB::table("tesco_template")
-                                ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name')
+                                ->select('tesco_template.*','tesco_item_master.ref_no','company.name as company_name','tesco_item_master.company_id')
                                 ->join('tesco_item_master','tesco_item_master.id','=','tesco_template.item_id')
                                 ->join('company','company.id','=','tesco_item_master.company_id')
                                 ->where('item_id',$exp)
@@ -90,6 +90,14 @@ class TemplateManagementCntrl extends Controller
          }
          
          return json_encode($view);
+    } 
+	public function getCompany(Request $request)
+    {
+         $items = DB::table("company")
+                                ->select('*')
+                                ->get();
+         
+         return json_encode($items);
     }
     /**
      * Method to store the taxation from template module
@@ -100,10 +108,27 @@ class TemplateManagementCntrl extends Controller
         try {
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
+			$name    = $request['name'];
+			$ref    = $request['ref'];
+			$company   = $request['company'];
             DB::table('tesco_template')
                         ->where('id',$template_id)
                         ->update([
-                           'tax' => $taxation
+                           'tax' => $taxation,
+						   'template_name' => $name
+                        ]);
+			
+			$items = DB::table("tesco_template")
+                                ->select('*')
+                                ->where('id',$template_id)
+                                ->get();
+			$item_id = $items{0}->item_id;
+			DB::table('tesco_item_master')
+                        ->where('id',$item_id)
+                        ->update([
+						   'item_name' => $name,
+						   'company_id' => $company,
+						   'ref_no' => $ref
                         ]);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
