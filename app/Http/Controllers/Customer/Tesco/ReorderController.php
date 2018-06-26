@@ -180,14 +180,14 @@ class ReorderController extends Controller
 		  $customer_id = Auth::guard('web_customer')->user()->id;
 		$style=$request->style;
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->where('order_placed_by','=',$customer_id)->select('*',DB::raw('"TCL 4" as TemplateName'),DB::raw('"tesco_tcl4_orders" as type'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
 
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->where('order_placed_by','=',$customer_id)->select('*',DB::raw('"THL 3" as TemplateName'),DB::raw('"tesco_thl3_orders" as type'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 
 
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('uk_style_ref',$style)->orWhere('ce_style_ref',$style)->where('order_placed_by','=',$customer_id)->select('*',DB::raw('"TSL 3" as TemplateName'),DB::raw('"tesco_tsl3_orders" as type'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
 	  }
 		
 
