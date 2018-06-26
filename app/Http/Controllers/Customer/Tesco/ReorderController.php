@@ -61,25 +61,25 @@ class ReorderController extends Controller
 	  if($customer_role_id->role_id == 1)
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_tcl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_tcl2_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_thl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_tsl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->select('*')->get();
 		echo json_encode($data);
 	  }
 	  else
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('tesco_tcl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('tesco_tcl2_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('tesco_tcl4_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('tesco_thl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('tesco_thl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('tesco_tsl1_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('tesco_tsl3_orders.order_status', '!=', 'Saved')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->select('*')->get();
 		echo json_encode($data);
 	  }
 		
