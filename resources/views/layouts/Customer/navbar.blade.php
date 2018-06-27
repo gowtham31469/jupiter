@@ -32,7 +32,9 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a style="cursor: pointer;" onclick="getCustomerProfile({{ Auth::guard('web_customer')->user()->id }})">Profile</a></li>
+									 @if(Auth::guard('web_customer')->user()->role_id == 1)
 									<li><a  href="{{ url('/customer/customers') }}">Customers</a></li>
+									@endif
                                       <li><a style="cursor: pointer;" data-target="#changePasswordModal" data-toggle="modal" data-backdrop="static" data-keyboard="false">Change Password</a></li>
 
                                 </ul>
