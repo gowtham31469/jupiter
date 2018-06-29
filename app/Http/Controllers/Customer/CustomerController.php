@@ -48,7 +48,7 @@ class CustomerController extends Controller
                  $customers       =  DB::table('customer_profile')
 					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
 					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
-					 				 ->where('company_id',$customer_id)
+					 				 ->where('company_id',Auth::guard('web_customer')->user()->company_id)
 					 				->where('role_id','!=','1')
                                      ->select('customer_profile.*','roles.role_name','customers.company_name')
                                      ->get();  
@@ -128,12 +128,14 @@ class CustomerController extends Controller
                                  ->select('customer_profile_buyer.buyer_id')
                                  ->where('customer_profile_buyer.customer_profile_id','=',$id)
                                  ->get();
-        			   $company_buyers = DB::table('customer_profile_buyer')
-        								 ->join('buyers', 'buyers.id', 'customer_profile_buyer.buyer_id')
-        								 ->select('customer_profile_buyer.*','buyers.buyer_name')
-        								 ->where('customer_profile_buyer.customer_id','=',$customer{0}->company_id)
-
-        								 ->get();
+        			 
+			  
+			     $company_buyers = DB::table('customer_buyers')
+        								    ->join('buyers', 'buyers.id', 'customer_buyers.buyer_id')
+        								    ->select('customer_buyers.*','buyers.buyer_name')
+        								    ->where('customer_buyers.customer_id','=',$customer{0}->company_id)
+        								    ->get();
+			  
                 
                 return response()->json(['error'=>'false','message' =>'success','customers' => $customer,'buyers' => $buyers,'company_buyers' => $company_buyers]);
               } catch (\Exception $e)
