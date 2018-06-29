@@ -596,7 +596,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_description">Short Description</label>\
-                                            <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="40" onkeyup="dynamicSVGTemplates()">\
+                                            <input type="text" class="form-control" name="tesco_description" id="tesco_description" required="" placeholder="Enter Description" maxlength="45" onkeyup="dynamicSVGTemplates()">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
