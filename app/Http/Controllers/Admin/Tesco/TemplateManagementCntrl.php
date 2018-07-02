@@ -111,11 +111,15 @@ class TemplateManagementCntrl extends Controller
 			$name    = $request['name'];
 			$ref    = $request['ref'];
 			$company   = $request['company'];
+			$inside_tamilnadu   = $request['inside_tamilnadu'];
+			$outside_tamilnadu   = $request['outside_tamilnadu'];
             DB::table('tesco_template')
                         ->where('id',$template_id)
                         ->update([
                            'tax' => $taxation,
-						   'template_name' => $name
+						   'template_name' => $name,
+						   'inside_tamilnadu' => $inside_tamilnadu,
+						   'outside_tamilnadu' => $outside_tamilnadu
                         ]);
 			
 			$items = DB::table("tesco_template")
