@@ -173,6 +173,11 @@ function showSnackbar() {
                        $('#addTescoBrandsModal').modal('hide');
                        tescoBrands()
                   },
+                  208: function() {
+                       $('#tesco_brand_result').removeAttr('style');
+                       $('#tesco_brand_result').html('Brand already exists.')
+                       $("#tesco_brand_result").addClass("alert alert-warning");
+                  },
                   400: function() {
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
@@ -270,7 +275,12 @@ function showSnackbar() {
                        showSnackbar();
                        $('#editTescoBrandsModal').modal('hide');
                        tescoBrands()
-                  }
+                  },
+                208: function() {
+                     $('#edit_tesco_brand_result').removeAttr('style');
+                     $('#edit_tesco_brand_result').html('Brand already exists.')
+                     $("#edit_tesco_brand_result").addClass("alert alert-warning");
+                },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -489,6 +499,11 @@ function tescoDepartment() {
                         $('#addTescoDepartmentsModal').modal('hide');
                         tescoDepartment()
                    },
+                   208: function() {
+                        $('#tesco_department_result').removeAttr('style');
+                        $('#tesco_department_result').html('Department already exists.')
+                        $("#tesco_department_result").addClass("alert alert-warning");
+                   },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
                         showSnackbar();
@@ -591,7 +606,12 @@ function tescoDepartment() {
                        showSnackbar();
                        $('#editTescoDepartmentsModal').modal('hide');
                        tescoDepartment()
-                  }
+                  },
+                208: function() {
+                     $('#edit_tesco_department_result').removeAttr('style');
+                     $('#edit_tesco_department_result').html('Department already exists.')
+                     $("#edit_tesco_department_result").addClass("alert alert-warning");
+                },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -805,6 +825,11 @@ function tescoSuppliers() {
                         $('#addTescoSuppliersModal').modal('hide');
                         tescoSuppliers()
                    },
+                   208: function() {
+                        $('#supplier_result').removeAttr('style');
+                        $('#supplier_result').html('Supplier already exists.')
+                        $("#supplier_result").addClass("alert alert-warning");
+                   },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
                         showSnackbar();
@@ -906,7 +931,12 @@ function tescoSuppliers() {
                        showSnackbar();
                        $('#editTescoSuppliersModal').modal('hide');
                        tescoSuppliers()
-                  }
+                  },
+                  208: function() {
+                       $('#edit_supplier_result').removeAttr('style');
+                       $('#edit_supplier_result').html('Supplier already exists.')
+                       $("#edit_supplier_result").addClass("alert alert-warning");
+                  },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
@@ -1128,6 +1158,11 @@ function tescoSizeChart() {
                         $('#addTescoSizeChartsModal').modal('hide');
                         tescoSizeChart()
                    },
+                   208: function() {
+                        $('#tesco_sizechart_result').removeAttr('style');
+                        $('#tesco_sizechart_result').html('Size Chart already exists.')
+                        $("#tesco_sizechart_result").addClass("alert alert-warning");
+                   },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
                         $('#snackbar').css('background-color','#F44336');
@@ -1231,7 +1266,12 @@ function tescoSizeChart() {
                        showSnackbar();
                        $('#editTescoSizeChartsModal').modal('hide');
                        tescoSizeChart()
-                  }
+                },
+                208: function() {
+                     $('#edit_tesco_sizechart_result').removeAttr('style');
+                     $('#edit_tesco_sizechart_result').html('Size Chart already exists.')
+                     $("#edit_tesco_sizechart_result").addClass("alert alert-warning");
+                },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
               this.tryCount++;
