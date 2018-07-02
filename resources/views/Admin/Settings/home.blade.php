@@ -1472,8 +1472,8 @@
                     <div class="modal-body">
                       <div id="supplier_result"></div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('supplier_name', 'supplier Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'supplier Name','required')) !!}
+                          {!! Form::label('supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
