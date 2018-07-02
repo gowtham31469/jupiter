@@ -1339,6 +1339,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="tesco_brand_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
                           {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
@@ -1364,6 +1365,7 @@
                </div>
                {!! Form::open(['id' => 'edit_tesco_brands_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
+                    <div id="edit_tesco_brand_result"></div>
                      {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
@@ -1392,6 +1394,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="tesco_department_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
                           {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
@@ -1427,6 +1430,7 @@
                </div>
                {!! Form::open(['id' => 'edit_tesco_departments_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
+                    <div id="edit_tesco_department_result"></div>
                      {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
@@ -1466,6 +1470,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                      <div id="supplier_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('supplier_name', 'supplier Name', ['class' => 'form_label']) !!}
                           {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'supplier Name','required')) !!}
@@ -1496,6 +1501,7 @@
                </div>
                {!! Form::open(['id' => 'edit_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
+                    <div id="edit_supplier_result"></div>
                      {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
@@ -1528,6 +1534,7 @@
                 </div>
                 {!! Form::open(['id' => 'add_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
+                        <div id="tesco_sizechart_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
                           {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
@@ -1563,6 +1570,7 @@
                </div>
                {!! Form::open(['id' => 'edit_tesco_size_charts_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body"> 
+                    <div id="edit_tesco_sizechart_result"></div>
                      {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
@@ -1778,6 +1786,14 @@
         $('#add_tesco_size_charts_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
+        $('#supplier_result').hide();
+        $('#edit_supplier_result').hide();
+        $('#tesco_sizechart_result').hide();
+        $('#edit_tesco_sizechart_result').hide();
+        $('#tesco_department_result').hide();
+        $('#edit_tesco_department_result').hide();
+        $('#tesco_brand_result').hide();
+        $('#edit_tesco_brand_result').hide();
        })
 
       /** Add orchestra garment form validation **/
