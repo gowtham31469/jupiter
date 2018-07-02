@@ -52,10 +52,24 @@ class TescoSettings extends Controller
     public function addTescoBrands(Request $request)
     {
         try {
-            $inserted = TescoBrand::create([
+
+             /** @var array [Database Unique field validation] */
+             $is_exists = array(
+                 'name' => 'required|unique:tesco_brand,brand',
+             );
+             $validator = Validator::make($request->all() ,$is_exists);
+             if($validator->fails())
+             {
+               $result = response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
+             }
+             else
+             {
+                $inserted = TescoBrand::create([
                         'brand' => $request['name']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+            
 
         } catch (\Exception $e)
         {
@@ -93,13 +107,24 @@ class TescoSettings extends Controller
           $id        = $request['id'];
           $name      = $request['name'];
           
-          TescoBrand::where('id',$id)
-           ->update([
-             'brand' => $name
-          ]);
+          /** @var array [Database Unique field validation] */
+          $rules     = array('name' => 'unique:tesco_brand,brand,'.$id);
+          $Validator  = Validator::make($request->all(),$rules);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
-        
+          if($Validator->fails())
+          {
+              return response()->json(['error'=> true,'message' =>'Brand Already Exists'],208);
+          }
+          else
+          {
+            TescoBrand::where('id',$id)
+             ->update([
+               'brand' => $name
+            ]);
+
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          }
+
         } catch (\Exception $e)
         {
           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -180,12 +205,24 @@ class TescoSettings extends Controller
     public function addTescoDepartment(Request $request)
     {
         try {
-            $inserted = TescoDepartment::create([
+             /** @var array [Database Unique field validation] */
+             $is_exists = array(
+                 'department' => 'required|unique:tesco_department,department',
+             );
+             $validator = Validator::make($request->all() ,$is_exists);
+             if($validator->fails())
+             {
+               $result = response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
+             }
+             else
+             {
+                $inserted = TescoDepartment::create([
                         'department' => $request['department'],
                         'pantone' => $request['pantone'],
                         'rbg' => $request['rbg']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
 
         } catch (\Exception $e)
         {
@@ -224,16 +261,26 @@ class TescoSettings extends Controller
           $department      = $request['department'];
           $pantone = $request['pantone'];
           $rbg = $request['rbg'];
-
           
-          TescoDepartment::where('id',$id)
-           ->update([
-             'department' => $department,
-             'pantone' => $pantone,
-             'rbg' => $rbg
-          ]);
+          /** @var array [Database Unique field validation] */
+          $rules     = array('department' => 'unique:tesco_department,department,'.$id);
+          $Validator  = Validator::make($request->all(),$rules);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          if($Validator->fails())
+          {
+              return response()->json(['error'=> true,'message' =>'Department Already Exists'],208);
+          }
+          else
+          {
+            TescoDepartment::where('id',$id)
+             ->update([
+               'department' => $department,
+               'pantone' => $pantone,
+               'rbg' => $rbg
+            ]);
+
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          }
         
         } catch (\Exception $e)
         {
@@ -313,11 +360,21 @@ class TescoSettings extends Controller
     public function addTescoSuppliers(Request $request)
     {
         try {
-            $inserted = TescoSupplier::create([
+              /** @var array [Database Unique field validation] */
+              $is_exists = TescoSupplier::where(['supplier_name' => $request['supplier_name'],'supplier_code' => $request['supplier_code']])->select('id')->get();
+              if(count($is_exists) > 0)
+              {
+                $result = response()->json(['error'=> true,'message' =>'Supplier Already Exists'],208);
+              }
+              else
+              {
+                $inserted = TescoSupplier::create([
                         'supplier_name' => $request['supplier_name'],
                         'supplier_code' => $request['supplier_code']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+              }
+            
 
         } catch (\Exception $e)
         {
@@ -352,18 +409,30 @@ class TescoSettings extends Controller
     public function updateTescoSuppliersById(Request $request)
     {
     try {
-          $id        = $request['id'];
-          $supplier_name      = $request['supplier_name'];
+          $id            = $request['id'];
+          $supplier_name = $request['supplier_name'];
           $supplier_code = $request['supplier_code'];
-        
-          
-          TescoSupplier::where('id',$id)
-           ->update([
-             'supplier_name' => $supplier_name,
-             'supplier_code' => $supplier_code
-          ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          /** @var array [Database Unique field validation] */
+          $is_exists = TescoSupplier::select('id')
+                       ->where('supplier_name', '=', $request['supplier_name'])
+                       ->where('supplier_code', '=', $request['supplier_code'])
+                       ->where('id','<>',$id)
+                       ->get();
+          if(count($is_exists) > 0)
+          {
+              return response()->json(['error'=> true,'message' =>'Supplier Already Exists.'],208);
+          }
+          else
+          {
+              TescoSupplier::where('id',$id)
+               ->update([
+                 'supplier_name' => $supplier_name,
+                 'supplier_code' => $supplier_code
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          }  
         
         } catch (\Exception $e)
         {
@@ -457,12 +526,25 @@ class TescoSettings extends Controller
     public function addTescoSizeCharts(Request $request)
     {
         try {
-            $inserted = TescoSizeChart::create([
+             $is_exists = TescoSizeChart::where('po_size', '=', $request['po_size'])->select('id')->get();
+             $is_exists = array(
+                 'po_size' => 'required|unique:tesco_size_chart,po_size',
+             );
+             $validator = Validator::make($request->all() ,$is_exists);
+             if($validator->fails())
+             {
+               $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
+             }
+             else
+             {
+                $inserted = TescoSizeChart::create([
                         'po_size' => $request['po_size'],
                         'uk' => $request['uk'],
                         'ce' => $request['ce']
                       ]);
-            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+            
 
         } catch (\Exception $e)
         {
@@ -500,16 +582,25 @@ class TescoSettings extends Controller
           $po_size      = $request['po_size'];
           $uk = $request['uk'];
           $ce = $request['ce'];
-        
-          
-          TescoSizeChart::where('id',$id)
-           ->update([
-             'po_size' => $po_size,
-             'uk' => $uk,
-             'ce' => $ce
-          ]);
 
-          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          $rules     = array('po_size' => 'unique:tesco_size_chart,po_size,'.$id);
+          $Validator  = Validator::make($request->all(),$rules);
+
+          if($Validator->fails())
+          {
+              return response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
+          }
+          else
+          {
+             TescoSizeChart::where('id',$id)
+              ->update([
+                'po_size' => $po_size,
+                'uk' => $uk,
+                'ce' => $ce
+             ]);
+
+             $result = response()->json(['error'=> false,'message' =>'Success'],200);
+          }
         
         } catch (\Exception $e)
         {

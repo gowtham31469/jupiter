@@ -174,7 +174,7 @@
                           </div>
                           <div class="col-md-6 customers-metadata" style="display: none;">
                             <div class="form-group has-feedback">
-                              {!! Form::label('customers_metadata', 'Select Customer From Metadata', ['class' => 'form_label']) !!}
+                              {!! Form::label('customers_metadata', 'Select Supplier From Metadata', ['class' => 'form_label']) !!}
                                 {{ Form::select('customers_metadata',$tesco_customers,'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'customers_metadata')) }}
                               <div class="help-block with-errors"></div>
                             </div>
@@ -456,7 +456,7 @@
                   </div>
                   <div class="col-md-6 edit-customers-metadata" style="display:none;">
                     <div class="form-group has-feedback">
-                      {!! Form::label('edit_customers_metadata', 'Select Customer From Metadata', ['class' => 'form_label']) !!}
+                      {!! Form::label('edit_customers_metadata', 'Select Supplier From Metadata', ['class' => 'form_label']) !!}
                         {{ Form::select('edit_customers_metadata',(['' => 'Choose one of the following...']),'',array('class' => 'form-control input-sm selectpicker','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...','id' => 'edit_customers_metadata')) }}
                       <div class="help-block with-errors"></div>
                     </div>
