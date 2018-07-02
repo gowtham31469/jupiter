@@ -2386,7 +2386,7 @@ class OrderController extends Controller
         //Check the file has been uploaded or not
         if($request->hasFile('purchase_order')) {
           $file = $request->file('purchase_order');
-          $name = str_replace(" ", "_", $file->getClientOriginalName());
+          $name = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $file->getClientOriginalName());
           $path = $file->move('storage/app/TESCO/purchaseOrder/UK', time().'_'.$name);
           //Read the Purchase Order Series
           $po_number = $this->getPOSeries($path);
@@ -2468,12 +2468,12 @@ class OrderController extends Controller
           if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
             //Move the orms file
             $orms = $request->file('ce_orms_purchase_order');
-            $orms_filename = str_replace(" ", "_", $orms->getClientOriginalName());
+            $orms_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $orms->getClientOriginalName());
             $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
 
             //Move the retek file
             $retek = $request->file('ce_retek_purchase_order');
-            $retek_filename = str_replace(" ", "_", $retek->getClientOriginalName());
+            $retek_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $retek->getClientOriginalName());
             $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
 
             //Parse ORMS File
