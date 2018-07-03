@@ -207,7 +207,7 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-6 hidden">
                             <div class="form-group has-feedback">
                               {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
                               <div class="input-group">
