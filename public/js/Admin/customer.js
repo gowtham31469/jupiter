@@ -45,7 +45,7 @@
                                   
                     if(item.bill_address != "-")
                     {
-                     table += '<td><dd>'+item.bill_address+','+item.bill_country+'-'+item.pincode+'</dd></td>';
+                     table += '<td><dd>'+item.bill_address+','+item.bill_country+'-'+item.bill_pincode+'</dd></td>';
                     }
                     else
                     {
@@ -53,7 +53,7 @@
                     }
                     if(item.ship_address != "-")
                     {
-                     table += '<td><dd>'+item.ship_address+','+item.ship_country+'-'+item.pincode+'</dd></td>';
+                     table += '<td><dd>'+item.ship_address+','+item.ship_country+'-'+item.ship_pincode+'</dd></td>';
                     }
                     else
                     {

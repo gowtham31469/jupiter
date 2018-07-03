@@ -132,7 +132,7 @@ class CustomerManagementController extends Controller
                   $value->bill_email     = $is_billing_address->bill_email;
                   $value->bill_telephone = $is_billing_address->bill_telephone;
                   $value->bill_fax       = $is_billing_address->bill_fax;
-                  $value->pincode        = $is_billing_address->pincode;
+                  $value->bill_pincode   = $is_billing_address->pincode;
                 }
                 else
                 {
@@ -141,7 +141,7 @@ class CustomerManagementController extends Controller
                   $value->bill_email     = "-";
                   $value->bill_telephone = "-";
                   $value->bill_fax       = "-";
-                  $value->pincode        = "-";
+                  $value->bill_pincode   = "-";
                 }
                 $is_shipping_address = DB::table('customer_bill_address')
                          ->select('customer_bill_address.address as ship_address','customer_bill_address.country as ship_country','customer_bill_address.email as ship_email','customer_bill_address.telephone as ship_telephone','customer_bill_address.fax as ship_fax','customer_bill_address.pincode')
@@ -155,7 +155,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = $is_shipping_address->ship_email;
                   $value->ship_telephone = $is_shipping_address->ship_telephone;
                   $value->ship_fax       = $is_shipping_address->ship_fax;
-                  $value->pincode       = $is_shipping_address->pincode;
+                  $value->ship_pincode   = $is_shipping_address->pincode;
                 }
                 else
                 {
@@ -164,7 +164,7 @@ class CustomerManagementController extends Controller
                   $value->ship_email     = "-";
                   $value->ship_telephone = "-";
                   $value->ship_fax       = "-";
-                  $value->pincode        = "-";
+                  $value->ship_pincode   = "-";
                 }
                 
               }            
@@ -863,12 +863,12 @@ class CustomerManagementController extends Controller
                         $value->bill_email     = $is_billing_address->bill_email;
                         $value->bill_telephone = $is_billing_address->bill_telephone;
                         $value->bill_fax       = $is_billing_address->bill_fax;
-                        $value->pincode        = $is_billing_address->pincode;
+                        $value->bill_pincode   = $is_billing_address->pincode;
                       }
                       else
                       {
                         $value->bill_address   = "-";
-                        $value->pincode        = "-";
+                        $value->bill_pincode   = "-";
                         $value->bill_country   = "-";
                         $value->bill_email     = "-";
                         $value->bill_telephone = "-";
@@ -886,7 +886,7 @@ class CustomerManagementController extends Controller
                         $value->ship_email     = $is_shipping_address->ship_email;
                         $value->ship_telephone = $is_shipping_address->ship_telephone;
                         $value->ship_fax       = $is_shipping_address->ship_fax;
-                        $value->pincode        = $is_shipping_address->pincode;
+                        $value->ship_pincode   = $is_shipping_address->pincode;
                       }
                       else
                       {
@@ -895,7 +895,7 @@ class CustomerManagementController extends Controller
                         $value->ship_email     = "-";
                         $value->ship_telephone = "-";
                         $value->ship_fax       = "-";
-                        $value->pincode        = "-";
+                        $value->ship_pincode   = "-";
                       }
                       
                     }  

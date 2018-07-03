@@ -37,14 +37,14 @@
                             <td>{{ $value->contact_person }}</td>
                             <td >
                               @if($value->bill_address != '-')
-                                  <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->pincode }}</dd>
+                                  <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->bill_pincode }}</dd>
                                 @else
                                   <dd>-</dd>
                                 @endif
                             </td>
                             <td >
                               @if($value->ship_address != '-')
-                                <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->pincode }}</dd>
+                                <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->ship_pincode }}</dd>
                               @else
                                 <dd>-</dd>
                               @endif
