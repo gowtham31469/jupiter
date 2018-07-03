@@ -98,12 +98,49 @@ class TemplateManagementCntrl extends Controller
     {
          $template_id = $request['template_id'];
          $treeviewData= DB::table("orchestra_template")
-                                ->select('orchestra_template.*','orchestra_item_master.ref_no','company.name as company_name')
+                                ->select('orchestra_template.*','orchestra_item_master.ref_no','orchestra_item_master.company_id','company.name as company_name')
                                 ->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_template.item_id')
                                 ->join('company','company.id','=','orchestra_item_master.company_id')
                                 ->where('item_id',$template_id)
                                 ->get();
          return json_encode($treeviewData);
     } 
+	public function saveTax(Request $request) {
+        try {
+            $template_id = $request['template_id'];
+            $taxation    = $request['tax'];
+			$name    = $request['name'];
+			$ref    = $request['ref'];
+			$company   = $request['company'];
+			$inside_tamilnadu   = $request['inside_tamilnadu'];
+			$outside_tamilnadu   = $request['outside_tamilnadu'];
+            DB::table('orchestra_template')
+                        ->where('id',$template_id)
+                        ->update([
+                           'tax' => $taxation,
+						   'inside_tamilnadu' => $inside_tamilnadu,
+						   'outside_tamilnadu' => $outside_tamilnadu
+                        ]);
+			
+			$items = DB::table("orchestra_template")
+                                ->select('*')
+                                ->where('id',$template_id)
+                                ->get();
+			$item_id = $items{0}->item_id;
+			DB::table('orchestra_item_master')
+                        ->where('id',$item_id)
+                        ->update([
+						   'company_id' => $company,
+						   'ref_no' => $ref
+                        ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    }
 }
 

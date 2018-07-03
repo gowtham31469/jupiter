@@ -277,6 +277,9 @@ Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@tem
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
 Route::post('admin/tesco/template-management/save-taxation', 'Admin\Tesco\TemplateManagementCntrl@saveTax');
+
+Route::post('admin/orchestra/template-management/save-taxation', 'Admin\Orchestra\TemplateManagementCntrl@saveTax');
+
 Route::get('admin/tesco/template-management/get-company', 'Admin\Tesco\TemplateManagementCntrl@getCompany');
 Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementCntrl@Orders');
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
