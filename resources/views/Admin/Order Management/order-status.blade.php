@@ -627,7 +627,7 @@
     $('#datePicker1').datepicker({
         autoclose: true,
         minViewMode: 1,
-        format: 'MM,yyyy',
+        format: 'MM,yyyy'
     })
     $('.remove').click(function() {
         $('.left-panel').removeClass('active');
