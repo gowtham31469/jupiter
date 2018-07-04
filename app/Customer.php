@@ -18,7 +18,7 @@ class Customer extends Authenticatable
       *
       * @var array
       */
-      protected $fillable = ['company_name','factory_code','email', 'password','courier_choice','tin_number','pan_number','gstin_number','is_active','pi_required','payment_terms','place_of_supply','freight_type','nominated_forwarder','po_required','credit_limit','delivery_date_required','delivery_day_count','short_name','sap_code'];
+      protected $fillable = ['company_name','factory_code','email', 'courier_choice','tin_number','pan_number','gstin_number','is_active','pi_required','payment_terms','place_of_supply','freight_type','nominated_forwarder','po_required','credit_limit','delivery_date_required','delivery_day_count','short_name','sap_code'];
     
 
      /**
