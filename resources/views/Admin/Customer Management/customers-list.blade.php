@@ -37,14 +37,14 @@
                             <td>{{ $value->contact_person }}</td>
                             <td >
                               @if($value->bill_address != '-')
-                                  <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->pincode }}</dd>
+                                  <dd>{{ $value->bill_address }},{{ $value->bill_country }}-{{ $value->bill_pincode }}</dd>
                                 @else
                                   <dd>-</dd>
                                 @endif
                             </td>
                             <td >
                               @if($value->ship_address != '-')
-                                <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->pincode }}</dd>
+                                <dd>{{ $value->ship_address }},{{ $value->ship_country }}-{{ $value->ship_pincode }}</dd>
                               @else
                                 <dd>-</dd>
                               @endif
@@ -204,17 +204,6 @@
                             <div class="form-group has-feedback">
                               {!! Form::label('forwarder', 'Select Nominated Forwarder', ['class' => 'form_label']) !!}
                                 {{ Form::select('forwarder',(['' => '-- Select a forwarder --']+ $forwarder),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'forwarder')) }}
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6 hidden">
-                            <div class="form-group has-feedback">
-                              {!! Form::label('password', 'Password', ['class' => ' form_label']) !!}
-                              <div class="input-group">
-                                {!! Form::text('password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password','required','minlength' => '6')) !!}
-                                <span id="generate_pwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
-                                <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#password">Copy</span>
-                              </div>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -489,17 +478,6 @@
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                  <div class="col-md-6 edit_pwd hidden">
-                    <div class="form-group has-feedback">
-                      {!! Form::label('edit_password', 'Password', ['class' => ' form_label']) !!}
-                      <div class="input-group">
-                        {!! Form::text('edit_password',$value = '', array('class' => 'form-control js-copytextarea','placeholder' => 'Password')) !!}
-                        <span id="generate_edit_pwd" class="input-group-addon input-sm" style="background-color:#18bc9c;border-right: white;border-style: solid;color:white;">Generate Password</span>
-                        <span class="input-group-addon js-textareacopybtn clipboard input-sm" style="background-color:#2c3e50;color:white;"  data-clipboard-target="#edit_password">Copy</span>
-                      </div>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
@@ -731,18 +709,6 @@
       $('#customers_metadata').prop('required',false)
      })
 
-    /** Generate random password for customer **/
-    $("#generate_pwd").validator().click(function(){
-      $("#password").val( randomString(10, 'aA#!'));
-      $('#add_customer_form').validator('validate');
-    })
-
-    /** generate random password while editing customer **/
-    $("#generate_edit_pwd").validator().click(function(){
-      $("#edit_password").val( randomString(10, 'aA#!'));
-      $('#edit_customer_form').validator('validate');
-    })
-
     /** function to generate random strings */
     function randomString(length, chars)
       {
@@ -755,18 +721,6 @@
         for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
         return result;
       }
-
-    /** Copy password to clipboard **/
-    $( document ).ready(function() {
-      var clipboard = new Clipboard('.clipboard');
-      clipboard.on('success', function(e) {
-        $(e.trigger).text("Copied!");
-        e.clearSelection();
-        setTimeout(function() {
-          $(e.trigger).text("Copy");
-        }, 2500);
-      });
-    });
 
     /** submit add customer form and check validation **/
     $('#add_customer_form').validator().on('submit', function (e) {

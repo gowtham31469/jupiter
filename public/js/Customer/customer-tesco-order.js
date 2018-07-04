@@ -182,10 +182,10 @@ function tescoOrders() {
                                                                         <div class="form-group has-feedback">
                                                                             <label for="order_type" class="form_label">Select Order Type</label>
                                                                             <div>
-                                                                                <label><input type="radio" class=" order_type" name="radio" value="1" required="" style="margin-right: 5px;">PO Upload
+                                                                                <label><input type="radio" class="order_type" name="radio" value="1" required="" style="margin-right: 5px;">PO Upload
                                                                                 </label>
 
-                                                                                <label><input type="radio" class=" order_type" name="radio" value="2" required="" style="margin-right: 5px;"> Manual Entry
+                                                                                <label><input type="radio" class="order_type" name="radio" value="2" required="" style="margin-right: 5px;"> Manual Entry
                                                                                 </label>
                                                                               </div>
                                                                             <div class="help-block with-errors"></div>

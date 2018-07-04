@@ -45,7 +45,7 @@
                                   
                     if(item.bill_address != "-")
                     {
-                     table += '<td><dd>'+item.bill_address+','+item.bill_country+'-'+item.pincode+'</dd></td>';
+                     table += '<td><dd>'+item.bill_address+','+item.bill_country+'-'+item.bill_pincode+'</dd></td>';
                     }
                     else
                     {
@@ -53,7 +53,7 @@
                     }
                     if(item.ship_address != "-")
                     {
-                     table += '<td><dd>'+item.ship_address+','+item.ship_country+'-'+item.pincode+'</dd></td>';
+                     table += '<td><dd>'+item.ship_address+','+item.ship_country+'-'+item.ship_pincode+'</dd></td>';
                     }
                     else
                     {
@@ -144,7 +144,6 @@ function addCustomer()
         var gstin_number        =  $('#gstin_number').val();
         var pan_number          =  $('#pan_number').val();
         var login_email         =  $('#login_email').val();
-        var password            =  $('#password').val();
         var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
         var pi_required         =  $('#pi_required').is(':checked')?1:0;
         var payment_term        =  $("#payment_terms option:selected").val();
@@ -314,7 +313,7 @@ function addCustomer()
         $.ajax({
             url: base_url + "/admin/customer-management/add-customer",
             method: 'POST',
-            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,p:password,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
+            data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,delivery_date_req:delivery_date_req,freight:freight,forwarder:forwarder,day_count:day_count,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
             tryCount : 0,
             retryLimit : 2,
             beforeSend: function () {
@@ -784,7 +783,6 @@ function addCustomer()
           var a = []
           $('#editContact').html('');
           $('#editbilladdress').html('');
-          $('#edit_password').val('');
           $('.edit-customers-metadata').hide();
          $.ajax({
              url:base_url + "/admin/customer-management/get-customers",
@@ -849,18 +847,6 @@ function addCustomer()
                     $('#edit_pi_required').prop('checked', false);
                   }
 
-                  /** [ if already password entered,Hide password input field. Othewise show ] */
-                  if(data.customers[0].password === 1)
-                   {
-                    $('.edit_pwd').addClass('hidden');
-                    $('#edit_password').prop('required',false)
-                   }
-                   else
-                   {
-                    $('.edit_pwd').removeClass('hidden');
-                    $('#edit_password').prop('required',true)
-                    $('#edit_password').attr('minlength',6)
-                   }
                    /** [ Delivery date mandatory checkbox  checked or not  ] */
                    if(data.customers[0].delivery_date_required === 1)
                     {
@@ -1212,7 +1198,6 @@ function addCustomer()
           var gstin_number        =  $('#edit_gstin_number').val();
           var pan_number          =  $('#edit_pan_number').val();
           var login_email         =  $('#edit_login_email').val();
-          var password            =  $('#edit_password').val();
           var csrf_token          =  $('meta[name="csrf-token"]').attr('content');
           var pi_required         =  $('#edit_pi_required').is(':checked')?1:0;
           var payment_term        =  $("#edit_payment_terms option:selected").val();
@@ -1373,7 +1358,7 @@ function addCustomer()
           $.ajax({
               url: base_url + "/admin/customer-management/update-customer",
               method: 'PUT',
-              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,p:password,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
+              data: {_token:csrf_token,factory_code:factory_code,company_name:company_name,contact_person:contact_person,contact_phone:contact_phone,contact_email:contact_email,courier_choice:courier_choice,tin_number:tin_number,gstin_number:gstin_number,pan_number:pan_number,login_email:login_email,address:address,country:country,telephone:telephone,fax:fax,address_email:address_email,default_contact:default_contact,billing_address:billing_address,id:id,buyer:buyer,pi_required:pi_required,shipping_address:shipping_address,payment_term:payment_term,place_of_supply:place_of_supply,po_required:po_required,freight:freight,forwarder:forwarder,day_count:day_count,delivery_date_req:delivery_date_req,short_name:short_name,pincode:pincode,customers:customers,sap_code:sap_code},
               tryCount : 0,
               retryLimit : 2,
               beforeSend: function () {
@@ -1472,8 +1457,8 @@ function addCustomer()
                 $('#tin-number').text(data.customers[0].tin_number == null?'-':data.customers[0].tin_number);
                 $('#payment-terms').text(data.customers[0].payment_terms == null?'-':data.customers[0].payment_terms);
                 $('#place-of-supply').text(data.customers[0].place_of_supply == null?'-':data.customers[0].place_of_supply);
-                $('#freight-type').text(data.customers[0].freight_type == null?'-':data.customers[0].freight_type);
-                $('#nominated-forwarder').text(data.customers[0].nominated_forwarder == null?'-':data.customers[0].nominated_forwarder);
+                $('#freight-type').text(data.customers[0].freight_terms == null?'-':data.customers[0].freight_terms);
+                $('#nominated-forwarder').text(data.customers[0].forwarder == null?'-':data.customers[0].forwarder);
                 $('#delivery-date-required').text(data.customers[0].delivery_date_required == 1?'Yes':'No');
                 $('#pi-required').text(data.customers[0].pi_required == 1?'Yes':'No');
                 $('#po-required').text(data.customers[0].po_required == 1?'Yes':'No');
