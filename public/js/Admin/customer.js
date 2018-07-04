@@ -1472,8 +1472,8 @@ function addCustomer()
                 $('#tin-number').text(data.customers[0].tin_number == null?'-':data.customers[0].tin_number);
                 $('#payment-terms').text(data.customers[0].payment_terms == null?'-':data.customers[0].payment_terms);
                 $('#place-of-supply').text(data.customers[0].place_of_supply == null?'-':data.customers[0].place_of_supply);
-                $('#freight-type').text(data.customers[0].freight_type == null?'-':data.customers[0].freight_type);
-                $('#nominated-forwarder').text(data.customers[0].nominated_forwarder == null?'-':data.customers[0].nominated_forwarder);
+                $('#freight-type').text(data.customers[0].freight_terms == null?'-':data.customers[0].freight_terms);
+                $('#nominated-forwarder').text(data.customers[0].forwarder == null?'-':data.customers[0].forwarder);
                 $('#delivery-date-required').text(data.customers[0].delivery_date_required == 1?'Yes':'No');
                 $('#pi-required').text(data.customers[0].pi_required == 1?'Yes':'No');
                 $('#po-required').text(data.customers[0].po_required == 1?'Yes':'No');
