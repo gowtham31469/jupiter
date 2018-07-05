@@ -1162,6 +1162,7 @@ function printDivTesco(data,name) {
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 					
 					//svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 26 53.6)");
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 25.5 53.6014)");
 				}
 				else
 				{
@@ -1407,6 +1408,7 @@ function printDivTesco(data,name) {
 			
 				if((name== "TSL3-sticker"))
 				{
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 28.5 53.6014)");
 					
 				}
 				else
@@ -1459,6 +1461,7 @@ function printDivTesco(data,name) {
 					}
 					jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 63.9998 204)");
 				}
 				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
 				{
@@ -1472,6 +1475,16 @@ function printDivTesco(data,name) {
 					}
 					jsbarcodetesco(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+					if((name == "TCL1-sticker"))
+					{
+						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 63 204.0012)");
+					}
+					else if((name == "THL1-sticker"))
+					{
+						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 60.9998 204.0003)");
+					}
+					
 					
 				}
 				
@@ -1609,6 +1622,24 @@ function printDivTesco(data,name) {
 			PopupTesco(svg_fin,name,zone);
 		}
 			
+			
+			if((name== "THL3-sticker"))
+			{
+				svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 66.9998 204)");
+			}
+			else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
+			{
+				if((name == "TCL1-sticker"))
+				{
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 66 204.0012)");
+				}
+				else if((name == "THL1-sticker"))
+				{
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 63.9998 204.0003)");
+				}
+
+
+			}
 		}
 	
 		
