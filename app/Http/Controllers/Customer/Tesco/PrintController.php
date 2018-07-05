@@ -35,8 +35,26 @@ class PrintController extends Controller
    * @return pdf
    */
   
-      public function printDivTesco(Request $request)
+    public function printDivTesco(Request $request)
     {
+		 $id=$request->id;
+		 $db=$request->db;
+		
+		 $create = DB::table($db)
+					->select('*')
+					->where('id',$id)
+					->get();
+		 $this->created_date = $create{0}->created_at;
+		  
+		 $company_id = Auth::guard('web_customer')->user()->company_id; 
+		
+		 $customer = DB::table("customers")
+					->select('*')
+					->where('id',$company_id)
+					->get();
+		 $customer_name = $customer{0}->short_name;
+		  
+		 $this->customer_name = $customer_name;
 		
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;
@@ -72,7 +90,8 @@ class PrintController extends Controller
 			$tesco_po_number=$this->tesco_po_number;
 			$style=$this->style;
 			$tesco_description=$this->template_desc;
-			
+			$date=date_create($this->created_date);
+			$created_date =  date_format($date,"d.m.Y");
 						 $image_file= K_PATH_IMAGES.'logo_example.jpg';
 					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
 <title>Qt Svg Document</title>
@@ -148,7 +167,7 @@ class PrintController extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Style: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.date("d.m.Y").'</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.$created_date.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Description: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Rev.no:</text>
@@ -162,7 +181,8 @@ class PrintController extends Controller
 		
 				// Custom Footer
 				PDF::setFooterCallback(function($pdf) {
-		$tesco_po_number=$this->tesco_po_number;
+					$tesco_po_number=$this->tesco_po_number;
+					$customer_name=$this->customer_name;
 						// Position at 15 mm from bottom
 						$pdf->SetY(-50);
 					    $pdf->SetX(9.5);
@@ -208,7 +228,7 @@ class PrintController extends Controller
 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: '.$customer_name.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Approved by: </text>
 </g>
@@ -276,6 +296,26 @@ class PrintController extends Controller
   
     public function printDivTescoSmall(Request $request)
     {
+		 $id=$request->id;
+		 $db=$request->db;
+		
+		 $create = DB::table($db)
+					->select('*')
+					->where('id',$id)
+					->get();
+		 $this->created_date = $create{0}->created_at;
+		
+		
+		$company_id = Auth::guard('web_customer')->user()->company_id; 
+		
+		 $customer = DB::table("customers")
+					->select('*')
+					->where('id',$company_id)
+					->get();
+		 $customer_name = $customer{0}->short_name;
+		  
+		 $this->customer_name = $customer_name;
+		
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;
 		  if($request->name == "TSL1-sticker")
@@ -297,7 +337,8 @@ class PrintController extends Controller
 			$tesco_po_number=$this->tesco_po_number;
 			$style=$this->style;
 			$tesco_description=$this->template_desc;
-			
+			$date=date_create($this->created_date);
+			$created_date =  date_format($date,"d.m.Y");
 						 $image_file= K_PATH_IMAGES.'logo_example.jpg';
 					$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
 <title>Qt Svg Document</title>
@@ -373,7 +414,7 @@ class PrintController extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Style: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.date("d.m.Y").'</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.$created_date.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 40x30mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Description: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Rev.no:</text>
@@ -388,6 +429,7 @@ class PrintController extends Controller
 				// Custom Footer
 				PDF::setFooterCallback(function($pdf) {
 		$tesco_po_number=$this->tesco_po_number;
+					$customer_name=$this->customer_name;
 						// Position at 15 mm from bottom
 						$pdf->SetY(-50);
 					    $pdf->SetX(9.5);
@@ -433,7 +475,7 @@ class PrintController extends Controller
 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
 </g>
 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Customer: '.$customer_name.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No. : '.$tesco_po_number.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">Approved by: </text>
 </g>
