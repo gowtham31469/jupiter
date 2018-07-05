@@ -1874,6 +1874,7 @@ class OrderManagementCntrl extends Controller
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$yy=12.5;
+//		PDF::AddPage('L', array(80,127));
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);

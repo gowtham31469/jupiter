@@ -1160,6 +1160,8 @@ function printDivTesco(data,name) {
 					}
 					jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+					//svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 26 53.6)");
 				}
 				else
 				{
@@ -1173,6 +1175,8 @@ function printDivTesco(data,name) {
 					}
 					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 20 53.6)");
 					
 				}
 				
@@ -1621,6 +1625,32 @@ function PopupTesco(data,name,zone) {
 	}
 	
 	
+	if(name == "TCL1-sticker")
+	{
+		var id = $('#TCL1_id').val();
+		var db = "tesco_tcl1_orders";
+	}
+	else if(name == "TCL2-sticker")
+	{
+		var id = $('#TCL2_id').val();
+		var db = "tesco_tcl2_orders";
+	}
+	else if(name == "TCL4-sticker")
+	{
+		var id = $('#TCL4_id').val();
+		var db = "tesco_tcl4_orders";
+	}
+	else if(name == "THL1-sticker")
+	{
+		var id = $('#THL1_id').val();
+		var db = "tesco_thl1_orders";
+	}
+	else if(name == "THL3-sticker")
+	{
+		var id = $('#THL3_id').val();
+		var db = "tesco_thl3_orders";
+	}
+	
 	var tesco_description = $('#tesco_description').val();
 	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -1634,7 +1664,9 @@ function PopupTesco(data,name,zone) {
 			zone:zone,
 			style:style,
 			tesco_po_number:tesco_po_number,
-			tesco_description:tesco_description
+			tesco_description:tesco_description,
+			id:id,
+			db:db
 		},
         tryCount : 0,
         retryLimit : 2,
@@ -1675,7 +1707,16 @@ function PopupTesco(data,name,zone) {
  */
 
 function PopupTescoSmall(data,name,zone) {
-	
+	if(name == "TSL1-sticker")
+	{
+		var id = $('#TSL1_id').val();
+		var db = "tesco_tsl1_orders";
+	}
+	else if(name == "TSL3-sticker")
+	{
+		var id = $('#TSL3_id').val();
+		var db = "tesco_tsl3_orders";
+	}
 	var tesco_po_number = $('#tesco_po_number').val();
 	if(zone == "CE")
 	{
@@ -1702,7 +1743,9 @@ function PopupTescoSmall(data,name,zone) {
 			zone:zone,
 			style:style,
 			tesco_po_number:tesco_po_number,
-			tesco_description:tesco_description
+			tesco_description:tesco_description,
+			id:id,
+			db:db
 		},
         tryCount : 0,
         retryLimit : 2,
