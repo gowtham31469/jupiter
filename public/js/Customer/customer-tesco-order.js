@@ -1176,7 +1176,7 @@ function printDivTesco(data,name) {
 					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 					
-					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 20 53.6)");
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 23 53.6)");
 					
 				}
 				
@@ -1404,6 +1404,15 @@ function printDivTesco(data,name) {
 
 				PopupTescoSmall(svg_fin,name,zone);
 			}
+			
+				if((name== "TSL3-sticker"))
+				{
+					
+				}
+				else
+				{
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 26 53.6)");
+				}
 			
 		}
 		else
