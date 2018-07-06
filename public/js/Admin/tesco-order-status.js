@@ -1738,20 +1738,21 @@ function setEditOrderStatus()
 		}
 	if(barcode_checks == 0)
 	{
-		$.ajax({
-			 url: base_url + "/admin/tesco/edit-check-exist-po",
-			 type: 'post',
-			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
-			 success: function (data) {
-				if(data == "true")
-				{
+//		$.ajax({
+//			 url: base_url + "/admin/tesco/edit-check-exist-po",
+//			 type: 'post',
+//			 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,zone:zone,edit_id:edit_id,template_name:template_name},
+//			 success: function (data) {
+//				if(data == "true")
+//				{
 					$('#po_already_error').addClass('hidden')
 					$.ajax({
 						 url: base_url + "/admin/tesco/set-tesco-order-status",
 						 type: 'post',
 						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
 						 success: function (data) {
-							 $('.left-panel').removeClass('active');  
+							 $('.left-panel').removeClass('active'); 
+							 td_row.find('td:nth-child(6)').text(data);
 							// location.reload()
 						 },
 						 error: function (data) {
@@ -1762,7 +1763,7 @@ function setEditOrderStatus()
 						 }
 					 })
 
-					td_row.find('td:nth-child(6)').text($("#tesco_supplier option:selected").text());
+					
 					td_row.find('td:nth-child(2)').text(po_number);
 					
 					if (order_type == "reOrder")
@@ -1787,19 +1788,19 @@ function setEditOrderStatus()
 						td_row.find('td:nth-child(1) a').html(span_style + uk_style);
 					}
 
-				}
-				else
-				{
-					$('#po_already_error').removeClass('hidden')
-				}
-			 },
-			 error: function (data) {
-				console.log(data);
-			 },
-			 complete: function () {
-
-			 }
-		})
+//				}
+//				else
+//				{
+//					$('#po_already_error').removeClass('hidden')
+//				}
+//			 },
+//			 error: function (data) {
+//				console.log(data);
+//			 },
+//			 complete: function () {
+//
+//			 }
+//		})
 	}
 	 
 	
