@@ -83,7 +83,7 @@
                       <div id="buyer_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('buyer_name', 'Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                          {!! Form::text('buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
@@ -137,7 +137,7 @@
                      {!! Form::hidden('buyer_edit_id',$value = null, array('id'=>'buyer_edit_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_buyer_name', 'Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                         {!! Form::text('edit_buyer_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
