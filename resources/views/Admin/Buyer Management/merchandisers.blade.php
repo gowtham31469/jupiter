@@ -76,7 +76,7 @@
                     <div id="add_merchandiser_result"></div>
                       <div class="form-group has-feedback">
                         {!! Form::label('merchandiser_name', 'Name', ['class' => 'form_label']) !!}
-                        {!! Form::text('merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                        {!! Form::text('merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group has-feedback">
@@ -139,7 +139,7 @@
                    <div id="edit_merchandiser_result"></div>
                      <div class="form-group has-feedback">
                        {!! Form::label('edit_merchandiser_name', 'Name', ['class' => 'form_label']) !!}
-                       {!! Form::text('edit_merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required')) !!}
+                       {!! Form::text('edit_merchandiser_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
