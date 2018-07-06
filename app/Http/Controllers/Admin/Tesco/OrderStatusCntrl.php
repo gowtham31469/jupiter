@@ -584,6 +584,11 @@ class OrderStatusCntrl extends Controller
 			$single_size = explode(',',$request['single_size']);
 		}
 		
+			
+		$customer_ids=DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
+		
+		$customer_name=DB::table('customers')->where('id',$customer_ids{0}->customer_id)->select('*')->get();
+		
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'zone'                 => $request['zone'],
@@ -597,7 +602,7 @@ class OrderStatusCntrl extends Controller
 								  'manufacture_date'     => $request['manufacture_date'],
 								  'tesco_department_id'  => $request['department'],
 								  'tesco_brand_id'       => $request['brand'],
-								  'tesco_supplier_id'    => $request['supplier'],
+								  'tesco_supplier_id'    => $customer_ids{0}->customer_id, 'tesco_metadata_supplier_id'    => $request['supplier'],
 								  'rfid_compliant'       => $request['rfid'],
 								  'tag_at_source'        => $request['tag_at_source'],
                                 ]);
@@ -659,7 +664,7 @@ class OrderStatusCntrl extends Controller
 		}
 		
 		
-		echo true;	
+		echo $customer_name{0}->company_name;	
 			  
     }
 	

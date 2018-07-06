@@ -1188,11 +1188,11 @@ function printDivTesco(data, name) {
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
 									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
 							} else if (data.size_chart.length != 0) {
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 								svgDoc.getElementById("description1").innerHTML = '';
 							} else if (description != '') {
@@ -1214,7 +1214,7 @@ function printDivTesco(data, name) {
 									}
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
@@ -1264,7 +1264,7 @@ function printDivTesco(data, name) {
 							} else {
 								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 								svgDoc.getElementById("description1").innerHTML = "";
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 							}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
@@ -1298,7 +1298,7 @@ function printDivTesco(data, name) {
 				} else {
 					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 					svgDoc.getElementById("description1").innerHTML = "";
-					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 				}
 				var s = new XMLSerializer();
 				var d = svgRoot;
@@ -2053,7 +2053,7 @@ function dynamicSVGTemplatescard(id, item) {
 						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 					} else {
 						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
-						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 						svgDoc.getElementById("description1").innerHTML = "";
 					}
 
@@ -2164,11 +2164,11 @@ function dynamicSVGTemplatescard(id, item) {
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
 									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
 							} else if (data.size_chart.length != 0) {
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 								svgDoc.getElementById("description1").innerHTML = '';
 							} else if (description != '') {
@@ -2190,7 +2190,7 @@ function dynamicSVGTemplatescard(id, item) {
 									}
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
@@ -2241,7 +2241,7 @@ function dynamicSVGTemplatescard(id, item) {
 								} else {
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
@@ -2283,7 +2283,7 @@ function dynamicSVGTemplatescard(id, item) {
 					} else {
 						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 						svgDoc.getElementById("description1").innerHTML = "";
-						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 					}
 				} else {
 					svgDoc.getElementById("description").innerHTML = '';
@@ -2383,12 +2383,12 @@ function dynamicSVGTemplatescard(id, item) {
 								} else {
 									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								}
 							} else if (data.size_chart.length != 0) {
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 								svgDoc.getElementById("description1").innerHTML = "";
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 							} else if (description != '') {
 								if (description.length > 24) {
 									if (/\S/.test(description.charAt(24))) {
@@ -2410,7 +2410,7 @@ function dynamicSVGTemplatescard(id, item) {
 								} else {
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								}
 							} else {
 								svgDoc.getElementById("description").innerHTML = '';
@@ -2458,7 +2458,7 @@ function dynamicSVGTemplatescard(id, item) {
 								} else {
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
