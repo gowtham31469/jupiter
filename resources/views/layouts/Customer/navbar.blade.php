@@ -109,17 +109,17 @@
                      {!! Form::hidden('customer_id',$value = Auth::guard("web_customer")->user()->id, array('id'=>'merchandiser_id','class' => 'form-control input-sm')) !!}
                      <div class="form-group has-feedback">
                        {!! Form::label('current_password', 'Current Password', ['class' => 'form_label']) !!}
-                       {!! Form::text('current_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Current Password','required', 'data-minlength' => 6)) !!}
+                       {!! Form::password('current_password', array('class' => 'form-control input-sm ','placeholder' => 'Current Password','required', 'data-minlength' => 6)) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('new_password', 'New Password', ['class' => 'form_label']) !!}
-                       {!! Form::text('new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'New Password','required', 'data-minlength' => 6)) !!}
+                       {!! Form::password('new_password', array('class' => 'form-control input-sm ','placeholder' => 'New Password','required', 'data-minlength' => 6)) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                      <div class="form-group has-feedback">
                        {!! Form::label('confirm_new_password', 'Confirm New Password', ['class' => 'form_label']) !!}
-                       {!! Form::text('confirm_new_password',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Confirm New Password','required','data-match' => '#new_password', 'data-match-error' => "Whoops, these don't match", 'data-minlength' => 6)) !!}
+                       {!! Form::password('confirm_new_password', array('class' => 'form-control input-sm ','placeholder' => 'Confirm New Password','required','data-match' => '#new_password', 'data-match-error' => "Whoops, these don't match", 'data-minlength' => 6)) !!}
                        <div class="help-block with-errors"></div>
                      </div>
                     </div>
