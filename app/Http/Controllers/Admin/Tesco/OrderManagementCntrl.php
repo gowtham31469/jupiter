@@ -1873,24 +1873,29 @@ class OrderManagementCntrl extends Controller
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
+		$j=0;
 		$yy=12.5;
 //		PDF::AddPage('L', array(80,127));
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-			
-			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(129, 82.5, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
 			if($i == 3)
 			{
-				$yy=112.5;
+				PDF::AddPage('P', 'A4');
+				$yy=92.5;
 				$i = 0;
 			}
 			else
 			{
-				$yy += 100;
+				$yy += 85;
 			}
 			//print_r($yy);
 			 $i++;
+			$j++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -1919,7 +1924,7 @@ class OrderManagementCntrl extends Controller
 		PDF::SetAutoPageBreak(TRUE);
         $i=0;
 		$yy=0;
-		$j=1;
+		$j=0;
 		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
@@ -1945,12 +1950,17 @@ class OrderManagementCntrl extends Controller
 			{
 				$xx+=70;
 			}
-			$j++;
 			
-			 PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			// PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			
+				file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
 			
 			//print_r($yy);
 			 $i++;
+			$j++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
