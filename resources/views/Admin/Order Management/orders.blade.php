@@ -409,8 +409,14 @@ border: 0;
                     <strong>Success! </strong>
                     PO uploaded successfully.
                 </div>
+                <form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
                 <div id="po-upload-modal-content"></div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
+                <button class="btn btn-primary btn-sm po-submit-btn" type="submit">Save</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

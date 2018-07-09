@@ -4397,23 +4397,27 @@ function afterOrderSubmitted(data) {
 		showSnackbar();
 
 		/** Buyer Po upload modal for combined po upload modal */
-		var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-             <div class="container-fluid">\
+		var html = '<div class="container-fluid">\
                  <div class="template-error1"></div>\
-                 <div class="row">\
                      <div class="col-md-12">\
                          <br> <strong>Select Artworks :</strong>';
 		$.each(data.last_insertions, function (index, value) {
-			html += '<div class="form-check form-group has-feedback">\
-                     <label class="form-check-label">\
+			html += '<div class="row">\
+			          <div class="col-md-4">\
+			           <div class="form-check form-group has-feedback">\
+                        <label class="form-check-label">\
                          <input class="form-check-input template-checkbox1" type="checkbox" value="' + value + '" name="' + index.replace(' ', '') + '" id="' + index.replace(' ', '') + '" style="margin-right: 10px;" data-name="' + index.replace(' ', '') + '"> ' + index + ' </label>\
                      <div class="help-block with-errors"></div>\
-                 </div>';
+                 </div></div>\
+                 <div class="col-md-8 '+index.replace(' ', '')+'-po-div" style="display:none; margin-top: 5px;">\
+                 <strong><span id="'+index.replace(' ', '')+'-uploaded-po"></span></strong>\
+                 <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
+                 </div></div>';
 		});
 		html += '</div>\
                      <hr>\
                      <div class="row">\
-                         <div class="col-md-12">\
+                         <div class="col-md-12 upload-po-form">\
                              <div class="col-md-6">\
                                  <div class="form-group has-feedback">\
                                      <label for="po_number" class="form_label">PO Number</label>\
@@ -4455,13 +4459,7 @@ function afterOrderSubmitted(data) {
 		}
 		html += '        </div>\
                        </div>\
-                    </div>\
-                 </div>\
-                 <div class="modal-footer">\
-                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                     <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                 </div>\
-                 </form>';
+                    </div>';
 		/** Dynamic content for po upload modal tab */
 		$('#po-upload-modal-content').html(html);
 	}
@@ -4561,16 +4559,19 @@ function afterOrderSubmitted(data) {
 				var delivery_date = $('#combined_delivery_date').val();
 				var po_number = $('#po_number').val();
 				var po_file = $('#po_file').prop('files')[0];
+				template_id = [];
+				templates = [];
 				/** [ Create array of Templates selected ] */
 				$('.template-checkbox1').each(function (i, item) {
-					i += 1;
 					if ($(this).is(':checked')) {
-						formData.append('template_id_' + i, $(this).val());
-						formData.append('template_' + i, $(this).data('name'));
+						template_id[i]    = $(this).val();
+						templates[i]      = $(this).data('name');
 						templateName.push($(this).data('name'));
 					}
 				});
 
+				formData.append('template_id', template_id);
+				formData.append('templates', templates);
 				formData.append('delivery_date', delivery_date);
 				formData.append('po_number', po_number);
 				formData.append('po_file', po_file);
@@ -4880,7 +4881,18 @@ function uploadCombinedPO(formdata, templateName) {
 					$.each(templateName, function (index, value) {
 						$('input[type="checkbox"]#' + value).prop('checked', false)
 						$('input[type="checkbox"]#' + value).prop('disabled', true)
+						$('.'+ value+'-po-div').show();
+						$('#'+ value+'-uploaded-po').text("PO Number : " + data.po_number);
 					});
+
+					
+					if($('.template-checkbox1').filter(':not(:disabled)').length === 0)
+					{
+						$('.po-submit-btn').text('Place Order');
+						$('.po-submit-btn').attr('data-dismiss', 'modal')
+						$('.upload-later').hide();
+						$('.upload-po-form').hide();
+					}
 					/** [ Show success alert] */
 					$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
 						$("#success-alert").slideUp(500);
