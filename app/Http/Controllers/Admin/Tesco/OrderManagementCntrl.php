@@ -1917,20 +1917,37 @@ class OrderManagementCntrl extends Controller
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
         $i=0;
-		$yy=12.5;
+		$yy=0;
+		$j=1;
+		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			if($i == 3)
+			PDF::SetFillColor(255,255,255);
+			if($i == 3 || $i == 6 || $i == 9 || $i == 12 || $i == 18)
 			{
-				$yy=112.5;
-				$i = 0;
+				$xx=15;
+				$yy+=50;
 			}
-			else
+			else if($i == 0)
 			{
-				$yy += 100;
+				$yy=10;
+				$xx=15;
 			}
+			else if($i == 15)
+			{
+				PDF::AddPage();
+				$xx=15;
+				$yy=10;
+			}
+			else 
+			{
+				$xx+=70;
+			}
+			$j++;
+			
+			 PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			
 			//print_r($yy);
 			 $i++;
 		}
