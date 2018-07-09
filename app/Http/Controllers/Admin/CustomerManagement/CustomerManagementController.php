@@ -782,7 +782,7 @@ class CustomerManagementController extends Controller
                                     ->whereNotIn('tesco_suppliers.id',$already_linked_customers)
                                     ->pluck('supplier_name','id')
                                     ->all();
-                 // $tesco_customers = DB::table('tesco_suppliers')->where('is_enabled','=',1)->pluck('supplier_name','id')->all();
+                 
                  $customers       = DB::table('customers')
                                    ->select('customers.id','customers.company_name','customers.factory_code','customers.courier_choice','customers.tin_number','customers.pan_number','customers.email','customers.gstin_number','customers.is_active')
                                    ->orderBy('is_active','desc')
@@ -936,7 +936,7 @@ class CustomerManagementController extends Controller
                                     ->where('is_active','=',1)
                                     ->pluck('company_name','id')
                                     ->all();
-                 // $tesco_customers = DB::table('tesco_suppliers')->where('is_enabled','=',1)->pluck('supplier_name','id')->all();
+                 
                  $customers       =  DB::table('customer_profile')
 					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
 					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
