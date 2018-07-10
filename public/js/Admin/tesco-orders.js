@@ -4421,7 +4421,7 @@ function afterOrderSubmitted(data) {
                              <div class="col-md-6">\
                                  <div class="form-group has-feedback">\
                                      <label for="po_number" class="form_label">PO Number</label>\
-                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="9">\
                                      <div class="help-block with-errors"></div>\
                                  </div>\
                              </div>\
