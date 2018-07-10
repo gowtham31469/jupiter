@@ -292,6 +292,9 @@ Route::get('admin/tesco/get-moq-value', 'Admin\Tesco\OrderManagementCntrl@getTes
 Route::post('admin/tesco/print-div-tesco', 'Admin\Tesco\OrderManagementCntrl@printDivTesco');
 Route::post('admin/tesco/print-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@printDivTescoSmall');
 
+Route::post('admin/tesco/generate-div-tesco', 'Admin\Tesco\OrderManagementCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tesco-small', 'Admin\Tesco\OrderManagementCntrl@generateDivTescoSmall');
+
 Route::post('admin/tesco/set-ce-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCERatioOrders');
 Route::post('admin/tesco/set-ce-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@setCESingleOrders');
 
