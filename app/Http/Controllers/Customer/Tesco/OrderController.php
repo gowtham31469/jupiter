@@ -27,7 +27,6 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
-use App\Classes\TescoPOUploadTemplatesSwitch;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
 use PDF;
@@ -1326,45 +1325,48 @@ class OrderController extends Controller
      * @return boolean true or false
      */
     public function uploadCombinedOrdersPO(Request $request)
-    {
-      
-       try {
-             /** [ Creating new object for TescoPOUploadTemplatesSwitch() class ] */
-             $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
-              $po_file = $request['po_file'];
-              $path = $po_file->getRealPath();
-              $filename = $po_file->getClientOriginalName();
-              $destination_path='/storage/app/public/po-files/';
-              $path='storage/app/public/po-files/';
-              $Orname = $po_file->getClientOriginalName();
-              $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
-              $po_file->move($path,$filename);
-              $destination_path_insert=$destination_path.$filename;
-             if($request['template_1'])
-             {
-                $response = $tesco_po_obj->combinedPOUploadTemplate1Switch($request['template_1'],$request,$destination_path_insert);
-             }
-             if ($request['template_2']) {
-                $response = $tesco_po_obj->combinedPOUploadTemplate2Switch($request['template_2'],$request,$destination_path_insert);
-             }
-             if ($request['template_3']) {
-                $response = $tesco_po_obj->combinedPOUploadTemplate3Switch($request['template_3'],$request,$destination_path_insert);
-             }
-
-             if (($response != '') || ($response != "Invalid Template")) 
-             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
-             }
-             else
-             {
-              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-             }
-           
-       } catch (\Exception $e) {
-           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-       return $result;
-    }
+        {
+           try {
+            $template_ids  = explode(',',$request['template_id']);
+            $template     = explode(',',$request['templates']);
+            
+             $po_file = $request['po_file'];
+             $destination_path='/storage/app/public/po-files/';
+             $path='storage/app/public/po-files/';
+             $Orname = $po_file->getClientOriginalName();
+             $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
+             $po_file->move($path,$filename);
+             $destination_path_insert=$destination_path.$filename;
+              foreach($template_ids as $key => $template_id)
+              {
+                  if($template_id > 0)
+                  {
+                    //Dynamic function name and database model name for each templates
+                    $func_name = "upload".$template[$key]."PO";
+                    $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                    $response = $model_name::where('id',$template_id)
+                                  ->update([
+                                  'po_status'         => "PO Uploaded",
+                                  'purchase_order_no' => $request['po_number'],
+                                  'po_file'           => $destination_path_insert,
+                                  'delivery_date'     => $request['delivery_date']
+                                ]);
+                  }
+              }
+               if (($response != '') || ($response != "Invalid Template")) 
+               {
+                 $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
+               }
+               else
+               {
+                $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+               }
+               
+           } catch (\Exception $e) {
+               $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+           }
+           return $result;
+        }
     /**
      * Save CE ratio template orders
      * @param \Illuminate\Http\Request
