@@ -1900,6 +1900,36 @@ class OrderManagementCntrl extends Controller
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
   
+	
+	/**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function generateDivTesco(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+        $name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetAutoPageBreak(TRUE);
+		foreach($svgarr as $value)
+		{
+			 PDF::SetMargins(0, 0, 0, false);
+			 PDF::AddPage('L', array(80,127));
+			 $svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
   /**
    * Print Preview For Stickers
    *
@@ -1960,6 +1990,37 @@ class OrderManagementCntrl extends Controller
 			//print_r($yy);
 			 $i++;
 			$j++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
+	 /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function generateDivTescoSmall(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetAutoPageBreak(TRUE);
+		foreach($svgarr as $value)
+		{
+			 PDF::AddPage('L', array(30,80));
+			 PDF::SetMargins(0, 0, 0, false);
+			
+			 $svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
