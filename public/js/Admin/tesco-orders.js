@@ -4877,7 +4877,6 @@ function afterOrderSubmitted(data) {
                  </div></div>';
 		});
 		html += '</div>\
-                     <hr>\
                      <div class="row">\
                          <div class="col-md-12 upload-po-form">\
                              <div class="col-md-6">\
@@ -5347,7 +5346,7 @@ function uploadCombinedPO(formdata, templateName) {
 						$('#'+ value+'-uploaded-po').text("PO Number : " + data.po_number);
 					});
 
-					
+					/** [ Rename button and hide form fields if Po uploaded for all templates ] */
 					if($('.template-checkbox1').filter(':not(:disabled)').length === 0)
 					{
 						$('.po-submit-btn').text('Place Order');
