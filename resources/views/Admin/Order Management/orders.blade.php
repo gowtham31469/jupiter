@@ -264,6 +264,14 @@ border: 0;
 .templateDiv {
     text-align: center;
 }
+.po-number-div::before {
+     font-weight: 700;
+     display: inline-block;
+     max-width: 100%;
+     margin-bottom: 5px;
+     content: '----------------> ';
+     margin-left:  -81px;
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">

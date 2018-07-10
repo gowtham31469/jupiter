@@ -4409,7 +4409,7 @@ function afterOrderSubmitted(data) {
                          <input class="form-check-input template-checkbox1" type="checkbox" value="' + value + '" name="' + index.replace(' ', '') + '" id="' + index.replace(' ', '') + '" style="margin-right: 10px;" data-name="' + index.replace(' ', '') + '"> ' + index + ' </label>\
                      <div class="help-block with-errors"></div>\
                  </div></div>\
-                 <div class="col-md-8 '+index.replace(' ', '')+'-po-div" style="display:none; margin-top: 5px;">\
+                 <div class="col-md-8 '+index.replace(' ', '')+'-po-div po-number-div" style="display:none; margin-top: 5px;">\
                  <strong><span id="'+index.replace(' ', '')+'-uploaded-po"></span></strong>\
                  <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
                  </div></div>';
@@ -4421,7 +4421,7 @@ function afterOrderSubmitted(data) {
                              <div class="col-md-6">\
                                  <div class="form-group has-feedback">\
                                      <label for="po_number" class="form_label">PO Number</label>\
-                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="9">\
                                      <div class="help-block with-errors"></div>\
                                  </div>\
                              </div>\
