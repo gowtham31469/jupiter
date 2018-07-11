@@ -138,11 +138,7 @@
                        <input name="template_id" id="template_id" value="" class="form-control hidden" >
                         <div class="col-sm-12 col-md-12">
                             <div class="col-md-7 featuresDiv">
-                              @php $i = 0; @endphp
-                              <div class="form-group">
-                                  {{ Form::textarea('edit_details[]',"" , ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;']) }}
-                              </div>
-                              @php $i++; @endphp
+                             
                              
                             </div>
                             <div class="col-md-2">

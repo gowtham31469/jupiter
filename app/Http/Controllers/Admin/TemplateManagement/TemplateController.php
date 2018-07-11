@@ -115,10 +115,13 @@ class TemplateController extends Controller
             TemplateNotes::where('template_id',$template_id)->delete();
             foreach ($notes as $key => $note) {
               
-                    TemplateNotes::create([
-                        'template_id' => $template_id,
-                        'notes'       => $note
-                    ]);
+                    if ($note!=null) {
+                        TemplateNotes::create([
+                            'template_id' => $template_id,
+                            'notes'       => $note
+                        ]);
+                    }
+                    
             }
             return redirect('admin/template-management')->with('message', 'Notes added successfully');
         }

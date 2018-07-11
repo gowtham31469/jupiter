@@ -366,7 +366,17 @@ function saveOrchestraTax(temp_id) {
 			$(".loader").css('margin-top', '12%');
 		},
 		success: function (data) {
-			console.log(data)
+			$('.featuresDiv').html('')
+			if (data.data.length > 0) {
+				$(data.data).each(function (key, index) {
+					
+                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]'>"+data.data[key].notes+"</textarea></div>");
+           		});
+			}
+			else{
+				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details'></textarea></div>");
+			}
+			
 		},
 		error: function (data) {
 			$('.snackbar_span').html('Something went wrong!!');
