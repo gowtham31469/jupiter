@@ -24,7 +24,7 @@ $this->post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 $this->get('admin/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 $this->post('admin/register', 'Auth\RegisterController@register');
 
-// Password Reset Routes...
+// Password Reset Routes for Admin...
 $this->get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 $this->post('admin/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 $this->get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
@@ -109,6 +109,11 @@ Route::group(['middleware' => 'customer_guest'], function()
 
 	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm');
 	Route::post('customer', 'CustomerAuth\LoginController@login');
+	// Password Reset Routes...
+	Route::get('customer/password/reset', 'CustomerAuth\ForgotPasswordController@showLinkRequestForm')->name('customer.password.request');
+	Route::post('customer/password/email', 'CustomerAuth\ForgotPasswordController@sendResetLinkEmail')->name('customer.password.email');
+	Route::get('customer/password/reset/{token}', 'CustomerAuth\ResetPasswordController@showResetForm')->name('customer.password.reset');
+	Route::post('customer/password/reset', 'CustomerAuth\ResetPasswordController@reset');
 });
 
 //Only logged in Customers can access or send requests to these pages
@@ -127,15 +132,15 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::get('customer/customers', 'Customer\CustomerController@customers');
 	
 	
-Route::put('customer/customer-management/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
-Route::put('customer/customer-management/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
-Route::get('customer/customer-management/get-customers-profile', 'Customer\CustomerController@getCustomerProfileById');
+	Route::put('customer/customer-management/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
+	Route::put('customer/customer-management/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
+	Route::get('customer/customer-management/get-customers-profile', 'Customer\CustomerController@getCustomerProfileById');
 
-Route::put('customer/customer-management/update-customerProfile', 'Customer\CustomerController@updateCustomerProfile');
+	Route::put('customer/customer-management/update-customerProfile', 'Customer\CustomerController@updateCustomerProfile');
 
-Route::post('customer/customer-management/add-customerProfile', 'Customer\CustomerController@addCustomerProfile');
+	Route::post('customer/customer-management/add-customerProfile', 'Customer\CustomerController@addCustomerProfile');
 
-Route::post('customer/customer-management/customer-company-buyer', 'Customer\CustomerController@customerCompanyBuyer');
+	Route::post('customer/customer-management/customer-company-buyer', 'Customer\CustomerController@customerCompanyBuyer');
 	
 
 	//TESCO VIEW ORDER
