@@ -152,12 +152,13 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img id="company-logo" style="height:50px;" src="" class="img-responsive">
-                                        <p><strong>Date</strong>
-                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span> </p>
-                                        <p><strong>PI </strong>
+                                        <img id="company-logo" style="height: 35px;" src="" class="img-responsive">
+                                        <strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
+                                        </span></br>
+                                        <strong>PI </strong>
                                             <span style="padding-left: 31px;"> : </span>
-                                            <span style="padding-left: 6px;" class="pi_number"></span></p>
+                                            <span style="padding-left: 6px;" class="pi_number"></span>
                                         <p class="rev hidden"><strong>REV : </strong><span class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
@@ -167,7 +168,7 @@
                             </div>
                             <hr />
                             <div class="row">
-                                <h3 style="margin-left: 15px;">Customer Details : </h3>
+                                <strong style="margin-left: 15px; font-size:11px;">Customer Details : </strong>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
@@ -176,7 +177,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4">
 
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 92px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
 
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5">
@@ -184,15 +185,10 @@
                                 </div>
                             </div>
                             <hr />
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <strong>ITEM DESCRIPTION & DETAILS :</strong>
-                                </div>
-                            </div>
+                            <strong>ITEM DESCRIPTION & DETAILS :</strong>
                             <div class="row" id="item_details">
 
                             </div>
-                            
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>

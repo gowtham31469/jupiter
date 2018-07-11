@@ -50,6 +50,9 @@ Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\O
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
+Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
+Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
+
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 

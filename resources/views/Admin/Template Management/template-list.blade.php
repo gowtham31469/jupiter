@@ -122,6 +122,45 @@
              </div>
          </div>
      </div>
+
+     {{-- More Details modal --}}
+<div class="modal fade" id="moreDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        {!! Form::open(['class' => 'form-horizontal', 'method' => 'post', 'id' => 'update-er-package', 'enctype' => 'multipart/form-data', 'url' => 'admin/tesco/update-notes']) !!}
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">More Details</h4>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    <div class="row">
+                       <input name="template_id" id="template_id" value="" class="form-control hidden" >
+                        <div class="col-sm-12 col-md-12">
+                            <div class="col-md-7 featuresDiv">
+                              @php $i = 0; @endphp
+                              <div class="form-group">
+                                  {{ Form::textarea('edit_details[]',"" , ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;']) }}
+                              </div>
+                              @php $i++; @endphp
+                             
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn raise_btn addNew"> + Add</button>
+                            </div>
+                        </div>
+                      
+                    </div>
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
+                {{ Form::submit('Save', array('class' => 'btn custom_btn btn-sm pull-right')) }}
+            </div>
+        </div>
+          {!! Form::close() !!}
+    </div>
+</div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -216,5 +255,16 @@
              })
             
         });
-    </script>
+
+         $(document).on('click', '.addNew', function() {
+        $(".featuresDiv").append(`<div class="form-group">
+                {{ Form::textarea('edit_details[]', null, ['class' => 'form-control input-sm','rows' => '3', 'cols'=>'25', 'placeholder' => 'Enter details', 'style' => 'resize:none;']) }}
+        </div>`);
+        });
+         $('.modal').on('hidden.bs.modal', function (e) {
+            $(this)
+                .find("input[type=textarea]").val('').end();
+            
+        })
+     </script>
     @endsection

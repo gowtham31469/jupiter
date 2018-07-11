@@ -10,6 +10,7 @@ use View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\TemplateNotes;
 
 class TemplateController extends Controller
 {
@@ -77,6 +78,53 @@ class TemplateController extends Controller
         }
 
     } 
+
+    /**
+     * method to get the templates notes
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getTemplateNotes(Request $request)
+    {
+        try
+        {   
+            $template_id = $request->template_id;
+            $template_notes =   DB::table('template_notes')->select('*')->where('template_id',$template_id)->get();
+
+            if ($template_notes) {
+                 $result    = response()->json(['error'=> false,'message' =>'success','data'=>$template_notes],200);
+            }
+            else{
+                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+            }
+           
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    public function setTemplateNotes(Request $request)
+    {
+        $notes       =  $request->edit_details;
+        $template_id =  $request->template_id;
+
+        if ($notes) {
+            TemplateNotes::where('template_id',$template_id)->delete();
+            foreach ($notes as $key => $note) {
+              
+                    TemplateNotes::create([
+                        'template_id' => $template_id,
+                        'notes'       => $note
+                    ]);
+            }
+            return redirect('admin/template-management')->with('message', 'Notes added successfully');
+        }
+        
+    }
+
 //    public function base64ToJpeg(Request $request)
 //    {
 //            $output_file=  public_path('/storage/app/template/barcode.svg');
