@@ -107,7 +107,7 @@ Route::group(['middleware' => 'customer_guest'], function()
 	Route::get('customer/register', 'CustomerAuth\RegisterController@showRegistrationForm');
 	Route::post('customer/register', 'CustomerAuth\RegisterController@register');
 
-	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm');
+	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm')->name('customer.login');
 	Route::post('customer', 'CustomerAuth\LoginController@login');
 	// Password Reset Routes for customer...
 	Route::get('customer/password/reset', 'CustomerAuth\ForgotPasswordController@showLinkRequestForm')->name('customer.password.request');
@@ -119,7 +119,7 @@ Route::group(['middleware' => 'customer_guest'], function()
 //Only logged in Customers can access or send requests to these pages
 Route::group(['middleware' => 'customer_auth'], function()
 {
-	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
+	Route::post('customer/logout', 'CustomerAuth\LoginController@logout')->name('customer.logout');
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
 	Route::get('customer/create-order', 'Customer\HomeController@customerOrders');
@@ -192,7 +192,7 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 {
 	Route::get('merchandiser/register', 'MerchandiserAuth\RegisterController@showRegistrationForm');
 	Route::post('merchandiser/register', 'MerchandiserAuth\RegisterController@register');
-	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm');
+	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm')->name('merchandiser.login');
 	Route::post('merchandiser', 'MerchandiserAuth\LoginController@login');
 
 	// Password Reset Routes for merchandiser...
@@ -204,7 +204,7 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
-	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
+	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout')->name('merchandiser.logout');
 	Route::get('/merchandiser/pending-orders', 'Merchandiser\HomeController@index');
 	Route::get('/merchandiser/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');

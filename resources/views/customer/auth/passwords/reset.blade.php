@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.Customer.app-forgot-pwd')
 
 @section('content')
 <div class="container">

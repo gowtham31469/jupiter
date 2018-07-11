@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.merchandiser.app-forgot-pwd')
 
 @section('content')
 <div class="container">
