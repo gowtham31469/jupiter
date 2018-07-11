@@ -124,6 +124,11 @@ return [
             'table' => 'customer_password_resets',
             'expire' => 600,
         ],
+        'merchandisers' => [
+            'provider' => 'merchandisers',
+            'table' => 'merchandiser_password_resets',
+            'expire' => 600,
+        ],
     ],
 
 ];

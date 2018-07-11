@@ -109,7 +109,7 @@ Route::group(['middleware' => 'customer_guest'], function()
 
 	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm');
 	Route::post('customer', 'CustomerAuth\LoginController@login');
-	// Password Reset Routes...
+	// Password Reset Routes for customer...
 	Route::get('customer/password/reset', 'CustomerAuth\ForgotPasswordController@showLinkRequestForm')->name('customer.password.request');
 	Route::post('customer/password/email', 'CustomerAuth\ForgotPasswordController@sendResetLinkEmail')->name('customer.password.email');
 	Route::get('customer/password/reset/{token}', 'CustomerAuth\ResetPasswordController@showResetForm')->name('customer.password.reset');
@@ -194,6 +194,12 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 	Route::post('merchandiser/register', 'MerchandiserAuth\RegisterController@register');
 	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm');
 	Route::post('merchandiser', 'MerchandiserAuth\LoginController@login');
+
+	// Password Reset Routes for merchandiser...
+	Route::get('merchandiser/password/reset', 'MerchandiserAuth\ForgotPasswordController@showLinkRequestForm')->name('merchandiser.password.request');
+	Route::post('merchandiser/password/email', 'MerchandiserAuth\ForgotPasswordController@sendResetLinkEmail')->name('merchandiser.password.email');
+	Route::get('merchandiser/password/reset/{token}', 'MerchandiserAuth\ResetPasswordController@showResetForm')->name('merchandiser.password.reset');
+	Route::post('merchandiser/password/reset', 'MerchandiserAuth\ResetPasswordController@reset');
 });
 
 Route::group(['middleware' => 'merchandiser_auth'], function()
