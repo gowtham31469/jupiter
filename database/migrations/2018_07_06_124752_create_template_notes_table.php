@@ -18,7 +18,7 @@ class CreateTemplateNotesTable extends Migration
             $table->integer('template_id')->unsigned();
             $table->string('notes');
             $table->timestamps();
-            $table->foreign('template_id')->references('id')->on('tesco_item_master')->onDelete('cascade');
+            $table->foreign('template_id')->references('id')->on('tesco_template')->onDelete('cascade');
         });
     }
 
