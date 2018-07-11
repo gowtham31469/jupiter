@@ -31,7 +31,7 @@
                             <button class="btn btn-sm btn-primary btn-block " type="submit">Sign in</button>
                         </form>
                         <!-- /form -->
-                        <a href="#" class="forgot-password">
+                        <a href="{{route('customer.password.request')}}" class="forgot-password">
                 Forgot the password?
             </a>
                     </div>
