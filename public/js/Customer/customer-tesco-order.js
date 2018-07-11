@@ -1231,11 +1231,11 @@ function printDivTesco(data,name) {
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
 									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
 							} else if (data.size_chart.length != 0) {
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
 								svgDoc.getElementById("description1").innerHTML = '';
 							} else if (description != '') {
@@ -1257,7 +1257,7 @@ function printDivTesco(data,name) {
 									}
 									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
 								} else {
-									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 									svgDoc.getElementById("description1").innerHTML = "";
 								}
@@ -1321,7 +1321,7 @@ function printDivTesco(data,name) {
 							} else {
 								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 								svgDoc.getElementById("description1").innerHTML = "";
-								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 							}
 					} else {
 						svgDoc.getElementById("description").innerHTML = '';
@@ -1371,7 +1371,7 @@ function printDivTesco(data,name) {
 				} else {
 					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
 					svgDoc.getElementById("description1").innerHTML = "";
-					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.1)");
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 65.1)");
 				}
 				
 //				var s = new XMLSerializer();
@@ -4843,48 +4843,50 @@ try{
     var order_date = data.ordered_date.date;
     delivery_date_req = data.delivery_date_required;
     var length = Object.keys(data.last_insertions).length;
-    
-    /** Show snackbar if order placed **/
-    if(length > 0)
-    {
-      /** remove save & submit button */
-      $('.submit-btn').remove();
-      $('.save-btn').remove();
-      $('.approve-btn').show();
-      $('.print-btn').show();
-      $('.cancel-btn').removeAttr('data-target'); 
-      $('.cancel-btn').attr('onClick','location.reload()');
-      var div_html='';
-      /** [ store last updated id as hidden input , for approve order functionality] */
-      $.each(data.last_insertions, function (index, value) {
-          div_html += '<input id="'+index.replace(' ','')+'_id" name="'+index.replace(' ','')+'_id" type="hidden" value="'+value+'">';
-      });
-      $('.invisible-div').html(div_html);
-      $('.snackbar_span').html('Your order has been placed successfully');
-      showSnackbar();
 
-      /** Buyer Po upload modal for combined po upload modal */
-        var html = '<form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">\
-             <div class="container-fluid">\
+    /** Show snackbar if order placed **/
+    if (length > 0) {
+        /** remove save & submit button */
+        $('.submit-btn').remove();
+        $('.save-btn').remove();
+        $('.approve-btn').show();
+        $('.print-btn').show();
+        $('.cancel-btn').removeAttr('data-target');
+        $('.cancel-btn').attr('onClick', 'location.reload()');
+        var div_html = '';
+        /** [ store last updated id as hidden input , for approve order functionality] */
+        $.each(data.last_insertions, function (index, value) {
+            div_html += '<input id="' + index.replace(' ', '') + '_id" name="' + index.replace(' ', '') + '_id" type="hidden" value="' + value + '">';
+        });
+        $('.invisible-div').html(div_html);
+        $('.snackbar_span').html('Your order has been placed successfully');
+        showSnackbar();
+
+        /** Buyer Po upload modal for combined po upload modal */
+        var html = '<div class="container-fluid">\
                  <div class="template-error1"></div>\
-                 <div class="row">\
                      <div class="col-md-12">\
                          <br> <strong>Select Artworks :</strong>';
-        $.each(data.last_insertions, function (index, value) { 
-        html+= '<div class="form-check form-group has-feedback">\
-                     <label class="form-check-label">\
-                         <input class="form-check-input template-checkbox1" type="checkbox" value="'+value+'" name="'+index.replace(' ','')+'" id="'+index.replace(' ','')+'" style="margin-right: 10px;" data-name="'+index.replace(' ','')+'"> '+ index+' </label>\
+        $.each(data.last_insertions, function (index, value) {
+            html += '<div class="row">\
+                      <div class="col-md-4">\
+                       <div class="form-check form-group has-feedback">\
+                        <label class="form-check-label">\
+                         <input class="form-check-input template-checkbox1" type="checkbox" value="' + value + '" name="' + index.replace(' ', '') + '" id="' + index.replace(' ', '') + '" style="margin-right: 10px;" data-name="' + index.replace(' ', '') + '"> ' + index + ' </label>\
                      <div class="help-block with-errors"></div>\
-                 </div>';
+                 </div></div>\
+                 <div class="col-md-8 '+index.replace(' ', '')+'-po-div po-number-div" style="display:none; margin-top: 5px;">\
+                 <strong><span id="'+index.replace(' ', '')+'-uploaded-po"></span></strong>\
+                 <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
+                 </div></div>';
         });
         html += '</div>\
-                     <hr>\
                      <div class="row">\
-                         <div class="col-md-12">\
+                         <div class="col-md-12 upload-po-form">\
                              <div class="col-md-6">\
                                  <div class="form-group has-feedback">\
                                      <label for="po_number" class="form_label">PO Number</label>\
-                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text">\
+                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="9">\
                                      <div class="help-block with-errors"></div>\
                                  </div>\
                              </div>\
@@ -4895,10 +4897,9 @@ try{
                                  </div>\
                              </div>\
                              <div class="col-md-6">';
-       /** [ Delivery Date mandatory or not for particular customer] */
-        if(data.delivery_date_required === 1)
-        {
-          html +='<div class="form-group has-feedback">\
+        /** [ Delivery Date mandatory or not for particular customer] */
+        if (data.delivery_date_required === 1) {
+            html += '<div class="form-group has-feedback">\
                      <label for="combined_delivery_date">Delivery Date</label>\
                      <div class="input-group date" data-provide="datepicker" id="datePicker3">\
                          <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
@@ -4909,10 +4910,8 @@ try{
                      <div class="help-block with-errors"></div>\
                  </div>\
                  </div>';
-        }
-        else
-        {
-          html +='<div class="form-group has-feedback">\
+        } else {
+            html += '<div class="form-group has-feedback">\
                      <label for="combined_delivery_date">Delivery Date</label>\
                      <div class="input-group date" data-provide="datepicker" id="datePicker3">\
                          <input value="" id="combined_delivery_date" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
@@ -4925,25 +4924,16 @@ try{
         }
         html += '        </div>\
                        </div>\
-                    </div>\
-                 </div>\
-                 <div class="modal-footer">\
-                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Upload Later</button>\
-                     <button class="btn btn-primary btn-sm" type="submit">Place Order</button>\
-                 </div>\
-                 </form>';
+                    </div>';
         /** Dynamic content for po upload modal tab */
         $('#po-upload-modal-content').html(html);
     }
 
     /** [ Show order already exists alertbox] */
-    if(data.already_exists.length === 0)
-    {
-      $('.po-modal-content').show();
-      $('#order-exists-alert').html('');
-    }
-    else
-    {
+    if (data.already_exists.length === 0) {
+        $('.po-modal-content').show();
+        $('#order-exists-alert').html('');
+    } else {
         var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
                              <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
                               <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
@@ -4951,27 +4941,26 @@ try{
                               </button>\
                              <p>Order already exists for following artworks,</p>\
                             <ol>';
-         $.each(data.already_exists, function (index, value) { 
-             html_content += '<li>'+value+'</li>';
-          });   
-         html_content += '</ol>\
+        $.each(data.already_exists, function (index, value) {
+            html_content += '<li>' + value + '</li>';
+        });
+        html_content += '</ol>\
                          </div>';
 
-      $('#order-exists-alert').html(html_content);
+        $('#order-exists-alert').html(html_content);
 
-      /** [ Show only alertbox if data already exits ] */
-      if(length === 0)
-      {
-         $('.po-modal-content').hide();
-         $('.close-btn').attr('data-dismiss','modal')
-      }
+        /** [ Show only alertbox if data already exits ] */
+        if (length === 0) {
+            $('.po-modal-content').hide();
+            $('.close-btn').attr('data-dismiss', 'modal')
+        }
     }
 
     /** [ Backdrop for bootstrap modal ] */
-      $('#poUploadModal').modal({
-           backdrop: 'static',
-           keyboard: false
-      })
+    $('#poUploadModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
     $('#poUploadModal').modal('show');
 
     /** Update bootstrap validator */
@@ -4980,95 +4969,83 @@ try{
     /** @type {Date} [Delivery date Datepicker format & validation] */
     var today = new Date(order_date);
     $('#datePicker3').datepicker({
-         autoclose: true,
-         startDate: today,
-         format: 'yyyy-mm-dd',
-     })
+        autoclose: true,
+        startDate: today,
+        format: 'yyyy-mm-dd',
+    })
 
-     /* [ Toggle required field validation in for fields ] */
-     $('.template-checkbox1:checkbox').on('change',function(){
-        var th = $(this), id = th.prop('id');
-        if(th.is(':checked'))
-        {
+    /* [ Toggle required field validation in for fields ] */
+    $('.template-checkbox1:checkbox').on('change', function () {
+        var th = $(this),
+            id = th.prop('id');
+        if (th.is(':checked')) {
             var checkbox_clicked = 0;
             /** [ Get count of checkboxes checked ] */
-             $('.template-checkbox1').each(function(i, item)
-             {
-               if ($(this).is(':checked'))
-                 {
-                   checkbox_clicked++;
-                 }
-                 
-             });
-             /** [ Hide validation error, if atleast 1 artwork selected ] */
-             if(checkbox_clicked === 1)
-             {
-                 $('.template-error1').html('');
-             }
+            $('.template-checkbox1').each(function (i, item) {
+                if ($(this).is(':checked')) {
+                    checkbox_clicked++;
+                }
+
+            });
+            /** [ Hide validation error, if atleast 1 artwork selected ] */
+            if (checkbox_clicked === 1) {
+                $('.template-error1').html('');
+            }
+        } else {
+            /** [ Clear all input fields values] */
+            $('input:not(.template-checkbox1)[id="' + id + '"]').val("");
+            /* [ remove validation error from input field ] */
+            $('#upload_combined_po_form').validator('validate');
         }
-        else
-        {
-             /** [ Clear all input fields values] */
-             $('input:not(.template-checkbox1)[id="'  + id + '"]').val("");
-             /* [ remove validation error from input field ] */
-             $('#upload_combined_po_form').validator('validate');
+    });
+
+    /** [ bootstrap validator for upload combined po form ] **/
+    $('#upload_combined_po_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            var checkbox_clicked = 0;
+            /** [ Get count of checkboxes checked ] */
+            $('.template-checkbox1').each(function (i, item) {
+                if ($(this).is(':checked')) {
+                    checkbox_clicked++;
+                }
+
+            });
+            /** [ Show validation error, if atleast 1 artwork not selected ] */
+            if (checkbox_clicked < 1) {
+                /**  [ Show validation error message ] **/
+                $('.template-error1').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
+            } else {
+                $('.template-error1').html('');
+                var templateName = [];
+                var formData = new FormData();
+                var delivery_date = $('#combined_delivery_date').val();
+                var po_number = $('#po_number').val();
+                var po_file = $('#po_file').prop('files')[0];
+                template_id = [];
+                templates = [];
+                /** [ Create array of Templates selected ] */
+                $('.template-checkbox1').each(function (i, item) {
+                    if ($(this).is(':checked')) {
+                        template_id[i]    = $(this).val();
+                        templates[i]      = $(this).data('name');
+                        templateName.push($(this).data('name'));
+                    }
+                });
+
+                formData.append('template_id', template_id);
+                formData.append('templates', templates);
+                formData.append('delivery_date', delivery_date);
+                formData.append('po_number', po_number);
+                formData.append('po_file', po_file);
+
+                uploadCombinedPO(formData, templateName);
+            }
         }
-     });
 
-     /** [ bootstrap validator for upload combined po form ] **/
-     $('#upload_combined_po_form').validator().on('submit', function (e) {
-         if (e.isDefaultPrevented()) 
-         {
-             
-         }
-         else 
-         {
-             e.preventDefault();
-             var checkbox_clicked = 0;
-              /** [ Get count of checkboxes checked ] */
-             $('.template-checkbox1').each(function(i, item)
-             {
-               if ($(this).is(':checked'))
-                 {
-                   checkbox_clicked++;
-                 }
-                 
-             });
-             /** [ Show validation error, if atleast 1 artwork not selected ] */
-             if(checkbox_clicked < 1)
-             {
-                 /**  [ Show validation error message ] **/
-                 $('.template-error1').html('<span style="color:#F44336">Please select atleast 1 artwork.</span>');
-             }
-             else
-             {
-                 $('.template-error1').html('');
-                 var templateName = [];
-                 var formData = new FormData();
-                 var delivery_date = $('#combined_delivery_date').val();
-                 var po_number = $('#po_number').val();
-                 var po_file = $('#po_file').prop('files')[0];
-                 /** [ Create array of Templates selected ] */ 
-                 $('.template-checkbox1').each(function(i, item) 
-                 { 
-                     i += 1;
-                     if ($(this).is(':checked')) 
-                     { 
-                       formData.append('template_id_'+i,$(this).val());
-                       formData.append('template_'+i,$(this).data('name'));
-                       templateName.push($(this).data('name'));
-                     } 
-                 }); 
-                
-                formData.append('delivery_date',delivery_date);
-                formData.append('po_number',po_number);
-                formData.append('po_file',po_file);
-
-                uploadCombinedPO(formData,templateName);
-             }
-         }
-
-     })
+    })
  }
 
 /**
@@ -5365,22 +5342,32 @@ try{
              cache: false,
              contentType: false,
              processData: false,
-             statusCode:
-             {
-                200: function(data) {
+             statusCode: {
+                200: function (data) {
                     /** [ Disable already uploaded templates checkbox] */
-                    $.each(templateName, function (index, value) { 
-                        $('input[type="checkbox"]#'+value).prop('checked',false)
-                        $('input[type="checkbox"]#'+value).prop('disabled',true)
+                    $.each(templateName, function (index, value) {
+                        $('input[type="checkbox"]#' + value).prop('checked', false)
+                        $('input[type="checkbox"]#' + value).prop('disabled', true)
+                        $('.'+ value+'-po-div').show();
+                        $('#'+ value+'-uploaded-po').text("PO Number : " + data.po_number);
                     });
+
+                    /** [ Rename button and hide form fields if Po uploaded for all templates ] */
+                    if($('.template-checkbox1').filter(':not(:disabled)').length === 0)
+                    {
+                        $('.po-submit-btn').text('Place Order');
+                        $('.po-submit-btn').attr('data-dismiss', 'modal')
+                        $('.upload-later').hide();
+                        $('.upload-po-form').hide();
+                    }
                     /** [ Show success alert] */
-                    $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                    $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
                         $("#success-alert").slideUp(500);
                     });
                     /** Reset po upload form**/
-                    $('#upload_combined_po_form').trigger('reset'); 
+                    $('#upload_combined_po_form').trigger('reset');
                 },
-                400: function() {
+                400: function () {
                     $('.snackbar_span').html("Something went wrong !. Try again");
                     showSnackbar();
                 }

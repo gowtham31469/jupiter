@@ -117,7 +117,17 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 600,
+        ],
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'customer_password_resets',
+            'expire' => 600,
+        ],
+        'merchandisers' => [
+            'provider' => 'merchandisers',
+            'table' => 'merchandiser_password_resets',
+            'expire' => 600,
         ],
     ],
 

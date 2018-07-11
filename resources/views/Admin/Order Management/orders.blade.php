@@ -264,6 +264,17 @@ border: 0;
 .templateDiv {
     text-align: center;
 }
+.po-number-div::before {
+font-weight: 700;
+display: inline-block;
+max-width: 100%;
+margin-bottom: 4px;
+content: '';
+margin-left: -117px;
+height: 1px;
+width: 80%;
+background: rgba(0,0,0,0.2);
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
@@ -409,8 +420,14 @@ border: 0;
                     <strong>Success! </strong>
                     PO uploaded successfully.
                 </div>
+                <form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
                 <div id="po-upload-modal-content"></div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
+                <button class="btn btn-primary btn-sm po-submit-btn" type="submit">Save</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

@@ -109,28 +109,28 @@
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('short_name', 'Short Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required')) !!}
+                                  {!! Form::text('short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                               <div class="form-group has-feedback">
                                   {!! Form::label('company_name', 'Company Name', ['class' => 'form_label']) !!}
-                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
+                                  {!! Form::text('company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                                   <div class="help-block with-errors"></div>
                               </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                                 {!! Form::label('courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
-                                {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
+                                {!! Form::text('courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','data-minlength' => '3','maxlength' => '40')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                                 {!! Form::label('sap_code', 'SAP Customer Code', ['class' => 'form_label']) !!}
-                                {!! Form::text('sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required')) !!}
+                                {!! Form::text('sap_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'SAP Customer Code','onkeypress' => 'return isNumber(event)','required','data-minlength' => '3','maxlength' => '40')) !!}
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -249,7 +249,7 @@
                                       <div id="contact0" class="panel">
                                         <div class="form-group has-feedback">
                                             {!! Form::label('contact_person0', 'Contact Person', ['class' => 'form_label']) !!}
-                                            {!! Form::text('contact_person0',$value = '', array('class' => 'form-control input-sm contact_person','placeholder' => 'Contact Person Name','required')) !!}
+                                            {!! Form::text('contact_person0',$value = '', array('class' => 'form-control input-sm contact_person','placeholder' => 'Contact Person Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                                             <div class="help-block with-errors"></div>
                                         </div>
                                       <div class="form-group has-feedback">
@@ -380,21 +380,21 @@
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_short_name', 'Short Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required')) !!}
+                          {!! Form::text('edit_short_name',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Short Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group has-feedback">
                           {!! Form::label('edit_company_name', 'Company Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required')) !!}
+                          {!! Form::text('edit_company_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Company Name','required','data-minlength' => '3','maxlength' => '40')) !!}
                           <div class="help-block with-errors"></div>
                       </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group has-feedback">
                         {!! Form::label('edit_courier_choice', 'Courier Choice', ['class' => 'form_label']) !!}
-                        {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice')) !!}
+                        {!! Form::text('edit_courier_choice',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Courier Choice','data-minlength' => '3','maxlength' => '40')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                   </div>

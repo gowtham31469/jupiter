@@ -12,11 +12,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
-<body>
-    <div id="app">
+<body class="wallpaper">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -28,8 +28,8 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'JGA') }}
+                    <a class="navbar-brand dropdown-toggle profile-dropdown-admin" href="{{ url('/') }}">
+                        Jupiter Garments Accessories
                     </a>
                 </div>
 
@@ -44,8 +44,7 @@
                         <!-- Authentication Links -->
                        
                         @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a class="dropdown-toggle profile-dropdown-admin" href="{{ route('login') }}">Login</a></li>
                         @else
                        
                             <li class="dropdown">
@@ -75,7 +74,6 @@
         </nav>
 
         @yield('content')
-    </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

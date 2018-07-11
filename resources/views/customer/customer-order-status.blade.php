@@ -109,6 +109,7 @@
                     <div id="new_po_div" class="hidden">
                         <h4>New PO : </h4>
                         <label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+						
                         <div class="form-group">
                             <label>PO Number</label>
                             <input id="new_po_no" type="text" class="form-control">
@@ -246,6 +247,7 @@
                     <div id="new_po_div_status" class="hidden">
                         <h4>New PO : </h4>
                         <label style='color:red' id='new_po_error_status' class='hidden'>Please Enter PO Number</label>
+						<label style='color:red' id='new_po_error_length_status' class='hidden'>Max 9 characters</label>
                         <div class="form-group">
                             <label>PO Number</label>
                             <input id="new_po_no_status" type="text" class="form-control">

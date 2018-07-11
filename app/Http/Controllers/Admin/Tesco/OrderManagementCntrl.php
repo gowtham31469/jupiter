@@ -27,7 +27,6 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
-use App\Classes\TescoPOUploadTemplatesSwitch;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
 use PDF;
@@ -1873,29 +1872,64 @@ class OrderManagementCntrl extends Controller
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
+		$j=0;
 		$yy=12.5;
 //		PDF::AddPage('L', array(80,127));
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-			
-			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(129, 82.5, 12.5, $yy, $html, '', 0, 0, false, 'L', false);
 			if($i == 3)
 			{
-				$yy=112.5;
+				PDF::AddPage('P', 'A4');
+				$yy=92.5;
 				$i = 0;
 			}
 			else
 			{
-				$yy += 100;
+				$yy += 85;
 			}
 			//print_r($yy);
 			 $i++;
+			$j++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
   
+	
+	/**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function generateDivTesco(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+        $name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetAutoPageBreak(TRUE);
+		foreach($svgarr as $value)
+		{
+			 PDF::SetMargins(0, 0, 0, false);
+			 PDF::AddPage('L', array(80,127));
+			 $svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
   /**
    * Print Preview For Stickers
    *
@@ -1918,22 +1952,75 @@ class OrderManagementCntrl extends Controller
 		// set auto page breaks
 		PDF::SetAutoPageBreak(TRUE);
         $i=0;
-		$yy=12.5;
+		$yy=0;
+		$j=0;
+		PDF::SetXY(10, 50);
 		foreach($svgarr as $value)
 		{
 			$svg=urldecode($value);
-			 PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
-			if($i == 3)
+			PDF::SetFillColor(255,255,255);
+			if($i == 3 || $i == 6 || $i == 9 || $i == 12 || $i == 18)
 			{
-				$yy=112.5;
-				$i = 0;
+				$xx=15;
+				$yy+=50;
 			}
-			else
+			else if($i == 0)
 			{
-				$yy += 100;
+				$yy=10;
+				$xx=15;
 			}
+			else if($i == 15)
+			{
+				PDF::AddPage();
+				$xx=15;
+				$yy=10;
+			}
+			else 
+			{
+				$xx+=70;
+			}
+			
+			// PDF::ImageSVG('@' . $svg, $x=$xx, $y=$yy, $w=40, $h=30, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			
+				file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+			// PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=127, $h=80, $link='', $align='', $palign='', $border=1, $fitonpage=false);
+			$html = '<img style="width:151.18110236px;height:113.38582677px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+			PDF::writeHTMLCell(42, 32, $xx, $yy, $html, '', 0, 0, false, 'L', false);
+			
 			//print_r($yy);
 			 $i++;
+			$j++;
+		}
+        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$name.'.pdf'));
+    } 
+	
+	 /**
+   * Print Preview For Stickers
+   *
+   * @return pdf
+   */
+  
+    public function generateDivTescoSmall(Request $request)
+    {
+		$svgarr = explode(',_',$request->svg);
+    	$name=$request->name;
+        $svg=urldecode($request->svg);
+        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+        PDF::setImageScale(1);
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('frankgothcnbt');
+		PDF::SetAutoPageBreak(TRUE);
+		foreach($svgarr as $value)
+		{
+			 PDF::AddPage('L', array(30,80));
+			 PDF::SetMargins(0, 0, 0, false);
+			
+			 $svg=urldecode($value);
+			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -2732,36 +2819,41 @@ class OrderManagementCntrl extends Controller
      */
     public function uploadCombinedOrdersPO(Request $request)
     {
-      
        try {
-             /** [ Creating new object for TescoPOUploadTemplatesSwitch() class ] */
-              $tesco_po_obj = new TescoPOUploadTemplatesSwitch(); 
-              $po_file = $request['po_file'];
-              $destination_path='/storage/app/public/po-files/';
-              $path='storage/app/public/po-files/';
-              $Orname = $po_file->getClientOriginalName();
-              $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
-              $po_file->move($path,$filename);
-              $destination_path_insert=$destination_path.$filename;
-             if($request['template_1'])
-             {
-                $response = $tesco_po_obj->combinedPOUploadTemplate1Switch($request['template_1'],$request,$destination_path_insert);
-             }
-             if ($request['template_2']) {
-                $response = $tesco_po_obj->combinedPOUploadTemplate2Switch($request['template_2'],$request,$destination_path_insert);
-             }
-             if ($request['template_3']) {
-                $response = $tesco_po_obj->combinedPOUploadTemplate3Switch($request['template_3'],$request,$destination_path_insert);
-             }
-
-             if (($response != '') || ($response != "Invalid Template")) 
-             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
-             }
-             else
-             {
-              $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-             }
+        $template_ids  = explode(',',$request['template_id']);
+        $template     = explode(',',$request['templates']);
+        
+         $po_file = $request['po_file'];
+         $destination_path='/storage/app/public/po-files/';
+         $path='storage/app/public/po-files/';
+         $Orname = $po_file->getClientOriginalName();
+         $filename= 'TESCO_PO_'.time().'_'.preg_replace('/\s+/', '-', $Orname);
+         $po_file->move($path,$filename);
+         $destination_path_insert=$destination_path.$filename;
+          foreach($template_ids as $key => $template_id)
+          {
+              if($template_id > 0)
+              {
+                //Dynamic function name and database model name for each templates
+                $func_name = "upload".$template[$key]."PO";
+                $model_name = 'App\\'."Tesco".$template[$key]."Orders";
+                $response = $model_name::where('id',$template_id)
+                              ->update([
+                              'po_status'         => "PO Uploaded",
+                              'purchase_order_no' => $request['po_number'],
+                              'po_file'           => $destination_path_insert,
+                              'delivery_date'     => $request['delivery_date']
+                            ]);
+              }
+          }
+           if (($response != '') || ($response != "Invalid Template")) 
+           {
+             $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
+           }
+           else
+           {
+            $result = response()->json(['error'=> true,'message' =>'Failed'],400);
+           }
            
        } catch (\Exception $e) {
            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

@@ -240,6 +240,7 @@ function orderStatus() {
                     $('#new_po_file_status').val("")
                     $('#exist_artwork_div_status').addClass('hidden')
                     $('#new_po_error_status').addClass('hidden')
+					$('#new_po_error_length_status').addClass('hidden');
                     $('#new_po_file_error_status').addClass('hidden')
 
                     $('#style_num').change(function(){
@@ -276,6 +277,7 @@ function orderStatus() {
                                         
                                         $('#check_error_status').addClass('hidden')
                                         $('#new_po_error_status').addClass('hidden')
+										$('#new_po_error_length_status').addClass('hidden');
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
                                         var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
@@ -487,57 +489,73 @@ function orderStatus() {
                                         if (sList > 0) {
                                             $('#check_error_status').addClass('hidden')
                                         if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() !="") {
-                                            var a = [];
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    a.push($(this).parent().attr('data-id'));
-                                                    //alert($(this).parent().attr('data-id'))
-                                                }
-                                            });
-                                            var aa = a.join(',');
-                                            var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                            var new_po_no = $('#new_po_no_status').val();
-                                            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                            var form_data = new FormData();
-                                            form_data.append('id', aa);
-                                            form_data.append('po_file', new_po_file);
-                                            form_data.append('po', new_po_no);
-                                            form_data.append('_token', csrf_token);
-                                            $.ajax({
-                                                url: base_url + "/customer/tesco/update-po",
-                                                dataType: 'text',
-                                                cache: false,
-                                                contentType: false,
-                                                processData: false,
-                                                data: form_data,
-                                                type: 'post',
-                                                success: function (data) {
-                                                    orderStatus()
-                                                    $('#po-file-upload-group').modal('hide')
-                                                    $('.snackbar_span').html('PO Updated Successfully');
-                                                    showSnackbar();
-                                                },
-                                                error: function () {
-                                                    console.log('somethig is wrong, please try later');
-                                                }
+											
+											
+												if($('#new_po_no_status').val().length > 9)
+											{
+												//alert("a")
+												$('#new_po_error_length_status').removeClass('hidden');
 
-                                            });
+												$('#new_po_error_status').addClass('hidden');
+												$('#new_po_file_error_status').addClass('hidden');
+											}
+											else
+											{
+												var a = [];
+												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
+													if (this.checked) {
+														a.push($(this).parent().attr('data-id'));
+														//alert($(this).parent().attr('data-id'))
+													}
+												});
+												var aa = a.join(',');
+												var new_po_file = $('#new_po_file_status').prop('files')[0];
+												var new_po_no = $('#new_po_no_status').val();
+												var csrf_token = $('meta[name="csrf-token"]').attr('content');
+												var form_data = new FormData();
+												form_data.append('id', aa);
+												form_data.append('po_file', new_po_file);
+												form_data.append('po', new_po_no);
+												form_data.append('_token', csrf_token);
+												$.ajax({
+													url: base_url + "/customer/tesco/update-po",
+													dataType: 'text',
+													cache: false,
+													contentType: false,
+													processData: false,
+													data: form_data,
+													type: 'post',
+													success: function (data) {
+														orderStatus()
+														$('#po-file-upload-group').modal('hide')
+														$('.snackbar_span').html('PO Updated Successfully');
+														showSnackbar();
+													},
+													error: function () {
+														console.log('somethig is wrong, please try later');
+													}
+
+												});
+											}
+                                            
                                         }
                                         else
                                         {
                                            if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_error_status').removeClass('hidden')
-                                                    $('#new_po_file_error_status').removeClass('hidden') 
+                                                   $('#new_po_error_length_status').addClass('hidden'); $('#new_po_file_error_status').removeClass('hidden') 
                                                 }
                                                 else if ($('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_file_error_status').removeClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden');
                                                     $('#new_po_error_status').addClass('hidden')   
                                                 }
                                                 else if ($('#new_po_no_status').val() == "")
                                                 {
                                                      $('#new_po_error_status').removeClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden');
                                                      $('#new_po_file_error_status').addClass('hidden')
                                                 }
                                             
@@ -560,7 +578,18 @@ function orderStatus() {
                                             $('#check_error_status').addClass('hidden')
                                             if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() !="")
                                             {
-                                                var a = [];
+												if($('#new_po_no_status').val().length > 9)
+											{
+												//alert("a")
+												$('#new_po_error_length_status').removeClass('hidden');
+
+												$('#new_po_error_status').addClass('hidden');
+												$('#new_po_file_error_status').addClass('hidden');
+											}
+											else
+											{
+												//alert("s")
+												var a = [];
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
@@ -595,22 +624,28 @@ function orderStatus() {
                                                     }
 
                                                 });
+											}
+												
+                                                
                                             } else
                                             {
                                                 if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_error_status').removeClass('hidden')
                                                     $('#new_po_file_error_status').removeClass('hidden') 
+													$('#new_po_error_length_status').addClass('hidden'); 
                                                 }
                                                 else if ($('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_file_error_status').removeClass('hidden')
-                                                    $('#new_po_error_status').addClass('hidden')   
+                                                    $('#new_po_error_status').addClass('hidden')  
+													$('#new_po_error_length_status').addClass('hidden'); 
                                                 }
                                                 else if ($('#new_po_no_status').val() == "")
                                                 {
                                                      $('#new_po_error_status').removeClass('hidden')
                                                      $('#new_po_file_error_status').addClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden'); 
                                                 }
                                             }
                                         
@@ -981,6 +1016,7 @@ function tescoOrderStatus()
                     $('#exist_artwork_div_status').addClass('hidden')
                     $('#new_po_error_status').addClass('hidden')
                     $('#new_po_file_error_status').addClass('hidden')
+					$('#new_po_error_length_status').addClass('hidden'); 
 
                     $('#style_num').change(function(){
                         if($(this).val() != "Select Style Number")
@@ -1016,6 +1052,7 @@ function tescoOrderStatus()
                                         
                                         $('#check_error_status').addClass('hidden')
                                         $('#new_po_error_status').addClass('hidden')
+										$('#new_po_error_length_status').addClass('hidden');
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
                                         var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
@@ -1219,41 +1256,55 @@ function tescoOrderStatus()
                                         if (sList > 0) {
                                             $('#check_error_status').addClass('hidden')
                                         if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() !="") {
-                                            var a = [];
-                                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
-                                                if (this.checked) {
-                                                    a.push($(this).parent().attr('data-id'));
-                                                    //alert($(this).parent().attr('data-id'))
-                                                }
-                                            });
-                                            var aa = a.join(',');
-                                            var new_po_file = $('#new_po_file_status').prop('files')[0];
-                                            var new_po_no = $('#new_po_no_status').val();
-                                            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                                            var form_data = new FormData();
-                                            form_data.append('id', aa);
-                                            form_data.append('po_file', new_po_file);
-                                            form_data.append('po', new_po_no);
-                                            form_data.append('_token', csrf_token);
-                                            $.ajax({
-                                                url: base_url + "/customer/tesco/update-po",
-                                                dataType: 'text',
-                                                cache: false,
-                                                contentType: false,
-                                                processData: false,
-                                                data: form_data,
-                                                type: 'post',
-                                                success: function (data) {
-                                                    orderStatus()
-                                                    $('#po-file-upload-group').modal('hide')
-                                                    $('.snackbar_span').html('PO Updated Successfully');
-                                                    showSnackbar();
-                                                },
-                                                error: function () {
-                                                    console.log('somethig is wrong, please try later');
-                                                }
+											
+											if($('#new_po_no_status').val().length > 9)
+											{
+												//alert("a")
+												$('#new_po_error_length_status').removeClass('hidden');
 
-                                            });
+												$('#new_po_error_status').addClass('hidden');
+												$('#new_po_file_error_status').addClass('hidden');
+											}
+											else
+											{
+												var a = [];
+												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
+													if (this.checked) {
+														a.push($(this).parent().attr('data-id'));
+														//alert($(this).parent().attr('data-id'))
+													}
+												});
+												var aa = a.join(',');
+												var new_po_file = $('#new_po_file_status').prop('files')[0];
+												var new_po_no = $('#new_po_no_status').val();
+												var csrf_token = $('meta[name="csrf-token"]').attr('content');
+												var form_data = new FormData();
+												form_data.append('id', aa);
+												form_data.append('po_file', new_po_file);
+												form_data.append('po', new_po_no);
+												form_data.append('_token', csrf_token);
+												$.ajax({
+													url: base_url + "/customer/tesco/update-po",
+													dataType: 'text',
+													cache: false,
+													contentType: false,
+													processData: false,
+													data: form_data,
+													type: 'post',
+													success: function (data) {
+														orderStatus()
+														$('#po-file-upload-group').modal('hide')
+														$('.snackbar_span').html('PO Updated Successfully');
+														showSnackbar();
+													},
+													error: function () {
+														console.log('somethig is wrong, please try later');
+													}
+
+												});
+											}
+											
+                                            
                                         }
                                         else
                                         {
@@ -1261,16 +1312,19 @@ function tescoOrderStatus()
                                                 {
                                                     $('#new_po_error_status').removeClass('hidden')
                                                     $('#new_po_file_error_status').removeClass('hidden') 
+													$('#new_po_error_length_status').addClass('hidden');
                                                 }
                                                 else if ($('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_file_error_status').removeClass('hidden')
-                                                    $('#new_po_error_status').addClass('hidden')   
+                                                    $('#new_po_error_status').addClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden');
                                                 }
                                                 else if ($('#new_po_no_status').val() == "")
                                                 {
                                                      $('#new_po_error_status').removeClass('hidden')
                                                      $('#new_po_file_error_status').addClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden');
                                                 }
                                             
                                         }
@@ -1292,7 +1346,18 @@ function tescoOrderStatus()
                                             $('#check_error_status').addClass('hidden')
                                             if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() !="")
                                             {
-                                                var a = [];
+												
+											if($('#new_po_no_status').val().length > 9)
+											{
+												//alert("a")
+												$('#new_po_error_length_status').removeClass('hidden');
+
+												$('#new_po_error_status').addClass('hidden');
+												$('#new_po_file_error_status').addClass('hidden');
+											}
+											else
+											{
+												var a = [];
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
@@ -1327,22 +1392,26 @@ function tescoOrderStatus()
                                                     }
 
                                                 });
+											}
+                                                
                                             } else
                                             {
                                                 if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_error_status').removeClass('hidden')
-                                                    $('#new_po_file_error_status').removeClass('hidden') 
+                                                   $('#new_po_error_length_status').addClass('hidden'); $('#new_po_file_error_status').removeClass('hidden') 
                                                 }
                                                 else if ($('#new_po_file_status').val() =="")
                                                 {
                                                     $('#new_po_file_error_status').removeClass('hidden')
                                                     $('#new_po_error_status').addClass('hidden')   
+													$('#new_po_error_length_status').addClass('hidden'); 
                                                 }
                                                 else if ($('#new_po_no_status').val() == "")
                                                 {
                                                      $('#new_po_error_status').removeClass('hidden')
                                                      $('#new_po_file_error_status').addClass('hidden')
+													$('#new_po_error_length_status').addClass('hidden'); 
                                                 }
                                             }
                                         
