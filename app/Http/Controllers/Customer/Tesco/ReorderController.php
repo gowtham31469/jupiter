@@ -933,11 +933,11 @@ class ReorderController extends Controller
 
            if($zone == 'UK')
            {
-               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size','=',$size)->get();
+               $size = DB::table('tesco_size_chart')->select('uk as size')->where('po_size','=',$size)->where('is_enabled','=',1)->get();
            }
            else
            {
-               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size','=',$size)->get();
+               $size = DB::table('tesco_size_chart')->select('ce as size')->where('po_size','=',$size)->where('is_enabled','=',1)->get();
            }
            
            return response()->json(['size_chart' => $size]);
