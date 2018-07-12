@@ -165,10 +165,11 @@ class ProfomaInvoice
           $data['company_details']->pi_number = "JGA00".$pi_id;
         }
         else {
-         $data['company_details']->pi_number = "SP00".$pi_id;
+          $data['company_details']->pi_number = "SP00".$pi_id;
         }
         $data['company_details']->rev_number = 0;
         $data['company_details']->pi_date = $today->toDateString();
+        
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
                                   ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
@@ -197,6 +198,7 @@ class ProfomaInvoice
                                   ->select('address','country')
                                   ->first();
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+
         $data['item_details']    = DB::table($table_name)
                                             ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
                                             ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
@@ -216,6 +218,7 @@ class ProfomaInvoice
               $value->style = $value->uk_style_ref;
            }
         }
+        
         $data['price_list']     = DB::table('price_taxation')
                                   ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                   ->where('price_taxation.template_id','=',$request->template_id)
