@@ -234,7 +234,10 @@
       /* Show logo on left side */
       $('.logo').html('Customers')
       $('#add_customer_form').trigger("reset");
-      $('#customers-list-table').DataTable();
+      var table =   $('#customers-list-table').DataTable();
+		
+	  table.order( [ 5, 'asc' ] ).draw();
+		
 	  $("#customers-list-table_filter input").addClass('form-control');
 	  $('.dataTables_length select').addClass('form-control');
 	  $("#customers-list-table_filter input").attr('placeholder', 'Data Search');
@@ -284,6 +287,14 @@
          addCustomer();
       }
     })
+		
+		 $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url.toString().replace("#","") + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url.toString().replace("#","");
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+          });
 		
 	/** To activate customers on click **/
     $(document).on('click', '#make_active', function(e) {

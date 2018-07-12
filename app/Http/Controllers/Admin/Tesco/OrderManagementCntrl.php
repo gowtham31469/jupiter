@@ -1914,7 +1914,6 @@ class OrderManagementCntrl extends Controller
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
@@ -1924,6 +1923,7 @@ class OrderManagementCntrl extends Controller
 			 PDF::SetMargins(0, 0, 0, false);
 			 PDF::AddPage('L', array(80,127));
 			 $svg=urldecode($value);
+			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -2154,7 +2154,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2201,7 +2201,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2248,7 +2248,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2296,7 +2296,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2344,7 +2344,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2392,7 +2392,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2439,7 +2439,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -2499,7 +2499,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2548,7 +2548,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2597,7 +2597,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2646,7 +2646,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2695,7 +2695,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2744,7 +2744,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -2793,7 +2793,7 @@ class OrderManagementCntrl extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
