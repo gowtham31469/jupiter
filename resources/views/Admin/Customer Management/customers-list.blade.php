@@ -326,14 +326,14 @@
                                         </div>
                                         <div class="form-check form-group has-feedback" style="margin-top: 25px;">
                                           <label class="form-check-label">
-                                            <input class="form-check-input default_address" type="checkbox" value="" name="default1" id="default_address0">
+                                            <input class="form-check-input default_address" type="checkbox" value="" checked="true" name="default1" id="default_address0">
                                             Make as default billing address
                                           </label>
                                           <div class="help-block with-errors"></div>
                                         </div>
                                         <div class="form-check form-group has-feedback">
                                           <label class="form-check-label">
-                                            <input class="form-check-input shipping_address" type="checkbox" value="" name="defaultShip1" id="shipping_address0">
+                                            <input class="form-check-input shipping_address" type="checkbox" value="" checked="true" name="defaultShip1" id="shipping_address0">
                                             Make as default shipping address
                                           </label>
                                           <div class="help-block with-errors"></div>
