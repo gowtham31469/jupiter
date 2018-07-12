@@ -14,6 +14,20 @@ use App\TescoBrand;
 use App\TescoDepartment;
 use App\TescoSupplier;
 use App\TescoSizeChart;
+use App\TescoTCL1Orders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2Orders;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4Orders;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTHL1Orders;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3Orders;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1Orders;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL3Orders;
+use App\TescoTSL3OrdersQuantity;
 
 class TescoSettings extends Controller
 {
@@ -164,13 +178,26 @@ class TescoSettings extends Controller
       {
         try {
               $id      = $request['id'];
-              
-              TescoBrand::where('id',$id)
-               ->update([
-                 'is_enabled'  => 0
-              ]);
-
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              // Check if this brand is in use or not  while placing the order. 
+              // Checking for 1 template order table from each combination.
+              // (ie, TCL1 from TCL1, TCL2 and TSL1 combination)
+              $tcl1_table_brands = TescoTCL1Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
+              $tcl4_table_brands = TescoTCL4Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
+              $thl1_table_brands = TescoTHL1Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
+              $thl3_table_brands = TescoTHL3Orders::where('tesco_brand_id','=',$id)->pluck('id')->all();
+              array_merge($tcl1_table_brands,$tcl4_table_brands,$thl1_table_brands,$thl3_table_brands);
+              if(empty($tcl1_table_brands) != '')
+              {
+                TescoBrand::where('id',$id)
+                 ->update([
+                   'is_enabled'  => 0
+                ]);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> false,'message' =>'Brand is in use.'],208);
+              }
             } 
             catch (\Exception $e)
             {
@@ -321,13 +348,27 @@ class TescoSettings extends Controller
       {
         try {
               $id      = $request['id'];
-              
-              TescoDepartment::where('id',$id)
-               ->update([
-                 'is_enabled'  => 0
-              ]);
+              // Check if this department is in use or not while placing the order. 
+              // Checking for 1 template order table from each combination.
+              // (ie, TCL1 from TCL1, TCL2 and TSL1 combination)
+              $tcl1_table_departments = TescoTCL1Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
+              $tcl4_table_departments = TescoTCL4Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
+              $thl1_table_departments = TescoTHL1Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
+              $thl3_table_departments = TescoTHL3Orders::where('tesco_department_id','=',$id)->pluck('id')->all();
+              array_merge($tcl1_table_departments,$tcl4_table_departments,$thl1_table_departments,$thl3_table_departments);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              if(empty($tcl1_table_departments) != '')
+              {
+                TescoDepartment::where('id',$id)
+                 ->update([
+                   'is_enabled'  => 0
+                ]);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> false,'message' =>'Department is in use.'],208);
+              }
             } 
             catch (\Exception $e)
             {
@@ -641,13 +682,29 @@ class TescoSettings extends Controller
       {
         try {
               $id      = $request['id'];
-              
-              TescoSizeChart::where('id',$id)
-               ->update([
-                 'is_enabled'  => 0
-              ]);
+              // get sizechart for this id.
+              $size = DB::table('tesco_size_chart')->select('po_size')->where('id','=',$id)->first();
+              // Check if this department is in use or not while placing the order. 
+              // Checking for 1 template order table from each combination.
+              // (ie, TCL4 from TCL4 and TSL3 combination)
+              // size only for tesco single templates
+              $tcl4_sizes = TescoTCL4OrdersQuantity::where('size','=',$size->po_size)->pluck('id')->all();
+              $thl3_sizes = TescoTHL3OrdersQuantity::where('size','=',$size->po_size)->pluck('id')->all();
+              array_merge($tcl4_sizes,$thl3_sizes);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              if(empty($tcl4_sizes) != '')
+              {
+                TescoSizeChart::where('id',$id)
+                 ->update([
+                   'is_enabled'  => 0
+                ]);
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
+              else
+              {
+                $result = response()->json(['error'=> false,'message' =>'Size Chart is in use.'],208);
+              }
+
             } 
             catch (\Exception $e)
             {

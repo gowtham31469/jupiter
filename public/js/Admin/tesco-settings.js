@@ -375,7 +375,12 @@ function showSnackbar() {
                         isSubmitting = false;
                         $('.snackbar_span').html('Brand is disabled ');
                         showSnackbar();
-                   }
+                   },
+                  208: function() {
+                       isSubmitting = false;
+                       $('.snackbar_span').html("This action can't be completed because brand is in use.")
+                       showSnackbar();
+                  }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
                 this.tryCount++;
@@ -704,6 +709,11 @@ function tescoDepartment() {
                     200: function() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Department is disabled ');
+                         showSnackbar();
+                    },
+                    208: function() {
+                        isSubmitting = false;
+                         $('.snackbar_span').html("This action can't be completed because department is in use.")
                          showSnackbar();
                     }
                },
@@ -1364,6 +1374,11 @@ function tescoSizeChart() {
                     200: function() {
                          isSubmitting = false;
                          $('.snackbar_span').html('Size Chart is disabled ');
+                         showSnackbar();
+                    },
+                    208: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html("This action can't be completed because size chart is in use.")
                          showSnackbar();
                     }
                },

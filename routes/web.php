@@ -24,7 +24,7 @@ $this->post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 $this->get('admin/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 $this->post('admin/register', 'Auth\RegisterController@register');
 
-// Password Reset Routes...
+// Password Reset Routes for Admin...
 $this->get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 $this->post('admin/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 $this->get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
@@ -50,6 +50,9 @@ Route::post('admin/order-management/print-special-pdf', 'Admin\OrderManagement\O
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
+Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
+Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
+
 //Route::get('admin/template-management/template-list', 'Admin\TemplateManagement\TemplateController@templateList');
 Route::post('admin/orchestra/template-management/template-view', 'Admin\Orchestra\TemplateManagementCntrl@templateView');
 
@@ -107,14 +110,19 @@ Route::group(['middleware' => 'customer_guest'], function()
 	Route::get('customer/register', 'CustomerAuth\RegisterController@showRegistrationForm');
 	Route::post('customer/register', 'CustomerAuth\RegisterController@register');
 
-	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm');
+	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm')->name('customer.login');
 	Route::post('customer', 'CustomerAuth\LoginController@login');
+	// Password Reset Routes for customer...
+	Route::get('customer/password/reset', 'CustomerAuth\ForgotPasswordController@showLinkRequestForm')->name('customer.password.request');
+	Route::post('customer/password/email', 'CustomerAuth\ForgotPasswordController@sendResetLinkEmail')->name('customer.password.email');
+	Route::get('customer/password/reset/{token}', 'CustomerAuth\ResetPasswordController@showResetForm')->name('customer.password.reset');
+	Route::post('customer/password/reset', 'CustomerAuth\ResetPasswordController@reset');
 });
 
 //Only logged in Customers can access or send requests to these pages
 Route::group(['middleware' => 'customer_auth'], function()
 {
-	Route::post('customer/logout', 'CustomerAuth\LoginController@logout');
+	Route::post('customer/logout', 'CustomerAuth\LoginController@logout')->name('customer.logout');
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
 	Route::get('customer/create-order', 'Customer\HomeController@customerOrders');
@@ -127,15 +135,15 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::get('customer/customers', 'Customer\CustomerController@customers');
 	
 	
-Route::put('customer/customer-management/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
-Route::put('customer/customer-management/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
-Route::get('customer/customer-management/get-customers-profile', 'Customer\CustomerController@getCustomerProfileById');
+	Route::put('customer/customer-management/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
+	Route::put('customer/customer-management/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
+	Route::get('customer/customer-management/get-customers-profile', 'Customer\CustomerController@getCustomerProfileById');
 
-Route::put('customer/customer-management/update-customerProfile', 'Customer\CustomerController@updateCustomerProfile');
+	Route::put('customer/customer-management/update-customerProfile', 'Customer\CustomerController@updateCustomerProfile');
 
-Route::post('customer/customer-management/add-customerProfile', 'Customer\CustomerController@addCustomerProfile');
+	Route::post('customer/customer-management/add-customerProfile', 'Customer\CustomerController@addCustomerProfile');
 
-Route::post('customer/customer-management/customer-company-buyer', 'Customer\CustomerController@customerCompanyBuyer');
+	Route::post('customer/customer-management/customer-company-buyer', 'Customer\CustomerController@customerCompanyBuyer');
 	
 
 	//TESCO VIEW ORDER
@@ -187,13 +195,19 @@ Route::group(['middleware' => 'merchandiser_guest'], function()
 {
 	Route::get('merchandiser/register', 'MerchandiserAuth\RegisterController@showRegistrationForm');
 	Route::post('merchandiser/register', 'MerchandiserAuth\RegisterController@register');
-	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm');
+	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm')->name('merchandiser.login');
 	Route::post('merchandiser', 'MerchandiserAuth\LoginController@login');
+
+	// Password Reset Routes for merchandiser...
+	Route::get('merchandiser/password/reset', 'MerchandiserAuth\ForgotPasswordController@showLinkRequestForm')->name('merchandiser.password.request');
+	Route::post('merchandiser/password/email', 'MerchandiserAuth\ForgotPasswordController@sendResetLinkEmail')->name('merchandiser.password.email');
+	Route::get('merchandiser/password/reset/{token}', 'MerchandiserAuth\ResetPasswordController@showResetForm')->name('merchandiser.password.reset');
+	Route::post('merchandiser/password/reset', 'MerchandiserAuth\ResetPasswordController@reset');
 });
 
 Route::group(['middleware' => 'merchandiser_auth'], function()
 {
-	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout');
+	Route::post('merchandiser/logout', 'MerchandiserAuth\LoginController@logout')->name('merchandiser.logout');
 	Route::get('/merchandiser/pending-orders', 'Merchandiser\HomeController@index');
 	Route::get('/merchandiser/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
 	Route::post('/merchandiser/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
