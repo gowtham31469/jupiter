@@ -253,7 +253,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -300,7 +300,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -347,7 +347,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -395,7 +395,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -443,7 +443,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -491,7 +491,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -538,7 +538,7 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "reOrder";
 				$newTasks->save();
 				
@@ -598,7 +598,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -648,7 +648,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -698,7 +698,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -748,7 +748,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -798,7 +798,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -848,7 +848,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
@@ -898,7 +898,7 @@ class ReorderController extends Controller
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
 				$newTasks->purchase_order_no = "";
-				$newTasks->po_file = "";
+				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
 				$newTasks->save();
 				
