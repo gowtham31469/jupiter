@@ -941,6 +941,7 @@ class CustomerManagementController extends Controller
 					 				 ->join('roles', 'roles.id', 'customer_profile.role_id')
 					 				 ->join('customers', 'customers.id', 'customer_profile.company_id')
                                      ->select('customer_profile.*','roles.role_name','customers.company_name')
+					 				->orderBy('customer_profile.status', 'asc')
                                      ->get();  
                  if($is_allowed)
                  {
