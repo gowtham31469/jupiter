@@ -1914,7 +1914,6 @@ class OrderManagementCntrl extends Controller
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
@@ -1924,6 +1923,7 @@ class OrderManagementCntrl extends Controller
 			 PDF::SetMargins(0, 0, 0, false);
 			 PDF::AddPage('L', array(80,127));
 			 $svg=urldecode($value);
+			 PDF::setImageScale(1.66);
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
