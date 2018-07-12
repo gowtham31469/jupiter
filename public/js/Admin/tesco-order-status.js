@@ -752,7 +752,7 @@ function tescoStatusTable(data,path)
     var columnsIn = data[0];
     for (var key in columnsIn)
     {
-        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag")
+        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
         {
         	th += "<th style='text-align: center;'>" + key + "</th>";
         }
@@ -885,18 +885,18 @@ function tescoStatusTable(data,path)
                     
                    if (value[key] == '00-00-0000')
                    {
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'")  readonly></td>';
                    }
                    else
                    {
                        
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'") readonly></td>';
                    }
                   
                    
                   
                 }
-                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag")
+                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
                 {
                 	if (value[key]== "" || value[key]==null)
                 	{
@@ -916,25 +916,16 @@ function tescoStatusTable(data,path)
 
 
 $('body').on('focus',".datepicker_recurring_start", function(){
+     var count = $('.datepicker_recurring_start').attr("data-id");
+
     $(this).datepicker({
         autoclose: true,
-        startDate: "+7d",
+        startDate: "+"+count+"d",
         format:'dd-mm-yyyy'
     });
 });
-function updateDeliveryDate(obj,tableID,tableName)
+function updateDeliveryDate(obj,tableID,tableName,count)
 {
-    var date = new Date();
-    var dd = date.getDate() +7;
-    var mm = date.getMonth()+1; //January is 0!
-    var yyyy = date.getFullYear();
-    if(dd<10){
-        dd='0'+dd;
-    } 
-    if(mm<10){
-        mm='0'+mm;
-    } 
-    var today = dd+'-'+mm+'-'+yyyy;
     $(obj).closest('tr').find('.datepicker_recurring_start').css('border-color', '');
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     var deliveryDate = $(obj).closest('tr').find('.datepicker_recurring_start').val();
@@ -1142,12 +1133,11 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                        $('.rev').removeClass('hidden')
                        $('.rev_number').text(data.data.company_details.rev_number) 
                     }
-                    
 
-                    $('#company_details').html('<h3><strong>'+data.data.company_details.name+'</strong></h3>'+data.data.company_details.address+'<br/>'+data.data.company_details.phone+'<br/>GSTN : '+data.data.company_details.gstin)
+                    $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
                     $('#ship_to').html('<h4>Shipping Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.ship_to.address+'</p>')
-                    $('#bank_details').html(' <strong> Bank Details: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C TYPE</td><td>'+data.data.company_details.account_type+'</td></tr><tr><td>A/C NUMBER</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>ACCOUNT NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>ADDRESS</td><td>'+data.data.company_details.branch+'</td></tr><tr><td>RTGS & IFSC</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
+                    $('#bank_details').html(' <strong>BANK DETAILS: </strong><table class="table table-condensed" style="width:50%;"><tr><td>Bank</td><td>'+data.data.company_details.bank+'</td></tr><tr><td>A/C No</td><td>'+data.data.company_details.account_no+'</td></tr><tr><td>A/C NAME</td><td>'+data.data.company_details.account_holder+'</td></tr><tr><td>IFSC CODE</td><td>'+data.data.company_details.ifsc_code+'</td></tr></table>')
                
                
                     var i = 0;
@@ -1158,11 +1148,11 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     
                     if (data.data.bank_details.template_type == "single")
                     {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Artwork</th><th class="size-pi">Size</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
                     }
                     else
                     {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S. No.</th><th>Artwork</th><th>Style</th><th>Quantity</th><th>Unit Cost (₹)</th><th>Total (₹)</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
                     }
                     if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
                     {
@@ -1180,14 +1170,15 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             if(unit_price === 0){
                                 noPrice++;
                             }
+                      
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+size+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
                             totalqnty+=value.quantity;
                             subtotal+=value.quantity * unit_price;
@@ -1196,7 +1187,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         if(noPrice < 1) {
                             var taxamnt = subtotal*(tax/100);
                             var billamnt = subtotal+taxamnt;
-                            tr += '</tbody></table></div><hr><div><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4></div><hr><div><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4></div><hr/><div class="text-right">'
+                            tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
                             if (data.data.bank_details.place_of_supply==1)
                             {
                                tr += '<h4> CGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4><h4> SGST : '+tax/2+'% (<span>'+(taxamnt/2).toFixed(2)+'</span>)</h4></div><hr><div class="text-right"><h4> Bill Amount : ₹ '+billamnt.toFixed(2)+' </h4><p  style="text-transform: capitalize" id="bilamnt">'+RsPaise(billamnt.toFixed(2))+'  </p></div><hr /></div>'

@@ -49,7 +49,7 @@ class TemplateManagementCntrl extends Controller
         }
         
     }
-     public function templateList()
+    public function templateList()
     {
         $treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->get()->toArray();
          

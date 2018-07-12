@@ -14,9 +14,9 @@ class AddInsideTamilnaduToOrchestraTemplates extends Migration
     public function up()
     {
          Schema::table('orchestra_template', function($table) {
-	   $table->double('tax')->after('disney');
+	       $table->double('tax')->after('disney');
      	   $table->string('outside_tamilnadu')->after('tax');
-	   $table->string('inside_tamilnadu')->after('outside_tamilnadu');
+	       $table->string('inside_tamilnadu')->after('outside_tamilnadu');
    	 });
     }
 

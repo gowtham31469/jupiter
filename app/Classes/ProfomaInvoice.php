@@ -171,11 +171,12 @@ class ProfomaInvoice
         $data['company_details']->pi_date = $today->toDateString();
         $customer_details       = DB::table($table_name)
                                   ->join('customers',$table_name.'.tesco_supplier_id','=','customers.id')
+                                  ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
                                   ->where($table_name.'.is_order_count_empty',0)
                                   ->leftjoin('payment_terms','customers.payment_terms','=','payment_terms.id')
                                   ->leftjoin('freight_terms','customers.freight_type','=','freight_terms.id')
                                   ->where($table_name.'.id',$id)
-                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type')
+                                  ->select('customers.*',$table_name.'.template_id',$table_name.'.po_number',$table_name.'.uk_style_ref',$table_name.'.ce_style_ref',$table_name.'.zone','payment_terms.payment_terms','freight_terms.freight_terms',$table_name.'.template_type','tesco_item_master.ref_no')
                                   ->first();
         if ($customer_details)
         {
@@ -198,14 +199,23 @@ class ProfomaInvoice
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
         $data['item_details']    = DB::table($table_name)
                                             ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
+                                            ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
                                             ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
                                             ->where('price_taxation.customer_id',$customer_details->id)
                                             ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('tesco_template.item_id',$request->template_id)
                                             ->where($table_name.'_quanty.'.$qnty_id,$id)
-                                            ->select('size',$table_name.'_quanty.count as quantity',$table_name.'.uk_style_ref as style','price_taxation.custom_name as material_name', 'tesco_template.tax')
+                                            ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no')
                                             ->get();
+        foreach ($data['item_details'] as $key => $value) {
+           if ($value->zone == "CE") {
+              $value->style = $value->ce_style_ref;
+           }
+           else{
+              $value->style = $value->uk_style_ref;
+           }
+        }
         $data['price_list']     = DB::table('price_taxation')
                                   ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                   ->where('price_taxation.template_id','=',$request->template_id)
@@ -281,6 +291,11 @@ class ProfomaInvoice
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
                                     ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'))
                                     ->get();
+        foreach ($data['item_details'] as $key => $value) {
+          $value->ref_no = $pi_details->ref_no;
+          $value->style = $pi_details->uvc_style_no;
+          $value->po_no = $pi_details->buyer_po_no;
+        }
         $data['price_list'] = array();
         foreach ($data['item_details'] as $key => $value) {
           array_push($data['price_list'], ['volume_to' => $value->quantity, 'price' => $value->unit_price]);

@@ -59,6 +59,6 @@ class ResetPasswordController extends Controller
 
         event(new PasswordReset($user));
 
-        return redirect('/admin');
+        return redirect()->route('login');
     }
 }

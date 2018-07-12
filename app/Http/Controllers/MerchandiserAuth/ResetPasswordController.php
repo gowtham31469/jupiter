@@ -81,6 +81,6 @@ class ResetPasswordController extends Controller
 
         event(new PasswordReset($user));
 
-        return redirect('/merchandiser');
+        return redirect()->route('merchandiser.login');
     }
 }
