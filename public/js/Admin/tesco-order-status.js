@@ -1133,6 +1133,9 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                        $('.rev').removeClass('hidden')
                        $('.rev_number').text(data.data.company_details.rev_number) 
                     }
+                    else{
+                      $('.rev').addClass('hidden')
+                    }
 
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')

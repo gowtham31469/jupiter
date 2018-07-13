@@ -209,7 +209,7 @@ class ProfomaInvoice
                                             ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('tesco_template.item_id',$request->template_id)
                                             ->where($table_name.'_quanty.'.$qnty_id,$id)
-                                            ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id')
+                                            ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no')
                                             ->get()->toArray();
 
         foreach ($item_details as $key => $value) {
@@ -251,7 +251,7 @@ class ProfomaInvoice
                                 ->where('price_taxation.customer_id',$customer_details->id)
                                 ->where('price_taxation.buyer_id',$buyer_id)
                                 ->where($key.'.po_number',$item_details[0]->po_no)
-                                ->select('size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id');
+                                ->select('size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no');
                     
               if ($item_details[0]->zone =="CE") {
                 $item_details2->where('ce_style_ref',$item_details[0]->style);

@@ -2063,6 +2063,9 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                        $('.rev').removeClass('hidden')
                        $('.rev_number').text(data.data.company_details.rev_number) 
                     }
+                    else{
+                      $('.rev').addClass('hidden')
+                    }
                     
 
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
