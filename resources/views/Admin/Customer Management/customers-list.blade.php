@@ -735,6 +735,14 @@
          addCustomer();
       }
     })
+		
+	 $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url.toString().replace("#","") + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url.toString().replace("#","");
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+          });
 
     /** To activate customers on click **/
     $(document).on('click', '#make_active', function(e) {
