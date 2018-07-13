@@ -198,8 +198,9 @@ class ProfomaInvoice
                                   ->select('address','country')
                                   ->first();
         $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+        
 
-        $data['item_details']    = DB::table($table_name)
+        $item_details    = DB::table($table_name)
                                             ->join($table_name.'_quanty',$table_name.'_quanty.'.$qnty_id,'=',$table_name.'.id')
                                             ->join('tesco_item_master','tesco_item_master.id',$table_name.'.template_id')
                                             ->leftjoin('price_taxation','price_taxation.template_id','=',$table_name.'.template_id')
@@ -208,9 +209,10 @@ class ProfomaInvoice
                                             ->where('price_taxation.buyer_id',$buyer_id)
                                             ->where('tesco_template.item_id',$request->template_id)
                                             ->where($table_name.'_quanty.'.$qnty_id,$id)
-                                            ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no')
-                                            ->get();
-        foreach ($data['item_details'] as $key => $value) {
+                                            ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id')
+                                            ->get()->toArray();
+
+        foreach ($item_details as $key => $value) {
            if ($value->zone == "CE") {
               $value->style = $value->ce_style_ref;
            }
@@ -218,15 +220,74 @@ class ProfomaInvoice
               $value->style = $value->uk_style_ref;
            }
         }
+        $data['tables'][$table_name]= $table_name.'_quanty';
+        if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+          $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+          $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+          $template_array = array_combine($table_array, $qnty_id_array);
+
+        }
+        if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+          $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+          $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+          $template_array = array_combine($table_array, $qnty_id_array);
+        }
+
+        $item_id_array = array();
+        $price_array = array();
+        $templates = array();
+        array_push($item_id_array, $request->template_id);
+        if (!empty($template_array)) {
+            unset($template_array[$table_name]);
+            $data['tables']  = array_merge($data['tables'],$template_array);
+            foreach ($template_array as $key => $qunty_tbl) {
+          
+            $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$key));
+            $item_details2    = DB::table($key)
+                                ->join($qunty_tbl,$qunty_tbl.'.'.$qnty_id,'=',$key.'.id')
+                                ->join('tesco_item_master','tesco_item_master.id',$key.'.template_id')
+                                ->leftjoin('price_taxation','price_taxation.template_id','=',$key.'.template_id')
+                                ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                                ->where('price_taxation.customer_id',$customer_details->id)
+                                ->where('price_taxation.buyer_id',$buyer_id)
+                                ->where($key.'.po_number',$item_details[0]->po_no)
+                                ->select('size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id');
+                    
+              if ($item_details[0]->zone =="CE") {
+                $item_details2->where('ce_style_ref',$item_details[0]->style);
+              }
+              else{
+                $item_details2->where('uk_style_ref',$item_details[0]->style);
+              }
+              $templates =  $item_details2->get()->toArray();
+              if ($templates) {
+                $item_details = array_merge($item_details,$templates);
+              }    
+          }
+          foreach ($item_details as $key => $value) {
+             if ($value->zone == "CE") {
+                $value->style = $value->ce_style_ref;
+             }
+             else{
+                $value->style = $value->uk_style_ref;
+             }
+             array_push($item_id_array, $value->item_id);
+          }
+        }
+        foreach (array_unique($item_id_array) as $item_id) {
+         $price_list      = DB::table('price_taxation')
+                                ->join('price_range','price_range.price_taxation_id','price_taxation.id')
+                                ->where('price_taxation.template_id','=',$item_id)
+                                ->where('price_taxation.customer_id',$customer_details->id)
+                                ->where('price_taxation.buyer_id',$buyer_id)
+                                ->orderBy('price_range.volume_to')
+                                ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'))
+                                ->get()->toArray();
+          $price_array = array_merge($price_array,$price_list);
+        } 
+        $data['price_list'] = $price_array;
+        $data['item_details']   = $item_details;
         
-        $data['price_list']     = DB::table('price_taxation')
-                                  ->join('price_range','price_range.price_taxation_id','price_taxation.id')
-                                  ->where('price_taxation.template_id','=',$request->template_id)
-                                  ->where('price_taxation.customer_id',$customer_details->id)
-                                  ->where('price_taxation.buyer_id',$buyer_id)
-                                  ->orderBy('price_range.volume_to')
-                                  ->select('price_range.volume_from', 'price_range.volume_to','price_range.price')
-                                  ->get();
 
         return $data;
        
@@ -245,7 +306,7 @@ class ProfomaInvoice
         $pi_details = DB::table('profoma_invoices')
         ->where('buyer_id',$buyer_id)
         ->where('uvc_style_no',$style_no)
-        ->where('template_id',$template_id)
+        // ->where('template_id',$template_id)
         ->where('buyer_po_no',$buyer_po)
         ->select('profoma_invoices.*',DB::raw("DATE_FORMAT(profoma_invoices.created_at,'%Y-%m-%d') as pi_date"))
         ->first();
@@ -271,15 +332,17 @@ class ProfomaInvoice
                                   ->where('customers.id',$pi_details->customer_id)
                                   ->select('customers.*','payment_terms.payment_terms','freight_terms.freight_terms')
                                   ->first();
+
         if ($customer_details)
         {
           if ($customer_details->nominated_forwarder!=null)
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
-           $customer_details->template_type = $pi_details->template_type;
+           // $customer_details['template_type'] = $pi_details->template_type;
           }
         }                        
         $data['bank_details']   = $customer_details;
+        $data['bank_details']->template_type = $pi_details->template_type;
         $data['bill_to']        = DB::table('customer_bill_address')
                                   ->where('customer_bill_address.customer_id',$customer_details->id)
                                   ->where('customer_bill_address.is_billing_address',1)
@@ -292,10 +355,9 @@ class ProfomaInvoice
                                   ->first();
         $data['item_details']    = DB::table('profoma_invoice_item_details')
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
-                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'))
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'),'ref_no')
                                     ->get();
         foreach ($data['item_details'] as $key => $value) {
-          $value->ref_no = $pi_details->ref_no;
           $value->style = $pi_details->uvc_style_no;
           $value->po_no = $pi_details->buyer_po_no;
         }

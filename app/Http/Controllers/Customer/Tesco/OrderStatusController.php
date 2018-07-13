@@ -280,9 +280,11 @@ class OrderStatusController extends Controller
                 {
                     $unit_cost = 0;
                     foreach ($data['price_list'] as $i => $val) {
-                        if($value->quantity <= $val->volume_to) {
-                            $unit_cost = $val->price;
-                            break;
+                        if ($value->item_id == $val->item_id) {
+                            if($value->quantity <= $val->volume_to) {
+                                $unit_cost = $val->price;
+                                break;
+                            }
                         }
                     }
                     $total_qnty+= $value->quantity;
@@ -291,6 +293,8 @@ class OrderStatusController extends Controller
                         'pi_id'     => $pi_details->id,
                         'material'  => $value->material_name,
                         'size'      => $value->size,
+                        'template_id' => $value->item_id,
+                        'ref_no'      => $value->ref_no,
                         'style'     => $value->style,
                         'quantity'  => $value->quantity,
                         'unit_cost' => $unit_cost
@@ -305,11 +309,24 @@ class OrderStatusController extends Controller
                             ]);
             }
             
-            $data       =   DB::table($table_name)
-                            ->where('id',$row_id)
-                            ->update([
-                               'pi_status' => "PI Approved"
-                            ]);
+            foreach ($data['tables'] as $table => $vals) {
+                if ($data['bank_details']->zone == "CE") {
+                    $approved_data   =   DB::table($table)
+                                        ->where('ce_style_ref',$style_no)
+                                        ->where('po_number',$data['bank_details']->po_number)
+                                        ->update([
+                                           'pi_status' => "PI Approved"
+                                        ]);
+                }
+                else {
+                    $approved_data   = DB::table($table)
+                                        ->where('uk_style_ref',$style_no)
+                                        ->where('po_number',$data['bank_details']->po_number)
+                                        ->update([
+                                           'pi_status' => "PI Approved"
+                                        ]);
+                }
+            }
             if ($data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
