@@ -160,9 +160,9 @@
                                         </span></br>
                                         <strong>PI </strong>
                                             <span style="padding-left: 31px;"> : </span>
-                                            <span style="padding-left: 6px;" class="pi_number"></span>
-                                        <p class="rev hidden"><strong>REV : </strong>
-                                        <span class="rev_number"> </span></p>
+                                            <span style="padding-left: 8px;" class="pi_number"></span>
+                                        <p class="rev hidden"><strong>Rev no</strong><span style="padding-left: 3px;"> : </span>
+                                        <span style="padding-left: 4px;" class="rev_number"> </span></p>
                                     </div>
                                     <div id="company_details">
 

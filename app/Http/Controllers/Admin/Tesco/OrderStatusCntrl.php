@@ -149,7 +149,6 @@ class OrderStatusCntrl extends Controller
             {
                 $data      = $pi_obj->getTescoPIDetails($request);
             }
-            
             $result    = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);
         }
         catch (\Exception $e)
@@ -174,7 +173,6 @@ class OrderStatusCntrl extends Controller
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
             $data       =   $pi_obj->getTescoPIDetails($request);
-
             if ($data)
             {
                 if ($data['bank_details']->zone == "CE")
@@ -196,27 +194,32 @@ class OrderStatusCntrl extends Controller
                     'shipping_address' => $data['ship_to']->address,
                     'billing_address'  => $data['bill_to']->address,
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
-                    'template_type'  => $data['bank_details']->template_type
+                    'template_type'    => $data['bank_details']->template_type,
+                    'revision_no'      => $data['item_details'][0]->pi_rev_no
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
                 {
                     $unit_cost = 0;
                     foreach ($data['price_list'] as $i => $val) {
-                        if($value->quantity <= $val->volume_to) {
-                            $unit_cost = $val->price;
-                            break;
+                        if ($value->item_id == $val->item_id) {
+                            if($value->quantity <= $val->volume_to) {
+                                $unit_cost = $val->price;
+                                break;
+                            }
                         }
                     }
                     $total_qnty+= $value->quantity;
                     $sub_total += $value->quantity *$unit_cost;
                     ProfomaInvoiceItemDetails::create([
-                        'pi_id'     => $pi_details->id,
-                        'material'  => $value->material_name,
-                        'size'      => $value->size,
-                        'style'     => $style_no,
-                        'quantity'  => $value->quantity,
-                        'unit_cost' => $unit_cost
+                        'pi_id'       => $pi_details->id,
+                        'material'    => $value->material_name,
+                        'size'        => $value->size,
+                        'template_id' => $value->item_id,
+                        'ref_no'      => $value->ref_no,
+                        'style'       => $style_no,
+                        'quantity'    => $value->quantity,
+                        'unit_cost'   => $unit_cost
                     ]);
                 }
                 PI::where('id',$pi_details->id)
@@ -227,13 +230,27 @@ class OrderStatusCntrl extends Controller
                               'bill_amount'      => $sub_total*$data['item_details'][0]->tax
                             ]);
             }
+
+            foreach ($data['tables'] as $table => $vals) {
+                if ($data['bank_details']->zone == "CE") {
+                    $approved_data   =   DB::table($table)
+                                        ->where('ce_style_ref',$style_no)
+                                        ->where('po_number',$data['bank_details']->po_number)
+                                        ->update([
+                                           'pi_status' => "PI Approved"
+                                        ]);
+                }
+                else {
+                    $approved_data   = DB::table($table)
+                                        ->where('uk_style_ref',$style_no)
+                                        ->where('po_number',$data['bank_details']->po_number)
+                                        ->update([
+                                           'pi_status' => "PI Approved"
+                                        ]);
+                }
+            }
             
-            $data       =   DB::table($table_name)
-                            ->where('id',$row_id)
-                            ->update([
-                               'pi_status' => "PI Approved"
-                            ]);
-            if ($data)
+            if ($approved_data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
             }
@@ -260,13 +277,42 @@ class OrderStatusCntrl extends Controller
         {
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
-            $data       =   DB::table($table_name)
-                            ->where('id',$row_id)
-                            ->update([
-                              'pi_status' => "PI Rejected"
-                            ]);
-    
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
+            $table_data =   DB::table($table_name)->where('id',$row_id)->first();
+
+            if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+              $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+              $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+              $template_array = array_combine($table_array, $qnty_id_array);
+
+            }
+            if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+              $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+              $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+              $template_array = array_combine($table_array, $qnty_id_array);
+            }
+            if (!empty($template_array)) {
+                foreach ($template_array as $table => $value) {
+                    if ($table_data->zone == "CE") {
+                        DB::table($table)
+                        ->where('ce_style_ref',$table_data->ce_style_ref)
+                        ->where('po_number',$table_data->po_number)
+                        ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no + 1
+                        ]);
+                    }    
+                }
+            }
+            else{
+                $data = DB::table($table_name)
+                        ->where('id',$row_id)
+                         ->update([
+                          'pi_status' => "PI Rejected",
+                          'pi_rev_no' => $table_data->pi_rev_no+1
+                        ]);
+            }
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         catch (\Exception $e)
         {

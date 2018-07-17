@@ -1133,6 +1133,9 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                        $('.rev').removeClass('hidden')
                        $('.rev_number').text(data.data.company_details.rev_number) 
                     }
+                    else{
+                      $('.rev').addClass('hidden')
+                    }
 
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
                     $('#bill_to').html('<h4>Billing Address:</h4>'+data.data.bank_details.company_name+'<p>'+data.data.bill_to.address+'</br> GSTN :'+data.data.bank_details.gstin_number+ '</p>')
@@ -1145,26 +1148,30 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     var subtotal = 0;
                     var tax = 0 ;
                     var tr = '';
-                    
+                    console.log(data.data.bank_details.template_type)
                     if (data.data.bank_details.template_type == "single")
                     {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Template</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
                     }
                     else
                     {
-                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
+                        tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Template</th><th>Style</th><th>Po.No.</th><th>Ref</th><th>Quantity</th><th>Unit Cost</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';
                     }
+
                     if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
                     {
                         var noPrice = 0;
                         tax = data.data.item_details[0].tax;
                         $.each(data.data.item_details, function (index, value)
                         {
+                            
                             var unit_price = 0;
                             $.each(data.data.price_list, function(i, val){
-                                if(value.quantity <= val.volume_to) {
-                                    unit_price = val.price;
-                                     return false; 
+                                if (value.item_id == val.item_id) {
+                                    if(value.quantity <= val.volume_to) {
+                                        unit_price = val.price;
+                                         return false; 
+                                    }
                                 }
                             });
                             if(unit_price === 0){
@@ -1174,11 +1181,11 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             if (data.data.bank_details.template_type == "single")
                             {
                                 size = value.size ;
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
                             else
                             {
-                                tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
+                                tr += '<tr><td>'+ ++i +'</td><td>'+value.material_name+'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+(value.quantity*unit_price).toFixed(2)+'</td></tr>'
                             }
                             totalqnty+=value.quantity;
                             subtotal+=value.quantity * unit_price;
@@ -1300,7 +1307,7 @@ function tescoApprovePI(template_id,id,table_name)
                var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-
+               location.reload();
             },
             400: function()
             {

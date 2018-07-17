@@ -1700,7 +1700,7 @@ function tescoStatusTable(data,path)
                     var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
                     {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
+                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
                     }
                     else
                     {
@@ -1941,6 +1941,8 @@ function tescoSetPO(obj,id,tableName,po_file)
                $('#snackbar').css('background-color','#00b6ff');
                $('.snackbar_span').html('Purchase Order Number added Successfully');
                $(obj).closest('tr').find('.tesco-po').val(po_number);
+               $(obj).closest('tr').find('.po-span').addClass('hidden');
+               $(obj).closest('tr').find('.tesco-po').attr('readonly', true);
                
                if ($(obj).closest('tr').find('.po_class').text() =="PO Pending" && po_file!="null")
                {
@@ -2061,6 +2063,9 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                        $('.rev').removeClass('hidden')
                        $('.rev_number').text(data.data.company_details.rev_number) 
                     }
+                    else{
+                      $('.rev').addClass('hidden')
+                    }
                     
 
                     $('#company_details').html('<strong style="font-size:11px;">'+data.data.company_details.name+'</strong><br/>'+data.data.company_details.address+'<br/>PH : '+data.data.company_details.office_phone+', '+data.data.company_details.phone+'<br/>GST : '+data.data.company_details.gstin)
@@ -2093,9 +2098,11 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                         {
                             var unit_price = 0;
                             $.each(data.data.price_list, function(i, val){
-                                if(value.quantity <= val.volume_to) {
-                                    unit_price = val.price;
-                                     return false; 
+                                if (value.item_id == val.item_id) {
+                                    if(value.quantity <= val.volume_to) {
+                                        unit_price = val.price;
+                                         return false; 
+                                    }
                                 }
                             });
                             if(unit_price === 0){
@@ -2230,6 +2237,7 @@ function tescoApprovePI(template_id,id,table_name)
                var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
+               location.reload();
 
             },
             400: function()
