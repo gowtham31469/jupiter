@@ -23,11 +23,8 @@
                             <span id="reauth-email" class="reauth-email"></span>
                             <input id="email" type="email" class="form-control" placeholder="Email address" required autofocus name="email" value="{{ old('email') }}">
                            <input id="password" type="password" class="form-control" name="password" required placeholder="Password">
-                            <div id="remember" class="checkbox">
-                                <label>
-                       <input type="checkbox" class="custom-control-input" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember me
-                    </label>
-                            </div>
+                            <br>
+                            <br>
                             <button class="btn btn-sm btn-primary btn-block " type="submit">Sign in</button>
                         </form>
                         <!-- /form -->
