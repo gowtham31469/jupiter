@@ -2048,6 +2048,7 @@ function addUKSingle(rem, e) {
                             <div class="form-group has-feedback">\
                                 <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_' + val + '" name="uk_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode">\
                                 <div class="help-block with-errors"></div>\
+                                <div class="barcode-error"></div>\
                             </div>\
                         </td>\
                         <td>\
@@ -2125,19 +2126,20 @@ function addUKRatio(rem, e) {
                         <td class="slno">' + val + '</td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" maxlength="9">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_' + val + '" name="uk_ratio_itf_' + val + '" onkeyup="dynamicSVGTemplates()" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode">\
+                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_' + val + '" name="uk_ratio_itf_' + val + '" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode">\
                                 <div class="help-block with-errors"></div>\
+                                <div class="barcode-error"></div>\
                             </div>\
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_' + val + '" name="uk_ratio_upc_' + val + '" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_' + val + '" name="uk_ratio_upc_' + val + '" placeholder="Enter Units Per Carton" maxlength="4">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -2279,8 +2281,9 @@ function addCESingle(rem, e) {
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_' + val + '" name="ce_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode">\
+                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_' + val + '" name="ce_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode" >\
                             <div class="help-block with-errors"></div>\
+                            <div class="barcode-error"></div>\
                         </div>\
                     </td>\
                     <td>\
@@ -2358,7 +2361,7 @@ function addCERatio(rem, e) {
                     <td class="slno">' + val + '</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" maxlength="13">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -2366,11 +2369,12 @@ function addCERatio(rem, e) {
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_' + val + '" name="ce_ratio_itf_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
                             <div class="help-block with-errors"></div>\
+                            <div class="barcode-error"></div>\
                         </div>\
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                            <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_' + val + '" name="ce_ratio_cpc_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter Cases Per Carton" maxlength="4">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -4842,9 +4846,16 @@ function afterOrderSubmitted(data) {
 
 	/** Show snackbar if order placed **/
 	if (length > 0) {
+		/** Make form as readonly */
+		$('#create_tesco_order_form input').attr('readonly', 'readonly');
+		$('.selectpicker').prop('disabled', true);
+		$('#tesco_manufacture_date').prop('disabled',true);
+		$("#datePicker1").datepicker("disabled");
+		$('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
 		/** remove save & submit button */
 		$('.submit-btn').remove();
 		$('.save-btn').remove();
+	    /** Show approve button */
 		$('.approve-btn').show();
 		$('.print-btn').show();
 		$('.cancel-btn').removeAttr('data-target');
@@ -6556,3 +6567,45 @@ function approveTescoOrder() {
 		console.error("Error:" + e)
 	}
 }
+
+// function validateEanBarcode(this,obj)
+// {
+// 	var barcode_checks = 0;
+// 	/** [ Dynamically change svg barcode ] */
+// 	if (obj.length === 13) {
+// 		var barcodecheck = checkjsbarcodeean(obj);
+// 		if (barcodecheck == "false") {
+// 			barcode_checks++;
+// 			$(this).find('.barcode-error').html('');
+// 			/**  [ Show validation error message ] **/
+// 			$(this).find('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+// 		} else {
+// 			barcode_checks = 0;
+// 			$(this).find('.barcode-error').html('');
+// 		}
+// 	} else {
+// 		barcode_checks = 0;
+// 		$(this).find('.barcode-error').html('');
+// 	}
+// }	
+
+// function validateItfBarcode(this,obj)
+// {
+// 	var barcode_checks = 0;
+// 	/** [ Dynamically change svg barcode ] */
+// 	if (obj.length === 14) {
+// 		var barcodecheck = checkjsbarcodeitf(obj);
+// 		if (barcodecheck == "false") {
+// 			barcode_checks++;
+// 			$(this).find('.barcode-error').html('');
+// 			/**  [ Show validation error message ] **/
+// 			$(this).find('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+// 		} else {
+// 			barcode_checks = 0;
+// 			$(this).find('.barcode-error').html('');
+// 		}
+// 	} else {
+// 		barcode_checks = 0;
+// 		$(this).find('.barcode-error').html('');
+// 	}
+// }	
