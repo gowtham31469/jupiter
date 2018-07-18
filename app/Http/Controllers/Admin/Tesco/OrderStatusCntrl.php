@@ -862,5 +862,44 @@ class OrderStatusCntrl extends Controller
 		
 	}
 
+    public function enableArtworkEdit(Request $request)
+    {
+        try {
+            $tablename = $request->tablename;
+            $rowid     = $request->rowid;
+            $data        = DB::table($tablename)->where('id',$rowid)
+                              ->update([
+                                  'edit_permission' => 1
+                                ]);
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    public function disableArtworkEdit(Request $request)
+    {
+        try {
+            
+            $tablename = $request->tablename;
+            $rowid     = $request->rowid;
+            $data    = DB::table($tablename)->where('id',$rowid)
+                              ->update([
+                                  'edit_permission' => 0
+                                ]);
+
+               $result = response()->json(['error'=> false,'message' =>'success'],200);
+                 
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
 
 }

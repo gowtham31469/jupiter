@@ -1435,8 +1435,6 @@ function updateArtwork(obj)
                     $('#tesco_description').val(data.order_details.short_description);                   
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-					
-					
 					var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
 					var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
 				
@@ -1523,7 +1521,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.orms_tpn;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size disabled" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled="" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter ORMS TPND";
 							var tpn_len="13";
 							var unit_len="6";
@@ -1534,7 +1532,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.tpnd;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size disabled" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled ="" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter TPND";
 							var tpn_len="9";
 							var unit_len="4";
@@ -1574,8 +1572,16 @@ function updateArtwork(obj)
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
 					$('.osartwork').text(" Artwork - "+TemplateName)
 					
-					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
+                    $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
 					
+                    if (data.order_details.edit_permission == 1){
+                        $('#enable_edit').addClass('hidden')
+                        $('#disable_edit').removeClass('hidden')
+                    }
+                    else{
+                        $('#disable_edit').addClass('hidden')
+                        $('#enable_edit').removeClass('hidden')
+                    }
 					$('#create_tesco_order_status_form').validator().on('submit', function (e) {
 						if (e.isDefaultPrevented()) {
 
@@ -1629,9 +1635,64 @@ function updateArtwork(obj)
     {
         $("#create_tesco_order_status_form :input").prop("disabled", false);
         $('#tesco_po_number').prop('disabled',true);
+        $('#tesco_uk_style').prop('disabled',true);
+        $('#tesco_ce_style').prop('disabled',true);
+
+        
     }
-function setEditOrderStatus()
-{
+    function enableArtworkEdit(tablename,rowid)
+    {
+        var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+             url: base_url + "/admin/tesco/enable-artwork-edit",
+             type: 'post',
+             data: { tablename: tablename,
+                    rowid:rowid,
+                    _token: csrf_token
+                },
+            beforeSend: function () {
+                // $(".loader").show();
+            },
+            success: function (data) {
+                $('#enable_edit').addClass('hidden')
+                $('#disable_edit').removeClass('hidden')
+            },
+            error: function (data){
+                
+            },
+            complete: function () {
+
+            }
+        })
+    } 
+
+    function disableArtworkEdit(tablename,rowid)
+    {
+        var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+             url: base_url + "/admin/tesco/disable-artwork-edit",
+             type: 'post',
+             data: { tablename: tablename,
+                    rowid:rowid,
+                     _token: csrf_token
+                },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#enable_edit').removeClass('hidden')
+                $('#disable_edit').addClass('hidden')
+            },
+            error: function (data){
+                console.log(data);
+            },
+            complete: function () {
+
+            }
+        })
+    }
+    function setEditOrderStatus()
+    {
 			
 		var tpnd         = [];
         var barcode      = [];
