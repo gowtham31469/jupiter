@@ -1844,7 +1844,8 @@ try{
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_'+val+'" name="uk_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode">\
+                                <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_' + val + '" name="uk_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode" onkeyup="return validateEanBarcode(this)">\
+                                <div class="barcode-error-ean"></div>\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -1932,7 +1933,8 @@ try{
                         </td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_'+val+'" name="uk_ratio_itf_'+val+'" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode">\
+                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_' + val + '" name="uk_ratio_itf_' + val + '" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode" onkeyup="return validateItfBarcode(this)">\
+                                 <div class="barcode-error-itf"></div>\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2085,7 +2087,8 @@ try{
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_'+val+'" name="ce_single_ean_'+val+'" required="" placeholder="Enter EAN Barcode">\
+                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_' + val + '" name="ce_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode" onkeyup="return validateEanBarcode(this)">\
+                            <div class="barcode-error-ean"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -2173,7 +2176,8 @@ try{
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_'+val+'" name="ce_ratio_itf_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
+                            <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_' + val + '" name="ce_ratio_itf_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode" onkeyup="return validateItfBarcode(this)">\
+                            <div class="barcode-error-itf"></div>\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -6784,5 +6788,61 @@ function approveTescoOrder()
     } catch(e) {
         /** [error statements] */
         console.error("Error:"+e)
+    }
+}
+
+/**
+ * [Validation for dynamic ean barcode fields]
+ * @author <praveen>
+ */
+function validateEanBarcode(obj)
+{
+    var barcode_checks = 0;
+    /** [ Dynamically change svg barcode ] */
+    if (obj.value.length === 13) {
+        var barcodecheck = checkjsbarcodeean(obj.value);
+        if (barcodecheck == "false") {
+            barcode_checks++;
+            $(obj).next('div').html('');
+            /**  [ Show validation error message ] **/
+            $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+            $('.submit-btn').prop('disabled', true);
+        } else {
+            barcode_checks = 0;
+            $(obj).next('div').html('');
+            $('.submit-btn').prop('disabled', false);
+        }
+    } else {
+        barcode_checks = 0;
+        $(obj).next('div').html('');
+        $('.submit-btn').prop('disabled', false);
+    }
+}   
+
+/**
+ * [Validation for dynamic itf barcode fields]
+ * @author <praveen>
+ */
+function validateItfBarcode(obj)
+{
+    var barcode_checks = 0;
+    /** [ Dynamically change svg barcode ] */
+    if (obj.value.length === 14) {
+        var barcodecheck = checkjsbarcodeitf(obj.value);
+        if (barcodecheck == "false") {
+            barcode_checks++;
+            $(obj).next('div').html('');
+            /**  [ Show validation error message ] **/
+            $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+            $('.submit-btn').prop('disabled', true);
+        } else {
+            barcode_checks = 0;
+            $(obj).next('div').html('');
+            $('.submit-btn').prop('disabled', false);
+        }
+    } else {
+        barcode_checks = 0;
+        $(obj).next('div').html('');
+        $('.submit-btn').prop('disabled', false);
     }
 }
