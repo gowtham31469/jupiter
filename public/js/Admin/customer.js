@@ -240,7 +240,7 @@ function addCustomer()
         /** [ Create array of multiple fax for address ] */
         $('.fax').each(function(i, item)
         {
-            fax[i]    = $(item).val();
+            fax[i]    = $(item).val() == ''?0:$(item).val();
             
         });
         $('.address_email').each(function(i, item)
@@ -280,7 +280,7 @@ function addCustomer()
         /** [Create array of multiple pincode for address ] */
         $('.pincode').each(function(i, item)
         {
-            pincode[i]    = $(item).val();
+            pincode[i]    = $(item).val() == ''?0:$(item).val();
             
         });
 
@@ -1283,7 +1283,7 @@ function addCustomer()
           /** [ Create array of multiple fax for address ] */
           $('.edit_fax').each(function(i, item)
           {
-              fax[i]    = $(item).val();
+              fax[i]    = $(item).val() == ''?0:$(item).val();
               
           });
 
@@ -1325,7 +1325,7 @@ function addCustomer()
           /** [ Create array of multiple pincode for address ] */
           $('.edit_pincode').each(function(i, item)
           {
-              pincode[i]    = $(item).val();
+              pincode[i]    = $(item).val() == ''?0:$(item).val();
               
           });
 

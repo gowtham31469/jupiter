@@ -238,6 +238,7 @@ class CustomerManagementController extends Controller
                   $pincode          = explode(',',$pincode);
                   $customers        = explode(',',$customers);
 
+
                   $customer = Customer::create([
                                 'factory_code'           => $factory_code,
                                 'company_name'           => $company_name,
@@ -272,36 +273,49 @@ class CustomerManagementController extends Controller
                         ]);
                         $i++;
                     }
-                    $j = 0;
-                    foreach($address as $value)
+
+                    if(array_filter($address) != NULL)
                     {
-                        CustomerBillAddress::create([
-                            'customer_id'            => $insert_Id,
-                            'address'                => $value,
-                            'country'                => $country[$j],
-                            'email'                  => $address_email[$j],
-                            'telephone'              => $telephone[$j],
-                            'fax'                    => $fax[$j],
-                            'is_billing_address'     => $billing_address[$j],
-                            'is_shipping_address'    => $shipping_address[$j],
-                            'pincode'                => $pincode[$j]
-                        ]);
-                        $j++;
+                      $j = 0;
+                      foreach($address as $value)
+                      {
+                          CustomerBillAddress::create([
+                              'customer_id'            => $insert_Id,
+                              'address'                => $value,
+                              'country'                => $country[$j],
+                              'email'                  => $address_email[$j],
+                              'telephone'              => $telephone[$j],
+                              'fax'                    => $fax[$j],
+                              'is_billing_address'     => $billing_address[$j],
+                              'is_shipping_address'    => $shipping_address[$j],
+                              'pincode'                => $pincode[$j]
+                          ]);
+                          $j++;
+                      }
                     }
-                    foreach($buyers as $buyer)
+                    
+                    if(array_filter($buyers) != NULL)
                     {
-                        CustomerBuyers::create([
-                            'customer_id'     => $insert_Id,
-                            'buyer_id'        => $buyer
-                        ]);
+                      foreach($buyers as $buyer)
+                      {
+                          CustomerBuyers::create([
+                              'customer_id'     => $insert_Id,
+                              'buyer_id'        => $buyer
+                          ]);
+                      }
                     }
-                    foreach($customers as $customer)
+                    
+                    if(array_filter($customers) != NULL)
                     {
-                        CustomerMetadata::create([
-                            'customer_id'           => $insert_Id,
-                            'customer_metadata_id'  => $customer
-                        ]);
+                      foreach($customers as $customer)
+                      {
+                          CustomerMetadata::create([
+                              'customer_id'           => $insert_Id,
+                              'customer_metadata_id'  => $customer
+                          ]);
+                      }
                     }
+                    
                     $result = response()->json(['error'=> false,'message' =>'success'],200);
                   }
                   else
@@ -641,7 +655,9 @@ class CustomerManagementController extends Controller
                             'sap_code'               => $input['sap_code']
                           ]);
                       /** Delete existing data before updating **/
-                      CustomerContactPersons::where('customer_id', '=', $id)
+                      if(array_filter($contact_person) != NULL)
+                      {
+                        CustomerContactPersons::where('customer_id', '=', $id)
                             ->delete();
                         $i = 0;
                         foreach($contact_person as $contact)
@@ -655,44 +671,55 @@ class CustomerManagementController extends Controller
                             ]);
                             $i++;
                         }
+                      }
+                        
                         /** Delete existing data before updating **/
-                        CustomerBillAddress::where('customer_id', '=', $id)
-                            ->delete();
-                        $j = 0;
-                        foreach($address as $value)
+                        if(array_filter($address) != NULL)
                         {
-                            CustomerBillAddress::create([
-                                'customer_id'         => $id,
-                                'address'             => $value,
-                                'country'             => $country[$j],
-                                'email'               => $address_email[$j],
-                                'telephone'           => $telephone[$j],
-                                'fax'                 => $fax[$j],
-                                'is_billing_address'  => $billing_address[$j],
-                                'is_shipping_address' => $shipping_address[$j],
-                                'pincode'             => $pincode[$j]
-                            ]);
-                            $j++;
+                          CustomerBillAddress::where('customer_id', '=', $id)
+                              ->delete();
+                          $j = 0;
+                          foreach($address as $value)
+                          {
+                              CustomerBillAddress::create([
+                                  'customer_id'         => $id,
+                                  'address'             => $value,
+                                  'country'             => $country[$j],
+                                  'email'               => $address_email[$j],
+                                  'telephone'           => $telephone[$j],
+                                  'fax'                 => $fax[$j],
+                                  'is_billing_address'  => $billing_address[$j],
+                                  'is_shipping_address' => $shipping_address[$j],
+                                  'pincode'             => $pincode[$j]
+                              ]);
+                              $j++;
+                          }
                         }
                         /** Delete existing data before updating **/
-                        CustomerBuyers::where('customer_id', '=', $id)
-                            ->delete();
-                        foreach($buyers as $buyer)
+                        if(array_filter($buyers) != NULL)
                         {
-                            CustomerBuyers::create([
-                                'customer_id'     => $id,
-                                'buyer_id'        => $buyer
-                            ]);
+                          CustomerBuyers::where('customer_id', '=', $id)
+                              ->delete();
+                          foreach($buyers as $buyer)
+                          {
+                              CustomerBuyers::create([
+                                  'customer_id'     => $id,
+                                  'buyer_id'        => $buyer
+                              ]);
+                          }
                         }
                         /** Delete existing data before updating **/
-                        CustomerMetadata::where('customer_id', '=', $id)
-                            ->delete();
-                        foreach($customers as $customer)
+                        if(array_filter($customers) != NULL)
                         {
-                            CustomerMetadata::create([
-                                'customer_id'          => $id,
-                                'customer_metadata_id' => $customer
-                            ]);
+                          CustomerMetadata::where('customer_id', '=', $id)
+                              ->delete();
+                          foreach($customers as $customer)
+                          {
+                              CustomerMetadata::create([
+                                  'customer_id'          => $id,
+                                  'customer_metadata_id' => $customer
+                              ]);
+                          }
                         }
                         $result = response()->json(['error'=> false,'message' =>'success'],200);
                       
