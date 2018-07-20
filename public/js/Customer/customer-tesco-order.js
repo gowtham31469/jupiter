@@ -5922,10 +5922,10 @@ function saveCESingleTHL3()
         });
         case_size = case_size.join(',');
 
-        /** [ Create array of ce single tcl1 count ] */
+        /** [ Create array of ce single tcl1 size ] */
         $('.ce_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            size[i]    = $(item).val();
             
         });
         size = size.join(',');
@@ -6004,7 +6004,7 @@ function saveUKRatioTCL1TCL2TSL1()
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
         {
-            tpnd[i]    = $(item).val() === ''? 0 : $(item).val();
+            tpnd[i]    = $(item).val();
             
         });
         tpnd   = tpnd.join(',');
@@ -6012,7 +6012,7 @@ function saveUKRatioTCL1TCL2TSL1()
         /** [ Create array of uk ratio itf barcode ] */
         $('.uk_ratio_itf').each(function(i, item)
         {
-            itf_code[i]    = $(item).val() === ''? 0 : $(item).val();
+            itf_code[i]    = $(item).val();
             
         });
         itf_code = itf_code.join(',');
@@ -6110,7 +6110,7 @@ function saveUKRatioTHL1()
         /** [ Create array of uk ratio orms tpn ] */
         $('.uk_ratio_tpnd').each(function(i, item)
         {
-            tpnd[i]    = $(item).val() === ''? 0 : $(item).val();
+            tpnd[i]    = $(item).val();
             
         });
         tpnd   = tpnd.join(',');
@@ -6118,7 +6118,7 @@ function saveUKRatioTHL1()
         /** [ Create array of uk ratio itf barcode ] */
         $('.uk_ratio_itf').each(function(i, item)
         {
-            itf_code[i]    = $(item).val() === ''? 0 : $(item).val();
+            itf_code[i]    = $(item).val();
             
         });
         itf_code = itf_code.join(',');
@@ -6203,7 +6203,7 @@ function saveUKSingleTCL4TSL3()
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
         {
-            tpnd[i]    = $(item).val() === ''? 0 : $(item).val();
+            tpnd[i]    = $(item).val();
             
         });
         tpnd   = tpnd.join(',');
@@ -6211,7 +6211,7 @@ function saveUKSingleTCL4TSL3()
         /** [ Create array of uk single ean barcode ] */
         $('.uk_single_ean').each(function(i, item)
         {
-            ean_code[i]    = $(item).val() === ''? 0 : $(item).val();
+            ean_code[i]    = $(item).val();
             
         });
         ean_code = ean_code.join(',');
@@ -6224,10 +6224,10 @@ function saveUKSingleTCL4TSL3()
         });
         case_size = case_size.join(',');
 
-        /** [ Create array of uk single tcl1 count ] */
+        /** [ Create array of uk single tcl1 size ] */
         $('.uk_single_size').each(function(i, item)
         {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
+            size[i]    = $(item).val();
             
         });
         size = size.join(',');
@@ -6310,7 +6310,7 @@ function saveUKSingleTHL3()
         /** [ Create array of uk single orms tpn ] */
         $('.uk_single_tpnd').each(function(i, item)
         {
-            tpnd[i]    = $(item).val() === ''? 0 : $(item).val();
+            tpnd[i]    = $(item).val();
             
         });
         tpnd   = tpnd.join(',');
@@ -6318,7 +6318,7 @@ function saveUKSingleTHL3()
         /** [ Create array of uk single ean barcode ] */
         $('.uk_single_ean').each(function(i, item)
         {
-            ean_code[i]    = $(item).val() === ''? 0 : $(item).val();
+            ean_code[i]    = $(item).val();
             
         });
         ean_code = ean_code.join(',');
