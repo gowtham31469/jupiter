@@ -564,15 +564,29 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
                                 <br>\
-                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">\
-                                    <div class="col-md-3">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="tesco_po_number">PO Number</label>\
-                                            <input type="text" class="form-control" name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-3">\
+                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true">';
+
+						if (zone === "CE") {
+							  html += '<div class="col-md-3">\
+																<div class="form-group has-feedback">\
+																	<label for="tesco_po_number">PO Number</label>\
+																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+																	<div class="help-block with-errors"></div>\
+																</div>\
+															</div>';
+							}
+							else
+							{
+							  	html += '<div class="col-md-3">\
+																<div class="form-group has-feedback">\
+																	<label for="tesco_po_number">PO Number</label>\
+																	<input type="text" class="form-control" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+																	<div class="help-block with-errors"></div>\
+																</div>\
+															</div>';
+								}
+                                  
+                                     html += '<div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_uk_style">UK Style Ref.</label>\
                                             <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="10">\
@@ -589,7 +603,7 @@ function createOrders(parsedObj = false, oType = false) {
                                     <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_season_code">Season Code</label>\
-                                            <input type="text" class="form-control" name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                            <input type="text" class="form-control" data-minlength="4" data-required-error="Mandatory Field." data-minlength-error="Enter 4 digits." name="tesco_season_code" id="tesco_season_code" required="" placeholder="Enter Season Code" onkeyup="dynamicSVGTemplates()" maxlength="4">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
                                     </div>\
@@ -721,7 +735,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_1" name="uk_ratio_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                                        <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_1" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." name="uk_ratio_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -794,7 +808,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
+                                                        <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_1" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." name="uk_single_tpnd_1" placeholder="Enter TPND" onkeyup="dynamicSVGTemplates()" maxlength="9">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -872,7 +886,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -943,7 +957,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_single_orms_tpn_1" required="" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
