@@ -2054,7 +2054,7 @@ function addUKSingle(rem, e) {
                         <td class="slno">' + val + '</td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_' + val + '" name="uk_single_tpnd_' + val + '" required="" placeholder="Enter TPND" maxlength="9">\
+                                <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_' + val + '" name="uk_single_tpnd_' + val + '" required="" placeholder="Enter TPND" data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits.">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2140,7 +2140,7 @@ function addUKRatio(rem, e) {
                         <td class="slno">' + val + '</td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" maxlength="9">\
+                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" maxlength="9" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." >\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2289,7 +2289,7 @@ function addCESingle(rem, e) {
                     <td class="slno">' + val + '</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_' + val + '" name="ce_single_orms_tpn_' + val + '" required="" placeholder="Enter ORMS TPN" maxlength="13">\
+                            <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_' + val + '" name="ce_single_orms_tpn_' + val + '" required="" placeholder="Enter ORMS TPN" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." >\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -2375,7 +2375,7 @@ function addCERatio(rem, e) {
                     <td class="slno">' + val + '</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" maxlength="13">\
+                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." >\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -5564,7 +5564,7 @@ function saveCERatioTCL1TCL2TSL1() {
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
-			cases_per_carton[i] = $(item).val();
+			cases_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		cases_per_carton = cases_per_carton.join(',');
@@ -5689,7 +5689,7 @@ function saveCERatioTHL1() {
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
-			cases_per_carton[i] = $(item).val();
+			cases_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		cases_per_carton = cases_per_carton.join(',');
@@ -5798,14 +5798,14 @@ function saveCESingleTCL4TSL3() {
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of ce single tcl1 count ] */
+		/** [ Create array of ce single tcl1 size ] */
 		$('.ce_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -5922,14 +5922,14 @@ function saveCESingleTHL3() {
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of ce single tcl1 count ] */
+		/** [ Create array of ce single tcl1 size ] */
 		$('.ce_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -6041,7 +6041,7 @@ function saveUKRatioTCL1TCL2TSL1() {
 
 		/** [ Create array of uk ratio units per carton ] */
 		$('.uk_ratio_upc').each(function (i, item) {
-			units_per_carton[i] = $(item).val();
+			units_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		units_per_carton = units_per_carton.join(',');
@@ -6165,7 +6165,7 @@ function saveUKRatioTHL1() {
 
 		/** [ Create array of uk ratio units per carton ] */
 		$('.uk_ratio_upc').each(function (i, item) {
-			units_per_carton[i] = $(item).val();
+			units_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		units_per_carton = units_per_carton.join(',');
@@ -6274,14 +6274,14 @@ function saveUKSingleTCL4TSL3() {
 
 		/** [ Create array of uk single case size ] */
 		$('.uk_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of uk single tcl1 count ] */
+		/** [ Create array of uk single tcl1 size ] */
 		$('.uk_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -6398,14 +6398,14 @@ function saveUKSingleTHL3() {
 
 		/** [ Create array of uk single case size ] */
 		$('.uk_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of uk single tcl1 count ] */
+		/** [ Create array of uk single tcl1 size ] */
 		$('.uk_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');

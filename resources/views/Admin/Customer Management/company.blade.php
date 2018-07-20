@@ -431,5 +431,15 @@
 			  } 
         });
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    /** To refresh modal and form data**/
+    $('.modal').on('hidden.bs.modal', function (e) {
+      $('#add_customer_form').trigger('reset');
+      $('#customer_result').hide();
+      $('#customer_add_role').val('0').selectpicker('refresh');
+      $('#customer_add_company').val('0').selectpicker('refresh');
+      $('#customer_add_buyer').val('0').selectpicker('refresh');
+      $('#customer_add_title').val('0').selectpicker('refresh');
+     })
     </script>
     @endsection
