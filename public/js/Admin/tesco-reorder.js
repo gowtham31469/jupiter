@@ -21,7 +21,7 @@ function reOrderTesco()
 		success: function (data) {
 			var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
 			var uniqueNames = [];
-			console.log(newObj)
+			
 				for(i = 0; i< newObj.length; i++){
 					if(newObj[i].is_order_count_empty == 0)
 					{
@@ -46,10 +46,10 @@ function reOrderTesco()
 				
 				var newObjrepeatOrder = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
 				
-			
+				//console.log(newObjrepeatOrder)
 				var uniqueNamesRepeatOrder = [];
 				for(i = 0; i< newObjrepeatOrder.length; i++){
-					if(newObj[i].is_order_count_empty == 0)
+					if(newObjrepeatOrder[i].is_order_count_empty == 0)
 					{
 						if(newObjrepeatOrder[i].zone == "CE")
 						{
@@ -66,6 +66,7 @@ function reOrderTesco()
 					}
 					     
 				}
+					//console.log(uniqueNamesRepeatOrder)
 				var optionsRepeatOrder="<option>Select Style Number</option>";
 				for(i = 0; i< uniqueNamesRepeatOrder.length; i++){    
 					 optionsRepeatOrder+="<option>"+uniqueNamesRepeatOrder[i]+"</option>";
@@ -308,7 +309,14 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 				}
 				else
 				{
-					$('.po_div').append('<div class="form-group has-feedback has-success"><input maxlength="9" type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
+					if(zone == "CE")
+					{
+						$('.po_div').append('<div class="form-group has-feedback has-success"><input data-minlength="7" maxlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
+					}
+					else
+					{
+						$('.po_div').append('<div class="form-group has-feedback has-success"><input data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div>')
+					}
 				}
 				
 			}
