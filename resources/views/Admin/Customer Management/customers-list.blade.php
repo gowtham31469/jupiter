@@ -200,7 +200,7 @@
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
-                          <div class="col-md-6 forwarder_div">
+                          <div class="col-md-6 forwarder_div" style="display: none;">
                             <div class="form-group has-feedback">
                               {!! Form::label('forwarder', 'Select Nominated Forwarder', ['class' => 'form_label']) !!}
                                 {{ Form::select('forwarder',(['' => '-- Select a forwarder --']+ $forwarder),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'forwarder')) }}
@@ -471,7 +471,7 @@
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                    <div class="col-md-6 edit_forwarder_div">
+                    <div class="col-md-6 edit_forwarder_div" style="display: none;">
                       <div class="form-group has-feedback">
                         {!! Form::label('edit_forwarder', 'Select Nominated Forwarder', ['class' => 'form_label']) !!}
                           {{ Form::select('edit_forwarder',(['' => '-- Select a forwarder --']+ $forwarder),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'edit_forwarder')) }}
@@ -674,7 +674,12 @@
       $('.dataTables_length select').addClass('form-control');
       $('div.freight_charge_div').hide()
       $('.forwarder_div').hide(); 
+      $('#forwarder').val('0').selectpicker('refresh');
+      $('#edit_forwarder').val('0').selectpicker('refresh');
       $('#customers_metadata').prop('required',false)
+      $('#freight').val('0').selectpicker('refresh');
+      $('#edit_freight').val('0').selectpicker('refresh');
+      $('div.po-required-div').hide();
       /* Refresh auto populate country functionality */
       autopopulateCountry(0)
     });
@@ -704,9 +709,14 @@
       $('#place_of_supply').val('0').selectpicker('refresh');
       $('#edit_place_of_supply').val('0').selectpicker('refresh');
       $('.forwarder_div').hide();
+      $('#forwarder').val('0').selectpicker('refresh');
+      $('#edit_forwarder').val('0').selectpicker('refresh');
       $('#edit_customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').val('0').selectpicker('refresh');
       $('#customers_metadata').prop('required',false)
+      $('#freight').val('0').selectpicker('refresh');
+      $('#edit_freight').val('0').selectpicker('refresh');
+      $('div.po-required-div').hide();
      })
 
     /** function to generate random strings */
@@ -815,6 +825,8 @@
         });
         /** [ To hide/show Nominated forwarder dropdown ( Based on freight type selected :Nominated Forwarded) ] */
           $('#freight').change(function(){
+            $('#forwarder').val('0').selectpicker('refresh');
+      
               if($('#freight option:selected').text() === "Nominated Forwarded") {
                   $('.forwarder_div').show(); 
                   $('#forwarder').prop('required',true);
@@ -824,6 +836,7 @@
               } 
         });
           $('#edit_freight').change(function(){
+            $('#edit_forwarder').val('0').selectpicker('refresh');
               if($('#edit_freight option:selected').text() === "Nominated Forwarded") {
                   $('.edit_forwarder_div').show(); 
                   $('#edit_forwarder').prop('required',true);
