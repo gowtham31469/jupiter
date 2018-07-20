@@ -2054,7 +2054,7 @@ function addUKSingle(rem, e) {
                         <td class="slno">' + val + '</td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_' + val + '" name="uk_single_tpnd_' + val + '" required="" placeholder="Enter TPND" maxlength="9">\
+                                <input type="text" class="form-control input-sm uk_single_tpnd" required="" onkeypress="return isNumber(event)" id="uk_single_tpnd_' + val + '" name="uk_single_tpnd_' + val + '" required="" placeholder="Enter TPND" data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits.">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2140,7 +2140,7 @@ function addUKRatio(rem, e) {
                         <td class="slno">' + val + '</td>\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" maxlength="9">\
+                                <input type="text" class="form-control input-sm uk_ratio_tpnd" required="" onkeypress="return isNumber(event)" id="uk_ratio_tpnd_' + val + '" name="uk_ratio_tpnd_' + val + '" placeholder="Enter TPND" maxlength="9" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." >\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -2289,7 +2289,7 @@ function addCESingle(rem, e) {
                     <td class="slno">' + val + '</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_' + val + '" name="ce_single_orms_tpn_' + val + '" required="" placeholder="Enter ORMS TPN" maxlength="13">\
+                            <input type="text" class="form-control input-sm ce_single_orms_tpn" onkeypress="return isNumber(event)" id="ce_single_orms_tpn_' + val + '" name="ce_single_orms_tpn_' + val + '" required="" placeholder="Enter ORMS TPN" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." >\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -2375,7 +2375,7 @@ function addCERatio(rem, e) {
                     <td class="slno">' + val + '</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" maxlength="13">\
+                            <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_' + val + '" name="ce_ratio_orms_tpn_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." >\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
