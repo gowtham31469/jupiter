@@ -5550,7 +5550,7 @@ function saveCERatioTCL1TCL2TSL1() {
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
-			cases_per_carton[i] = $(item).val();
+			cases_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		cases_per_carton = cases_per_carton.join(',');
@@ -5675,7 +5675,7 @@ function saveCERatioTHL1() {
 
 		/** [ Create array of ce ratio case per carton ] */
 		$('.ce_ratio_cpc').each(function (i, item) {
-			cases_per_carton[i] = $(item).val();
+			cases_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		cases_per_carton = cases_per_carton.join(',');
@@ -5784,14 +5784,14 @@ function saveCESingleTCL4TSL3() {
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of ce single tcl1 count ] */
+		/** [ Create array of ce single tcl1 size ] */
 		$('.ce_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -5908,14 +5908,14 @@ function saveCESingleTHL3() {
 
 		/** [ Create array of ce single case size ] */
 		$('.ce_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of ce single tcl1 count ] */
+		/** [ Create array of ce single tcl1 size ] */
 		$('.ce_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -6027,7 +6027,7 @@ function saveUKRatioTCL1TCL2TSL1() {
 
 		/** [ Create array of uk ratio units per carton ] */
 		$('.uk_ratio_upc').each(function (i, item) {
-			units_per_carton[i] = $(item).val();
+			units_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		units_per_carton = units_per_carton.join(',');
@@ -6151,7 +6151,7 @@ function saveUKRatioTHL1() {
 
 		/** [ Create array of uk ratio units per carton ] */
 		$('.uk_ratio_upc').each(function (i, item) {
-			units_per_carton[i] = $(item).val();
+			units_per_carton[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		units_per_carton = units_per_carton.join(',');
@@ -6260,14 +6260,14 @@ function saveUKSingleTCL4TSL3() {
 
 		/** [ Create array of uk single case size ] */
 		$('.uk_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of uk single tcl1 count ] */
+		/** [ Create array of uk single tcl1 size ] */
 		$('.uk_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');
@@ -6384,14 +6384,14 @@ function saveUKSingleTHL3() {
 
 		/** [ Create array of uk single case size ] */
 		$('.uk_single_case_size').each(function (i, item) {
-			case_size[i] = $(item).val();
+			case_size[i] = $(item).val() === '' ? 0 : $(item).val();
 
 		});
 		case_size = case_size.join(',');
 
-		/** [ Create array of uk single tcl1 count ] */
+		/** [ Create array of uk single tcl1 size ] */
 		$('.uk_single_size').each(function (i, item) {
-			size[i] = $(item).val() === '' ? 0 : $(item).val();
+			size[i] = $(item).val();
 
 		});
 		size = size.join(',');

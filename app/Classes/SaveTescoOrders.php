@@ -89,7 +89,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
               }
@@ -175,7 +174,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
               }
@@ -260,7 +258,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
               }
@@ -346,7 +343,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
               }
@@ -431,7 +427,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
                 }
@@ -516,7 +511,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
                 }
@@ -601,7 +595,6 @@ class SaveTescoOrders
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'is_order_count_empty' => "",
                           'order_placed_by'      => $created_by
                         ]);
                 }
