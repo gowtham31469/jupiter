@@ -1464,6 +1464,7 @@ function updateArtwork(obj)
 						$('#tesco_manufacture_date').prop('disabled',true);
 						$('#tesco_supplier').prop('disabled',true);
 						$('#tesco_brand').prop('disabled',true);
+						$(".dropdown-toggle").css("background-color", "#eee"); 
 						$('#tesco_department').prop('disabled',true);
 						$('#tesco_rfid').prop('disabled',true);
 						$('#tesco_tag_at_source').prop('disabled',true);
@@ -1524,7 +1525,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.orms_tpn;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size disabled" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter ORMS TPND";
 							var tpn_len="13";
 							var unit_len="6";
@@ -1535,7 +1536,7 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.tpnd;
-							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size disabled" required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'" value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 							var tpn_th="Enter TPND";
 							var tpn_len="9";
 							var unit_len="4";
@@ -1629,6 +1630,7 @@ function updateArtwork(obj)
     function editArtwork()
     {
         $("#create_tesco_order_status_form :input").prop("disabled", false);
+		$(".dropdown-toggle").css("background-color", "#fff"); 
         $('#tesco_po_number').prop('disabled',true);
     }
 function setEditOrderStatus()

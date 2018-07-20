@@ -330,7 +330,7 @@
                     </div>
                               <div class="form-group has-feedback">
                         <label for="tesco_department">Department</label>
-                        <select class="selectpicker" data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">
+                        <select class="selectpicker"  data-live-search="true" id="tesco_department" name="tesco_department" required="" onchange="dynamicSVGTemplates()">
                             <option selected value="">Select Department</option>
                             @foreach($tesco_department as $dept)
                                 <option title="{{$dept->department}}" value="{{$dept->id}}">{{$dept->department}}
