@@ -2369,6 +2369,7 @@ function updateArtwork(obj)
                     $('#tesco_manufacture_date').prop('disabled',true);
 					$('#tesco_supplier').prop('disabled',true);
                     $('#tesco_brand').prop('disabled',true);
+					$(".dropdown-toggle").css("background-color", "#eee"); 
                     $('#tesco_department').prop('disabled',true);
                     $('#tesco_rfid').prop('disabled',true);
                     $('#tesco_tag_at_source').prop('disabled',true);
