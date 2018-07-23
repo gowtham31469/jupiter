@@ -275,6 +275,91 @@ height: 1px;
 width: 80%;
 background: rgba(0,0,0,0.2);
 }
+	
+	
+	.list_div p {
+		margin: 5px 0px 5px 0px;
+	}
+	
+	.list_div p.uvc {
+		font-weight: bold;
+	}
+	
+	.list_div p.name {
+		font-weight: 400;
+		color: #666;
+		font-size: 13px;
+	}
+	
+	.list_div span.label {
+		vertical-align: bottom;
+	}
+	
+	
+	.list_div {
+		padding-top: 50px;
+	}
+	
+	.list-group img {
+		width: 30px;
+		height: 30px;
+	}
+	
+	.list_div li {
+		border: 1px solid #f7f7f7;
+		box-shadow: -1px 2px 4px 1px #0000000f;
+		outline: none;
+	}
+	.nav-tabs-item
+	{
+		border-bottom: 0px solid;
+		    margin-left: 70px;
+	}
+	
+	.sticker {
+		border-radius: 10px;
+		background-color: #1A237E;
+		padding: 3px 15px;
+	}
+	
+	.labels {
+		border-radius: 10px;
+		background-color: #00BCD4;
+		padding: 3px 15px;
+	}
+	
+	.btn-ghost {
+		background-color: #fff;
+		border: 1px solid #818080;
+		color: #818080;
+		padding: 4px -1px;
+		border-radius: 3px;
+		transition: 0.3s ease;
+	}
+	
+	.btn-ghost:hover {
+		background-color: #333;
+		color: #fff;
+	}
+	
+	.nav-tabs>.li-item.active>.li-a,
+	.nav-tabs>.li-item.active>.li-a:focus,
+	.nav-tabs>.li-item.active>.li-a:hover {
+		border: 2px solid transparent;
+		border-bottom: 2px solid;
+		color: #273238;
+	}
+	
+	.nav-tabs>.li-item>.li-a:hover {
+		border-color:  rgba(39, 50, 56, 0.66);
+		background-color: transparent;
+		border: 2px solid transparent;
+		border-bottom: 2px solid;
+	}
+	
+	.left-panel.active {
+    margin-right: 0%;
+}
 </style>
 <div class="col-sm-12 col-md-12 main">
 	<div class="top-content">
@@ -517,6 +602,34 @@ background: rgba(0,0,0,0.2);
          </div>
      </div>
  </div>
+
+
+
+<div class="left-panel col-md-12" style="display: none;">
+	<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+	<div class="div-max">
+		<div class="col-md-7">
+			<h4 class="artwork_name"></h4>
+			<hr>
+			<div class="section-1 sections">
+				<div class="sample-artwork scroll" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
+			</div>
+		</div>
+		<div class="col-md-5 scroll" style="overflow-y: scroll;height: 100%;">
+			<h4>Quantity Information</h4>
+			<hr>
+
+			<div class="merchandiser-area">
+
+				<div class="quantity"></div>
+				<div class="buttons pull-right" style="margin-top:10px;">
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";
@@ -524,6 +637,7 @@ background: rgba(0,0,0,0.2);
 	</script>
 	@endif @section('jqueryIncludes') 
 	<script src="{{ asset('js/Admin/order.js') }}"></script>
+	<script src="{{ asset('js/Admin/tesco-reorder.js') }}"></script>
 	<script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
@@ -700,6 +814,7 @@ background: rgba(0,0,0,0.2);
                     orders();
                 } else {
                     tescoOrders();
+					reOrderTesco();
                 }
             }
 
@@ -719,6 +834,7 @@ background: rgba(0,0,0,0.2);
                         orders();
                     } else {
                         tescoOrders();
+						reOrderTesco();
                     }
                 } else {
                     localStorage.removeItem("buyer");
@@ -745,6 +861,7 @@ background: rgba(0,0,0,0.2);
                         orders();
                     } else {
                         tescoOrders();
+						reOrderTesco();
                     }
               }
              })
