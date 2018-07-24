@@ -157,6 +157,7 @@ function tescoOrders() {
                                                         <ul class="nav nav-tabs">
                                                             <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#viewOrder" role="tab">View Order</a> </li>
                                                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newOrder" role="tab">New Order</a> </li>
+<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#reOrder" role="tab">Re Order</a> </li>
                                                         </ul>
                                                         <div class="tab-content ">
                                                             <div class="tab-pane fade in active" id="viewOrder" role="tabpanel">
@@ -176,6 +177,23 @@ function tescoOrders() {
                                                                     </form>
                                                                 </div>
                                                             </div>
+<div class="tab-pane fade in active" id="reOrder" role="tabpanel">
+                                                                <div class="pad-top">
+                                                                    <form id="view_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
+                                                                        <div class="form-group has-feedback">
+                                                                            <label for="style_num" class="form_label">Select Style Number</label>
+                                                                            <select class="form-control po_number selectpicker" name="po_number" id="po_number" required data-live-search="true">`+options+`</select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <div class="form-group has-feedback artwork_list hidden">
+                                                                            <label for="order_type" class="form_label">Select Artwork</label>
+                                                                            <select class="form-control selectpicker" name="artwork_list" id="artwork_list" required data-live-search="true" onchange="loadTemplatePreview()"></select>
+                                                                            <div class="help-block with-errors"></div>
+                                                                        </div>
+                                                                        <button class="btn btn-primary btn-block ">View Order</button>
+                                                                    </form>
+                                                                </div>
+ </div>
                                                             <div class="tab-pane fade" id="newOrder" role="tabpanel">
                                                                 <div class="pad-top">
                                                                     <form id="create_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">

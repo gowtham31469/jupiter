@@ -28,6 +28,8 @@ function camelize(str) {
 	});
 }
 
+
+
 /**  
  * Validation for numeric values with dot
  * @param   evt 
@@ -155,8 +157,9 @@ function tescoOrders() {
                                                         <h4>Create Order</h4>
                                                         <hr/>
                                                         <ul class="nav nav-tabs">
-                                                            <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#viewOrder" role="tab">View Order</a> </li>
-                                                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newOrder" role="tab">New Order</a> </li>
+                                                            <li  id="viewOrdertab" class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#viewOrder" role="tab">View Order</a> </li>
+                                                            <li  id="newOrdertab" class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newOrder" role="tab">New Order</a> </li>
+ <li class="nav-item"> <a class="nav-link" data-toggle="tab" id="reOrdertab" href="#reOrder" role="tab">Re Order</a> </li>
                                                         </ul>
                                                         <div class="tab-content ">
                                                             <div class="tab-pane fade in active" id="viewOrder" role="tabpanel">
@@ -173,6 +176,14 @@ function tescoOrders() {
                                                                             <div class="help-block with-errors"></div>
                                                                         </div>
                                                                         <button class="btn btn-primary btn-block ">View Order</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+															<div class="tab-pane fade" id="reOrder" role="tabpanel">
+                                                                <div class="pad-top">
+                                                                    <form id="re_order_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
+                                                                    <div class="reorder-content">
+                                                                    </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -226,7 +237,7 @@ function tescoOrders() {
                                                 </div>
                                                 <div class="col-md-8 ">
                                                     <div class="card " style="height:calc(100vh - 100px); ">
-                                                        <h4>Template Preview</h4>
+                                                        <h4 id="head_template">Template Preview</h4>
                                                         <hr/>
                                                         <div class="row ">
                                                             <div class="loader ">
@@ -239,6 +250,26 @@ function tescoOrders() {
                                                 </div>
                                             </div>
                                         </div>`);
+				
+				$('#reOrdertab').click(function () {
+					$('.templateDiv').html('<div style="margin-top:150px" class="how_it_works_reorder text-center"><h4>How it works ?</h4><p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div><div style="padding-top:0px;overflow-y: scroll;max-height: 450px;" class="list_div list_div_reorder scroll hidden"><ul class="list-group"></ul></div>')
+					$('#head_template').html("Re Order")
+					$('#style_number').val("Select Style Number");
+					$('#style_number').selectpicker('refresh');
+					$('#uvc_number').val("Select Style Number");
+				$('#uvc_number').selectpicker('refresh');
+				});
+				
+				$('#newOrdertab').click(function () {
+					$('.templateDiv').html('<img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png ">')
+					$('#head_template').html("Template Preview")
+				});
+				
+				$('#viewOrdertab').click(function () {
+					$('.templateDiv').html('<img style="height:150px;object-fit:cover;margin-top: 122px; " src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png ">')
+					$('#head_template').html("Template Preview")
+				});
+				
 				$(".search-input").keyup(function () {
 					var searchString = $(this).val();
 					$('#jstree').jstree('search', searchString);
