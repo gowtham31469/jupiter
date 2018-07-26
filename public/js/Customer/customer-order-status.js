@@ -742,7 +742,7 @@ function orderStatus() {
                var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
-                     "order": [[ 6, "desc" ]],
+                     "order": [[ 5, "desc" ]],
                      "aoColumns": [
                                 null,
                                 null,

@@ -1,0 +1,30 @@
+Script started on Tuesday 24 July 2018 03:01:01 PM IST
+]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ git push origin postgres ll[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "tesco order reorder  merging"[A]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ [C[C[C[Cadd *[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "tesco order reorder  merging"[A]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ [C[C[C[C[9Ppull origin postgres 
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csh[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kgit push origin postgres ll[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccommit -m "tesco order reorder  merging"[A]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ [C[C[C[Cadd *[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatusphp artisan serve --host=192.168.1..23[A]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ ifconfig[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cphp artisan serve --host=192.168.1..23[K[K[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K
+[32mLaravel development server started:[39m <http://127.0.0.1:8000>
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33038 [200]: /css/dropzone.css
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33042 [200]: /css/bootstrap.css
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33046 [200]: /css/custom.css
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33050 [200]: /DataTables/datatables.css
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33054 [200]: /DataTables/Buttons-1.5.1/css/buttons.dataTables.min.css
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33064 [200]: /DataTables/jQuery-3.2.1/jquery-3.2.1.min.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33068 [200]: /bootstrap-3.3.7-dist/js/bootstrap.min.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33072 [200]: /DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33076 [200]: /js/dropzone.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33080 [200]: /js/select2.min.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33084 [200]: /js/Customer/customer-tesco-order.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33088 [200]: /js/Customer/tesco-reorder.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33092 [200]: /js/Admin/parser.js
+[Tue Jul 24 15:01:17 2018] 127.0.0.1:33096 [200]: /storage/app/public/buyer-logo/1527596898_Tesco-logo.jpg
+[Tue Jul 24 15:01:18 2018] 127.0.0.1:33108 [200]: /favicon.ico
+[Tue Jul 24 15:01:18 2018] 127.0.0.1:33116 [200]: /css/custom.css
+[Tue Jul 24 15:01:18 2018] 127.0.0.1:33120 [200]: /images/repeat.png
+^C
+]0;gowtham@WizrootsLinux1: /var/www/html/jupiter[01;32mgowtham@WizrootsLinux1[00m:[01;34m/var/www/html/jupiter[00m$ exit
+exit
+
+Script done on Tuesday 24 July 2018 03:01:21 PM IST

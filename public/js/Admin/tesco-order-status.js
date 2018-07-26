@@ -572,7 +572,7 @@ $('#new_po_error_length_status').addClass('hidden');
                var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
-                     "order": [[ 7, "desc" ]],
+                     "order": [[ 6, "desc" ]],
                      "aoColumns": [
                                 null,
                                 null,
