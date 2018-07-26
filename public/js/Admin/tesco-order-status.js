@@ -770,7 +770,7 @@ function tescoStatusTable(data,path)
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
 	                {
-	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
+	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
 	                }
 	                else
 	                {
@@ -883,7 +883,7 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00-00-0000')
+                   if (value[key] == null)
                    {
                         tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'")  readonly></td>';
                    }
@@ -912,6 +912,11 @@ function tescoStatusTable(data,path)
         tr += '</tr>';
     })
     return '<table id="datatable-tesco-orders" class="table table-hover table-striped table-bordered" style="width: 100%"><thead><tr>' + th + '</tr></thead><tbody>' + tr + '</tbody></table></div></div></div></div></div></div>';
+}
+
+function AvoidSpace(event) {
+    var k = event ? event.which : window.event.keyCode;
+    if (k == 32) return false;
 }
 
 
@@ -1127,7 +1132,8 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'))
+				    var createdate = data.data.company_details.pi_date.replace(/-/g,'/')
+                    $('.pi-date').text(createdate)
                     if (data.data.company_details.rev_number!=0)
                     {
                        $('.rev').removeClass('hidden')
@@ -1786,6 +1792,9 @@ function setEditOrderStatus()
 						 success: function (data) {
 							 $('.left-panel').removeClass('active'); 
 							 td_row.find('td:nth-child(6)').text(data);
+							 $('#snackbar').css('background-color','#00b6ff');
+							 $('.snackbar_span').html('Order updated Successfully');
+							 showSnackbar();
 							// location.reload()
 						 },
 						 error: function (data) {
