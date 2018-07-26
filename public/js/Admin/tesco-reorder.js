@@ -881,6 +881,7 @@ function setTescoReorder(type,id,liid)
 		$('#'+liid).append('<span class="label sticker" style="position: absolute;margin-left: -100px;margin-top: 5px;">'+val_count+'</span><img src="http://atlas-content-cdn.pixelsquid.com/stock-images/check-mark-z074ln3-600.jpg" alt="Tag" style="position: absolute;margin-left: 20px;margin-top: -2px;">');
 	if(item == "Repeat Order")
 	{
+		var uvc=$('#style_number').val();
 		var buyer = localStorage.getItem("buyer");
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 		var po_number=$('.purchase_order_number').val();
@@ -911,7 +912,22 @@ function setTescoReorder(type,id,liid)
 
 						},
 						success: function (data) {
+						
+							var i=1;
+							$(".list-group li").each(function(key,index){
+								i++;
+							})
+
 							$('.left-panel').removeClass('active');
+								if(data[0].zone == "CE")
+								{
+									var span='<span class="label labels">'+data[0].zone+'</span><span id="list-li-repeatorder'+i+'">';
+								}
+								else
+								{
+									var span='<span class="label sticker">'+data[0].zone+'</span><span id="list-li-repeatorder'+i+'">';
+								}
+								$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="'+base_url+'/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-'+uvc+'</p></div><div class="col-md-2"><p class="po">PO-'+data[0].po_number+'</p></div><div class="col-md-2"><p class="name">'+data[0].TemplateName+'</p></div><div class="col-md-2">'+span+' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityTesco("'+data[0].type+'","'+data[0].id+'","'+data[0].TemplateName.replace(' ', '')+'","'+data[0].zone+'","'+data[0].po_number+'","list-li-repeatorder'+i+'")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 							$('.snackbar_span').html('Repeat Order Created Successfully ...!');
 							showSnackbar();
 						},

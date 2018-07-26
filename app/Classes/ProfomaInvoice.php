@@ -308,7 +308,7 @@ class ProfomaInvoice
         ->where('uvc_style_no',$style_no)
         // ->where('template_id',$template_id)
         ->where('buyer_po_no',$buyer_po)
-        ->select('profoma_invoices.*',DB::raw("DATE_FORMAT(profoma_invoices.created_at,'%Y-%m-%d') as pi_date"))
+        ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
         ->first();
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')

@@ -742,7 +742,7 @@ function orderStatus() {
                var $tableSel = $('#datatable-tesco-orders');
                 $tableSel.DataTable({
                     "pageLength": 25,
-                     "order": [[ 6, "desc" ]],
+                     "order": [[ 5, "desc" ]],
                      "aoColumns": [
                                 null,
                                 null,
@@ -1700,7 +1700,7 @@ function tescoStatusTable(data,path)
                     var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
                     {
-                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
+                        tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
                     }
                     else
                     {
@@ -1813,7 +1813,7 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00-00-0000')
+                   if (value[key] == null)
                    {
                         tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
                    }
@@ -2014,6 +2014,11 @@ $(".update-po-file").click(function () {
     $('.upload-po').removeClass('hidden')
 });
 
+function AvoidSpace(event) {
+    var k = event ? event.which : window.event.keyCode;
+    if (k == 32) return false;
+}
+
 /**
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
@@ -2057,7 +2062,8 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     $('.advnc').text(data.data.bank_details.payment_terms)
                     $('.freight').text(data.data.bank_details.freight_terms)
                     $('.pi_number').text(data.data.company_details.pi_number)
-                    $('.pi-date').text(moment(data.data.company_details.pi_date).format('DD/MM/YYYY'))
+				    var createdate = data.data.company_details.pi_date.replace(/-/g,'/')
+                    $('.pi-date').text(createdate)
                     if (data.data.company_details.rev_number!=0)
                     {
                        $('.rev').removeClass('hidden')
@@ -2682,6 +2688,9 @@ function setEditOrderStatus()
                          data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
                          success: function (data) {
                              $('.left-panel').removeClass('active');  
+							  $('#snackbar').css('background-color','#00b6ff');
+							 $('.snackbar_span').html('Order updated Successfully');
+							 showSnackbar();
                             // location.reload()
                          },
                          error: function (data) {
