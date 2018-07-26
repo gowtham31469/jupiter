@@ -1574,7 +1574,7 @@ function updateArtwork(obj)
 					$('#edit_id').val(data.order_details.id)
 					
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
-					$('.osartwork').text(" Artwork - "+TemplateName)
+					$('.osartwork').text(" Artwork - "+TemplateName)   
 					
 					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
 					if (data.order_details.edit_permission == 1){

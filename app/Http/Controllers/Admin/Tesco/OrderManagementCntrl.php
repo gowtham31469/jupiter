@@ -2545,6 +2545,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+		  $data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_tcl2_orders")
 			{
@@ -2593,6 +2594,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_tcl4_orders")
 			{
@@ -2642,6 +2644,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_thl1_orders")
 			{
@@ -2691,6 +2694,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_thl3_orders")
 			{
@@ -2740,6 +2744,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_tsl1_orders")
 			{
@@ -2789,6 +2794,7 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}
 			if($type == "tesco_tsl3_orders")
 			{
@@ -2838,8 +2844,9 @@ class OrderManagementCntrl extends Controller
 					$newTask->save();
 					$i++;
 				}
+				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}	
-		    echo true;
+		    echo $data;
     }
     /**
      * Function to upload combined buyer po file for tesco
