@@ -770,7 +770,7 @@ function tescoStatusTable(data,path)
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
 	                {
-	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
+	                	tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"'+value.tableID+'","'+value.tableName+'","'+po_file+'")><span class="glyphicon glyphicon-ok"></span></button></span></div></div></td>';
 	                }
 	                else
 	                {
@@ -1576,8 +1576,15 @@ function updateArtwork(obj)
 					$('.osorderdetails').text(" Order Details - "+TemplateName)
 					$('.osartwork').text(" Artwork - "+TemplateName)
 					
-					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
-					
+					$('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("'+table_name+'","'+id+'")>Enable Edit</button><button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =disableArtworkEdit("'+table_name+'","'+id+'")>Disable Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+					if (data.order_details.edit_permission == 1){
+                        $('#enable_edit').addClass('hidden')
+                        $('#disable_edit').removeClass('hidden')
+                    }
+                    else{
+                        $('#disable_edit').addClass('hidden')
+                        $('#enable_edit').removeClass('hidden')
+                    }
 					$('#create_tesco_order_status_form').validator().on('submit', function (e) {
 						if (e.isDefaultPrevented()) {
 
@@ -1632,6 +1639,8 @@ function updateArtwork(obj)
         $("#create_tesco_order_status_form :input").prop("disabled", false);
 		$(".dropdown-toggle").css("background-color", "#fff"); 
         $('#tesco_po_number').prop('disabled',true);
+        $('#tesco_uk_style').prop('disabled',true);
+        $('#tesco_ce_style').prop('disabled',true);
     }
 function setEditOrderStatus()
 {
@@ -2799,6 +2808,10 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
         } 
 }
 
+function AvoidSpace(event) {
+    var k = event ? event.which : window.event.keyCode;
+    if (k == 32) return false;
+}
 
 /**
  * This Function is used to invoke JSBarcode.
@@ -3108,3 +3121,48 @@ function checkjsbarcodeean(code) {
 	});
 	return return_value;
 }
+
+  function enableArtworkEdit(tablename,rowid)
+   {
+       var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+            url: base_url + "/admin/tesco/enable-artwork-edit",
+            type: 'post',
+            data: { tablename: tablename,
+                   rowid:rowid,
+                   _token: csrf_token
+               },
+           beforeSend: function () {
+               // $(".loader").show();
+           },
+           success: function (data) {
+               $('#enable_edit').addClass('hidden')
+               $('#disable_edit').removeClass('hidden')
+           },
+           error: function (data){
+               
+           },
+           complete: function () {            }
+       })
+   } 
+   function disableArtworkEdit(tablename,rowid)
+   {
+       var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+            url: base_url + "/admin/tesco/disable-artwork-edit",
+            type: 'post',
+            data: { tablename: tablename,
+                   rowid:rowid,
+                    _token: csrf_token
+               },
+           beforeSend: function () {            },
+           success: function (data) {
+               $('#enable_edit').removeClass('hidden')
+               $('#disable_edit').addClass('hidden')
+           },
+           error: function (data){
+               console.log(data);
+           },
+           complete: function () {            }
+       })
+   }
