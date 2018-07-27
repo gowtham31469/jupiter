@@ -250,6 +250,7 @@ class OrderStatusCntrl extends Controller
             foreach ($data['tables'] as $table => $vals) {
                 if ($data['bank_details']->zone == "CE") {
                     $approved_data   =   DB::table($table)
+                                        ->where($table.'.is_order_count_empty',0)
                                         ->where('ce_style_ref',$style_no)
                                         ->where('po_number',$data['bank_details']->po_number)
                                         ->update([
@@ -258,6 +259,7 @@ class OrderStatusCntrl extends Controller
                 }
                 else {
                     $approved_data   = DB::table($table)
+                                        ->where($table.'.is_order_count_empty',0)
                                         ->where('uk_style_ref',$style_no)
                                         ->where('po_number',$data['bank_details']->po_number)
                                         ->update([
