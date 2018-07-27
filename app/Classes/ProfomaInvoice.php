@@ -286,8 +286,7 @@ class ProfomaInvoice
           $price_array = array_merge($price_array,$price_list);
         } 
         $data['price_list'] = $price_array;
-        $data['item_details']   = $item_details;
-        
+        $data['item_details'] = $item_details;
 
         return $data;
        
