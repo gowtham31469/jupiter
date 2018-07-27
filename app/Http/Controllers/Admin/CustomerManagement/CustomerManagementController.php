@@ -20,6 +20,9 @@ use App\PlaceOfSupply;
 use App\FreightTerms;
 use App\NominatedForwarder;
 use App\CustomerMetadata;
+use App\PriceRange;
+use App\PriceTaxation;
+
 /**
  * Customer management controller
  * @author <Praveen>
@@ -1050,14 +1053,13 @@ class CustomerManagementController extends Controller
         $price_taxation_id = '';
         if($isExists->count()) {
           $price_taxation_id = $isExists[0];
-          DB::table('price_taxation')
-              ->where('id', $price_taxation_id)
+          PriceTaxation::where('id', $price_taxation_id)
               ->update([
                   'custom_name' => $request->custom_name,
                   'moq' => $request->moq
                 ]) ;
         } else {
-            $price_taxation_id = DB::table('price_taxation')->insertGetId([
+            $price_taxation_id = PriceTaxation::insertGetId([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id,
@@ -1066,10 +1068,10 @@ class CustomerManagementController extends Controller
           ]);
         }
 
-        DB::table('price_range')->where('price_taxation_id', '=', $price_taxation_id)->delete();
+        PriceRange::where('price_taxation_id', '=', $price_taxation_id)->delete();
         $count = count($pricearray);
         for ($i=1; $i <= ($count/3); $i++) { 
-          DB::table('price_range')->insert([
+          PriceRange::insert([
             'price_taxation_id' => $price_taxation_id,
             'volume_from'    => $pricearray['volume_from_'.$i],
             'volume_to' => $pricearray['volume_to_'.$i],
