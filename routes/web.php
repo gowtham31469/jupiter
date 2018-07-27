@@ -506,3 +506,6 @@ Route::put('admin/update-admin-password', 'Admin\AdminProfile\AdminProfileContro
 
 Route::post('admin/tesco/enable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@enableArtworkEdit');
 Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@disableArtworkEdit');
+
+/** admin role Management **/
+Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
