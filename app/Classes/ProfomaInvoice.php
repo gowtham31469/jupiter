@@ -281,12 +281,11 @@ class ProfomaInvoice
                                 ->where('price_taxation.customer_id',$customer_details->id)
                                 ->where('price_taxation.buyer_id',$buyer_id)
                                 ->orderBy('price_range.volume_to')
-                                ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'))
+                                ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' a439s item_id'))
                                 ->get()->toArray();
           $price_array = array_merge($price_array,$price_list);
         } 
         $data['price_list'] = $price_array;
-        $data['item_details']   = $item_details;
         
 
         return $data;
