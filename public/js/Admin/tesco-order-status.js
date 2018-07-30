@@ -1163,16 +1163,21 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     if(data.data.item_details.length != 0 && data.data.price_list.length != 0)
                     {
                         var noPrice = 0;
+                        var noVol = 0 ;
                         tax = data.data.item_details[0].tax;
                         $.each(data.data.item_details, function (index, value)
                         {
                             
                             var unit_price = 0;
+
                             $.each(data.data.price_list, function(i, val){
                                 if (value.item_id == val.item_id) {
                                     if(value.quantity <= val.volume_to) {
                                         unit_price = val.price;
                                          return false; 
+                                    }
+                                    else{
+                                        noVol++;
                                     }
                                 }
                             });
@@ -1192,8 +1197,8 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             totalqnty+=value.quantity;
                             subtotal+=value.quantity * unit_price;
                         });
-
-                        if(noPrice < 1) {
+                        
+                        if(noPrice <1) {
                             var taxamnt = subtotal*(tax/100);
                             var billamnt = subtotal+taxamnt;
                             tr += '</tbody></table></div><hr><h4 class="text-right"> Total Quantity : '+totalqnty+' </h4><hr><h4 class="text-right"> Sub-Total : ₹ '+subtotal.toFixed(2)+' </h4><hr/><div class="text-right">'
