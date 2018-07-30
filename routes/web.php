@@ -509,3 +509,4 @@ Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@di
 
 /** admin role Management **/
 Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
+Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');

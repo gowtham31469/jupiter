@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
+use Auth;
 use App\Customer;
 use App\CustomerContactPersons;
 use App\CustomerBillAddress;
@@ -22,6 +23,9 @@ use App\NominatedForwarder;
 use App\CustomerMetadata;
 use App\PriceRange;
 use App\PriceTaxation;
+use Illuminate\Support\Facades\URL;
+use App\Audits;
+use Carbon\Carbon;
 
 /**
  * Customer management controller
@@ -1034,9 +1038,27 @@ class CustomerManagementController extends Controller
      * @return [type]           [description]
      */
     public function savePriceTax(Request $request) {
-        // user web browser details
-         $user_agent = $request->header('user-agent');
-         return $request->server();
+         // get user details for auditing.
+         $user_agent   = $request->header('user-agent');
+         $user_id      = Auth::user()->id;
+         $ip_address   = $request->ip();
+         $module       = 'Pricing';
+         $url          = URL::current();
+         // get the current time
+         $current_date = Carbon::now('Asia/Kolkata');
+         $date         = $current_date->toDateTimeString();
+
+         // create  old and new pricing values array for auditing
+         $old_values   = [];
+         $new_values   = [];
+         
+         // new changes in pricing module (auditing)
+         $new_values['company_id']  = $request->customer_id;
+         $new_values['buyer_id']    = $request->buyer_id;
+         $new_values['template_id'] = $request->template_id;
+         $new_values['custom_name'] = $request->custom_name;
+         $new_values['moq']         = $request->moq;
+
          $validator = Validator::make($request->all(), [
             'customer_id' => 'bail|required',
             'template_id' => 'bail|required',
@@ -1047,20 +1069,43 @@ class CustomerManagementController extends Controller
         if ($validator->fails()) {
              return response()->json(['error' => true,'error' => $validator], 409);
         }
+
         parse_str($request->price, $pricearray);        
         $isExists = DB::table('price_taxation')->where([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
             'template_id' => $request->template_id])->pluck('id');
         $price_taxation_id = '';
+
         if($isExists->count()) {
+          $event = 'updated';
+          // get old values from price_taxation table for auditing.
+          $old_price_taxation_data = DB::table('price_taxation')->where([
+              'customer_id' => $request->customer_id,
+              'buyer_id'    => $request->buyer_id,
+              'template_id' => $request->template_id])->select('*')->first();
+
+          // push price_taxation old values into old_values array
+          $old_values['company_id']  = $old_price_taxation_data->customer_id;
+          $old_values['buyer_id']    = $old_price_taxation_data->buyer_id;
+          $old_values['template_id'] = $old_price_taxation_data->template_id;
+          $old_values['custom_name'] = $old_price_taxation_data->custom_name;
+          $old_values['moq']         = $old_price_taxation_data->moq;
+
           $price_taxation_id = $isExists[0];
+          
+          // get old values from price_range table for auditing(before deleting).
+          $old_price_range_data = PriceRange::where('price_taxation_id', '=', $price_taxation_id)->select('volume_from','volume_to','price')->get();
+          // push price_range old values into old_values array
+          $old_values['price_range'] = $old_price_range_data;
+
           PriceTaxation::where('id', $price_taxation_id)
               ->update([
                   'custom_name' => $request->custom_name,
                   'moq' => $request->moq
                 ]) ;
         } else {
+            $event = 'created';
             $price_taxation_id = PriceTaxation::insertGetId([
             'customer_id' => $request->customer_id,
             'buyer_id'    => $request->buyer_id,
@@ -1071,6 +1116,7 @@ class CustomerManagementController extends Controller
         }
 
         PriceRange::where('price_taxation_id', '=', $price_taxation_id)->delete();
+
         $count = count($pricearray);
         for ($i=1; $i <= ($count/3); $i++) { 
           PriceRange::insert([
@@ -1080,6 +1126,24 @@ class CustomerManagementController extends Controller
             'price' => $pricearray['price_'.$i]
           ]);
         }
+        // get new values from price_range table for auditing.
+        $new_price_range_data = PriceRange::where('price_taxation_id', '=', $price_taxation_id)->select('volume_from','volume_to','price')->get();
+        // push price_range new_values into new_values array
+        $new_values['price_range'] = $new_price_range_data;
+        
+        // save pricing changes into audits table.
+        Audits::create([
+          'user_id'    => $user_id,
+          'module'     => $module,
+          'ip_address' => $ip_address,
+          'user_agent' => $user_agent,
+          'event'      => $event,
+          'old_values' => json_encode($old_values),
+          'new_values' => json_encode($new_values),
+          'url'        => $url,
+          'created_at' => $date,
+          'updated_at' => $date
+        ]);
         return response()->json(['message' => 'success'], 200);
 
     }
