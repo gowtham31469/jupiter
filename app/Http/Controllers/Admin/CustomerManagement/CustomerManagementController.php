@@ -1034,7 +1034,9 @@ class CustomerManagementController extends Controller
      * @return [type]           [description]
      */
     public function savePriceTax(Request $request) {
-
+        // user web browser details
+         $user_agent = $request->header('user-agent');
+         return $request->server();
          $validator = Validator::make($request->all(), [
             'customer_id' => 'bail|required',
             'template_id' => 'bail|required',
