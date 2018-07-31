@@ -48,7 +48,7 @@ class OrderController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count,'new_orders'=>'100']);
         }
         else
         {
