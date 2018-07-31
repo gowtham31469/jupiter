@@ -199,6 +199,12 @@ class OrderStatusCntrl extends Controller
                 {
                     $style_no = $data['bank_details']->uk_style_ref;
                 }
+                if ($data['item_details'][0]->order_flag=="reOrder") {
+                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+                }
+                else{
+                    $rep_order_id = 0;
+                }
                 $pi_details = PI::create([
                     'buyer_id'         => $buyer_id,
                     'company_id'       => $data['company_details']->id,
@@ -211,7 +217,8 @@ class OrderStatusCntrl extends Controller
                     'billing_address'  => $data['bill_to']->address,
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'template_type'    => $data['bank_details']->template_type,
-                    'revision_no'      => $data['item_details'][0]->pi_rev_no
+                    'revision_no'      => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)

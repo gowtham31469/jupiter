@@ -209,7 +209,7 @@ class ProfomaInvoice
                           ->where('price_taxation.buyer_id',$buyer_id)
                           ->where('tesco_template.item_id',$request->template_id)
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
-                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag')
+                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name')
                           ->get()->toArray();
 
         foreach ($item_details as $key => $value) {
@@ -253,7 +253,7 @@ class ProfomaInvoice
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
                                     ->where($key.'.po_number',$item_details[0]->po_no)
-                                    ->select('size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no');
+                                    ->select($key.'id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name');
                         
                   if ($item_details[0]->zone =="CE") {
                     $item_details2->where('ce_style_ref',$item_details[0]->style);
@@ -298,21 +298,37 @@ class ProfomaInvoice
 
     public function getApprovedTescoPI($request)
     {
+        
+        $table_id       = $request->id;
+        $template_name  = $request->template_name;
+        $order_flag     = $request->order_flag;
         $pi_status      = $request->pi_status;
         $buyer_id       = $request->buyer_id;
         $pi_status      = $request->pi_status;
         $style_no       = $request->style_no;
         $template_id    = $request->template_id;
         $buyer_po       = $request->buyer_po;
-        $template_id    = $request->template_id;
+        if ($order_flag == "reOrder") {
+           $rep_order_id   =  str_replace(' ', '', $template_name)."_".$table_id;
+           $pi_details = DB::table('profoma_invoices')
+            ->where('buyer_id',$buyer_id)
+            ->where('uvc_style_no',$style_no)
+            ->where('buyer_po_no',$buyer_po)
+            ->where('rep_order_id',$rep_order_id)
+            ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
+            ->first();
+        }
+        else{
+          $pi_details = DB::table('profoma_invoices')
+            ->where('buyer_id',$buyer_id)
+            ->where('uvc_style_no',$style_no)
+            ->where('buyer_po_no',$buyer_po)
+            ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
+            ->first();
+        }
+       
 
-        $pi_details = DB::table('profoma_invoices')
-        ->where('buyer_id',$buyer_id)
-        ->where('uvc_style_no',$style_no)
-        // ->where('template_id',$template_id)
-        ->where('buyer_po_no',$buyer_po)
-        ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
-        ->first();
+        
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')
                                         ->where('tesco_item_master.id',$pi_details->company_id)
