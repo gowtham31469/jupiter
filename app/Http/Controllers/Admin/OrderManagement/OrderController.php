@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use PDF;
+use App\Classes\Dashboard;
 
 class OrderController extends Controller
 {
@@ -48,7 +49,210 @@ class OrderController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count,'new_orders'=>'100']);
+			
+			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl4'] = DB::table('tesco_tcl4_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl1'] = DB::table('tesco_thl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl3'] = DB::table('tesco_thl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl3']{0}->sum;
+			
+			
+			$approved_orders['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$approve_count = $approved_orders['tcl1']{0}->sum + $approved_orders['tcl2']{0}->sum + $approved_orders['tcl4']{0}->sum + $approved_orders['thl1']{0}->sum + $approved_orders['thl3']{0}->sum + $approved_orders['tsl1']{0}->sum + $approved_orders['tsl3']{0}->sum;
+			
+			$pending_orders['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Placed')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$pending_count = $pending_orders['tcl1']{0}->sum + $pending_orders['tcl2']{0}->sum + $pending_orders['tcl4']{0}->sum + $pending_orders['thl1']{0}->sum + $pending_orders['thl3']{0}->sum + $pending_orders['tsl1']{0}->sum + $pending_orders['tsl3']{0}->sum;
+			
+			
+			$app_pipo1['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl1'] = DB::table('tesco_tcl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl2'] = DB::table('tesco_tcl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl4'] = DB::table('tesco_tcl4_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['thl1'] = DB::table('tesco_thl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['thl3'] = DB::table('tesco_thl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$app_pipo1['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tsl1'] = DB::table('tesco_tsl1_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo1['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tsl3'] = DB::table('tesco_tsl3_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			
+			$app_pipo = $app_pipo1['tcl1']{0}->sum + $app_pipo1['tcl2']{0}->sum + $app_pipo1['tcl4']{0}->sum + $app_pipo1['thl1']{0}->sum + $app_pipo1['thl3']{0}->sum + $app_pipo1['tsl1']{0}->sum + $app_pipo1['tsl3']{0}->sum + $app_pipo2['tcl1']{0}->sum + $app_pipo2['tcl2']{0}->sum + $app_pipo2['tcl4']{0}->sum + $app_pipo2['thl1']{0}->sum + $app_pipo2['thl3']{0}->sum + $app_pipo2['tsl1']{0}->sum + $app_pipo2['tsl3']{0}->sum;
+			
+			$pending_class    = new Dashboard();
+
+            $pendingproduction      = $pending_class->pendingProduction();
+                
+			
+			
+		
+          return view('Admin/Order Management/dashboard',['buyers' => $buyers,'buyer_count' => $buyer_count,'new_orders'=>$tot_count,'approved_pipo'=>$app_pipo,'approved_orders'=>$approve_count,'pending_orders'=>$pending_count,'pendingproduction'=>$pendingproduction]);
         }
         else
         {
@@ -56,6 +260,8 @@ class OrderController extends Controller
         }
 
     }
+	
+	
 	
 	 /**
 	 * Show the Order dashboard.

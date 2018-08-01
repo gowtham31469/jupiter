@@ -36,6 +36,13 @@ Route::get('admin/dashboard', 'HomeController@index')->name('admin');
 
 
 Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
+
+Route::post('admin/order-management/new_orders', 'Admin\OrderManagement\DashboardController@newOrders');
+Route::post('admin/order-management/aowp', 'Admin\OrderManagement\DashboardController@aowp');
+Route::post('admin/order-management/approved_orders', 'Admin\OrderManagement\DashboardController@approvedOrders');
+Route::post('admin/order-management/pending_orders', 'Admin\OrderManagement\DashboardController@pendingOrders');
+Route::post('admin/order-management/viewed_pen_production', 'Admin\OrderManagement\DashboardController@viewedPenProduction');
+
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');
 Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
