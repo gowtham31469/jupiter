@@ -27,7 +27,7 @@ class AuditTrailController extends Controller
        $this->middleware('auth');
     }
     /**
-     * Show the application dashboard.
+     * Show the Audits list page.
      *
      * @return \Illuminate\Http\Response
      * @author <Praveen>
