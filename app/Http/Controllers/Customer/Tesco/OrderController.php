@@ -29,6 +29,8 @@ use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
+use App\Classes\ApproveTescoOrders;
+use App\Classes\CancelTescoOrders;
 use PDF;
 use Carbon\Carbon;
 
@@ -3739,91 +3741,146 @@ class OrderController extends Controller
             echo true;
     }
     /**
-     * Approve tesco order
-     * @param \Illuminate\Http\Request
-     * @author <Praveen>
-     * @return \Illuminate\Http\Response
-     */
-    public function approveTescoOrder(Request $request)
-    {
-        try {
-              $TCL1_id = $request['tcl1_last_id'];
-              $TCL2_id = $request['tcl2_last_id'];
-              $TSL1_id = $request['tsl1_last_id'];
-              $TCL4_id = $request['tcl4_last_id'];
-              $TSL3_id = $request['tsl3_last_id'];
-              $THL1_id = $request['thl1_last_id'];
-              $THL3_id = $request['thl3_last_id'];
-              
-              if($TCL1_id)
-              {
-                TescoTCL1Orders::where('id',$TCL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TCL2_id)
-              {
-                TescoTCL2Orders::where('id',$TCL2_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TSL1_id)
-              {
-                TescoTSL1Orders::where('id',$TSL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TCL4_id)
-              {
-                TescoTCL4Orders::where('id',$TCL4_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($TSL3_id)
-              {
-                TescoTSL3Orders::where('id',$TSL3_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($THL1_id)
-              {
-                TescoTHL1Orders::where('id',$THL1_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-              if($THL3_id)
-              {
-                TescoTHL3Orders::where('id',$THL3_id)
-                              ->update([
-                              'order_status'    => "Order Approved",
-                              'artwork_status'  => "Order Approved",
-                              'print_status'    => "Order Approved",
-                            ]);
-              }
-            
-           return response()->json(['error'=> false,'message' =>'success'],200);
-
-        } catch (\Exception $e)
+         * Approve tesco order
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function approveTescoOrder(Request $request)
         {
-            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            try {
+                  /** [ Creating new object for ApproveTescoOrders() class ] */
+                  $approve_order_obj = new ApproveTescoOrders();
+
+                  $TCL1_id = $request['tcl1_last_id'];
+                  $TCL2_id = $request['tcl2_last_id'];
+                  $TSL1_id = $request['tsl1_last_id'];
+                  $TCL4_id = $request['tcl4_last_id'];
+                  $TSL3_id = $request['tsl3_last_id'];
+                  $THL1_id = $request['thl1_last_id'];
+                  $THL3_id = $request['thl3_last_id'];
+                  
+                  if($TCL1_id)
+                  {
+                    /** [ Invoking approveTCL1Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTCL1Order($TCL1_id);
+                  }
+                  if($TCL2_id)
+                  {
+                    /** [ Invoking approveTCL2Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTCL2Order($TCL2_id);
+                  }
+                  if($TSL1_id)
+                  {
+                    /** [ Invoking approveTSL1Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTSL1Order($TSL1_id);
+                  }
+                  if($TCL4_id)
+                  {
+                    /** [ Invoking approveTCL4Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTCL4Order($TCL4_id);
+                  }
+                  if($TSL3_id)
+                  {
+                    /** [ Invoking approveTSL3Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTSL3Order($TSL3_id);
+                  }
+                  if($THL1_id)
+                  {
+                    /** [ Invoking approveTHL1Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTHL1Order($THL1_id);
+                  }
+                  if($THL3_id)
+                  {
+                    /** [ Invoking approveTHL3Order function using class instance ] */
+                     $approved_order = $approve_order_obj->approveTHL3Order($THL3_id);
+                  }
+                
+                if($approved_order)
+                {
+                  $result = response()->json(['error'=> false,'message' =>'success'],200);
+                }
+                else
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
         }
-    }
+
+        /**
+         * Cancel tesco order
+         * @param \Illuminate\Http\Request
+         * @author <Praveen>
+         * @return \Illuminate\Http\Response
+         */
+        public function cancelTescoOrder(Request $request)
+        {
+            try {
+                  /** [ Creating new object for CancelTescoOrders() class ] */
+                  $cancel_order_obj = new CancelTescoOrders();
+
+                  $TCL1_id = $request['tcl1_last_id'];
+                  $TCL2_id = $request['tcl2_last_id'];
+                  $TSL1_id = $request['tsl1_last_id'];
+                  $TCL4_id = $request['tcl4_last_id'];
+                  $TSL3_id = $request['tsl3_last_id'];
+                  $THL1_id = $request['thl1_last_id'];
+                  $THL3_id = $request['thl3_last_id'];
+                  
+                  if($TCL1_id)
+                  {
+                    /** [ Invoking cancelTCL1Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTCL1Order($TCL1_id);
+                  }
+                  if($TCL2_id)
+                  {
+                    /** [ Invoking cancelTCL2Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTCL2Order($TCL2_id);
+                  }
+                  if($TSL1_id)
+                  {
+                    /** [ Invoking cancelTSL1Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTSL1Order($TSL1_id);
+                  }
+                  if($TCL4_id)
+                  {
+                    /** [ Invoking cancelTCL4Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTCL4Order($TCL4_id);
+                  }
+                  if($TSL3_id)
+                  {
+                    /** [ Invoking cancelTSL3Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTSL3Order($TSL3_id);
+                  }
+                  if($THL1_id)
+                  {
+                    /** [ Invoking cancelTHL1Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTHL1Order($THL1_id);
+                  }
+                  if($THL3_id)
+                  {
+                    /** [ Invoking cancelTHL3Order function using class instance ] */
+                     $canceled_order = $cancel_order_obj->cancelTHL3Order($THL3_id);
+                  }
+                
+                if($canceled_order)
+                {
+                  $result = response()->json(['error'=> false,'message' =>'success'],200);
+                }
+                else
+                {
+                  $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                }
+
+            } catch (\Exception $e)
+            {
+                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
 }

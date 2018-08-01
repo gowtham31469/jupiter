@@ -183,6 +183,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::put('customer/tesco/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
 	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 	Route::put('customer/tesco/approve-tesco-order', 'Customer\Tesco\OrderController@approveTescoOrder');
+	Route::put('customer/tesco/cancel-tesco-order', 'Customer\Tesco\OrderController@cancelTescoOrder');
     
     /** customer profile related routes */
     Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
@@ -322,6 +323,8 @@ Route::put('admin/tesco/save-ce-single-template-orders', 'Admin\Tesco\OrderManag
 Route::put('admin/tesco/save-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKRatioOrders');
 Route::put('admin/tesco/save-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKSingleOrders');
 Route::put('admin/tesco/approve-tesco-order', 'Admin\Tesco\OrderManagementCntrl@approveTescoOrder');
+Route::put('admin/tesco/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@cancelTescoOrder');
+
 
 //Template Management
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');

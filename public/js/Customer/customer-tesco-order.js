@@ -1069,7 +1069,8 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                      <button class="btn btn-xs btn-success approve-btn" type="button" onclick="approveTescoOrder()" data-insert="true" style="display:none;"><i class="fa fa-check" aria-hidden="true" ></i> Approve</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "location.reload()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
                                 </div>\
@@ -4902,8 +4903,7 @@ try{
         $('.save-btn').remove();
         $('.approve-btn').show();
         $('.print-btn').show();
-        $('.cancel-btn').removeAttr('data-target');
-        $('.cancel-btn').attr('onClick', 'location.reload()');
+        $('.cancel-btn').show();
         var div_html = '';
         /** [ store last updated id as hidden input , for approve order functionality] */
         $.each(data.last_insertions, function (index, value) {
@@ -6630,16 +6630,15 @@ function mapStoredValues(oDetails) {
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         $('.print-btn').show();
-        /** Remove cancel button data-target if order status is not saved */
-        $('.cancel-btn').removeAttr('data-target'); 
-        $('.cancel-btn').attr('onClick','location.reload()');
         if(artwork_status === 'Order Placed')
         {
             $('.approve-btn').show();
+            $('.cancel-btn').show();
         }
         else 
         {
             $('.approve-btn').hide();
+            $('.cancel-btn').hide();
         }
     }
 	/** [ Refresh boostrap form-validator ]  */
@@ -6805,6 +6804,7 @@ function approveTescoOrder()
                     showSnackbar();
 
                     $('.approve-btn').remove();
+                    $('.cancel-btn').remove();
                    
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
@@ -6885,5 +6885,73 @@ function validateItfBarcode(obj)
         barcode_checks = 0;
         $(obj).next('div').html('');
         $('.submit-btn').prop('disabled', false);
+    }
+}
+
+/**
+ * [cancel tesco orders]
+ * @author <praveen>
+ */
+function cancelTescoOrder() {
+    try {
+        var tcl1_last_id = $('#TCL1_id').val();
+        var tcl2_last_id = $('#TCL2_id').val();
+        var tsl1_last_id = $('#TSL1_id').val();
+        var tcl4_last_id = $('#TCL4_id').val();
+        var tsl3_last_id = $('#TSL3_id').val();
+        var thl1_last_id = $('#THL1_id').val();
+        var thl3_last_id = $('#THL3_id').val();
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: base_url + "/customer/tesco/cancel-tesco-order",
+            type: 'PUT',
+            data: {
+                _token: csrf_token,
+                tcl1_last_id: tcl1_last_id,
+                tcl2_last_id: tcl2_last_id,
+                tsl1_last_id: tsl1_last_id,
+                tcl4_last_id: tcl4_last_id,
+                tsl3_last_id: tsl3_last_id,
+                thl1_last_id: thl1_last_id,
+                thl3_last_id: thl3_last_id
+            },
+            tryCount: 0,
+            retryLimit: 2,
+            dataType: "json",
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            success: function (data) {
+                $('.snackbar_span').html('Order Cancelled Successfully');
+                showSnackbar();
+
+                $('#cancelOrderModal').modal('hide');
+                $('.approve-btn').remove();
+                $('.cancel-btn').remove();
+
+            },
+            error: function (errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+            },
+            complete: function () {
+                $(".loader").hide();
+                /** [To make top menu active] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+            }
+        })
+    } catch (e) {
+        /** [error statements] */
+        console.error("Error:" + e)
     }
 }
