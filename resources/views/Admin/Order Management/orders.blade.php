@@ -568,7 +568,7 @@ background: rgba(0,0,0,0.2);
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm','onclick' => 'location.reload()'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelTescoOrder()'] ) !!}
                    </div>
            </div>
        </div>
