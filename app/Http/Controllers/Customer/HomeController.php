@@ -39,8 +39,26 @@ class HomeController extends Controller
                           ->where('customer_profile_buyer.customer_profile_id',$customer_id)
                           ->where('buyers.is_active',1)
                           ->get();
+            $approved_orders = 
+            $approved['tcl1'] = DB::table('tesco_tcl1_orders')->where('order_status',"Order Approved")->count() + 
+            $approved['tcl2'] = DB::table('tesco_tcl2_orders')->where('order_status',"Order Approved")->count()+
+            $approved['tcl4'] = DB::table('tesco_tcl4_orders')->where('order_status',"Order Approved")->count() +
+            $approved['thl1'] = DB::table('tesco_thl1_orders')->where('order_status',"Order Approved")->count() +
+            $approved['thl3'] = DB::table('tesco_thl3_orders')->where('order_status',"Order Approved")->count() +
+            $approved['tsl1'] = DB::table('tesco_tsl1_orders')->where('order_status',"Order Approved")->count() +
+            $approved['tsl3'] = DB::table('tesco_tsl3_orders')->where('order_status',"Order Approved")->count();
+
+            $app_pending_orders = 
+            $app_pending['tcl1'] = DB::table('tesco_tcl1_orders')->where('order_status',"Order Placed")->count() + 
+            $app_pending['tcl2'] = DB::table('tesco_tcl2_orders')->where('order_status',"Order Placed")->count()+
+            $app_pending['tcl4'] = DB::table('tesco_tcl4_orders')->where('order_status',"Order Placed")->count() +
+            $app_pending['thl1'] = DB::table('tesco_thl1_orders')->where('order_status',"Order Placed")->count() +
+            $app_pending['thl3'] = DB::table('tesco_thl3_orders')->where('order_status',"Order Placed")->count() +
+            $app_pending['tsl1'] = DB::table('tesco_tsl1_orders')->where('order_status',"Order Placed")->count() +
+            $app_pending['tsl3'] = DB::table('tesco_tsl3_orders')->where('order_status',"Order Placed")->count();
+            
             $buyer_count = count($buyers);
-            return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count,'approved_orders'=>$approved_orders , 'app_pending_orders'=>$app_pending_orders]);
         } catch (\Exception $e)
           {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

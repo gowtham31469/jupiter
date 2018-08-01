@@ -15,30 +15,25 @@
     <div class="main-content">
         <div class="select-buyer"></div>
         <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card">
-                <h4>Total Orders</h4>
+                <h4>Approved orders</h4>
+                <span class="numbers">{{$approved_orders}}</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <h4>Approval pending Orders</h4>
+                <span class="numbers">{{$app_pending_orders}}</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <h4>Cancelled Orders</h4>
                 <span class="numbers">26004</span>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <h4>Open Orders</h4>
-                <span class="numbers">20</span><span class="sub-number">/140</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <h4>Total Orders</h4>
-                <span class="numbers">26004</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <h4>Total Orders</h4>
-                 <span class="numbers">20</span><span class="sub-number">/140</span>
-            </div>
-        </div>
+        
         <div class="col-md-6">
             <div class="card">
                 <h4 class="text-center">Tabel Data</h4>
