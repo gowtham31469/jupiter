@@ -69,93 +69,21 @@
                           <div class="row">
                               <!-- Card Projects -->
                               <div class="col-md-6">
-                                  <div class="card">
+                                  <div class="card old-values-card">
                                       <h4 class="card-title">Old Values</h4>
                                       <hr>
-                                      <div class="card-content">
-                                          <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><span><strong class="old-company-name">Company Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="old-buyer-name">Buyer Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="old-template-name">Template Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="old-custome-name">Custom Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="old-moq">MOQ value:</strong></span></li>
-                                          </ul>
-                                          <table class="table">
-                                            <thead>
-                                              <tr>
-                                                <th scope="col" class="">Sl. No</th>
-                                                <th scope="col" class="old-volume-from">Volume From</th>
-                                                <th scope="col" class="old-volume-to">Volume To</th>
-                                                <th scope="col" class="old-price">Price</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr>
-                                                <th scope="row">1</th>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                              </tr>
-                                              <tr>
-                                                <th scope="row">2</th>
-                                                <td>Jacob</td>
-                                                <td>Thornton</td>
-                                                <td>@fat</td>
-                                              </tr>
-                                              <tr>
-                                                <th scope="row">3</th>
-                                                <td>Larry</td>
-                                                <td>the Bird</td>
-                                                <td>@twitter</td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
+                                      <div class="card-content old-values-card-content">
+                                          
                                       </div>
                                   </div>
                               </div>
                               <div class="col-md-6">
-                                  <div class="card">
+                                  <div class="card new-values-card">
                                       <h4 class="card-title">New Values</h4>
                                       <hr>
-                                      <div class="card-content">
-                                          <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><span><strong class="new-company-name">Company Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="new-buyer-name">Buyer Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="new-template-name">Template Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="new-custome-name">Custom Name:</strong> </span></li>
-                                            <li class="list-group-item"><span><strong class="new-moq">MOQ value:</strong></span></li>
-                                          </ul>
+                                      <div class="card-content new-values-card-content">
+                                          
                                       </div>
-                                      <table class="table">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col">Sl. No</th>
-                                            <th scope="col" class="new-volume-from">Volume From</th>
-                                            <th scope="col" class="new-volume-to">Volume To</th>
-                                            <th scope="col" class="new-price">Price</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                          </tr>
-                                          <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                          </tr>
-                                          <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
                                   </div>
                               </div>
                            

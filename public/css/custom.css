@@ -1490,3 +1490,25 @@ span.batch-additional {
     overflow-y: auto;
 }
 
+
+.old-values-card, .new-values-card{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    font-weight: 400;
+    min-height: calc(100% - 10px);
+    overflow: hidden;
+    z-index: 1;
+    position: relative;
+    background: #fff;
+    border-radius: 2px;
+    box-sizing: border-box;
+    margin: 0 20px 40px;
+    height: calc(100% - 10px);
+}
+
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
