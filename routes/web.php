@@ -43,6 +43,11 @@ Route::post('admin/order-management/approved_orders', 'Admin\OrderManagement\Das
 Route::post('admin/order-management/pending_orders', 'Admin\OrderManagement\DashboardController@pendingOrders');
 Route::post('admin/order-management/viewed_pen_production', 'Admin\OrderManagement\DashboardController@viewedPenProduction');
 
+Route::post('admin/order-management/viewedneworders', 'Admin\OrderManagement\DashboardController@viewedNewOrders');
+Route::post('admin/order-management/viewedpenorders', 'Admin\OrderManagement\DashboardController@viewedPenOrders');
+Route::post('admin/order-management/viewedapporders', 'Admin\OrderManagement\DashboardController@viewedAppOrders');
+Route::post('admin/order-management/viewedaowp', 'Admin\OrderManagement\DashboardController@viewedAOWP');
+
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');
 Route::get('admin/order-management/reorder', 'Admin\OrderManagement\OrderController@reorder');
@@ -468,6 +473,9 @@ Route::post('admin/tesco/get-po-file', 'Admin\Tesco\OrderStatusCntrl@getPOFile')
 Route::post('admin/tesco/update-delivery-date', 'Admin\Tesco\OrderStatusCntrl@updateDeliveryDate');
 
 Route::post('admin/tesco/set-tesco-order-status', 'Admin\Tesco\OrderStatusCntrl@setTescoOrderStatus');
+
+Route::post('admin/tesco/enable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@enableArtworkEdit');
+Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@disableArtworkEdit');
 
 Route::post('admin/tesco/edit-check-exist-po', 'Admin\Tesco\OrderStatusCntrl@editCheckExistPo');
 

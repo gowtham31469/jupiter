@@ -1080,7 +1080,96 @@
 
 					},
 					success: function(data) {
-					 
+						var html="";
+						$(data.new_orders.tcl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						});
+						$(data.new_orders.tcl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						});  
+						$(data.new_orders.tcl4).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						}); 
+						$(data.new_orders.tsl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						});  
+						$(data.new_orders.tsl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						});  
+						$(data.new_orders.thl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						}); 
+						$(data.new_orders.thl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}	
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+						});  
+						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+						  $('.new_orders').DataTable();
+						  $(".modal-body input").addClass('form-control');
+						  $('.dataTables_length select').addClass('form-control');
+						  $(".modal-body input").attr('placeholder', 'Data Search'); 
 					},
 					error: function(data) {
 

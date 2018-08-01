@@ -942,6 +942,4 @@ class OrderStatusCntrl extends Controller
        }
        return $result;
    }
-
-
 }

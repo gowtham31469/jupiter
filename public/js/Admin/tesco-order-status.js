@@ -1443,8 +1443,6 @@ function updateArtwork(obj)
                     $('#tesco_description').val(data.order_details.short_description);                   
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-					
-					
 					var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
 					var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
 				
@@ -1532,7 +1530,9 @@ function updateArtwork(obj)
 							var barcode_td=value.ean_barcode;
 							var maxlength=13;
 							var tpnd=value.orms_tpn;
+
 							var th_td='<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled required="" id="os_single_size_'+i+'" name="os_single_size_'+i+'"  value="'+value.size+'" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
+
 							var tpn_th="Enter ORMS TPND";
 							var tpn_len="13";
 							var unit_len="6";
@@ -1649,8 +1649,59 @@ function updateArtwork(obj)
         $('#tesco_uk_style').prop('disabled',true);
         $('#tesco_ce_style').prop('disabled',true);
     }
-function setEditOrderStatus()
-{
+    function enableArtworkEdit(tablename,rowid)
+    {
+        var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+             url: base_url + "/admin/tesco/enable-artwork-edit",
+             type: 'post',
+             data: { tablename: tablename,
+                    rowid:rowid,
+                    _token: csrf_token
+                },
+            beforeSend: function () {
+                // $(".loader").show();
+            },
+            success: function (data) {
+                $('#enable_edit').addClass('hidden')
+                $('#disable_edit').removeClass('hidden')
+            },
+            error: function (data){
+                
+            },
+            complete: function () {
+
+            }
+        })
+    } 
+
+    function disableArtworkEdit(tablename,rowid)
+    {
+        var csrf_token    =  $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+             url: base_url + "/admin/tesco/disable-artwork-edit",
+             type: 'post',
+             data: { tablename: tablename,
+                    rowid:rowid,
+                     _token: csrf_token
+                },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#enable_edit').removeClass('hidden')
+                $('#disable_edit').addClass('hidden')
+            },
+            error: function (data){
+                console.log(data);
+            },
+            complete: function () {
+
+            }
+        })
+    }
+    function setEditOrderStatus()
+    {
 			
 		var tpnd         = [];
         var barcode      = [];
