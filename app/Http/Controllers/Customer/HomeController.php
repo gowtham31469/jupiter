@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-
+use App\Classes\CustomerDashboard;
 use Response;
 use View;
 use DB;
@@ -14,6 +14,13 @@ use Auth;
 
 class HomeController extends Controller
 {
+    private $tcl1;
+    private $tcl2;
+    private $tcl4;
+    private $thl1;
+    private $thl3;
+    private $tsl1;
+    private $tsl3;
     /**
      * Create a new controller instance.
      *
@@ -22,6 +29,13 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('customer_auth');
+        $this->tcl1 = "TCL 1";
+        $this->tcl2 = "TCL 2";
+        $this->tcl4 = "TCL 4";
+        $this->thl1 = "THL 1";
+        $this->thl3 = "THL 3";
+        $this->tsl1 = "TSL 1";
+        $this->tsl3 = "TSL 3";
     }
 
     /**
@@ -32,33 +46,45 @@ class HomeController extends Controller
     public function index()
     {
         try{
-            $customer_id = Auth::guard('web_customer')->user()->id;
+            $customObj   = new CustomerDashboard();
+            $customer_id = Auth::guard('web_customer')->id();
+            $customer_role_id = DB::table('customer_profile')->select('*')
+                              ->where('id',$customer_id)->first();
+            $approved_orders = 0;
+            $app_pending_orders = 0;
+            $cancelled_orders = 0;
+
             $buyers = DB::table('buyers')
                           ->select('buyers.*')
                           ->join('customer_profile_buyer','customer_profile_buyer.buyer_id','buyers.id')
                           ->where('customer_profile_buyer.customer_profile_id',$customer_id)
                           ->where('buyers.is_active',1)
                           ->get();
-            $approved_orders = 
-            $approved['tcl1'] = DB::table('tesco_tcl1_orders')->where('order_status',"Order Approved")->count() + 
-            $approved['tcl2'] = DB::table('tesco_tcl2_orders')->where('order_status',"Order Approved")->count()+
-            $approved['tcl4'] = DB::table('tesco_tcl4_orders')->where('order_status',"Order Approved")->count() +
-            $approved['thl1'] = DB::table('tesco_thl1_orders')->where('order_status',"Order Approved")->count() +
-            $approved['thl3'] = DB::table('tesco_thl3_orders')->where('order_status',"Order Approved")->count() +
-            $approved['tsl1'] = DB::table('tesco_tsl1_orders')->where('order_status',"Order Approved")->count() +
-            $approved['tsl3'] = DB::table('tesco_tsl3_orders')->where('order_status',"Order Approved")->count();
 
-            $app_pending_orders = 
-            $app_pending['tcl1'] = DB::table('tesco_tcl1_orders')->where('order_status',"Order Placed")->count() + 
-            $app_pending['tcl2'] = DB::table('tesco_tcl2_orders')->where('order_status',"Order Placed")->count()+
-            $app_pending['tcl4'] = DB::table('tesco_tcl4_orders')->where('order_status',"Order Placed")->count() +
-            $app_pending['thl1'] = DB::table('tesco_thl1_orders')->where('order_status',"Order Placed")->count() +
-            $app_pending['thl3'] = DB::table('tesco_thl3_orders')->where('order_status',"Order Placed")->count() +
-            $app_pending['tsl1'] = DB::table('tesco_tsl1_orders')->where('order_status',"Order Placed")->count() +
-            $app_pending['tsl3'] = DB::table('tesco_tsl3_orders')->where('order_status',"Order Placed")->count();
+            if($customer_role_id->role_id == 1)
+            {
+                $approved_orders = $customObj->getAllApprovedOrders();
+                $approved_count  = count($approved_orders['tcl1'])+count($approved_orders['tcl2'])+count($approved_orders['tcl4'])+count($approved_orders['thl1'])+count($approved_orders['thl3'])+count($approved_orders['tsl1']) + count($approved_orders['tsl3']);
+
+                $app_pending_orders = $customObj->getAllPendingOrders();
+                $pending_count  = count($app_pending_orders['tcl1'])+count($app_pending_orders['tcl2'])+count($app_pending_orders['tcl4'])+count($app_pending_orders['thl1'])+count($app_pending_orders['thl3'])+count($app_pending_orders['tsl1']) + count($app_pending_orders['tsl3']);
+
+                $cancelled_orders = $customObj->getAllCancelledOrders();
+                $cancelled_count  = count($cancelled_orders['tcl1'])+count($cancelled_orders['tcl2'])+count($cancelled_orders['tcl4'])+count($cancelled_orders['thl1'])+count($cancelled_orders['thl3'])+count($cancelled_orders['tsl1']) + count($cancelled_orders['tsl3']);
+            }
+            else{
+                $approved_orders = $customObj->getApprovedOrders();
+                $approved_count  = count($approved_orders['tcl1'])+count($approved_orders['tcl2'])+count($approved_orders['tcl4'])+count($approved_orders['thl1'])+count($approved_orders['thl3'])+count($approved_orders['tsl1']) + count($approved_orders['tsl3']);
+                $app_pending_orders = $customObj->getPendingOrders();
+                $pending_count  = count($app_pending_orders['tcl1'])+count($app_pending_orders['tcl2'])+count($app_pending_orders['tcl4'])+count($app_pending_orders['thl1'])+count($app_pending_orders['thl3'])+count($app_pending_orders['tsl1']) + count($app_pending_orders['tsl3']);
+                $cancelled_orders = $customObj->getCancelledOrders();
+                $cancelled_count  = count($cancelled_orders['tcl1'])+count($cancelled_orders['tcl2'])+count($cancelled_orders['tcl4'])+count($cancelled_orders['thl1'])+count($cancelled_orders['thl3'])+count($cancelled_orders['tsl1']) + count($cancelled_orders['tsl3']);
+
+            }
+            
             
             $buyer_count = count($buyers);
-            return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count,'approved_orders'=>$approved_orders , 'app_pending_orders'=>$app_pending_orders]);
+            return view('customer/home')->with(['buyers' => $buyers,'buyer_count' => $buyer_count,'approved_orders'=>$approved_count , 'app_pending_orders'=>$pending_count, 'cancelled_orders' =>$cancelled_count]);
         } catch (\Exception $e)
           {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -66,6 +92,143 @@ class HomeController extends Controller
         
     }
 
+
+    public function getApprovedOrdersList()
+    {
+      try {
+          $customObj   = new CustomerDashboard();
+          $customer_id = Auth::guard('web_customer')->id();
+          $customer_role_id = DB::table('customer_profile')->select('*')
+                              ->where('id',$customer_id)->first();
+          if($customer_role_id->role_id == 1)
+            {
+                $approved_orders = $customObj->getAllApprovedOrders();
+            }
+            else{
+                $approved_orders = $customObj->getApprovedOrders();
+            }
+
+          $result = response()->json(['error'=> false,'message' =>'success','data'=>$approved_orders],200);
+      } 
+      catch (\Exception $e)
+      {
+             $result =  response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+    public function getPendingOrdersList()
+    {
+      try {
+          $customObj   = new CustomerDashboard();
+
+          $customer_id = Auth::guard('web_customer')->id();
+          $customer_role_id = DB::table('customer_profile')->select('*')
+                              ->where('id',$customer_id)->first();
+          if($customer_role_id->role_id == 1)
+            {
+                $pending_orders = $customObj->getAllPendingOrders();
+            }
+            else{
+                $pending_orders = $customObj->getPendingOrders();
+            }
+
+          $result = response()->json(['error'=> false,'message' =>'success','data'=>$pending_orders],200);
+      } 
+      catch (\Exception $e)
+      {
+             $result =  response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+
+     public function getCancelledOrdersList()
+    {
+      try {
+          $customObj   = new CustomerDashboard();
+          $customer_id = Auth::guard('web_customer')->id();
+          $customer_role_id = DB::table('customer_profile')->select('*')
+                              ->where('id',$customer_id)->first();
+          if($customer_role_id->role_id == 1)
+            {
+                $cancelled_orders = $customObj->getAllCancelledOrders();
+            }
+            else{
+                $cancelled_orders = $customObj->getCancelledOrders();
+            }
+
+          $result = response()->json(['error'=> false,'message' =>'success','data'=>$cancelled_orders],200);
+      } 
+      catch (\Exception $e)
+      {
+             $result =  response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
+
+    public function viewedApprovedOrder(Request $request)
+    {
+      try
+      {
+        $table_name   = $request->table_name;
+        $row_id = $request->id;
+        
+         $data   = DB::table($table_name)->where('id',$row_id)
+                          ->update([
+                            'app_ord_flag' => 1,
+                          ]);
+        
+          $result = response()->json(['error'=> false,'message' =>'success'],200);
+      }
+          catch (\Exception $e)
+          {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+
+    public function viewedPendingOrder(Request $request)
+    {
+      try
+      {
+        $table_name   = $request->table_name;
+        $row_id = $request->id;
+        
+         $data   = DB::table($table_name)->where('id',$row_id)
+                          ->update([
+                            'pen_ord_flag' => 1,
+                          ]);
+        
+          $result = response()->json(['error'=> false,'message' =>'success','approved_orders'=>$approved_orders],200);
+      }
+          catch (\Exception $e)
+          {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
+
+    public function viewedCancelledOrder(Request $request)
+    {
+      try
+      {
+        $table_name   = $request->table_name;
+        $row_id       = $request->id;
+        $data   = DB::table($table_name)->where('id',$row_id)
+                          ->update([
+                            'cancel_ord_flag' => 1
+                          ]);
+        
+          $result = response()->json(['error'=> false,'message' =>'success'],200);
+      }
+          catch (\Exception $e)
+          {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+          return $result;
+    }
     /**
      * Show the customer order status.
      * @return \Illuminate\Http\Response

@@ -988,6 +988,9 @@ span.sticker-details {
 .label-OrderApproved {
     background: #09a308;
 }
+.label-OrderCancelled {
+    background: rgb(244, 67, 54);
+}
 .label-Pending {
     background: #2c3e50;
 }
