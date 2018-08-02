@@ -65,7 +65,7 @@ class OrderStatusController extends Controller
 			
 	  if($customer_role_id->role_id == 1)
 	  {
-		  $customer_id = Auth::guard('web_customer')->user()->id;          
+		  $customer_id = Auth::guard('web_customer')->id();         
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                              ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('tesco_tcl1_orders.is_order_count_empty',0)

@@ -27,7 +27,7 @@ $(document).ready(function() {
        {
            $('#hidden-buyer-div').hide();
            $('div.buyers-card').addClass("active");
-           localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+         //  localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
            localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
            $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
        }   

@@ -199,6 +199,12 @@ class OrderStatusCntrl extends Controller
                 {
                     $style_no = $data['bank_details']->uk_style_ref;
                 }
+                if ($data['item_details'][0]->order_flag=="reOrder") {
+                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+                }
+                else{
+                    $rep_order_id = 0;
+                }
                 $pi_details = PI::create([
                     'buyer_id'         => $buyer_id,
                     'company_id'       => $data['company_details']->id,
@@ -211,7 +217,8 @@ class OrderStatusCntrl extends Controller
                     'billing_address'  => $data['bill_to']->address,
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'template_type'    => $data['bank_details']->template_type,
-                    'revision_no'      => $data['item_details'][0]->pi_rev_no
+                    'revision_no'      => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -622,14 +629,16 @@ class OrderStatusCntrl extends Controller
 		$size			 = explode(',',$request['size']);
 		$count			 = explode(',',$request['count']);
 		$template_id     = $request['edit_id'];
-		$template_name     = $request['template_name'];
-		$zone =$request['zone'];
+		$template_name   = $request['template_name'];
+		$zone            = $request['zone'];
+        
 		if($template_name == "TCL1")
 		{
-			$table_name="tesco_tcl1_orders";
+			$table_name = "tesco_tcl1_orders";
 			$qty_table_name="tesco_tcl1_orders_quanty";
 			$foreign_key="tcl1_order_id";
 			$single_size	= $request['single_size'];
+            $table_array = array('tesco_tcl2_orders','tesco_tsl1_orders');
 		}
 		else if($template_name == "TCL2")
 		{
@@ -637,27 +646,35 @@ class OrderStatusCntrl extends Controller
 			$qty_table_name="tesco_tcl2_orders_quanty";
 			$foreign_key="tcl2_order_id";
 			$single_size = $request['single_size'];
+            $table_array = array('tesco_tcl1_orders','tesco_tsl1_orders');
+            $qnty_table_array = array('tesco_tcl1_orders_quanty','tesco_tsl1_orders_quanty');
 		}
 		else if($template_name == "TCL4")
 		{
-			$table_name="tesco_tcl4_orders";
-			$qty_table_name="tesco_tcl4_orders_quanty";
-			$foreign_key="tcl4_order_id";
+			$table_name ="tesco_tcl4_orders";
+			$qty_table_name ="tesco_tcl4_orders_quanty";
+			$foreign_key ="tcl4_order_id";
 			$single_size = explode(',',$request['single_size']);
+            $table_array = array('tesco_tsl3_orders');
+            $qnty_table_array = array('tesco_tsl3_orders_quanty');
 		}
 		else if($template_name == "TSL1")
 		{
-			$table_name="tesco_tsl1_orders";
-			$qty_table_name="tesco_tsl1_orders_quanty";
-			$foreign_key="tsl1_order_id";
+			$table_name ="tesco_tsl1_orders";
+			$qty_table_name ="tesco_tsl1_orders_quanty";
+			$foreign_key ="tsl1_order_id";
 			$single_size = $request['single_size'];
+            $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders');
+            $qnty_table_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty');
 		}
 		else if($template_name == "TSL3")
 		{
-			$table_name="tesco_tsl3_orders";
-			$qty_table_name="tesco_tsl3_orders_quanty";
-			$foreign_key="tsl3_order_id";
+			$table_name ="tesco_tsl3_orders";
+			$qty_table_name ="tesco_tsl3_orders_quanty";
+			$foreign_key ="tsl3_order_id";
 			$single_size = explode(',',$request['single_size']);
+            $table_array = array('tesco_tcl4_orders');
+            $qnty_table_array = array('tesco_tcl4_orders_quanty');
 		}
 		else if($template_name == "THL1")
 		{
@@ -678,7 +695,8 @@ class OrderStatusCntrl extends Controller
 		$customer_ids=DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
 		
 		$customer_name=DB::table('customers')->where('id',$customer_ids{0}->customer_id)->select('*')->get();
-		
+		$temp_data = DB::table($table_name)->where('id',$template_id)->first();
+
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'zone'                 => $request['zone'],
@@ -692,11 +710,14 @@ class OrderStatusCntrl extends Controller
 								  'manufacture_date'     => $request['manufacture_date'],
 								  'tesco_department_id'  => $request['department'],
 								  'tesco_brand_id'       => $request['brand'],
-								  'tesco_supplier_id'    => $customer_ids{0}->customer_id, 'tesco_metadata_supplier_id'    => $request['supplier'],
+								  'tesco_supplier_id'    => $customer_ids{0}->customer_id,
+                                  'tesco_metadata_supplier_id'    => $request['supplier'],
 								  'rfid_compliant'       => $request['rfid'],
 								  'tag_at_source'        => $request['tag_at_source'],
                                 ]);
 		
+       
+
 		DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
 		$i=0;
 		foreach($tpnd as $value)
@@ -708,46 +729,46 @@ class OrderStatusCntrl extends Controller
 					DB::table($qty_table_name)->insert([
 					  'orms_tpn'           => $value,
 					  'itf_barcode'        => $barcode[$i],
-					  $foreign_key       =>$template_id,
+					   $foreign_key         => $template_id,
 					  'cases_per_carton'   => $size[$i],
 					  'count'         	   => $count[$i],
-					  'size'  			=>"0"
+					  'size'  			   => "0"
 					]);
 			}
 			else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE") || ($template_name == "THL3" && $zone=="CE"))
 			{
 					
 				DB::table($qty_table_name)->insert([
-					  'orms_tpn'           => $value,
-					  'ean_barcode'        => $barcode[$i],
-					  $foreign_key       =>$template_id,
-					  'case_size'   => $size[$i],
-					  'count'         	   => $count[$i],
-					  'size'  			=>$single_size[$i]
+					  'orms_tpn'         => $value,
+					  'ean_barcode'      => $barcode[$i],
+					  $foreign_key       => $template_id,
+					  'case_size'        => $size[$i],
+					  'count'         	 => $count[$i],
+					  'size'  			 => $single_size[$i]
 					]);
 			}
 			else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK") || ($template_name == "THL3" && $zone=="UK"))
 			{
 				
 				DB::table($qty_table_name)->insert([
-				  'tpnd'           => $value,
-				  'ean_barcode'        => $barcode[$i],
-				  $foreign_key       =>$template_id,
-				  'case_size'   => $size[$i],
-				  'count'         	   => $count[$i],
-				  'size'  			=>$single_size[$i]
+				  'tpnd'            => $value,
+				  'ean_barcode'     => $barcode[$i],
+				  $foreign_key      => $template_id,
+				  'case_size'       => $size[$i],
+				  'count'           => $count[$i],
+				  'size'  			=> $single_size[$i]
 				]);
 			}
 			else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK") || ($template_name == "THL1" && $zone=="UK"))
 			{
 				
 				DB::table($qty_table_name)->insert([
-					  'tpnd'           		=> $value,
+					  'tpnd'           	   => $value,
 					  'itf_barcode'        => $barcode[$i],
-					  $foreign_key       =>$template_id,
+					   $foreign_key        => $template_id,
 					  'units_per_carton'   => $size[$i],
 					  'count'         	   => $count[$i],
-					  'size'  			=>"0"
+					  'size'  			   => "0"
 				]);
 			}
 			$i++;
