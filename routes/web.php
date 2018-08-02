@@ -138,6 +138,16 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::get('customer/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('customer/order-status', 'Customer\HomeController@customerOrderStatus');
 	Route::get('customer/create-order', 'Customer\HomeController@customerOrders');
+
+	Route::post('customer/tesco/order-management/approved-orders', 'Customer\HomeController@getApprovedOrdersList');
+	Route::post('customer/tesco/order-management/viewed-approved', 'Customer\HomeController@viewedApprovedOrder');
+
+	Route::post('customer/tesco/order-management/pending-orders', 'Customer\HomeController@getPendingOrdersList');
+
+	Route::post('customer/tesco/order-management/viewed-pending', 'Customer\HomeController@viewedPendingOrder');
+
+	Route::post('customer/tesco/order-management/cancelled-orders', 'Customer\HomeController@getCancelledOrdersList');
+	Route::post('customer/tesco/order-management/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
 	//ORCHESTRA 
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
