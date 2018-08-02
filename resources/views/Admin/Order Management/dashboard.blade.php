@@ -104,25 +104,25 @@
 		<div class="col-md-3">
 			<div class="card">
 				<h4>New orders</h4>
-				<span class="numbers"><?php echo $new_orders; ?></span><i onclick="new_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+				<span class="numbers new_order_count"><?php echo $new_orders; ?></span><i onclick="new_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card">
 				<h4>Approved orders without Pi/Po</h4>
-				<span class="numbers"><?php echo $approved_pipo; ?></span><i onclick="aowp_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+				<span class="numbers app_pipo_count"><?php echo $approved_pipo; ?></span><i onclick="aowp_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card">
 				<h4>Approved orders</h4>
-				<span class="numbers"><?php echo $approved_orders; ?></span><i onclick="app_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+				<span class="numbers app_order_count"><?php echo $approved_orders; ?></span><i onclick="app_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="card">
 				<h4>Pending orders</h4>
-				<span class="numbers"><?php echo $pending_orders; ?></span><i onclick="pen_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+				<span class="numbers pen_order_count"><?php echo $pending_orders; ?></span><i onclick="pen_orders_modal()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -151,7 +151,7 @@
 								
 								<td>TCL 1</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_tcl1_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tcl1_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['tcl2'] as $value)
@@ -164,7 +164,7 @@
 								
 								<td>TCL 2</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_tcl2_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tcl2_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['tcl4'] as $value)
@@ -177,7 +177,7 @@
 								
 								<td>TCL 4</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_tcl4_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tcl4_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['tsl1'] as $value)
@@ -190,7 +190,7 @@
 								
 								<td>TSL 1</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_tsl1_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tsl1_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['tsl3'] as $value)
@@ -203,7 +203,7 @@
 								
 								<td>TSL 3</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_tsl3_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tsl3_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['thl1'] as $value)
@@ -216,7 +216,7 @@
 								
 								<td>THL 1</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_thl1_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_thl1_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 							@foreach ($pendingproduction['thl3'] as $value)
@@ -229,7 +229,7 @@
 								
 								<td>THL 3</td>
 								<td>{{ $value->zone }}</td>
-								<td><label onclick="viewed({{ $value->id }},'tesco_thl3_orders')" style="cursor:pointer" class="label label-info">Viewed</label></td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_thl3_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
 						</tbody>
@@ -375,7 +375,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.new_orders.tcl2).each(function(index, value)
 						{
@@ -387,7 +387,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.tcl4).each(function(index, value)
 						{
@@ -399,7 +399,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.new_orders.tsl1).each(function(index, value)
 						{
@@ -411,7 +411,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.tsl3).each(function(index, value)
 						{
@@ -423,7 +423,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.thl1).each(function(index, value)
 						{
@@ -435,7 +435,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.new_orders.thl3).each(function(index, value)
 						{
@@ -447,7 +447,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
 						$('#new_orders_modal').modal("show")
@@ -492,7 +492,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl1_2).each(function(index, value)
 						{
@@ -504,7 +504,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl2_1).each(function(index, value)
 						{
@@ -516,7 +516,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tcl2_2).each(function(index, value)
 						{
@@ -528,7 +528,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl4_1).each(function(index, value)
 						{
@@ -540,7 +540,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.tcl4_2).each(function(index, value)
 						{
@@ -552,7 +552,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.tsl1_1).each(function(index, value)
 						{
@@ -564,7 +564,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl1_2).each(function(index, value)
 						{
@@ -576,7 +576,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl3_1).each(function(index, value)
 						{
@@ -588,7 +588,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl3_2).each(function(index, value)
 						{
@@ -600,7 +600,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl1_1).each(function(index, value)
 						{
@@ -612,7 +612,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl1_2).each(function(index, value)
 						{
@@ -624,7 +624,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl3_1).each(function(index, value)
 						{
@@ -636,7 +636,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.thl3_2).each(function(index, value)
 						{
@@ -648,7 +648,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#aowp_modal').modal("show")
@@ -693,7 +693,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.approved_orders.tcl2).each(function(index, value)
 						{
@@ -705,7 +705,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.tcl4).each(function(index, value)
 						{
@@ -717,7 +717,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.approved_orders.tsl1).each(function(index, value)
 						{
@@ -729,7 +729,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.tsl3).each(function(index, value)
 						{
@@ -741,7 +741,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.thl1).each(function(index, value)
 						{
@@ -753,7 +753,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.approved_orders.thl3).each(function(index, value)
 						{
@@ -765,7 +765,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#app_orders_modal').modal("show")
@@ -810,7 +810,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.pending_orders.tcl2).each(function(index, value)
 						{
@@ -822,7 +822,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.tcl4).each(function(index, value)
 						{
@@ -834,7 +834,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pending_orders.tsl1).each(function(index, value)
 						{
@@ -846,7 +846,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.tsl3).each(function(index, value)
 						{
@@ -858,7 +858,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.thl1).each(function(index, value)
 						{
@@ -870,7 +870,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pending_orders.thl3).each(function(index, value)
 						{
@@ -882,7 +882,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#pen_orders_modal').modal("show")      
@@ -972,7 +972,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.pendingproduction.tcl2).each(function(index, value)
 						{
@@ -984,7 +984,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pendingproduction.tcl4).each(function(index, value)
 						{
@@ -996,7 +996,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pendingproduction.tsl1).each(function(index, value)
 						{
@@ -1008,7 +1008,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pendingproduction.tsl3).each(function(index, value)
 						{
@@ -1020,7 +1020,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pendingproduction.thl1).each(function(index, value)
 						{
@@ -1032,7 +1032,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pendingproduction.thl3).each(function(index, value)
 						{
@@ -1044,7 +1044,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});     
 						
 						$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th class="text-center">Style No</th><th class="text-center">Template Name</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
@@ -1066,6 +1066,7 @@
 		
 		function viewedneworders(id,table_name)
 		{
+			
 			var csrf_token = $('meta[name="csrf-token"]').attr('content');
 				$.ajax({
 					url: base_url + "/admin/order-management/viewedneworders",
@@ -1080,6 +1081,8 @@
 
 					},
 					success: function(data) {
+						var count = parseInt($('.new_order_count').text()) - 1;
+						$('.new_order_count').text(count)
 						var html="";
 						$(data.new_orders.tcl1).each(function(index, value)
 						{
@@ -1091,7 +1094,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.new_orders.tcl2).each(function(index, value)
 						{
@@ -1103,7 +1106,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.tcl4).each(function(index, value)
 						{
@@ -1115,7 +1118,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.new_orders.tsl1).each(function(index, value)
 						{
@@ -1127,7 +1130,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.tsl3).each(function(index, value)
 						{
@@ -1139,7 +1142,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.new_orders.thl1).each(function(index, value)
 						{
@@ -1151,7 +1154,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.new_orders.thl3).each(function(index, value)
 						{
@@ -1163,13 +1166,454 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
 						  $('.new_orders').DataTable();
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search'); 
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		
+		function viewedaowp(id,table_name)
+		{
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedaowp",
+					type: "Post",
+					dataType: "json",
+					data: {
+						_token: csrf_token,
+						table_name: table_name,
+						id: id
+					},
+					beforeSend: function() {
+
+					},
+					success: function(data) {
+						var count = parseInt($('.app_pipo_count').text()) - 1;
+						$('.app_pipo_count').text(count)
+						var html="";
+						$(data.app_pipo.tcl1_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});
+						$(data.app_pipo.tcl1_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});
+						$(data.app_pipo.tcl2_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.tcl2_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});
+						$(data.app_pipo.tcl4_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.tcl4_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.tsl1_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.tsl1_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.tsl3_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.tsl3_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.thl1_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.thl1_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.thl3_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}	
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.thl3_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}	
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+						  $('.aowp_orders').DataTable();
+						  $(".modal-body input").addClass('form-control');
+						  $('.dataTables_length select').addClass('form-control');
+						  $(".modal-body input").attr('placeholder', 'Data Search');
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		
+		function viewedapporders(id,table_name)
+		{
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedapporders",
+					type: "Post",
+					dataType: "json",
+					data: {
+						_token: csrf_token,
+						table_name: table_name,
+						id: id
+					},
+					beforeSend: function() {
+
+					},
+					success: function(data) {
+						var count = parseInt($('.app_order_count').text()) - 1;
+						$('.app_order_count').text(count)
+						var html="";
+						$(data.approved_orders.tcl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});
+						$(data.approved_orders.tcl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.approved_orders.tcl4).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.approved_orders.tsl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.approved_orders.tsl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.approved_orders.thl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.approved_orders.thl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}	
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						  $('.approved_orders').DataTable();
+						  $(".modal-body input").addClass('form-control');
+						  $('.dataTables_length select').addClass('form-control');
+						  $(".modal-body input").attr('placeholder', 'Data Search');
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		
+		function viewedpenorders(id,table_name)
+		{
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedpenorders",
+					type: "Post",
+					dataType: "json",
+					data: {
+						_token: csrf_token,
+						table_name: table_name,
+						id: id
+					},
+					beforeSend: function() {
+
+					},
+					success: function(data) {
+						var count = parseInt($('.pen_order_count').text()) - 1;
+						$('.pen_order_count').text(count)
+						var html="";
+						$(data.pending_orders.tcl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});
+						$(data.pending_orders.tcl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.pending_orders.tcl4).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.pending_orders.tsl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.pending_orders.tsl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.pending_orders.thl1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.pending_orders.thl3).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}	
+							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>'); 
+						  $('.pending_orders').DataTable();
+						  $(".modal-body input").addClass('form-control');
+						  $('.dataTables_length select').addClass('form-control');
+						  $(".modal-body input").attr('placeholder', 'Data Search');
 					},
 					error: function(data) {
 

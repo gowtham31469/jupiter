@@ -150,13 +150,14 @@ function tescoOrders() {
                 }
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-5" style="width:37%">
                                                     <div class="card">
                                                         <h4>Create Order</h4>
                                                         <hr/>
                                                         <ul class="nav nav-tabs">
                                                             <li class="nav-item active"> <a class="nav-link active" data-toggle="tab" href="#viewOrder" role="tab" id="viewOrdertab">View Order</a> </li>
                                                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newOrder" role="tab" id="newOrdertab">New Order</a> </li>
+<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#newTemplate" role="tab" id="newTemplatetab">New Template</a> </li>
  <li class="nav-item"> <a class="nav-link" data-toggle="tab" id="reOrdertab" href="#reOrder" role="tab">Re Order</a> </li>
                                                         </ul>
                                                         <div class="tab-content ">
@@ -183,6 +184,10 @@ function tescoOrders() {
                                                                     <div class="reorder-content">
                                                                     </div>
                                                                     </form>
+                                                                </div>
+                                                            </div>
+															<div class="tab-pane fade" id="newTemplate" role="tabpanel">
+                                                                <div class="pad-top">
                                                                 </div>
                                                             </div>
                                                             <div class="tab-pane fade" id="newOrder" role="tabpanel">
@@ -233,7 +238,7 @@ function tescoOrders() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 ">
+                                                <div class="col-md-7" style="width:62%">
                                                     <div class="card " style="height:calc(100vh - 100px); ">
                                                         <h4 id="head_template">Template Preview</h4>
                                                         <hr/>

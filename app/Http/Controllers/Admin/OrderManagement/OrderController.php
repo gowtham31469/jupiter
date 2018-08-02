@@ -52,30 +52,37 @@ class OrderController extends Controller
 			
 			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tcl4'] = DB::table('tesco_tcl4_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl1'] = DB::table('tesco_thl1_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['thl3'] = DB::table('tesco_thl3_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
 									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -84,30 +91,37 @@ class OrderController extends Controller
 			
 			$approved_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tcl2'] = DB::table('tesco_tcl2_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tcl4'] = DB::table('tesco_tcl4_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['thl3'] = DB::table('tesco_thl3_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tsl1'] = DB::table('tesco_tsl1_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -115,30 +129,37 @@ class OrderController extends Controller
 			
 			$pending_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tcl2'] = DB::table('tesco_tcl2_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tcl4'] = DB::table('tesco_tcl4_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['thl3'] = DB::table('tesco_thl3_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tsl1'] = DB::table('tesco_tsl1_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -149,6 +170,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -156,6 +178,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -163,6 +186,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -170,6 +194,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -177,6 +202,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -184,6 +210,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -191,6 +218,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -198,6 +226,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -205,6 +234,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -212,12 +242,14 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			$app_pipo1['tsl1'] = DB::table('tesco_tsl1_orders')
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -225,6 +257,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -232,6 +265,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Pending')
 									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
@@ -239,6 +273,7 @@ class OrderController extends Controller
 									->where('order_status','Order Approved')
 									->where('po_status','PO Uploaded')
 									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
