@@ -624,6 +624,7 @@ class OrderStatusCntrl extends Controller
      */
     public function setTescoOrderStatus(Request $request)
     {
+        $orderObj        = new TescoOrders();
         $tpnd         	 = explode(',',$request['tpnd']);
 		$barcode         = explode(',',$request['barcode']);
 		$size			 = explode(',',$request['size']);
@@ -695,15 +696,17 @@ class OrderStatusCntrl extends Controller
 		$customer_ids=DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->get();
 		
 		$customer_name=DB::table('customers')->where('id',$customer_ids{0}->customer_id)->select('*')->get();
-		$temp_data = DB::table($table_name)->where('id',$template_id)->first();
-
+		$temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+        if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+            $orderObj->updateTescoAdminOrders($table_name,$temp_data,$request,$customer_ids{0}->customer_id);
+        }
 		DB::table($table_name)->where('id',$template_id)
 						      ->update([
                                   'zone'                 => $request['zone'],
 								  'template_type'        => $request['type'],
-								  'po_number'            => $request['po_number'],
-								  'uk_style_ref'         => $request['uk_style'],
-								  'ce_style_ref'         => $request['ce_style'],
+								 // 'po_number'            => $request['po_number'],
+								 // 'uk_style_ref'         => $request['uk_style'],
+								//  'ce_style_ref'         => $request['ce_style'],
 								  'season_code'          => $request['season_code'],
 								  'short_description'    => $request['description'],
 								  'eqos_site_code'       => $request['eqos'],

@@ -2488,7 +2488,7 @@ function updateArtwork(obj)
                     $('.osorderdetails').text(" Order Details - "+TemplateName)
                     $('.osartwork').text(" Artwork - "+TemplateName)
                     if (data.order_details.edit_permission == 1){
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
                     }
                     else{
                          $('.osfooter').html('<button class="btn btn-danger pull-right remove input-sm" id="close" type="button">Close</button>')
@@ -3849,5 +3849,6 @@ function editArtwork()
         $('#tesco_uk_style').prop('disabled',true);
         $('#tesco_ce_style').prop('disabled',true);
         $('#tesco_supplier').prop('disabled',true);
+        $('#submit').removeClass("hidden");
         
     }
