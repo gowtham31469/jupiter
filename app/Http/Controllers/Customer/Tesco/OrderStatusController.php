@@ -833,7 +833,7 @@ class OrderStatusController extends Controller
             $foreign_key="thl3_order_id";
             $single_size = explode(',',$request['single_size']);
         }
-        
+        $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
         DB::table($table_name)->where('id',$template_id)
                               ->update([
                                   'zone'                 => $request['zone'],

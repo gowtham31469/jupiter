@@ -359,4 +359,19 @@ class CustomerDashboard
                               ->get() ;                      
         return $cancelled;
 	}
+
+  public function getApprovedOrdersCount($approved_orders)
+  {
+    return count($approved_orders['tcl1'])+count($approved_orders['tcl2'])+count($approved_orders['tcl4'])+count($approved_orders['thl1'])+count($approved_orders['thl3'])+count($approved_orders['tsl1']) + count($approved_orders['tsl3']);
+  }
+  
+  public function getPendingOrdersCount($app_pending_orders)
+  {
+    return count($app_pending_orders['tcl1'])+count($app_pending_orders['tcl2'])+count($app_pending_orders['tcl4'])+count($app_pending_orders['thl1'])+count($app_pending_orders['thl3'])+count($app_pending_orders['tsl1']) + count($app_pending_orders['tsl3']);
+  }
+
+  public function getCancelledOrdersCount($cancelled_orders)
+  {
+    return count($cancelled_orders['tcl1'])+count($cancelled_orders['tcl2'])+count($cancelled_orders['tcl4'])+count($cancelled_orders['thl1'])+count($cancelled_orders['thl3'])+count($cancelled_orders['tsl1']) + count($cancelled_orders['tsl3']);
+  }
 }

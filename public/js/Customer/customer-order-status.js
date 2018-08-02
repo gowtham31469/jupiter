@@ -3848,6 +3848,6 @@ function editArtwork()
         $('#tesco_po_number').prop('disabled',true);
         $('#tesco_uk_style').prop('disabled',true);
         $('#tesco_ce_style').prop('disabled',true);
-
+        $('#tesco_supplier').prop('disabled',true);
         
     }

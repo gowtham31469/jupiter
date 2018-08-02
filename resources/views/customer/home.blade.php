@@ -18,19 +18,19 @@
         <div class="col-md-4">
             <div class="card">
                 <h4>Approved orders</h4>
-                <span class="numbers">{{$approved_orders}}</span><i onclick="showApprovedOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+                <span class="numbers approved-count">{{$approved_orders}}</span><i onclick="showApprovedOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
                 <h4>Approval pending Orders</h4>
-                <span class="numbers">{{$app_pending_orders}}</span><i onclick="showPendingOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+                <span class="numbers pending-count">{{$app_pending_orders}}</span><i onclick="showPendingOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
                 <h4>Cancelled Orders</h4>
-                <span class="numbers">{{$cancelled_orders}}</span><i onclick="showCancelledOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
+                <span class="numbers cancelled-count">{{$cancelled_orders}}</span><i onclick="showCancelledOrders()" class="fa fa-arrow-right" aria-hidden="true" style="cursor:pointer;float: right;margin-top: 50px;color: #717171;font-size: 18px;"></i>
             </div>
         </div>
         
@@ -205,7 +205,7 @@
                             {
                                 var style_no = value.uk_style_ref;
                             }   
-                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#approvedModal .modal-body').html('<table class="table approved-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
                         $('.approved-orders').DataTable();
@@ -248,7 +248,7 @@
                             {
                                 var style_no = value.uk_style_ref;
                             }   
-                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#appPendingModal .modal-body').html('<table class="table pending-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
                        $('.pending-orders').DataTable();  
@@ -280,6 +280,7 @@
                     },
                     success: function(data) {
                         var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                       
                         var html = "";
                         $(orders).each(function(index, value)
                         {
@@ -291,12 +292,14 @@
                             {
                                 var style_no = value.uk_style_ref;
                             }   
-                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
                         $('.cancelled-orders').DataTable();
-                        $('#cancelledOrdersModal').modal("show")
                         $(".modal-body input").attr('placeholder', 'Data Search');
+                 
+                        $('#cancelledOrdersModal').modal("show")
+                        
                         },
                     error: function(data) {
 
@@ -308,7 +311,7 @@
                 })
         }
 
-        function  viewedApproved(id,tablename) {
+        function  viewedApproved(id,table_name) {
 
            var csrf_token = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
@@ -318,14 +321,32 @@
                     data: {
                         _token: csrf_token,
                         id:id,
-                        tablename:tablename
+                        table_name:table_name
                     },
                     beforeSend: function() {
 
                     },
                     success: function(data) {
-                        
-                        },
+                        var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                        var html = "";
+                        $(orders).each(function(index, value)
+                        {
+                            if(value.zone == "CE")
+                            {
+                                var style_no = value.ce_style_ref;
+                            }
+                            else
+                            {
+                                var style_no = value.uk_style_ref;
+                            }   
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+                        });
+                        $('#approvedModal .modal-body').html('<table class="table approved-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+                        $('.approved-count').text(data.approved_count)
+                        $('.approved-orders').DataTable();
+                        $('#approvedModal').modal("show");
+                        $(".modal-body input").attr('placeholder', 'Data Search');
+                    },
                     error: function(data) {
 
                     },
@@ -335,7 +356,7 @@
                     }
                 })
         }
-        function  viewedPending(id,tablename) {
+        function  viewedPending(id,table_name) {
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: base_url + "/customer/tesco/order-management/viewed-pending",
@@ -344,14 +365,32 @@
                     data: {
                         _token: csrf_token,
                         id:id,
-                        tablename:tablename
+                        table_name:table_name
                     },
                     beforeSend: function() {
 
                     },
                     success: function(data) {
-                        
-                        },
+                        var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                        var html = "";
+                        $(orders).each(function(index, value)
+                        {
+                            if(value.zone == "CE")
+                            {
+                                var style_no = value.ce_style_ref;
+                            }
+                            else
+                            {
+                                var style_no = value.uk_style_ref;
+                            }   
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+                        });
+                        $('#appPendingModal .modal-body').html('<table class="table pending-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+                        $('.pending-count').text(data.pending_count)
+                       $('.pending-orders').DataTable();  
+                       $('#appPendingModal').modal("show");
+                       $(".modal-body input").attr('placeholder', 'Data Search');
+                     },
                     error: function(data) {
 
                     },
@@ -377,8 +416,27 @@
 
                     },
                     success: function(data) {
-                        
-                        },
+                        var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+
+                        var html = "";
+                        $(orders).each(function(index, value)
+                        {
+                            if(value.zone == "CE")
+                            {
+                                var style_no = value.ce_style_ref;
+                            }
+                            else
+                            {
+                                var style_no = value.uk_style_ref;
+                            }   
+                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
+                        });
+                        $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+                        $('.cancelled-count').text(data.cancelled_count);
+                        $('.cancelled-orders').DataTable();
+                        $('#cancelledOrdersModal').modal("show")
+                        $(".modal-body input").attr('placeholder', 'Data Search');
+                    },
                     error: function(data) {
 
                     },
