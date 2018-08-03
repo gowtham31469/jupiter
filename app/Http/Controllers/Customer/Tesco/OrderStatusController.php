@@ -777,6 +777,7 @@ class OrderStatusController extends Controller
      */
     public function setTescoOrderStatus(Request $request)
     {
+        $orderObj        = new TescoOrders();
         $tpnd            = explode(',',$request['tpnd']);
         $barcode         = explode(',',$request['barcode']);
         $size            = explode(',',$request['size']);
@@ -834,20 +835,23 @@ class OrderStatusController extends Controller
             $single_size = explode(',',$request['single_size']);
         }
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+        if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
+            $orderObj->updateTescoOrders($table_name,$temp_data,$request);
+        }
         DB::table($table_name)->where('id',$template_id)
                               ->update([
                                   'zone'                 => $request['zone'],
                                   'template_type'        => $request['type'],
-                                  'po_number'            => $request['po_number'],
-                                  'uk_style_ref'         => $request['uk_style'],
-                                  'ce_style_ref'         => $request['ce_style'],
+                                 // 'po_number'            => $request['po_number'],
+                                 // 'uk_style_ref'         => $request['uk_style'],
+                                 // 'ce_style_ref'         => $request['ce_style'],
                                   'season_code'          => $request['season_code'],
                                   'short_description'    => $request['description'],
                                   'eqos_site_code'       => $request['eqos'],
                                   'manufacture_date'     => $request['manufacture_date'],
                                   'tesco_department_id'  => $request['department'],
                                   'tesco_brand_id'       => $request['brand'],
-                                  'tesco_supplier_id'    => $request['supplier'],
+                                  //'tesco_supplier_id'    => $request['supplier'],
                                   'rfid_compliant'       => $request['rfid'],
                                   'tag_at_source'        => $request['tag_at_source'],
                                 ]);
@@ -897,12 +901,12 @@ class OrderStatusController extends Controller
             {
                 
                 DB::table($qty_table_name)->insert([
-                      'tpnd'                => $value,
+                      'tpnd'               => $value,
                       'itf_barcode'        => $barcode[$i],
-                      $foreign_key       =>$template_id,
+                       $foreign_key        => $template_id,
                       'units_per_carton'   => $size[$i],
                       'count'              => $count[$i],
-                      'size'            =>"0"
+                      'size'               => "0"
                 ]);
             }
             $i++;

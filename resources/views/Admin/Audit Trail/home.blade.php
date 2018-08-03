@@ -23,7 +23,7 @@
                           <th>Event</th>
                           <th>User</th>
                           <th>User Email</th>
-                          <th>IP address</th>
+                          {{-- <th>IP address</th> --}}
                           <th>User Agent</th>
                           <th>Date & Time</th>
                           <th>Compare</th>
@@ -38,7 +38,7 @@
                         <td><span class="label label-success">{{ $value->event }}</span></td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
-                        <td>{{ $value->ip_address }}</td>
+                        {{-- <td>{{ $value->ip_address }}</td> --}}
                         <td>{{ $value->user_agent }}</td>
                         <td>{{ $value->created_at }}</td>
                         <td><a href="#"><i class="fa fa-eye filterbtn options fa-button compare-audit" aria-hidden="true" title="View Changes" id="compare"></i></a></td>
