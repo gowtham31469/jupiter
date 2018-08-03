@@ -20,21 +20,33 @@ function reOrderTesco()
 		},
 		success: function (data) {
 			var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+			
+			var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+			
 			var uniqueNames = [];
 			
-				for(i = 0; i< newObj.length; i++){
-					if(newObj[i].is_order_count_empty == 0)
+			
+			newObj1.sort(function(obj1, obj2) {
+					var date1 =obj1.created_at;
+					var date2 =obj2.created_at;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+			
+				for(i = 0; i< newObj1.length; i++){
+					if(newObj1[i].is_order_count_empty == 0)
 					{
-						if(newObj[i].zone == "CE")
+						if(newObj1[i].zone == "CE")
 						{
-							if(uniqueNames.indexOf(newObj[i].ce_style_ref) === -1){
-									uniqueNames.push(newObj[i].ce_style_ref);    
+							if(uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1){
+									uniqueNames.push(newObj1[i].ce_style_ref);    
 							}   
 						}
 						else
 						{
-							if(uniqueNames.indexOf(newObj[i].uk_style_ref) === -1){
-									uniqueNames.push(newObj[i].uk_style_ref);   
+							if(uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1){
+									uniqueNames.push(newObj1[i].uk_style_ref);   
 							}   
 						}
 					}
@@ -46,21 +58,32 @@ function reOrderTesco()
 				
 				var newObjrepeatOrder = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
 				
+				var newObjrepeatOrder1 = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
+				
 				//console.log(newObjrepeatOrder)
 				var uniqueNamesRepeatOrder = [];
-				for(i = 0; i< newObjrepeatOrder.length; i++){
-					if(newObjrepeatOrder[i].is_order_count_empty == 0)
+			
+				newObjrepeatOrder1.sort(function(obj1, obj2) {
+					var date1 =obj1.created_at;
+					var date2 =obj2.created_at;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+			
+				for(i = 0; i< newObjrepeatOrder1.length; i++){
+					if(newObjrepeatOrder1[i].is_order_count_empty == 0)
 					{
-						if(newObjrepeatOrder[i].zone == "CE")
+						if(newObjrepeatOrder1[i].zone == "CE")
 						{
-							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder[i].ce_style_ref) === -1){
-								uniqueNamesRepeatOrder.push(newObjrepeatOrder[i].ce_style_ref);        
+							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].ce_style_ref) === -1){
+								uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].ce_style_ref);        
 							}   
 						}
 						else
 						{
-							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder[i].uk_style_ref) === -1){
-								uniqueNamesRepeatOrder.push(newObjrepeatOrder[i].uk_style_ref);        
+							if(uniqueNamesRepeatOrder.indexOf(newObjrepeatOrder1[i].uk_style_ref) === -1){
+								uniqueNamesRepeatOrder.push(newObjrepeatOrder1[i].uk_style_ref);        
 							}   
 						}
 					}
