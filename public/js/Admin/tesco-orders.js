@@ -91,48 +91,61 @@ function tescoOrders() {
 			},
 			success: function (data) {
 				var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				
+				newObj1.sort(function(obj1, obj2) {
+					var date1 =obj1.created_at;
+					var date2 =obj2.created_at;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+				
 				var CEUniqueNames = [];
 				var UKUniqueNames = [];
 				var CEPOCollection = [];
 				var UKPOCollection = [];
 				var artwork_collection = {};
-				for (i = 0; i < newObj.length; i++) {
-					if (newObj[i].zone === 'CE' && newObj[i].ce_style_ref !== null) {
-						if (CEUniqueNames.indexOf(newObj[i].ce_style_ref) === -1) {
-							CEPOCollection.push(newObj[i].po_number);
-							CEUniqueNames.push(newObj[i].ce_style_ref);
-							artwork_collection[newObj[i].ce_style_ref] = {};
-							artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+				for (i = 0; i < newObj1.length; i++) {
+					if (newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
+						if (CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
+							CEPOCollection.push(newObj1[i].po_number);
+							CEUniqueNames.push(newObj1[i].ce_style_ref);
+							artwork_collection[newObj1[i].ce_style_ref] = {};
+							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 						} else {
-							if (CEPOCollection.indexOf(newObj[i].po_number) === -1) {
-								CEPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+							if (CEPOCollection.indexOf(newObj1[i].po_number) === -1) {
+								CEPOCollection.push(newObj1[i].po_number);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 							} else {
-								var artwork_group = artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].ce_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+								var artwork_group = artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number];
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 							}
 						}
 
-					} else if (newObj[i].zone === 'UK' && newObj[i].uk_style_ref !== null) {
-						if (UKUniqueNames.indexOf(newObj[i].uk_style_ref) === -1) {
-							UKPOCollection.push(newObj[i].po_number);
-							UKUniqueNames.push(newObj[i].uk_style_ref);
-							artwork_collection[newObj[i].uk_style_ref] = {};
-							artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+					} else if (newObj1[i].zone === 'UK' && newObj1[i].uk_style_ref !== null) {
+						if (UKUniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
+							UKPOCollection.push(newObj1[i].po_number);
+							UKUniqueNames.push(newObj1[i].uk_style_ref);
+							artwork_collection[newObj1[i].uk_style_ref] = {};
+							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 						} else {
-							if (UKPOCollection.indexOf(newObj[i].po_number) === -1) {
-								UKPOCollection.push(newObj[i].po_number);
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+							if (UKPOCollection.indexOf(newObj1[i].po_number) === -1) {
+								UKPOCollection.push(newObj1[i].po_number);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 
 							} else {
-								var artwork_group = artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number];
-								artwork_collection[newObj[i].uk_style_ref][newObj[i].po_number] = artwork_group + ',' + newObj[i].template_id + '__' + newObj[i].TemplateName + '__' + camelize(newObj[i].artwork_status);
+								var artwork_group = artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number];
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
 							}
 
 						}
 					}
 
 				}
+				
+				console.log(newObj1)
 
 				var options = "<option value=''>Search Style Number</option>";
 				if (CEUniqueNames.length > 0) {

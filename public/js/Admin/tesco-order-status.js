@@ -29,6 +29,8 @@ function tescoOrderStatus()
             {
                var path = base_url + "/admin/tesco/order-management/order-status";
                var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+				
+			   var newObj1 = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
                
                 $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
 
@@ -37,18 +39,27 @@ function tescoOrderStatus()
                 $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
                 var uniqueNames = [];
                 var zones = [];
-                for(i = 0; i< newObj.length; i++){ 
-                    if(newObj[i].Zone == "CE")
+				
+				newObj1.sort(function(obj1, obj2) {
+					var date1 =obj1.OrderDate;
+					var date2 =obj2.OrderDate;
+					if (date1 > date2) return -1;
+					if (date1 < date2) return 1;
+					return 0;
+				});
+				
+                for(i = 0; i< newObj1.length; i++){ 
+                    if(newObj1[i].Zone == "CE")
                     {
-                        if(uniqueNames.indexOf(newObj[i].ce_style_ref) === -1){
-                            uniqueNames.push(newObj[i].ce_style_ref);
+                        if(uniqueNames.indexOf(newObj1[i].ce_style_ref) === -1){
+                            uniqueNames.push(newObj1[i].ce_style_ref);
                             zones.push("CE");      
                         } 
                     }
                     else
                     {
-                        if(uniqueNames.indexOf(newObj[i].uk_style_ref) === -1){
-                            uniqueNames.push(newObj[i].uk_style_ref);
+                        if(uniqueNames.indexOf(newObj1[i].uk_style_ref) === -1){
+                            uniqueNames.push(newObj1[i].uk_style_ref);
                             zones.push("UK");       
                         }
                     }       

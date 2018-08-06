@@ -23,8 +23,6 @@ function getComparisonData(id)
              $(".loader").show();
            },
            success: function(data){
-            ;
-               console.log($.parseJSON(data.comparison_data[0].old_values))
                  $('#view-changes-modal-body').html('');
                  switch (data.comparison_data[0].module) 
                  {
