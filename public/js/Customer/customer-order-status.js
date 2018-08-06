@@ -2175,7 +2175,7 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             });
 
                         } else {
-                            $('.snackbar_span').html('Price Details are Missing !!');
+                            $('.snackbar_span').html('Price details should be within a range !!');
                             $('#snackbar').css('background-color','#F44336');
                             showSnackbar();
                         }

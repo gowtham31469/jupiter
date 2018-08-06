@@ -211,86 +211,104 @@ class ProfomaInvoice
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
                           ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name')
                           ->get()->toArray();
-
-        foreach ($item_details as $key => $value) {
+        if ($item_details){
+          foreach ($item_details as $key => $value) {
            if ($value->zone == "CE") {
               $value->style = $value->ce_style_ref;
            }
            else{
               $value->style = $value->uk_style_ref;
            }
-        }
-        $data['tables'][$table_name]= $table_name.'_quanty';
-        $item_id_array = array();
-        $price_array = array();
-        $templates = array();
-        array_push($item_id_array, $request->template_id);
-        if ($item_details[0]->order_flag!="reOrder"){
-            if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-              $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-              $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
+          }
+          $data['tables'][$table_name]= $table_name.'_quanty';
+          $item_id_array = array();
+          $price_array = array();
+          $templates = array();
+          array_push($item_id_array, $request->template_id);
+          if ($item_details[0]->order_flag!="reOrder"){
+              if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+                $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+                $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+                $template_array = array_combine($table_array, $qnty_id_array);
+                $count = 3;
 
-            }
-            if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-              $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-              $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
-            }
-            
-            if (!empty($template_array)) {
-                unset($template_array[$table_name]);
-                $data['tables']  = array_merge($data['tables'],$template_array);
-                foreach ($template_array as $key => $qunty_tbl) {
+              }
+              if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+                $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+                $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+                $template_array = array_combine($table_array, $qnty_id_array);
+                $count = 2;
+              }
               
-                $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$key));
-                $item_details2    = DB::table($key)
-                                    ->join($qunty_tbl,$qunty_tbl.'.'.$qnty_id,'=',$key.'.id')
-                                    ->join('tesco_item_master','tesco_item_master.id',$key.'.template_id')
-                                    ->leftjoin('price_taxation','price_taxation.template_id','=',$key.'.template_id')
-                                    ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
-                                    ->where($key.'.is_order_count_empty',0)
+              if (!empty($template_array)) {
+                  unset($template_array[$table_name]);
+                  $data['tables']  = array_merge($data['tables'],$template_array);
+                  foreach ($template_array as $key => $qunty_tbl) {
+                
+                  $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$key));
+                  $item_details2    = DB::table($key)
+                                      ->join($qunty_tbl,$qunty_tbl.'.'.$qnty_id,'=',$key.'.id')
+                                      ->join('tesco_item_master','tesco_item_master.id',$key.'.template_id')
+                                      ->leftjoin('price_taxation','price_taxation.template_id','=',$key.'.template_id')
+                                      ->leftjoin('tesco_template','tesco_template.item_id','=','price_taxation.template_id')
+                                      ->where($key.'.is_order_count_empty',0)
+                                      ->where('price_taxation.customer_id',$customer_details->id)
+                                      ->where('price_taxation.buyer_id',$buyer_id)
+                                      ->where($key.'.po_number',$item_details[0]->po_no)
+                                      ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name');
+                    if($item_details2){
+                      if ($item_details[0]->zone =="CE") {
+                        $item_details2->where('ce_style_ref',$item_details[0]->style);
+                      }
+                      else{
+                        $item_details2->where('uk_style_ref',$item_details[0]->style);
+                      }
+                      $templates =  $item_details2->get()->toArray();
+                      if ($templates) {
+                        $item_details = array_merge($item_details,$templates);
+                      }
+                    }   
+                }
+                foreach ($item_details as $key => $value) {
+                   if ($value->zone == "CE") {
+                      $value->style = $value->ce_style_ref;
+                   }
+                   else{
+                      $value->style = $value->uk_style_ref;
+                   }
+                   array_push($item_id_array, $value->item_id);
+                }
+              }
+          }          
+          if ($item_id_array) {
+            foreach (array_unique($item_id_array) as $item_id) {
+             $price_list      = DB::table('price_taxation')
+                                    ->join('price_range','price_range.price_taxation_id','price_taxation.id')
+                                    ->where('price_taxation.template_id','=',$item_id)
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
-                                    ->where($key.'.po_number',$item_details[0]->po_no)
-                                    ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name');
-                        
-                  if ($item_details[0]->zone =="CE") {
-                    $item_details2->where('ce_style_ref',$item_details[0]->style);
-                  }
-                  else{
-                    $item_details2->where('uk_style_ref',$item_details[0]->style);
-                  }
-                  $templates =  $item_details2->get()->toArray();
-                  if ($templates) {
-                    $item_details = array_merge($item_details,$templates);
-                  }    
-              }
-              foreach ($item_details as $key => $value) {
-                 if ($value->zone == "CE") {
-                    $value->style = $value->ce_style_ref;
-                 }
-                 else{
-                    $value->style = $value->uk_style_ref;
-                 }
-                 array_push($item_id_array, $value->item_id);
-              }
-            }
+                                    ->orderBy('price_range.volume_to')
+                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'))
+                                    ->get()->toArray();
+              $price_array = array_merge($price_array,$price_list);
+            } 
+          $data['price_list'] = $price_array;
+          }
+          if ($count == sizeof($item_details)) {
+            $data['item_details'] = $item_details;
+            $data['price_list'] = $price_array;
+          }
+          else{
+          $data['price_list'] = [];
+          $data['item_details'] = [];
+        }
+        }
+        else{
+          $data['price_list'] = [];
+          $data['item_details'] = [];
         }
         
-        foreach (array_unique($item_id_array) as $item_id) {
-         $price_list      = DB::table('price_taxation')
-                                ->join('price_range','price_range.price_taxation_id','price_taxation.id')
-                                ->where('price_taxation.template_id','=',$item_id)
-                                ->where('price_taxation.customer_id',$customer_details->id)
-                                ->where('price_taxation.buyer_id',$buyer_id)
-                                ->orderBy('price_range.volume_to')
-                                ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'))
-                                ->get()->toArray();
-          $price_array = array_merge($price_array,$price_list);
-        } 
-        $data['price_list'] = $price_array;
-        $data['item_details'] = $item_details;
+        
 
         return $data;
        

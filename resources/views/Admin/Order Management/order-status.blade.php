@@ -433,6 +433,16 @@
          </div>
      </div>
  </div>
+ <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <p class="modal-title" id="myModalLabel"><i class="fa fa-warning" style="font-size:24px"></i>   The size of the file you uploaded exceeds the limit !</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/admin') }}";
@@ -575,11 +585,15 @@
 
             // You might want to show the submit button only when 
             // files are dropped here:
-
             this.on("addedfile", function(file) {
-                var filename = file.name;
-                $('.upload-po').removeClass('disabled')
-                // Show submit button here and/or inform user to click it.
+               if(((file.size/1024)/1024)>2){
+                       $('#age_modal').modal("show");
+                        this.removeFile(file);
+                    }else{
+                        var filename = file.name;
+                        $('.upload-po').removeClass('disabled')
+                    } 
+               // Show submit button here and/or inform user to click it.
             });
             this.on("complete", function(file) {
                 this.removeFile(file);
@@ -613,6 +627,9 @@
                 $('.snackbar_span').html('Something went wrong');
                 $('#snackbar').css('background-color', '#F44336');
                 showSnackbar();
+            });
+            this.on("removedfile", function(file){
+                $('.upload-po').addClass('disabled')
             });
         }
     };

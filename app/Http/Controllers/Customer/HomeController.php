@@ -221,7 +221,7 @@ class HomeController extends Controller
         else{
             $pending_orders = $customObj->getPendingOrders();
         }
-        $pending_count   = $customObj->getPendingOrdersCount($app_pending_orders);
+        $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
             
         $result = response()->json(['error'=> false,'message' =>'success','data'=>$pending_orders,'pending_count'=>$pending_count],200);
       }
