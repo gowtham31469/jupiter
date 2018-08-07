@@ -1728,7 +1728,7 @@ function tescoStatusTable(data,path)
                 else if (key == "PI Status")
                 {
                     var str=value[key] ;
-                    if(str != null && str != "")
+                    if(str != null && str != "" )
                     {
                        if (str=="PI Approved"){
                             action_status = true;
@@ -1786,18 +1786,19 @@ function tescoStatusTable(data,path)
                     var style_no = "";
                     if (zone=="CE")
                     {
-                        style_no = value.ce_style_ref;
-
-                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-
+                        style_no = value.ce_style_ref;     
                     }
                     else
                     {
                         style_no = value.uk_style_ref;
-                        
-                        tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>'; 
-                   
                     }
+                    if (value["Artwork Status"]!="Order Cancelled"){
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
+                    }
+                    else{
+                      tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'">'+span_style+''+style_no+'</td>';
+                    }
+                    
                 }
                 else if (key == "Actions")
                 {
@@ -1811,14 +1812,20 @@ function tescoStatusTable(data,path)
                    }                
                    var pi_required = value['pi_required'];
                    
-                   if (pi_required==1)
-                   {
-                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
-                   }
-                   else
-                   {
-                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
-                   }                  
+                  if (value["Artwork Status"]!="Order Cancelled") {
+                      if (pi_required==1)
+                      {
+                          tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                      }
+                      else
+                      {
+                          tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                      } 
+                  }
+                  else{
+                      tr += '<td align="center"> - </td>';
+                  }
+                                   
                 }
                 else if (key =="DeliveryDate")
                 {   

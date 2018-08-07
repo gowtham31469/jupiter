@@ -769,7 +769,16 @@
 						});  
 						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#app_orders_modal').modal("show")
-						  $('.approved_orders').DataTable();
+						  $('.approved_orders').DataTable(
+						  	{
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -886,7 +895,15 @@
 						});  
 						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#pen_orders_modal').modal("show")      
-						  $('.pending_orders').DataTable();
+						  $('.pending_orders').DataTable({
+                            dom: 'Bfrtip',
+                           
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -1049,7 +1066,15 @@
 						
 						$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th class="text-center">Style No</th><th class="text-center">Template Name</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						
-						  $('.pending_table').DataTable();
+						  $('.pending_table').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $("#penproductiondiv input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $("#penproductiondiv input").attr('placeholder', 'Data Search');
@@ -1169,7 +1194,15 @@
 							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-						  $('.new_orders').DataTable();
+						  $('.new_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search'); 
@@ -1372,7 +1405,15 @@
 							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-						  $('.aowp_orders').DataTable();
+						  $('.aowp_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -1491,7 +1532,15 @@
 							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
-						  $('.approved_orders').DataTable();
+						  $('.approved_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -1610,7 +1659,15 @@
 							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>'); 
-						  $('.pending_orders').DataTable();
+						  $('.pending_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');

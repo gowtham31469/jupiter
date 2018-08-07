@@ -124,7 +124,7 @@
         </div>
     </div>
     <div class="modal fade" id="approvedModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -208,7 +208,17 @@
                             html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedApproved("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#approvedModal .modal-body').html('<table class="table approved-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                        $('.approved-orders').DataTable();
+                        $('.approved-orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
+                        $(".modal-body input").addClass('form-control');
+                        $('.dataTables_length select').addClass('form-control');
                         $('#approvedModal').modal("show");
                         $(".modal-body input").attr('placeholder', 'Data Search');
                     
@@ -251,7 +261,17 @@
                             html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#appPendingModal .modal-body').html('<table class="table pending-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                       $('.pending-orders').DataTable();  
+                       $('.pending-orders').DataTable({
+                            dom: 'Bfrtip',
+                           
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        }); 
+                       $(".modal-body input").addClass('form-control');
+                       $('.dataTables_length select').addClass('form-control');
                        $('#appPendingModal').modal("show");
                        $(".modal-body input").attr('placeholder', 'Data Search');
 
@@ -295,7 +315,17 @@
                             html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                        $('.cancelled-orders').DataTable();
+                        $('.cancelled-orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
+                        $(".modal-body input").addClass('form-control');
+                        $('.dataTables_length select').addClass('form-control');
                         $(".modal-body input").attr('placeholder', 'Data Search');
                  
                         $('#cancelledOrdersModal').modal("show")
@@ -343,7 +373,17 @@
                         });
                         $('#approvedModal .modal-body').html('<table class="table approved-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
                         $('.approved-count').text(data.approved_count)
-                        $('.approved-orders').DataTable();
+                        $('.approved-orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
+                        $(".modal-body input").addClass('form-control');
+                        $('.dataTables_length select').addClass('form-control');
                         $('#approvedModal').modal("show");
                         $(".modal-body input").attr('placeholder', 'Data Search');
                     },
@@ -386,8 +426,19 @@
                             html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
                         });
                         $('#appPendingModal .modal-body').html('<table class="table pending-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                        $('.pending-count').text(data.pending_count)
-                       $('.pending-orders').DataTable();  
+                       $('.pending-count').text(data.pending_count)
+                       $('.pending-orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        }); 
+                       $(".modal-body input").addClass('form-control');
+                       $('.dataTables_length select').addClass('form-control');
+                       $('#approvedModal').modal("show"); 
                        $('#appPendingModal').modal("show");
                        $(".modal-body input").attr('placeholder', 'Data Search');
                      },
@@ -433,7 +484,18 @@
                         });
                         $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
                         $('.cancelled-count').text(data.cancelled_count);
-                        $('.cancelled-orders').DataTable();
+                        $('.cancelled-orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'pdfHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                            ]
+                        });
+                        $(".modal-body input").addClass('form-control');
+                        $('.dataTables_length select').addClass('form-control');
+                        $('#approvedModal').modal("show");
                         $('#cancelledOrdersModal').modal("show")
                         $(".modal-body input").attr('placeholder', 'Data Search');
                     },

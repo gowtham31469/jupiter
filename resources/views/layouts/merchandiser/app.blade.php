@@ -47,6 +47,13 @@
 	<script src="{{ asset('js/dropzone.js') }}"></script>
 	<script src="{{ asset('js/select2.min.js') }}"></script>
 
+     <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.html5.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.print.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.colVis.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/JSZip-2.5.0/jszip.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/pdfmake-0.1.36/pdfmake.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('DataTables/pdfmake-0.1.36/vfs_fonts.js') }}"></script>
 	<script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>

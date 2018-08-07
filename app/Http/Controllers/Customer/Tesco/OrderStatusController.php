@@ -328,25 +328,38 @@ class OrderStatusController extends Controller
                             ]);
             }
             
-            foreach ($data['tables'] as $table => $vals) {
-                if ($data['bank_details']->zone == "CE") {
-                    $approved_data   =   DB::table($table)
-                                        ->where('ce_style_ref',$style_no)
-                                        ->where('po_number',$data['bank_details']->po_number)
-                                        ->update([
-                                           'pi_status' => "PI Approved"
-                                        ]);
-                }
-                else {
-                    $approved_data   = DB::table($table)
-                                        ->where('uk_style_ref',$style_no)
-                                        ->where('po_number',$data['bank_details']->po_number)
-                                        ->update([
-                                           'pi_status' => "PI Approved"
-                                        ]);
+            if ($data['item_details'][0]->order_flag == "newOrder") {
+               foreach ($data['tables'] as $table => $vals) {
+                    if ($data['bank_details']->zone == "CE") {
+                        $approved_data   =   DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('ce_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('po_number',$data['bank_details']->po_number)
+                                            ->update([
+                                               'pi_status' => "PI Approved"
+                                            ]);
+                    }
+                    else {
+                        $approved_data   = DB::table($table)
+                                            ->where($table.'.is_order_count_empty',0)
+                                            ->where('uk_style_ref',$style_no)
+                                            ->where('order_flag',$data['item_details'][0]->order_flag)
+                                            ->where('po_number',$data['bank_details']->po_number)
+                                            ->update([
+                                               'pi_status' => "PI Approved"
+                                            ]);
+                    }
                 }
             }
-            if ($data)
+            else{
+                $approved_data   = DB::table($table_name)
+                                    ->where('id',$row_id)
+                                    ->update([
+                                       'pi_status' => "PI Approved"
+                                    ]);
+            }
+            if ($approved_data)
             {
                $result = response()->json(['error'=> false,'message' =>'success'],200);
             }
