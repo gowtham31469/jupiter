@@ -14,45 +14,45 @@ class AddApprovedCreatedCancelledDateToTescoOrdersTables extends Migration
     public function up()
     {
        Schema::table('tesco_tcl1_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_tcl2_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_tsl1_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_tcl4_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_tsl3_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_thl1_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
 
        Schema::table('tesco_thl3_orders', function (Blueprint $table) {
-           $table->timestamp('order_created_at')->after('order_placed_by');
-           $table->timestamp('order_approved_at')->after('order_created_at');
-           $table->timestamp('order_cancelled_at')->after('order_approved_at');
+           $table->timestamp('order_created_at')->after('order_placed_by')->nullable();
+           $table->timestamp('order_approved_at')->after('order_created_at')->nullable();
+           $table->timestamp('order_cancelled_at')->after('order_approved_at')->nullable();
        });
     }
 

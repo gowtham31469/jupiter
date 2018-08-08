@@ -15,12 +15,26 @@ use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
 use App\TescoTSL3Orders;
 use App\Classes\SubmitTescoOrdersUpdateQuery;
+use Carbon\Carbon;
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
  */
 class TescoOrders
 {
+
+  private $current_date;
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+      // get the current time
+      $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
+  }
+
 	/**
 	 * method to store the tesco TCL1 orders
 	 * @param  [type] $request, $template_id
@@ -93,7 +107,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
             }
@@ -180,7 +195,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
             }
@@ -267,7 +283,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
               
@@ -355,7 +372,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
             }
@@ -442,7 +460,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
             }
@@ -529,7 +548,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
               
@@ -617,7 +637,8 @@ class TescoOrders
                           'pi_status'            => $pi_status,
                           'po_status'            => "PO Pending",
                           'is_order_count_empty' => $is_order_count_empty,
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'order_created_at'     => $this->current_date
                         ]);
               }
               
