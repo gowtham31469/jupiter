@@ -344,7 +344,13 @@
 	</script>
 	@endif @section('jqueryIncludes')
 	<script>
-		$('.pending_table').DataTable();
+		$('.pending_table').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'excelHtml5'
+                            ]
+                        });
 	    $("#penproductiondiv input").addClass('form-control');
 	    $('.dataTables_length select').addClass('form-control');
 	    $("#penproductiondiv input").attr('placeholder', 'Data Search');
@@ -451,7 +457,13 @@
 						});  
 						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
 						$('#new_orders_modal').modal("show")
-						  $('.new_orders').DataTable();
+						  $('.new_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'excelHtml5'
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -652,7 +664,13 @@
 						});  
 						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#aowp_modal').modal("show")
-						  $('.aowp_orders').DataTable();
+						  $('.aowp_orders').DataTable({
+                            dom: 'Bfrtip',
+                            
+                            buttons: [
+                                'excelHtml5'
+                            ]
+                        });
 						  $(".modal-body input").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input").attr('placeholder', 'Data Search');
@@ -774,9 +792,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
+                                // 'pdfHtml5',
                                 'excelHtml5',
-                                'csvHtml5',
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
@@ -899,9 +917,9 @@
                             dom: 'Bfrtip',
                            
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
@@ -1070,9 +1088,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $("#penproductiondiv input").addClass('form-control');
@@ -1198,9 +1216,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
@@ -1409,9 +1427,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
@@ -1536,9 +1554,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
@@ -1663,9 +1681,9 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
+                                // 'pdfHtml5',
+                                'excelHtml5'
+                                // 'csvHtml5',
                             ]
                         });
 						  $(".modal-body input").addClass('form-control');
