@@ -39,7 +39,7 @@ class SubmitTescoOrdersUpdateQuery
 	 * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
 	 * @return number of rows updated.
 	 */
-	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+	public function updateTCL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
 	{
 		try {
               $result = TescoTCL1Orders::where('id',$existing_id)
@@ -65,7 +65,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -81,7 +81,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTCL2Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
             $result = TescoTCL2Orders::where('id',$existing_id)
@@ -107,7 +107,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -124,7 +124,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTSL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
             $result = TescoTSL1Orders::where('id',$existing_id)
@@ -150,7 +150,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -167,7 +167,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTHL1Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
               $result = TescoTHL1Orders::where('id',$existing_id)
@@ -193,7 +193,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -210,7 +210,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTCL4Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
               $result = TescoTCL4Orders::where('id',$existing_id)
@@ -236,7 +236,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -253,7 +253,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTSL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
               $result = TescoTSL3Orders::where('id',$existing_id)
@@ -279,7 +279,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
@@ -296,7 +296,7 @@ class SubmitTescoOrdersUpdateQuery
    * @param  [type] $request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id
    * @return number of rows updated.
    */
-  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by)
+  public function updateTHL3Order($request,$order_id,$template_id,$pi_status,$is_order_count_empty,$existing_id,$customer_id,$created_by,$po_status)
   {
     try {
               $result = TescoTHL3Orders::where('id',$existing_id)
@@ -322,7 +322,7 @@ class SubmitTescoOrdersUpdateQuery
                           'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
-                          'po_status'            => "PO Pending",
+                          'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
                           'order_created_at'     => $this->current_date
