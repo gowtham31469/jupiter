@@ -124,6 +124,37 @@ class DashboardController extends Controller
         return $result;
 	}
 	
+	public function viewedPenProductionAll(Request $request)
+	{
+		try
+		{
+			$table_name   = $request->table_name;
+			$row_id = $request->id;
+			
+			
+			foreach($row_id as $value)
+			{
+				$tab = explode("-",$value);
+				$table_name=$tab[0];
+				$id=$tab[1];
+				$data   = DB::table($table_name)->where('id',$id)
+                        ->update([
+                          'pen_pro_flag' => 1,
+                ]);
+			}
+			
+			$pending_class    = new Dashboard();
+
+            $pendingproduction      = $pending_class->pendingProduction();
+			 $result = response()->json(['error'=> false,'message' =>'success','pendingproduction'=>$pendingproduction],200);
+		}
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+	}
+	
 	public function viewedNewOrders(Request $request)
 	{
 		try
@@ -141,6 +172,76 @@ class DashboardController extends Controller
             $new_orders      = $new_class->newOrders();
 			
             $result = response()->json(['error'=> false,'message' =>'success','new_orders'=>$new_orders],200);
+		}
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+	}
+	
+	public function viewedNewOrdersAll(Request $request)
+	{
+		try
+		{
+			$table_name   = $request->table_name;
+			$row_id = $request->id;
+			
+			
+			foreach($row_id as $value)
+			{
+				$tab = explode("-",$value);
+				$table_name=$tab[0];
+				$id=$tab[1];
+				$data   = DB::table($table_name)->where('id',$id)
+                        ->update([
+                          'new_ord_flag' => 1,
+                        ]);
+			}
+			
+			$new_class    = new Dashboard();
+
+            $new_orders      = $new_class->newOrders();
+			
+			$new_count['tcl1'] = DB::table('tesco_tcl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl2'] = DB::table('tesco_tcl2_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tcl4'] = DB::table('tesco_tcl4_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl1'] = DB::table('tesco_thl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['thl3'] = DB::table('tesco_thl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl1'] = DB::table('tesco_tsl1_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl3']{0}->sum;
+			
+            $result = response()->json(['error'=> false,'message' =>'success','new_orders'=>$new_orders,'tot_count'=>$tot_count],200);
 		}
         catch (\Exception $e)
         {
