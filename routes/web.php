@@ -43,10 +43,25 @@ Route::post('admin/order-management/approved_orders', 'Admin\OrderManagement\Das
 Route::post('admin/order-management/pending_orders', 'Admin\OrderManagement\DashboardController@pendingOrders');
 Route::post('admin/order-management/viewed_pen_production', 'Admin\OrderManagement\DashboardController@viewedPenProduction');
 
+Route::post('admin/order-management/viewed_pen_production_all', 'Admin\OrderManagement\DashboardController@viewedPenProductionAll');
+
 Route::post('admin/order-management/viewedneworders', 'Admin\OrderManagement\DashboardController@viewedNewOrders');
+
+Route::post('admin/order-management/viewedneworders_all', 'Admin\OrderManagement\DashboardController@viewedNewOrdersAll');
+
+
+
 Route::post('admin/order-management/viewedpenorders', 'Admin\OrderManagement\DashboardController@viewedPenOrders');
+
+Route::post('admin/order-management/viewedpenorders_all', 'Admin\OrderManagement\DashboardController@viewedPenOrdersAll');
+
+Route::post('admin/order-management/viewedapporders_all', 'Admin\OrderManagement\DashboardController@viewedAppOrdersAll');
+
 Route::post('admin/order-management/viewedapporders', 'Admin\OrderManagement\DashboardController@viewedAppOrders');
+
 Route::post('admin/order-management/viewedaowp', 'Admin\OrderManagement\DashboardController@viewedAOWP');
+
+Route::post('admin/order-management/viewedaowp_all', 'Admin\OrderManagement\DashboardController@viewedAOWPAll');
 
 Route::get('admin/order-management/orders', 'Admin\OrderManagement\OrderController@orders');
 Route::get('admin/order-management/order-status', 'Admin\OrderManagement\OrderController@orderStatus');

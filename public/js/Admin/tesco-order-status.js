@@ -765,8 +765,16 @@ function tescoStatusTable(data,path)
     {
         if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
         {
-        	th += "<th style='text-align: center;'>" + key + "</th>";
+			if(key == "TemplateName")
+			{
+				th += "<th style='text-align: center;'>Reference No</th>";
+			}
+			else
+			{
+				th += "<th style='text-align: center;'>" + key + "</th>";
+			}
         }
+		
     }
     $.each(data, function (index, value)
     {
