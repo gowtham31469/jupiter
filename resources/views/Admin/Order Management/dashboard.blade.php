@@ -140,7 +140,7 @@
 								<th class="text-center">Customer Name</th>
 								<th class="text-center">Buyer</th>
 								<th class="text-center">Style No</th>
-								<th class="text-center">Template Name</th>
+								<th class="text-center">Reference No</th>
 								<th class="text-center">Zone</th>
 								<th class="text-center">Actions</th>
 							</tr>
@@ -275,7 +275,7 @@
 						<thead>
 							<tr>
 								<th class="text-center">Style No</th>
-								<th class="text-center">Template Name</th>
+								<th class="text-center">Reference No</th>
 								<th class="text-center">Zone</th>
 							</tr>
 						</thead>
@@ -505,7 +505,7 @@
 													html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 												});     
 
-												$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th class="text-center">Style No</th><th class="text-center">Template Name</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+												$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 
 												  var table = $('.pending_table').DataTable({
 													dom: 'Bfrtip',
@@ -576,6 +576,98 @@
 					success: function(data) {
 					  $('.new_order_count').text(data.tot_count)
 					  newordersclass(data);
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		
+		function aowpsubmit()
+		{
+			var myCheckboxes = new Array();
+				$("input:checked").each(function() {
+					myCheckboxes.push($(this).val());
+				});
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedaowp_all",
+					type: "Post",
+					dataType: "json",
+					data:{
+						id:myCheckboxes,
+						_token : $('meta[name="csrf-token"]').attr('content')
+					},
+					beforeSend: function() {
+							
+					},
+					success: function(data) {
+					  aowpclass(data);
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		function approvedorderssubmit()
+		{
+			var myCheckboxes = new Array();
+				$("input:checked").each(function() {
+					myCheckboxes.push($(this).val());
+				});
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedapporders_all",
+					type: "Post",
+					dataType: "json",
+					data:{
+						id:myCheckboxes,
+						_token : $('meta[name="csrf-token"]').attr('content')
+					},
+					beforeSend: function() {
+							
+					},
+					success: function(data) {
+						$('.app_pipo_count').text(data.tot_count)
+						approvedclass(data)
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+						$(".loader").hide();
+						$(".loader").css('margin-top', '0%');
+					}
+				})
+		}
+		
+		
+		function pendingorderssubmit()
+		{
+			var myCheckboxes = new Array();
+				$("input:checked").each(function() {
+					myCheckboxes.push($(this).val());
+				});
+				$.ajax({
+					url: base_url + "/admin/order-management/viewedpenorders_all",
+					type: "Post",
+					dataType: "json",
+					data:{
+						id:myCheckboxes,
+						_token : $('meta[name="csrf-token"]').attr('content')
+					},
+					beforeSend: function() {
+							
+					},
+					success: function(data) {
+						$('.pen_order_count').text(data.pending_count)
+						pendingclass(data)
 					},
 					error: function(data) {
 
@@ -845,7 +937,7 @@
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});     
 						
-						$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th><input name="select_all" value="1" id="example-select-all" type="checkbox" /><th class="text-center">Customer Name</th><th class="text-center">Buyer</th></th><th class="text-center">Style No</th><th class="text-center">Template Name</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#penproductiondiv').html('<table class="table pending_table table-striped text-center"><thead><tr><th><input name="select_all" value="1" id="example-select-all" type="checkbox" /><th class="text-center">Customer Name</th><th class="text-center">Buyer</th></th><th class="text-center">Style No</th><th class="text-center">Reference No</th><th class="text-center">Zone</th><th class="text-center">Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						
 						   var table = $('.pending_table').DataTable({
                             dom: 'Bfrtip',
@@ -967,8 +1059,8 @@
 
 					},
 					success: function(data) {
-						var count = parseInt($('.app_order_count').text()) - 1;
-						$('.app_order_count').text(count)
+						var count = parseInt($('.app_pipo_count').text()) - 1;
+						$('.app_pipo_count').text(count)
 						approvedclass(data)
 					},
 					error: function(data) {
@@ -1102,7 +1194,7 @@
 							}	
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+value.delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-new" type="checkbox" /></th><th class="text-center">Order Date</th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Template Name</th><th>Zone</th><th class="text-center">Quantity</th><th class="text-center">Delivery Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
+						$('#new_orders_modal .modal-body').html('<table class="table new_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-new" type="checkbox" /></th><th class="text-center">Order Date</th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Reference No</th><th>Zone</th><th class="text-center">Quantity</th><th class="text-center">Delivery Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
 						$('#new_orders_modal').modal("show")
 						   var table = $('.new_orders').DataTable({
 								dom: 'Bfrtip',
@@ -1143,7 +1235,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl1_2).each(function(index, value)
 						{
@@ -1155,7 +1247,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl2_1).each(function(index, value)
 						{
@@ -1167,7 +1259,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tcl2_2).each(function(index, value)
 						{
@@ -1179,7 +1271,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.app_pipo.tcl4_1).each(function(index, value)
 						{
@@ -1191,7 +1283,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.tcl4_2).each(function(index, value)
 						{
@@ -1203,7 +1295,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.tsl1_1).each(function(index, value)
 						{
@@ -1215,7 +1307,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl1_2).each(function(index, value)
 						{
@@ -1227,7 +1319,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl3_1).each(function(index, value)
 						{
@@ -1239,7 +1331,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.tsl3_2).each(function(index, value)
 						{
@@ -1251,7 +1343,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl1_1).each(function(index, value)
 						{
@@ -1263,7 +1355,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl1_2).each(function(index, value)
 						{
@@ -1275,7 +1367,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.app_pipo.thl3_1).each(function(index, value)
 						{
@@ -1287,7 +1379,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.app_pipo.thl3_2).each(function(index, value)
 						{
@@ -1299,20 +1391,34 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#aowp_modal .modal-body').html('<table class="table aowp_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-aowp" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>A/W Approved Date</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#aowp_modal').modal("show")
-						  $('.aowp_orders').DataTable({
-                            dom: 'Bfrtip',
-                            
-                            buttons: [
-                                'excelHtml5'
-                            ]
-                        });
-						  $(".modal-body input").addClass('form-control');
+						   var table = $('.aowp_orders').DataTable({
+								dom: 'Bfrtip',
+
+								buttons: [
+									'excelHtml5',
+									 {
+										text: 'Mark as viewed',
+										action: function ( e, dt, node, config ) {
+											aowpsubmit()
+										}
+									}
+								]
+							});
+			
+							// Handle click on "Select all" control
+							$('#example-select-all-aowp').on('click', function(){
+							  // Check/uncheck all checkboxes in the table
+							  var rows = table.rows({ 'search': 'applied' }).nodes();
+							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+							});
+			
+						  $(".modal-body input[type=search]").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
-						  $(".modal-body input").attr('placeholder', 'Data Search');
+						  $(".modal-body input[type=search]").attr('placeholder', 'Data Search');
 		}
 		function approvedclass(data)
 		{
@@ -1328,7 +1434,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.approved_orders.tcl2).each(function(index, value)
 						{
@@ -1340,7 +1446,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.tcl4).each(function(index, value)
 						{
@@ -1352,7 +1458,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.approved_orders.tsl1).each(function(index, value)
 						{
@@ -1364,7 +1470,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.tsl3).each(function(index, value)
 						{
@@ -1376,7 +1482,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.approved_orders.thl1).each(function(index, value)
 						{
@@ -1388,7 +1494,7 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.approved_orders.thl3).each(function(index, value)
 						{
@@ -1400,23 +1506,34 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.order_approved_at+'</td><td>'+value.purchase_order_no+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#app_orders_modal .modal-body').html('<table class="table approved_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-app" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>Order Date</th><th>Approval Date</th><th>PO Number</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
 						$('#app_orders_modal').modal("show")
-						  $('.approved_orders').DataTable(
-						  	{
-                            dom: 'Bfrtip',
-                            
-                            buttons: [
-                                // 'pdfHtml5',
-                                'excelHtml5',
-                                // 'csvHtml5',
-                            ]
-                        });
-						  $(".modal-body input").addClass('form-control');
+						     var table = $('.approved_orders').DataTable({
+								dom: 'Bfrtip',
+
+								buttons: [
+									'excelHtml5',
+									 {
+										text: 'Mark as viewed',
+										action: function ( e, dt, node, config ) {
+											approvedorderssubmit()
+										}
+									}
+								]
+							});
+			
+							// Handle click on "Select all" control
+							$('#example-select-all-app').on('click', function(){
+							  // Check/uncheck all checkboxes in the table
+							  var rows = table.rows({ 'search': 'applied' }).nodes();
+							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+							});
+			
+						  $(".modal-body input[type=search]").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
-						  $(".modal-body input").attr('placeholder', 'Data Search');
+						  $(".modal-body input[type=search]").attr('placeholder', 'Data Search');
 		}
 		function pendingclass(data)
 		{
@@ -1424,6 +1541,12 @@
 					    var html="";
 						$(data.pending_orders.tcl1).each(function(index, value)
 						{
+							
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+							
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1432,10 +1555,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});
 						$(data.pending_orders.tcl2).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1444,10 +1571,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 2</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.tcl4).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1456,10 +1587,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pending_orders.tsl1).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1468,10 +1603,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.tsl3).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1480,10 +1619,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>TSL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
 						$(data.pending_orders.thl1).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1492,10 +1635,14 @@
 							{
 								var style_no = value.uk_style_ref;
 							}
-							html += '<tr><td>'+style_no+'</td><td>THL 1</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 						$(data.pending_orders.thl3).each(function(index, value)
 						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 							if(value.zone == "CE")
 							{
 								var style_no = value.ce_style_ref;
@@ -1504,22 +1651,36 @@
 							{
 								var style_no = value.uk_style_ref;
 							}	
-							html += '<tr><td>'+style_no+'</td><td>THL 3</td><td>'+value.zone+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_thl3_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>THL 3</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_thl3_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
-						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
-						$('#pen_orders_modal').modal("show")      
-						  $('.pending_orders').DataTable({
-                            dom: 'Bfrtip',
-                           
-                            buttons: [
-                                // 'pdfHtml5',
-                                'excelHtml5'
-                                // 'csvHtml5',
-                            ]
-                        });
-						  $(".modal-body input").addClass('form-control');
+						$('#pen_orders_modal .modal-body').html('<table class="table pending_orders"><thead><tr><th><input name="select_all" value="1" id="example-select-all-pen" type="checkbox" /></th><th class="text-center">Customer Name</th><th class="text-center">Buyer</th><th>Style No</th><th>Product</th><th>Reference No</th><th>Zone</th><th>A/W Date</th><th>Pending Days</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');  
+						$('#pen_orders_modal').modal("show")   
+			
+			
+						    var table = $('.pending_orders').DataTable({
+								dom: 'Bfrtip',
+
+								buttons: [
+									'excelHtml5',
+									 {
+										text: 'Mark as viewed',
+										action: function ( e, dt, node, config ) {
+											pendingorderssubmit()
+										}
+									}
+								]
+							});
+			
+							// Handle click on "Select all" control
+							$('#example-select-all-pen').on('click', function(){
+							  // Check/uncheck all checkboxes in the table
+							  var rows = table.rows({ 'search': 'applied' }).nodes();
+							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+							});
+			
+						  $(".modal-body input[type=search]").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
-						  $(".modal-body input").attr('placeholder', 'Data Search');
+						  $(".modal-body input[type=search]").attr('placeholder', 'Data Search');
 		}
 
 	</script>
