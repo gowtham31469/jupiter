@@ -199,6 +199,44 @@ class HomeController extends Controller
       return $result;
     }
 
+    public function viewedSelectedApprovedOrder(Request $request)
+    {
+        try
+        {
+          $customObj    = new CustomerDashboard();
+          $customer_id  = Auth::guard('web_customer')->id();
+          $customer_role_id = DB::table('customer_profile')->select('*')
+                                ->where('id',$customer_id)->first();
+          $formdata   = explode(',',$request->formdata);;
+          foreach ($formdata as $key => $value) {
+            $table_name =   preg_replace( '/_[^_]*$/', '', $value );
+            $row_id = substr($value, strrpos($value, '_') + 1);
+            if ($table_name!="select-all") {
+              $data   = DB::table($table_name)->where('id',$row_id)
+                            ->update([
+                              'app_ord_flag' => 1,
+                            ]);
+            }
+          }
+                   
+          if($customer_role_id->role_id == 1)
+          {
+              $approved_orders = $customObj->getAllApprovedOrders();
+          }
+          else{
+              $approved_orders = $customObj->getApprovedOrders();
+          }
+          $approved_count  = $customObj->getApprovedOrdersCount($approved_orders);
+          
+          $result = response()->json(['error'=> false,'message' =>'success','data'=>$approved_orders,'approved_count'=>$approved_count],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
     public function viewedPendingOrder(Request $request)
     {
       try

@@ -203,13 +203,16 @@ class CustomerDashboard
 		$customer_id = Auth::guard('web_customer')->id();
         $customer_role_id = DB::table('customer_profile')->select('*')
                               ->where('id',$customer_id)->first();
-		$pending['tcl1'] = DB::table('tesco_tcl1_orders')
+
+		      $pending['tcl1'] = DB::table('tesco_tcl1_orders')
+                              ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
                               ->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)->where('order_status',"Order Placed")
                               ->where('pen_ord_flag',0)
                               ->where('tesco_tcl1_orders.order_placed_by','=',$customer_id)
                               ->select('*',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_table."'".' as "tablename"'))
                               ->get() ;
           $pending['tcl2'] = DB::table('tesco_tcl2_orders')
+                                ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
                                 ->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
                                 ->where('order_status',"Order Placed")
                                 ->where('pen_ord_flag',0)
@@ -217,6 +220,7 @@ class CustomerDashboard
                                 ->select('*',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_table."'".' as "tablename"'))
                                 ->get() ;
           $pending['tcl4'] = DB::table('tesco_tcl4_orders')
+                              ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
                                ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
                                ->where('order_status',"Order Placed")
                                ->where('pen_ord_flag',0)
@@ -224,6 +228,7 @@ class CustomerDashboard
                                ->select('*',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_table."'".' as "tablename"'))
                                ->get() ;
           $pending['thl1'] = DB::table('tesco_thl1_orders')
+                                ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
                                 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                                 ->where('order_status',"Order Placed")
                                 ->where('pen_ord_flag',0)
@@ -231,6 +236,7 @@ class CustomerDashboard
                                 ->select('*',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_table."'".' as "tablename"'))
                                 ->get() ;
           $pending['thl3'] = DB::table('tesco_thl3_orders')
+                                ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
                                 ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
                                 ->where('order_status',"Order Placed")
                                 ->where('pen_ord_flag',0)
@@ -238,6 +244,7 @@ class CustomerDashboard
                                 ->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_table."'".' as "tablename"'))
                                 ->get() ;
           $pending['tsl1'] = DB::table('tesco_tsl1_orders')
+                              ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
                               ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                               ->where('order_status',"Order Placed")
                               ->where('pen_ord_flag',0)
@@ -245,6 +252,7 @@ class CustomerDashboard
                               ->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_table."'".' as "tablename"'))
                               ->get() ;
           $pending['tsl3'] = DB::table('tesco_tsl3_orders')
+                              ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                               ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
                               ->where('order_status',"Order Placed")
                               ->where('pen_ord_flag',0)

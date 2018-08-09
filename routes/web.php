@@ -142,6 +142,8 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/order-management/approved-orders', 'Customer\HomeController@getApprovedOrdersList');
 	Route::post('customer/tesco/order-management/viewed-approved', 'Customer\HomeController@viewedApprovedOrder');
 
+	Route::post('customer/tesco/order-management/viewed-selected-approved', 'Customer\HomeController@viewedSelectedApprovedOrder');
+
 	Route::post('customer/tesco/order-management/pending-orders', 'Customer\HomeController@getPendingOrdersList');
 
 	Route::post('customer/tesco/order-management/viewed-pending', 'Customer\HomeController@viewedPendingOrder');
