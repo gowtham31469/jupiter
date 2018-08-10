@@ -109,7 +109,6 @@ class TemplateManagementCntrl extends Controller
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
 			$name    = $request['name'];
-			$ref    = $request['ref'];
 			$company   = $request['company'];
 			$inside_tamilnadu   = $request['inside_tamilnadu'];
 			$outside_tamilnadu   = $request['outside_tamilnadu'];
@@ -131,8 +130,7 @@ class TemplateManagementCntrl extends Controller
                         ->where('id',$item_id)
                         ->update([
 						   'item_name' => $name,
-						   'company_id' => $company,
-						   'ref_no' => $ref
+						   'company_id' => $company
                         ]);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
