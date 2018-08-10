@@ -46,22 +46,22 @@ class OrderStatusController extends Controller
 		
 	  $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 			
-	$tcl1 = "TCL 1";
-	$tesco_tcl1_orders = "tesco_tcl1_orders";
-	$tcl2 = "TCL 2";
-	$tesco_tcl2_orders = "tesco_tcl2_orders";
-	$tcl4 = "TCL 4";
-	$tesco_tcl4_orders = "tesco_tcl4_orders";			
-	$thl1 = "THL 1";
-	$tesco_thl1_orders = "tesco_thl1_orders";					
-	$thl3 = "THL 3";
-	$tesco_thl3_orders = "tesco_thl3_orders";							
-	$tsl1 = "TSL 1";
-	$tesco_tsl1_orders = "tesco_tsl1_orders";							
-	$tsl3 = "TSL 3";
-	$tesco_tsl3_orders = "tesco_tsl3_orders";	
-	$actions="-";
-	$ddmmyy="DD-MM-YYYY";
+    	$tcl1 = "TCL 1";
+    	$tesco_tcl1_orders = "tesco_tcl1_orders";
+    	$tcl2 = "TCL 2";
+    	$tesco_tcl2_orders = "tesco_tcl2_orders";
+    	$tcl4 = "TCL 4";
+    	$tesco_tcl4_orders = "tesco_tcl4_orders";			
+    	$thl1 = "THL 1";
+    	$tesco_thl1_orders = "tesco_thl1_orders";					
+    	$thl3 = "THL 3";
+    	$tesco_thl3_orders = "tesco_thl3_orders";							
+    	$tsl1 = "TSL 1";
+    	$tesco_tsl1_orders = "tesco_tsl1_orders";							
+    	$tsl3 = "TSL 3";
+    	$tesco_tsl3_orders = "tesco_tsl3_orders";	
+    	$actions="-";
+    	$ddmmyy="DD-MM-YYYY";
 			
 	  if($customer_role_id->role_id == 1)
 	  {
