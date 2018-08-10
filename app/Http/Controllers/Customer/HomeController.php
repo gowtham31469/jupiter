@@ -175,7 +175,7 @@ class HomeController extends Controller
         $customer_id  = Auth::guard('web_customer')->id();
         $customer_role_id = DB::table('customer_profile')->select('*')
                               ->where('id',$customer_id)->first();
-        
+                              
         $data   = DB::table($table_name)->where('id',$row_id)
                           ->update([
                             'app_ord_flag' => 1,
@@ -270,6 +270,44 @@ class HomeController extends Controller
       return $result;
     }
 
+    public function viewedSelectedPendingOrder(Request $request)
+    {
+      try
+      {
+        $customObj    = new CustomerDashboard();
+        $customer_id  = Auth::guard('web_customer')->id();
+        $customer_role_id = DB::table('customer_profile')->select('*')
+                              ->where('id',$customer_id)->first();
+        $formdata   = explode(',',$request->formdata);;
+        foreach ($formdata as $key => $value) {
+          $table_name =   preg_replace( '/_[^_]*$/', '', $value );
+          $row_id = substr($value, strrpos($value, '_') + 1);
+          if ($table_name!="select-all") {
+            $data   = DB::table($table_name)->where('id',$row_id)
+                          ->update([
+                            'pen_ord_flag' => 1,
+                          ]);
+          }
+        }
+                   
+        if($customer_role_id->role_id == 1)
+        {
+            $pending_orders = $customObj->getAllPendingOrders();
+        }
+        else{
+            $pending_orders = $customObj->getPendingOrders();
+        }
+        $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
+            
+        $result = response()->json(['error'=> false,'message' =>'success','data'=>$pending_orders,'pending_count'=>$pending_count],200);
+      }
+      catch (\Exception $e)
+      {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
+
     public function viewedCancelledOrder(Request $request)
     {
       try
@@ -300,6 +338,44 @@ class HomeController extends Controller
           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
       return $result;
+    }
+
+
+    public function viewedSelectedCancelledOrder(Request $request)
+    {
+        try
+        {
+          $customObj    = new CustomerDashboard();
+          $customer_id  = Auth::guard('web_customer')->id();
+          $customer_role_id = DB::table('customer_profile')->select('*')
+                                ->where('id',$customer_id)->first();
+          $formdata   = explode(',',$request->formdata);;
+          foreach ($formdata as $key => $value) {
+            $table_name =   preg_replace( '/_[^_]*$/', '', $value );
+            $row_id = substr($value, strrpos($value, '_') + 1);
+            if ($table_name!="select-all") {
+              $data   = DB::table($table_name)->where('id',$row_id)
+                            ->update([
+                              'cancel_ord_flag' => 1,
+                            ]);
+            }
+          }
+                     
+        if($customer_role_id->role_id == 1)
+        {
+            $cancelled_orders = $customObj->getAllCancelledOrders();
+        }
+        else{
+            $cancelled_orders = $customObj->getCancelledOrders();
+        }
+        $cancelled_count = $customObj->getCancelledOrdersCount($cancelled_orders);
+        $result = response()->json(['error'=> false,'message' =>'success','data'=>$cancelled_orders,'cancelled_count'=>$cancelled_count],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
     }
     /**
      * Show the customer order status.

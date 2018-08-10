@@ -188,13 +188,12 @@
     </script>
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Customer/customer-dashboard.js') }}"></script>
-    <script>        
-        
-        function showPendingOrders() 
+    <script>       
+        function showApprovedOrders()
         {
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: base_url + "/customer/tesco/order-management/pending-orders",
+                url: base_url + "/customer/tesco/order-management/approved-orders",
                 type: "Post",
                 dataType: "json",
                 data: {
@@ -204,36 +203,12 @@
 
                 },
                 success: function(data) {
-                    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-                    var html = "";
-                    $(orders).each(function(index, value)
-                    {
-                        if(value.zone == "CE")
-                        {
-                            var style_no = value.ce_style_ref;
-                        }
-                        else
-                        {
-                            var style_no = value.uk_style_ref;
-                        }   
-                        html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
-                    });
-                    $('#appPendingModal .modal-body').html('<form id="frm-pending"><table class="table pending-orders"><thead><tr><th style="width: 0px;padding-right: 8px !important;"><input name="select_all" value="1" id="select-all" type="checkbox" class="form-control" /></th><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table><button style="height: 20px;"class="label label-warning mark-selected-pending hidden">Mark Selected as Viewed</button></form>');
-                   $('.pending-orders').DataTable({
-                        dom: 'Bfrtip',
-                       
-                        buttons: [
-                            // 'pdfHtml5',
-                            'excelHtml5',
-                            // 'csvHtml5',
-                        ]
-                    }); 
-                   $(".modal-body input").addClass('form-control');
-                   $('.dataTables_length select').addClass('form-control');
-                   $('#appPendingModal').modal("show");
-                   $(".modal-body input").attr('placeholder', 'Data Search');
-
-                    },
+                    displayApprovedTable(data)                        
+                    $('.mark-selected').on('click', function(e){
+                        viewedSelectedApproved()
+                       e.preventDefault();
+                   });
+                },
                 error: function(data) {
 
                 },
@@ -244,6 +219,36 @@
             })
         }
 
+        function showPendingOrders() 
+        {
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+              url: base_url + "/customer/tesco/order-management/pending-orders",
+              type: "Post",
+              dataType: "json",
+              data: {
+                  _token: csrf_token
+              },
+              beforeSend: function() {
+
+              },
+              success: function(data) {
+                  displayPendingTable(data)
+                  $('.mark-selected').on('click', function(e){
+                      viewedSelectedPending()
+                     e.preventDefault();
+                  }); 
+
+                  },
+              error: function(data) {
+
+              },
+              complete: function() {
+                  $(".loader").hide();
+                  $(".loader").css('margin-top', '0%');
+              }
+          })
+        }
         function showCancelledOrders() 
         {
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -258,36 +263,11 @@
 
                 },
                 success: function(data) {
-                    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-                   
-                    var html = "";
-                    $(orders).each(function(index, value)
-                    {
-                        if(value.zone == "CE")
-                        {
-                            var style_no = value.ce_style_ref;
-                        }
-                        else
-                        {
-                            var style_no = value.uk_style_ref;
-                        }   
-                        html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+                    displayCancelledTable(data)                        
+                    $('.mark-selected').on('click', function(e){
+                      viewedSelectedCancelled()
+                      e.preventDefault();
                     });
-                    $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                    $('.cancelled-orders').DataTable({
-                        dom: 'Bfrtip',
-                        
-                        buttons: [
-                            // 'pdfHtml5',
-                            'excelHtml5',
-                            // 'csvHtml5',
-                        ]
-                    });
-                    $(".modal-body input").addClass('form-control');
-                    $('.dataTables_length select').addClass('form-control');
-                    $(".modal-body input").attr('placeholder', 'Data Search');
-             
-                    $('#cancelledOrdersModal').modal("show")
                     
                     },
                 error: function(data) {
@@ -299,123 +279,6 @@
                 }
             })
         }
-
-        
-        function  viewedPending(id,table_name) 
-        {
-            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: base_url + "/customer/tesco/order-management/viewed-pending",
-                    type: "Post",
-                    dataType: "json",
-                    data: {
-                        _token: csrf_token,
-                        id:id,
-                        table_name:table_name
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(data) {
-                        var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-                        var html = "";
-                        $(orders).each(function(index, value)
-                        {
-                            if(value.zone == "CE")
-                            {
-                                var style_no = value.ce_style_ref;
-                            }
-                            else
-                            {
-                                var style_no = value.uk_style_ref;
-                            }   
-                            html += '<tr><td><input type="checkbox" class="form-control" value="'+value.tablename+'_'+value.id+'" id="'+value.tablename+'_'+value.id+'" name="row_id" data-id="'+value.tablename+'"/></td><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick=viewedPending("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
-                        });
-
-                        $('#appPendingModal .modal-body').html('<form id="frm-pending"><table class="table pending-orders"><thead><tr><th style="width: 0px;padding-right: 8px !important;"><input name="select_all" value="1" id="select-all" type="checkbox" class="form-control" /></th><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table><button style="height: 20px;"class="label label-warning mark-selected-pending hidden">Mark Selected as Viewed</button></form>');
-                       $('.pending-count').text(data.pending_count)
-                       $('.pending-orders').DataTable({
-                            dom: 'Bfrtip',
-                            
-                            buttons: [
-                                // 'pdfHtml5',
-                                'excelHtml5',
-                                // 'csvHtml5',
-                            ]
-                        }); 
-                       $(".modal-body input").addClass('form-control');
-                       $('.dataTables_length select').addClass('form-control');
-                       $('#appPendingModal').modal("show");
-                       $(".modal-body input").attr('placeholder', 'Data Search');
-                     },
-                    error: function(data) {
-
-                    },
-                    complete: function() {
-                        $(".loader").hide();
-                        $(".loader").css('margin-top', '0%');
-                    }
-                })
-        }
-        function  viewedCancelled(id,tablename) 
-        {
-                var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                var table_name = tablename;
-                $.ajax({
-                    url: base_url + "/customer/tesco/order-management/viewed-cancelled",
-                    type: "Post",
-                    dataType: "json",
-                    data: {
-                        _token: csrf_token,
-                        id:id,
-                        table_name:table_name
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(data) {
-                        var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
-
-                        var html = "";
-                        $(orders).each(function(index, value)
-                        {
-                            if(value.zone == "CE")
-                            {
-                                var style_no = value.ce_style_ref;
-                            }
-                            else
-                            {
-                                var style_no = value.uk_style_ref;
-                            }   
-                            html += '<tr><td>'+style_no+'</td><td>'+value.TemplateName+'</td><td>'+value.zone+'</td><td><label onclick= viewedCancelled("'+value.id+'","'+value.tablename+'") style="cursor:pointer" class="label label-info">Viewed</label></td></tr>';
-                        });
-                        $('#cancelledOrdersModal .modal-body').html('<table class="table cancelled-orders"><thead><tr><th>Style No</th><th>Template Name</th><th>Zone</th><th>Actions</th></tr></thead><tbody>'+html+'</tbody></table>');
-                        $('.cancelled-count').text(data.cancelled_count);
-                        $('.cancelled-orders').DataTable({
-                            dom: 'Bfrtip',
-                            
-                            buttons: [
-                                'pdfHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
-                            ]
-                        });
-                        $(".modal-body input").addClass('form-control');
-                        $('.dataTables_length select').addClass('form-control');
-                        $('#approvedModal').modal("show");
-                        $('#cancelledOrdersModal').modal("show")
-                        $(".modal-body input").attr('placeholder', 'Data Search');
-                    },
-                    error: function(data) {
-
-                    },
-                    complete: function() {
-                        $(".loader").hide();
-                        $(".loader").css('margin-top', '0%');
-                    }
-                })
-        }
-
 
     </script>
     @endsection

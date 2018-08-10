@@ -163,8 +163,12 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	Route::post('customer/tesco/order-management/viewed-pending', 'Customer\HomeController@viewedPendingOrder');
 
+	Route::post('customer/tesco/order-management/viewed-selected-pending', 'Customer\HomeController@viewedSelectedPendingOrder');
+
 	Route::post('customer/tesco/order-management/cancelled-orders', 'Customer\HomeController@getCancelledOrdersList');
 	Route::post('customer/tesco/order-management/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
+	Route::post('customer/tesco/order-management/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
+	
 	//ORCHESTRA 
 	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 
