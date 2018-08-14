@@ -89,7 +89,10 @@ class HomeController extends Controller
         }
     }
 
-
+    /**
+     * method to get all the tesco approved orders list
+     * @return [type] [approved order list]
+     */
     public function getApprovedOrdersList()
     {
       try {
@@ -98,10 +101,12 @@ class HomeController extends Controller
           $customer_role_id = DB::table('customer_profile')->select('*')
                               ->where('id',$customer_id)->first();
           if($customer_role_id->role_id == 1)
-          {
+          { 
+            //invoke the CustomerDashboard class method to get all the  approved order list
               $approved_orders = $customObj->getAllApprovedOrders();
           }
           else{
+             //invoke the CustomerDashboard class method to get the approved order list for the logged in user
               $approved_orders = $customObj->getApprovedOrders();
           }
 
@@ -114,6 +119,10 @@ class HomeController extends Controller
       return $result;
     }
 
+    /**
+     * method to get all the tesco approval pending orders list
+     * @return [type] [approval pending orders]
+     */
     public function getPendingOrdersList()
     {
       try {
@@ -124,9 +133,11 @@ class HomeController extends Controller
                               ->where('id',$customer_id)->first();
           if($customer_role_id->role_id == 1)
             {
+              //invoke the CustomerDashboard class method to get all the  approval pending order list
                 $pending_orders = $customObj->getAllPendingOrders();
             }
             else{
+              //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
                 $pending_orders = $customObj->getPendingOrders();
             }
 
@@ -139,7 +150,10 @@ class HomeController extends Controller
       return $result;
     }
 
-
+    /**
+     * method to get all the tesco cancelled orders list
+     * @return [type] [cancelled orderlist]
+     */
     public function getCancelledOrdersList()
     {
       try {
@@ -149,9 +163,11 @@ class HomeController extends Controller
                               ->where('id',$customer_id)->first();
           if($customer_role_id->role_id == 1)
           {
+             //invoke the CustomerDashboard class method to get all the cancelled order list
               $cancelled_orders = $customObj->getAllCancelledOrders();
           }
           else{
+            //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
               $cancelled_orders = $customObj->getCancelledOrders();
           }
 
@@ -164,7 +180,11 @@ class HomeController extends Controller
       return $result;
     }
 
-
+    /**
+     * method to set the tesco approved order as viewed
+     * @param  Request $request [tesco order table name , row id]
+     * @return [type]           [tesco approved orderlist ]
+     */
     public function viewedApprovedOrder(Request $request)
     {
       try
@@ -183,9 +203,11 @@ class HomeController extends Controller
         
         if($customer_role_id->role_id == 1)
         {
+          //invoke the CustomerDashboard class method to get all the  approved order list
             $approved_orders = $customObj->getAllApprovedOrders();
         }
         else{
+          //invoke the CustomerDashboard class method to get the approved order list for the logged in user
             $approved_orders = $customObj->getApprovedOrders();
         }
         $approved_count  = $customObj->getApprovedOrdersCount($approved_orders);
@@ -199,6 +221,11 @@ class HomeController extends Controller
       return $result;
     }
 
+    /**
+     * method to set selected tesco approved order as viewed
+     * @param  Request $request [tesco order tables and respective row id's]
+     * @return [type]           [approved order listt]
+     */
     public function viewedSelectedApprovedOrder(Request $request)
     {
         try
@@ -220,10 +247,12 @@ class HomeController extends Controller
           }
                    
           if($customer_role_id->role_id == 1)
-          {
+          { 
+            //invoke the CustomerDashboard class method to get all the  approved order list
               $approved_orders = $customObj->getAllApprovedOrders();
           }
           else{
+            //invoke the CustomerDashboard class method to get the approved order list for the logged in user
               $approved_orders = $customObj->getApprovedOrders();
           }
           $approved_count  = $customObj->getApprovedOrdersCount($approved_orders);
@@ -237,6 +266,11 @@ class HomeController extends Controller
         return $result;
     }
 
+    /**
+     * method to set the tesco approval pending order as viewed
+     * @param  Request $request [tesco order table , row id]
+     * @return [type]           [tesco approval pending order list]
+     */
     public function viewedPendingOrder(Request $request)
     {
       try
@@ -253,10 +287,12 @@ class HomeController extends Controller
                           ]);
 
         if($customer_role_id->role_id == 1)
-        {
+        { 
+          //invoke the CustomerDashboard class method to get all the  approval pending order list
             $pending_orders = $customObj->getAllPendingOrders();
         }
         else{
+          //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
             $pending_orders = $customObj->getPendingOrders();
         }
         $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
@@ -270,6 +306,11 @@ class HomeController extends Controller
       return $result;
     }
 
+    /**
+     * method to set selected tesco approval pending order as viewed
+     * @param  Request $request [tesco order tables and respective row id's]
+     * @return [type]           [tesco approval pending order list]
+     */
     public function viewedSelectedPendingOrder(Request $request)
     {
       try
@@ -291,10 +332,12 @@ class HomeController extends Controller
         }
                    
         if($customer_role_id->role_id == 1)
-        {
+        {   
+          //invoke the CustomerDashboard class method to get all the  approval pending order list
             $pending_orders = $customObj->getAllPendingOrders();
         }
         else{
+            //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
             $pending_orders = $customObj->getPendingOrders();
         }
         $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
@@ -308,6 +351,11 @@ class HomeController extends Controller
       return $result;
     }
 
+    /**
+     * method to set the tesco cancelled order as viewed
+     * @param  Request $request [tesco order table , row id]
+     * @return [type]           [tesco cancelled order list]
+     */
     public function viewedCancelledOrder(Request $request)
     {
       try
@@ -325,9 +373,11 @@ class HomeController extends Controller
         
         if($customer_role_id->role_id == 1)
         {
-            $cancelled_orders = $customObj->getAllCancelledOrders();
+           //invoke the CustomerDashboard class method to get all the cancelled order list
+           $cancelled_orders = $customObj->getAllCancelledOrders();
         }
         else{
+          //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
             $cancelled_orders = $customObj->getCancelledOrders();
         }
         $cancelled_count = $customObj->getCancelledOrdersCount($cancelled_orders);
@@ -340,7 +390,11 @@ class HomeController extends Controller
       return $result;
     }
 
-
+    /**
+     * method to set selected tesco cancelled order as viewed
+     * @param  Request $request [tesco order tables and respective row id's]
+     * @return [type]           [tesco cancelled order list]
+     */
     public function viewedSelectedCancelledOrder(Request $request)
     {
         try
@@ -362,10 +416,12 @@ class HomeController extends Controller
           }
                      
         if($customer_role_id->role_id == 1)
-        {
+        {   
+            //invoke the CustomerDashboard class method to get all the cancelled order list
             $cancelled_orders = $customObj->getAllCancelledOrders();
         }
         else{
+           //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
             $cancelled_orders = $customObj->getCancelledOrders();
         }
         $cancelled_count = $customObj->getCancelledOrdersCount($cancelled_orders);
