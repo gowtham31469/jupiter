@@ -1263,7 +1263,14 @@
 											neworderssubmit()
 										}
 									}
-								]
+								],
+							'columnDefs': [{
+								 'targets': 0,
+								 'searchable':false,
+								 'orderable':false,
+								 'className': 'dt-body-center'
+							 }],
+							 'order': [1, 'asc']
 							});
 			
 							// Handle click on "Select all" control
@@ -1576,7 +1583,14 @@
 											aowpsubmit()
 										}
 									}
-								]
+								],
+							'columnDefs': [{
+								 'targets': 0,
+								 'searchable':false,
+								 'orderable':false,
+								 'className': 'dt-body-center'
+							 }],
+							 'order': [1, 'asc']
 							});
 			
 							// Handle click on "Select all" control
@@ -1804,7 +1818,14 @@
 											approvedorderssubmit()
 										}
 									}
-								]
+								],
+							'columnDefs': [{
+								 'targets': 0,
+								 'searchable':false,
+								 'orderable':false,
+								 'className': 'dt-body-center'
+							 }],
+							 'order': [1, 'asc']
 							});
 			
 							// Handle click on "Select all" control
@@ -1951,7 +1972,14 @@
 											pendingorderssubmit()
 										}
 									}
-								]
+								],
+							'columnDefs': [{
+								 'targets': 0,
+								 'searchable':false,
+								 'orderable':false,
+								 'className': 'dt-body-center'
+							 }],
+							 'order': [1, 'asc']
 							});
 			
 							// Handle click on "Select all" control

@@ -1976,6 +1976,33 @@ class OrderManagementCntrl extends Controller
       		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
+		
+		
+		
+//		$svgarr = explode(',_',$request->svg);
+//		$name=$request->name;
+//        $svg=urldecode($request->svg);
+//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
+//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
+//        PDF::setPrintHeader(false);
+//        PDF::setPrintFooter(false);
+//        PDF::SetFont('frankgothcnbt');
+//		PDF::SetAutoPageBreak(TRUE);
+//		$j=0;
+//		foreach($svgarr as $value)
+//		{
+//			PDF::SetMargins(0, 0, 0, false);
+//			PDF::setImageScale(1);
+//			PDF::AddPage('L', array(80,127));
+//			$svg=urldecode($value);
+//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
+//			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
+//			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
+//			$j++;
+//		}
+//		PDF::deletePage(1);
+//        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
+//        print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
 	
   /**

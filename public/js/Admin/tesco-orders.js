@@ -5170,7 +5170,7 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	//remove temporary canvas
 	canvasTmp.remove();
-
+console.log(svg_xml)
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
