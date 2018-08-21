@@ -98,7 +98,12 @@ $(document).ready(function() {
         })
     });
 
-
+  /**
+   * method to set all the check boxes by clicking select all button for the form formname
+   * @param {[type]} source   [checkbox]
+   * @param {[type]} formname [form name]
+   * @param {[type]} table    [data table]
+   */
   function setSelectAll(source,formname,table)
   {
       // var rows = table.rows({ 'search': 'applied' }).nodes();
@@ -116,6 +121,12 @@ $(document).ready(function() {
       }
   }
 
+  /**
+   * method to set the checkbox
+   * @param  {[type]} obj      [checkbox]
+   * @param  {[type]} formname [form name]
+   * @param  {[type]} table    [data table]
+   */
   function setcheckBox(obj,formname,table)
   {
       var $checkboxes = $('#'+formname+' td input[type="checkbox"]');
@@ -142,6 +153,11 @@ $(document).ready(function() {
       }
   }
 
+  /**
+   * method to call the controller method to set a particular approved order as viewed
+   * @param  {[type]} id         [row id]
+   * @param  {[type]} table_name [order table name]
+   */
   function  viewedApproved(id,table_name) 
   {
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -173,6 +189,11 @@ $(document).ready(function() {
         }
     })
   }
+
+  /**
+   * method to call the controller method to set the selected approved order as viewed
+   * @return {[type]} [description]
+   */
   function viewedSelectedApproved()
   {
       var formdata = $("#frm-example").serialize();
@@ -184,7 +205,6 @@ $(document).ready(function() {
           }
       });
       var formdata = selected.join(',');
-      console.log(formdata)
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-approved",
           type: "Post",
@@ -214,6 +234,11 @@ $(document).ready(function() {
       })
   }
 
+  /**
+   * method to view the approved orders data-table
+   * @param  {[type]} data [order list]
+   * @return {[type]}      [table view]
+   */
   function displayApprovedTable(data)
   {
       var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
@@ -266,6 +291,11 @@ $(document).ready(function() {
      });
   }
 
+  /**
+   * method to call the controller method to set a particular approval pending order as viewed
+   * @param  {[type]} id         [row id]
+   * @param  {[type]} table_name [order table name]
+   */
   function  viewedPending(id,table_name) 
   {
       var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -298,6 +328,10 @@ $(document).ready(function() {
       })
   }
 
+ /**
+ * method to call the controller method to set the selected appproval-pending order as viewed
+ * @return {[type]} [description]
+ */
   function viewedSelectedPending()
   {
       var formdata = $("#frm-pending").serialize();
@@ -339,6 +373,11 @@ $(document).ready(function() {
       })
   }
 
+    /**
+   * method to view the approval pending orders data-table
+   * @param  {[type]} data [order list]
+   * @return {[type]}      [table view]
+   */
   function displayPendingTable(data)
   {
       var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
@@ -394,7 +433,11 @@ $(document).ready(function() {
      });
   }
 
-
+   /**
+   * method to view the cancelled orders data-table
+   * @param  {[type]} data [order list]
+   * @return {[type]}      [table view]
+   */
   function displayCancelledTable(data)
   {
     var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
@@ -448,6 +491,10 @@ $(document).ready(function() {
      });
   }
 
+  /**
+   * method to call controller method to set the selected cancelled orders as viewed
+   * @return {[type]} [description]
+   */
   function viewedSelectedCancelled()
   {
       var formdata = $("#frm-cancelled").serialize();
@@ -489,6 +536,12 @@ $(document).ready(function() {
       })
   }
 
+  /**
+   * method to call the controller method to set a particular canceled order as viewed
+   * @param  {[type]} id        [description]
+   * @param  {[type]} tablename [description]
+   * @return {[type]}           [description]
+   */
   function  viewedCancelled(id,tablename) 
   {
       var csrf_token = $('meta[name="csrf-token"]').attr('content');

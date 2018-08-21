@@ -188,7 +188,11 @@
     </script>
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Customer/customer-dashboard.js') }}"></script>
-    <script>       
+    <script> 
+        /**
+         * method to call the controller method for getting all the tesco approved orders list
+         * @return {[type]} [order list]
+         */
         function showApprovedOrders()
         {
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -219,6 +223,10 @@
             })
         }
 
+         /**
+         * method to call the controller method for getting all the tesco approval pending orders list
+         * @return {[type]} [order list]
+         */
         function showPendingOrders() 
         {
           var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -249,6 +257,11 @@
               }
           })
         }
+
+         /**
+         * method to call the controller method for getting all the tesco cancelled orders list
+         * @return {[type]} [order list]
+         */
         function showCancelledOrders() 
         {
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
