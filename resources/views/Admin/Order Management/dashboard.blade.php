@@ -398,7 +398,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+							 "oSearch": {
+								"bSmart": false, 
+								"bRegex": true,
+								"sSearch": ""                
+							 }
                         });
 		
 		function pendingproductionsubmit()
@@ -525,7 +530,12 @@
 														 'orderable':false,
 														 'className': 'dt-body-center'
 													 }],
-													 'order': [1, 'asc']
+													 'order': [1, 'asc'],
+													  "oSearch": {
+														"bSmart": false, 
+														"bRegex": true,
+														"sSearch": ""                
+													 }
 												});
 
 													// Handle click on "Select all" control
@@ -957,7 +967,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+													  "oSearch": {
+														"bSmart": false, 
+														"bRegex": true,
+														"sSearch": ""                
+													 }
                         });
 						
 							// Handle click on "Select all" control
@@ -1270,7 +1285,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+							  "oSearch": {
+								"bSmart": false, 
+								"bRegex": true,
+								"sSearch": ""                
+							 }
 							});
 			
 							// Handle click on "Select all" control
@@ -1590,7 +1610,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+							  "oSearch": {
+								"bSmart": false, 
+								"bRegex": true,
+								"sSearch": ""                
+							 }
 							});
 			
 							// Handle click on "Select all" control
@@ -1825,7 +1850,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+							  "oSearch": {
+								"bSmart": false, 
+								"bRegex": true,
+								"sSearch": ""                
+							 }
 							});
 			
 							// Handle click on "Select all" control
@@ -1979,7 +2009,12 @@
 								 'orderable':false,
 								 'className': 'dt-body-center'
 							 }],
-							 'order': [1, 'asc']
+							 'order': [1, 'asc'],
+							  "oSearch": {
+								"bSmart": false, 
+								"bRegex": true,
+								"sSearch": ""                
+							 }
 							});
 			
 							// Handle click on "Select all" control
