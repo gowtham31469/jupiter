@@ -1475,12 +1475,12 @@ function updateArtwork(obj)
 					
 					
 					
-					if(data.order_details.order_flag != "newOrder")
-					{
-						if(data.order_details.order_flag == "reOrder")
-						{
+//					if(data.order_details.order_flag != "newOrder")
+//					{
+//						if(data.order_details.order_flag == "reOrder")
+//						{
 							$('#tesco_po_number').prop('disabled',true);
-						}
+//						}
 						$('#order_type').prop('disabled',true);
 						$('#tesco_uk_style').prop('disabled',true);
 						$('#tesco_ce_style').prop('disabled',true);
@@ -1494,7 +1494,7 @@ function updateArtwork(obj)
 						$('#tesco_department').prop('disabled',true);
 						$('#tesco_rfid').prop('disabled',true);
 						$('#tesco_tag_at_source').prop('disabled',true);
-					}
+//					}
 					
 					
 					$('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="'+data.template_file[0].template_file+'" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
@@ -1874,6 +1874,11 @@ function updateArtwork(obj)
 						 success: function (data) {
 							 $('.left-panel').removeClass('active'); 
 							 td_row.find('td:nth-child(6)').text(data);
+							 
+							 $('#snackbar').css('background-color','#00b6ff');
+							 $('.snackbar_span').html('Order updated Successfully');
+							 showSnackbar();
+							 
 							// location.reload()
 						 },
 						 error: function (data) {

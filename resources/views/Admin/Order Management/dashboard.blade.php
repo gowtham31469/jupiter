@@ -115,7 +115,7 @@
 				<div class="dropdown">
 					<i style="cursor: pointer;float: right; color: #717171;font-size: 18px;"class="fa fa-arrow-right dropdown-toggle" data-toggle="dropdown" aria-hidden="true"></i>
 					  <ul class="dropdown-menu pull-right" style="margin-top: 21px;right: 10px;">
-						<li><a href="#"  onclick="aowp_modal()">Approved orders without Pi/Po</a></li>
+						<li><a href="#"  onclick="aowp_modal()">Approved orders without PI/PO</a></li>
 						<li><a href="#"  onclick="app_orders_modal()">Approved orders</a></li>
 					  </ul>
 					</div>
@@ -333,7 +333,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Approved orders without Pi/Po
+					<h4 class="modal-title" id="myModalLabel">Approved orders without PI/PO
 </h4>
 				</div>
 				<form id="frm-example-aowp" action="#" method="POST">
