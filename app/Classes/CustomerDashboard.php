@@ -92,7 +92,6 @@ class CustomerDashboard
                               ->get() ;
           $approved['tsl3'] = DB::table('tesco_tsl3_orders')
                               ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
-                              ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                               ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
                               ->where('order_status',"Order Approved")
                               ->where('app_ord_flag',0)
