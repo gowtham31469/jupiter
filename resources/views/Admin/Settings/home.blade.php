@@ -1342,7 +1342,7 @@
                       <div id="tesco_brand_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                          {!! Form::text('brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required', 'maxlength' => '25')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1369,7 +1369,7 @@
                      {!! Form::hidden('edit_tesco_brands_id',$value = null, array('id'=>'edit_tesco_brands_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_brand_name', 'Brand Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required')) !!}
+                         {!! Form::text('edit_brand_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Brand Name','required', 'maxlength' => '25')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                    </div>
@@ -1397,17 +1397,17 @@
                       <div id="tesco_department_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('department_name', 'Department Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                          {!! Form::text('department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required', 'maxlength' => '25')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('pantone', 'Pantone', ['class' => 'form_label']) !!}
-                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required')) !!}
+                          {!! Form::text('pantone',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('rbg', 'RBG', ['class' => 'form_label']) !!}
-                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required')) !!}
+                          {!! Form::text('rbg',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1434,17 +1434,17 @@
                      {!! Form::hidden('edit_tesco_departments_id',$value = null, array('id'=>'edit_tesco_departments_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_department_name', 'Department Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required')) !!}
+                         {!! Form::text('edit_department_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Department Name','required', 'maxlength' => '25')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_pantone_name', 'Pantone Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required')) !!}
+                         {!! Form::text('edit_pantone_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Pantone Name','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_rbg_name', 'RBG Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required')) !!}
+                         {!! Form::text('edit_rbg_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'RBG Name','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
@@ -1473,12 +1473,12 @@
                       <div id="supplier_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
+                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required', 'maxlength' => '50')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)', 'maxlength' => '15')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1505,12 +1505,12 @@
                      {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required')) !!}
+                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required', 'maxlength' => '50')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required')) !!}
+                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required', 'maxlength' => '15')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
@@ -1537,17 +1537,17 @@
                         <div id="tesco_sizechart_result"></div>
                         <div class="form-group has-feedback">
                           {!! Form::label('po_size', 'PO Size', ['class' => 'form_label']) !!}
-                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                          {!! Form::text('po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('uk', 'UK', ['class' => 'form_label']) !!}
-                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                          {!! Form::text('uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
                           {!! Form::label('ce', 'CE', ['class' => 'form_label']) !!}
-                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                          {!! Form::text('ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required', 'maxlength' => '10')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1574,17 +1574,17 @@
                      {!! Form::hidden('edit_tesco_size_charts_id',$value = null, array('id'=>'edit_tesco_size_charts_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_po_size', 'PO Size', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required')) !!}
+                         {!! Form::text('edit_po_size',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Size','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_uk', 'UK', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required')) !!}
+                         {!! Form::text('edit_uk',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
                          {!! Form::label('edit_ce', 'CE', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required')) !!}
+                         {!! Form::text('edit_ce',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'CE','required', 'maxlength' => '10')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        

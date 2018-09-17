@@ -68,7 +68,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
         } catch (\Exception $e)
         {
@@ -110,7 +111,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -153,7 +155,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -196,7 +199,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -239,7 +243,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -282,7 +287,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -325,7 +331,8 @@ class SubmitTescoOrdersUpdateQuery
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
             

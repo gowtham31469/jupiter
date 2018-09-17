@@ -51,6 +51,7 @@ class OrderController extends Controller
     private $thl3_type;
     private $tsl1_type;
     private $tsl3_type;
+    private $current_date;
 
     /**
      * Create a new controller instance.
@@ -76,6 +77,9 @@ class OrderController extends Controller
        $this->thl3_type = "tesco_thl3_orders";
        $this->tsl1_type = "tesco_tsl1_orders";
        $this->tsl3_type = "tesco_tsl3_orders";
+
+       // get the current time
+       $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
     /**
@@ -1389,7 +1393,8 @@ class OrderController extends Controller
                                   'po_status'         => "PO Uploaded",
                                   'purchase_order_no' => $request['po_number'],
                                   'po_file'           => $destination_path_insert,
-                                  'delivery_date'     => $request['delivery_date']
+                                  'delivery_date'     => $request['delivery_date'],
+                                  'po_uploaded_at'    => $this->current_date
                                 ]);
                   }
               }

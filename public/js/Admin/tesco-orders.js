@@ -717,6 +717,13 @@ function createOrders(parsedObj = false, oType = false) {
                             </div>\
                             <div class="col-md-3">\
                                 <div class="form-group has-feedback">\
+                                    <label for="tesco_ocn">OCN Code</label>\
+                                    <input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" onkeypress="return isNumber(event)" maxlength="15">\
+                                    <div class="help-block with-errors"></div>\
+                                </div>\
+                            </div>\
+                            <div class="col-md-3">\
+                                <div class="form-group has-feedback">\
                                     <label for="tesco_rfid">RFID Compliant</label>\
                                     <select class="selectpicker" id="tesco_rfid" name="tesco_rfid" required="" onchange="dynamicSVGTemplates()">\
                                         <option value="">Select RFID Compliant</option>\
@@ -3903,22 +3910,23 @@ function setTescoOrder() {
  * @author <praveen>
  */
 function tescoOrderCommonData() {
-	po_number = $('#tesco_po_number').val();
-	uk_style = $('#tesco_uk_style').val();
-	ce_style = $('#tesco_ce_style').val();
-	season_code = $('#tesco_season_code').val();
-	description = $('#tesco_description').val();
-	eqos = $('#tesco_eqos').val();
+	po_number 		 = $('#tesco_po_number').val();
+	uk_style 		 = $('#tesco_uk_style').val();
+	ce_style 		 = $('#tesco_ce_style').val();
+	season_code 	 = $('#tesco_season_code').val();
+	description      = $('#tesco_description').val();
+	eqos             = $('#tesco_eqos').val();
 	manufacture_date = $('#tesco_manufacture_date').val();
-	csrf_token = $('meta[name="csrf-token"]').attr('content');
-	department = $("#tesco_department option:selected").val();
-	brand = $("#tesco_brand option:selected").val();
-	supplier = $("#tesco_supplier option:selected").val();
-	rfid = $("#tesco_rfid option:selected").val() === "yes" ? 1 : 0;
-	tag_at_source = $("#tesco_tag_at_source option:selected").val() === "yes" ? 1 : 0;
-	zone = localStorage.getItem("zone");
-	type = localStorage.getItem("template type");
-	data = JSON.parse(localStorage.getItem("data"));
+	csrf_token 		 = $('meta[name="csrf-token"]').attr('content');
+	department  	 = $("#tesco_department option:selected").val();
+	brand 			 = $("#tesco_brand option:selected").val();
+	supplier 		 = $("#tesco_supplier option:selected").val();
+	rfid 			 = $("#tesco_rfid option:selected").val() === "yes" ? 1 : 0;
+	tag_at_source    = $("#tesco_tag_at_source option:selected").val() === "yes" ? 1 : 0;
+	zone			 = localStorage.getItem("zone");
+	type             = localStorage.getItem("template type");
+	data             = JSON.parse(localStorage.getItem("data"));
+	ocn_no           = $('#tesco_ocn').val();
 }
 
 /**
@@ -4012,7 +4020,8 @@ function storeCERatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id
+				tsl1_last_id: tsl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4118,7 +4127,8 @@ function storeCERatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				thl1_last_id: thl1_last_id,
-				is_insert: is_insert
+				is_insert: is_insert,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4245,7 +4255,8 @@ function storeCESingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id
+				tsl3_last_id: tsl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4360,7 +4371,8 @@ function storeCESingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id
+				thl3_last_id: thl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4489,7 +4501,8 @@ function storeUKRatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id
+				tsl1_last_id: tsl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4595,7 +4608,8 @@ function storeUKRatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id
+				thl1_last_id: thl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4721,7 +4735,8 @@ function storeUKSingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id
+				tsl3_last_id: tsl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4836,7 +4851,8 @@ function storeUKSingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id
+				thl3_last_id: thl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -4954,7 +4970,7 @@ function afterOrderSubmitted(data) {
 	                             <div class="col-md-6">\
 	                                 <div class="form-group has-feedback">\
 	                                     <label for="po_number" class="form_label">PO Number</label>\
-	                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="9">\
+	                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">\
 	                                     <div class="help-block with-errors"></div>\
 	                                 </div>\
 	                             </div>\
@@ -5668,7 +5684,8 @@ function saveCERatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id
+				tsl1_last_id: tsl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5775,7 +5792,8 @@ function saveCERatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id
+				thl1_last_id: thl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -5901,7 +5919,8 @@ function saveCESingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id
+				tsl3_last_id: tsl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6016,7 +6035,8 @@ function saveCESingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id
+				thl3_last_id: thl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6145,7 +6165,8 @@ function saveUKRatioTCL1TCL2TSL1() {
 				is_insert: is_insert,
 				tcl1_last_id: tcl1_last_id,
 				tcl2_last_id: tcl2_last_id,
-				tsl1_last_id: tsl1_last_id
+				tsl1_last_id: tsl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6251,7 +6272,8 @@ function saveUKRatioTHL1() {
 				count_THL1: count_THL1,
 				templates: data,
 				is_insert: is_insert,
-				thl1_last_id: thl1_last_id
+				thl1_last_id: thl1_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6377,7 +6399,8 @@ function saveUKSingleTCL4TSL3() {
 				templates: data,
 				is_insert: is_insert,
 				tcl4_last_id: tcl4_last_id,
-				tsl3_last_id: tsl3_last_id
+				tsl3_last_id: tsl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -6492,7 +6515,8 @@ function saveUKSingleTHL3() {
 				count_THL3: count_THL3,
 				templates: data,
 				is_insert: is_insert,
-				thl3_last_id: thl3_last_id
+				thl3_last_id: thl3_last_id,
+				ocn_no: ocn_no
 			},
 			tryCount: 0,
 			retryLimit: 2,

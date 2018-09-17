@@ -150,6 +150,7 @@ function mapStoredValues(oDetails) {
             $('#tesco_supplier').val(ele.tesco_metadata_supplier_id);
             $('#tesco_rfid').val(ele.rfid_compliant === 1  ? 'yes' : 'no');
             $('#tesco_tag_at_source').val(ele.tag_at_source === 1  ? 'yes' : 'no');
+            $('#tesco_ocn').val(ele.ocn_number);
 
             if(ele.template_type === 'single') {
                 $.each(ele.order_quantity, function(i, j) {
