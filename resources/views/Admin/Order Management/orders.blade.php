@@ -272,7 +272,7 @@ margin-bottom: 4px;
 content: '';
 margin-left: -117px;
 height: 1px;
-width: 80%;
+width: 75%;
 background: rgba(0,0,0,0.2);
 }
 	
@@ -494,6 +494,7 @@ background: rgba(0,0,0,0.2);
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div id="order-exists-alert"></div>
+        <div id="price-missing-alert"></div>
         <div class="modal-content po-modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

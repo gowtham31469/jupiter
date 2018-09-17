@@ -14,31 +14,31 @@ class AddOrderFlagToTescoTcl1OrdersTable extends Migration
     public function up()
     {
         Schema::table('tesco_tcl1_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 	
 	Schema::table('tesco_tcl2_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 
 	Schema::table('tesco_tcl4_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 
 	Schema::table('tesco_thl1_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 
 	Schema::table('tesco_thl3_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 
 	Schema::table('tesco_tsl1_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
 
 	Schema::table('tesco_tsl3_orders', function (Blueprint $table) {
-            $table->string('order_flag')->default('newOrder')->after('print_status');
+            $table->string('order_flag')->default('newOrder')->after('order_status');
         });
     }
 

@@ -131,7 +131,7 @@ function viewOrder(pNumber,aWork) {
 function mapStoredValues(oDetails) {
     var artwork_num = oDetails.length;
     var count = 0;
-    var artwork_status = '';
+    var order_status = '';
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
@@ -192,7 +192,7 @@ function mapStoredValues(oDetails) {
             $('#'+ele.zone.toLowerCase()+'_'+ele.template_type+'_count_'+ele.TemplateName.replace(/ /g,"")+'_'+(loop+1)).val(qty.count);
         });
         count++;
-        artwork_status = ele.artwork_status;
+        order_status = ele.order_status;
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
 
     });
@@ -206,14 +206,14 @@ function mapStoredValues(oDetails) {
         }
         $('.invisible-div').html(div_html);
         
-    if(artwork_status != 'Saved') {
+    if(order_status != 'Saved') {
         $('#create_tesco_order_form input').attr('readonly', 'readonly');
         $('.selectpicker').prop('disabled', true);
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         $('.print-btn').show();
-        if(artwork_status === 'Order Placed')
+        if(order_status === 'Order Placed')
         {
             $('.approve-btn').show();
             $('.cancel-btn').show();

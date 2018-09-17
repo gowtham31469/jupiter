@@ -273,7 +273,7 @@ margin-bottom: 4px;
 content: '';
 margin-left: -117px;
 height: 1px;
-width: 80%;
+width: 75%;
 background: rgba(0,0,0,0.2);
 } 
 	

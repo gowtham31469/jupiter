@@ -113,14 +113,14 @@ function tescoOrders() {
 							CEPOCollection.push(newObj1[i].po_number);
 							CEUniqueNames.push(newObj1[i].ce_style_ref);
 							artwork_collection[newObj1[i].ce_style_ref] = {};
-							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 						} else {
 							if (CEPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								CEPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 							}
 						}
 
@@ -129,15 +129,15 @@ function tescoOrders() {
 							UKPOCollection.push(newObj1[i].po_number);
 							UKUniqueNames.push(newObj1[i].uk_style_ref);
 							artwork_collection[newObj1[i].uk_style_ref] = {};
-							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 						} else {
 							if (UKPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								UKPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].artwork_status);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
 							}
 
 						}
@@ -5082,6 +5082,32 @@ function afterOrderSubmitted(data) {
 		}
 	}
 
+		// /** [ Show order already exists alertbox] */
+		// if (data.price_missing.length === 0) {
+		// 	$('.po-modal-content').show();
+		// 	$('#price-missing-alert').html('');
+		// } else {
+		// 	var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+	 //                             <strong class="alert-heading">Price information missing !!</strong>\
+	 //                              <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+	 //                                <span aria-hidden="true">×</span>\
+	 //                              </button>\
+	 //                             <p>Price missing for following artworks,</p>\
+	 //                            <ol>';
+		// 	$.each(data.price_missing, function (index, value) {
+		// 		html_content += '<li>' + value + '</li>';
+		// 	});
+		// 	html_content += '</ol>\
+	 //                         </div>';
+
+		// 	$('#price-missing-alert').html(html_content);
+
+		// 	/** [ Show only alertbox if data already exits ] */
+		// 	if (last_insertions_length === 0) {
+		// 		$('.po-modal-content').hide();
+		// 		$('.close-btn').attr('data-dismiss', 'modal')
+		// 	}
+		// }
 	/** Update bootstrap validator */
 	$('#upload_combined_po_form').validator('update');
 

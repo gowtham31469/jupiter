@@ -690,6 +690,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
+            $price_missing    = [];
           
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
