@@ -5,6 +5,21 @@ $(document).ready(function() {
          $('div.buyers-card').removeClass("active");
          $(this).addClass("active");
          $('#hidden-buyer-div').hide();
+         /* Save selected buyer into localdb */
+         if ($('.buyers-card.active-buyer.active').length != 0) 
+         {
+             $('#hidden-buyer-div').hide();
+             localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+             localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+             $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+             $('#buyerSelectionModalCenter').modal('hide');
+             var buyer = localStorage.getItem("buyer");
+             orderStatus();
+         } else {
+             localStorage.removeItem("buyer");
+             localStorage.removeItem("buyer_id");
+             $('#hidden-buyer-div').show();
+         }
        });
 
        /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -48,25 +63,6 @@ $(document).ready(function() {
            var buyer = localStorage.getItem("buyer");
            orderStatus();
        }
-
-       /** [ Select buyer on clicking proceed button] */
-       $('.proceed-btn').on('click', function() {
-           
-           if ($('.buyers-card.active-buyer.active').length != 0) 
-           {
-               $('#hidden-buyer-div').hide();
-               localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-               $('#buyerSelectionModalCenter').modal('hide');
-               var buyer = localStorage.getItem("buyer");
-               orderStatus();
-           } else {
-               localStorage.removeItem("buyer");
-               localStorage.removeItem("buyer_id");
-               $('#hidden-buyer-div').show();
-           }
-       });
 
        /** To refresh modal while hidden **/
        $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
