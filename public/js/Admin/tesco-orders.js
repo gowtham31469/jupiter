@@ -5011,12 +5011,6 @@ function afterOrderSubmitted(data) {
 	                    </div>';
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
-			/** [ Backdrop for bootstrap modal ] */
-			$('#poUploadModal').modal({
-				backdrop: 'static',
-				keyboard: false
-			})
-			$('#poUploadModal').modal('show');
 
 			/** @type {Date} [Delivery date Datepicker format & validation] */
 			var today = new Date(order_date);
@@ -5082,32 +5076,14 @@ function afterOrderSubmitted(data) {
 		}
 	}
 
-		// /** [ Show order already exists alertbox] */
-		// if (data.price_missing.length === 0) {
-		// 	$('.po-modal-content').show();
-		// 	$('#price-missing-alert').html('');
-		// } else {
-		// 	var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
-	 //                             <strong class="alert-heading">Price information missing !!</strong>\
-	 //                              <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
-	 //                                <span aria-hidden="true">×</span>\
-	 //                              </button>\
-	 //                             <p>Price missing for following artworks,</p>\
-	 //                            <ol>';
-		// 	$.each(data.price_missing, function (index, value) {
-		// 		html_content += '<li>' + value + '</li>';
-		// 	});
-		// 	html_content += '</ol>\
-	 //                         </div>';
+	/** [ Backdrop for bootstrap modal ] */
+	$('#poUploadModal').modal({
+		backdrop: 'static',
+		keyboard: false
+	})
+	
+	$('#poUploadModal').modal('show');
 
-		// 	$('#price-missing-alert').html(html_content);
-
-		// 	/** [ Show only alertbox if data already exits ] */
-		// 	if (last_insertions_length === 0) {
-		// 		$('.po-modal-content').hide();
-		// 		$('.close-btn').attr('data-dismiss', 'modal')
-		// 	}
-		// }
 	/** Update bootstrap validator */
 	$('#upload_combined_po_form').validator('update');
 
