@@ -1175,7 +1175,6 @@ function tescoSizeChart() {
                    },
                    400: function() {
                         $('.snackbar_span').html("Something went wrong!!");
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                    }
               },

@@ -509,7 +509,6 @@ function ValidateSingleInput(oInput) {
              
             if (!blnValid) {
                 $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file format. Please upload a PDF file.");
-                $('#snackbar').css('background-color','#F44336');
                 showSnackbar();
                 $("#"+oInput.id).val(null);
                 return false;

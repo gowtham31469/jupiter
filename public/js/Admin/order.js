@@ -921,7 +921,6 @@ function setPO(obj,id,table_name)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },
@@ -994,7 +993,6 @@ function genaratePI(id,table_name,uvc,pi_status)
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html('Something went wrong');
-                    $('#snackbar').css('background-color','#F44336');
                     showSnackbar();
                }
                else
@@ -1053,7 +1051,6 @@ function genaratePI(id,table_name,uvc,pi_status)
                     else
                     {
                         $('.snackbar_span').html('Price Details are Missing !!');
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                     }
                 } 
@@ -1107,7 +1104,6 @@ function approvePI(id,table_name)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }
@@ -1155,7 +1151,6 @@ function rejectPI(id,table_name)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong!');
-               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }
