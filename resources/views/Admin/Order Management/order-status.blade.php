@@ -154,7 +154,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img id="company-logo" style="height: 35px;" src="" class="img-responsive">
+                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
                                         <strong>Date</strong>
                                         <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
                                         </span></br>

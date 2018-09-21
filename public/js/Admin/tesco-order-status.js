@@ -835,7 +835,7 @@ function tescoStatusTable(data,path)
                 else if (key == "PO Status")
                 {
                     var str=value[key] ;
-                    if(str != null && str != "")
+                    if(str != null && str != "" && value['po_required']==1)
                     {
                         $status=str.replace(/ /g, "");
                         $status_text='<span class="po_class label label-' + $status + '">' + value[key] + '</span>';
@@ -886,22 +886,28 @@ function tescoStatusTable(data,path)
                    else{
                         style_po = "style='border-color:#FF0000'"
                    }                
-                   var pi_required = value['pi_required'];
-                   var po_required = value['po_required'];
-                   if (pi_required==1 && po_required ==1)
-                   {
-                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
-                   }
-                   else if (po_required ==1 && pi_required ==0)
-                   {
-                        
-                        tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
-                   }
-                   else if (pi_required ==1 && po_required ==0)
-                   {
-                        
-                        tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
-                   }                  
+                    var pi_required = value['pi_required'];
+                    var po_required = value['po_required'];
+                    if (value["Artwork Status"]!="Order Cancelled") 
+                    {
+                       if (pi_required==1 && po_required ==1)
+                       {
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                       }
+                       else if (po_required ==1 && pi_required ==0)
+                       {
+                            
+                            tr += '<td align="center"><a href="javascript:void(0)" style="margin-left:36px" class="po-style" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                       }
+                       else if (pi_required ==1 && po_required ==0)
+                       {
+                            
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
+                       }
+                    }
+                    else{
+                      tr += '<td align="center"> - </td>';
+                    }                 
                 }
                 else if (key =="DeliveryDate")
                 {   
