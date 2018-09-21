@@ -110,9 +110,13 @@ function orderStatus() {
 
                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_polybag_sticker_orders)))))));
                 //based on path extra column will append in the datatable
+<<<<<<< Updated upstream
 
                 $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-primary pull-right' type='button'>Update PO</button>");
 
+=======
+                $('.main-content').html("<button style='margin-bottom:10px;' id='po-file-upload-button' class='btn btn-primary pull-right byn-sm' type='button'>Update PO</button>");
+>>>>>>> Stashed changes
 				$('.main-content').append(table(newObj,path));
                 $('.top-content').html("")
 				console.log(newObj)
