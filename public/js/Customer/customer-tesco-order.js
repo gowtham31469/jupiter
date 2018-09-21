@@ -5002,7 +5002,7 @@ try{
                         </div>';
             /** Dynamic content for po upload modal tab */
             $('#po-upload-modal-content').html(html);
-
+            $('#poUploadModal').modal('show');
            /** @type {Date} [Delivery date Datepicker format & validation] */
             var today = new Date(order_date);
             $('#datePicker3').datepicker({
@@ -5065,6 +5065,7 @@ try{
             $('.po-modal-content').hide();
             $('.close-btn').attr('data-dismiss', 'modal')
         }
+        $('#poUploadModal').modal('show');
     }
 
     /** [ Backdrop for bootstrap modal ] */
@@ -5073,8 +5074,6 @@ try{
         keyboard: false
     })
     
-    $('#poUploadModal').modal('show');
-
     /** Update bootstrap validator */
     $('#upload_combined_po_form').validator('update');
 
