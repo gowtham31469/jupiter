@@ -272,7 +272,7 @@ margin-bottom: 4px;
 content: '';
 margin-left: -117px;
 height: 1px;
-width: 80%;
+width: 75%;
 background: rgba(0,0,0,0.2);
 }
 	
@@ -494,10 +494,11 @@ background: rgba(0,0,0,0.2);
 <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div id="order-exists-alert"></div>
+        <div id="price-missing-alert"></div>
         <div class="modal-content po-modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Buyer Purchase Order Upload</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">Customer Purchase Order Upload</h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-success" id="success-alert">
@@ -596,7 +597,6 @@ background: rgba(0,0,0,0.2);
                  </div>
                  <div class="modal-footer buyer-selection-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -768,6 +768,28 @@ background: rgba(0,0,0,0.2);
               $('div.buyers-card').removeClass("active");
               $(this).addClass("active");
               $('#hidden-buyer-div').hide();
+
+                /* Save selected buyer into localdb */
+                if ($('.buyers-card.active-buyer.active').length != 0) 
+                {
+                    $('#hidden-buyer-div').hide();
+                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+                    $('#buyerSelectionModalCenter').modal('hide');
+                    var buyer = localStorage.getItem("buyer");
+                    if (buyer === 'orchestra') 
+                    {
+                        orders();
+                    } else {
+                        tescoOrders();
+                        reOrderTesco();
+                    }
+                } else {
+                    localStorage.removeItem("buyer");
+                    localStorage.removeItem("buyer_id");
+                    $('#hidden-buyer-div').show();
+                }
             });
 
             /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -817,31 +839,6 @@ background: rgba(0,0,0,0.2);
 					reOrderTesco();
                 }
             }
-
-            /** [ Select buyer on clicking proceed button] */
-            $('.proceed-btn').on('click', function() {
-                
-                if ($('.buyers-card.active-buyer.active').length != 0) 
-                {
-                    $('#hidden-buyer-div').hide();
-                    localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-                    localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                    $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-                    $('#buyerSelectionModalCenter').modal('hide');
-                    var buyer = localStorage.getItem("buyer");
-                    if (buyer === 'orchestra') 
-                    {
-                        orders();
-                    } else {
-                        tescoOrders();
-						reOrderTesco();
-                    }
-                } else {
-                    localStorage.removeItem("buyer");
-                    localStorage.removeItem("buyer_id");
-                    $('#hidden-buyer-div').show();
-                }
-            });
 
             /** To refresh modal while hidden **/
             $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {

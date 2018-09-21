@@ -51,6 +51,7 @@ class OrderManagementCntrl extends Controller
     private $thl3_type;
     private $tsl1_type;
     private $tsl3_type;
+    private $current_date;
     /**
      * Create a new controller instance.
      *
@@ -74,6 +75,9 @@ class OrderManagementCntrl extends Controller
         $this->thl3_type = "tesco_thl3_orders";
         $this->tsl1_type = "tesco_tsl1_orders";
         $this->tsl3_type = "tesco_tsl3_orders";
+
+        // get the current time
+        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
     /**
@@ -687,11 +691,11 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
           
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -710,7 +714,7 @@ class OrderManagementCntrl extends Controller
             }
             
             /** [Get comapanies super admin id as created by customer id] */
-            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
             /** Check if super admin exists or not  */
             if($customer_profile_id)
             {
@@ -991,7 +995,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
            
 
         } catch (\Exception $e)
@@ -1019,11 +1023,11 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
 
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -1042,7 +1046,7 @@ class OrderManagementCntrl extends Controller
             }
             
             /** [Get comapanies super admin id as created by customer id] */
-            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
             /** Check if super admin exists or not  */
             if($customer_profile_id)
             {
@@ -1264,7 +1268,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -1290,11 +1294,11 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -1313,7 +1317,7 @@ class OrderManagementCntrl extends Controller
             }
 
             /** [Get comapanies super admin id as created by customer id] */
-            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
             /** Check if super admin exists or not  */
             if($customer_profile_id)
             {
@@ -1594,7 +1598,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -1621,11 +1625,11 @@ class OrderManagementCntrl extends Controller
             $last_insertions  = [];
             $already_exists   = [];
 
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -1644,7 +1648,7 @@ class OrderManagementCntrl extends Controller
             }
 
             /** [Get comapanies super admin id as created by customer id] */
-            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
             /** Check if super admin exists or not  */
             if($customer_profile_id)
             {
@@ -1866,7 +1870,7 @@ class OrderManagementCntrl extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -2925,7 +2929,8 @@ class OrderManagementCntrl extends Controller
                               'po_status'         => "PO Uploaded",
                               'purchase_order_no' => $request['po_number'],
                               'po_file'           => $destination_path_insert,
-                              'delivery_date'     => $request['delivery_date']
+                              'delivery_date'     => $request['delivery_date'],
+                              'po_uploaded_at'    => $this->current_date
                             ]);
               }
           }
@@ -3039,9 +3044,9 @@ class OrderManagementCntrl extends Controller
               /** Check if supplier value empty or not */
               if($request['supplier'])
               {
-                $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+                $tesco_main_customer_id     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
                 /** [Get comapanies super admin id as created by customer id] */
-                $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+                $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
                 /** Check if super admin exists or not  */
                 if($customer_profile_id)
                 {
@@ -3302,7 +3307,7 @@ class OrderManagementCntrl extends Controller
                     }
                 }
               }
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'already_exists' => $already_exists],200);
+            return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'already_exists' => $already_exists],200);
         } catch (\Exception $e)
         {
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -3331,9 +3336,9 @@ class OrderManagementCntrl extends Controller
             /** Check if supplier value empty or not */
             if($request['supplier'])
             {
-              $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+              $tesco_main_customer_id     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
               /** Check if super admin exists or not  */
               if($customer_profile_id)
               {
@@ -3574,9 +3579,9 @@ class OrderManagementCntrl extends Controller
             /** Check if supplier value empty or not */
             if($request['supplier'])
             {
-              $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+              $tesco_main_customer_id     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
               /** Check if super admin exists or not  */
               if($customer_profile_id)
               {
@@ -3871,9 +3876,9 @@ class OrderManagementCntrl extends Controller
             /** Check if supplier value empty or not */
             if($request['supplier'])
             {
-              $customer_ids     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+              $tesco_main_customer_id     = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
               /** [Get comapanies super admin id as created by customer id] */
-              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$customer_ids->customer_id)->where('role_id','=',1)->select('id')->first();
+              $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
               /** Check if super admin exists or not  */
               if($customer_profile_id)
               {

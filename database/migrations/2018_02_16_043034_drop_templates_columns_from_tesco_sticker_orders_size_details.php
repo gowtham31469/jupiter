@@ -22,8 +22,6 @@ class DropTemplatesColumnsFromTescoStickerOrdersSizeDetails extends Migration
             $table->dropColumn('thl1_count');
             $table->dropColumn('thl3_count');
             $table->dropColumn('order_status');
-            $table->dropColumn('artwork_status');
-            $table->dropColumn('print_status');
         });
     }
 
@@ -43,8 +41,6 @@ class DropTemplatesColumnsFromTescoStickerOrdersSizeDetails extends Migration
             $table->addColumn('thl1_count')->after('tsl3_count');
             $table->addColumn('thl3_count')->after('thl1_count');
             $table->addColumn('order_status')->after('thl3_count');
-            $table->addColumn('artwork_status')->after('order_status');
-            $table->addColumn('print_status')->after('artwork_status');
         });
     }
 }

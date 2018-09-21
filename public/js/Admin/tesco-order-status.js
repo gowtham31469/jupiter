@@ -564,7 +564,6 @@ function tescoOrderStatus()
                                     400: function()
                                     {
                                        $('.snackbar_span').html('Something went wrong');
-                                       $('#snackbar').css('background-color','#F44336');
                                        showSnackbar();
                                     }
                                 },
@@ -684,7 +683,6 @@ function tescoOrderStatus()
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },
@@ -988,7 +986,6 @@ function updateDeliveryDate(obj,tableID,tableName,count)
                 400: function()
                 {
                    $('.snackbar_span').html('Something went wrong');
-                   $('#snackbar').css('background-color','#F44336');
                    showSnackbar();
                 }
             },
@@ -1056,7 +1053,6 @@ function tescoSetPO(obj,id,tableName,po_file)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },
@@ -1073,7 +1069,6 @@ function tescoSetPO(obj,id,tableName,po_file)
 	   $(obj).closest('tr').find('.tesco-po').focus();
 	   $(obj).closest('tr').find('.tesco-po').css('border-color', '#F44336');
 	   $('.snackbar_span').html('Please enter a valid PO number');
-       $('#snackbar').css('background-color','#F44336');
        showSnackbar();
    }
 }	
@@ -1148,7 +1143,6 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html("Customer Profile isn't complete");
-                    $('#snackbar').css('background-color','#F44336');
                     showSnackbar();
                }
                else
@@ -1293,7 +1287,6 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
 
                         } else {
                             $('.snackbar_span').html('Price Details are Missing !!');
-                            $('#snackbar').css('background-color','#F44336');
                             showSnackbar();
                         }
                         
@@ -1301,7 +1294,6 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                     else
                     {
                         $('.snackbar_span').html('Price Details are Missing !!');
-                        $('#snackbar').css('background-color','#F44336');
                         showSnackbar();
                     }
                 } 
@@ -1369,7 +1361,6 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
-               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }
@@ -1414,7 +1405,6 @@ function tescoRejectPI(id,table_name)
             200: function(data)
             {
                $('.snackbar_span').html('PI Rejected!');
-               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
                showSnackbar();             
@@ -1422,7 +1412,6 @@ function tescoRejectPI(id,table_name)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong!');
-               $('#snackbar').css('background-color','#F44336');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }
@@ -1669,7 +1658,6 @@ function updateArtwork(obj)
             400: function()
             {
                $('.snackbar_span').html('Something went wrong!');
-               $('#snackbar').css('background-color','#F44336');
                showSnackbar();
             }
         },

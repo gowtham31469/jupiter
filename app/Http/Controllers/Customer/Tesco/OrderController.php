@@ -51,6 +51,7 @@ class OrderController extends Controller
     private $thl3_type;
     private $tsl1_type;
     private $tsl3_type;
+    private $current_date;
 
     /**
      * Create a new controller instance.
@@ -76,6 +77,9 @@ class OrderController extends Controller
        $this->thl3_type = "tesco_thl3_orders";
        $this->tsl1_type = "tesco_tsl1_orders";
        $this->tsl3_type = "tesco_tsl3_orders";
+
+       // get the current time
+       $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
     /**
@@ -222,11 +226,11 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -513,7 +517,7 @@ class OrderController extends Controller
               }
             }
             
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
            
 
         } catch (\Exception $e)
@@ -541,11 +545,11 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -774,7 +778,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -800,11 +804,11 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -1092,7 +1096,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -1119,11 +1123,11 @@ class OrderController extends Controller
             $last_insertions  = [];
             $already_exists   = [];
             $created_by       = $request['created_by'];
-            $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
-            if($customer_ids)
+            if($tesco_main_customer_id)
             {
-              $customer_id = $customer_ids->customer_id;
+              $customer_id = $tesco_main_customer_id->customer_id;
               $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
               $delivery_date_req= $customer_details->delivery_date_required; 
               $pi_required      = $customer_details->pi_required; 
@@ -1352,7 +1356,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required],200);
 
         } catch (\Exception $e)
         {
@@ -1389,7 +1393,8 @@ class OrderController extends Controller
                                   'po_status'         => "PO Uploaded",
                                   'purchase_order_no' => $request['po_number'],
                                   'po_file'           => $destination_path_insert,
-                                  'delivery_date'     => $request['delivery_date']
+                                  'delivery_date'     => $request['delivery_date'],
+                                  'po_uploaded_at'    => $this->current_date
                                 ]);
                   }
               }

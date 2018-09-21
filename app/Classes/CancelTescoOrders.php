@@ -45,8 +45,6 @@ class CancelTescoOrders
             return TescoTCL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -67,8 +65,6 @@ class CancelTescoOrders
             return TescoTCL2Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -89,8 +85,6 @@ class CancelTescoOrders
             return TescoTSL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -111,8 +105,6 @@ class CancelTescoOrders
             return TescoTCL4Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -133,8 +125,6 @@ class CancelTescoOrders
             return TescoTSL3Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -155,8 +145,6 @@ class CancelTescoOrders
             return TescoTHL1Orders::where('id',$template_id)
                           ->update([
                           'order_status'       => "Order Cancelled",
-                          'artwork_status'     => "Order Cancelled",
-                          'print_status'       => "Order Cancelled",
                           'order_cancelled_at' => $this->current_date
                         ]);
             
@@ -177,8 +165,6 @@ class CancelTescoOrders
             return TescoTHL3Orders::where('id',$template_id)
                               ->update([
                               'order_status'       => "Order Cancelled",
-                              'artwork_status'     => "Order Cancelled",
-                              'print_status'       => "Order Cancelled",
                               'order_cancelled_at' => $this->current_date
                             ]);
             
