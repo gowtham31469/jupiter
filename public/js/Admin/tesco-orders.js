@@ -5012,7 +5012,11 @@ function afterOrderSubmitted(data) {
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
 			$('#poUploadModal').modal('show');
-
+				/** [ Backdrop for bootstrap modal ] */
+			$('#poUploadModal').modal({
+				backdrop: 'static',
+				keyboard: false
+			})
 			/** @type {Date} [Delivery date Datepicker format & validation] */
 			var today = new Date(order_date);
 			$('#datePicker3').datepicker({
@@ -5076,13 +5080,12 @@ function afterOrderSubmitted(data) {
 			$('.close-btn').attr('data-dismiss', 'modal')
 		}
 		$('#poUploadModal').modal('show');
+			/** [ Backdrop for bootstrap modal ] */
+		$('#poUploadModal').modal({
+			backdrop: 'static',
+			keyboard: false
+		})
 	}
-
-	/** [ Backdrop for bootstrap modal ] */
-	$('#poUploadModal').modal({
-		backdrop: 'static',
-		keyboard: false
-	})
 
 	/** Update bootstrap validator */
 	$('#upload_combined_po_form').validator('update');
