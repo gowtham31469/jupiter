@@ -114,7 +114,8 @@ function orderStatus() {
 
                 // $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-primary pull-right' type='button'>Update PO</button>");
 
-                $('.main-content').html("<button style='margin-bottom:10px;' id='po-file-upload-button' class='btn btn-primary pull-right byn-sm' type='button'>
+                $('.main-content').html("<button style='margin-bottom:10px;' id='po-file-upload-button' class='btn btn-primary pull-right byn-sm' type='button'>Update PO</button>");
+                	
 				$('.main-content').append(table(newObj,path));
                 $('.top-content').html("")
 				console.log(newObj)
