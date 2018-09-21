@@ -1161,7 +1161,6 @@ p.dropdown-toggle i {
 
 .help-block.with-errors ul li {
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
     margin-top: -10px;
     color: #F44336;
     position: absolute;
@@ -1171,14 +1170,6 @@ p.dropdown-toggle i {
 margin-top: -10px;
     color: #F44336;
     position: absolute;
-=======
-margin-top: -10px;
-    color: #F44336;
-    position: absolute;
-}
-.help-block.with-errors ul li:first-child {
-    right: 0;
->>>>>>> Stashed changes
 }
 >>>>>>> Stashed changes
 .help-block.with-errors ul li:first-child {
@@ -1188,7 +1179,6 @@ margin-top: -10px;
 .has-error .form-control {
     border-color: #F44336 !important;
     background: rgba(244, 67, 54, 0.10);
-<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -1204,8 +1194,6 @@ margin-top: -10px;
 #bank_details .table td,
 #bank_details .table th {
 =======
-=======
->>>>>>> Stashed changes
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
@@ -1561,9 +1549,5 @@ span.batch-additional {
             url('fonts/Franklin.woff') format('woff'), /* Pretty Modern Browsers */
             url('fonts/Franklin.ttf') format('truetype'), /* Safari, Android, iOS */
             /* Legacy iOS */
-<<<<<<< Updated upstream
-        }
->>>>>>> Stashed changes
-=======
         }
 >>>>>>> Stashed changes
