@@ -266,6 +266,7 @@ class OrderStatusController extends Controller
             $row_id     =   $request->id;
             $table_name =   $request->table_name;
             $buyer_id   =   $request->buyer_id;
+            $billamnt   =   $request->billamnt;
             $total_qnty =   0 ; 
             $sub_total  =   0 ;
             $pi_obj     =   new ProfomaInvoice();
@@ -280,11 +281,17 @@ class OrderStatusController extends Controller
                 {
                     $style_no = $data['bank_details']->uk_style_ref;
                 }
+                if ($data['item_details'][0]->order_flag=="reOrder") {
+                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+                }
+                else{
+                    $rep_order_id = 0;
+                }
                 $pi_details = PI::create([
                     'buyer_id'         => $buyer_id,
                     'company_id'       => $data['company_details']->id,
                     'customer_id'      => $data['bank_details']->id,
-                    'template_id'      => $data['bank_details']->template_id,
+                    // 'template_id'      => $data['bank_details']->template_id,
                     'buyer_po_no'      => $data['bank_details']->po_number,
                     'uvc_style_no'     => $style_no,
                     'ref_no'           => $data['bank_details']->ref_no,
@@ -292,7 +299,8 @@ class OrderStatusController extends Controller
                     'billing_address'  => $data['bill_to']->address,
                     'place_of_supply'  => $data['bank_details']->place_of_supply,
                     'template_type'  => $data['bank_details']->template_type,
-                    'revision_no'  => $data['item_details'][0]->pi_rev_no
+                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id
                     
                 ]);
                 foreach ($data['item_details'] as $key => $value)
@@ -302,6 +310,7 @@ class OrderStatusController extends Controller
                         if ($value->item_id == $val->item_id) {
                             if($value->quantity <= $val->volume_to) {
                                 $unit_cost = $val->price;
+                                $tax = $val->tax;
                                 break;
                             }
                         }
@@ -316,15 +325,16 @@ class OrderStatusController extends Controller
                         'ref_no'      => $value->ref_no,
                         'style'     => $value->style,
                         'quantity'  => $value->quantity,
-                        'unit_cost' => $unit_cost
+                        'unit_cost' => $unit_cost,
+                        'tax'       => $tax
                     ]);
                 }
                 PI::where('id',$pi_details->id)
                             ->update([
                               'total_quantity'   => $total_qnty,
                               'sub_total'        => $sub_total,
-                              'tax'              => $data['item_details'][0]->tax,
-                              'bill_amount'      => $sub_total*$data['item_details'][0]->tax
+                              // 'tax'              => $data['item_details'][0]->tax,
+                              'bill_amount'      => $billamnt
                             ]);
             }
             
