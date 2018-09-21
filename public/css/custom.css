@@ -1160,18 +1160,11 @@ p.dropdown-toggle i {
 }
 
 .help-block.with-errors ul li {
-<<<<<<< Updated upstream
     margin-top: -10px;
     color: #F44336;
     position: absolute;
 }
 
-=======
-margin-top: -10px;
-    color: #F44336;
-    position: absolute;
-}
->>>>>>> Stashed changes
 .help-block.with-errors ul li:first-child {
     right: 0;
 }
@@ -1179,7 +1172,6 @@ margin-top: -10px;
 .has-error .form-control {
     border-color: #F44336 !important;
     background: rgba(244, 67, 54, 0.10);
-<<<<<<< Updated upstream
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
@@ -1193,19 +1185,6 @@ margin-top: -10px;
 
 #bank_details .table td,
 #bank_details .table th {
-=======
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-}
-
-.has-error .form-control:after{
-content: "text";
-    position: absolute;
-    right: 0;
-
-}
-#bank_details .table td, #bank_details  .table th{
->>>>>>> Stashed changes
     text-align: left;
 }
 
@@ -1358,7 +1337,6 @@ a.notification:focus {
 }
 
 .navbar-default .dropdown-menu.notify-drop .notify-drop-footer a:hover {
-<<<<<<< Updated upstream
     color: #333;
 }
 
@@ -1537,17 +1515,3 @@ span.batch-additional {
 .error-template {padding: 40px 15px;text-align: center;}
 .error-actions {margin-top:15px;margin-bottom:15px;}
 .error-actions .btn { margin-right:10px; }
-=======
-  color: #333;
-}
-        @font-face {
-            font-family: 'Franklin';
-            src: url('fonts/Franklin.eot');
-            /* IE9 Compat Modes */
-            src: url('fonts/Franklin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-            url('fonts/Franklin.woff2') format('woff2'), /* Super Modern Browsers */
-            url('fonts/Franklin.woff') format('woff'), /* Pretty Modern Browsers */
-            url('fonts/Franklin.ttf') format('truetype'), /* Safari, Android, iOS */
-            /* Legacy iOS */
-        }
->>>>>>> Stashed changes
