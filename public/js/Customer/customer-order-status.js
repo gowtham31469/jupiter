@@ -1703,8 +1703,7 @@ function tescoStatusTable(data,path)
         tr += '<tr class="trClass" id="'+value.tableName+'_'+ value.tableID + '">';
         for (var key in columnsIn) {
             if (key != "id")
-            {
-                
+            {                
                 if (key =="PO Number" && value['po_required']==1) 
                 {
                     var po_file     = value['po_file'];
