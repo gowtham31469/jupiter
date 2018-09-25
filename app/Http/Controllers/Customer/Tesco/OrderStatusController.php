@@ -398,23 +398,27 @@ class OrderStatusController extends Controller
             $table_name =   $request->table_name;
             $table_data =   DB::table($table_name)->where('id',$row_id)->first();
 
-            if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-              $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-              $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
+            if ($table_data->order_flag =="newOrder") {
+               if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+                  $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
+                  $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
               $template_array = array_combine($table_array, $qnty_id_array);
 
+                }
+                if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+                  $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
+                  $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+                  $template_array = array_combine($table_array, $qnty_id_array);
+                }
             }
-            if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-              $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-              $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
-            }
+            
             if (!empty($template_array)) {
                 foreach ($template_array as $table => $value) {
                     if ($table_data->zone == "CE") {
                         DB::table($table)
                         ->where('ce_style_ref',$table_data->ce_style_ref)
                         ->where('po_number',$table_data->po_number)
+                        ->where('order_flag',$table_data->order_flag)
                         ->update([
                           'pi_status' => "PI Rejected",
                           'pi_rev_no' => $table_data->pi_rev_no + 1
