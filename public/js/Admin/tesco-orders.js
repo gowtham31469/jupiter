@@ -1518,6 +1518,7 @@ function GenerateDivTesco(data, name) {
 	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
 		var svgarr = [];
 		var ajax_count = 0;
+		var name_count=0;
 		$('#table_row tr').each(function (key, val) {
 			var svgRoot = svgDoc.documentElement;
 
@@ -1547,7 +1548,33 @@ function GenerateDivTesco(data, name) {
 				} else {
 					var barcode_change = $(this).find('.uk_ratio_itf').val()
 				}
-				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				//jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				
+				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+	
+				$.ajax({
+						url: base_url + "/admin/tesco/generatebarcodetsl1",
+						type: 'post',
+						data: {
+							barcode: barcode_change,
+							type: 2,
+							name:"barcode_"+name_count,
+							_token: csrf_token,
+						},
+						success: function (data) {
+							
+						},
+						complete: function () {
+
+						}
+					})
+				svgDoc.getElementById("barcodeimage").setAttributeNS(
+    'http://www.w3.org/1999/xlink', 
+    'xlink:href', 
+    "barcode_"+name_count+".jpg");
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 
 			}
@@ -1715,6 +1742,7 @@ function GenerateDivTesco(data, name) {
 				svgarr.push(svg)
 			}
 			ajax_count++;
+			name_count++;
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {

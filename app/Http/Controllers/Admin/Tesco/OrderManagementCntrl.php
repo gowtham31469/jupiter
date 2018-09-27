@@ -1911,7 +1911,7 @@ class OrderManagementCntrl extends Controller
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
+        PDF::setImageScale(1.66);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
@@ -2018,7 +2018,7 @@ class OrderManagementCntrl extends Controller
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
+        PDF::setImageScale(1.66);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
@@ -2083,7 +2083,7 @@ class OrderManagementCntrl extends Controller
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
         define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-        PDF::setImageScale(1);
+        PDF::setImageScale(1.66);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
@@ -4272,5 +4272,23 @@ class OrderManagementCntrl extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
+    }
+	
+	 /**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeTsl1(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/tesco/'.$name).' '.$type);
+        $info    = json_decode($info, true);
+		return $info;
     }
 }
