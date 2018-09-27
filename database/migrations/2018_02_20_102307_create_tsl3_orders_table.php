@@ -31,8 +31,6 @@ class CreateTsl3OrdersTable extends Migration
             $table->boolean('rfid_compliant')->default('0');
             $table->boolean('tag_at_source')->default('0');
             $table->string('order_status')->nullable();
-            $table->string('artwork_status')->nullable();
-            $table->string('print_status')->nullable();
             $table->string('purchase_order_no')->nullable();
             $table->string('po_file')->nullable();
             $table->string('po_status')->nullable();

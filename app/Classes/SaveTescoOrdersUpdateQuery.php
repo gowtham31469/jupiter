@@ -47,12 +47,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -88,12 +87,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -129,12 +127,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -170,12 +167,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -211,13 +207,12 @@ class SaveTescoOrdersUpdateQuery
                             'rfid_compliant'       => $request['rfid'],
                             'tag_at_source'        => $request['tag_at_source'],
                             'order_status'         => "Saved",
-                            'artwork_status'       => "Saved",
-                            'print_status'         => "Saved",
                             'template_id'          => $template_id,
                             'pi_status'            => "",
                             'po_status'            => "",
                             'is_order_count_empty' => "",
-                            'order_placed_by'      => $created_by
+                            'order_placed_by'      => $created_by,
+                            'ocn_number'           => $request['ocn_no']
                           ]);
             
         } catch (\Exception $e)
@@ -253,12 +248,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
         } catch (\Exception $e)
@@ -294,12 +288,11 @@ class SaveTescoOrdersUpdateQuery
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Saved",
-                          'artwork_status'       => "Saved",
-                          'print_status'         => "Saved",
                           'template_id'          => $template_id,
                           'pi_status'            => "",
                           'po_status'            => "",
-                          'order_placed_by'      => $created_by
+                          'order_placed_by'      => $created_by,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
             
             

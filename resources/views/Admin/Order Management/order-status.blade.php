@@ -154,7 +154,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="right" style="float: right">
-                                        <img id="company-logo" style="height: 35px;" src="" class="img-responsive">
+                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
                                         <strong>Date</strong>
                                         <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
                                         </span></br>
@@ -427,7 +427,6 @@
                  </div>
                  <div class="modal-footer buyer-selection-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -470,6 +469,26 @@
          $('div.buyers-card').removeClass("active");
          $(this).addClass("active");
          $('#hidden-buyer-div').hide();
+
+         /* Save selected buyer into localdb */
+         if ($('.buyers-card.active-buyer.active').length != 0) 
+         {
+             $('#hidden-buyer-div').hide();
+             localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+             localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+             $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+             $('#buyerSelectionModalCenter').modal('hide');
+             var buyer = localStorage.getItem("buyer");
+             if (buyer === 'orchestra') {
+                 orderStatus();
+             } else {
+                 tescoOrderStatus();
+             }
+         } else {
+             localStorage.removeItem("buyer");
+             localStorage.removeItem("buyer_id");
+             $('#hidden-buyer-div').show();
+         }
        });
 
        /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -517,29 +536,6 @@
                tescoOrderStatus();
            }
        }
-
-       /** [ Select buyer on clicking proceed button] */
-       $('.proceed-btn').on('click', function() {
-           
-           if ($('.buyers-card.active-buyer.active').length != 0) 
-           {
-               $('#hidden-buyer-div').hide();
-               localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-               $('#buyerSelectionModalCenter').modal('hide');
-               var buyer = localStorage.getItem("buyer");
-               if (buyer === 'orchestra') {
-                   orderStatus();
-               } else {
-                   tescoOrderStatus();
-               }
-           } else {
-               localStorage.removeItem("buyer");
-               localStorage.removeItem("buyer_id");
-               $('#hidden-buyer-div').show();
-           }
-       });
 
        /** To refresh modal while hidden **/
        $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {

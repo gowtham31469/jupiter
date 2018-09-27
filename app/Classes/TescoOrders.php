@@ -58,9 +58,6 @@ class TescoOrders
             $max_id = TescoTCL1Orders::max('id');
 
             $order_id = $company_id->company_id == 1?"JGA_TCL100".($max_id+1):"SP_TCL100".($max_id+1);
-            
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -104,14 +101,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
             }
@@ -150,8 +146,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL2Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_TCL200".($max_id+1):"SP_TCL200".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -195,14 +189,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
             }
@@ -241,8 +234,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL1Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_TSL100".($max_id+1):"SP_TSL100".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -286,14 +277,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
               
@@ -333,8 +323,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL1Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_THL100".($max_id+1):"SP_THL100".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -378,14 +366,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
             }
@@ -424,8 +411,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTCL4Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_TCL400".($max_id+1):"SP_TCL400".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -469,14 +454,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
             }
@@ -515,8 +499,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTSL3Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_TSL300".($max_id+1):"SP_TSL300".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
 
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -560,14 +542,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
               
@@ -607,8 +588,6 @@ class TescoOrders
             /** [ Get orders table maximum id value for creating order id] */
             $max_id = TescoTHL3Orders::max('id');
             $order_id = $company_id->company_id == 1?"JGA_THL300".($max_id+1):"SP_THL300".($max_id+1);
-            // /** [ Check if price is available for this template ] */
-            // $price = DB::table('price_taxation')->select('price')->where('id','=',$template_id)->where('customer_id','=',$customer_id)->first();
             
             /** Insert order details first time. If data already exits, update old values**/
             if($request['is_insert'] == 'true')
@@ -652,14 +631,13 @@ class TescoOrders
                           'rfid_compliant'       => $request['rfid'],
                           'tag_at_source'        => $request['tag_at_source'],
                           'order_status'         => "Order Placed",
-                          'artwork_status'       => "Order Placed",
-                          'print_status'         => "Order Placed",
                           'template_id'          => $template_id,
                           'pi_status'            => $pi_status,
                           'po_status'            => $po_status,
                           'is_order_count_empty' => $is_order_count_empty,
                           'order_placed_by'      => $created_by,
-                          'order_created_at'     => $this->current_date
+                          'order_created_at'     => $this->current_date,
+                          'ocn_number'           => $request['ocn_no']
                         ]);
               }
               

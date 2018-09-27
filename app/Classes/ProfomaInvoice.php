@@ -300,11 +300,12 @@ class ProfomaInvoice
             foreach (array_unique($item_id_array) as $item_id) {
              $price_list      = DB::table('price_taxation')
                                     ->join('price_range','price_range.price_taxation_id','price_taxation.id')
+                                    ->join('tesco_template','tesco_template.item_id','price_taxation.template_id')
                                     ->where('price_taxation.template_id','=',$item_id)
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
                                     ->orderBy('price_range.volume_to')
-                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'))
+                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tesco_template.tax')
                                     ->get()->toArray();
               $price_array = array_merge($price_array,$price_list);
             } 
@@ -355,14 +356,12 @@ class ProfomaInvoice
             ->select('profoma_invoices.*',DB::raw("to_char(profoma_invoices.created_at,'DD-MM-YYYY') as pi_date"))
             ->first();
         }
-       
-
-        
+               
         $data['company_details'] =  DB::table('tesco_item_master')
                                        ->join('company','company.id','=','tesco_item_master.company_id')
-                                        ->where('tesco_item_master.id',$pi_details->company_id)
-                                        ->select('company.*')
-                                          ->first();
+                                       ->where('tesco_item_master.id',$pi_details->company_id)
+                                       ->select('company.*')
+                                       ->first();
 
         if ($pi_details->company_id == 1)
         {
@@ -403,7 +402,7 @@ class ProfomaInvoice
                                   ->first();
         $data['item_details']    = DB::table('profoma_invoice_item_details')
                                     ->where('profoma_invoice_item_details.pi_id',$pi_details->id)
-                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price',DB::raw($pi_details->tax.' as tax'),'ref_no')
+                                    ->select('size','quantity','style','material as material_name','unit_cost as unit_price','profoma_invoice_item_details.tax','ref_no','profoma_invoice_item_details.template_id as item_id')
                                     ->get();
         foreach ($data['item_details'] as $key => $value) {
           $value->style = $pi_details->uvc_style_no;
@@ -411,7 +410,7 @@ class ProfomaInvoice
         }
         $data['price_list'] = array();
         foreach ($data['item_details'] as $key => $value) {
-          array_push($data['price_list'], ['volume_to' => $value->quantity, 'price' => $value->unit_price]);
+          array_push($data['price_list'], ['volume_to' => $value->quantity, 'price' => $value->unit_price,'tax' => $value->tax ,'item_id'=>$value->item_id]);
           
         }
         return $data;

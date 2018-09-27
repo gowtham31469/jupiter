@@ -15,7 +15,7 @@ class AddPiStatusToTescoStickerOrdersCountTable extends Migration
     {
         Schema::table('tesco_sticker_orders_count', function (Blueprint $table)
         {
-            $table->string('po_number')->after('artwork_status')->nullable();
+            $table->string('po_number')->after('order_status')->nullable();
             $table->string('po_file')->after('po_number')->nullable();
             $table->string('po_status')->after('po_file')->nullable();
             $table->string('pi_status')->after('po_status')->nullable();

@@ -273,7 +273,7 @@ margin-bottom: 4px;
 content: '';
 margin-left: -117px;
 height: 1px;
-width: 80%;
+width: 75%;
 background: rgba(0,0,0,0.2);
 } 
 	
@@ -560,7 +560,6 @@ background: rgba(0,0,0,0.2);
                  </div>
                  <div class="modal-footer buyer-selection-modal-footer">
                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     {!! Form::button('Proceed', ['class' => 'btn btn-primary btn-sm proceed-btn','type' => 'submit'] ) !!}
                  </div>
             {!! Form::close() !!}
          </div>
@@ -622,6 +621,28 @@ background: rgba(0,0,0,0.2);
           $('div.buyers-card').removeClass("active");
           $(this).addClass("active");
           $('#hidden-buyer-div').hide();
+
+          /* Save selected buyer into localdb */
+          if ($('.buyers-card.active-buyer.active').length != 0) 
+          {
+              $('#hidden-buyer-div').hide();
+              localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
+              localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
+              $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
+              $('#buyerSelectionModalCenter').modal('hide');
+              var buyer = localStorage.getItem("buyer");
+              if (buyer === 'orchestra') 
+              {
+                  orders();
+              } else {
+                  tescoOrders();
+                reOrderTesco();
+              }
+          } else {
+              localStorage.removeItem("buyer");
+              localStorage.removeItem("buyer_id");
+              $('#hidden-buyer-div').show();
+          }
         });
 
         /** [ Show already selected(active) buyer on clicking buyer menu] */
@@ -671,31 +692,6 @@ background: rgba(0,0,0,0.2);
 				reOrderTesco();
             }
         }
-
-        /** [ Select buyer on clicking proceed button] */
-        $('.proceed-btn').on('click', function() {
-            
-            if ($('.buyers-card.active-buyer.active').length != 0) 
-            {
-                $('#hidden-buyer-div').hide();
-                localStorage.setItem("buyer", $('.buyers-card.active-buyer.active').data("name").toLowerCase());
-                localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
-                $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
-                $('#buyerSelectionModalCenter').modal('hide');
-                var buyer = localStorage.getItem("buyer");
-                if (buyer === 'orchestra') 
-                {
-                    orders();
-                } else {
-                    tescoOrders();
-					reOrderTesco();
-                }
-            } else {
-                localStorage.removeItem("buyer");
-                localStorage.removeItem("buyer_id");
-                $('#hidden-buyer-div').show();
-            }
-        });
 
         /** To refresh modal while hidden **/
         $('#buyerSelectionModalCenter').on('hidden.bs.modal', function (e) {
