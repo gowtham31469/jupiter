@@ -2294,12 +2294,10 @@ function uploadPurchaseOrder(formData, zone) {
 				},
 				422: function (data) {
 					$('.snackbar_span').html("File Mismatch!! Please check the file.");
-					$('#snackbar').css('background-color', '#F44336');
 					showSnackbar();
 				},
 				400: function () {
 					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
-					$('#snackbar').css('background-color', '#F44336');
 					showSnackbar();
 				}
 			},
