@@ -2092,14 +2092,23 @@ class OrderManagementCntrl extends Controller
         PDF::setPrintFooter(false);
         PDF::SetFont('frankgothcnbt');
 		PDF::SetAutoPageBreak(TRUE);
+		$i=0;
 		foreach($svgarr as $value)
 		{
 			 PDF::AddPage('L', array(30,80));
 			 PDF::SetMargins(0, 0, 0, false);
 			
 			 $svg=urldecode($value);
+			
+			
+			
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.jpg'), 2, 2, 33, 13, 'JPG', '', '', true, 300, '', false, false, 0, false, false, false);
+			
+			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.jpg'), 42, 2, 33, 13, 'JPG', '', '', true, 300, '', false, false, 0, false, false, false);
+			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
@@ -4292,7 +4301,24 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/tesco/'.$name).' '.$type);
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type);
+        $info    = json_decode($info, true);
+		return $info;
+    }
+	/**
+     * This Function is used to generate barcode using java.
+     *
+     * @return path of barcode
+     */
+  	public function generateBarcodeTsl3(Request $request)
+    {
+		$name=$request['name'];
+		$type=$request['type'];
+		$barcode=$request['barcode'];
+		
+		$tabula       = Config::get('tabula.bar_jar');
+		
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type);
         $info    = json_decode($info, true);
 		return $info;
     }

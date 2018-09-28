@@ -384,6 +384,7 @@ Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\Order
 Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl1');
+Route::post('admin/tesco/generatebarcodetsl3', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl3');
 
 
 // Route::get('upload', 'UploadController@index');
