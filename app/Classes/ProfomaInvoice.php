@@ -211,7 +211,6 @@ class ProfomaInvoice
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
                           ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name')
                           ->get()->toArray();
-
         if ($item_details){
           foreach ($item_details as $key => $value) {
            if ($value->zone == "CE") {
@@ -240,13 +239,11 @@ class ProfomaInvoice
                 $template_array = array_combine($table_array, $qnty_id_array);
                 $count = 2;
               }
-              
               if (!empty($template_array)) {
                   unset($template_array[$table_name]);
                   $data['tables']  = array_merge($data['tables'],$template_array);
 
                   foreach ($template_array as $key => $qunty_tbl) {
-                
                   $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$key));
                   if ($item_details[0]->zone =="CE") {
                     $item_details2    = DB::table($key)
@@ -261,6 +258,7 @@ class ProfomaInvoice
                                   ->where('ce_style_ref',$item_details[0]->style)
                                   ->where($key.'.order_flag',"newOrder")
                                   ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name')->get()->toArray();
+
                   }
                   else{
                     
@@ -293,9 +291,11 @@ class ProfomaInvoice
                 if ($count == sizeof($item_details)) {
                   $data['item_details'] = $item_details;
                 }
+                else{
+                  $data['item_details'] = [];
+                }
               }
           }  
-
           if ($item_id_array) {
             foreach (array_unique($item_id_array) as $item_id) {
              $price_list      = DB::table('price_taxation')
