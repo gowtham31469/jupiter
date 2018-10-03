@@ -761,7 +761,7 @@ function tescoStatusTable(data,path)
     var columnsIn = data[0];
     for (var key in columnsIn)
     {
-        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
+        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count" && key!= "is_order_count_empty")
         {
 			if(key == "TemplateName")
 			{
@@ -782,7 +782,7 @@ function tescoStatusTable(data,path)
             if (key != "id")
             {
                 
-                if (key =="PO Number" && value['po_required']==1) 
+                if (key =="PO Number" && value['po_required']==1 && value['is_order_count_empty'] == 0)
                 {
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
@@ -798,8 +798,13 @@ function tescoStatusTable(data,path)
                 }
                 else if (key == "OrderDate")
                 {
-                    var orderDate = moment(value[key] ).format('DD-MM-YYYY');
-                    tr += '<td align="center">'+orderDate+'</td>';
+                    if(value['is_order_count_empty'] == 0){
+                        var orderDate = moment(value[key] ).format('DD-MM-YYYY');
+                        tr += '<td align="center">'+orderDate+'</td>';
+                    }
+                    else{
+                        tr += '<td align="center"> - </td>';
+                    }
 
                    
                 }
@@ -807,7 +812,7 @@ function tescoStatusTable(data,path)
                 else if (key == "PI Status")
                 {
                     var str=value[key] ;
-                    if(str != null && str != "")
+                    if(str != null && str != "" && value['is_order_count_empty'] == 0)
                     {
                        if (str=="PI Approved"){
                             action_status = true;
@@ -826,16 +831,21 @@ function tescoStatusTable(data,path)
                    
                 }
                 else if (key == "Artwork Status") {
-                    var str=value[key] ;
-                    $status=str.replace(/ /g, "");
-                    
-                    tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                    if(value['is_order_count_empty'] == 0){
+                        var str=value[key] ;
+                        $status=str.replace(/ /g, "");
+                        
+                        tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                    }
+                    else{
+                       tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
+                    }
                    
                 }
                 else if (key == "PO Status")
                 {
                     var str=value[key] ;
-                    if(str != null && str != "" && value['po_required']==1)
+                    if(str != null && str != "" && value['po_required']==1 && value['is_order_count_empty'] == 0)
                     {
                         $status=str.replace(/ /g, "");
                         $status_text='<span class="po_class label label-' + $status + '">' + value[key] + '</span>';
@@ -888,7 +898,7 @@ function tescoStatusTable(data,path)
                    }                
                     var pi_required = value['pi_required'];
                     var po_required = value['po_required'];
-                    if (value["Artwork Status"]!="Order Cancelled") 
+                    if (value["Artwork Status"]!="Order Cancelled" && value['is_order_count_empty'] == 0) 
                     {
                        if (pi_required==1 && po_required ==1)
                        {
@@ -912,20 +922,22 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00-00-0000' || value[key] == null)
-                   {
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'"  style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'")  readonly></td>';
+                   if(value['is_order_count_empty'] == 0){
+                        if (value[key] == null)
+                       {
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                       }
+                       else
+                       {
+                           
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                       }
                    }
-                   else
-                   {
-                       
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;"  placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'") readonly></td>';
-                   }
-                  
-                   
-                  
+                   else{
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span> - </td>';
+                   }                
                 }
-                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
+                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count" && key!="is_order_count_empty")
                 {
                 	if (value[key]== "" || value[key]==null)
                 	{
@@ -1438,6 +1450,7 @@ function updateArtwork(obj)
 	$('#tesco_uk_style').prop('disabled',true);
 	$('#tesco_ce_style').prop('disabled',true);
 	$('#tesco_eqos').prop('disabled',true);
+    $('#tesco_ocn').prop('disabled',true);    
 	$('#tesco_description').prop('disabled',true);   
 	$('#tesco_season_code').prop('disabled',true);
 	$('#tesco_manufacture_date').prop('disabled',true);
@@ -1484,6 +1497,7 @@ function updateArtwork(obj)
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
                     $('#tesco_eqos').val(data.order_details.eqos_site_code);
+                    $('#tesco_ocn').val(data.order_details.ocn_number);
                     $('#tesco_description').val(data.order_details.short_description);                   
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
@@ -1508,6 +1522,7 @@ function updateArtwork(obj)
 						$('#tesco_uk_style').prop('disabled',true);
 						$('#tesco_ce_style').prop('disabled',true);
 						$('#tesco_eqos').prop('disabled',true);
+                        $('#tesco_ocn').prop('disabled',true);         
 						$('#tesco_description').prop('disabled',true);   
 						$('#tesco_season_code').prop('disabled',true);
 						$('#tesco_manufacture_date').prop('disabled',true);
@@ -1745,14 +1760,12 @@ function updateArtwork(obj)
     }
     function setEditOrderStatus()
     {
-			
 		var tpnd         = [];
         var barcode      = [];
         var size 		 = [];
         var count        = [];
 		var single_size        = [];
 		var barcode_checks=0;
-	
 		var po_number         =  $('#tesco_po_number').val();
 		var uk_style          =  $('#tesco_uk_style').val();
 		var ce_style          =  $('#tesco_ce_style').val();
@@ -1770,9 +1783,8 @@ function updateArtwork(obj)
 		var type              =  $('#edit_template_type').val()
 		var template_name     =  $('#edit_template_name').val()
 	    var edit_id           =  $('#edit_id').val() 
-		var order_type           =  $('#order_type').val()
-		
-		
+		var order_type        =  $('#order_type').val()
+        var tesco_ocn         =  $('#tesco_ocn').val()
 		
 
         /** [ Create array of ce ratio orms tpn ] */
@@ -1892,16 +1904,16 @@ function updateArtwork(obj)
 					$.ajax({
 						 url: base_url + "/admin/tesco/set-tesco-order-status",
 						 type: 'post',
-						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
+						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size,tesco_ocn:tesco_ocn},
 						 success: function (data) {
 							 $('.left-panel').removeClass('active'); 
-							 td_row.find('td:nth-child(6)').text(data);
+							 // td_row.find('td:nth-child(6)').text(data);
 							 
 							 $('#snackbar').css('background-color','#00b6ff');
 							 $('.snackbar_span').html('Order updated Successfully');
 							 showSnackbar();
 							 
-							// location.reload()
+							location.reload()
 						 },
 						 error: function (data) {
 							console.log(data);
@@ -2463,6 +2475,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
             var uk_style         = $('#tesco_uk_style').val();
             var ce_style         = $('#tesco_ce_style').val();
             var tesco_eqos       = $('#tesco_eqos').val();
+            var tesco_ocn        = $('#tesco_ocn').val();            
             var supplier         = $('#tesco_supplier option:selected').text();
             var department       = $('#tesco_department option:selected').text();
             var brand            = $('#tesco_brand option:selected').text();

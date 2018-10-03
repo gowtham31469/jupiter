@@ -30,9 +30,7 @@ class DashboardController extends Controller
 		try
 		{
 			$new_class    = new Dashboard();
-
-            $new_orders      = $new_class->newOrders();
-			
+            $new_orders      = $new_class->newOrders();			
             $result = response()->json(['error'=> false,'message' =>'success','new_orders'=>$new_orders],200);
        
 		}
