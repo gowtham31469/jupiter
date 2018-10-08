@@ -493,6 +493,10 @@ Route::get('admin/tesco/get-tesco-Sizecharts-details', 'Admin\Settings\Tesco\Tes
 Route::put('admin/tesco/update-tesco-sizecharts', 'Admin\Settings\Tesco\TescoSettings@updateTescoSizechartsById');
 Route::put('admin/tesco/make-sizechart-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSizechartEnabled');
 Route::put('admin/tesco/make-sizechart-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSizechartDisabled');
+Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings@tescoTaxCode');
+Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTescoTaxCodes');
+Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTaxCodesById');
+Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoTaxCodesById');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');

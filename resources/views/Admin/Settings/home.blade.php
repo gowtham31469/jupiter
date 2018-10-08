@@ -22,7 +22,7 @@
               <li id="6" onclick="compositions()"><a>Compositions</a></li>
               <li id="7" onclick="parts()"><a>Parts</a></li>
               <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
-              <li id="8"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+              <li id="9"  onclick="orchestraSymbols()"><a>Symbols</a></li>
             </ul>
           </div>
         <div class="tesco-sidebar sidebar style-4" style="display: none;">
@@ -32,6 +32,7 @@
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
             <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
+            <li id="5"  onclick="tescoTaxCode()"><a>Tax Code</a></li>
           </ul>
         </div>
         <div class="content">
@@ -1598,6 +1599,69 @@
        </div>
    </div>
 
+   {{-- Add Tesco Tax Code Modal --}}
+   <div class="modal fade" id="addTescoTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="addTescoTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoTaxCodeLabel">Add Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="tesco_taxcode_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Tesco Tax Code Modal --}}
+   <div class="modal fade" id="editTescoTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="editTescoTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editTescoTaxCodeLabel">Edit Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_tesco_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="edit_tesco_taxcode_result"></div>
+                        {!! Form::hidden('edit_tesco_tax_code_id',$value = null, array('id'=>'edit_tesco_tax_code_id','class' => 'form-control input-sm')) !!}
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
     <!-- Buyer selection Modal -->
@@ -1780,6 +1844,7 @@
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
+        $('#add_tesco_tax_codes_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
         $('#supplier_result').hide();
@@ -1790,6 +1855,8 @@
         $('#edit_tesco_department_result').hide();
         $('#tesco_brand_result').hide();
         $('#edit_tesco_brand_result').hide();
+        $('#tesco_taxcode_result').hide();
+        $('#edit_tesco_taxcode_result').hide();
        })
 
       /** Add orchestra garment form validation **/
@@ -2455,6 +2522,42 @@
            /* call makeSizeChartDisabled function from tesco-settings.js*/
            makeSizeChartDisabled(id,csrf_token)
        });
+
+     /** Add Tesco Tax Code form validation **/
+     $('#add_tesco_tax_codes_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoTaxCodes function from  tesco-settings.js*/
+           addTescoTaxCodes();
+        }
+      })
+       
+         /** get edit Tesco tax code details **/
+       $(document).on('click','.edit-tesco-taxcodes',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoTaxCodesById function from settings.js*/
+           getTescoTaxCodesById(id);
+       });
+
+       /** submit edit Tesco tax code form **/
+       $('#edit_tesco_tax_codes_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoTaxCodes function from tesco-settings.js*/
+            editTescoTaxCode();
+         }
+       })
 
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
