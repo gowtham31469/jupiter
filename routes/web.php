@@ -501,6 +501,8 @@ Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSetti
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');
 Route::post('admin/tesco/order-management/set-po-number', 'Admin\Tesco\OrderStatusCntrl@setPONumber');
+Route::post('admin/tesco/set-po-file', 'Admin\Tesco\OrderStatusCntrl@setCustomerPOFile');
+
 Route::post('admin/tesco/order-management/show-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@getTescoPI');
 Route::post('admin/tesco/approve-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@approveTescoPI');
 Route::post('admin/tesco/reject-tesco-pi', 'Admin\Tesco\OrderStatusCntrl@rejectTescoPI');
