@@ -19,6 +19,9 @@ return [
     |
     */
    'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
+	
+   
+	'bar_jar' => '/var/www/html/jupiter/BarcodeGenerator.jar',
 
    /*
     |--------------------------------------------------------------------------
