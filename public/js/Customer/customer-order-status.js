@@ -194,7 +194,13 @@ function orderStatus() {
                 var newObj1 = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
                
                $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-
+                newObj.sort(function(obj1, obj2) {
+                    var date1 =obj1.OrderDate;
+                    var date2 =obj2.OrderDate;
+                    if (date1 > date2) return -1;
+                    if (date1 < date2) return 1;
+                    return 0;
+                });
                $('.main-content').append(tescoStatusTable(newObj,path));
                $('.top-content').html("");
                $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
@@ -308,8 +314,7 @@ function orderStatus() {
                                             }
 											else
 											{
-												
-												  $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
+												$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.tableName+'-'+value1.id+'" data-company="'+value1.company_id+'"class="list-group-item">'+value1.TemplateName+'</li>')
 											}
                                           
                                         });
@@ -1740,10 +1745,8 @@ function tescoStatusTable(data,path)
                     }
                     else
                     {
-                        //$status="status";
                         $status_text=" - ";
                     }
-                    
                     
                     tr += '<td align="center">'+$status_text+'</td>';
                    
@@ -1766,14 +1769,20 @@ function tescoStatusTable(data,path)
                 {
                     var str=value[key] ;
                     
-                    if(str != null && str != "" && value['po_required']==1 && value['is_order_count_empty'] == 0)
+                    if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
-                        $status=str.replace(/ /g, "");
-                        $status_text='<span class="po_class label label-' + $status + '">' + value[key] + '</span>';
+                        if(str != null && str != ""){
+                            status=str.replace(/ /g, "");
+                            status_text='<span class="po_class label label-' + status + '">' + value[key] + '</span>';
+                        }
+                        else{
+                            str ="PO Pending"
+                            status=str.replace(/ /g, "");
+                            status_text='<span class="po_class label label-' + status + '">' + str + '</span>';
+                        }                        
                     }
                     else
                     {
-                        //$status="status";
                         $status_text=" - ";
                     }
                     

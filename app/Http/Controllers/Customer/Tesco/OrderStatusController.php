@@ -19,6 +19,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Config;
 use App\Classes\TescoOrders;
 use Auth;
+use Carbon\Carbon;
 
 class OrderStatusController extends Controller
 {
@@ -225,7 +226,8 @@ class OrderStatusController extends Controller
             $data        = DB::table($table_name)->where('id',$template_id)
                               ->update([
                                   'purchase_order_no' => $po_number,
-                                  'po_status' => $po_status
+                                  'po_status' => $po_status,
+                                  'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                 ]);
 
             $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -361,7 +363,8 @@ class OrderStatusController extends Controller
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
-                                               'pi_status' => "PI Approved"
+                                               'pi_status' => "PI Approved",
+                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
                     else {
@@ -371,7 +374,8 @@ class OrderStatusController extends Controller
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
-                                               'pi_status' => "PI Approved"
+                                               'pi_status' => "PI Approved",
+                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
                     }
                 }
@@ -380,7 +384,8 @@ class OrderStatusController extends Controller
                 $approved_data   = DB::table($table_name)
                                     ->where('id',$row_id)
                                     ->update([
-                                       'pi_status' => "PI Approved"
+                                       'pi_status' => "PI Approved",
+                                       'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                     ]);
             }
             if ($approved_data)
@@ -494,74 +499,90 @@ class OrderStatusController extends Controller
 	  		if($customer_role_id->role_id == 1)
 		    {
 				$data['tcl1'] = DB::table('tesco_tcl1_orders')
-                            ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
-					->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
-							->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_tcl1_orders.is_order_count_empty',0)
-                            ->select('tesco_tcl1_orders.*',DB::raw("'".$tcl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    					        ->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
+    							->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_tcl1_orders.is_order_count_empty',0)
+                                ->select('tesco_tcl1_orders.*',DB::raw("'".$tcl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['tcl2'] = DB::table('tesco_tcl2_orders')
-                            ->where('tesco_tcl2_orders.is_order_count_empty',0)
-                            ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
-							->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->where('tesco_tcl2_orders.is_order_count_empty',0)
+                                ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    				            ->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
+    							->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['tcl4'] = DB::table('tesco_tcl4_orders')
-                            ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
-				            ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_tcl4_orders.is_order_count_empty',0)
-                            ->select('tesco_tcl4_orders.*',DB::raw("'".$tcl4."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    				            ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
+    				            ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_tcl4_orders.is_order_count_empty',0)
+                                ->select('tesco_tcl4_orders.*',DB::raw("'".$tcl4."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['thl1'] = DB::table('tesco_thl1_orders')
-                            ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_thl1_orders.order_status', '!=', 'Saved')
-							 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_thl1_orders.is_order_count_empty',0)
-                            ->select('tesco_thl1_orders.*',DB::raw("'".$thl1."'".' as "TemplateName"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    				            ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
+    							 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_thl1_orders.is_order_count_empty',0)
+                                ->select('tesco_thl1_orders.*',DB::raw("'".$thl1."'".' as "TemplateName"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['thl3'] = DB::table('tesco_thl3_orders')
-                            ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_thl3_orders.order_status', '!=', 'Saved')
-				            ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_thl3_orders.is_order_count_empty',0)
-                            ->select('tesco_thl3_orders.*',DB::raw("'".$thl3."'".' as "TemplateName"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    				            ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
+    				            ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_thl3_orders.is_order_count_empty',0)
+                                ->select('tesco_thl3_orders.*',DB::raw("'".$thl3."'".' as "TemplateName"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['tsl1'] = DB::table('tesco_tsl1_orders')
-                            ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
-				             ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_tsl1_orders.is_order_count_empty',0)
-                            ->select('tesco_tsl1_orders.*',DB::raw("'".$tsl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1) 
+    				            ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
+    				             ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_tsl1_orders.is_order_count_empty',0)
+                                ->select('tesco_tsl1_orders.*',DB::raw("'".$tsl1."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
-                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
-							->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->where('tesco_tsl3_orders.is_order_count_empty',0)
-                            ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
-                            ->where("zone",$zone)
-                            ->where($col,$style_num)
-                            ->get();
+                                ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1)                            
+    				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
+    							->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_tsl3_orders.is_order_count_empty',0)
+                                ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where("zone",$zone)
+                                ->where($col,$style_num)
+                                ->get();
 			}
 			else
 			{
 				$data['tcl1'] = DB::table('tesco_tcl1_orders')
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
-					->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
+                            ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+					        ->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
 							->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tcl1_orders.is_order_count_empty',0)
@@ -572,7 +593,9 @@ class OrderStatusController extends Controller
             $data['tcl2'] = DB::table('tesco_tcl2_orders')
                             ->where('tesco_tcl2_orders.is_order_count_empty',0)
                             ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
+                            ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
 							->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl2_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
@@ -581,7 +604,9 @@ class OrderStatusController extends Controller
                             ->get();
             $data['tcl4'] = DB::table('tesco_tcl4_orders')
                             ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
+                            ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
 				            ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl4_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tcl4_orders.is_order_count_empty',0)
@@ -591,8 +616,10 @@ class OrderStatusController extends Controller
                             ->get();
             $data['thl1'] = DB::table('tesco_thl1_orders')
                             ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_thl1_orders.order_status', '!=', 'Saved')
-							 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
+                            ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
+							->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_thl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_thl1_orders.is_order_count_empty',0)
                             ->select('tesco_thl1_orders.*',DB::raw("'".$thl1."'".' as "TemplateName"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_item_master.company_id')
@@ -601,8 +628,10 @@ class OrderStatusController extends Controller
                             ->get();
             $data['thl3'] = DB::table('tesco_thl3_orders')
                             ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_thl3_orders.order_status', '!=', 'Saved')
-				             ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
+                            ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
+				            ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_thl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_thl3_orders.is_order_count_empty',0)
                             ->select('tesco_thl3_orders.*',DB::raw("'".$thl3."'".' as "TemplateName"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
@@ -611,7 +640,9 @@ class OrderStatusController extends Controller
                             ->get();
             $data['tsl1'] = DB::table('tesco_tsl1_orders')
                             ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
+                            ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
 				            ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tsl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tsl1_orders.is_order_count_empty',0)
@@ -620,8 +651,10 @@ class OrderStatusController extends Controller
                             ->where($col,$style_num)
                             ->get();
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
-                            ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
-				->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
+                            ->join('tesco_item_master','tesco_tsl3_orders_quanty.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
 				            ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tsl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tsl3_orders.is_order_count_empty',0)
@@ -677,7 +710,8 @@ class OrderStatusController extends Controller
                    ->update([
                         'purchase_order_no' => $po,
                         'po_file' => $destination_path_insert,
-                        'po_status' => $po_status
+                        'po_status' => $po_status,
+                        'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
@@ -719,7 +753,8 @@ class OrderStatusController extends Controller
                 DB::table($value[0])->where('id',$value[1])
                    ->update([
                         'purchase_order_no' => $po,
-                        'po_status' => $po_status
+                        'po_status' => $po_status,
+                        'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                   ]);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200);
@@ -876,6 +911,7 @@ class OrderStatusController extends Controller
             $single_size = explode(',',$request['single_size']);
         }
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
+        $order_qnty = (array_sum($count)>0)?0:1 ;
         if ($temp_data->order_flag == "newOrder" && $template_name != "THL3" && $template_name != "THL1") {
             $orderObj->updateTescoOrders($table_name,$temp_data,$request);
         }
@@ -895,6 +931,7 @@ class OrderStatusController extends Controller
                                   //'tesco_supplier_id'    => $request['supplier'],
                                   'rfid_compliant'       => $request['rfid'],
                                   'tag_at_source'        => $request['tag_at_source'],
+                                  'is_order_count_empty' => $order_qnty
                                 ]);
         
         DB::table($qty_table_name)->where($foreign_key,$template_id)->delete();
@@ -1052,7 +1089,8 @@ class OrderStatusController extends Controller
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
                           'po_file' => $destination_path_insert,
-                          'po_status' => $po_status
+                          'po_status' => $po_status,
+                          'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
                         ]);
             if ($data)
