@@ -18,5 +18,5 @@ class TescoTaxCode extends Model
       *
       * @var array
       */
-      protected $fillable = ['tax_type','tax_code', 'is_enabled'];
+      protected $fillable = ['tax_type','tax_code', 'is_enabled', 'tax'];
 }

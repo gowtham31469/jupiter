@@ -1421,10 +1421,10 @@ function tescoTaxCode() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="tesco-taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="tesco-taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax (%)</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_taxcodes, function(i, item){
                     var index = i+1;
-                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
                    });
                    tesco_metadata += '</tbody></table></div>';
                    $('.content').html(tesco_metadata)
@@ -1463,12 +1463,13 @@ function tescoTaxCode() {
      try{
           var tax_type   = $('#tax_type').val();
           var tax_code   = $('#tax_code').val();
+          var tax        = $('#tax').val();
           var csrf_token = $('meta[name="csrf-token"]').attr('content');
  
           $.ajax({
               url: base_url + "/admin/tesco/add-tesco-tax-code",
               method: 'POST',
-              data: {_token:csrf_token,tax_type:tax_type,tax_code:tax_code},
+              data: {_token:csrf_token,tax_type:tax_type,tax_code:tax_code,tax:tax},
               tryCount : 0,
               retryLimit : 2,
               beforeSend: function () {
@@ -1535,6 +1536,7 @@ function tescoTaxCode() {
                  $('#edit_tesco_tax_code_id').val(id);
                  $('#edit_tax_code').val(data.tesco_tax_codes[0].tax_code);
                  $('#edit_tax_type').val(data.tesco_tax_codes[0].tax_type);
+                 $('#edit_tax').val(data.tesco_tax_codes[0].tax);
         
                  $('#editTescoTaxCodesModal').modal({
                       backdrop: 'static',
@@ -1569,6 +1571,7 @@ function tescoTaxCode() {
        var id        = $('#edit_tesco_tax_code_id').val();
        var tax_type  = $('#edit_tax_type').val();
        var tax_code  = $('#edit_tax_code').val();
+       var tax       = $('#edit_tax').val();
 
        var csrf_token = $('meta[name="csrf-token"]').attr('content');
        $.ajax({
@@ -1578,7 +1581,7 @@ function tescoTaxCode() {
              $(".loader").show();
            },
            method:"put",
-           data:{_token:csrf_token,id:id,tax_type:tax_type,tax_code:tax_code},
+           data:{_token:csrf_token,id:id,tax_type:tax_type,tax_code:tax_code,tax:tax},
            tryCount : 0,
            retryLimit : 2,
            statusCode: {

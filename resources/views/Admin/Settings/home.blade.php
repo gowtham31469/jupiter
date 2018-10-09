@@ -1616,6 +1616,11 @@
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
+                          {!! Form::label('tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
                           {!! Form::label('tax_code', 'Tax Code', ['class' => 'form_label']) !!}
                           {!! Form::text('tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
                           <div class="help-block with-errors"></div>
@@ -1645,6 +1650,11 @@
                         <div class="form-group has-feedback">
                           {!! Form::label('edit_tax_type', 'Tax Type', ['class' => 'form_label']) !!}
                           {!! Form::text('edit_tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">

@@ -710,7 +710,7 @@ class TescoSettings extends Controller
          public function tescoTaxCode()
          {
            try {
-                 $tesco_taxcode = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled')->orderBy('is_enabled','desc')->get();
+                 $tesco_taxcode = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->orderBy('is_enabled','desc')->get();
                  return response()->json(['error'=>'false','message' =>'success', 'tesco_taxcodes' => $tesco_taxcode]);
                } catch (\Exception $e)
                {
@@ -727,7 +727,7 @@ class TescoSettings extends Controller
        public function addTescoTaxCodes(Request $request)
        {
            try {
-                $is_exists = TescoTaxCode::where('tax_type', 'ilike', $request['tax_type'])->where('tax_code', 'ilike', $request['tax_code'])->select('id')->get();
+                $is_exists = TescoTaxCode::where('tax_type', 'ilike', $request['tax_type'])->where('tax_code', 'ilike', $request['tax_code'])->where('tax', '=', $request['tax'])->select('id')->get();
 
                 if(sizeof($is_exists) > 0)
                 {
@@ -738,6 +738,7 @@ class TescoSettings extends Controller
                    $inserted = TescoTaxCode::create([
                            'tax_type'   => $request['tax_type'],
                            'tax_code'   => $request['tax_code'],
+                           'tax'        => $request['tax'],
                            'is_enabled' => 0
                          ]);
                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
@@ -759,7 +760,7 @@ class TescoSettings extends Controller
        {
        try {
              $id = $request['id'];
-             $tesco_tax_code = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled')->where('tesco_tax_code.id',$id)->get();
+             $tesco_tax_code = DB::table('tesco_tax_code')->select('id','tax_code','tax_type','is_enabled', 'tax')->where('tesco_tax_code.id',$id)->get();
              return response()->json(['error'=>'false','message' =>'success', 'tesco_tax_codes' => $tesco_tax_code]);
            } catch (\Exception $e)
            {
@@ -778,11 +779,13 @@ class TescoSettings extends Controller
              $id        = $request['id'];
              $tax_code  = $request['tax_code'];
              $tax_type  = $request['tax_type'];
+             $tax       = $request['tax'];
 
              /** @var array [Database Unique field validation] */
              $is_exists = TescoTaxCode::select('id')
                           ->where('tax_type', 'ilike', $tax_type)
                           ->where('tax_code', 'ilike', $tax_code)
+                          ->where('tax', '=', $tax)
                           ->where('id','<>',$id)
                           ->get();
 
@@ -795,7 +798,9 @@ class TescoSettings extends Controller
                 TescoTaxCode::where('id',$id)
                  ->update([
                    'tax_code' => $tax_code,
-                   'tax_type' => $tax_type
+                   'tax_type' => $tax_type,
+                   'tax'      => $tax,
+
                 ]);
 
                 $result = response()->json(['error'=> false,'message' =>'Success'],200);
