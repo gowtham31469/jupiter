@@ -1318,7 +1318,6 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                             $('.snackbar_span').html('Price Details are Missing !!');
                             showSnackbar();
                         }
-                        
                     }
                     else
                     {

@@ -450,7 +450,7 @@
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script type="text/javascript">
         var buyer = localStorage.getItem("buyer");
-        Dropzone.options.poUpload = {
+        Dropzone.options.poUpload = {   
 
             // Prevents Dropzone from uploading dropped files immediately
             url: base_url + "/customer/" + buyer + "/set-po-file",
@@ -539,6 +539,5 @@
         $('.left-panel').removeClass('active');
 
     })
-    </script>
-    
+    </script>  
     @endsection
