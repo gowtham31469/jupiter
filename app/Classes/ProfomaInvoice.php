@@ -158,7 +158,7 @@ class ProfomaInvoice
                                           ->join($table_name,$table_name.'.template_id','=','tesco_item_master.id')
                                           ->join('company','company.id','=','tesco_item_master.company_id')
                                           ->where($table_name.'.id',$id)
-                                          ->select('company.*')
+                                          ->select('company.*',$table_name.'.pi_rev_no as rev_number')
                                           ->first();
                                          
         if ($data['company_details']->id == 1) {
@@ -167,7 +167,7 @@ class ProfomaInvoice
         else {
           $data['company_details']->pi_number = "SP00".$pi_id;
         }
-        $data['company_details']->rev_number = 0;
+        // $data['company_details']->rev_number = 0;
         $data['company_details']->pi_date = $today->toDateString();
         
         $customer_details       = DB::table($table_name)
@@ -209,7 +209,7 @@ class ProfomaInvoice
                           ->where('price_taxation.buyer_id',$buyer_id)
                           ->where('tesco_template.item_id',$request->template_id)
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
-                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status')
+                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status','pi_rev_no')
                           ->get()->toArray();
         if ($item_details){
           foreach ($item_details as $key => $value) {
@@ -258,7 +258,7 @@ class ProfomaInvoice
                                   ->where('ce_style_ref',$item_details[0]->style)
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
 
                   }
                   else{
@@ -275,7 +275,7 @@ class ProfomaInvoice
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where('uk_style_ref',$item_details[0]->style)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
                   }
                   if ($item_details2) {
                     $item_details = array_merge($item_details,$item_details2);
