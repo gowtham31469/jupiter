@@ -93,10 +93,13 @@ class TemplateManagementCntrl extends Controller
     } 
 	public function getCompany(Request $request)
     {
-         $items = DB::table("company")
+        $items = array();
+         $items['company'] = DB::table("company")
                                 ->select('*')
                                 ->get();
-         
+         $items['tax'] = DB::table("tesco_tax_code")
+                                ->select('id','tax_type','tax_code')
+                                ->get();
          return json_encode($items);
     }
     /**

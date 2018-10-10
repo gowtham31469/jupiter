@@ -1065,7 +1065,7 @@ function tescoSuppliers() {
    }
   }
 
-    /**
+/**
   * Function to Tesco Size Chart Settings home page
   * @author <praveen>
   */
@@ -1194,7 +1194,7 @@ function tescoSizeChart() {
     }
    }
 
-    /**
+ /**
    * Function for get tesco Size Chart details for editing
    * @param id
    * @author <praveen>
@@ -1247,7 +1247,7 @@ function tescoSizeChart() {
    }
   }
   /**
-  * Function for edit tesco department details
+  * Function for edit tesco size chart details
   * @author <praveen>
   */
  function editTescoSizeChart()
@@ -1397,5 +1397,220 @@ function tescoSizeChart() {
      console.log("Error:"+e)
     }
    }
+
+/**
+  * Function to Tesco Tax code Settings home page
+  * @author <praveen>
+  */
+function tescoTaxCode() {
+    try{
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/tax-code",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount : 0,
+          retryLimit : 2,
+          beforeSend: function () {
+              $(".loader").show();
+          },
+          success: function (data) {
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="tesco-taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax (%)</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.tesco_taxcodes, function(i, item){
+                    var index = i+1;
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-tesco-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                   });
+                   tesco_metadata += '</tbody></table></div>';
+                   $('.content').html(tesco_metadata)
+                   $('.edit-tesco-taxcodes').tooltip('show')
+                   $('.edit-tesco-taxcodes').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
+                   $('#tesco-taxcodes-list-table').DataTable();
+                   $("#tesco-taxcodes-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-taxcodes-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-taxcodes-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+          },
+          complete: function () {
+              $(".loader").hide();
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+
+/**
+  * Adds a tesco taxcode.
+  * @author <praveen>
+  */
+  function addTescoTaxCodes()
+  {
+     try{
+          var tax_type   = $('#tax_type').val();
+          var tax_code   = $('#tax_code').val();
+          var tax        = $('#tax').val();
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/tesco/add-tesco-tax-code",
+              method: 'POST',
+              data: {_token:csrf_token,tax_type:tax_type,tax_code:tax_code,tax:tax},
+              tryCount : 0,
+              retryLimit : 2,
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Tax Code Added Successfully");
+                        showSnackbar();
+                        $('#addTescoTaxCodesModal').modal('hide');
+                        tescoTaxCode()
+                   },
+                   208: function() {
+                        $('#tesco_taxcode_result').removeAttr('style');
+                        $('#tesco_taxcode_result').html('Tax Code already exists.')
+                        $("#tesco_taxcode_result").addClass("alert alert-warning");
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                        $(".loader").hide();
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+
+/**
+   * Function for get tesco tax code details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getTescoTaxCodesById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/tesco/get-tesco-tax-code-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_tesco_tax_code_id').val(id);
+                 $('#edit_tax_code').val(data.tesco_tax_codes[0].tax_code);
+                 $('#edit_tax_type').val(data.tesco_tax_codes[0].tax_type);
+                 $('#edit_tax').val(data.tesco_tax_codes[0].tax);
+        
+                 $('#editTescoTaxCodesModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_tesco_tax_codes_form').validator('validate');
+                 $('#editTescoTaxCodesModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+/**
+  * Function for edit tesco tax code details
+  * @author <praveen>
+  */
+ function editTescoTaxCode()
+ {
+  try{
+       var id        = $('#edit_tesco_tax_code_id').val();
+       var tax_type  = $('#edit_tax_type').val();
+       var tax_code  = $('#edit_tax_code').val();
+       var tax       = $('#edit_tax').val();
+
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-tax-code",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,tax_type:tax_type,tax_code:tax_code,tax:tax},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Tax Code Updated Successfully");
+                       showSnackbar();
+                       $('#editTescoTaxCodesModal').modal('hide');
+                       tescoTaxCode()
+                },
+                208: function() {
+                     $('#edit_tesco_taxcode_result').removeAttr('style');
+                     $('#edit_tesco_taxcode_result').html('Tax Code already exists.')
+                     $("#edit_tesco_taxcode_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
    
    
