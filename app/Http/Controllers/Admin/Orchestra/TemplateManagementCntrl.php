@@ -48,7 +48,23 @@ class TemplateManagementCntrl extends Controller
              return redirect('/admin/dashboard');
         }
         
-    }    
+    } 
+    /**
+     * [getCompany to get company and orchestra taxcode ]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getCompanyList(Request $request)
+    {
+        $items = array();
+         $items['company'] = DB::table("company")
+                                ->select('*')
+                                ->get();
+         $items['tax'] = DB::table("orchestra_taxcode")
+                                ->select('id','tax_type','tax_code')
+                                ->get();
+         return json_encode($items);
+    }  
 	/**
 		To Show Template List
 	*/
@@ -109,18 +125,28 @@ class TemplateManagementCntrl extends Controller
         try {
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
-			      $name    = $request['name'];
-		      	$ref    = $request['ref'];
-			      $company   = $request['company'];
-		      	$inside_tamilnadu   = $request['inside_tamilnadu'];
-			      $outside_tamilnadu   = $request['outside_tamilnadu'];
+            $ref         = $request['ref'];
+            $company     = $request['company'];
+            $hsncode     = $request['hsncode'];
+            $sapcode     = $request['sapcode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material    = $request['material'];
+            $height      = $request['height'];
+            $width       = $request['width'];
             DB::table('orchestra_template')
                         ->where('id',$template_id)
                         ->update([
-                           'tax' => $taxation,
-						               'inside_tamilnadu' => $inside_tamilnadu,
-						               'outside_tamilnadu' => $outside_tamilnadu
-                        ]);
+                          'tax_code_id'      => $taxation,
+                          'template_name'    => $ref,
+                          'hsn_code'         => $hsncode,
+                          'gl_code'          => $glcode,
+                          'sap_ref'          => $sapcode,
+                          'color'            => $color,
+                          'dimension_height' => $height,
+                          'dimension_width'  => $width,
+                          'material'         => $material
+                          ]);
 			
 			$items = DB::table("orchestra_template")
                                 ->select('*')
@@ -130,8 +156,8 @@ class TemplateManagementCntrl extends Controller
 			DB::table('orchestra_item_master')
                         ->where('id',$item_id)
                         ->update([
-						   'company_id' => $company,
-						   'ref_no' => $ref
+            						   'company_id' => $company,
+            						   'ref_no' => $ref
                         ]);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
