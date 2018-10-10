@@ -302,6 +302,18 @@ function template_list() {
 													$('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "update_orch_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_' + temp_id + '">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="' + data[0].template_name + '" name="ref_' + temp_id + '" id="ref_' + temp_id + '" required disabled> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_' + temp_id + '">Company Name</label> <select class="form-control input-sm " name="company_' + temp_id + '" id="company_' + temp_id + '" style="width: 100%;">' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_' + temp_id + '">Taxation :</label> <select class="form-control input-sm " name="tax_' + temp_id + '" id="tax_' + temp_id + '" style="width: 100%;">' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_' + temp_id + '">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="text" value="' + data[0].hsn_code + '" name="hsn_code_' + temp_id + '" id="hsn_code_' + temp_id + '" maxlength = "4" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="sap_ref_' + temp_id + '">SAP Ref No:</label> <input class="form-control input-sm" placeholder="SAP Ref. No" required type="text" value="' + data[0].sap_ref + '" name="sap_ref_' + temp_id + '" id="sap_ref_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_' + temp_id + '">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="text" value="' + data[0].gl_code + '" name="gl_code_' + temp_id + '" id="gl_code_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_' + temp_id + '">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="' + data[0].color + '" name="color_' + temp_id + '" id="color_' + temp_id + '" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_' + temp_id + '">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="text" value="' + data[0].dimension_height + '" name="dimension_height_' + temp_id + '" id="dimension_height_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_' + temp_id + '">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="text" value="' + data[0].dimension_width + '" name="dimension_width_' + temp_id + '" id="dimension_width_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_' + temp_id + '">Material :</label> <input class="form-control input-sm" placeholder="Material" required type="text" value="' + data[0].material + '" name="material_' + temp_id + '" id="material_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4" style="margin-top: 20px;"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="' + temp_id + '" >Save</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
 													$('.descriptionDiv').css('margin-top', '20px')
 													$('.viewDiv').css('margin-top', '0px')
+													/* Template details edit form */
+														$('#update_orch_template_data_form').validator().on('submit', function (e) {
+													        if (e.isDefaultPrevented())
+													        {
+
+													        }
+													        else
+													        {
+													           e.preventDefault();
+													           saveTescoTax(temp_id);
+													        }
+												      })
 
 												} else {
 													$('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
@@ -319,18 +331,6 @@ function template_list() {
 											$('#company_' + data[0].id).val(data[0].company_id)
 											$('#tax_' + temp_id).val(value[0].tax_code_id)
 
-											/* Template details edit form */
-											$('#update_orch_template_data_form').validator().on('submit', function (e) {
-										        if (e.isDefaultPrevented())
-										        {
-
-										        }
-										        else
-										        {
-										           e.preventDefault();
-										           saveTescoTax(temp_id);
-										        }
-									      })
 										}
 									},
 									error: function (errorXHR, errorStatus, errorThrown) {},
