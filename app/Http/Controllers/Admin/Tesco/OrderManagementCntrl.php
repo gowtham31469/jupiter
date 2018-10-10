@@ -2105,9 +2105,9 @@ class OrderManagementCntrl extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			 PDF::ImageSVG('@' . $svg, $x=40, $y=0, $w=40, $h=30, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
-			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.jpg'), 2, 2, 33, 13, 'JPG', '', '', true, 300, '', false, false, 0, false, false, false);
+			//PDF::Image(public_path('/storage/app/template/prince.png'), 2, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-			 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.jpg'), 42, 2, 33, 13, 'JPG', '', '', true, 300, '', false, false, 0, false, false, false);
+			//PDF::Image(public_path('/storage/app/template/prince.png'), 42, 2, 33, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			$i++;
 		}
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -4301,7 +4301,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type);
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
@@ -4318,7 +4318,7 @@ class OrderManagementCntrl extends Controller
 		
 		$tabula       = Config::get('tabula.bar_jar');
 		
-		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type);
+		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.jpg').' '.$type.' 33 13');
         $info    = json_decode($info, true);
 		return $info;
     }
