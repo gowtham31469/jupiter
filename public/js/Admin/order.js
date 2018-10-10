@@ -1163,7 +1163,7 @@ function rejectPI(id,table_name)
     })
 }
 
-function Rs(amount) {
+function Rs(amount) {	
     var words = new Array();
     words[0] = 'Zero';
     words[1] = 'One';
