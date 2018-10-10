@@ -1547,30 +1547,30 @@ function GenerateDivTesco(data, name) {
 				} else {
 					var barcode_change = $(this).find('.uk_single_ean').val()
 				}
-				//jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
 				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	
-				$.ajax({
-						url: base_url + "/admin/tesco/generatebarcodetsl3",
-						type: 'post',
-						data: {
-							barcode: barcode_change,
-							type: 1,
-							name:"barcode_"+name_count,
-							_token: csrf_token,
-						},
-						success: function (data) {
-							
-						},
-						complete: function () {
-
-						}
-					})
-				//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/tesco/barcode_"+name_count+".jpg");
-				
-				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
-				
+//				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//	
+//				$.ajax({
+//						url: base_url + "/admin/tesco/generatebarcodetsl3",
+//						type: 'post',
+//						data: {
+//							barcode: barcode_change,
+//							type: 1,
+//							name:"barcode_"+name_count,
+//							_token: csrf_token,
+//						},
+//						success: function (data) {
+//							
+//						},
+//						complete: function () {
+//
+//						}
+//					})
+//				svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+//				
+//				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+//				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 			} else {
 				if (zone == "CE") {
@@ -1578,29 +1578,29 @@ function GenerateDivTesco(data, name) {
 				} else {
 					var barcode_change = $(this).find('.uk_ratio_itf').val()
 				}
-				//jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
-				
-				var csrf_token = $('meta[name="csrf-token"]').attr('content');
-	
-				$.ajax({
-						url: base_url + "/admin/tesco/generatebarcodetsl1",
-						type: 'post',
-						data: {
-							barcode: barcode_change,
-							type: 2,
-							name:"barcode_"+name_count,
-							_token: csrf_token,
-						},
-						success: function (data) {
-							
-						},
-						complete: function () {
-
-						}
-					})
-				//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/tesco/barcode_"+name_count+".jpg");
-				
-				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+//				
+//				var csrf_token = $('meta[name="csrf-token"]').attr('content');
+//	
+//				$.ajax({
+//						url: base_url + "/admin/tesco/generatebarcodetsl1",
+//						type: 'post',
+//						data: {
+//							barcode: barcode_change,
+//							type: 2,
+//							name:"barcode_"+name_count,
+//							_token: csrf_token,
+//						},
+//						success: function (data) {
+//							
+//						},
+//						complete: function () {
+//
+//						}
+//					})
+//				svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+//				
+//				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 
