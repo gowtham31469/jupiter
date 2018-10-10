@@ -4147,7 +4147,8 @@ function storeCERatioTCL1TCL2TSL1()
                  success: function (data) {
 
                     /** Call  afterOrderSubmitted() */
-                    afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4238,7 +4239,8 @@ function storeCERatioTHL1()
                  success: function (data) {
 
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4347,7 +4349,8 @@ function storeCESingleTCL4TSL3()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4446,7 +4449,8 @@ function storeCESingleTHL3()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4557,7 +4561,8 @@ function storeUKRatioTCL1TCL2TSL1()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4647,7 +4652,8 @@ function storeUKRatioTHL1()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4756,7 +4762,8 @@ function storeUKSingleTCL4TSL3()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4855,7 +4862,8 @@ function storeUKSingleTHL3()
                  },
                  success: function (data) {
                        /** Call  afterOrderSubmitted() */
-                       afterOrderSubmitted(data)
+                    var stl_no =  (zone=="CE")? ce_style : uk_style;
+                    afterOrderSubmitted(data,po_number,stl_no)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -4905,7 +4913,7 @@ try{
  * After submitting the order callback function.
  * @author    <praveen>
  */
- function afterOrderSubmitted(data)
+ function afterOrderSubmitted(data,po_number,stl_no)
  {
     var order_date = data.ordered_date.date;
     var delivery_date_req = data.delivery_date_required;
@@ -5040,9 +5048,40 @@ try{
                     $('#upload_combined_po_form').validator('validate');
                 }
             });
-        } else {
-            alert('Po not mandatory.Upload PI')
         }
+        else if(data.pi_required === 1 && data.po_required != 1 )
+        {
+            alert()
+            var template_id = '';
+            var tabl_name = "";
+            var order_flag = "newOrder";
+            var pi_status  = false ;
+            var template_name = Object.keys(data.last_insertions)[0].replace(/ /g, "");
+            var row_id = data.last_insertions[Object.keys(data.last_insertions)[0]];
+            var temp_details = JSON.parse(localStorage.getItem("data"));
+            $.each(temp_details, function (i, item) {
+                if(temp_details[i].template_name == Object.keys(data.last_insertions)[0]){
+                    template_id = temp_details[i].id;
+                }
+            });
+            switch(template_name){
+                case 'TCL1' : tabl_name = "tesco_tcl1_orders";
+                                break;
+                case 'TCL2' : tabl_name = "tesco_tcl2_orders";
+                                break;
+                case 'TSL1' : tabl_name = "tesco_tsl1_orders";
+                                break;
+                case 'TCL4' : tabl_name = "tesco_tcl4_orders";
+                                break;
+                case 'TSL3' : tabl_name = "tesco_tsl3_orders";
+                                break;
+                case 'THL1' : tabl_name = "tesco_thl1_orders";
+                                break;
+                case 'THL3' : tabl_name = "tesco_thl3_orders";
+                                break;
+            }
+            genarateTescoPI(row_id,tabl_name,pi_status,stl_no,template_id,po_number,template_name,order_flag)
+        }   
     }
 
     /** [ Show order already exists alertbox] */

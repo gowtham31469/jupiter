@@ -13,53 +13,87 @@ function template_list() {
 			$(".loader").css('margin-top', '12%');
 		},
 		success: function (data) {
-			$('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8"><div class="card preview-tag" style="height:calc(100vh - 110px);"><div class="loader"></div><div class="viewDiv"> </div><div class="descriptionDiv">  </div></div> </div> </div>')
+			$('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8" style="margin-top: 70px;"><div class="card preview-tag" style="height:calc(100vh - 110px);"><div class="loader"></div><div class="viewDiv"> </div><div class="descriptionDiv">  </div></div> </div> </div>')
 
 			if (buyer == "tesco") {
 				$('.descriptionDiv').addClass('hidden')
 				$('#tree1').jstree({
-					'core': {
-						'data': [{
-							"id": 1,
-							"text": "Stickers",
-							"parent_id": 0,
-							"children": [{
-								"id": 2,
-								"text": "Carton & Polybag Stickers",
-								"parent_id": 1,
-								"children": [{
-									"id": 3,
-									"text": "CE",
-									"parent_id": 2,
-									"children": [{
-										"id": "5,6,7",
-										"text": "TCL 1 , TCL 2 & TSL 1",
-										"parent_id": 3
+                    'core': {
+                        'data': [{
+                            "id": 1,
+                            "text": "Stickers",
+                            "parent_id": 0,
+                            "children": [{
+                                "id": 2,
+                                "text": "Carton & Polybag Stickers",
+                                "parent_id": 1,
+                                "children": [{
+                                    "id": 3,
+                                    "text": "CE",
+                                    "parent_id": 2,
+                                    "children": [
+                                    {
+                                        "id": "5",
+                                        "text": "TCL 1",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "6",
+                                        "text": "TCL 2",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "7",
+                                        "text": "TSL 1",
+                                        "parent_id": 3
                                     }, {
-										"id": "8,9",
-										"text": "TCL 4 & TSL 3",
-										"parent_id": 3
+                                        "id": "8",
+                                        "text": "TCL 4",
+                                        "parent_id": 3
                                     }, {
-										"id": "10,11",
-										"text": "THL 1 & THL 3",
-										"parent_id": 3
+                                        "id": "9",
+                                        "text": "TSL 3",
+                                        "parent_id": 3
+                                    }, {
+                                        "id": "10",
+                                        "text": "THL 1",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "11",
+                                        "text": "THL 3",
+                                        "parent_id": 3
                                     }]
                                 }, {
-									"id": 4,
-									"text": "UK",
-									"parent_id": 2,
-									"children": [{
-										"id": "12,13,14",
-										"text": "TCL 1 , TCL 2 & TSL 1",
-										"parent_id": 4
+                                    "id": 4,
+                                    "text": "UK",
+                                    "parent_id": 2,
+                                    "children": [
+                                    {
+                                        "id": "12",
+                                        "text": "TCL 1",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "13",
+                                        "text": "TCL 2",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "14",
+                                        "text": "TSL 1",
+                                        "parent_id": 3
                                     }, {
-										"id": "15,16",
-										"text": "TCL 4 & TSL 3",
-										"parent_id": 4
+                                        "id": "15",
+                                        "text": "TCL 4",
+                                        "parent_id": 3
                                     }, {
-										"id": "17,18",
-										"text": "THL 1 & THL 3",
-										"parent_id": 4
+                                        "id": "16",
+                                        "text": "TSL 3",
+                                        "parent_id": 3
+                                    }, {
+                                        "id": "17",
+                                        "text": "THL 1",
+                                        "parent_id": 3
+                                    },{
+                                        "id": "18",
+                                        "text": "THL 3",
+                                        "parent_id": 3
                                     }]
                                 }]
                             }]
@@ -116,16 +150,20 @@ function template_list() {
 									statusCode: {
 										200: function (companydata) {
 											var company = "";
-											$.each(companydata, function (index1, value1) {
+											$.each(companydata.company, function (index1, value1) {
 												company += "<option value=" + value1.id + ">" + value1.name + "</option>";
+											});
+											var tax = "";
+											$.each(companydata.tax, function (index1, value1) {
+												tax += "<option value=" + value1.id + ">" + value1.tax_type + "("+value1.tax_code+")</option>";
 											});
 											$('.viewDiv').html('');
 											$.each(data, function (index, value) {
 												if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-													$('.viewDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input disabled class="form-control input-sm " placeholder="Enter Reference No" required type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 70px;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 70px;">' + company + '</select></div></td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" value="' + value[0].tax + '" name="tax_' + value[0].id + '" step="0.01" id="tax_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Inside Tamilnadu : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Inside Tamilnadu" required type="text" value="' + value[0].inside_tamilnadu + '" name="inside_tamilnadu_' + value[0].id + '" id="inside_tamilnadu_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Outside Tamilnadu : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Outside Tamilnadu" required type="text" value="' + value[0].outside_tamilnadu + '" name="outside_tamilnadu_' + value[0].id + '" id="outside_tamilnadu_' + value[0].id + '" style="width: 70px;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
+													$('.viewDiv').append('<div class="col-md-12"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px solid #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input disabled class="form-control input-sm " placeholder="Enter Reference No" required type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">SAP Ref : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="SAP Ref. No" required type="text" value="' + value[0].sap_ref + '" name="sap_ref' + value[0].id + '" id="sap_ref' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">GL Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="GL Code" required type="text" value="' + value[0].gl_code + '" name="gl_code_' + value[0].id + '" id="gl_code_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">HSN Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="HSN Code" required type="text" value="' + value[0].hsn_code + '" name="hsn_code_' + value[0].id + '" id="hsn_code_' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 100%;">' + company + '</select></div></td><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="tax_' + value[0].id + '" id="tax_' + value[0].id + '" style="width: 100%;">' + tax + '</select></div></td></tr><tr><td class="pull-left">Color : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Color" required type="text" value="' + value[0].color + '" name="color_' + value[0].id + '" id="color_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">Material : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Material" required type="text" value="' + value[0].material + '" name="material_' + value[0].id + '" id="material_' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">Height : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Height" required type="text" value="' + value[0].dimension_height + '" name="dimension_height_' + value[0].id + '" id="dimension_height_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">Width : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Width" required type="text" value="' + value[0].dimension_width + '" name="dimension_width_' + value[0].id + '" id="dimension_width_' + value[0].id + '" style="width: 100%;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
 
 												} else {
-													$('.viewDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Reference No" disabled type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 70px;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 70px;">' + company + '</select></div></td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Tax" required type="number" value="' + value[0].tax + '" name="tax_' + value[0].id + '" step="0.01" id="tax_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Inside Tamilnadu : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Inside Tamilnadu" required type="text" value="' + value[0].inside_tamilnadu + '" name="inside_tamilnadu_' + value[0].id + '" id="inside_tamilnadu_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Outside Tamilnadu : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Outside Tamilnadu" required type="text" value="' + value[0].outside_tamilnadu + '" name="outside_tamilnadu_' + value[0].id + '" id="outside_tamilnadu_' + value[0].id + '" style="width: 70px;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
+													$('.viewDiv').append('<div class="col-md-12"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px solid #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Reference No" disabled type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 70px;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 70px;">' + company + '</select></div></td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="tax_' + value[0].id + '" id="tax_' + value[0].id + '" style="width: 70px;">' + tax + '</select></div></td><td class="pull-left">SAP Ref : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="SAP Ref. No" required type="text" value="' + value[0].sap_ref + '" name="sap_ref' + value[0].id + '" id="sap_ref' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">GL Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="GL Code" required type="text" value="' + value[0].gl_code + '" name="gl_code_' + value[0].id + '" id="gl_code_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">HSN Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="HSN Code" required type="text" value="' + value[0].hsn_code + '" name="hsn_code_' + value[0].id + '" id="hsn_code_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Color : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Color" required type="text" value="' + value[0].color + '" name="color_' + value[0].id + '" id="color_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Material : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Material" required type="text" value="' + value[0].material + '" name="material_' + value[0].id + '" id="material_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Height : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Height" required type="text" value="' + value[0].dimension_height + '" name="dimension_height_' + value[0].id + '" id="dimension_height_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Width : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Width" required type="text" value="' + value[0].dimension_width + '" name="dimension_width_' + value[0].id + '" id="dimension_width_' + value[0].id + '" style="width: 70px;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
 												}
 												$('#company_' + value[0].id).val(value[0].company_id)
 											});

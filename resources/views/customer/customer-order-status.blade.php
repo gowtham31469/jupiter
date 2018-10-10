@@ -449,10 +449,11 @@
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script type="text/javascript">
-        Dropzone.options.poUpload = {
+        var buyer = localStorage.getItem("buyer");
+        Dropzone.options.poUpload = {   
 
             // Prevents Dropzone from uploading dropped files immediately
-            url: base_url + "/customer/tesco/set-po-file",
+            url: base_url + "/customer/" + buyer + "/set-po-file",
             autoProcessQueue: false,
             maxFilesize: 500,
             maxFiles: 1,
@@ -538,6 +539,5 @@
         $('.left-panel').removeClass('active');
 
     })
-    </script>
-    
+    </script>  
     @endsection

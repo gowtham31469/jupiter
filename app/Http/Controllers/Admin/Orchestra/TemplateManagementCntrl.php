@@ -109,17 +109,17 @@ class TemplateManagementCntrl extends Controller
         try {
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
-			$name    = $request['name'];
-			$ref    = $request['ref'];
-			$company   = $request['company'];
-			$inside_tamilnadu   = $request['inside_tamilnadu'];
-			$outside_tamilnadu   = $request['outside_tamilnadu'];
+			      $name    = $request['name'];
+		      	$ref    = $request['ref'];
+			      $company   = $request['company'];
+		      	$inside_tamilnadu   = $request['inside_tamilnadu'];
+			      $outside_tamilnadu   = $request['outside_tamilnadu'];
             DB::table('orchestra_template')
                         ->where('id',$template_id)
                         ->update([
                            'tax' => $taxation,
-						   'inside_tamilnadu' => $inside_tamilnadu,
-						   'outside_tamilnadu' => $outside_tamilnadu
+						               'inside_tamilnadu' => $inside_tamilnadu,
+						               'outside_tamilnadu' => $outside_tamilnadu
                         ]);
 			
 			$items = DB::table("orchestra_template")

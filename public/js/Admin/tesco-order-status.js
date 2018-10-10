@@ -33,7 +33,13 @@ function tescoOrderStatus()
 			   var newObj1 = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
                
                 $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-
+                newObj.sort(function(obj1, obj2) {
+                    var date1 = obj1.OrderDate;
+                    var date2 = obj2.OrderDate;
+                    if (date1 > date2) return -1;
+                    if (date1 < date2) return 1;
+                    return 0;
+                });
                 $('.main-content').append(tescoStatusTable(newObj,path));
                 $('.top-content').html("")
                 $('#datatable-tesco-orders th:contains("StyleNo")').text('Style No');
@@ -761,7 +767,7 @@ function tescoStatusTable(data,path)
     var columnsIn = data[0];
     for (var key in columnsIn)
     {
-        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
+        if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref"&& key != "template_id" && key!="customer_id" && key!="order_flag" && key!="delivery_day_count" && key!= "is_order_count_empty")
         {
 			if(key == "TemplateName")
 			{
@@ -782,7 +788,7 @@ function tescoStatusTable(data,path)
             if (key != "id")
             {
                 
-                if (key =="PO Number" && value['po_required']==1) 
+                if (key =="PO Number" && value['po_required']==1 && value['is_order_count_empty'] == 0)
                 {
                 	var po_file     = value['po_file'];
                     if (value[key]== "" || value[key]==null)
@@ -798,8 +804,13 @@ function tescoStatusTable(data,path)
                 }
                 else if (key == "OrderDate")
                 {
-                    var orderDate = moment(value[key] ).format('DD-MM-YYYY');
-                    tr += '<td align="center">'+orderDate+'</td>';
+                    if(value['is_order_count_empty'] == 0){
+                        var orderDate = moment(value[key] ).format('DD-MM-YYYY');
+                        tr += '<td align="center">'+orderDate+'</td>';
+                    }
+                    else{
+                        tr += '<td align="center"> - </td>';
+                    }
 
                    
                 }
@@ -807,7 +818,7 @@ function tescoStatusTable(data,path)
                 else if (key == "PI Status")
                 {
                     var str=value[key] ;
-                    if(str != null && str != "")
+                    if(str != null && str != "" && value['is_order_count_empty'] == 0)
                     {
                        if (str=="PI Approved"){
                             action_status = true;
@@ -817,7 +828,6 @@ function tescoStatusTable(data,path)
                     }
                     else
                     {
-                        //$status="status";
                         $status_text=" - ";
                     }
                     
@@ -826,27 +836,39 @@ function tescoStatusTable(data,path)
                    
                 }
                 else if (key == "Artwork Status") {
-                    var str=value[key] ;
-                    $status=str.replace(/ /g, "");
-                    
-                    tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                    if(value['is_order_count_empty'] == 0){
+                        var str=value[key] ;
+                        $status=str.replace(/ /g, "");
+                        
+                        tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                    }
+                    else{
+                       tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
+                    }
                    
                 }
                 else if (key == "PO Status")
                 {
-                    var str=value[key] ;
-                    if(str != null && str != "" && value['po_required']==1)
+                    var str= value[key] ;
+                    // if(str != null && str != "" && value['po_required']== 1 && value['is_order_count_empty'] == 0)
+                    if(value['po_required']== 1 && value['is_order_count_empty'] == 0)
                     {
-                        $status=str.replace(/ /g, "");
-                        $status_text='<span class="po_class label label-' + $status + '">' + value[key] + '</span>';
+                        if(str != null && str != ""){
+                            status=str.replace(/ /g, "");
+                            status_text='<span class="po_class label label-' + status + '">' + value[key] + '</span>';
+                        }
+                        else{
+                            str ="PO Pending"
+                            status=str.replace(/ /g, "");
+                            status_text='<span class="po_class label label-' + status + '">' + str + '</span>';
+                        }                        
                     }
                     else
                     {
-                        //$status="status";
-                        $status_text=" - ";
+                        status_text=" - ";
                     }
                     
-                    tr += '<td align="center class="po_status">'+$status_text+'</td>';
+                    tr += '<td align="center class="po_status">'+status_text+'</td>';
                    
                 }
                 else if (key =="StyleNo")
@@ -868,7 +890,6 @@ function tescoStatusTable(data,path)
                         style_no = value.ce_style_ref
 
                         tr += '<td align="center" data-id="'+value.tableID+'" data-table="'+value.tableName+'" data-template="'+value.TemplateName.replace(/ /g, "")+'"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>'+span_style+''+style_no+'</a></td>';
-
                     }
                     else
                     {
@@ -888,11 +909,11 @@ function tescoStatusTable(data,path)
                    }                
                     var pi_required = value['pi_required'];
                     var po_required = value['po_required'];
-                    if (value["Artwork Status"]!="Order Cancelled") 
+                    if (value["Artwork Status"]!="Order Cancelled" && value['is_order_count_empty'] == 0) 
                     {
                        if (pi_required==1 && po_required ==1)
                        {
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=tescoPOUpload(this,"'+value.tableID+'","'+po_file+'","'+value.tableName+'") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" '+style_po+'></i></a></td>';
                        }
                        else if (po_required ==1 && pi_required ==0)
                        {
@@ -902,7 +923,7 @@ function tescoStatusTable(data,path)
                        else if (pi_required ==1 && po_required ==0)
                        {
                             
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI(this,"'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateTescoPI("'+value.tableID+'","'+value.tableName+'","'+action_status+'","'+style_no+'","'+value.template_id+'","'+value.BuyerPO+'","'+value.TemplateName.replace(/ /g, "")+'","'+order_flag+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
                        }
                     }
                     else{
@@ -912,20 +933,22 @@ function tescoStatusTable(data,path)
                 else if (key =="DeliveryDate")
                 {   
                     
-                   if (value[key] == '00-00-0000' || value[key] == null)
-                   {
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'"  style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'")  readonly></td>';
+                   if(value['is_order_count_empty'] == 0){
+                        if (value[key] == null)
+                       {
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'")  readonly></td>';
+                       }
+                       else
+                       {
+                           
+                            tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;" placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'") readonly></td>';
+                       }
                    }
-                   else
-                   {
-                       
-                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="'+value.delivery_day_count+'" style="width: 107px;"  placeholder="Enter Delivery Date" onchange=updateDeliveryDate(this,"'+value.tableID+'","'+value.tableName+'","'+value.delivery_day_count+'") readonly></td>';
-                   }
-                  
-                   
-                  
+                   else{
+                        tr += '<td><span style=display:none;>'+value.OrderDate+'</span> - </td>';
+                   }                
                 }
-                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count")
+                else if (key != "tableName" && key!="tableID" && key!="po_file" && key!="pi_required" && key!="po_required"&& key!="uk_style_ref" && key!="ce_style_ref" && key != "template_id"  && key!="customer_id" && key!="order_flag" && key!="delivery_day_count" && key!="is_order_count_empty")
                 {
                 	if (value[key]== "" || value[key]==null)
                 	{
@@ -1116,7 +1139,7 @@ $(".update-po-file").click(function () {
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
  */
-function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
+function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag)
 {
     $('#uvc_number').text(style_no)
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -1295,7 +1318,6 @@ function genarateTescoPI(obj,id,tableName,pi_status,style_no,template_id,buyer_p
                             $('.snackbar_span').html('Price Details are Missing !!');
                             showSnackbar();
                         }
-                        
                     }
                     else
                     {
@@ -1438,6 +1460,7 @@ function updateArtwork(obj)
 	$('#tesco_uk_style').prop('disabled',true);
 	$('#tesco_ce_style').prop('disabled',true);
 	$('#tesco_eqos').prop('disabled',true);
+    $('#tesco_ocn').prop('disabled',true);    
 	$('#tesco_description').prop('disabled',true);   
 	$('#tesco_season_code').prop('disabled',true);
 	$('#tesco_manufacture_date').prop('disabled',true);
@@ -1484,6 +1507,7 @@ function updateArtwork(obj)
                     $('#tesco_uk_style').val(data.order_details.uk_style_ref);
                     $('#tesco_ce_style').val(data.order_details.ce_style_ref);
                     $('#tesco_eqos').val(data.order_details.eqos_site_code);
+                    $('#tesco_ocn').val(data.order_details.ocn_number);
                     $('#tesco_description').val(data.order_details.short_description);                   
                     $('#tesco_season_code').val(data.order_details.season_code);
                     $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
@@ -1508,6 +1532,7 @@ function updateArtwork(obj)
 						$('#tesco_uk_style').prop('disabled',true);
 						$('#tesco_ce_style').prop('disabled',true);
 						$('#tesco_eqos').prop('disabled',true);
+                        $('#tesco_ocn').prop('disabled',true);         
 						$('#tesco_description').prop('disabled',true);   
 						$('#tesco_season_code').prop('disabled',true);
 						$('#tesco_manufacture_date').prop('disabled',true);
@@ -1745,14 +1770,12 @@ function updateArtwork(obj)
     }
     function setEditOrderStatus()
     {
-			
 		var tpnd         = [];
         var barcode      = [];
         var size 		 = [];
         var count        = [];
 		var single_size        = [];
 		var barcode_checks=0;
-	
 		var po_number         =  $('#tesco_po_number').val();
 		var uk_style          =  $('#tesco_uk_style').val();
 		var ce_style          =  $('#tesco_ce_style').val();
@@ -1770,9 +1793,8 @@ function updateArtwork(obj)
 		var type              =  $('#edit_template_type').val()
 		var template_name     =  $('#edit_template_name').val()
 	    var edit_id           =  $('#edit_id').val() 
-		var order_type           =  $('#order_type').val()
-		
-		
+		var order_type        =  $('#order_type').val()
+        var tesco_ocn         =  $('#tesco_ocn').val()
 		
 
         /** [ Create array of ce ratio orms tpn ] */
@@ -1892,16 +1914,16 @@ function updateArtwork(obj)
 					$.ajax({
 						 url: base_url + "/admin/tesco/set-tesco-order-status",
 						 type: 'post',
-						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size},
+						 data: { _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,barcode:barcode,size:size,count:count,edit_id:edit_id,template_name:template_name,single_size:single_size,tesco_ocn:tesco_ocn},
 						 success: function (data) {
 							 $('.left-panel').removeClass('active'); 
-							 td_row.find('td:nth-child(6)').text(data);
+							 // td_row.find('td:nth-child(6)').text(data);
 							 
 							 $('#snackbar').css('background-color','#00b6ff');
 							 $('.snackbar_span').html('Order updated Successfully');
 							 showSnackbar();
 							 
-							// location.reload()
+							location.reload()
 						 },
 						 error: function (data) {
 							console.log(data);
@@ -2463,6 +2485,7 @@ function dynamicSVGTemplatescard(svgDoc,template_name,zone,type)
             var uk_style         = $('#tesco_uk_style').val();
             var ce_style         = $('#tesco_ce_style').val();
             var tesco_eqos       = $('#tesco_eqos').val();
+            var tesco_ocn        = $('#tesco_ocn').val();            
             var supplier         = $('#tesco_supplier option:selected').text();
             var department       = $('#tesco_department option:selected').text();
             var brand            = $('#tesco_brand option:selected').text();

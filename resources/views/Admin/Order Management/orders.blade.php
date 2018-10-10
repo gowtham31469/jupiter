@@ -630,6 +630,85 @@ background: rgba(0,0,0,0.2);
 
 	</div>
 </div>
+<!-- Proforma Invoice Modal -->
+<div class="modal fade" id="profoma-invoice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div style="margin-left: 5px" class="pi_actions pull-right">
+
+                    </div>
+                    <h5><strong>Proforma Invoice for <span id="uvc_number"></span></strong></h5>
+
+                </div>
+                <div class="modal-body" id="proforma-invoice">
+                    <div class="col-md-12 text-center">
+                        <h4><strong><u>Proforma Invoice</u></strong></h4>
+                        <br/>
+                        <br/>
+                    </div>
+                    <div class="row color-invoice">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="right" style="float: right">
+                                        <img id="company-logo" style="height: 45px;" src="" class="img-responsive">
+                                        <strong>Date</strong>
+                                        <span style="padding-left: 14px;"> : <span style="padding-left: 6px;" class="pi-date"></span>
+                                        </span></br>
+                                        <strong>PI </strong>
+                                            <span style="padding-left: 31px;"> : </span>
+                                            <span style="padding-left: 8px;" class="pi_number"></span>
+                                        <p class="rev hidden"><strong>Rev no</strong><span style="padding-left: 3px;"> : </span>
+                                        <span style="padding-left: 4px;" class="rev_number"> </span></p>
+                                    </div>
+                                    <div id="company_details">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <strong style="margin-left: 15px; font-size:11px;">Customer Details : </strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4" id="bill_to">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px;">
+
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5">
+
+                                </div>
+                            </div>
+                            <hr />
+                            <strong>ITEM DESCRIPTION & DETAILS :</strong>
+                            <div class="row" id="item_details">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <p class="text-left"><strong>Payment Terms : </strong><span class="advnc"></span></p><p class="text-left"><strong>Freight Type  : <span class="bond"></span></strong><span class="freight"> </span></p>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12" id="bank_details">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div style="float:right" class="pi_actions">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	@endsection @else
 	<script type="text/javascript">
 		window.location = "{{ url('/admin') }}";
@@ -639,8 +718,10 @@ background: rgba(0,0,0,0.2);
 	<script src="{{ asset('js/Admin/order.js') }}"></script>
 	<script src="{{ asset('js/Admin/tesco-reorder.js') }}"></script>
 	<script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
     <script src="{{ asset('js/Admin/parser.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-view-orders.js') }}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script>
 	$(document).ready (function(){
         $("#success-alert").hide();
