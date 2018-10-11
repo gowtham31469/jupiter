@@ -23,27 +23,6 @@
         border: 1px solid #555555;
     }
 
-    .descriptionDiv {
-        background: #fff;
-        padding: 10px;
-        margin-left: -13px;
-        text-align: center;
-        margin-bottom: 11px;
-        position: absolute;
-        bottom: 0;
-        width: 97%;
-        border: 1px dashed #333;
-    }
-
-    .descriptionDiv span {
-        font-weight: 400;
-    }
-
-    .descriptionDiv h4 {
-        color: #333;
-        border-bottom: 1px solid #cacaca;
-        padding-bottom: 8px;
-    }
     p.delta {
         display: inline-block;
         margin-right: 30px;
@@ -136,12 +115,12 @@
                     <div class="row">
                        <input name="template_id" id="template_id" value="" class="form-control hidden" >
                         <div class="col-sm-12 col-md-12">
-                            <div class="col-md-7 featuresDiv">
+                            <div class="col-md-10 featuresDiv">
                              
                              
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn raise_btn addNew"> + Add</button>
+                              <button type="button" class="btn btn-primary raise_btn addNew"> + Add</button>
                             </div>
                         </div>
                       
@@ -149,8 +128,8 @@
                 </h5>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
-                {{ Form::submit('Save', array('class' => 'btn custom_btn btn-sm pull-right')) }}
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">Cancel</button>
+                {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right')) }}
             </div>
         </div>
           {!! Form::close() !!}

@@ -24,9 +24,11 @@ AIA5AGAOAJgDAOYAgDkAYA4AYA4AmAMA5gCAOQBgDgCYAwDmAIA5AGAOAJgDAOYAgDkAYA4AmAMA
 -->
     <g width="391" height="178" transform="matrix(0.2356 0 0 0.207 7.8 -3.4654)" id="barcode"></g>
 	
+<!--
 	<image width="391" height="178" transform="matrix(0.2356 0 0 0.207 9.8 4.3654)" id="barcodeimage" xlink:href="">
 		
 </image>
+-->
 	
 <text transform="matrix(1 0 0 1 28.5 53.6014)" style="font-family:Myriad, Myriad Roman, Arial, sans-serif; font-size:8.5px;" id="barcode_number">5057545998991</text>
 <text text-anchor="middle" transform="matrix(1.0002 0 0 1 57 79.0482)" style="font-family:'FranklinGothicBT-RomanCondensed', FrankGoth Cn BT; font-size:8px;" id="tpnd">ORMS TPN: 7418529678528</text>

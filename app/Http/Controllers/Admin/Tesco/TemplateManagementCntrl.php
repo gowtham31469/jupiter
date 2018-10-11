@@ -111,17 +111,28 @@ class TemplateManagementCntrl extends Controller
         try {
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
-			$name    = $request['name'];
-			$company   = $request['company'];
-			$inside_tamilnadu   = $request['inside_tamilnadu'];
-			$outside_tamilnadu   = $request['outside_tamilnadu'];
+			$ref         = $request['ref'];
+			$company     = $request['company'];
+			$hsncode     = $request['hsncode'];
+			$sapcode     = $request['sapcode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material    = $request['material'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+
             DB::table('tesco_template')
                         ->where('id',$template_id)
                         ->update([
-                           'tax' => $taxation,
-						   'template_name' => $name,
-						   'inside_tamilnadu' => $inside_tamilnadu,
-						   'outside_tamilnadu' => $outside_tamilnadu
+                           'tax_code_id'      => $taxation,
+						   'template_name'    => $ref,
+						   'hsn_code'         => $hsncode,
+						   'gl_code'          => $glcode,
+                           'sap_ref'          => $sapcode,
+                           'color'            => $color,
+                           'dimension_height' => $height,
+                           'dimension_width'  => $width,
+                           'material'         => $material
                         ]);
 			
 			$items = DB::table("tesco_template")
@@ -132,7 +143,7 @@ class TemplateManagementCntrl extends Controller
 			DB::table('tesco_item_master')
                         ->where('id',$item_id)
                         ->update([
-						   'item_name' => $name,
+						   'item_name'  => $ref,
 						   'company_id' => $company
                         ]);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
