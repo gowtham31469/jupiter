@@ -500,7 +500,6 @@ function saveOrchestraTax(temp_id) {
 
 		$('#moreDetails').modal("show");
 		$('#moreDetails').removeData('.modal');
-		console.log(id)
 	}
 
 /**

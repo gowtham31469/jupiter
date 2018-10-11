@@ -48,7 +48,6 @@ function orders() {
         success: function (data) {
                 var path = base_url + "/admin/orchestra/order-management/orders"
                 var newObj = data.sticker_orders.concat(data.label_orders);
-                console.log(newObj);
                 var search_string= localStorage.getItem("search_string");
             //alert(search_string)
                 $('.main-content').html(table(newObj,path)); 
@@ -114,7 +113,6 @@ function orderStatus() {
                 	
 				$('.main-content').append(table(newObj,path));
                 $('.top-content').html("")
-				console.log(newObj)
 				
 				var uniqueNames = [];
 				for(i = 0; i< newObj.length; i++){    
@@ -988,7 +986,6 @@ function genaratePI(id,table_name,uvc,pi_status)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-               console.log(data.data)
                if ((jQuery.isEmptyObject(data.data.company_details)) || (jQuery.isEmptyObject(data.data.bank_details)) || (jQuery.isEmptyObject(data.data.ship_to)) || (jQuery.isEmptyObject(data.data.bill_to)))
                {
                     $('.snackbar_span').html('Something went wrong');
@@ -2502,7 +2499,6 @@ function barcode_polybag(id, data) {
  */
 
 function barcode_carton(id, data) {
-	console.log(data);
 	var mySVG = document.getElementById(id);
 	var svgDoc;
 	mySVG.addEventListener("load", function () {
@@ -4399,7 +4395,6 @@ function hangtagmodal(data) {
 
 function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
-	console.log(data.merchandisers);
 	var tr = "";
 	var barcode = "";
 	$.each(data.order_details, function (index, value) {
@@ -5824,7 +5819,6 @@ function jsbarcode(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -5882,7 +5876,6 @@ function jsbarcodewash(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -5939,7 +5932,6 @@ function jsbarcode_hang(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -6403,7 +6395,6 @@ function setWashLabel(index, dataid, id) {
             care_instruction_select.push([$(this).val()]);
         });
         var care_instruction_select_fin = care_instruction_select.join(',');
-        console.log(care_instruction_select_fin);
 
         //template_front_id = template_id[0].id;
         var tot_qty_table = [];
@@ -6666,10 +6657,7 @@ function clonewashcarelabels(index)
 	 if (washcare <= 5) {
                   washcare += 1;
                 $('#add_modal').append('<div class="col-md-4" ><div  style="border:1px dashed #333;height: 280px;" class="card add-card wash-card'+washcare+'" data-toggle="modal" data-target=".washcare_label_' + washcare + '"  data-backdrop="static" data-keyboard="false"><span></span>    <div class="card-title"><p class="pull-right delete-wash' + washcare + '" id="' + washcare + '" style="cursor: pointer;"> Delete <i class="fa fa-trash" aria-hidden="true"></i></p><p class="pull-right" style="cursor: pointer;margin-right:5px" id=clickme' + washcare + ' >Edit <i class="fa fa-pencil" aria-hidden="true"></i> </p>  <h5><b class="washlabelname' + washcare + '">Washcare label</b></h5></div><div class="row"><div class="col-md-6 col-md-offset-3"><div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="clone_washcare_label_card' + washcare + '" style=";cursor:pointer;display: none;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
-		 
-               // var index=washcare;
-				console.log(index);
-		 		console.log(washcare);
+
 				$('#clone_washcare_label_card'+washcare).on('click', function (e) {
 					clonewashcarelabels(washcare);
 				});

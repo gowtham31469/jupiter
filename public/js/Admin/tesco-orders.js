@@ -144,8 +144,6 @@ function tescoOrders() {
 					}
 
 				}
-				
-				console.log(newObj1)
 
 				var options = "<option value=''>Search Style Number</option>";
 				if (CEUniqueNames.length > 0) {
@@ -1293,7 +1291,6 @@ function printDivTesco(data, name) {
 							var str = s.serializeToString(d);
 							var svg = encodeURI(str)
 							svgarr.push(svg)
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1376,8 +1373,6 @@ function printDivTesco(data, name) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name);
 		}
@@ -1460,7 +1455,6 @@ function printDivTesco(data, name) {
 							var d = svgRoot;
 							var str = s.serializeToString(d);
 							svgarr.push(str)
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1502,8 +1496,6 @@ function printDivTesco(data, name) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			PopupTesco(svg_fin, name);
 		}
@@ -1689,7 +1681,6 @@ function GenerateDivTesco(data, name) {
 							var str = s.serializeToString(d);
 							var svg = encodeURI(str)
 							svgarr.push(svg)
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1773,8 +1764,6 @@ function GenerateDivTesco(data, name) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			PopupTescoGenerateSmall(svg_fin, name);
 		}
@@ -1857,7 +1846,6 @@ function GenerateDivTesco(data, name) {
 							var d = svgRoot;
 							var str = s.serializeToString(d);
 							svgarr.push(str)
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1899,8 +1887,6 @@ function GenerateDivTesco(data, name) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			PopupTescoGenerate(svg_fin, name);
 		}
@@ -5279,7 +5265,6 @@ function jsbarcodetesco(code, id, svgDoc) {
 
 	//remove temporary canvas
 	canvasTmp.remove();
-console.log(svg_xml)
 	svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 

@@ -63,7 +63,6 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                     var subtotal = 0;
                    
                     var tr = '';
-                    console.log(data.data.bank_details.template_type)
                     if (data.data.bank_details.template_type == "single")
                     {
                         tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
@@ -238,7 +237,6 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-				console.log(data)
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
                $('#profoma-invoice').modal("hide");
@@ -408,7 +406,6 @@ function RsPaise(n) {
     if (nums[1].length == 1) nums[1] = nums[1] + '0';
     if (nums[1].length > 2) {
         nums[1] = nums[1].substring(2, length - 1)
-        console.log(nums[1])
     }
 
     if (nums.length == 2) {

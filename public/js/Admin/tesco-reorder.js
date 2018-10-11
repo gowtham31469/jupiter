@@ -60,7 +60,6 @@ function reOrderTesco()
 				
 				var newObjrepeatOrder1 = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders))
 				
-				//console.log(newObjrepeatOrder)
 				var uniqueNamesRepeatOrder = [];
 			
 				newObjrepeatOrder1.sort(function(obj1, obj2) {
@@ -89,7 +88,6 @@ function reOrderTesco()
 					}
 					     
 				}
-					//console.log(uniqueNamesRepeatOrder)
 				var optionsRepeatOrder="<option>Select Style Number</option>";
 				for(i = 0; i< uniqueNamesRepeatOrder.length; i++){    
 					 optionsRepeatOrder+="<option>"+uniqueNamesRepeatOrder[i]+"</option>";
@@ -706,7 +704,6 @@ function jsbarcodetesco(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -768,7 +765,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
