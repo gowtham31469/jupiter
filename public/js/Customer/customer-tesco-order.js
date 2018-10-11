@@ -5051,7 +5051,6 @@ try{
         }
         else if(data.pi_required === 1 && data.po_required != 1 )
         {
-            alert()
             var template_id = '';
             var tabl_name = "";
             var order_flag = "newOrder";
