@@ -128,7 +128,7 @@
                 </h5>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Cancel</button>
                 {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right')) }}
             </div>
         </div>

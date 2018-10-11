@@ -23,6 +23,7 @@
               <li id="7" onclick="parts()"><a>Parts</a></li>
               <li id="8"  onclick="sizeChart()"><a>Size Chart</a></li>
               <li id="9"  onclick="orchestraSymbols()"><a>Symbols</a></li>
+              <li id="10"  onclick="orchestraTaxCode()"><a>Tax Code</a></li>
             </ul>
           </div>
         <div class="tesco-sidebar sidebar style-4" style="display: none;">
@@ -1671,7 +1672,78 @@
             </div>
         </div>
     </div>
+      {{-- Add Orchestra Tax Code Modal --}}
+   <div class="modal fade" id="addOrchestraTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="addOrchestraTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addOrchestraTaxCodeLabel">Add Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'add_orchestra_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="orchestra_taxcode_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('orch_tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('orch_tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('orch_tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('orch_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('orch_tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('orch_tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
 
+    {{-- Edit Orchestra Tax Code Modal --}}
+   <div class="modal fade" id="editOrchestraTaxCodesModal" tabindex="-1" role="dialog" aria-labelledby="editOrchestraTaxCodeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editOrchestraTaxCodeLabel">Edit Tax Code</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_orchestra_tax_codes_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="edit_orchestra_taxcode_result"></div>
+                        {!! Form::hidden('edit_orchestra_tax_code_id',$value = null, array('id'=>'edit_orchestra_tax_code_id','class' => 'form-control input-sm')) !!}
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_orch_tax_type', 'Tax Type', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_orch_tax_type',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Type','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_orch_tax', 'Tax (%)', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_orch_tax',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax In %','required','onkeypress' => 'return isNumberKey(event)')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_orch_tax_code', 'Tax Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_orch_tax_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tax Code','required', 'maxlength' => '5')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
     <!-- Buyer selection Modal -->
@@ -1857,6 +1929,7 @@
         $('#add_tesco_tax_codes_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
+        $('#add_orchestra_tax_codes_form').trigger("reset");
         $('#supplier_result').hide();
         $('#edit_supplier_result').hide();
         $('#tesco_sizechart_result').hide();
@@ -1867,6 +1940,8 @@
         $('#edit_tesco_brand_result').hide();
         $('#tesco_taxcode_result').hide();
         $('#edit_tesco_taxcode_result').hide();
+        $('#orchestra_taxcode_result').hide();
+        $('#edit_orchestra_taxcode_result').hide();
        })
 
       /** Add orchestra garment form validation **/
@@ -2551,7 +2626,7 @@
        $(document).on('click','.edit-tesco-taxcodes',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
-           /* call getTescoTaxCodesById function from settings.js*/
+           /* call getTescoTaxCodesById function from tesco-settings.js*/
            getTescoTaxCodesById(id);
        });
 
@@ -2566,6 +2641,42 @@
             e.preventDefault();
             /* call editTescoTaxCodes function from tesco-settings.js*/
             editTescoTaxCode();
+         }
+       })
+
+       /** Add orchestra Tax Code form validation **/
+     $('#add_orchestra_tax_codes_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addOrchestraTaxCodes function from  orchestra-settings.js*/
+           addOrchestraTaxCodes();
+        }
+      })
+       
+         /** get edit orchestra tax code details **/
+       $(document).on('click','.edit-orchestra-taxcodes',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getOrchestraTaxCodesById function from orchestra-settings.js*/
+           getOrchestraTaxCodesById(id);
+       });
+
+       /** submit edit orchestra tax code form **/
+       $('#edit_orchestra_tax_codes_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editOrchestraTaxCodes function from orchestra-settings.js*/
+            editOrchestraTaxCode();
          }
        })
 

@@ -249,7 +249,7 @@ function tescoOrders() {
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 ">
-                                                    <div class="card " style="height:calc(100vh - 100px); ">
+                                                    <div class="card " style="height:calc(100vh - 100px); overflow:auto">
                                                         <h4 id="head_template">Template Preview</h4>
                                                         <hr/>
                                                         <div class="row ">
