@@ -1948,9 +1948,6 @@ function PopupTesco(data, name) {
 			}
 		},
 	})
-	//	if (success) { //AND THIS CHANGED
-	//		window.open(url)
-	//	}
 }
 /**
  * This Function is Sub Function of #printDivTesco.
@@ -1960,13 +1957,7 @@ function PopupTesco(data, name) {
 
 function PopupTescoSmall(data, name) {
 
-	//	var s = new XMLSerializer();
-	//	var d = data;
-	//	var str = s.serializeToString(d);
-	//	var svg = encodeURI(str)
-	//var success = false;
 	var url = "";
-	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/tesco/print-div-tesco-small",
@@ -1980,9 +1971,6 @@ function PopupTescoSmall(data, name) {
 		retryLimit: 2,
 		async: false,
 		success: function (data) {
-			//window.location.href=data;
-			//			success = true;
-			//			url = data;
 
 			var element = document.createElement('a');
 			element.setAttribute('href', data);
@@ -2004,9 +1992,6 @@ function PopupTescoSmall(data, name) {
 			}
 		},
 	})
-	//	if (success) { //AND THIS CHANGED
-	//		window.open(url)
-	//	}
 }
 
 /**
@@ -2017,13 +2002,7 @@ function PopupTescoSmall(data, name) {
 
 function PopupTescoGenerate(data, name) {
 
-	//	var s = new XMLSerializer();
-	//	var d = data;
-	//	var str = s.serializeToString(d);
-	//	var svg = encodeURI(str)
-	//var success = false;
 	var url = "";
-	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/tesco/generate-div-tesco",
@@ -2037,9 +2016,6 @@ function PopupTescoGenerate(data, name) {
 		retryLimit: 2,
 		async: false,
 		success: function (data) {
-			//window.location.href=data;
-			//			success = true;
-			//			url = data;
 
 			var element = document.createElement('a');
 			element.setAttribute('href', data);
@@ -2061,9 +2037,6 @@ function PopupTescoGenerate(data, name) {
 			}
 		},
 	})
-	//	if (success) { //AND THIS CHANGED
-	//		window.open(url)
-	//	}
 }
 /**
  * This Function is Sub Function of #printDivTesco.
@@ -2073,13 +2046,7 @@ function PopupTescoGenerate(data, name) {
 
 function PopupTescoGenerateSmall(data, name) {
 
-	//	var s = new XMLSerializer();
-	//	var d = data;
-	//	var str = s.serializeToString(d);
-	//	var svg = encodeURI(str)
-	//var success = false;
 	var url = "";
-	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
 		url: base_url + "/admin/tesco/generate-div-tesco-small",
@@ -2093,9 +2060,6 @@ function PopupTescoGenerateSmall(data, name) {
 		retryLimit: 2,
 		async: false,
 		success: function (data) {
-			//window.location.href=data;
-			//			success = true;
-			//			url = data;
 
 			var element = document.createElement('a');
 			element.setAttribute('href', data);
@@ -2117,9 +2081,6 @@ function PopupTescoGenerateSmall(data, name) {
 			}
 		},
 	})
-	//	if (success) { //AND THIS CHANGED
-	//		window.open(url)
-	//	}
 }
 
 /**

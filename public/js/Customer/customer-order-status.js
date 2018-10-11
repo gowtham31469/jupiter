@@ -169,7 +169,6 @@ function orderStatus() {
                     function(start, end, label) {
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         filterByDate(4, start, end); // We call our filter function
                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
                 });
@@ -305,7 +304,6 @@ function orderStatus() {
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
-                                                    console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -406,7 +404,6 @@ function orderStatus() {
                                                 $count_li++;
                                             }
                                         });
-                                        //alert($count_li);
                                         if($count_li > 0)
                                         {
                                             var company_id=$(this).data('company');
@@ -503,7 +500,6 @@ function orderStatus() {
 											
 												if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -515,7 +511,6 @@ function orderStatus() {
 												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 													if (this.checked) {
 														a.push($(this).parent().attr('data-id'));
-														//alert($(this).parent().attr('data-id'))
 													}
 												});
 												var aa = a.join(',');
@@ -590,7 +585,6 @@ function orderStatus() {
                                             {
 												if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -598,12 +592,10 @@ function orderStatus() {
 											}
 											else
 											{
-												//alert("s")
 												var a = [];
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
-                                                        //alert($(this).parent().attr('data-id'))
                                                     }
                                                 });
                                                 var aa = a.join(',');
@@ -823,7 +815,6 @@ function orderStatus() {
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
                         filterByDate(5, start, end); // We call our filter function
@@ -1077,7 +1068,6 @@ function tescoOrderStatus()
                                                 if (old_po!=value1.purchase_order_no)
                                                 {
                                                     options += "<option>" + value1.purchase_order_no +"</option>";
-                                                    console.log(old_po)
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
@@ -1172,7 +1162,6 @@ function tescoOrderStatus()
                                                 $count_li++;
                                             }
                                         });
-                                        //alert($count_li);
                                         if($count_li > 0)
                                         {
                                             var company_id=$(this).data('company');
@@ -1268,7 +1257,6 @@ function tescoOrderStatus()
 											
 											if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -1280,7 +1268,6 @@ function tescoOrderStatus()
 												$('#exist_artwork_div_status input[type=checkbox]').each(function () {
 													if (this.checked) {
 														a.push($(this).parent().attr('data-id'));
-														//alert($(this).parent().attr('data-id'))
 													}
 												});
 												var aa = a.join(',');
@@ -1358,7 +1345,6 @@ function tescoOrderStatus()
 												
 											if($('#new_po_no_status').val().length > 9)
 											{
-												//alert("a")
 												$('#new_po_error_length_status').removeClass('hidden');
 
 												$('#new_po_error_status').addClass('hidden');
@@ -1370,7 +1356,6 @@ function tescoOrderStatus()
                                                 $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                     if (this.checked) {
                                                         a.push($(this).parent().attr('data-id'));
-                                                        //alert($(this).parent().attr('data-id'))
                                                     }
                                                 });
                                                 var aa = a.join(',');
@@ -1583,7 +1568,6 @@ function tescoOrderStatus()
 
                     },
                     function (start, end, label) {
-                        // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         $.fn.dataTableExt.afnFiltering.length = 0;
                         $tableSel.dataTable().fnDraw();
                         filterByDate(6, start, end); // We call our filter function
@@ -2537,7 +2521,6 @@ function updateArtwork(obj)
                             tr +='<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm ce_ratio_orms_tpn" required="" id="os_tpnd_'+i+'" data-minlength="'+tpn_len+'" maxlength="'+tpn_len+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+tpn_len+' digits." name="os_tpnd_'+i+'" onkeypress="return isNumber(event)" value="'+tpnd+'" placeholder="'+tpn_th+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="'+maxlength+'" maxlength="'+maxlength+'" data-required-error="Mandatory Field." data-minlength-error="Enter '+maxlength+' digits." id="os_barcode_'+i+'" onkeyup="dynamicSVGTemplates()" name="os_barcode_'+i+'" onkeypress="return isNumber(event)" value="'+barcode_td+'" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="'+unit_len+'" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_'+i+'" name="os_case_qty_'+i+'" onkeypress="return isNumber(event)" value="'+unit_qty+'" placeholder="Enter '+qty+'" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>'+th_td+'<td> <div class="form-group has-feedback has-success"><input disabled onkeypress="return checkNumbersOnly(event)" class="form-control  input-sm tot_qty_table" value="'+value.count+'" required=""  placeholder="Quantity" maxlength="4" type="text"><div class="help-block with-errors"></div></div></td></tr>';
                         i++;
                     })
-                     // <button disabled type="button" onclick=addRowOs(this,"'+TemplateName+'","'+data.order_details.zone+'") data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
                      $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - '+TemplateName+'</h4><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th>'+tpnd_tr+'</th><th>'+barcode_tr+'</th> <th>'+qty+'</th>'+th_tr+' <th>Quantity</th></tr></thead> <tbody style="font-size: 11px">'+tr+'</tbody></table>') 
                     
                     $('#edit_template_name').val(TemplateName)
@@ -3653,7 +3636,6 @@ function jsbarcodetesco(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -3716,7 +3698,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();

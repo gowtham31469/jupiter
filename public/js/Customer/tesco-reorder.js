@@ -32,8 +32,6 @@ function reOrderTesco()
 				if (date1 < date2) return 1;
 				return 0;
 			});
-
-			console.log(newObj)
 				for(i = 0; i< newObj1.length; i++){
 					if(newObj1[i].is_order_count_empty == 0)
 					{
@@ -701,7 +699,6 @@ function jsbarcodetesco(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();
@@ -762,7 +759,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
-	console.log(img.src);
 
 	//remove temporary canvas
 	canvasTmp.remove();

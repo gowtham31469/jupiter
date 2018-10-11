@@ -1347,8 +1347,6 @@ function printDivTesco(data,name) {
 							var str = s.serializeToString(d);
 
 							svgarr.push(str)
-							
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1462,8 +1460,6 @@ function printDivTesco(data,name) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 				var svg_fin = svgarr.join(',_');
 
 
@@ -1606,7 +1602,6 @@ function printDivTesco(data,name) {
 
 							svgarr.push(str)
 							
-							//						 console.log(svgRoot)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -1679,8 +1674,6 @@ function printDivTesco(data,name) {
 			ajax_count++;
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-			//				console.log("hai")
-			//				console.log(svgarr)
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name,zone);
