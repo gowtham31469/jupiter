@@ -209,7 +209,7 @@ class ProfomaInvoice
                           ->where('price_taxation.buyer_id',$buyer_id)
                           ->where('tesco_template.item_id',$request->template_id)
                           ->where($table_name.'_quanty.'.$qnty_id,$id)
-                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status','pi_rev_no')
+                          ->select('size',$table_name.'_quanty.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$table_name.'.pi_rev_no','order_flag','tesco_template.template_name','pi_status','pi_rev_no')
                           ->get()->toArray();
         if ($item_details){
           foreach ($item_details as $key => $value) {
@@ -258,7 +258,7 @@ class ProfomaInvoice
                                   ->where('ce_style_ref',$item_details[0]->style)
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
 
                   }
                   else{
@@ -275,7 +275,7 @@ class ProfomaInvoice
                                   ->where($key.'.pi_status',$item_details[0]->pi_status)
                                   ->where('uk_style_ref',$item_details[0]->style)
                                   ->where($key.'.order_flag',"newOrder")
-                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name', 'tesco_template.tax','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
+                                  ->select($key.'.id','size',$qunty_tbl.'.count as quantity','uk_style_ref','ce_style_ref','price_taxation.custom_name as material_name','po_number as po_no','zone','tesco_item_master.ref_no','tesco_template.item_id',$key.'.pi_rev_no','tesco_template.template_name','pi_rev_no')->get()->toArray();
                   }
                   if ($item_details2) {
                     $item_details = array_merge($item_details,$item_details2);
@@ -304,11 +304,12 @@ class ProfomaInvoice
              $price_list      = DB::table('price_taxation')
                                     ->join('price_range','price_range.price_taxation_id','price_taxation.id')
                                     ->join('tesco_template','tesco_template.item_id','price_taxation.template_id')
+                                    ->join('tesco_tax_code','tesco_template.tax_code_id','tesco_tax_code.id')
                                     ->where('price_taxation.template_id','=',$item_id)
                                     ->where('price_taxation.customer_id',$customer_details->id)
                                     ->where('price_taxation.buyer_id',$buyer_id)
                                     ->orderBy('price_range.volume_to')
-                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tesco_template.tax')
+                                    ->select('price_range.volume_from', 'price_range.volume_to','price_range.price',DB::raw($item_id.' as item_id'),'tesco_tax_code.tax')
                                     ->get()->toArray();
               $price_array = array_merge($price_array,$price_list);
             } 
