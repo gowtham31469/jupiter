@@ -240,12 +240,14 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
                $('#profoma-invoice').modal("hide");
+
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
+
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
                var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-              // location.reload();
+              location.reload();
             },
             400: function()
             {
@@ -295,8 +297,11 @@ function tescoRejectPI(id,table_name)
             {
                $('.snackbar_span').html('PI Rejected!');
                $('#profoma-invoice').modal("hide")
+
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
-               showSnackbar();             
+
+               showSnackbar();
+               location.reload();             
             },
             400: function()
             {
@@ -318,16 +323,16 @@ function tescoRejectPI(id,table_name)
 
 function Rs(amount) {   
     var words = new Array();
-    words[0] = 'Zero';
-    words[1] = 'One';
-    words[2] = 'Two';
-    words[3] = 'Three';
-    words[4] = 'Four';
-    words[5] = 'Five';
-    words[6] = 'Six';
-    words[7] = 'Seven';
-    words[8] = 'Eight';
-    words[9] = 'Nine';
+    words[0]  = 'Zero';
+    words[1]  = 'One';
+    words[2]  = 'Two';
+    words[3]  = 'Three';
+    words[4]  = 'Four';
+    words[5]  = 'Five';
+    words[6]  = 'Six';
+    words[7]  = 'Seven';
+    words[8]  = 'Eight';
+    words[9]  = 'Nine';
     words[10] = 'Ten';
     words[11] = 'Eleven';
     words[12] = 'Twelve';
