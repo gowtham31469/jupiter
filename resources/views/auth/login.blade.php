@@ -8,7 +8,7 @@
                         <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
                         <img id="profile-img" class="profile-img-card" src="{{ asset('images/logo.png') }}" />
                     
-                       <form class="form-group" method="POST" action="{{ route('login') }}">
+                       <form class="form-group" method="POST" action="/admin">
                             {{ csrf_field() }}
                             @if ($errors->has('email'))
                             <span class="help-block" style="color:red">

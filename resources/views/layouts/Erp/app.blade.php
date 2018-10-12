@@ -15,17 +15,15 @@
     <link href="{{ asset('font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
      <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Erp/custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 <body class="wallpaper">
     <div class="container-fluid">
         <div class="row">
-        @if (Auth::guard("web_erp_user")->user())
-        @include('layouts.Erp.navbar')
-        @elseif(!Auth::guest())
-            <script type="text/javascript">
-                window.location = "{{ url('/admin/login') }}";
-            </script>
-        @endif
+        @if(Auth::guard('erpuser')->user())
+        	@include('layouts.Erp.navbar')
+		@endif
+        
         @yield('content')
         </div>
     </div>
