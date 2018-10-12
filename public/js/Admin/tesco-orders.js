@@ -64,7 +64,7 @@ function isNumberKey(evt) {
  */
 var globalOrderType = 0;
 var barcode_checks = 0;
-
+var isSubmitting = false;
 function tescoOrders() {
 	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	$('.top-content').html('');
@@ -74,6 +74,11 @@ function tescoOrders() {
 	localStorage.removeItem("zone");
 	localStorage.removeItem("template type");
 	localStorage.removeItem("data");
+	localStorage.removeItem("moq_values");
+	localStorage.removeItem("template_id");
+	localStorage.removeItem("template_group");
+	localStorage.removeItem("customer_id");
+
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	try {
 		/** [ ajax call to load tesco order page ] **/
@@ -702,7 +707,7 @@ function createOrders(parsedObj = false, oType = false) {
                              <div class="col-md-3">\
                               <div class="form-group has-feedback">\
                                <label for="tesco_supplier">Supplier</label> \
-                                <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">\
+                                <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="">\
                                   <option value="">Select Supplier</option>';
 
 				/** [ Show dynamic supplier selectbox ] */
@@ -749,7 +754,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -799,7 +804,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '"  id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                                             </div>\
                                         </td>';
 						});
@@ -820,7 +825,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -875,7 +880,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                                             </div>\
                                         </td>';
 						});
@@ -897,7 +902,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -944,7 +949,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
+                                        <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                                         </div>\
                                         </td>';
 						});
@@ -963,7 +968,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -1018,7 +1023,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="text" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                        <input type="number" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" maxlength="4" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                                         </div>\
                                         </td>';
 						});
@@ -1108,6 +1113,8 @@ function createOrders(parsedObj = false, oType = false) {
 				/** [ show tooltip ] */
 				$('.delete-row').tooltip('show')
 				$('.delete-row').tooltip('toggle')
+				$('.add-row-btn').tooltip('show')
+                $('.add-row-btn').tooltip('toggle')
 				if (parsedObj) {
 					if (oType) {
 						mapStoredValues(parsedObj);
@@ -1133,6 +1140,15 @@ function createOrders(parsedObj = false, oType = false) {
 						$('.quantity-field').prop('required', true)
 					}
 				});
+
+				/** [ Get data from localstorage ] */
+				var data = JSON.parse(localStorage.getItem("data"));
+				/** [ Dynamic tesco suppliers preview and Get MOQ value based on supplier selection ] */
+				$('#tesco_supplier').on('change',function(){ 
+					$.each(data, function (i, item) {
+						dynamicTescoSuppliers("tesco_svg" + i);
+					});
+		        });
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -2127,7 +2143,7 @@ function addUKSingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                             </div>\
                         </td>';
 		});
@@ -2207,7 +2223,7 @@ function addUKRatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                             </div>\
                         </td>';
 		});
@@ -2360,7 +2376,7 @@ function addCESingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                         </div>\
                     </td>';
 		});
@@ -2440,7 +2456,7 @@ function addCERatio(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="text" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" onkeypress="return isNumber(event)" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_ratio_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" maxlength="4" data-lastid="" onfocus="return checkMOQ(this)" data-artwork="'+ item.template_name+'">\
                         </div>\
                     </td>';
 		});
@@ -2529,11 +2545,72 @@ function dynamicSVGTemplates() {
 	try {
 		$.each(data, function (i, item) {
 			dynamicSVGTemplatescard("tesco_svg" + i, item);
-			//dynamicSVGTemplatescard("tesco_svg_modal"+i,item);  
+			
 		});
 	} catch (e) {
 		/** [error statements] */
 		console.error(e);
+	}
+}
+/**
+ * [Tesco supplier dynamic preview function]
+ * @author <praveen>
+ */
+function dynamicTescoSuppliers(id)
+{
+	/**  [ Dynamically change all svg templates ] */
+	var mySVG = document.getElementById(id);
+	var svgDoc = mySVG.contentDocument;
+	var supplier = $('#tesco_supplier option:selected').text();
+	var templates = localStorage.getItem("templates");
+	var buyer_id  = localStorage.getItem("buyer_id");
+	var supplier_id = $('#tesco_supplier option:selected').val();
+	/** [ Dynamically change  svg supplier name ] */
+	if (supplier_id != '') {
+		
+		$('.add-row-btn').removeAttr('disabled');
+		$('.add-row-btn').tooltip('disable');
+		/*
+		 * Get MOQ value based on supplier value.
+		 */
+		
+	    if(isSubmitting) 
+        {
+          return;
+        }
+        isSubmitting = true;
+	    $.ajax({
+		       url:base_url + "/admin/tesco/get-moq-value",
+		       dataType:"json",
+		       method:"get",
+		       data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
+	           tryCount : 0,
+	           retryLimit : 2,
+	           beforeSend: function () {
+	             $(".loader").show();
+	           },
+	           success: function(data){
+	           	     isSubmitting = false;
+	           	     /** Store moq values for validation */
+	                 localStorage.setItem("moq_values", JSON.stringify(data.moq));
+	           },
+	           error: function(errorXHR, errorStatus, errorThrown) {
+	                this.tryCount++;
+	                if (this.tryCount <= this.retryLimit) {
+	                    $.ajax(this);
+	                    return;
+	                }
+	            },
+	           complete: function () {
+	               $(".loader").hide();
+	               svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+	           }
+	       })
+	} else {
+		localStorage.removeItem("moq_values");
+		$('.add-row-btn').attr('disabled', 'disabled');
+		$('.add-row-btn').tooltip('enable');
+		svgDoc.getElementById("supplier").innerHTML = '';
 	}
 }
 /**
@@ -2996,7 +3073,6 @@ function dynamicSVGTemplatescard(id, item) {
 		var uk_style = $('#tesco_uk_style').val();
 		var ce_style = $('#tesco_ce_style').val();
 		var tesco_eqos = $('#tesco_eqos').val();
-		var supplier = $('#tesco_supplier option:selected').text();
 		var department = $('#tesco_department option:selected').text();
 		var brand = $('#tesco_brand option:selected').text();
 		var rfid = $('#tesco_rfid option:selected').text();
@@ -3028,12 +3104,6 @@ function dynamicSVGTemplatescard(id, item) {
 			svgDoc.getElementById("eqos").innerHTML = tesco_eqos.toUpperCase();
 		} else {
 			svgDoc.getElementById("eqos").innerHTML = '';
-		}
-		/** [ Dynamically change  svg supplier name ] */
-		if ($('#tesco_supplier option:selected').val() != '') {
-			svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
-		} else {
-			svgDoc.getElementById("supplier").innerHTML = '';
 		}
 		/** [ Dynamically change  svg department ] */
 		if ($('#tesco_department option:selected').val() != '') {
@@ -3389,7 +3459,7 @@ function setTescoOrder() {
 		var count_TSL3 = [];
 		var count_THL3 = [];
 		var count_THL1 = [];
-		var msg = '';
+		var msg        = '';
 
 		if (zone === "CE") {
 			if (type === "ratio") {
@@ -4922,7 +4992,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	/** Show snackbar if order placed **/
 	if (last_insertions_length > 0) {
 		/** Make form as readonly */
-		$('#create_tesco_order_form input').attr('readonly', 'readonly');
+		$('#create_tesco_order_form input').prop('disabled', 'true');
 		$('.selectpicker').prop('disabled', true);
 		$('#tesco_manufacture_date').prop('disabled',true);
 		$("#datePicker1").datepicker("disabled");
@@ -6806,6 +6876,30 @@ function cancelTescoOrder() {
 				});
 			}
 		})
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
+}
+
+
+/**
+ * [MOQ validation function]
+ * @author <praveen>
+ */
+function checkMOQ(obj) {
+	try {
+		var temp_name = $(obj).data('artwork');
+		var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+
+		if(moq_array != null)
+		{
+			moq_array.forEach(function(i,j){
+				moq = i[temp_name];
+			})
+			$(obj).attr("min",moq); 
+			$(obj).attr("data-min-error","MOQ should be greater than "+moq); 
+		}
 	} catch (e) {
 		/** [error statements] */
 		console.error("Error:" + e)
