@@ -249,7 +249,7 @@ function tescoOrders() {
                                                     </div>
                                                 </div>
                                                 <div class="col-md-7" style="width:62%">
-                                                    <div class="card " style="height:calc(100vh - 100px); ">
+                                                    <div class="card " style="height:calc(100vh - 100px); overflow:auto">
                                                         <h4 id="head_template">Template Preview</h4>
                                                         <hr/>
                                                         <div class="row ">
@@ -5051,7 +5051,6 @@ try{
         }
         else if(data.pi_required === 1 && data.po_required != 1 )
         {
-            alert()
             var template_id = '';
             var tabl_name = "";
             var order_flag = "newOrder";

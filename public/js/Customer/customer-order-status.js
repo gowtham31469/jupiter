@@ -2150,7 +2150,7 @@ function genarateTescoPI(id,tableName,pi_status,style_no,template_id,buyer_po,te
                         var totalsgst = 0;
                         var billamnt = 0;
                         var amount = 0;
-                        tax = data.data.item_details[0].tax;
+                        // tax = data.data.item_details[0].tax;
                         $.each(data.data.item_details, function (index, value)
                         {
                             var unit_price = 0;
