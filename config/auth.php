@@ -49,7 +49,7 @@ return [
             'driver' => 'session',
             'provider' => 'customers',
         ],
-         'web_merchandiser' => [
+        'web_merchandiser' => [
             'driver' => 'session',
             'provider' => 'merchandisers',
         ],
