@@ -2125,14 +2125,14 @@ class OrderManagementCntrl extends Controller
 
     		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
 
-    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved"," Order Placed"])->select('*')->get();
+    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
 
     		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
 
-    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')-->whereNotIn('order_status', ["Saved"," Order Placed"])->select('*')->get();
+    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
 
     		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
-
+        
     		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
     		echo json_encode($data);
     }
