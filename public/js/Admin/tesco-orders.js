@@ -755,7 +755,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -827,7 +827,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -905,7 +905,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -972,7 +972,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn"  disabled="true" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -1118,8 +1118,6 @@ function createOrders(parsedObj = false, oType = false) {
 				/** [ show tooltip ] */
 				$('.delete-row').tooltip('show')
 				$('.delete-row').tooltip('toggle')
-				$('.add-row-btn').tooltip('show')
-                $('.add-row-btn').tooltip('toggle')
 				if (parsedObj) {
 					if (oType) {
 						mapStoredValues(parsedObj);
@@ -3006,6 +3004,7 @@ function dynamicSVGTemplatescard(id, item) {
 		var manufacture_date = $('#tesco_manufacture_date').val();
 		var supplier_id = $('#tesco_supplier option:selected').val();
 		var supplier = $('#tesco_supplier option:selected').text();
+		var temp_data = JSON.parse(localStorage.getItem("data"));
 
 		if (po_number != '') {
 			svgDoc.getElementById("po_number").innerHTML = po_number.toUpperCase();
@@ -3083,8 +3082,6 @@ function dynamicSVGTemplatescard(id, item) {
 		/** [ Dynamically change  svg supplier name ] */
 		if ($('#tesco_supplier option:selected').val() != '') {
 			
-			$('.add-row-btn').removeAttr('disabled');
-			$('.add-row-btn').tooltip('disable');
 			/*
 			 * Get MOQ value based on supplier value.
 			 */
@@ -3102,6 +3099,26 @@ function dynamicSVGTemplatescard(id, item) {
 		           	     /** Store moq values for validation */
 		                 localStorage.setItem("moq_values", JSON.stringify(data.moq));
 		                 svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+		                 /** hide quantity missing error msgs */
+						$('.quantity-feedback').removeClass('has-error has-danger');
+						$('.quantity-feedback-err-msg').css('display', 'none');
+						$('.quantity-field').prop('required', false);
+						$('.quantity-field').parent().removeClass('has-error')
+						$('.help-block').html('');
+		                 /** [ Dynamic moq value assignment on supplier change ] */
+						 var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+						 $.each(temp_data, function (i, item) {
+							var temp_name = item.template_name;
+							if(moq_array != null)
+							{
+								moq_array.forEach(function(i,j){
+									moq = i[temp_name];
+								})
+								$('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
+								$('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+							}
+						});
+						 
 		           },
 		           error: function(errorXHR, errorStatus, errorThrown) {
 		                this.tryCount++;
@@ -3116,9 +3133,19 @@ function dynamicSVGTemplatescard(id, item) {
 		       })
 		} else {
 				localStorage.removeItem("moq_values");
-				$('.add-row-btn').attr('disabled', 'disabled');
-				$('.add-row-btn').tooltip('enable');
 				svgDoc.getElementById("supplier").innerHTML = "";
+				
+				/** hide quantity missing error msgs */
+				$('.quantity-feedback').removeClass('has-error has-danger');
+				$('.quantity-feedback-err-msg').css('display', 'none');
+				$('.quantity-field').prop('required', false);
+				$('.quantity-field').parent().removeClass('has-error')
+				$('.help-block').html('');
+				/** [ Remove MOQ values] */
+				$.each(temp_data, function (i, item) {
+					$('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
+					$('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
+				});
 		}
 		if (zone === "CE") {
 			/**  [ if CE ratio template ] */
@@ -6864,7 +6891,7 @@ function checkMOQ(obj) {
 				moq = i[temp_name];
 			})
 			$(obj).attr("min",moq); 
-			$(obj).attr("data-min-error","MOQ should be greater than "+moq); 
+			$(obj).data("min-error","MOQ should be greater than "+moq); 
 		}
 	} catch (e) {
 		/** [error statements] */
