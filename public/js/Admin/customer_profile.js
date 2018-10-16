@@ -307,7 +307,6 @@ function addCustomer()
  
                  /** [ Show response status based on HTTP status code ] */
                  200: function(data) {
-					 console.log(data)
                       $('.snackbar_span').html('Customer Added Successfully');
                       showSnackbar();
                       $('#addCustomerModal').modal('hide');

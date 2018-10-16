@@ -269,23 +269,23 @@
 		<div class="col-md-6">
 			<div class="card">
 				<h4 class="text-center">New Enquiries</h4>
-				<div class="table-responsive">
-					<table class="table table-striped text-center">
+					<div class="table-responsive">
+						<table class="table table-striped text-center">
 
-						<thead>
-							<tr>
-								<th class="text-center">Style No</th>
-								<th class="text-center">Reference No</th>
-								<th class="text-center">Zone</th>
-							</tr>
-						</thead>
+							<thead>
+								<tr>
+									<th class="text-center">Style No</th>
+									<th class="text-center">Reference No</th>
+									<th class="text-center">Zone</th>
+								</tr>
+							</thead>
 
-						<tbody>
-							
-						</tbody>
+							<tbody>
+								
+							</tbody>
 
-					</table>
-				</div>
+						</table>
+					</div>
 			</div>
 		</div>
 	</div>

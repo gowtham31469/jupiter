@@ -2119,16 +2119,22 @@ class OrderManagementCntrl extends Controller
      *
      * @return json value
      */
-  public function reOrder(Request $request)
+    public function reOrder(Request $request)
     {
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('order_status','Order Approved')->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('order_status','Order Approved')->select('*')->get();
-		echo json_encode($data);
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+
+    		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+        
+    		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed"])->select('*')->get();
+    		echo json_encode($data);
     }
   /**
      * This Function is used to list all the artwork for particular style number.
@@ -4193,24 +4199,26 @@ class OrderManagementCntrl extends Controller
              /**  [Get parent customer id from tesco_suppliers metadata id] */
              $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
              $moq_array = array();
+             $moq_value = array();
              foreach ($templates as $template_id) 
              {
                 $moq = DB::table('price_taxation')
-                         ->select('moq')
+                         ->select('price_taxation.moq','tesco_item_master.item_name')
+                         ->join('tesco_item_master', 'tesco_item_master.id','price_taxation.template_id')
                          ->where('template_id','=',$template_id)
                          ->where('customer_id','=',$customer_id->customer_id)
                          ->where('buyer_id','=',$buyer_id)
                          ->first();
                 if($moq)
                 {
-                  $moq_value = $moq->moq;
+                  $moq_value[$moq->item_name] = $moq->moq;
                 }
                 else
                 {
-                  $moq_value = 0;
+                  $moq_value[$moq->item_name] = 0;
                 }
-                array_push($moq_array,$moq_value);
              }
+             array_push($moq_array,$moq_value);
            
            return response()->json(['error'=> false,'message' =>'success','moq' => $moq_array]);
        } catch (\Exception $e) {

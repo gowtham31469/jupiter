@@ -26,7 +26,6 @@ function orders() {
         success: function (data) {
             if (buyer == "orchestra") {
                 var newObj = data.sticker_orders.concat(data.label_orders);
-                console.log(newObj);
                 $('.main-content').html(table(newObj));
                 $('#datatable-example-2').DataTable({
                     "pageLength": 25
@@ -35,7 +34,7 @@ function orders() {
                 $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
                 $('#datatable-example-2_length select').addClass('form-control input-sm');
             } else {
-                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form id = "create_order_form" data-toggle = "validator" role = "form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><div class="help-block with-errors"></div></div><br><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div id="jstree""></div></div><div class="form-group"><div class="po-upload"><div class="form-group files hidden" id="single_file"><label>Upload PO<sub>(Single File upload)</sub></label><input class="form-control" multiple="" type="file"></div><div class="form-group files hidden" id="multiple_file"><label>Upload PO<sub>(Multiple File upload)</sub></label><input class="form-control" multiple="" type="file"></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div></div><div class="col-md-8"><div class="card" style="height:calc(100vh - 100px);"><h4>Template Preview</h4><hr/><div class="row"><div class="loader"></div><div class="viewDiv"><img style="height:150px;object-fit:cover;margin-top: 122px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png"></div><div class="descriptionDiv"></div></div></div></div></div></div>')
+                $('.main-content').html('<div class="container-fluid"><div class="row col-md-4"><div class="card"><h4>Create Order</h4><hr/><form id = "create_order_form" data-toggle = "validator" role = "form"><div class="form-group has-feedback"><label for="order_type" class="form_label">Order type</label><select class="form-control order_type" name="order_type" id="order_type" required=""><option value="">Select Order Type</option><option value="1">PO Upload</option><option value="2">Manual Entry</option></select><div class="help-block with-errors"></div></div><br><div class="form-group"><label for="template" class="form_label">Select Template</label><input class="search-input form-control" placeholder="Search for Awesomeness"><div id="jstree""></div></div><div class="form-group"><div class="po-upload"><div class="form-group files hidden" id="single_file"><label>Upload PO<sub>(Single File upload)</sub></label><input class="form-control" multiple="" type="file"></div><div class="form-group files hidden" id="multiple_file"><label>Upload PO<sub>(Multiple File upload)</sub></label><input class="form-control" multiple="" type="file"></div></div></div><button class="btn btn-primary btn-block">Create Order</button></form><br/></div></div><div class="col-md-8"><div class="card" style="height:calc(100vh - 100px); overflow:auto"><h4>Template Preview</h4><hr/><div class="row"><div class="loader"></div><div class="viewDiv"><img style="height:150px;object-fit:cover;margin-top: 122px;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png"></div><div class="descriptionDiv"></div></div></div></div></div></div>')
 
                 $(".search-input").keyup(function () {
                     var searchString = $(this).val();
@@ -658,25 +657,12 @@ function printDiv(data, isstd) {
 }
 
 function Popup(data) {
-    //    var s = new XMLSerializer();
-    //    var d = data;
-    //    var str = s.serializeToString(d);
-    //    var mywindow = window.open('', 'new div', 'class=printmedia');
-    //    mywindow.document.write('<html><head><title></title>');
-    //    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    //    mywindow.document.write('</head><body><div id="printmedia" style="width:150mm;height:100mm">');
-    //    mywindow.document.write(str);
-    //    mywindow.document.write('</div>');
-    //    mywindow.print();
-    //    mywindow.close();
-    //    return true;
     var s = new XMLSerializer();
     var d = data;
     var str = s.serializeToString(d);
     var svg = encodeURI(str)
     var success = false;
     var url = "";
-    // window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: base_url + "/admin/order-management/print-pdf",
@@ -687,16 +673,8 @@ function Popup(data) {
         },
         async: false,
         success: function (data) {
-            //window.location.href=data;
             success = true;
             url = data;
-            //         window.open('http://google.com')
-            //            var a = document.createElement('a');
-            //            a.href = data;
-            //            a.download = "stickers.pdf";
-            //            document.body.appendChild(a);
-            //            a.click();
-            //            document.body.removeChild(a);
         },
         error: function (data) {
 
@@ -832,7 +810,6 @@ function barcode_polybag(id, data) {
 }
 
 function barcode_carton(id, data) {
-    console.log(data);
     var mySVG = document.getElementById(id);
     var svgDoc;
     mySVG.addEventListener("load", function () {
@@ -1195,7 +1172,6 @@ function washcarelabels(data, dataid) {
 
 
         $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            // alert()
             if ($('.washing_select' + dataid + ' option:selected').val() != "") {
                 svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
                 svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
@@ -1436,7 +1412,6 @@ function deleteComposition(obj, dataid) {
     }
     var wash = localStorage.getItem('wash_composition');
     var wash_fin = JSON.parse(wash);
-    alert(add_page_composition)
     delete wash_fin['wash_composition' + dataid][classname];
     delete wash_composition['wash_composition' + dataid][classname];
     var wash_final = JSON.stringify(wash_fin);
@@ -1517,8 +1492,6 @@ function mainlabels(data, dataid) {
 	 var dateMsg = (date.getMonth()+1)+'/'+ date.getDate() +'/'+date.getFullYear();
 	$('.main_delivery_date').datepicker({startDate: dateMsg});
     $("#clickmemain" + dataid).click(function () {
-        // $('.sample-artwork').html("")
-        //alert($('.mainlabelname'+dataid).text())
         $('.mainlabelnameqty' + dataid).text($('.mainlabelname' + dataid).text())
         $("#mainlabelsform" + dataid + " .backdrop").toggleClass('active');
         $("#mainlabelsform" + dataid + " .right-panel").toggleClass('active');
@@ -1715,7 +1688,6 @@ function hangtagmodal(data) {
     $("#tree1").on("loaded.jstree", function (e, data) {
         $('#tree1').jstree(true).select_node($template_front_id);
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
             var template_id = $template_front_id;
@@ -1780,7 +1752,6 @@ function hangtagmodal(data) {
 
     $('#tree1').on('activate_node.jstree', function (e, data) {
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert()
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -2134,11 +2105,8 @@ function treestructure(data, tree, template_id) {
 
         $('#' + tree).jstree(true).select_node(template_id);
         var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-        //alert(ids)
-        //alert()
         if (template_id != "") {
             var buyer = localStorage.getItem("buyer");
-            // var template_id = template_id;
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: base_url + "/admin/" + buyer + "/template-management/template-view",
@@ -2255,7 +2223,6 @@ function jsbarcode(code, id, svgDoc) {
     img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
     // img.src - contains base64 URI from svg
-    console.log(img.src);
 
     //remove temporary canvas
     canvasTmp.remove();
@@ -2370,7 +2337,6 @@ function setWashCareLabelStatus(dataid) {
 		$('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
     } else {
         $('#wash_composition_error'+ dataid).removeClass('hidden')
-		//alert("fail")
     }
 	
 
@@ -2400,7 +2366,6 @@ function setHangTag(id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
         type: "Post",
@@ -2451,7 +2416,6 @@ function setSpecialTag(id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_special_tag",
         type: "Post",
@@ -2481,7 +2445,6 @@ function setSpecialTag(id) {
 
 function setMainLabel(index, dataid, id) {
     var delivery_date = $('#main_delivery_date' + dataid).val();
-    alert(delivery_date)
     delivery_date = delivery_date.split('/');
     delivery_date_fin = delivery_date[2] + "-" + delivery_date[0] + "-" + delivery_date[1];
     var template_id = $('#' + index).find('#tree3' + dataid).jstree('get_selected', true);
@@ -2503,7 +2466,6 @@ function setMainLabel(index, dataid, id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_main_label",
         type: "Post",
@@ -2535,7 +2497,6 @@ function removeMainLabel(id) {
    
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/remove_main_label",
         type: "Post",
@@ -2560,7 +2521,6 @@ function removeWashLabel(id) {
    
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/remove_wash_label",
         type: "Post",
@@ -2608,8 +2568,6 @@ function setWashLabel(index, dataid, id) {
         care_instruction_select.push([$(this).val()]);
     });
     var care_instruction_select_fin = care_instruction_select.join(',');
-    console.log(care_instruction_select_fin);
-
     //template_front_id = template_id[0].id;
     var tot_qty_table = [];
     var uvc_tco = [];
@@ -2627,7 +2585,6 @@ function setWashLabel(index, dataid, id) {
     size_fin = size.join(',');
     var buyer = localStorage.getItem("buyer");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
-    //alert($('#uvc_id').val())
     $.ajax({
         url: base_url + "/admin/" + buyer + "/order-management/set_wash_label",
         type: "Post",
@@ -2672,7 +2629,6 @@ var finish=0;
 		
        	if($('.merchandisers').find("option:selected").val() != "")
 		{
-			//alert("suc")
 			var wash_json = JSON.parse(localStorage.getItem("wash_label"));
 
 			$.each(wash_json, function (index, value) {
@@ -2683,13 +2639,11 @@ var finish=0;
 		}
 		else
 		{
-			//alert("fail")
 			return false;
 			
 
 		}
 		 finish++;
-        //setMainLabel()
     }
 	else
 	{
@@ -2768,7 +2722,6 @@ function setSolidStickers()
 
             var buyer = localStorage.getItem("buyer");
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            //alert($('#uvc_id').val())
                 $.ajax({
                     url: base_url + "/admin/" + buyer + "/order-management/set_standard_stickers",
                     type: "Post",
@@ -2830,13 +2783,11 @@ function setSolidStickers()
 
             var buyer = localStorage.getItem("buyer");
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            //alert($('#uvc_id').val())
                 $.ajax({
                     url: base_url + "/admin/" + buyer + "/order-management/set_solid_stickers",
                     type: "Post",
                     data: {
                         delivery_date: delivery_date_fin,
-                       // template_front_id: template_front_id,
                         tot_qty_poly: tot_qty_table_poly_fin,
                         tot_qty_carton: tot_qty_carton_fin,
                         size: size_fin,
@@ -2848,7 +2799,6 @@ function setSolidStickers()
                         carton_id: $('#carton_id').val(), 
                         poly_id: $('#poly_id').val(), 
                         po: $('#po').val(),
-                        //size: size_fin,
                         _token: csrf_token
                     },
                     beforeSend: function () {

@@ -126,8 +126,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po" class="btn btn-primary btn-sm hidden">Update</button>
-                    <button type="button" id="update_po" class="btn btn-primary  btn-smhidden">Update</button>
-                    <button type="button" id="new_pos" class="btn btn-primary  btn-sm btn-sm hidden">Update</button>
+                    <button type="button" id="update_po" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos" class="btn btn-primary btn-sm btn-sm hidden">Update</button>
                     
                 </div>
             </div>
@@ -267,8 +267,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                     <button type="button" id="update_new_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="update_po_status" class="btn btn-primary hidden">Update</button>
-                    <button type="button" id="new_pos_status" class="btn btn-primary hidden">Update</button>
+                    <button type="button" id="update_po_status" class="btn btn-primary btn-sm hidden">Update</button>
+                    <button type="button" id="new_pos_status" class="btn btn-primary btn-sm hidden">Update</button>
                 </div>
             </div>
         </div>
@@ -457,6 +457,7 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 <script src="{{ asset('js/Admin/order.js') }}"></script>
+<script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
 <script>
     localStorage.removeItem("page_navigation");

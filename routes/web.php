@@ -328,6 +328,7 @@ Route::get('admin/orchestra/order-management/get_existing_label_orders_status_po
 
 Route::Post('admin/orchestra/order-management/put_existing_label_orders_po', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPo');
 Route::Post('admin/orchestra/order-management/put_existing_label_orders_po_new', 'Admin\Orchestra\OrderManagementCntrl@putExistingLabelOrdersPoNew');
+Route::get('admin/orchestra/template-management/get-company-list', 'Admin\Orchestra\TemplateManagementCntrl@getCompanyList');
 
 Route::post('/admin/order-management/order_sub_modules', 'Admin\AdminController@orderSubModules');
 Route::post('/admin/template-management/sub_modules', 'Admin\AdminController@templateSubModules');
@@ -410,63 +411,67 @@ Route::post('admin/orchestra/settings/garments', 'Admin\Settings\Orchestra\Orche
 Route::post('admin/orchestra/add-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraGarments');
 Route::get('admin/orchestra/get-orchestra-garments-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraGarmentsById');
 Route::put('admin/orchestra/update-orchestra-garments', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraGarmentsById');
-Route::put('admin/Orchestra/make-garment-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeGarmentEnabled');
-Route::put('admin/Orchestra/make-garment-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeGarmentDisabled');
+Route::put('admin/orchestra/make-garment-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeGarmentEnabled');
+Route::put('admin/orchestra/make-garment-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeGarmentDisabled');
 
 Route::post('admin/orchestra/settings/age-group', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraAgeGroup');
 Route::post('admin/orchestra/add-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraAgeGroup');
 Route::get('admin/orchestra/get-orchestra-agegroup-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraAgeGroupById');
 Route::put('admin/orchestra/update-orchestra-agegroup', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraAgeGroupById');
-Route::put('admin/Orchestra/make-agegroup-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeAgeGroupEnabled');
-Route::put('admin/Orchestra/make-agegroup-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeAgeGroupDisabled');
+Route::put('admin/orchestra/make-agegroup-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeAgeGroupEnabled');
+Route::put('admin/orchestra/make-agegroup-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeAgeGroupDisabled');
 
 Route::post('admin/orchestra/settings/countries', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraCountries');
 Route::post('admin/orchestra/add-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraCountry');
 Route::get('admin/orchestra/get-orchestra-country-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraCountryById');
 Route::put('admin/orchestra/update-orchestra-country', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraCountryById');
-Route::put('admin/Orchestra/make-country-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCountryEnabled');
-Route::put('admin/Orchestra/make-country-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCountryDisabled');
+Route::put('admin/orchestra/make-country-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCountryEnabled');
+Route::put('admin/orchestra/make-country-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCountryDisabled');
 
 Route::post('admin/orchestra/settings/productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraProductFamily');
 Route::post('admin/orchestra/add-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraProductFamily');
 Route::get('admin/orchestra/get-orchestra-productfamily-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraProductFamilyById');
 Route::put('admin/orchestra/update-orchestra-productfamily', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraProductFamilyById');
-Route::put('admin/Orchestra/make-productfamily-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeProductFamilyEnabled');
-Route::put('admin/Orchestra/make-productfamily-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeProductFamilyDisabled');
+Route::put('admin/orchestra/make-productfamily-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeProductFamilyEnabled');
+Route::put('admin/orchestra/make-productfamily-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeProductFamilyDisabled');
 
 Route::post('admin/orchestra/settings/special-instructions', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSpecialInstructions');
 Route::post('admin/orchestra/add-orchestra-special-instructions', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSpecialInstructions');
 Route::get('admin/orchestra/get-orchestra-special-instruction-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSpecialInstructionById');
 Route::put('admin/orchestra/update-orchestra-special-instruction', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSpecialInstructionById');
-Route::put('admin/Orchestra/make-special-instruction-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSpecialInstructionEnabled');
-Route::put('admin/Orchestra/make-special-instruction-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSpecialInstructionDisabled');
+Route::put('admin/orchestra/make-special-instruction-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSpecialInstructionEnabled');
+Route::put('admin/orchestra/make-special-instruction-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSpecialInstructionDisabled');
 
 Route::post('admin/orchestra/settings/compositions', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraCompositions');
 Route::post('admin/orchestra/add-orchestra-compositions', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraCompositions');
 Route::get('admin/orchestra/get-orchestra-composition-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraCompositionById');
 Route::put('admin/orchestra/update-orchestra-composition', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraCompositionById');
-Route::put('admin/Orchestra/make-composition-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCompositionEnabled');
-Route::put('admin/Orchestra/make-composition-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCompositionDisabled');
+Route::put('admin/orchestra/make-composition-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCompositionEnabled');
+Route::put('admin/orchestra/make-composition-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeCompositionDisabled');
 
 Route::post('admin/orchestra/settings/parts', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraParts');
 Route::post('admin/orchestra/add-orchestra-parts', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraParts');
 Route::get('admin/orchestra/get-orchestra-part-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraPartById');
 Route::put('admin/orchestra/update-orchestra-part', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraPartById');
-Route::put('admin/Orchestra/make-part-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartEnabled');
-Route::put('admin/Orchestra/make-part-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartDisabled');
+Route::put('admin/orchestra/make-part-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartEnabled');
+Route::put('admin/orchestra/make-part-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makePartDisabled');
 
 Route::post('admin/orchestra/settings/size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSizeCharts');
 Route::post('admin/orchestra/add-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSizeCharts');
 Route::get('admin/orchestra/get-orchestra-size-chart-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraSizeChartById');
 Route::put('admin/orchestra/update-orchestra-size-chart', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraSizeChartById');
-Route::put('admin/Orchestra/make-size-chart-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSizeChartEnabled');
-Route::put('admin/Orchestra/make-size-chart-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSizeChartDisabled');
+Route::put('admin/orchestra/make-size-chart-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSizeChartEnabled');
+Route::put('admin/orchestra/make-size-chart-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSizeChartDisabled');
 
 Route::post('admin/orchestra/settings/symbols', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraSymbols');
 Route::post('admin/orchestra/settings/addOrchestraSymbols', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraSymbols');
 Route::post('admin/orchestra/settings/editOrchestraSymbols', 'Admin\Settings\Orchestra\OrchestraSettings@editOrchestraSymbols');
-Route::put('admin/Orchestra/make-symbol-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolEnabled');
-Route::put('admin/Orchestra/make-symbol-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolDisabled');
+Route::put('admin/orchestra/make-symbol-enabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolEnabled');
+Route::put('admin/orchestra/make-symbol-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolDisabled');
+Route::post('admin/orchestra/settings/tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraTaxCode');
+Route::post('admin/orchestra/add-orchestra-tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraTaxCodes');
+Route::get('admin/orchestra/get-orchestra-tax-code-details', 'Admin\Settings\Orchestra\OrchestraSettings@getOrchestraTaxCodesById');
+Route::put('admin/orchestra/update-orchestra-tax-code', 'Admin\Settings\Orchestra\OrchestraSettings@updateOrchestraTaxCodesById');
 
 /**tesco Settings Page**/
 Route::post('admin/tesco/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');

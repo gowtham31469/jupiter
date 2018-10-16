@@ -303,7 +303,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-garment-enabled",
+               url:base_url + "/admin/orchestra/make-garment-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -351,7 +351,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-garment-disabled",
+               url:base_url + "/admin/orchestra/make-garment-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -620,7 +620,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-agegroup-enabled",
+               url:base_url + "/admin/orchestra/make-agegroup-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -668,7 +668,7 @@ function showSnackbar() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-agegroup-disabled",
+               url:base_url + "/admin/orchestra/make-agegroup-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -970,7 +970,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-country-enabled",
+               url:base_url + "/admin/orchestra/make-country-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1018,7 +1018,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-country-disabled",
+               url:base_url + "/admin/orchestra/make-country-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1297,7 +1297,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-productfamily-enabled",
+               url:base_url + "/admin/orchestra/make-productfamily-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1345,7 +1345,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-productfamily-disabled",
+               url:base_url + "/admin/orchestra/make-productfamily-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1647,7 +1647,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-special-instruction-enabled",
+               url:base_url + "/admin/orchestra/make-special-instruction-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1695,7 +1695,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-special-instruction-disabled",
+               url:base_url + "/admin/orchestra/make-special-instruction-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -1996,7 +1996,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-composition-enabled",
+               url:base_url + "/admin/orchestra/make-composition-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2044,7 +2044,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-composition-disabled",
+               url:base_url + "/admin/orchestra/make-composition-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2345,7 +2345,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-part-enabled",
+               url:base_url + "/admin/orchestra/make-part-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2393,7 +2393,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-part-disabled",
+               url:base_url + "/admin/orchestra/make-part-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2665,7 +2665,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-size-chart-enabled",
+               url:base_url + "/admin/orchestra/make-size-chart-enabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2713,7 +2713,7 @@ function countries() {
           }
           isSubmitting = true;
           $.ajax({
-               url:base_url + "/admin/Orchestra/make-size-chart-disabled",
+               url:base_url + "/admin/orchestra/make-size-chart-disabled",
                dataType:"json",
                beforeSend: function () {
                  $(".loader").show();
@@ -2945,7 +2945,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
          }
          isSubmitting = true;
          $.ajax({
-              url:base_url + "/admin/Orchestra/make-symbol-enabled",
+              url:base_url + "/admin/orchestra/make-symbol-enabled",
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
@@ -2993,7 +2993,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
          }
          isSubmitting = true;
          $.ajax({
-              url:base_url + "/admin/Orchestra/make-symbol-disabled",
+              url:base_url + "/admin/orchestra/make-symbol-disabled",
               dataType:"json",
               beforeSend: function () {
                 $(".loader").show();
@@ -3072,8 +3072,223 @@ function readURL(input) {
     $("#cofreet_symbol").add("#astms_symbol").add("#edit_cofreet_symbol").add("#edit_astms_symbol").change(function() {
             readURL(this);
             if(".hidden_"+this.id != "undefined"){
-                console.log("hai")
                 $(".hidden_"+this.id).removeClass('hidden')
             }
 
     });
+
+/**
+  * Function to orchestra Tax code Settings home page
+  * @author <praveen>
+  */
+function orchestraTaxCode() {
+    try{
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').hide();
+      $('.orchestra-sidebar').show();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/orchestra/settings/tax-code",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount : 0,
+          retryLimit : 2,
+          beforeSend: function () {
+              $(".loader").show();
+          },
+          success: function (data) {
+                  var orchestra_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addOrchestraTaxCodesModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Tax Codes</h3></div><table id="orchestra-taxcodes-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Tax Type</th><th>Tax (%)</th><th>Tax Code</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.orchestra_taxcodes, function(i, item){
+                    var index = i+1;
+                    orchestra_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.tax_type+'</td><td>'+item.tax+'</td><td>'+item.tax_code+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-orchestra-taxcodes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                   });
+                   orchestra_metadata += '</tbody></table></div>';
+                   $('.content').html(orchestra_metadata)
+                   $('.edit-orchestra-taxcodes').tooltip('show')
+                   $('.edit-orchestra-taxcodes').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
+                   $('#orchestra-taxcodes-list-table').DataTable();
+                   $("#orchestra-taxcodes-list-table_filter input").addClass('form-control input-sm');
+                   $("#orchestra-taxcodes-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#orchestra-taxcodes-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+          },
+          complete: function () {
+              $(".loader").hide();
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+
+/**
+  * Adds a orchestra taxcode.
+  * @author <praveen>
+  */
+  function addOrchestraTaxCodes()
+  {
+     try{
+          var tax_type   = $('#orch_tax_type').val();
+          var tax_code   = $('#orch_tax_code').val();
+          var tax        = $('#orch_tax').val();
+          var csrf_token = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/orchestra/add-orchestra-tax-code",
+              method: 'POST',
+              data: {_token:csrf_token,tax_type:tax_type,tax_code:tax_code,tax:tax},
+              tryCount : 0,
+              retryLimit : 2,
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Tax Code Added Successfully");
+                        showSnackbar();
+                        $('#addOrchestraTaxCodesModal').modal('hide');
+                        orchestraTaxCode()
+                   },
+                   208: function() {
+                        $('#orchestra_taxcode_result').removeAttr('style');
+                        $('#orchestra_taxcode_result').html('Tax Code already exists.')
+                        $("#orchestra_taxcode_result").addClass("alert alert-warning");
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                        $(".loader").hide();
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+
+/**
+   * Function for get orchestra tax code details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getOrchestraTaxCodesById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/orchestra/get-orchestra-tax-code-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_orchestra_tax_code_id').val(id);
+                 $('#edit_orch_tax_code').val(data.orchestra_tax_codes[0].tax_code);
+                 $('#edit_orch_tax_type').val(data.orchestra_tax_codes[0].tax_type);
+                 $('#edit_orch_tax').val(data.orchestra_tax_codes[0].tax);
+        
+                 $('#editOrchestraTaxCodesModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_orchestra_tax_codes_form').validator('validate');
+                 $('#editOrchestraTaxCodesModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+/**
+  * Function for edit orchestra tax code details
+  * @author <praveen>
+  */
+ function editOrchestraTaxCode()
+ {
+  try{
+       var id        = $('#edit_orchestra_tax_code_id').val();
+       var tax_type  = $('#edit_orch_tax_type').val();
+       var tax_code  = $('#edit_orch_tax_code').val();
+       var tax       = $('#edit_orch_tax').val();
+
+       var csrf_token = $('meta[name="csrf-token"]').attr('content');
+       $.ajax({
+           url:base_url + "/admin/orchestra/update-orchestra-tax-code",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,tax_type:tax_type,tax_code:tax_code,tax:tax},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Tax Code Updated Successfully");
+                       showSnackbar();
+                       $('#editOrchestraTaxCodesModal').modal('hide');
+                       orchestraTaxCode()
+                },
+                208: function() {
+                     $('#edit_orchestra_taxcode_result').removeAttr('style');
+                     $('#edit_orchestra_taxcode_result').html('Tax Code already exists.')
+                     $("#edit_orchestra_taxcode_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
+   

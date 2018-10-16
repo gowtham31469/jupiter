@@ -1,3 +1,30 @@
+/**  
+ * Validation for numeric values with dot
+ * @param   evt 
+ * @return {Boolean} 
+ * @author <praveen>    
+ */
+function isNumberKey(evt) {
+	try {
+		var charCode = (evt.which) ? evt.which : event.keyCode
+
+		if (charCode == 46) {
+			var inputValue = $("#inputfield").val()
+			if (inputValue.indexOf('.') < 1) {
+				return true;
+			}
+			return false;
+		}
+		/** [ Checking key stroke values for numeric values ] */
+		if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
+
 function template_list() {
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -13,7 +40,7 @@ function template_list() {
 			$(".loader").css('margin-top', '12%');
 		},
 		success: function (data) {
-			$('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:scroll; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8" style="margin-top: 70px;"><div class="card preview-tag" style="height:calc(100vh - 110px);"><div class="loader"></div><div class="viewDiv"> </div><div class="descriptionDiv">  </div></div> </div> </div>')
+			$('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:auto; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8 col-sm-12 col-xs-12" style="margin-top: 70px;"><div class="card text-white preview-tag" style="height:calc(100vh - 110px);overflow-y: auto;"> <div class="card-body text-center justify-content-center"> <div class="loader"></div><div class="viewDiv" style="width:100%;"> </div><div class="descriptionDiv"> </div></div></div></div></div>')
 
 			if (buyer == "tesco") {
 				$('.descriptionDiv').addClass('hidden')
@@ -69,31 +96,31 @@ function template_list() {
                                     {
                                         "id": "12",
                                         "text": "TCL 1",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     },{
                                         "id": "13",
                                         "text": "TCL 2",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     },{
                                         "id": "14",
                                         "text": "TSL 1",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     }, {
                                         "id": "15",
                                         "text": "TCL 4",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     }, {
                                         "id": "16",
                                         "text": "TSL 3",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     }, {
                                         "id": "17",
                                         "text": "THL 1",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     },{
                                         "id": "18",
                                         "text": "THL 3",
-                                        "parent_id": 3
+                                        "parent_id": 4
                                     }]
                                 }]
                             }]
@@ -159,16 +186,26 @@ function template_list() {
 											});
 											$('.viewDiv').html('');
 											$.each(data, function (index, value) {
-												if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
-													$('.viewDiv').append('<div class="col-md-12"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px solid #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input disabled class="form-control input-sm " placeholder="Enter Reference No" required type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">SAP Ref : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="SAP Ref. No" required type="text" value="' + value[0].sap_ref + '" name="sap_ref' + value[0].id + '" id="sap_ref' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">GL Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="GL Code" required type="text" value="' + value[0].gl_code + '" name="gl_code_' + value[0].id + '" id="gl_code_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">HSN Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="HSN Code" required type="text" value="' + value[0].hsn_code + '" name="hsn_code_' + value[0].id + '" id="hsn_code_' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 100%;">' + company + '</select></div></td><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="tax_' + value[0].id + '" id="tax_' + value[0].id + '" style="width: 100%;">' + tax + '</select></div></td></tr><tr><td class="pull-left">Color : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Color" required type="text" value="' + value[0].color + '" name="color_' + value[0].id + '" id="color_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">Material : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Material" required type="text" value="' + value[0].material + '" name="material_' + value[0].id + '" id="material_' + value[0].id + '" style="width: 100%;"></div></td></tr><tr><td class="pull-left">Height : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Height" required type="text" value="' + value[0].dimension_height + '" name="dimension_height_' + value[0].id + '" id="dimension_height_' + value[0].id + '" style="width: 100%;"></div></td><td class="pull-left">Width : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Width" required type="text" value="' + value[0].dimension_width + '" name="dimension_width_' + value[0].id + '" id="dimension_width_' + value[0].id + '" style="width: 100%;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
-
-												} else {
-													$('.viewDiv').append('<div class="col-md-12"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px solid #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Reference No :</td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Enter Reference No" disabled type="text" value="' + value[0].template_name + '" name="name_' + value[0].id + '" step="0.01" id="name_' + value[0].id + '" style="width: 70px;"></div></td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="company_' + value[0].id + '" id="company_' + value[0].id + '" style="width: 70px;">' + company + '</select></div></td></tr><tr><td class="pull-left">Taxation : </td><td class="pull-left"><div class="input-group"><select class="form-control input-sm "  name="tax_' + value[0].id + '" id="tax_' + value[0].id + '" style="width: 70px;">' + tax + '</select></div></td><td class="pull-left">SAP Ref : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="SAP Ref. No" required type="text" value="' + value[0].sap_ref + '" name="sap_ref' + value[0].id + '" id="sap_ref' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">GL Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="GL Code" required type="text" value="' + value[0].gl_code + '" name="gl_code_' + value[0].id + '" id="gl_code_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">HSN Code : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="HSN Code" required type="text" value="' + value[0].hsn_code + '" name="hsn_code_' + value[0].id + '" id="hsn_code_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Color : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Color" required type="text" value="' + value[0].color + '" name="color_' + value[0].id + '" id="color_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Material : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Material" required type="text" value="' + value[0].material + '" name="material_' + value[0].id + '" id="material_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Height : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Height" required type="text" value="' + value[0].dimension_height + '" name="dimension_height_' + value[0].id + '" id="dimension_height_' + value[0].id + '" style="width: 70px;"></div></td><td class="pull-left">Width : </td><td class="pull-left"><div class="input-group"><input class="form-control input-sm " placeholder="Width" required type="text" value="' + value[0].dimension_width + '" name="dimension_width_' + value[0].id + '" id="dimension_width_' + value[0].id + '" style="width: 70px;"></div></td></tr></tbody></table><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + value[0].id + '" onclick="saveTescoTax(this.id)">Save</button><button class="btn btn-secondary btn-sm pull-left" type="button" onclick="showMoreDetails(' + value[0].id + ')">More Details</button></div></div>')
-												}
-												$('#company_' + value[0].id).val(value[0].company_id)
+												temp_id = value[0].id;
+												$('.viewDiv').append('<div class="col-md-12"><div class="row"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object></div><div class="row" style="margin-top:15px;"><form role="form" id = "update_tesco_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_' + temp_id + '">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="' + value[0].template_name + '" name="ref_' + temp_id + '" id="ref_' + temp_id + '" required disabled> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_' + temp_id + '">Company Name</label> <select class="form-control input-sm " name="company_' + temp_id + '" id="company_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_' + temp_id + '">Taxation :</label> <select class="form-control input-sm " name="tax_' + temp_id + '" id="tax_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_' + temp_id + '">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="text" value="' + value[0].hsn_code + '" name="hsn_code_' + temp_id + '" id="hsn_code_' + temp_id + '" maxlength = "4" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="sap_ref_' + temp_id + '">SAP Ref No:</label> <input class="form-control input-sm" placeholder="SAP Ref. No" required type="text" value="' + value[0].sap_ref + '" name="sap_ref_' + temp_id + '" id="sap_ref_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_' + temp_id + '">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="text" value="' + value[0].gl_code + '" name="gl_code_' + temp_id + '" id="gl_code_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_' + temp_id + '">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="' + value[0].color + '" name="color_' + temp_id + '" id="color_' + temp_id + '" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_' + temp_id + '">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="text" value="' + value[0].dimension_height + '" name="dimension_height_' + temp_id + '" id="dimension_height_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_' + temp_id + '">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="text" value="' + value[0].dimension_width + '" name="dimension_width_' + temp_id + '" id="dimension_width_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_' + temp_id + '">Material :</label> <input class="form-control input-sm" placeholder="Material" required type="text" value="' + value[0].material + '" name="material_' + temp_id + '" id="material_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="' + temp_id + '" >Save</button><button class="btn btn-primary btn-sm " type="button" onclick="showMoreDetails(' + temp_id + ')"> + More Details</button> </div><div class="clearfix"></div></form></div></div></div></div></div>')
+												$('#company_' + temp_id).val(value[0].company_id)
+												$('#tax_' + temp_id).val(value[0].tax_code_id)
 											});
-											$('.viewDiv').css('width', '100%')
+
+										    /* Template details edit form */
+											$('#update_tesco_template_data_form').validator().on('submit', function (e) {
+										        if (e.isDefaultPrevented())
+										        {
+
+										        }
+										        else
+										        {
+										           e.preventDefault();
+										           saveTescoTax(temp_id);
+										        }
+										      })
 										}
+
 									},
 									error: function (errorXHR, errorStatus, errorThrown) {},
 									complete: function () {}
@@ -234,7 +271,7 @@ function template_list() {
 							},
 							success: function (data) {
 								$.ajax({
-									url: base_url + "/admin/tesco/template-management/get-company",
+									url: base_url + "/admin/orchestra/template-management/get-company-list",
 									type: "get",
 									dataType: "json",
 									beforeSend: function () {
@@ -243,23 +280,40 @@ function template_list() {
 									statusCode: {
 										200: function (companydata) {
 											var company = "";
-											$.each(companydata, function (index1, value1) {
+											var temp_id = data[0].id;
+											$.each(companydata.company, function (index1, value1) {
 												company += "<option value=" + value1.id + ">" + value1.name + "</option>";
 											});
-											console.log(data);
+											var tax = "";
+											$.each(companydata.tax, function (index1, value1) {
+												tax += "<option value=" + value1.id + ">" + value1.tax_type + "("+value1.tax_code+")</option>";
+											});
 											if (data.length > 0) {
 												if (data[0].template_file != "") {
 													if (data.length > 1) {
 														$('.viewDiv').html("");
 														$.each(data, function (index, value) {
-															$('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+															$('.viewDiv').append('<div class="row"><object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object></div>')
 														});
 													} else {
-														$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
+														$('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
 													}
-													$('.descriptionDiv').html('<div class="col-md-4"><label>Template Name : </label><input class="form-control center-block input-sm " placeholder="Enter Template Name" required type="text" disabled value="' + data[0].template_name + '" name="template_name_' + data[0].id + '" id="template_name_' + data[0].id + '" style="width: 120px;"><label>Reference Number : </label><input class="form-control center-block input-sm " placeholder="Enter Reference Number" required type="text" value="' + data[0].ref_no + '" name="ref_' + data[0].id + '" id="ref_' + data[0].id + '" style="width: 120px;"></div><div class="col-md-4"><label>Company Name : </label><select class="form-control center-block input-sm "  name="company_' + data[0].id + '" id="company_' + data[0].id + '" style="width: 150px;">' + company + '</select><label>Tax : </label><input class="form-control center-block input-sm " placeholder="Enter Tax" required type="number" value="' + data[0].tax + '" name="tax_' + data[0].id + '" step="0.01" id="tax_' + data[0].id + '" style="width: 120px;"></div><div class="col-md-4"><label>Inside Tamilnadu: </label><input class="form-control center-block input-sm " placeholder="Inside Tamilnadu" required type="text" value="' + data[0].inside_tamilnadu + '" name="inside_tamilnadu_' + data[0].id + '" id="inside_tamilnadu_' + data[0].id + '" style="width: 120px;"><label>Outside Tamilnadu: </label><input class="form-control center-block input-sm " placeholder="Outside Tamilnadu" required type="text" value="' + data[0].outside_tamilnadu + '" name="outside_tamilnadu_' + data[0].id + '" id="outside_tamilnadu_' + data[0].id + '" style="width: 120px;"></div><button class="btn btn-secondary btn-sm pull-right" type="button" id="' + data[0].id + '" onclick="saveOrchestraTax(this.id)">Save</button>')
+
+													$('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "update_orch_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_' + temp_id + '">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="' + data[0].template_name + '" name="ref_' + temp_id + '" id="ref_' + temp_id + '" required disabled> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_' + temp_id + '">Company Name</label> <select class="form-control input-sm " name="company_' + temp_id + '" id="company_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_' + temp_id + '">Taxation :</label> <select class="form-control input-sm " name="tax_' + temp_id + '" id="tax_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_' + temp_id + '">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="text" value="' + data[0].hsn_code + '" name="hsn_code_' + temp_id + '" id="hsn_code_' + temp_id + '" maxlength = "4" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="sap_ref_' + temp_id + '">SAP Ref No:</label> <input class="form-control input-sm" placeholder="SAP Ref. No" required type="text" value="' + data[0].sap_ref + '" name="sap_ref_' + temp_id + '" id="sap_ref_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_' + temp_id + '">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="text" value="' + data[0].gl_code + '" name="gl_code_' + temp_id + '" id="gl_code_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_' + temp_id + '">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="' + data[0].color + '" name="color_' + temp_id + '" id="color_' + temp_id + '" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_' + temp_id + '">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="text" value="' + data[0].dimension_height + '" name="dimension_height_' + temp_id + '" id="dimension_height_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_' + temp_id + '">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="text" value="' + data[0].dimension_width + '" name="dimension_width_' + temp_id + '" id="dimension_width_' + temp_id + '" maxlength = "5" onkeypress = "return isNumberKey(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_' + temp_id + '">Material :</label> <input class="form-control input-sm" placeholder="Material" required type="text" value="' + data[0].material + '" name="material_' + temp_id + '" id="material_' + temp_id + '" maxlength = "20"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="' + temp_id + '" >Save</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
 													$('.descriptionDiv').css('margin-top', '20px')
 													$('.viewDiv').css('margin-top', '0px')
+													/* Template details edit form */
+														$('#update_orch_template_data_form').validator().on('submit', function (e) {
+													        if (e.isDefaultPrevented())
+													        {
+
+													        }
+													        else
+													        {
+													           e.preventDefault();
+													           saveTescoTax(temp_id);
+													        }
+												      })
 
 												} else {
 													$('.viewDiv').html('<img style="height:150px;object-fit:cover;"src="https://maxcdn.icons8.com/Share/icon/Dusk_Wired/Programming//template1600.png">')
@@ -275,6 +329,8 @@ function template_list() {
 												$('.viewDiv').css('margin-top', '140px')
 											}
 											$('#company_' + data[0].id).val(data[0].company_id)
+											$('#tax_' + temp_id).val(data[0].tax_code_id)
+
 										}
 									},
 									error: function (errorXHR, errorStatus, errorThrown) {},
@@ -306,10 +362,14 @@ function template_list() {
 function saveTescoTax(temp_id) {
 	var tax = $('#tax_' + temp_id).val();
 	var ref = $('#ref_' + temp_id).val();
-	var name = $('#name_' + temp_id).val();
 	var company = $('#company_' + temp_id).val();
-	var inside_tamilnadu = $('#inside_tamilnadu_' + temp_id).val();
-	var outside_tamilnadu = $('#outside_tamilnadu_' + temp_id).val();
+	var hsncode = $('#hsn_code_' + temp_id).val();
+	var sapcode = $('#sap_ref_' + temp_id).val();
+	var glcode = $('#gl_code_' + temp_id).val();
+	var color = $('#color_' + temp_id).val();
+	var material = $('#material_' + temp_id).val();
+	var height = $('#dimension_height_' + temp_id).val();
+	var width = $('#dimension_width_' + temp_id).val();
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -320,10 +380,14 @@ function saveTescoTax(temp_id) {
 			template_id: temp_id,
 			tax: tax,
 			ref: ref,
-			name: name,
 			company: company,
-			inside_tamilnadu: inside_tamilnadu,
-			outside_tamilnadu: outside_tamilnadu,
+			hsncode:hsncode,
+			sapcode:sapcode,
+			glcode:glcode,
+			color:color,
+			material:material,
+			height:height,
+			width:width,
 			_token: csrf_token
 		},
 		beforeSend: function () {
@@ -347,10 +411,14 @@ function saveTescoTax(temp_id) {
 function saveOrchestraTax(temp_id) {
 	var tax = $('#tax_' + temp_id).val();
 	var ref = $('#ref_' + temp_id).val();
-	var name = $('#name_' + temp_id).val();
 	var company = $('#company_' + temp_id).val();
-	var inside_tamilnadu = $('#inside_tamilnadu_' + temp_id).val();
-	var outside_tamilnadu = $('#outside_tamilnadu_' + temp_id).val();
+	var hsncode = $('#hsn_code_' + temp_id).val();
+	var sapcode = $('#sap_ref_' + temp_id).val();
+	var glcode = $('#gl_code_' + temp_id).val();
+	var color = $('#color_' + temp_id).val();
+	var material = $('#material_' + temp_id).val();
+	var height = $('#dimension_height_' + temp_id).val();
+	var width = $('#dimension_width_' + temp_id).val();
 	var buyer = localStorage.getItem("buyer");
 	var csrf_token = $('meta[name="csrf-token"]').attr('content');
 	$.ajax({
@@ -361,10 +429,14 @@ function saveOrchestraTax(temp_id) {
 			template_id: temp_id,
 			tax: tax,
 			ref: ref,
-			name: name,
 			company: company,
-			inside_tamilnadu: inside_tamilnadu,
-			outside_tamilnadu: outside_tamilnadu,
+			hsncode:hsncode,
+			sapcode:sapcode,
+			glcode:glcode,
+			color:color,
+			material:material,
+			height:height,
+			width:width,
 			_token: csrf_token
 		},
 		beforeSend: function () {
@@ -408,11 +480,11 @@ function saveOrchestraTax(temp_id) {
 			if (data.data.length > 0) {
 				$(data.data).each(function (key, index) {
 					
-                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]'>"+data.data[key].notes+"</textarea></div>");
+                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' style='resize: vertical;min-height:10vh;'>"+data.data[key].notes+"</textarea></div>");
            		});
 			}
 			else{
-				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details'></textarea></div>");
+				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details' style='resize: vertical;min-height:10vh;'></textarea></div>");
 			}
 			
 		},
@@ -428,7 +500,6 @@ function saveOrchestraTax(temp_id) {
 
 		$('#moreDetails').modal("show");
 		$('#moreDetails').removeData('.modal');
-		console.log(id)
 	}
 
 /**
