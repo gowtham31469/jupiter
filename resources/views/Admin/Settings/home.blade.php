@@ -31,7 +31,7 @@
           <ul class="customer-select meta-data-list-1">
             <li id="1" onclick="tescoBrands()"><a class="active">Brands</a></li>
             <li id="2" onclick="tescoDepartment()"><a>Departments</a></li>
-            <li id="3" onclick="tescoSuppliers()"><a>Suppliers</a></li>
+            <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoTaxCode()"><a>Tax Code</a></li>
           </ul>
@@ -1468,19 +1468,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addTescoSupplierLabel">Add Supplier</h4>
+                    <h4 class="modal-title" id="addTescoSupplierLabel">Add Customer</h4>
                 </div>
                 {!! Form::open(['id' => 'add_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="modal-body">
                       <div id="supplier_result"></div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required', 'maxlength' => '50')) !!}
+                          {!! Form::label('supplier_name', 'Customer Name', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Name','required', 'maxlength' => '50')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
-                          {!! Form::label('supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required','onkeypress' => 'return isNumberKey(event)', 'maxlength' => '15')) !!}
+                          {!! Form::label('supplier_code', 'Customer Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required','onkeypress' => 'return isNumberKey(event)', 'maxlength' => '15')) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1499,20 +1499,20 @@
            <div class="modal-content">
                <div class="modal-header">
                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="myModalLabel">Edit Supplier</h4>
+                   <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
                </div>
                {!! Form::open(['id' => 'edit_tesco_suppliers_form','data-toggle' => 'validator','role' => 'form']) !!}
                    <div class="modal-body">
                     <div id="edit_supplier_result"></div>
                      {!! Form::hidden('edit_tesco_suppliers_id',$value = null, array('id'=>'edit_tesco_suppliers_id','class' => 'form-control input-sm')) !!}
                        <div class="form-group has-feedback">
-                         {!! Form::label('edit_supplier_name', 'Supplier Name', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Name','required', 'maxlength' => '50')) !!}
+                         {!! Form::label('edit_supplier_name', 'Customer Name', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Name','required', 'maxlength' => '50')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        <div class="form-group has-feedback">
-                         {!! Form::label('edit_supplier_code', 'Supplier Code', ['class' => 'form_label']) !!}
-                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Supplier Code','required', 'maxlength' => '15')) !!}
+                         {!! Form::label('edit_supplier_code', 'Customer Code', ['class' => 'form_label']) !!}
+                         {!! Form::text('edit_supplier_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Customer Code','required', 'maxlength' => '15')) !!}
                          <div class="help-block with-errors"></div>
                        </div>
                        
