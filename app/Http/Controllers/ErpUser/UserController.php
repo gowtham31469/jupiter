@@ -25,12 +25,22 @@ class UserController extends Controller
 
     /**
      * Show the application dashboard.
-     * @author [Praveen] <[praveen@wizroots.com]>
+     * @author [Gba] <[guberakannan@wizroots.com]>
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
 		return view('erp.home');
+	}
+	
+	/**
+     * Show the application dashboard.
+     * @author [Gba] <[guberakannan@wizroots.com]>
+     * @return \Illuminate\Http\Response
+     */
+    public function show()
+    {
+		return view('erp.users.user-list');
 	}
 
 }

@@ -548,19 +548,21 @@ Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@di
 /** admin role Management **/
 Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 Route::get('admin/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
-
+/* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
-  Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'ErpuserAuth\LoginController@login');
-  Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
+	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('login');
+	Route::post('/login', 'ErpuserAuth\LoginController@login');
+	Route::post('/logout', 'ErpuserAuth\LoginController@logout')->name('logout');
 
-  Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('/register', 'ErpuserAuth\RegisterController@register');
+	Route::get('/register', 'ErpuserAuth\RegisterController@showRegistrationForm')->name('register');
+	Route::post('/register', 'ErpuserAuth\RegisterController@register');
 
-  Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-  Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
+	Route::post('/password/email', 'ErpuserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+	Route::post('/password/reset', 'ErpuserAuth\ResetPasswordController@reset')->name('password.email');
+	Route::get('/password/reset', 'ErpuserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+	Route::get('/password/reset/{token}', 'ErpuserAuth\ResetPasswordController@showResetForm');
 	Route::get('/', 'Erpuser\UserController@index')->name('erp');
 	Route::get('/home', 'Erpuser\UserController@index')->name('home');
+	/* Routes for User Management */
+	Route::get('/users', 'ErpUser\UserController@show')->name('erp-users');
 });
