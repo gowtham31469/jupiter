@@ -372,12 +372,12 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 				{
 					if(zone == "CE")
 					{
-						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="7" maxlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">OCN Number</label><input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
+						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="7" maxlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()"  required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">OCN Number</label><input  type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input  id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="repeatordermanufacturedate()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
 						  
 					}
 					else
 					{
-						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" value="" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback">  <label for="tesco_manufacture_date">OCN Number</label><input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input value="" id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="dynamicSVGTemplates()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
+						$('.po_div').append('<div class="form-group has-feedback has-success"> <label for="tesco_manufacture_date">PO Number</label><input data-minlength="9" maxlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits."  type="text" class="form-control  input-sm purchase_order_number" onkeyup="repeatorderpo()" required placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div></div><div class="form-group has-feedback">  <label for="tesco_manufacture_date">OCN Number</label><input type="text" class="form-control" name="tesco_ocn" id="tesco_ocn" required="" placeholder="Enter OCN Code" maxlength="15"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"> <label for="tesco_manufacture_date">Manufactured Date</label><div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1"><input id="tesco_manufacture_date" name="tesco_manufacture_date" type="text" class="form-control" required="" placeholder="Select Manufactured Date" onchange="repeatordermanufacturedate()"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span > </div ></div ><div class="help-block with-errors"></div> </div>')
 					}
 				}
 				
@@ -454,6 +454,19 @@ function repeatorderpo()
 	var svgDoc;
     var po=$('.purchase_order_number').val();
     svgDoc1.getElementById("po_number").innerHTML = po;
+}
+
+/**
+ * This Function is used to render manufacture date in artwork.
+ *
+ * @return View
+ */
+function repeatordermanufacturedate()
+{
+	var mySVG = document.getElementById("reorder_svg");
+	var svgDoc;
+    var md=$('#tesco_manufacture_date').val();
+    svgDoc1.getElementById("manufactured_date").innerHTML = md.toUpperCase();
 }
 
 /**
@@ -574,7 +587,7 @@ function contentdocument(data,name,zone)
 			svgDoc1.getElementById("description").innerHTML = data.template[0].short_description;
 			svgDoc1.getElementById("eqos").innerHTML = data.template[0].eqos_site_code;
 			svgDoc1.getElementById("supplier").innerHTML = data.template[0].supplier_name;
-			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date;
+			svgDoc1.getElementById("manufactured_date").innerHTML = data.template[0].manufacture_date.toUpperCase();
 			var description = data.template[0].short_description;
 			if(name == "TCL4" || name == "THL3" )
 			{
@@ -926,6 +939,8 @@ function setTescoReorder(type,id,liid)
 		var ce_style=$('#ce_style').val()
 		var template_name=$('#template_name').val()
 		var zone=$('#zone').val()
+		var tesco_ocn=$('#tesco_ocn').val()
+		var tesco_manufacture_date=$('#tesco_manufacture_date').val()
 		
 		$.ajax({
 			 url: base_url + "/admin/tesco/edit-check-exist-po-repeat",
@@ -943,6 +958,8 @@ function setTescoReorder(type,id,liid)
 							type:type,
 							id:id,
 							po:po,
+							manufacture_date:tesco_manufacture_date,
+							ocn:tesco_ocn,
 							counts:count
 						},
 						beforeSend: function () {
