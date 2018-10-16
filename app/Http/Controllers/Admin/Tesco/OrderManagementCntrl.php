@@ -2121,13 +2121,13 @@ class OrderManagementCntrl extends Controller
      */
   public function reOrder(Request $request)
     {
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('*')->get();
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->select('*')->get();
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->select('*')->get();
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->select('*')->get();
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*')->get();
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*')->get();
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where('order_status','Order Approved')->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where('order_status','Order Approved')->select('*')->get();
 		echo json_encode($data);
     }
   /**
