@@ -4997,13 +4997,10 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 		$('.approve-btn').show();
 		$('.cancel-btn').show();
 		var div_html = '';
-		/** [ store last updated id as hidden input , for approve order functionality] */
+		/** [ store last updated id as hidden input , for approve/cancel order functionality] */
 		$.each(data.last_insertions, function (index, value) {
 			div_html += '<input id="' + index.replace(' ', '') + '_id" name="' + index.replace(' ', '') + '_id" type="hidden" value="' + value + '">';
 
-			/** [ Remove print and proof genration button if quantity is 0 ] */
-			$('#print_' + index.replace(' ', '') + '_btn').show();
-			$('#proof_' + index.replace(' ', '') + '_btn').show();
 		});
 		$('.invisible-div').html(div_html);
 		$('.snackbar_span').html('Your order has been placed successfully');
@@ -5018,7 +5015,7 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                     <div class="col-md-12">\
 	                         <br> <strong>Select Artworks :</strong>';
 			$.each(data.last_insertions, function (index, value) {
-				html += '<div class="row">\
+				html += '<div class="row" id="' + index.replace(' ', '') + '_row">\
 				          <div class="col-md-4">\
 				           <div class="form-check form-group has-feedback">\
 	                        <label class="form-check-label">\
@@ -5077,6 +5074,14 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 	                    </div>';
 			/** Dynamic content for po upload modal tab */
 			$('#po-upload-modal-content').html(html);
+			$.each(data.zero_quantity, function (key, item) {
+				/** remove zero quantity templates from po upload modal */
+				$("#"+ item.replace(' ', '') + '_row').remove();
+
+				/** [ Remove print and proof genration button if quantity is 0 ] */
+				$('#print_' + item.replace(' ', '') + '_btn').hide();
+				$('#proof_' + item.replace(' ', '') + '_btn').hide();
+			});
 			$('#poUploadModal').modal('show');
 				/** [ Backdrop for bootstrap modal ] */
 			$('#poUploadModal').modal({

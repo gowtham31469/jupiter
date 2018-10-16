@@ -227,6 +227,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::put('customer/tesco/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
 	Route::put('customer/tesco/approve-tesco-order', 'Customer\Tesco\OrderController@approveTescoOrder');
 	Route::put('customer/tesco/cancel-tesco-order', 'Customer\Tesco\OrderController@cancelTescoOrder');
+	Route::get('customer/tesco/get-template-moq-value', 'Customer\Tesco\OrderController@getTescoTemplateMoq');
     
     /** customer profile related routes */
     Route::put('customer/update-customer-password', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerPassword');
