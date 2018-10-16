@@ -541,6 +541,8 @@ Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderCont
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
 
+Route::post('customer/tesco/edit-check-exist-po-repeat', 'Customer\Tesco\ReorderController@editCheckExistPoRepeat');
+
 Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
 
 
