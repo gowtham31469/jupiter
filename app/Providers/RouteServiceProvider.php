@@ -39,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapErpuserRoutes();
+
         //
     }
 
@@ -70,4 +72,12 @@ class RouteServiceProvider extends ServiceProvider
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
+	
+	protected function mapErpuserRoutes ()      
+	{
+		Route::prefix('erp')
+             ->middleware('erpuser')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/erpuser.php'));  
+	}
 }
