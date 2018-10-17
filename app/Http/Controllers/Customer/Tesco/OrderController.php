@@ -175,7 +175,7 @@ class OrderController extends Controller
                     $moq = DB::table('price_taxation')
                              ->select('price_taxation.moq')
                              ->where('template_id','=',$template_id)
-                             ->where('customer_id','=',$id)
+                             ->where('customer_id','=',$customer->company_id)
                              ->where('buyer_id','=',$buyer_id)
                              ->first();
                     if($moq)
@@ -550,7 +550,7 @@ class OrderController extends Controller
               }
             }
             
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required ,'pi_required'=>$pi_required],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required ,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
            
 
         } catch (\Exception $e)
@@ -819,7 +819,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1147,7 +1147,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1415,7 +1415,7 @@ class OrderController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {

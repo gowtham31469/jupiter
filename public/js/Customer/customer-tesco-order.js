@@ -606,6 +606,8 @@ function createOrders(parsedObj = false, oType = false) {
                  },
                  success: function (data) {
                      localStorage.setItem("data", JSON.stringify(data.templates));
+                     /** Store moq values for validation */
+                     localStorage.setItem("moq_values", JSON.stringify(data.moq));
                      var html = '<div class="loader">\
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
@@ -710,7 +712,7 @@ function createOrders(parsedObj = false, oType = false) {
                              </div>\
                              <div class="col-md-3">\
                               <div class="form-group has-feedback">\
-                               <label for="tesco_supplier">Supplier</label> \
+                               <label for="tesco_supplier">Customer</label> \
                                 <select class="selectpicker" data-live-search="true" id="tesco_supplier" name="tesco_supplier" required="" onchange="dynamicSVGTemplates()">';
 
                        /** [ Show dynamic supplier selectbox ] */
@@ -1093,7 +1095,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                                  </div>\
                                                  <div class="modal-footer">\
-                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'") style="display:none;">Download</button>\
+                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'") style="display:none;" id="print_' + item.template_name.replace(' ', '') + '_btn">Download</button>\
                                                  <div id="hiddenDiv" style="display:none" ><canvas id="hiddenCanvas"></canvas><a id="hiddenPng" /></div><div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
                                                    </div>\
@@ -1130,14 +1132,6 @@ function createOrders(parsedObj = false, oType = false) {
                             minViewMode: 1,
                             format: 'MM,yyyy',
                         })
-                       /** [ Get data from localstorage ] */
-                        var data = JSON.parse(localStorage.getItem("data"));
-                        /** [ Dynamic tesco suppliers preview and Get MOQ value based on supplier selection ] */
-                        $('#tesco_supplier').on('change',function(){ 
-                            $.each(data, function (i, item) {
-                                dynamicTescoSuppliers("tesco_svg" + i);
-                            });
-                        });
                       /** [ bootstrap validator for create tesco order form ] **/
                         $('#create_tesco_order_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) {
@@ -4873,8 +4867,8 @@ try{
         $('.submit-btn').remove();
         $('.save-btn').remove();
         $('.approve-btn').show();
-        $('.print-btn').show();
         $('.cancel-btn').show();
+        $('.print-btn').show();
         var div_html = '';
         /** [ store last updated id as hidden input , for approve order functionality] */
         $.each(data.last_insertions, function (index, value) {
@@ -4893,7 +4887,7 @@ try{
                          <div class="col-md-12">\
                              <br> <strong>Select Artworks :</strong>';
             $.each(data.last_insertions, function (index, value) {
-                html += '<div class="row">\
+                html += '<div class="row" id="' + index.replace(' ', '') + '_row">\
                           <div class="col-md-4">\
                            <div class="form-check form-group has-feedback">\
                             <label class="form-check-label">\
@@ -4956,9 +4950,8 @@ try{
                 /** remove zero quantity templates from po upload modal */
                 $("#"+ item.replace(' ', '') + '_row').remove();
 
-                /** [ Remove print and proof genration button if quantity is 0 ] */
+                /** [ Remove print genration button if quantity is 0 ] */
                 $('#print_' + item.replace(' ', '') + '_btn').hide();
-                $('#proof_' + item.replace(' ', '') + '_btn').hide();
             });
             $('#poUploadModal').modal('show');
             /** [ Backdrop for bootstrap modal ] */
@@ -6631,6 +6624,15 @@ function mapStoredValues(oDetails) {
         count++;
         order_status = ele.order_status;
         last_insertions[ele.TemplateName.replace(/ /g,"")+'_id'] = ele.id;
+        /** [ Remove print and proof genration button if quantity is 0 ] */
+        if(ele.is_order_count_empty === 1)
+        {
+           $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').hide();
+        }
+        else
+        {
+            $('#print_' + ele.TemplateName.replace(' ', '') + '_btn').show();
+        }
 
     });
     
@@ -6649,7 +6651,6 @@ function mapStoredValues(oDetails) {
         $('#tesco_manufacture_date').prop('disabled',true);
         $("#datePicker1").datepicker("disabled");
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
-        $('.print-btn').show();
         if(order_status === 'Order Placed')
         {
             $('.approve-btn').show();
@@ -7049,99 +7050,4 @@ function validateMOQ(obj) {
         /** [ error statements ] */
         console.log("Error:" + e)
     }
-}
-/**
- * [Tesco supplier dynamic preview function]
- * @author <praveen>
- */
-function dynamicTescoSuppliers(id)
-{
-    /**  [ Dynamically change all svg templates ] */
-    var mySVG = document.getElementById(id);
-    var svgDoc = mySVG.contentDocument;
-    var supplier = $('#tesco_supplier option:selected').text();
-    var templates = localStorage.getItem("templates");
-    var buyer_id  = localStorage.getItem("buyer_id");
-    var supplier_id = $('#tesco_supplier option:selected').val();
-    /** [ Get template details from localstorage ] */
-    var temp_data = JSON.parse(localStorage.getItem("data"));
-    /** [ Dynamically change  svg supplier name ] */
-        if (supplier_id != '') {
-            /*
-             * Get MOQ value based on supplier value.
-             */
-            if(isSubmitting) 
-            {
-              return;
-            }
-            isSubmitting = true;
-            $.ajax({
-                   url:base_url + "/customer/tesco/get-template-moq-value",
-                   dataType:"json",
-                   method:"get",
-                   data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
-                   tryCount : 0,
-                   retryLimit : 2,
-                   beforeSend: function () {
-                     $(".loader").show();
-                   },
-                   success: function(data){
-                         if(svgDoc.getElementById("supplier"))
-                         {
-                           svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
-                         }
-                         /** Store moq values for validation */
-                         localStorage.setItem("moq_values", JSON.stringify(data.moq));
-                         
-                         /** hide quantity missing error msgs */
-                         $('.quantity-feedback').removeClass('has-error has-danger');
-                         $('.quantity-feedback-err-msg').css('display', 'none');
-                         $('.quantity-field').prop('required', false);
-                         $('.quantity-field').parent().removeClass('has-error')
-                         $('.help-block').html('');
-                         /** [ Dynamic moq value assignment on supplier change ] */
-                         var moq_array = JSON.parse(localStorage.getItem("moq_values"));
-                         $.each(temp_data, function (i, item) {
-                            var temp_name = item.template_name;
-                            if(moq_array != null)
-                            {
-                                moq_array.forEach(function(i,j){
-                                    moq = i[temp_name];
-                                })
-                                $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
-                                $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
-                            }
-                        });
-                         
-                   },
-                   error: function(errorXHR, errorStatus, errorThrown) {
-                        this.tryCount++;
-                        if (this.tryCount <= this.retryLimit) {
-                            $.ajax(this);
-                            return;
-                        }
-                    },
-                   complete: function () {
-                       isSubmitting = false;
-                       $(".loader").hide();
-                   }
-               })
-        } else {
-                localStorage.removeItem("moq_values");
-                if(svgDoc.getElementById("supplier"))
-                {
-                    svgDoc.getElementById("supplier").innerHTML = "";
-                }               
-                /** hide quantity missing error msgs */
-                $('.quantity-feedback').removeClass('has-error has-danger');
-                $('.quantity-feedback-err-msg').css('display', 'none');
-                $('.quantity-field').prop('required', false);
-                $('.quantity-field').parent().removeClass('has-error')
-                $('.help-block').html('');
-                /** [ Remove MOQ values] */
-                $.each(temp_data, function (i, item) {
-                    $('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
-                    $('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
-                });
-        }
 }
