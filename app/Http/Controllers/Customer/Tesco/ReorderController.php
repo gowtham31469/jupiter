@@ -595,6 +595,8 @@ class ReorderController extends Controller
       $type         =   $request->type;
       $id           =   $request->id;
       $po           =   $request->po;
+	  $ocn_number   =   $request->ocn;
+	  $manufacture_date  =   $request->manufacture_date;
 	  $counts       =   explode(',',$request->counts);
       if($type == "tesco_tcl1_orders")
       {
@@ -625,6 +627,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
@@ -675,6 +679,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -725,6 +731,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -775,6 +783,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -825,6 +835,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -875,6 +887,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -925,6 +939,8 @@ class ReorderController extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -973,4 +989,73 @@ class ReorderController extends Controller
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
     }
+	/**
+     * This function is used to check exist Po exists or not
+     * 
+     * @return boolean values
+     */
+    public function editCheckExistPoRepeat(Request $request)
+    {
+		$template_name  = $request['template_name'];
+		$uk_style	    = $request['uk_style'];
+		$po_number	    = $request['po_number'];
+		$ce_style	    = $request['ce_style'];
+		$zone =$request['zone'];
+		
+		if($template_name == "TCL1")
+		{
+			$table_name="tesco_tcl1_orders";
+			$qty_table_name="tesco_tcl1_orders_quanty";
+		}
+		else if($template_name == "TCL2")
+		{
+			$table_name="tesco_tcl2_orders";
+			$qty_table_name="tesco_tcl2_orders_quanty";
+		}
+		else if($template_name == "TCL4")
+		{
+			$table_name="tesco_tcl4_orders";
+			$qty_table_name="tesco_tcl4_orders_quanty";
+		}
+		else if($template_name == "TSL1")
+		{
+			$table_name="tesco_tsl1_orders";
+			$qty_table_name="tesco_tsl1_orders_quanty";
+		}
+		else if($template_name == "TSL3")
+		{
+			$table_name="tesco_tsl3_orders";
+			$qty_table_name="tesco_tsl3_orders_quanty";
+		}
+		else if($template_name == "THL1")
+		{
+			$table_name="tesco_thl1_orders";
+			$qty_table_name="tesco_thl1_orders_quanty";
+		}
+		else if($template_name == "THL3")
+		{
+			$table_name="tesco_thl3_orders";
+			$qty_table_name="tesco_thl3_orders_quanty";
+		}
+		
+		if($zone == "CE")
+		{
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('order_flag','!=','reOrder')->select('*')->get();
+		}
+		else
+		{
+			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->select('*')->get();
+		}
+		
+		if(count($template_exists) > 0) 
+		{
+			echo "false";
+		}
+		else
+		{
+			echo "true";
+		}
+		
+		
+	}
 }

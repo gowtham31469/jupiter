@@ -690,6 +690,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
+            $zero_quantity= [];
           
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
@@ -771,8 +772,8 @@ class OrderManagementCntrl extends Controller
                            $i++;
                          }
                          
-                         /** [ tesco order id, that has artwork count > 0] */
-                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
+                         /** [ last inserted tesco order id ] */
+                         $templates_inserted = array('TCL 1' => $tesco_order_id);
                        }
                        else
                        {
@@ -790,11 +791,13 @@ class OrderManagementCntrl extends Controller
                               ]);
                            $i++;
                          }
-                         /** [ tesco order id, that has artwork count > 0] */
-                         $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
+                         /** [ last inserted tesco order id ] */
+                         $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
                        }
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
+                       $quantity_empty  = $is_order_count_empty == 1?array('TCL 1'):[];
+                       $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                    
                 }
@@ -834,8 +837,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                            $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                            $templates_inserted = array('TCL 2' => $tesco_order_id);
                          }
                          else
                          {
@@ -854,12 +857,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 2'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                    }
                 }
                 else
@@ -898,8 +903,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                            $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                            $templates_inserted = array('TSL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -918,12 +923,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 1'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
               }
@@ -965,8 +972,8 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       /** [ tesco order id, that has artwork count > 0] */
-                        $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
+                       /** [ last inserted tesco order id ] */
+                        $templates_inserted = array('THL 1' => $tesco_order_id);
                      }
                      else
                      {
@@ -985,17 +992,19 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       /** [ tesco order id, that has artwork count > 0] */
-                        $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
+                       /** [ last inserted tesco order id ] */
+                        $templates_inserted = array('THL 1' => $request['thl1_last_id']);
                      }
 
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
+                     $quantity_empty  = $is_order_count_empty == 1?array('THL 1'):[];
+                     $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                  }
               }
             }
             
-            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required' => $pi_required],200);
+            return response()->json(['error'=> true,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required' => $pi_required, 'zero_quantity' => $zero_quantity],200);
            
 
         } catch (\Exception $e)
@@ -1022,6 +1031,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
+            $zero_quantity= [];
 
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
 
@@ -1102,8 +1112,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 4' => $tesco_order_id);
                          }
                          else
                          {
@@ -1123,12 +1133,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 4'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -1168,8 +1180,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TSL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -1189,12 +1201,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 3'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
               }
@@ -1237,8 +1251,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -1258,17 +1272,19 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
                          }
                          
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('THL 3'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1293,6 +1309,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
+            $zero_quantity= [];
 
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
@@ -1373,8 +1390,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -1393,12 +1410,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 1' => $request['tcl1_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 1' => $request['tcl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty != 1?array('TCL 1'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else if($template['template_name'] == "TCL 2")
@@ -1437,8 +1456,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 2' => $tesco_order_id);
                          }
                          else
                          {
@@ -1457,12 +1476,14 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('TCL 2' => $request['tcl2_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('TCL 2' => $request['tcl2_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 2'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -1501,8 +1522,8 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $tesco_order_id):[];
+                       /** [ last inserted tesco order id ] */
+                       $templates_inserted = array('TSL 1' => $tesco_order_id);
                      }
                      else
                      {
@@ -1521,12 +1542,14 @@ class OrderManagementCntrl extends Controller
                          $i++;
                        }
 
-                       /** [ tesco order id, that has artwork count > 0] */
-                       $templates_inserted = $is_order_count_empty != 1?array('TSL 1' => $request['tsl1_last_id']):[];
+                       /** [ last inserted tesco order id ] */
+                       $templates_inserted = array('TSL 1' => $request['tsl1_last_id']);
                      }
                      
                      /** [ Return array of inserted id ] */
                      $last_insertions = array_merge($last_insertions,$templates_inserted);
+                     $quantity_empty  = $is_order_count_empty == 1?array('TSL 1'):[];
+                     $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                    }
                 }
               }
@@ -1568,8 +1591,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 1' => $tesco_order_id);
                          }
                          else
                          {
@@ -1588,17 +1611,19 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 1' => $request['thl1_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 1' => $request['thl1_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('THL 1'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -1624,6 +1649,7 @@ class OrderManagementCntrl extends Controller
             $templates        = $request['templates'];
             $last_insertions  = [];
             $already_exists   = [];
+            $zero_quantity= [];
 
             $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
             
@@ -1704,8 +1730,8 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $tesco_order_id):[];
+                             /** [ last inserted tesco order id ] */
+                             $templates_inserted = array('TCL 4' => $tesco_order_id);
                          }
                          else
                          {
@@ -1725,12 +1751,14 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TCL 4' => $request['tcl4_last_id']):[];
+                             /** [ last inserted tesco order id ] */
+                             $templates_inserted = array('TCL 4' => $request['tcl4_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TCL 4'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                     }
                 }
                 else
@@ -1770,8 +1798,8 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                             /** [ tesco order id, that has artwork count > 0] */
-                             $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $tesco_order_id):[];
+                             /** [ last inserted tesco order id ] */
+                             $templates_inserted = array('TSL 3' => $tesco_order_id);
                          }
                          else
                          {
@@ -1791,12 +1819,14 @@ class OrderManagementCntrl extends Controller
                                $i++;
                              }
 
-                            /** [ tesco order id, that has artwork count > 0] */
-                            $templates_inserted = $is_order_count_empty != 1?array('TSL 3' => $request['tsl3_last_id']):[];
+                            /** [ last inserted tesco order id ] */
+                            $templates_inserted = array('TSL 3' => $request['tsl3_last_id']);
                          }
 
                          /** [ Return array of inserted id ] */
                          $last_insertions = array_merge($last_insertions,$templates_inserted);
+                         $quantity_empty  = $is_order_count_empty == 1?array('TSL 3'):[];
+                         $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                       }
                 }
               }
@@ -1839,8 +1869,8 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $tesco_order_id):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 3' => $tesco_order_id);
                        }
                        else
                        {
@@ -1860,17 +1890,19 @@ class OrderManagementCntrl extends Controller
                              $i++;
                            }
 
-                           /** [ tesco order id, that has artwork count > 0] */
-                           $templates_inserted = $is_order_count_empty != 1?array('THL 3' => $request['thl3_last_id']):[];
+                           /** [ last inserted tesco order id ] */
+                           $templates_inserted = array('THL 3' => $request['thl3_last_id']);
                        }
 
                        /** [ Return array of inserted id ] */
                        $last_insertions = array_merge($last_insertions,$templates_inserted);
+                       $quantity_empty  = $is_order_count_empty == 1?array('THL 3'):[];
+                       $zero_quantity  = array_merge($zero_quantity,$quantity_empty);
                   }
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
         } catch (\Exception $e)
         {
@@ -2563,6 +2595,8 @@ class OrderManagementCntrl extends Controller
       $type         =   $request->type;
       $id           =   $request->id;
       $po           =   $request->po;
+	  $ocn_number   =   $request->ocn;
+	  $manufacture_date  =   $request->manufacture_date;
 	  $counts       =   explode(',',$request->counts);
       if($type == "tesco_tcl1_orders")
       {
@@ -2593,6 +2627,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 		  		$newTasks->order_flag = "repeatOrder";
@@ -2643,6 +2679,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2693,6 +2731,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2743,6 +2783,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2793,6 +2835,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2843,6 +2887,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -2893,6 +2939,8 @@ class OrderManagementCntrl extends Controller
 				$newTasks->po_status = $po_status;
 				$newTasks->pi_status = $pi_status;
 				$newTasks->po_number =$po;
+		  		$newTasks->ocn_number =$ocn_number;
+		  		$newTasks->manufacture_date =$manufacture_date;
 				$newTasks->purchase_order_no = "";
 				$newTasks->po_file = null;
 				$newTasks->order_flag = "repeatOrder";
@@ -4199,30 +4247,36 @@ class OrderManagementCntrl extends Controller
              /**  [Get parent customer id from tesco_suppliers metadata id] */
              $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
              $moq_array = array();
+             $moq_value = array();
              foreach ($templates as $template_id) 
              {
+                $temp_name = DB::table('tesco_item_master')
+                         ->select('tesco_item_master.item_name')
+                         ->where('id','=',$template_id)
+                         ->first();
                 $moq = DB::table('price_taxation')
-                         ->select('moq')
+                         ->select('price_taxation.moq')
                          ->where('template_id','=',$template_id)
                          ->where('customer_id','=',$customer_id->customer_id)
                          ->where('buyer_id','=',$buyer_id)
                          ->first();
                 if($moq)
                 {
-                  $moq_value = $moq->moq;
+                  $moq_value[$temp_name->item_name] = $moq->moq;
                 }
                 else
                 {
-                  $moq_value = 0;
+                  $moq_value[$temp_name->item_name] = 0;
                 }
-                array_push($moq_array,$moq_value);
              }
+             array_push($moq_array,$moq_value);
            
            return response()->json(['error'=> false,'message' =>'success','moq' => $moq_array]);
        } catch (\Exception $e) {
            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
        }
-    } /**
+    } 
+    /**
      * Cancel tesco order
      * @param \Illuminate\Http\Request
      * @author <Praveen>

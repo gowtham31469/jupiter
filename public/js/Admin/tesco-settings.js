@@ -756,7 +756,7 @@ function tescoSuppliers() {
               $(".loader").show();
           },
           success: function (data) {
-                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSuppliersModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Supplier</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Suppliers</h3></div><table id="tesco-suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Supplier Name</th><th>Supplier Code</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSuppliersModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Customer</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Customers</h3></div><table id="tesco-suppliers-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Customer Name</th><th>Customer Code</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                    $.each(data.tesco_suppliers, function(i, item){
                     var index = i+1;
                     tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.supplier_name+'</td><td>'+item.supplier_code+'</td>';
@@ -830,14 +830,14 @@ function tescoSuppliers() {
               },
               statusCode: {
                    200: function() {
-                        $('.snackbar_span').html("Supplier Added Successfully");
+                        $('.snackbar_span').html("Customer Added Successfully");
                         showSnackbar();
                         $('#addTescoSuppliersModal').modal('hide');
                         tescoSuppliers()
                    },
                    208: function() {
                         $('#supplier_result').removeAttr('style');
-                        $('#supplier_result').html('Supplier already exists.')
+                        $('#supplier_result').html('Customer already exists.')
                         $("#supplier_result").addClass("alert alert-warning");
                    },
                    400: function() {
@@ -937,14 +937,14 @@ function tescoSuppliers() {
            retryLimit : 2,
            statusCode: {
                 200: function() {
-                       $('.snackbar_span').html("Supplier Updated Successfully");
+                       $('.snackbar_span').html("Customer Updated Successfully");
                        showSnackbar();
                        $('#editTescoSuppliersModal').modal('hide');
                        tescoSuppliers()
                   },
                   208: function() {
                        $('#edit_supplier_result').removeAttr('style');
-                       $('#edit_supplier_result').html('Supplier already exists.')
+                       $('#edit_supplier_result').html('Customer already exists.')
                        $("#edit_supplier_result").addClass("alert alert-warning");
                   },
            },
@@ -991,7 +991,7 @@ function tescoSuppliers() {
                    /** [Show response status based on HTTP status code] */
                    200: function() {
                        isSubmitting = false; 
-                       $('.snackbar_span').html('Supplier is enabled ');
+                       $('.snackbar_span').html('Customer is enabled ');
                        showSnackbar();
                    }
               },
@@ -1039,12 +1039,12 @@ function tescoSuppliers() {
                    /** [Show response status based on HTTP status code] */
                    200: function() {
                         isSubmitting = false;
-                        $('.snackbar_span').html('Supplier is disabled ');
+                        $('.snackbar_span').html('Customer is disabled ');
                         showSnackbar();
                    },
                    208: function() {
                         isSubmitting = false;
-                        $('.snackbar_span').html("This action can't be completed because supplier is linked to some company.");
+                        $('.snackbar_span').html("This action can't be completed because customer is linked to some company.");
                         showSnackbar();
                    }
               },
