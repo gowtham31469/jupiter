@@ -15,7 +15,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 
                  <ul class="nav navbar-nav dynamic-menu">
-                        <li><a  href="{{ url('/customer/dashboard') }}" class="active">Create Invoice</a></li>
+                        <li><a  href="{{ url('/erp/invoice') }}" class="active">Create Invoice</a></li>
                     </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">

@@ -120,5 +120,5 @@
     </script>
 @endif
 @section('jqueryIncludes')
-<script src="{{ asset('js/Erp/invoice.js') }}"></script>
+
 @endsection

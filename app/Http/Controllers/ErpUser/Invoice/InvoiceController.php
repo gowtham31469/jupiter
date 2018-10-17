@@ -30,7 +30,14 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('erp.Invoice.create-invoice');
+        $tesco_suppliers = DB::table('tesco_suppliers')
+                              ->select('tesco_suppliers.supplier_name','tesco_suppliers.id')
+                              ->join('customer_metadata','customer_metadata.customer_metadata_id','=','tesco_suppliers.id')
+                              ->join('customer_profile','customer_profile.company_id','=','customer_metadata.customer_id')
+                              ->where('is_enabled','=',1)
+                              ->groupBy('tesco_suppliers.id')
+                              ->get();
+        return view('erp.Invoice.create-invoice',['tesco_suppliers' => $tesco_suppliers]);
 	}
 
 }
