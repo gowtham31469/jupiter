@@ -151,6 +151,7 @@ class OrderController extends Controller
          try {
              $templates = explode(',',$request['template_id']);
              $id = Auth::guard('web_customer')->id();
+             $buyer_id = $request['buyer_id'];
              $customer = DB::table('customer_profile')
                           ->select('*')
                           ->where('customer_profile.id','=',$id)
@@ -174,7 +175,7 @@ class OrderController extends Controller
                     $moq = DB::table('price_taxation')
                              ->select('price_taxation.moq')
                              ->where('template_id','=',$template_id)
-                             ->where('customer_id','=',$customer_id->customer_id)
+                             ->where('customer_id','=',$id)
                              ->where('buyer_id','=',$buyer_id)
                              ->first();
                     if($moq)
@@ -198,7 +199,7 @@ class OrderController extends Controller
                                       ->where('customer_metadata.customer_id','=',$customer->company_id)
                                       ->get();
              
-             return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers]);
+             return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'moq' => $moq_array]);
          } catch (\Exception $e) {
              return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
          }

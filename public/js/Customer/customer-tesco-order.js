@@ -590,6 +590,7 @@ function createOrders(parsedObj = false, oType = false) {
         var template_id = localStorage.getItem("templates");
         var zone        = localStorage.getItem("zone");
         var type        = localStorage.getItem("template type");
+        var buyer_id    = localStorage.getItem("buyer_id");
         var word        = localStorage.getItem("templates").length === 1?'Artwork':'Artworks';
         $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-'+zone+' '+localStorage.getItem("template_group")+'</strong></h4></div>');
 
@@ -597,7 +598,7 @@ function createOrders(parsedObj = false, oType = false) {
                  url: base_url + "/customer/tesco/templates-details",
                  type: "get",
                  dataType:"json",
-                 data: {template_id:template_id},
+                 data: {template_id:template_id,buyer_id:buyer_id},
                  tryCount : 0,
                  retryLimit : 2,
                  beforeSend: function () {
