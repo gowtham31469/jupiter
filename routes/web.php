@@ -502,6 +502,12 @@ Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings
 Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTescoTaxCodes');
 Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoTaxCodesById');
 Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoTaxCodesById');
+Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@tescoMaterials');
+Route::post('admin/tesco/add-tesco-material', 'Admin\Settings\Tesco\TescoSettings@addTescoMaterial');
+Route::get('admin/tesco/get-tesco-material-details', 'Admin\Settings\Tesco\TescoSettings@getTescoMaterialById');
+Route::put('admin/tesco/update-tesco-material', 'Admin\Settings\Tesco\TescoSettings@updateTescoMaterialById');
+Route::put('admin/tesco/make-material-enabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialEnabled');
+Route::put('admin/tesco/make-material-disabled', 'Admin\Settings\Tesco\TescoSettings@makeMaterialDisabled');
 
 /** Tesco order-status**/
 Route::post('admin/tesco/tesco-orders', 'Admin\Tesco\OrderStatusCntrl@index');

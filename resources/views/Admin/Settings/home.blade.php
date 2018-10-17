@@ -34,6 +34,7 @@
             <li id="3" onclick="tescoSuppliers()"><a>Customers</a></li>
             <li id="4"  onclick="tescoSizeChart()"><a>Size Chart</a></li>
             <li id="5"  onclick="tescoTaxCode()"><a>Tax Code</a></li>
+            <li id="6"  onclick="tescoMaterialMasters()"><a>Material Master</a></li>
           </ul>
         </div>
         <div class="content">
@@ -1744,6 +1745,78 @@
             </div>
         </div>
     </div>
+    {{-- Add Tesco Material Master Modal --}}
+   <div class="modal fade" id="addTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="addTescoMaterialLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoMaterialLabel">Add Material</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_material_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                        <div id="tesco_material_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_employee', 'Material Name For Employee', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_employee',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Employee','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_production', 'Material Name For Production', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_production',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Production','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('material_name_purchase', 'Material Name For Purchase', ['class' => 'form_label']) !!}
+                          {!! Form::text('material_name_purchase',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Purchase','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    {{-- Edit Tesco material Modal --}}
+    <div class="modal fade" id="editTescoMaterialModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">Edit Material</h4>
+               </div>
+               {!! Form::open(['id' => 'edit_tesco_material_form','data-toggle' => 'validator','role' => 'form']) !!}
+                   <div class="modal-body"> 
+                    <div id="edit_tesco_material_result"></div>
+                     {!! Form::hidden('edit_tesco_material_id',$value = null, array('id'=>'edit_tesco_material_id','class' => 'form-control input-sm')) !!}
+                       <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_employee', 'Material Name For Employee', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_employee',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Employee','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_production', 'Material Name For Production', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_production',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Production','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('edit_material_name_purchase', 'Material Name For Purchase', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_material_name_purchase',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Material Name For Purchase','required', 'maxlength' => '50')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::submit('Update', ['class' => 'btn btn-primary btn-sm'] ) !!}
+                   </div>
+              {!! Form::close() !!}
+           </div>
+       </div>
+   </div>
    {{-- Show snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
     <!-- Buyer selection Modal -->
@@ -1927,6 +2000,7 @@
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
         $('#add_tesco_tax_codes_form').trigger("reset");
+        $('#add_tesco_material_form').trigger("reset");
         $('#edit_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_symbols_form').trigger("reset");
         $('#add_orchestra_tax_codes_form').trigger("reset");
@@ -1942,6 +2016,8 @@
         $('#edit_tesco_taxcode_result').hide();
         $('#orchestra_taxcode_result').hide();
         $('#edit_orchestra_taxcode_result').hide();
+        $('#tesco_material_result').hide();
+        $('#edit_tesco_material_result').hide();
        })
 
       /** Add orchestra garment form validation **/
@@ -2675,10 +2751,60 @@
          else
          {
             e.preventDefault();
-            /* call editOrchestraTaxCodes function from orchestra-settings.js*/
+            /* call editOrchestraTaxCode function from orchestra-settings.js*/
             editOrchestraTaxCode();
          }
+       });
+       /** Add Tesco material form validation **/
+     $('#add_tesco_material_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoMaterial function from  tesco-settings.js*/
+           addTescoMaterial();
+        }
+      })
+       
+         /** get edit Tesco material details **/
+       $(document).on('click','.edit-tesco-material',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoMaterialById function from tesco-settings.js*/
+           getTescoMaterialById(id);
+       });
+
+       /** submit edit Tesco material form **/
+       $('#edit_tesco_material_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoMaterial function from tesco-settings.js*/
+            editTescoMaterial();
+         }
        })
+       /** To Enable  Material  on click **/
+       $(document).on('click', '#make_material_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeMaterialEnabled function from orchestra-settings.js*/
+           makeMaterialEnabled(id,csrf_token)
+       });
+
+       /** To disable Material  on click **/
+       $(document).on('click', '#make_material_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           var csrf_token = $('meta[name="csrf-token"]').attr('content');
+           /* call makeMaterialDisabled function from orchestra-settings.js*/
+           makeMaterialDisabled(id,csrf_token)
+       });
 
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){

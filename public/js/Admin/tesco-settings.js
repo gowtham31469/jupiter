@@ -1612,5 +1612,334 @@ function tescoTaxCode() {
      console.log("Error:"+e)
    }
  }
+ /**
+  * Function to Tesco material Settings home page
+  * @author <praveen>
+  */
+function tescoMaterialMasters() {
+    try{
+      $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+      $('.tesco-sidebar').show();
+      $('.orchestra-sidebar').hide();
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          url: base_url + "/admin/tesco/settings/material",
+          type: "POST",
+          dataType: "json",
+          data: {
+              _token: csrf_token
+          },
+          tryCount : 0,
+          retryLimit : 2,
+          beforeSend: function () {
+              $(".loader").show();
+          },
+          success: function (data) {
+                  var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoMaterialModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="ion-plus"></i> Add Tax Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Materials</h3></div><table id="tesco-materials-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Material Name For Employee</th><th>Material Name For Production</th><th>Material Name For Purchase</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                   $.each(data.tesco_materials, function(i, item){
+                    var index = i+1;
+                    tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.material_name_employee+'</td><td>'+item.material_name_production+'</td><td>'+item.material_name_purchase+'</td>';
+                    if(item.is_enabled === true)
+                    {
+                     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                    }
+                    if(item.is_enabled === true)
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_material_disabled" data-placement="left"></i></a>';
+                    }
+                    else
+                    {
+                     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_material_enabled" data-placement="left"></i></a>';
+                    }
+
+                    tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-material filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                   });
+                   tesco_metadata += '</tbody></table></div>';
+                   $('.content').html(tesco_metadata)
+                   $('.edit-tesco-material').tooltip('show')
+                   $('.edit-tesco-material').tooltip('toggle')
+                   $('.status').tooltip('show')
+                   $('.status').tooltip('toggle')
+                   $('#tesco-materials-list-table').DataTable();
+                   $("#tesco-materials-list-table_filter input").addClass('form-control input-sm');
+                   $("#tesco-materials-list-table_filter input").attr('placeholder', 'Data Search');
+                   $('#tesco-materials-list-table_length select').addClass('form-control input-sm');
+  
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+            this.tryCount++;
+            if (this.tryCount <= this.retryLimit) {
+                $.ajax(this);
+                return;
+            }
+          },
+          complete: function () {
+              $(".loader").hide();
+          }
+      })
+      } catch (e) {
+       console.log("Error:"+e)
+     }
+  }
+
+/**
+  * Adds a tesco material.
+  * @author <praveen>
+  */
+  function addTescoMaterial()
+  {
+     try{
+          var emp_material        = $('#material_name_employee').val();
+          var production_material = $('#material_name_production').val();
+          var purchase_material   = $('#material_name_purchase').val();
+          var csrf_token          = $('meta[name="csrf-token"]').attr('content');
+ 
+          $.ajax({
+              url: base_url + "/admin/tesco/add-tesco-material",
+              method: 'POST',
+              data: {_token:csrf_token,purchase_material:purchase_material,emp_material:emp_material,production_material:production_material},
+              tryCount : 0,
+              retryLimit : 2,
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              statusCode: {
+                   200: function() {
+                        $('.snackbar_span').html("Material Added Successfully");
+                        showSnackbar();
+                        $('#addTescoMaterialModal').modal('hide');
+                        tescoMaterialMasters()
+                   },
+                   208: function() {
+                        $('#tesco_material_result').removeAttr('style');
+                        $('#tesco_material_result').html('Material already exists.')
+                        $("#tesco_material_result").addClass("alert alert-warning");
+                   },
+                   400: function() {
+                        $('.snackbar_span').html("Something went wrong!!");
+                        showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                 $(".loader").hide();
+              }
+          })
+      } catch (e) {
+      console.log("Error:"+e)
+    }
+   }
+
+/**
+   * Function for get tesco material details for editing
+   * @param id
+   * @author <praveen>
+   *
+   */
+  function getTescoMaterialById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/tesco/get-tesco-material-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_tesco_material_id').val(id);
+                 $('#edit_material_name_employee').val(data.tesco_material[0].material_name_employee);
+                 $('#edit_material_name_production').val(data.tesco_material[0].material_name_production);
+                 $('#edit_material_name_purchase').val(data.tesco_material[0].material_name_purchase);
+        
+                 $('#editTescoMaterialModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_tesco_material_form').validator('validate');
+                 $('#editTescoMaterialModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+/**
+  * Function for edit material code details
+  * @author <praveen>
+  */
+ function editTescoMaterial()
+ {
+  try{
+       var id                  = $('#edit_tesco_material_id').val();
+       var emp_material        = $('#edit_material_name_employee').val();
+       var production_material = $('#edit_material_name_production').val();
+       var purchase_material   = $('#edit_material_name_purchase').val();
+       var csrf_token          = $('meta[name="csrf-token"]').attr('content');
+
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-material",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data: {_token:csrf_token,purchase_material:purchase_material,emp_material:emp_material,production_material:production_material,id:id},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Material Updated Successfully");
+                       showSnackbar();
+                       $('#editTescoMaterialModal').modal('hide');
+                       tescoMaterialMasters()
+                },
+                208: function() {
+                     $('#edit_tesco_material_result').removeAttr('style');
+                     $('#edit_tesco_material_result').html('Material already exists.')
+                     $("#edit_tesco_material_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
+ /**
+   * Makes a Material Enabled.
+   * @param id,csrf_token
+   * @author <praveen>
+   */
+   function makeMaterialEnabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-material-enabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                        isSubmitting = false; 
+                        $('.snackbar_span').html('Material is enabled ');
+                        showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoMaterialMasters();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
+
+ /**
+  * Makes a Material Diabled
+  * @param id,csrf_token
+  * @author <praveen>
+  */
+  function makeMaterialDisabled(id,csrf_token)
+   {
+    try{
+          if(isSubmitting) 
+          {
+              return;
+          }
+          isSubmitting = true;
+          $.ajax({
+               url:base_url + "/admin/tesco/make-material-disabled",
+               dataType:"json",
+               beforeSend: function () {
+                 $(".loader").show();
+               },
+               method:"put",
+               data:{_token:csrf_token,id:id},
+               tryCount : 0,
+               retryLimit : 2,
+               statusCode: {
+                    /** [Show response status based on HTTP status code] */
+                    200: function() {
+                         isSubmitting = false;
+                         $('.snackbar_span').html('Material is disabled ');
+                         showSnackbar();
+                    }
+               },
+               error: function(errorXHR, errorStatus, errorThrown) {
+                 this.tryCount++;
+                 if (this.tryCount <= this.retryLimit) {
+                     $.ajax(this);
+                     return;
+                 }
+               },
+               complete: function () {
+                 tescoMaterialMasters();
+                 $(".loader").hide();
+               }
+           })
+    } catch (e) {
+     console.log("Error:"+e)
+    }
+   }
+
+
    
    

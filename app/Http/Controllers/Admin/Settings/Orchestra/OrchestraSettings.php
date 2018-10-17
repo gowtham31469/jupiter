@@ -1413,7 +1413,7 @@ class OrchestraSettings extends Controller
                            'tax_type'   => $request['tax_type'],
                            'tax_code'   => $request['tax_code'],
                            'tax'        => $request['tax'],
-                           'is_enabled' => 0
+                           'is_enabled' => 1
                          ]);
                    $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
