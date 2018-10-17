@@ -682,7 +682,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/Admin/order.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
+<script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>
