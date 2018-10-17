@@ -65,6 +65,7 @@ function camelize(str) {
  */
 var globalOrderType = 0;
 var barcode_checks = 0;
+var isSubmitting = false;
 function tescoOrders() {
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -74,6 +75,8 @@ function tescoOrders() {
     localStorage.removeItem("zone");
     localStorage.removeItem("template type");
     localStorage.removeItem("data");
+    localStorage.removeItem("template_group");
+    localStorage.removeItem("moq_values");
     var csrf_token = $('meta[name="csrf-token"]').attr('content');
     try {
         /** [ ajax call to load tesco order page ] **/
@@ -805,7 +808,8 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
+                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                                <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
                              });
@@ -883,7 +887,8 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="">\
+                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                                <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
                              });
@@ -955,7 +960,8 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity" data-lastid="">\
+                                        <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'"  id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" maxlength="4" placeholder="Enter Quantity" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                        <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
                              });
@@ -1032,7 +1038,8 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="text" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                        <input type="number" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" maxlength="4" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                        <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
                              });
@@ -1122,6 +1129,14 @@ function createOrders(parsedObj = false, oType = false) {
                             minViewMode: 1,
                             format: 'MM,yyyy',
                         })
+                       /** [ Get data from localstorage ] */
+                        var data = JSON.parse(localStorage.getItem("data"));
+                        /** [ Dynamic tesco suppliers preview and Get MOQ value based on supplier selection ] */
+                        $('#tesco_supplier').on('change',function(){ 
+                            $.each(data, function (i, item) {
+                                dynamicTescoSuppliers("tesco_svg" + i);
+                            });
+                        });
                       /** [ bootstrap validator for create tesco order form ] **/
                         $('#create_tesco_order_form').validator().on('submit', function (e) {
                             if (e.isDefaultPrevented()) {
@@ -1147,24 +1162,6 @@ function createOrders(parsedObj = false, oType = false) {
                             }
                             setTimeout(function(){  dynamicSVGTemplates(); }, 500);
                         }
-
-                        /** [Toggle all Quantity value 0 error msg] */
-                        $(".quantity-field").keyup(function () {
-                            if($(this).val() != '' && $(this).val() > 0)
-                            {
-                                /** All quantity value fields empty - hide custom validation message and functionality */
-                                $('.quantity-feedback').removeClass('has-error has-danger');
-                                $('.quantity-feedback-err-msg').css('display','none');
-                                $('.quantity-field').prop('required',false)
-                            }
-                            else
-                            {
-                                /** All quantity value fields empty - Show custom validation message and functionality  */
-                                $('.quantity-feedback').addClass('has-error has-danger');
-                                $('.quantity-feedback-err-msg').css('display','block');
-                                $('.quantity-field').prop('required',true)
-                            }
-                        });
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
@@ -1936,7 +1933,8 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
              });
@@ -1958,23 +1956,6 @@ try{
 
          /** [ Call setSerialNumber function ] */
          setSerialNumber()
-         /** [Toggle all Quantity value 0 error msg] */
-         $(".quantity-field").keyup(function () {
-             if($(this).val() != '' && $(this).val() > 0)
-             {
-                 /** All quantity value fields empty - hide custom validation message and functionality */
-                 $('.quantity-feedback').removeClass('has-error has-danger');
-                 $('.quantity-feedback-err-msg').css('display','none');
-                 $('.quantity-field').prop('required',false)
-             }
-             else
-             {
-                 /** All quantity value fields empty - Show custom validation message and functionality  */
-                 $('.quantity-feedback').addClass('has-error has-danger');
-                 $('.quantity-feedback-err-msg').css('display','block');
-                 $('.quantity-field').prop('required',true)
-             }
-         });
          
    } catch (e) {
     /** [error statements] */
@@ -2019,7 +2000,8 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
              });
@@ -2042,23 +2024,6 @@ try{
 
          /** [ Call setSerialNumber function ] */
          setSerialNumber()
-         /** [Toggle all Quantity value 0 error msg] */
-         $(".quantity-field").keyup(function () {
-             if($(this).val() != '' && $(this).val() > 0)
-             {
-                 /** All quantity value fields empty - hide custom validation message and functionality */
-                 $('.quantity-feedback').removeClass('has-error has-danger');
-                 $('.quantity-feedback-err-msg').css('display','none');
-                 $('.quantity-field').prop('required',false)
-             }
-             else
-             {
-                 /** All quantity value fields empty - Show custom validation message and functionality  */
-                 $('.quantity-feedback').addClass('has-error has-danger');
-                 $('.quantity-feedback-err-msg').css('display','block');
-                 $('.quantity-field').prop('required',true)
-             }
-         });
          
    } catch (e) {
     /** [error statements] */
@@ -2177,7 +2142,8 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                            <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
          });
@@ -2200,23 +2166,6 @@ try{
 
      /** [ Call setSerialNumber function ] */
      setSerialNumber()
-     /** [Toggle all Quantity value 0 error msg] */
-     $(".quantity-field").keyup(function () {
-         if($(this).val() != '' && $(this).val() > 0)
-         {
-             /** All quantity value fields empty - hide custom validation message and functionality */
-             $('.quantity-feedback').removeClass('has-error has-danger');
-             $('.quantity-feedback-err-msg').css('display','none');
-             $('.quantity-field').prop('required',false)
-         }
-         else
-         {
-             /** All quantity value fields empty - Show custom validation message and functionality  */
-             $('.quantity-feedback').addClass('has-error has-danger');
-             $('.quantity-feedback-err-msg').css('display','block');
-             $('.quantity-field').prop('required',true)
-         }
-     });
    } catch (e) {
     /** [error statements] */
    console.log("Error:"+e)
@@ -2260,7 +2209,8 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="text" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" onkeypress="return isNumber(event)" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="">\
+                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" maxlength="4" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                            <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
          });
@@ -2283,23 +2233,6 @@ try{
 
      /** [ Call setSerialNumber function ] */
      setSerialNumber()
-     /** [Toggle all Quantity value 0 error msg] */
-     $(".quantity-field").keyup(function () {
-         if($(this).val() != '' && $(this).val() > 0)
-         {
-             /** All quantity value fields empty - hide custom validation message and functionality */
-             $('.quantity-feedback').removeClass('has-error has-danger');
-             $('.quantity-feedback-err-msg').css('display','none');
-             $('.quantity-field').prop('required',false)
-         }
-         else
-         {
-             /** All quantity value fields empty - Show custom validation message and functionality  */
-             $('.quantity-feedback').addClass('has-error has-danger');
-             $('.quantity-feedback-err-msg').css('display','block');
-             $('.quantity-field').prop('required',true)
-         }
-     });
    } catch (e) {
     /** [error statements] */
    console.log("Error:"+e)
@@ -5018,6 +4951,14 @@ try{
                         </div>';
             /** Dynamic content for po upload modal tab */
             $('#po-upload-modal-content').html(html);
+            $.each(data.zero_quantity, function (key, item) {
+                /** remove zero quantity templates from po upload modal */
+                $("#"+ item.replace(' ', '') + '_row').remove();
+
+                /** [ Remove print and proof genration button if quantity is 0 ] */
+                $('#print_' + item.replace(' ', '') + '_btn').hide();
+                $('#proof_' + item.replace(' ', '') + '_btn').hide();
+            });
             $('#poUploadModal').modal('show');
             /** [ Backdrop for bootstrap modal ] */
             $('#poUploadModal').modal({
@@ -7032,4 +6973,174 @@ function cancelTescoOrder() {
         /** [error statements] */
         console.error("Error:" + e)
     }
+}
+
+/**
+ * [MOQ validation function]
+ * @author <praveen>
+ */
+function checkMOQ(obj) {
+    try {
+        var temp_name = $(obj).data('artwork');
+        var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+
+        if(moq_array != null)
+        {
+            moq_array.forEach(function(i,j){
+                moq = i[temp_name];
+            })
+            $(obj).attr("min",moq); 
+            $(obj).data("min-error","MOQ should be greater than "+moq); 
+        }
+    } catch (e) {
+        /** [error statements] */
+        console.error("Error:" + e)
+    }
+}
+/**
+ * Validate quantity moq custom validation code
+ * @author <praveen>
+ */
+function validateMOQ(obj) {
+ try {
+        var quantity_array = [];
+        /** [ Get template details from localstorage ] */
+        var temp_data = JSON.parse(localStorage.getItem("data"));
+        /** [create array of all quantities , for validation] */
+        $.each(temp_data, function (i, item) {
+            var temp_name = item.template_name.replace(' ', '');
+            $('.count_' +temp_name ).each(function (i, item) {
+                quantity = $(item).val() === '' ? 0 : $(item).val();
+                quantity_array.push(quantity);
+            });
+        });
+
+        if ($(obj).val() != '' && $(obj).val() > 0 ) {
+            /** hide quantity missing error msgs */
+            $('.quantity-feedback').removeClass('has-error has-danger');
+            $('.quantity-feedback-err-msg').css('display', 'none');
+            $('.quantity-field').prop('required', false);
+            $('.quantity-field').parent().removeClass('has-error')
+            $('.help-block').html('');
+            
+        } else {
+            if(quantity_array.every( (val, i, arr) => val === 0 ) === false)
+            {
+                /** hide quantity missing error msgs */
+                $('.quantity-feedback').removeClass('has-error has-danger');
+                $('.quantity-feedback-err-msg').css('display', 'none');
+                $('.quantity-field').prop('required', false);
+                $('.quantity-field').parent().removeClass('has-error')
+                $('.help-block').html('');
+            }
+            else
+            {
+                /** All quantity value fields empty - Show custom validation message and functionality  */
+                $('.quantity-feedback').addClass('has-error has-danger');
+                $('.quantity-feedback-err-msg').css('display', 'block');
+                $('.quantity-field').prop('required', true);
+            }
+        }
+        /** [ Refresh boostrap form-validator ]  */
+        $('#create_tesco_order_form').validator('update');
+
+    } catch (e) {
+        /** [ error statements ] */
+        console.log("Error:" + e)
+    }
+}
+/**
+ * [Tesco supplier dynamic preview function]
+ * @author <praveen>
+ */
+function dynamicTescoSuppliers(id)
+{
+    /**  [ Dynamically change all svg templates ] */
+    var mySVG = document.getElementById(id);
+    var svgDoc = mySVG.contentDocument;
+    var supplier = $('#tesco_supplier option:selected').text();
+    var templates = localStorage.getItem("templates");
+    var buyer_id  = localStorage.getItem("buyer_id");
+    var supplier_id = $('#tesco_supplier option:selected').val();
+    /** [ Get template details from localstorage ] */
+    var temp_data = JSON.parse(localStorage.getItem("data"));
+    /** [ Dynamically change  svg supplier name ] */
+        if (supplier_id != '') {
+            /*
+             * Get MOQ value based on supplier value.
+             */
+            if(isSubmitting) 
+            {
+              return;
+            }
+            isSubmitting = true;
+            $.ajax({
+                   url:base_url + "/customer/tesco/get-template-moq-value",
+                   dataType:"json",
+                   method:"get",
+                   data:{supplier:supplier_id,buyer_id:buyer_id,templates:templates},
+                   tryCount : 0,
+                   retryLimit : 2,
+                   beforeSend: function () {
+                     $(".loader").show();
+                   },
+                   success: function(data){
+                         if(svgDoc.getElementById("supplier"))
+                         {
+                           svgDoc.getElementById("supplier").innerHTML = supplier.toUpperCase().replace('&', '&amp;');
+                         }
+                         /** Store moq values for validation */
+                         localStorage.setItem("moq_values", JSON.stringify(data.moq));
+                         
+                         /** hide quantity missing error msgs */
+                         $('.quantity-feedback').removeClass('has-error has-danger');
+                         $('.quantity-feedback-err-msg').css('display', 'none');
+                         $('.quantity-field').prop('required', false);
+                         $('.quantity-field').parent().removeClass('has-error')
+                         $('.help-block').html('');
+                         /** [ Dynamic moq value assignment on supplier change ] */
+                         var moq_array = JSON.parse(localStorage.getItem("moq_values"));
+                         $.each(temp_data, function (i, item) {
+                            var temp_name = item.template_name;
+                            if(moq_array != null)
+                            {
+                                moq_array.forEach(function(i,j){
+                                    moq = i[temp_name];
+                                })
+                                $('.count_' + item.template_name.replace(' ', '') ).attr("min",moq); 
+                                $('.count_' + item.template_name.replace(' ', '') ).data("min-error","MOQ should be greater than "+moq); 
+                            }
+                        });
+                         
+                   },
+                   error: function(errorXHR, errorStatus, errorThrown) {
+                        this.tryCount++;
+                        if (this.tryCount <= this.retryLimit) {
+                            $.ajax(this);
+                            return;
+                        }
+                    },
+                   complete: function () {
+                       isSubmitting = false;
+                       $(".loader").hide();
+                   }
+               })
+        } else {
+                localStorage.removeItem("moq_values");
+                if(svgDoc.getElementById("supplier"))
+                {
+                    svgDoc.getElementById("supplier").innerHTML = "";
+                }               
+                /** hide quantity missing error msgs */
+                $('.quantity-feedback').removeClass('has-error has-danger');
+                $('.quantity-feedback-err-msg').css('display', 'none');
+                $('.quantity-field').prop('required', false);
+                $('.quantity-field').parent().removeClass('has-error')
+                $('.help-block').html('');
+                /** [ Remove MOQ values] */
+                $.each(temp_data, function (i, item) {
+                    $('.count_' + item.template_name.replace(' ', '') ).removeAttr("min"); 
+                    $('.count_' + item.template_name.replace(' ', '') ).data("min-error",""); 
+                });
+        }
 }

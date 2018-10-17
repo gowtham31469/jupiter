@@ -805,7 +805,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '"  id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '"  id="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" name="uk_ratio_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -882,7 +882,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" maxlength="4" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
