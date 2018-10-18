@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Response;
 use View;
 use DB;
+use App\Erpuser;
+use App\ErpuserBuyerMapping;
+use App\ErpuserCompanyMapping;
 use App\Buyer;
 
 class UserController extends Controller
@@ -59,17 +62,47 @@ class UserController extends Controller
 
 		if($emailValidator->fails())
 		{
-			return response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+			return response()->json(['error'=> true,'message' =>'Email Already Exists'], 409);
 		}
 		else
 		{
-			\App\Erpuser::create([
-				'name'		=>	$request->name,
-				'email'		=>	$request->email,
-				'password'	=>	random_bytes(8)
-			]);
-			return response()->json(['error' => false], 200);
+			$data = new Erpuser;
+			
+			$data->name = $request->name;
+			$data->email = $request->email;
+			$data->password = bcrypt(random_bytes(8));
+			/*   Insert and get id of ErpUser   */
+			if($data->save()) {
+				/*   ErpUser - Buyer Mapping  */
+				foreach($request->buyer as $buyer){
+					ErpuserBuyerMapping::create([
+						'erp_user'	=>	$data->id,
+						'buyer'	=>	$buyer
+					]);
+				}
+				/*   ErpUser - Company Mapping  */
+				foreach($request->company as $company){
+					ErpuserCompanyMapping::create([
+						'erp_user'	=>	$data->id,
+						'company'	=>	$company
+					]);
+				}
+				return Response::json(array('error' => false, 'message' => 'User Details Added'), 200);
+			}
+			
+			return Response::json(array('error'=> true, 'message' =>'Something Went wrong'), 500);
 		}
 	}
+	/**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        \App\Erpuser::where('id', $request->id)->delete();
+		return redirect('erp/users')->with('message', 'User Deleted successfully');
+    }
 
 }

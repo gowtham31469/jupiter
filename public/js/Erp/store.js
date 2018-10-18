@@ -1,7 +1,6 @@
 /* Generic Function to Store values using AJAX */ 
 function store(url, data) {
 	try {
-console.log(base_url + url)
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
 		$.ajax({
@@ -18,15 +17,18 @@ console.log(base_url + url)
 				/** [ Show response status based on HTTP status code ] */
 				200: function (data) {
 					$('.snackbar_span').html(data.message);
-					showSnackbar();
+					
 //					setTimeout(function(){
 //						location.reload();
 //					}, 500);
 				},
 				400: function () {
 					$('.snackbar_span').html(data.message);
-					showSnackbar();
+				},
+				500: function () {
+					$('.snackbar_span').html(data.message);
 				}
+				
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -37,6 +39,7 @@ console.log(base_url + url)
 			},
 			complete: function () {
 				$(".loader").hide();
+				showSnackbar();
 			}
 		})
 	} catch (e) {
